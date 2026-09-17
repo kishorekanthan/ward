@@ -1,0 +1,45 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.root {
+  display: grid;
+  gap: var(--ward-space-3);
+  padding: var(--ward-space-3);
+  background: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+  transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
+}
+
+.attach {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+}
+
+.actions {
+  display: flex;
+  gap: var(--ward-space-2);
+}
+
+/* Mirrors ward/screens/Trellis Intake and Rerun.dc.html block 12c — 11px 13px row on a line2 inset, 8px gap. */
+.reply {
+  display: grid;
+  gap: var(--ward-gap-intakeThread);
+}
+
+.replyRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-gap-row);
+  padding: var(--ward-pad-intakeTurn);
+  background: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line2);
+}
+
+.replyRow > :first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.sendsAs {
+  font: var(--ward-type-useText);
+  color: var(--ward-color-muted);
+}

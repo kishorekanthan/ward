@@ -1,0 +1,31 @@
+/* Provenance: mirrors `.cons` / `.cl` in design/Trellis Board Item.dc.html: padding 13px 15px,
+   6px gap, 400 11px/1.5 mono. `dim` is a colour there (consoleDim), not a transparency. */
+.block {
+  padding: var(--ward-pad-console);
+  background: var(--ward-color-console);
+  overflow-x: auto;
+}
+
+.list {
+  display: grid;
+  gap: var(--ward-gap-console);
+}
+
+.line {
+  font: var(--ward-type-consoleLine);
+  font-variant-numeric: tabular-nums;
+  color: var(--ward-color-consoleInfo);
+  white-space: nowrap;
+}
+
+.line[data-kind="ok"] {
+  color: var(--ward-color-consoleOk);
+}
+
+.line[data-kind="warn"] {
+  color: var(--ward-color-consoleWarn);
+}
+
+.line[data-kind="dim"] {
+  color: var(--ward-color-consoleDim);
+}

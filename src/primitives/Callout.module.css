@@ -1,0 +1,27 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.root {
+  display: grid;
+  gap: var(--ward-space-1);
+  padding: var(--ward-space-3);
+  background: var(--ward-color-surface2);
+  box-shadow: inset var(--ward-underline) 0 0 0 var(--ward-color-line2);
+}
+
+.root[data-variant="warn"] {
+  background: var(--ward-color-warnSurface);
+  box-shadow: inset var(--ward-underline) 0 0 0 var(--ward-color-warnLine);
+}
+
+.ticket {
+  font: var(--ward-type-monoId);
+  color: var(--ward-color-muted);
+}
+
+.root[data-variant="warn"] .ticket {
+  color: var(--ward-color-warnInk);
+}
+
+.body {
+  font: var(--ward-type-body);
+  color: var(--ward-color-text);
+}

@@ -1,0 +1,69 @@
+/* Provenance: mirrors design/Trellis Board Item.dc.html 8b `.tl` rows — gap 11px, 2px spine, 9px node at margin-top 4px, body gap 4px, stage 500 13px, use sentence, mono meta `time · actor · cost`. */
+.list {
+  display: grid;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ward-gap-timeline);
+  padding: var(--ward-pad-timeline);
+  box-shadow: inset var(--ward-underline) 0 0 var(--ward-color-line);
+}
+
+.item[data-state="hold"] {
+  box-shadow: inset var(--ward-underline) 0 0 var(--ward-color-amber);
+}
+
+.node {
+  display: inline-flex;
+  flex: none;
+  margin-top: var(--ward-gap-entryNode);
+}
+
+.body {
+  display: grid;
+  gap: var(--ward-gap-entryBody);
+  min-width: 0;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ward-space-2);
+}
+
+.stage {
+  font: var(--ward-type-entryStage);
+  color: var(--ward-color-text);
+}
+
+.version {
+  font: var(--ward-type-monoId);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sentence {
+  font: var(--ward-type-useText);
+  color: var(--ward-color-muted);
+}
+
+.meta {
+  font: var(--ward-type-monoText);
+  color: var(--ward-color-muted);
+}
+
+.item[data-state="hold"] .stage {
+  color: var(--ward-color-amber);
+}
+
+.item[data-state="pending"] {
+  box-shadow: inset var(--ward-underline) 0 0 var(--ward-color-line2);
+}
+
+.item[data-state="pending"] .stage {
+  color: var(--ward-color-muted);
+}

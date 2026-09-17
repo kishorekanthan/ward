@@ -1,0 +1,109 @@
+/* Provenance: mirrors design/Trellis Board Item.dc.html 8a — head row, summary, kv, quote and action bands; 10a for the resolve band. */
+.body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Right padding is derived: it clears the Overlay close button (control height plus its two 12px offsets). */
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ward-gap-row);
+  padding: var(--ward-pad-drawerHead);
+  padding-right: calc(var(--ward-height-control) + 2 * var(--ward-space-3));
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.summary,
+.block,
+.actionsBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-gap-drawerBlock);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.summary {
+  padding: var(--ward-pad-drawerSummary);
+}
+
+.block,
+.actionsBlock {
+  padding: var(--ward-pad-drawerBlock);
+}
+
+.actionsBlock {
+  border-bottom: 0;
+}
+
+.title {
+  font: var(--ward-type-drawerTitle);
+  color: var(--ward-color-text);
+}
+
+.note {
+  font: var(--ward-type-useText);
+  color: var(--ward-color-muted);
+}
+
+.k {
+  font: var(--ward-type-colHead);
+  letter-spacing: var(--ward-type-colHead-tracking);
+  text-transform: var(--ward-type-colHead-transform);
+  color: var(--ward-color-muted);
+}
+
+.kv {
+  display: grid;
+  padding: var(--ward-pad-drawerKv);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.row {
+  display: flex;
+  gap: var(--ward-gap-row);
+  padding: var(--ward-pad-kv);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.label {
+  flex: none;
+  width: var(--ward-width-keyCol);
+  font: var(--ward-type-keyCol);
+  letter-spacing: var(--ward-type-keyCol-tracking);
+  text-transform: var(--ward-type-keyCol-transform);
+  color: var(--ward-color-muted);
+}
+
+.value {
+  min-width: 0;
+  font: var(--ward-type-kvValue);
+  color: var(--ward-color-text);
+}
+
+.quote {
+  font: var(--ward-type-body);
+  color: var(--ward-color-ink2);
+  padding-left: var(--ward-space-3);
+  box-shadow: inset var(--ward-underline) 0 0 0 var(--ward-color-blue);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ward-gap-row);
+}
+
+.resolve {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-gap-resolveList);
+  padding: var(--ward-pad-drawerBlock);
+  border-top: var(--ward-border) solid var(--ward-color-line);
+}

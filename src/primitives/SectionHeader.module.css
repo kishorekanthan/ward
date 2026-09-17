@@ -1,0 +1,66 @@
+/* Provenance: mirrors design/Trellis Collaboration.dc.html + design/Trellis Intake and Rerun.dc.html + design/Trellis Board Item.dc.html. */
+.root {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ward-gap-section);
+  padding: var(--ward-pad-section);
+  background: var(--ward-color-surface);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.head {
+  font: var(--ward-type-microHead);
+  letter-spacing: var(--ward-type-microHead-tracking);
+  text-transform: var(--ward-type-microHead-transform);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+}
+
+.root[data-kind="key"] .head {
+  font: var(--ward-type-colHead);
+  letter-spacing: var(--ward-type-colHead-tracking);
+  text-transform: var(--ward-type-colHead-transform);
+}
+
+.index {
+  color: var(--ward-color-muted);
+}
+
+.dot {
+  padding: 0 var(--ward-space-1);
+  color: var(--ward-color-faint);
+}
+
+.note {
+  font: var(--ward-type-useText);
+  color: var(--ward-color-muted);
+  min-width: 0;
+}
+
+.counter {
+  margin-left: auto;
+  font: var(--ward-type-monoId);
+  font-variant-numeric: var(--ward-type-monoId-numeric);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+}
+
+.trailing {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+  margin-left: auto;
+  min-width: 0;
+}
+
+/* Mirrors ward/screens/Trellis Studio.dc.html block 4a — a `.k` head over no band, with a 400 10.5px prose counter. */
+.root[data-kind="bare"] {
+  justify-content: space-between;
+  padding: 0;
+  background: none;
+  border-bottom: 0;
+}
+
+.root[data-kind="bare"] .counter {
+  font: var(--ward-type-rowNote);
+}

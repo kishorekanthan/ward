@@ -1,0 +1,44 @@
+/* Provenance: mirrors design/Trellis Board Item.dc.html 8b gate rows — padding 9px 0, gap 8px, name flex:1, 70px centred tag, 78px use-line actor, last row unruled. */
+.list {
+  display: grid;
+}
+
+.rung {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-gap-row);
+  padding: var(--ward-pad-gateRung);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.rung:last-child {
+  border-bottom: 0;
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  font: var(--ward-type-body);
+  color: var(--ward-color-text);
+}
+
+.rung [data-ward-chip] {
+  flex: none;
+  width: var(--ward-width-gateTag);
+  justify-content: center;
+  text-align: center;
+}
+
+.actor {
+  flex: none;
+  width: var(--ward-width-gateActor);
+  font: var(--ward-type-useText);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rung[data-state="pending"] .name {
+  color: var(--ward-color-muted);
+}

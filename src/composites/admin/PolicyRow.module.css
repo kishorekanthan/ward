@@ -1,0 +1,119 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.row {
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.row[data-inheritance="locked"] {
+  background: var(--ward-color-surface2);
+}
+
+.row[data-inheritance="overridden"] {
+  background: var(--ward-color-blueSoft);
+}
+
+.headCell,
+.cell {
+  box-sizing: border-box;
+  padding: var(--ward-pad-row);
+  text-align: left;
+  vertical-align: top;
+}
+
+.headCell {
+  font-weight: inherit;
+}
+
+.name {
+  display: block;
+  font: var(--ward-type-title);
+  color: var(--ward-color-text);
+}
+
+.consequence {
+  display: block;
+  font: var(--ward-type-secondary);
+  color: var(--ward-color-muted);
+}
+
+.reason {
+  display: block;
+  font: var(--ward-type-meta);
+  color: var(--ward-color-muted);
+}
+
+.value {
+  font: var(--ward-type-body);
+  color: var(--ward-color-text);
+}
+
+.value[data-locked="true"] {
+  color: var(--ward-color-muted);
+}
+
+/* Table cells cannot take row padding or flex gap: the comp's 11px 0 row and 8px gap
+   live on the cell as padding, and as padding-left after the first cell. */
+.cell + .cell {
+  padding-left: var(--ward-gap-row);
+}
+
+/* Loop policy 11d: 13px 15px rows, a 150px value column and a centred 104px chip column. */
+.webRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ward-gap-policyRow);
+  padding: var(--ward-pad-policyRow);
+}
+
+.webRow:last-child {
+  border-bottom: 0;
+}
+
+.webSetting {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--ward-space-1);
+  min-width: 0;
+}
+
+.webName {
+  font: var(--ward-type-entryStage);
+}
+
+.webRow[data-inheritance="locked"] .webName {
+  color: var(--ward-color-muted);
+}
+
+.webConsequence {
+  margin: 0;
+  font: var(--ward-type-useText);
+  color: var(--ward-color-muted);
+}
+
+.webControl {
+  display: flex;
+  flex: 0 0 var(--ward-width-policyControl);
+  align-items: center;
+  gap: var(--ward-gap-policyState);
+  min-width: 0;
+}
+
+/* A segment keeps its options whole; it takes the width they need rather than the value column. */
+.webControl[data-kind="segment"] {
+  flex: 0 0 auto;
+}
+
+.webState {
+  font: var(--ward-type-useText);
+  color: var(--ward-color-muted);
+}
+
+.webChip {
+  display: flex;
+  flex: 0 0 auto;
+}
+
+.webChip > * {
+  flex: 1 1 auto;
+  text-align: center;
+}

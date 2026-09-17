@@ -1,0 +1,74 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+}
+
+.track {
+  position: relative;
+  flex: none;
+  width: var(--ward-width-switchTrack);
+  height: var(--ward-height-switchTrack);
+  padding: 0;
+  background: var(--ward-color-surface2);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line2);
+  transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
+}
+
+.track[data-on="true"] {
+  background: var(--ward-color-blue);
+  box-shadow: none;
+}
+
+.track:disabled:not([data-locked="true"]) {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.track[data-locked="true"] {
+  background: var(--ward-color-line3);
+  box-shadow: none;
+  cursor: default;
+}
+
+.thumb {
+  position: absolute;
+  top: var(--ward-border);
+  left: var(--ward-border);
+  width: var(--ward-height-switchThumb);
+  height: var(--ward-height-switchThumb);
+  background: var(--ward-color-surface);
+}
+
+.track:not([data-on="true"]) .thumb {
+  background: var(--ward-color-line2);
+}
+
+.track[data-on="true"] .thumb {
+  left: auto;
+  right: var(--ward-border);
+}
+
+.labelHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.label {
+  font: var(--ward-type-body);
+  color: var(--ward-color-text);
+}
+
+.lockedNote {
+  font: var(--ward-type-micro);
+  letter-spacing: var(--ward-type-micro-tracking);
+  text-transform: var(--ward-type-micro-transform);
+  color: var(--ward-color-muted);
+  padding-left: var(--ward-space-2);
+}

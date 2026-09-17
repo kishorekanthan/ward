@@ -1,0 +1,69 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.root {
+  display: grid;
+  gap: var(--ward-space-2);
+}
+
+.list {
+  display: grid;
+  gap: var(--ward-space-2);
+}
+
+.item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ward-space-2);
+}
+
+.box {
+  display: inline-flex;
+  flex: none;
+}
+
+.text {
+  font: var(--ward-type-secondary);
+  color: var(--ward-color-text);
+}
+
+.note {
+  font: var(--ward-type-secondary);
+  color: var(--ward-color-muted);
+}
+
+
+/* Mirrors ward/screens/Trellis Studio.dc.html block 4a — "Effect of this config": 8px row gap, 400 11.5/1.35 text. */
+.root[data-density="compact"] .list {
+  gap: var(--ward-gap-effects);
+}
+
+.root[data-density="compact"] .item {
+  align-items: flex-start;
+}
+
+.root[data-density="compact"] .text {
+  font: var(--ward-type-effectText);
+}
+
+.root[data-density="compact"] .item[data-met="false"] .text {
+  color: var(--ward-color-muted);
+}
+
+/* Mirrors ward/screens/Trellis Intake and Rerun.dc.html block 12c — 9px rows, 8px mark gap, 11.5/1.55 muted text. */
+.root[data-density="rail"],
+.root[data-density="rail"] .list {
+  gap: var(--ward-gap-readyList);
+}
+
+.root[data-density="rail"] .item {
+  align-items: flex-start;
+}
+
+.root[data-density="rail"] .text,
+.root[data-density="rail"] .note {
+  font: var(--ward-type-useText);
+  color: var(--ward-color-muted);
+}
+
+.root[data-density="rail"] .item[data-met="false"] .text {
+  color: var(--ward-color-ink2);
+}

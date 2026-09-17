@@ -1,0 +1,760 @@
+/* Generated from tokens.json by scripts/gen-css.mjs — edit tokens.json, never this file. */
+
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/archivo/v25/k3kPo8UDI-1M0wlSV9XAw6lQkqWY8Q82sLydOxKsv4Rn.woff2') format('woff2'), local('Archivo Medium'), local('Archivo-Medium');
+}
+
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/archivo/v25/k3kPo8UDI-1M0wlSV9XAw6lQkqWY8Q82sLydOxKsv4Rn.woff2') format('woff2'), local('Archivo SemiBold'), local('Archivo-SemiBold');
+}
+
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/sourcesans3/v19/nwpStKy2OAdR1K-IwhWudF-R3w8aZejf5Hc.woff2') format('woff2'), local('Source Sans 3'), local('SourceSans3-Regular');
+}
+
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/sourcesans3/v19/nwpStKy2OAdR1K-IwhWudF-R3w8aZejf5Hc.woff2') format('woff2'), local('Source Sans 3 Medium'), local('SourceSans3-Medium');
+}
+
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/sourcesans3/v19/nwpStKy2OAdR1K-IwhWudF-R3w8aZejf5Hc.woff2') format('woff2'), local('Source Sans 3 SemiBold'), local('SourceSans3-Semibold');
+}
+
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/sourcesans3/v19/nwpStKy2OAdR1K-IwhWudF-R3w8aZejf5Hc.woff2') format('woff2'), local('Source Sans 3 Bold'), local('SourceSans3-Bold');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q131nj-o.woff2') format('woff2'), local('IBM Plex Mono'), local('IBMPlexMono');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgsAXHNk.woff2') format('woff2'), local('IBM Plex Mono Medium'), local('IBMPlexMono-Medium');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgsAXHNk.woff2') format('woff2'), local('IBM Plex Mono SemiBold'), local('IBMPlexMono-SemiBold');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3pQPwlBFgsAXHNk.woff2') format('woff2'), local('IBM Plex Mono Bold'), local('IBMPlexMono-Bold');
+}
+
+:root {
+  --ward-color-bg: #F7F8FA;
+  --ward-color-surface: #FFFFFF;
+  --ward-color-surface2: #EDF0F4;
+  --ward-color-line: #E2E6EC;
+  --ward-color-line2: #C9D2DE;
+  --ward-color-text: #071D49;
+  --ward-color-muted: #5A6474;
+  --ward-color-faint: #616C7E;
+  --ward-color-blue: #0066F5;
+  --ward-color-blueSoft: #F0F5FF;
+  --ward-color-runningTint: #D7E3F7;
+  --ward-color-green: #0C7A4D;
+  --ward-color-orange: #B14E12;
+  --ward-color-amber: #8A5A00;
+  --ward-color-red: #B4232A;
+  --ward-color-warnInk: #9A410C;
+  --ward-color-warnSurface: #FFF8F2;
+  --ward-color-warnLine: #E8C4A6;
+  --ward-color-console: #0B1631;
+  --ward-color-consoleInk: #7FB2FF;
+  --ward-color-consoleWarn: #E7C57F;
+  --ward-color-consoleOk: #7FD3A0;
+  --ward-color-consoleFaint: #8B97AB;
+  --ward-color-deep: #2B3648;
+  --ward-color-overcapTint: rgba(180,35,42,0.08);
+  --ward-color-scrim: rgba(7,29,73,0.30);
+  --ward-color-greenFill: #00897B;
+  --ward-color-orangeFill: #BF5310;
+  --ward-color-consoleInfo: #7FB2FF;
+  --ward-color-consoleDim: #8FA3C8;
+  --ward-color-line3: #B9C6DB;
+  --ward-color-ink2: #2B3648;
+  --ward-color-surface3: #FCFCFD;
+  --ward-chip-gate-bg: #071D49;
+  --ward-chip-gate-fg: #FFFFFF;
+  --ward-chip-gate-line: #071D49;
+  --ward-chip-system-bg: #071D49;
+  --ward-chip-system-fg: #FFFFFF;
+  --ward-chip-system-line: #071D49;
+  --ward-chip-write-bg: #B14E12;
+  --ward-chip-write-fg: #FFFFFF;
+  --ward-chip-write-line: #B14E12;
+  --ward-chip-drift-bg: #B14E12;
+  --ward-chip-drift-fg: #FFFFFF;
+  --ward-chip-drift-line: #B14E12;
+  --ward-chip-done-bg: #0C7A4D;
+  --ward-chip-done-fg: #FFFFFF;
+  --ward-chip-done-line: #0C7A4D;
+  --ward-chip-attention-bg: #8A5A00;
+  --ward-chip-attention-fg: #FFFFFF;
+  --ward-chip-attention-line: #8A5A00;
+  --ward-chip-failed-bg: #B4232A;
+  --ward-chip-failed-fg: #FFFFFF;
+  --ward-chip-failed-line: #B4232A;
+  --ward-chip-pending-bg: transparent;
+  --ward-chip-pending-fg: #5A6474;
+  --ward-chip-pending-line: #C9D2DE;
+  --ward-chip-running-bg: #D7E3F7;
+  --ward-chip-running-fg: #071D49;
+  --ward-chip-running-line: #D7E3F7;
+  --ward-chip-warn-bg: transparent;
+  --ward-chip-warn-fg: #9A410C;
+  --ward-chip-warn-line: #E8C4A6;
+  --ward-chip-meta-bg: transparent;
+  --ward-chip-meta-fg: #5A6474;
+  --ward-chip-meta-line: #E2E6EC;
+  --ward-chip-soft-bg: #EDF0F4;
+  --ward-chip-soft-fg: #071D49;
+  --ward-chip-soft-line: #EDF0F4;
+  --ward-chip-quiet-bg: #EDF0F4;
+  --ward-chip-quiet-fg: #5A6474;
+  --ward-chip-quiet-line: #EDF0F4;
+  --ward-stream-1-id: #00897B;
+  --ward-stream-1-chip: #00776B;
+  --ward-stream-1-chipText: #FFFFFF;
+  --ward-stream-2-id: #7038C8;
+  --ward-stream-2-chip: #7038C8;
+  --ward-stream-2-chipText: #FFFFFF;
+  --ward-stream-3-id: #BF5310;
+  --ward-stream-3-chip: #BF5310;
+  --ward-stream-3-chipText: #FFFFFF;
+  --ward-stream-4-id: #1C6FB8;
+  --ward-stream-4-chip: #1C6FB8;
+  --ward-stream-4-chipText: #FFFFFF;
+  --ward-stream-5-id: #8A6A00;
+  --ward-stream-5-chip: #8A6A00;
+  --ward-stream-5-chipText: #FFFFFF;
+  --ward-stream-6-id: #A02C6B;
+  --ward-stream-6-chip: #A02C6B;
+  --ward-stream-6-chipText: #FFFFFF;
+  --ward-space-1: 4px;
+  --ward-space-s1: var(--ward-space-1);
+  --ward-space-2: 8px;
+  --ward-space-s2: var(--ward-space-2);
+  --ward-space-3: 12px;
+  --ward-space-s3: var(--ward-space-3);
+  --ward-space-4: 16px;
+  --ward-space-s4: var(--ward-space-4);
+  --ward-space-5: 20px;
+  --ward-space-s5: var(--ward-space-5);
+  --ward-space-6: 24px;
+  --ward-space-s6: var(--ward-space-6);
+  --ward-space-7: 32px;
+  --ward-space-s7: var(--ward-space-7);
+  --ward-space-page: 24px;
+  --ward-pad-row: 11px 0;
+  --ward-pad-sessionCell: 11px 8px 11px 0;
+  --ward-pad-sessionTitle: 11px 22px 11px 0;
+  --ward-pad-sessionHead: 8px 8px 8px 0;
+  --ward-pad-scopeTabs: 14px 0 0;
+  --ward-pad-kv: 8px 0;
+  --ward-pad-field: 11px 0;
+  --ward-pad-activity: 10px 0;
+  --ward-pad-timeline: 11px 0 11px 14px;
+  --ward-pad-section: 13px 18px;
+  --ward-pad-bar: 12px 20px;
+  --ward-pad-tabs: 0 20px 14px;
+  --ward-pad-console: 13px 15px;
+  --ward-pad-message: 14px 15px;
+  --ward-pad-chip: 4px 6px;
+  --ward-pad-control: 9px 12px;
+  --ward-pad-bandHead: 16px 16px 18px;
+  --ward-pad-bandCell: 14px 14px 16px;
+  --ward-pad-configRow: 10px 0;
+  --ward-pad-configHead: 8px 0;
+  --ward-pad-input: 7px 9px;
+  --ward-pad-controlPrimary: 9px 14px;
+  --ward-pad-ruleRow: 11px 13px;
+  --ward-pad-toolRow: 9px 0;
+  --ward-pad-sectionBlock: 18px 0 16px;
+  --ward-pad-page: 0 20px 22px;
+  --ward-pad-pageHeader: 18px 20px 14px;
+  --ward-pad-boardHead: 16px 20px 12px;
+  --ward-pad-boardColumn: 13px 12px;
+  --ward-pad-workCard: 11px;
+  --ward-pad-trace: 7px 0;
+  --ward-pad-metricCell: 12px 14px;
+  --ward-pad-railSection: 14px;
+  --ward-pad-sidebarBrand: 13px 14px;
+  --ward-pad-sidebarNav: 11px 14px;
+  --ward-pad-sidebarGroup: 14px 14px 9px;
+  --ward-pad-sidebarAgent: 10px 14px;
+  --ward-pad-sidebarFoot: 13px 14px;
+  --ward-pad-sidebarFootList: 9px 0 0;
+  --ward-pad-drawerHead: 14px 18px;
+  --ward-pad-drawerSummary: 16px 18px;
+  --ward-pad-drawerBlock: 15px 18px;
+  --ward-pad-drawerKv: 4px 18px 12px;
+  --ward-pad-caseHead: 16px 20px 13px;
+  --ward-pad-caseCriteria: 6px 18px 14px;
+  --ward-pad-caseHistory: 8px 18px 16px;
+  --ward-pad-railBlock: 14px 16px;
+  --ward-pad-railList: 6px 16px 14px;
+  --ward-pad-intakeTurn: 11px 13px;
+  --ward-pad-placementList: 6px 18px 14px;
+  --ward-pad-policyRow: 13px 15px;
+  --ward-pad-policyCallout: 13px 15px;
+  --ward-pad-adminCard: 14px 16px;
+  --ward-pad-runbookStep: 9px 0;
+  --ward-pad-gateRung: 9px 0;
+  --ward-pad-criterion: 10px 0;
+  --ward-pad-resolvePath: 13px 14px;
+  --ward-pad-stageColumn: 14px 12px;
+  --ward-pad-stageFoot: 13px 20px;
+  --ward-pad-streamCell: 15px 4px;
+  --ward-pad-streamHead: 9px 4px;
+  --ward-pad-streamFoot: 14px 20px;
+  --ward-pad-modalHead: 15px 18px;
+  --ward-pad-modalBody: 18px;
+  --ward-pad-modalSection: 16px 0;
+  --ward-pad-modalInput: 9px 10px;
+  --ward-pad-stageRow: 9px 11px;
+  --ward-pad-choiceCard: 10px 11px;
+  --ward-pad-swatchRow: 2px 0 0;
+  --ward-pad-addStage: 2px 0 0;
+  --ward-pad-fieldCell: 8px 10px;
+  --ward-pad-skeletonColumn: 8px 7px;
+  --ward-gap-row: 8px;
+  --ward-gap-section: 10px;
+  --ward-gap-bar: 10px;
+  --ward-gap-tabs: 16px;
+  --ward-gap-field: 10px;
+  --ward-gap-activity: 10px;
+  --ward-gap-timeline: 11px;
+  --ward-gap-console: 6px;
+  --ward-gap-message: 10px;
+  --ward-gap-intakeTurn: 6px;
+  --ward-gap-intakeThread: 13px;
+  --ward-gap-readyList: 9px;
+  --ward-gap-policyRow: 10px;
+  --ward-gap-policyState: 7px;
+  --ward-gap-policyCallout: 11px;
+  --ward-gap-policyGroup: 10px;
+  --ward-gap-policyStack: 20px;
+  --ward-gap-adminCard: 11px;
+  --ward-gap-adminAside: 12px;
+  --ward-gap-adminGrid: 16px;
+  --ward-gap-envGrid: 12px;
+  --ward-gap-deployStack: 18px;
+  --ward-gap-runbookStep: 10px;
+  --ward-gap-band: 7px;
+  --ward-gap-configRow: 10px;
+  --ward-gap-configName: 7px;
+  --ward-gap-ruleRow: 9px;
+  --ward-gap-toolRow: 10px;
+  --ward-gap-sectionBlock: 11px;
+  --ward-gap-sample: 5px;
+  --ward-gap-trace: 9px;
+  --ward-gap-traceHead: 11px;
+  --ward-gap-traceBody: 3px;
+  --ward-gap-traceDotTop: 5px;
+  --ward-gap-metricCell: 5px;
+  --ward-gap-sidebarBrand: 9px;
+  --ward-gap-sidebarAgent: 5px;
+  --ward-gap-sidebarDot: 7px;
+  --ward-gap-boardColumn: 10px;
+  --ward-gap-drawerBlock: 9px;
+  --ward-gap-resolveList: 12px;
+  --ward-gap-entryBody: 4px;
+  --ward-gap-criterionMark: 2px;
+  --ward-gap-entryNode: 4px;
+  --ward-gap-stageColumn: 11px;
+  --ward-gap-stageHead: 5px;
+  --ward-gap-stageTag: 6px;
+  --ward-gap-streamCell: 6px;
+  --ward-gap-streamChain: 5px;
+  --ward-gap-agentCard: 7px;
+  --ward-gap-agentTags: 5px;
+  --ward-gap-gatePanel: 8px;
+  --ward-gap-reviewerList: 6px;
+  --ward-gap-reviewer: 7px;
+  --ward-gap-terminalCard: 6px;
+  --ward-gap-formLabel: 6px;
+  --ward-gap-swatch: 5px;
+  --ward-gap-stageList: 6px;
+  --ward-gap-choiceBody: 3px;
+  --ward-gap-modalFooter: 8px;
+  --ward-gap-fieldCell: 9px;
+  --ward-gap-fieldGridRow: 7px;
+  --ward-gap-fieldGridCol: 12px;
+  --ward-gap-grouping: 14px;
+  --ward-gap-configSub: 4px;
+  --ward-gap-skeleton: 5px;
+  --ward-gap-effects: 9px;
+  --ward-width-max: 1240px;
+  --ward-width-drawer: 430px;
+  --ward-width-dryrun: 316px;
+  --ward-width-preview: 356px;
+  --ward-width-colFloor: 240px;
+  --ward-width-sessionResolved: 180px;
+  --ward-width-sessionCost: 112px;
+  --ward-width-sessionActivity: 126px;
+  --ward-width-sessionState: 150px;
+  --ward-width-switchTrack: 26px;
+  --ward-width-colCredId: 168px;
+  --ward-width-colClass: 112px;
+  --ward-width-colTier: 124px;
+  --ward-width-colNext: 96px;
+  --ward-width-colState: 106px;
+  --ward-width-colServer: 196px;
+  --ward-width-colTools: 118px;
+  --ward-width-colPin: 108px;
+  --ward-width-colConn: 120px;
+  --ward-width-overlayWide: 720px;
+  --ward-width-drawerKey: 120px;
+  --ward-width-maxWide: 1928px;
+  --ward-width-sidebar: 236px;
+  --ward-width-keyCol: 104px;
+  --ward-width-keyColWide: 116px;
+  --ward-width-bandHead: 170px;
+  --ward-width-rail: 316px;
+  --ward-width-configHandle: 22px;
+  --ward-width-configLabel: 150px;
+  --ward-width-toolName: 150px;
+  --ward-width-configCap: 84px;
+  --ward-width-configShown: 88px;
+  --ward-width-gateTag: 70px;
+  --ward-width-gateActor: 78px;
+  --ward-width-stageColumn: 176px;
+  --ward-width-streamName: 250px;
+  --ward-width-streamAgents: 120px;
+  --ward-width-streamPolicy: 150px;
+  --ward-width-policyControl: 150px;
+  --ward-width-roleGroup: 228px;
+  --ward-width-rolePeople: 92px;
+  --ward-width-roleVia: 168px;
+  --ward-width-roleIndent: 22px;
+  --ward-width-personIndent: 48px;
+  --ward-width-adminAside: 348px;
+  --ward-width-streamFlight: 96px;
+  --ward-width-streamIndent: 16px;
+  --ward-width-streamEdge: 20px;
+  --ward-width-streamKey: 110px;
+  --ward-width-colourPick: 150px;
+  --ward-height-control: 30px;
+  --ward-height-controlSm: 26px;
+  --ward-height-card: 96px;
+  --ward-height-cardRow: 16px;
+  --ward-height-touch: 44px;
+  --ward-height-topbar: 44px;
+  --ward-height-identityChip: 22px;
+  --ward-height-chart: 40px;
+  --ward-height-switchTrack: 14px;
+  --ward-height-switchThumb: 12px;
+  --ward-height-bar: 4px;
+  --ward-height-mark: 14px;
+  --ward-height-app: 760px;
+  --ward-height-traceDot: 6px;
+  --ward-height-brandMark: 15px;
+  --ward-height-agentDot: 7px;
+  --ward-height-reviewerMark: 18px;
+  --ward-height-swatch: 22px;
+  --ward-height-radio: 13px;
+  --ward-height-skeletonBar: 12px;
+  --ward-size-marker6: 6px;
+  --ward-size-marker8: 8px;
+  --ward-size-marker9: 9px;
+  --ward-size-marker14: 14px;
+  --ward-radius: 0px;
+  --ward-border: 1px;
+  --ward-underline: 2px;
+  --ward-shadow-overlay: 0 24px 64px rgba(7,29,73,0.30);
+  --ward-type-h1: 600 19px/1.2 Archivo, system-ui, sans-serif;
+  --ward-type-h1-tracking: -0.2px;
+  --ward-type-title: 500 15px/1.3 Archivo, system-ui, sans-serif;
+  --ward-type-stat: 600 19px/1 Archivo, system-ui, sans-serif;
+  --ward-type-stat-numeric: tabular-nums;
+  --ward-type-body: 400 13px/1.55 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-secondary: 400 12.5px/1.5 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-meta: 400 11.5px/1.4 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-control: 600 11.5px/1 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-monoId: 400 10.5px/1.45 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-monoId-numeric: tabular-nums;
+  --ward-type-chip: 500 10px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-chip-tracking: 0.07em;
+  --ward-type-chip-transform: uppercase;
+  --ward-type-micro: 700 10px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-micro-tracking: 0.8px;
+  --ward-type-micro-transform: uppercase;
+  --ward-type-colHead: 600 10px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-colHead-tracking: 0.09em;
+  --ward-type-colHead-transform: uppercase;
+  --ward-type-rowName: 500 12.5px/1 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-rowNote: 400 10.5px/1 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-inputText: 400 11.5px/1 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-inputStrong: 500 11.5px/1 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-stateLabel: 400 11px/1 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-ruleCond: 400 12px/1 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-ruleAct: 500 12px/1 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-toolName: 500 12px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-toolScope: 400 11.5px/1 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-sampleTitle: 500 13px/1.35 Archivo, system-ui, sans-serif;
+  --ward-type-traceTitle: 500 11.5px/1.3 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-traceDetail: 400 10.5px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-handleMark: 400 11px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-pageTitle: 600 24px/1 Archivo, system-ui, sans-serif;
+  --ward-type-pageTitle-tracking: -0.022em;
+  --ward-type-bandTitle: 600 15px/1.15 Archivo, system-ui, sans-serif;
+  --ward-type-bandTitle-tracking: -0.014em;
+  --ward-type-cellTitle: 600 12.5px/1.25 Archivo, system-ui, sans-serif;
+  --ward-type-cardTitle: 600 13px/1 Archivo, system-ui, sans-serif;
+  --ward-type-keyCol: 600 10px/1.6 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-keyCol-tracking: 0.09em;
+  --ward-type-keyCol-transform: uppercase;
+  --ward-type-kvValue: 400 12.5px/1.6 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-consoleLine: 400 11px/1.5 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-monoText: 400 11.5px/1.45 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-useText: 400 11.5px/1.55 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-tabLabel: 500 11.5px/1 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-bandNote: 400 11px/1.45 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-modalTitle: 600 18px/1 Archivo, system-ui, sans-serif;
+  --ward-type-modalTitle-tracking: -0.018em;
+  --ward-type-choiceNote: 400 11px/1.4 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-inputMono: 500 12.5px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-cellBody: 400 11.5px/1.5 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-markGlyph: 700 9px/14px 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-microHead: 500 9px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-microHead-tracking: 0.13em;
+  --ward-type-microHead-transform: uppercase;
+  --ward-type-brandMark: 600 13px/1 Archivo, system-ui, sans-serif;
+  --ward-type-brandMark-tracking: -0.01em;
+  --ward-type-navAction: 600 11px/1 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-swatchName: 400 10px/1.55 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-agentActive: 600 12.5px/1 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-boardTitle: 600 21px/1 Archivo, system-ui, sans-serif;
+  --ward-type-boardTitle-tracking: -0.02em;
+  --ward-type-columnLabel: 600 12px/1 Archivo, system-ui, sans-serif;
+  --ward-type-columnCount: 400 10.5px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-columnCount-numeric: tabular-nums;
+  --ward-type-overCapCount: 500 11px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-overCapCount-numeric: tabular-nums;
+  --ward-type-workTitle: 500 12.5px/1.3 Archivo, system-ui, sans-serif;
+  --ward-type-overCapNote: 500 11px/1.45 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-caseTitle: 600 19px/1 Archivo, system-ui, sans-serif;
+  --ward-type-caseTitle-tracking: -0.02em;
+  --ward-type-costTotal: 600 20px/1 Archivo, system-ui, sans-serif;
+  --ward-type-costTotal-numeric: tabular-nums;
+  --ward-type-entryStage: 500 13px/1.55 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-sessionTitle: 500 13px/1.55 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-ruleNote: 400 11px/1.5 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-costCeiling: 400 12px/1.55 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-drawerTitle: 600 15px/1.3 Archivo, system-ui, sans-serif;
+  --ward-type-stageName: 500 13px/1 Archivo, system-ui, sans-serif;
+  --ward-type-agentName: 600 11.5px/1.25 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-cardNote: 400 10.5px/1.4 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-gateNote: 400 10.5px/1.5 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-reviewerName: 500 11px/1 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-reviewerMark: 600 8.5px/18px 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-terminalCount: 500 18px/1 Archivo, system-ui, sans-serif;
+  --ward-type-terminalCount-numeric: tabular-nums;
+  --ward-type-tag: 500 9.5px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-tag-tracking: 0.07em;
+  --ward-type-tag-transform: uppercase;
+  --ward-type-policyKey: 500 11px/1.5 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-stageFoot: 400 11.5px/1.5 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-streamName: 600 14px/1 Archivo, system-ui, sans-serif;
+  --ward-type-cellSub: 400 10.5px/1.3 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-sampleValue: 400 10px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-skeletonLabel: 500 9.5px/1.2 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-previewNote: 400 10.5px/1.45 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-effectText: 400 11.5px/1.35 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-scopeName: 600 13.5px/1 Archivo, system-ui, sans-serif;
+  --ward-type-scopeName-tracking: -0.014em;
+  --ward-type-personName: 400 12px/1 'Source Sans 3', system-ui, sans-serif;
+  --ward-motion-fast: 0.12s;
+  --ward-motion-flash: 300ms;
+  --ward-motion-reveal: 320ms;
+  --ward-motion-tick: 1000ms;
+  --ward-motion-patience: 800ms;
+  --ward-live-heartbeat: 15s;
+  --ward-live-poll: 15s;
+  --ward-live-reconnectMax: 30s;
+  --ward-live-staleAfter: 45000ms;
+}
+
+[data-theme="dark"] {
+  --ward-color-bg: #0D1017;
+  --ward-color-surface: #151A24;
+  --ward-color-surface2: #1E2530;
+  --ward-color-line: #2A323F;
+  --ward-color-line2: #3A4453;
+  --ward-color-text: #E8ECF2;
+  --ward-color-muted: #9AA6B8;
+  --ward-color-faint: #8491A3;
+  --ward-color-blue: #4D9BFF;
+  --ward-color-blueSoft: #101C33;
+  --ward-color-runningTint: #101C33;
+  --ward-color-green: #4FD08B;
+  --ward-color-orange: #F0A46B;
+  --ward-color-amber: #E0B84D;
+  --ward-color-red: #FF8A93;
+  --ward-color-warnInk: #E0B84D;
+  --ward-color-warnSurface: #2A2008;
+  --ward-color-warnLine: #4A3A14;
+  --ward-color-console: #0B1631;
+  --ward-color-consoleInk: #7FB2FF;
+  --ward-color-consoleWarn: #E7C57F;
+  --ward-color-consoleOk: #7FD3A0;
+  --ward-color-consoleFaint: #8B97AB;
+  --ward-color-deep: #2B3648;
+  --ward-color-overcapTint: rgba(255,138,147,0.08);
+  --ward-color-scrim: rgba(0,0,0,0.55);
+  --ward-color-greenFill: #45C4B4;
+  --ward-color-orangeFill: #F0A46B;
+  --ward-color-consoleInfo: #7FB2FF;
+  --ward-color-consoleDim: #8FA3C8;
+  --ward-color-line3: #4E5868;
+  --ward-color-ink2: #C3CBD8;
+  --ward-color-surface3: #1A2030;
+  --ward-chip-gate-bg: #101C33;
+  --ward-chip-gate-fg: #9CC2FF;
+  --ward-chip-gate-line: #101C33;
+  --ward-chip-system-bg: #101C33;
+  --ward-chip-system-fg: #9CC2FF;
+  --ward-chip-system-line: #101C33;
+  --ward-chip-write-bg: #2E1A0E;
+  --ward-chip-write-fg: #F0A46B;
+  --ward-chip-write-line: #2E1A0E;
+  --ward-chip-drift-bg: #2E1A0E;
+  --ward-chip-drift-fg: #F0A46B;
+  --ward-chip-drift-line: #2E1A0E;
+  --ward-chip-done-bg: #12261C;
+  --ward-chip-done-fg: #4FD08B;
+  --ward-chip-done-line: #12261C;
+  --ward-chip-attention-bg: #2A2008;
+  --ward-chip-attention-fg: #E0B84D;
+  --ward-chip-attention-line: #2A2008;
+  --ward-chip-failed-bg: #2B1417;
+  --ward-chip-failed-fg: #FF8A93;
+  --ward-chip-failed-line: #2B1417;
+  --ward-chip-pending-bg: transparent;
+  --ward-chip-pending-fg: #9AA6B8;
+  --ward-chip-pending-line: #3A4453;
+  --ward-chip-running-bg: #101C33;
+  --ward-chip-running-fg: #9CC2FF;
+  --ward-chip-running-line: #101C33;
+  --ward-chip-warn-bg: transparent;
+  --ward-chip-warn-fg: #E0B84D;
+  --ward-chip-warn-line: #4A3A14;
+  --ward-chip-meta-bg: transparent;
+  --ward-chip-meta-fg: #9AA6B8;
+  --ward-chip-meta-line: #2A323F;
+  --ward-chip-soft-bg: #1E2530;
+  --ward-chip-soft-fg: #E8ECF2;
+  --ward-chip-soft-line: #1E2530;
+  --ward-chip-quiet-bg: #1E2530;
+  --ward-chip-quiet-fg: #9AA6B8;
+  --ward-chip-quiet-line: #1E2530;
+  --ward-stream-1-id: #00897B;
+  --ward-stream-1-chip: #0E2622;
+  --ward-stream-1-chipText: #45C4B4;
+  --ward-stream-2-id: #7038C8;
+  --ward-stream-2-chip: #1D1533;
+  --ward-stream-2-chipText: #C0A2F0;
+  --ward-stream-3-id: #BF5310;
+  --ward-stream-3-chip: #27160A;
+  --ward-stream-3-chipText: #F0A46B;
+  --ward-stream-4-id: #1C6FB8;
+  --ward-stream-5-id: #8A6A00;
+  --ward-stream-6-id: #A02C6B;
+}
+
+[data-theme="light"] {
+  --ward-color-bg: #F7F8FA;
+  --ward-color-surface: #FFFFFF;
+  --ward-color-surface2: #EDF0F4;
+  --ward-color-line: #E2E6EC;
+  --ward-color-line2: #C9D2DE;
+  --ward-color-text: #071D49;
+  --ward-color-muted: #5A6474;
+  --ward-color-faint: #616C7E;
+  --ward-color-blue: #0066F5;
+  --ward-color-blueSoft: #F0F5FF;
+  --ward-color-runningTint: #D7E3F7;
+  --ward-color-green: #0C7A4D;
+  --ward-color-orange: #B14E12;
+  --ward-color-amber: #8A5A00;
+  --ward-color-red: #B4232A;
+  --ward-color-warnInk: #9A410C;
+  --ward-color-warnSurface: #FFF8F2;
+  --ward-color-warnLine: #E8C4A6;
+  --ward-color-console: #0B1631;
+  --ward-color-consoleInk: #7FB2FF;
+  --ward-color-consoleWarn: #E7C57F;
+  --ward-color-consoleOk: #7FD3A0;
+  --ward-color-consoleFaint: #8B97AB;
+  --ward-color-deep: #2B3648;
+  --ward-color-overcapTint: rgba(180,35,42,0.08);
+  --ward-color-scrim: rgba(7,29,73,0.30);
+  --ward-color-greenFill: #00897B;
+  --ward-color-orangeFill: #BF5310;
+  --ward-color-consoleInfo: #7FB2FF;
+  --ward-color-consoleDim: #8FA3C8;
+  --ward-color-line3: #B9C6DB;
+  --ward-color-ink2: #2B3648;
+  --ward-color-surface3: #FCFCFD;
+  --ward-chip-gate-bg: #071D49;
+  --ward-chip-gate-fg: #FFFFFF;
+  --ward-chip-gate-line: #071D49;
+  --ward-chip-system-bg: #071D49;
+  --ward-chip-system-fg: #FFFFFF;
+  --ward-chip-system-line: #071D49;
+  --ward-chip-write-bg: #B14E12;
+  --ward-chip-write-fg: #FFFFFF;
+  --ward-chip-write-line: #B14E12;
+  --ward-chip-drift-bg: #B14E12;
+  --ward-chip-drift-fg: #FFFFFF;
+  --ward-chip-drift-line: #B14E12;
+  --ward-chip-done-bg: #0C7A4D;
+  --ward-chip-done-fg: #FFFFFF;
+  --ward-chip-done-line: #0C7A4D;
+  --ward-chip-attention-bg: #8A5A00;
+  --ward-chip-attention-fg: #FFFFFF;
+  --ward-chip-attention-line: #8A5A00;
+  --ward-chip-failed-bg: #B4232A;
+  --ward-chip-failed-fg: #FFFFFF;
+  --ward-chip-failed-line: #B4232A;
+  --ward-chip-pending-bg: transparent;
+  --ward-chip-pending-fg: #5A6474;
+  --ward-chip-pending-line: #C9D2DE;
+  --ward-chip-running-bg: #D7E3F7;
+  --ward-chip-running-fg: #071D49;
+  --ward-chip-running-line: #D7E3F7;
+  --ward-chip-warn-bg: transparent;
+  --ward-chip-warn-fg: #9A410C;
+  --ward-chip-warn-line: #E8C4A6;
+  --ward-chip-meta-bg: transparent;
+  --ward-chip-meta-fg: #5A6474;
+  --ward-chip-meta-line: #E2E6EC;
+  --ward-chip-soft-bg: #EDF0F4;
+  --ward-chip-soft-fg: #071D49;
+  --ward-chip-soft-line: #EDF0F4;
+  --ward-chip-quiet-bg: #EDF0F4;
+  --ward-chip-quiet-fg: #5A6474;
+  --ward-chip-quiet-line: #EDF0F4;
+  --ward-stream-1-id: #00897B;
+  --ward-stream-1-chip: #00776B;
+  --ward-stream-1-chipText: #FFFFFF;
+  --ward-stream-2-id: #7038C8;
+  --ward-stream-2-chip: #7038C8;
+  --ward-stream-2-chipText: #FFFFFF;
+  --ward-stream-3-id: #BF5310;
+  --ward-stream-3-chip: #BF5310;
+  --ward-stream-3-chipText: #FFFFFF;
+  --ward-stream-4-id: #1C6FB8;
+  --ward-stream-4-chip: #1C6FB8;
+  --ward-stream-4-chipText: #FFFFFF;
+  --ward-stream-5-id: #8A6A00;
+  --ward-stream-5-chip: #8A6A00;
+  --ward-stream-5-chipText: #FFFFFF;
+  --ward-stream-6-id: #A02C6B;
+  --ward-stream-6-chip: #A02C6B;
+  --ward-stream-6-chipText: #FFFFFF;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+html {
+  background: var(--ward-color-bg);
+}
+body {
+  min-width: 0;
+  background: var(--ward-color-bg);
+  color: var(--ward-color-text);
+  font: var(--ward-type-body);
+}
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+  border: none;
+}
+button {
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
+fieldset {
+  border: none;
+  min-inline-size: 0;
+}
+ul, ol {
+  list-style: none;
+}
+img, svg {
+  display: block;
+}
+
+:focus-visible {
+  outline: var(--ward-border) solid var(--ward-color-blue);
+  outline-offset: 2px;
+}
+
+.ward-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@keyframes ward-flash {
+  from { border-color: var(--ward-flash-colour, var(--ward-color-blue)); }
+}
+.ward-border-flash {
+  animation: ward-flash var(--ward-motion-flash) 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

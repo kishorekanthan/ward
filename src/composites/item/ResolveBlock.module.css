@@ -1,0 +1,43 @@
+/* Provenance: mirrors design/Trellis Board Item.dc.html 10a — path cards 13px 14px, gap 8, inset rule; the Approver card is warm. */
+.list {
+  display: grid;
+  gap: var(--ward-gap-resolveList);
+}
+
+.path {
+  display: grid;
+  gap: var(--ward-gap-row);
+  justify-items: start;
+  padding: var(--ward-pad-resolvePath);
+  background: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+}
+
+.path[data-role="write"] {
+  background: var(--ward-color-warnSurface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-warnLine);
+}
+
+.head {
+  display: flex;
+  align-self: stretch;
+  align-items: center;
+  gap: var(--ward-gap-row);
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+  font: var(--ward-type-rowName);
+  color: var(--ward-color-text);
+}
+
+.consequence,
+.ask {
+  font: var(--ward-type-useText);
+  color: var(--ward-color-muted);
+}
+
+.path[data-role="write"] .consequence {
+  color: var(--ward-color-ink2);
+}

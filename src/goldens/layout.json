@@ -1,0 +1,18 @@
+{
+  "subjectRail": {
+    "dryrun": "var(--ward-width-dryrun)",
+    "preview": "var(--ward-width-preview)",
+    "border": "var(--ward-border) solid var(--ward-color-line)"
+  },
+  "drawer": {
+    "width": "var(--ward-width-drawer)",
+    "border": "var(--ward-border) solid var(--ward-color-line)",
+    "shadow": "var(--ward-shadow-overlay)"
+  },
+  "board": {
+    "colFloor": "240px",
+    "tracks": "minmax(var(--ward-width-colFloor), 1fr)",
+    "overflowX": "auto",
+    "columnMinWidth": "var(--ward-width-colFloor)"
+  }
+}

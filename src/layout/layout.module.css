@@ -1,0 +1,180 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.frame {
+  width: 100%;
+  min-width: 0;
+  max-width: var(--ward-width-max);
+  margin-inline: auto;
+}
+
+.frame[data-inset="page"] {
+  padding: var(--ward-space-5) var(--ward-space-page);
+}
+
+/* Studio 4b: the board fills the page below the bar, full width, its columns ruled to the bottom. */
+.frame[data-inset="board"] {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  max-width: none;
+}
+
+.subjectRail {
+  --ward-subject-rail-width: var(--ward-width-preview);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--ward-subject-rail-width);
+  min-width: 0;
+}
+
+.subjectRail[data-ward-subject-rail="dryrun"] {
+  --ward-subject-rail-width: var(--ward-width-dryrun);
+}
+
+/* Mirrors ward/screens/Trellis Intake and Rerun.dc.html block 12c — minmax(0,1.4fr) minmax(0,1fr). */
+.subjectRail[data-ward-subject-rail="split"] {
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+}
+
+.subject {
+  min-width: 0;
+}
+
+.rail {
+  min-width: 0;
+  background: var(--ward-color-surface);
+  border-left: var(--ward-border) solid var(--ward-color-line);
+}
+
+.rail[data-sticky="true"] {
+  position: sticky;
+  top: 0;
+  align-self: start;
+}
+
+/* Mirrors Trellis Board Item 8b: the grid carries border-top; the rail's own rule stands in for the record's border-right. */
+.subjectRail[data-ruled="true"] {
+  margin-inline: calc(-1 * var(--ward-page-inset));
+  border-top: var(--ward-border) solid var(--ward-color-line);
+}
+
+.subjectRail[data-ruled="true"] .rail {
+  background: none;
+}
+
+.record {
+  min-width: 0;
+}
+
+/* Mirrors Trellis Board Item 8b block padding under each `.sec` band. */
+.recordBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-gap-section);
+  padding: var(--ward-pad-drawerBlock);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.recordBody[data-pad="criteria"] {
+  gap: 0;
+  padding: var(--ward-pad-caseCriteria);
+  border-bottom: 0;
+}
+
+.recordBody[data-pad="history"] {
+  gap: 0;
+  padding: var(--ward-pad-caseHistory);
+  border-bottom: 0;
+}
+
+.recordBody[data-pad="rail"] {
+  padding: var(--ward-pad-railBlock);
+}
+
+.recordBody[data-pad="cost"] {
+  gap: var(--ward-gap-drawerBlock);
+  padding: var(--ward-pad-railBlock);
+  border-bottom: 0;
+}
+
+.recordBody[data-pad="railList"] {
+  gap: 0;
+  padding: var(--ward-pad-railList);
+  border-bottom: 0;
+}
+
+/* Mirrors ward/screens/Trellis Intake and Rerun.dc.html block 11a — the resolved-placement list, 6px 18px 14px. */
+.recordBody[data-pad="placement"] {
+  gap: 0;
+  padding: var(--ward-pad-placementList);
+  border-bottom: 0;
+}
+
+.band {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-space-4);
+  padding: var(--ward-space-3) var(--ward-space-5);
+  background: var(--ward-color-surface);
+  border-block: var(--ward-border) solid var(--ward-color-line);
+}
+
+.bandBody {
+  min-width: 0;
+  flex: 1;
+}
+
+.bandActions {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+  margin-left: auto;
+}
+
+.scroller {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(var(--ward-width-colFloor), 1fr);
+  gap: 0;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+
+/* Only the board page runs its columns full-bleed under a rule; an embedded preview keeps its own box. */
+.frame[data-inset="board"] .scroller {
+  margin-inline: calc(-1 * var(--ward-page-inset));
+  border-top: var(--ward-border) solid var(--ward-color-line);
+}
+
+/* The lane picker keeps the page inset; only the lane itself runs full-bleed. */
+.lanes {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--ward-space-3);
+  min-width: 0;
+}
+
+@media (max-width: 767.98px) {
+  .frame[data-inset="page"] {
+    padding-inline: var(--ward-space-4);
+  }
+
+  .subjectRail {
+    display: block;
+  }
+
+  .rail {
+    border-top: var(--ward-border) solid var(--ward-color-line);
+    border-left: 0;
+  }
+
+  .band {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .bandActions {
+    margin-left: 0;
+  }
+}

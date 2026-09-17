@@ -1,0 +1,246 @@
+/* Provenance: mirrors design/Trellis Studio.dc.html — `.app` grid 236px 1fr 316px, min-height 760px; the top bar mirrors `.bar`/`.on` in all six comps (padding 12px 20px, gap 10px, no declared height). */
+/* No font-family on the grid: every Ward text element names its own type token, and an inherited family would mask a missing one. */
+.app {
+  display: grid;
+  grid-template-columns: var(--ward-width-sidebar) 1fr var(--ward-width-rail);
+  min-height: max(var(--ward-height-app), 100dvh);
+  padding-inline: calc((100% - var(--ward-width-maxWide)) / 2);
+  background: var(--ward-color-bg);
+  color: var(--ward-color-text);
+}
+
+/* No rail means no third track, or an empty ruled strip would be drawn. */
+.app[data-rail="false"] {
+  grid-template-columns: var(--ward-width-sidebar) 1fr;
+}
+
+/* Real borders, as the comp declares; border-box keeps them inside the 236/316 tracks. */
+.side {
+  display: flex;
+  flex-direction: column;
+  background: var(--ward-color-surface);
+  border-right: var(--ward-border) solid var(--ward-color-line);
+}
+
+/* min-width: 0 is the comp's own; it stops a long unbroken string widening the 1fr track. */
+.main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  background: var(--ward-color-surface);
+  border-left: var(--ward-border) solid var(--ward-color-line);
+}
+
+.page {
+  --ward-page-inset: var(--ward-space-5);
+  padding: var(--ward-pad-page);
+}
+
+/* Derived reflow (no comp declares @media): below railStack the rail stacks under the centre,
+   below singleColumn everything does. A stack, not a drawer, because AppShell owns no state. */
+@media (max-width: 791.98px) {
+  .app {
+    grid-template-columns: var(--ward-width-sidebar) 1fr;
+  }
+
+  .side {
+    grid-row: 1 / -1;
+  }
+
+  .main {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .rail {
+    grid-column: 2;
+    grid-row: 2;
+    border-left: none;
+    border-top: var(--ward-border) solid var(--ward-color-line);
+  }
+}
+
+@media (max-width: 475.98px) {
+  .app {
+    grid-template-columns: 1fr;
+  }
+
+  .side {
+    grid-row: auto;
+    border-right: none;
+    border-bottom: var(--ward-border) solid var(--ward-color-line);
+  }
+
+  .main {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .rail {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
+
+.root {
+  min-height: 100vh;
+  background: var(--ward-color-bg);
+  color: var(--ward-color-text);
+  font: var(--ward-type-body);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-gap-bar);
+  padding: var(--ward-pad-bar);
+  overflow: hidden;
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+  background: var(--ward-color-surface);
+  color: var(--ward-color-text);
+}
+
+.mark {
+  flex: none;
+  width: var(--ward-height-brandMark);
+  height: var(--ward-height-brandMark);
+  background: var(--ward-color-blue);
+}
+
+.brand {
+  flex: 0 0 auto;
+  font: var(--ward-type-brandMark);
+  letter-spacing: var(--ward-type-brandMark-tracking);
+}
+
+.tagline {
+  font: var(--ward-type-control);
+  white-space: nowrap;
+  color: var(--ward-color-muted);
+}
+
+.identity,
+.tools {
+  margin-left: auto;
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--ward-space-2);
+  overflow: hidden;
+}
+
+.actor,
+.metadata {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  min-height: var(--ward-height-identityChip);
+  padding: 0 var(--ward-space-2);
+  overflow: hidden;
+  border: var(--ward-border) solid var(--ward-color-line);
+  color: var(--ward-color-muted);
+  text-overflow: ellipsis;
+  font: var(--ward-type-micro);
+  letter-spacing: var(--ward-type-micro-tracking);
+  text-transform: var(--ward-type-micro-transform);
+}
+
+.actor,
+.detail {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  margin-left: var(--ward-space-3);
+  gap: var(--ward-space-4);
+  overflow-x: auto;
+  scrollbar-width: none;
+  font: var(--ward-type-tabLabel);
+}
+
+.nav a {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  color: var(--ward-color-muted);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav a[aria-current="page"] {
+  color: var(--ward-color-text);
+  box-shadow: inset 0 calc(-1 * var(--ward-underline)) 0 var(--ward-color-blue);
+  padding-bottom: var(--ward-space-1);
+}
+
+/* Consumer controls (sign-out, dev identity) stay visible at every width, unlike the identity chips. */
+.tools {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+}
+
+/* A board page stretches to the viewport floor so its ruled columns reach the bottom. */
+.root:has(> .content > [data-inset="board"]) {
+  display: flex;
+  flex-direction: column;
+}
+
+.content:has(> [data-inset="board"]) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding-bottom: 0;
+}
+
+.identity + .tools {
+  margin-left: 0;
+}
+
+/* Comp .page inset (0 20px 22px); --ward-page-inset lets full-bleed bands such as PageHeader pull back out by the same 20px. */
+.content {
+  --ward-page-inset: var(--ward-space-5);
+  min-width: 0;
+  padding: var(--ward-pad-page);
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+  z-index: 10;
+  background: var(--ward-color-surface);
+  color: var(--ward-color-text);
+  padding: var(--ward-space-2) var(--ward-space-3);
+}
+
+.skip:focus {
+  top: var(--ward-space-2);
+  left: var(--ward-space-2);
+}
+
+@media (max-width: 767.98px) {
+  .topbar {
+    gap: var(--ward-space-2);
+    overflow-x: auto;
+  }
+
+  .nav {
+    flex: 1 0 auto;
+    margin-left: 0;
+  }
+
+  .identity {
+    display: none;
+  }
+}

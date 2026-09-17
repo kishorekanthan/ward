@@ -1,0 +1,65 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.sheet {
+  display: grid;
+  gap: var(--ward-space-4);
+  max-width: var(--ward-width-max);
+  margin: 0 auto;
+}
+
+.title {
+  font: var(--ward-type-h1);
+  letter-spacing: var(--ward-type-h1-tracking);
+  color: var(--ward-color-text);
+}
+
+.stage {
+  font: var(--ward-type-secondary);
+  color: var(--ward-color-muted);
+}
+
+.effects {
+  display: grid;
+  gap: var(--ward-space-2);
+}
+
+.effect {
+  display: flex;
+  gap: var(--ward-space-3);
+  align-items: baseline;
+}
+
+.numeral {
+  font: var(--ward-type-monoId);
+  font-variant-numeric: var(--ward-type-monoId-numeric);
+  color: var(--ward-color-muted);
+  flex: none;
+}
+
+.effectText {
+  font: var(--ward-type-body);
+  color: var(--ward-color-text);
+}
+
+.refusals {
+  display: grid;
+  gap: var(--ward-space-2);
+  justify-items: start;
+  padding: var(--ward-space-3);
+  background: var(--ward-color-warnSurface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-warnLine);
+}
+
+.reasons {
+  display: grid;
+  gap: var(--ward-space-1);
+}
+
+.reason {
+  font: var(--ward-type-secondary);
+  color: var(--ward-color-warnInk);
+}
+
+.actions {
+  display: flex;
+  gap: var(--ward-space-2);
+}

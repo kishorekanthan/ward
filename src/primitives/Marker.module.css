@@ -1,0 +1,6 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.marker {
+  display: inline-block;
+  flex: none;
+  background: var(--marker);
+}

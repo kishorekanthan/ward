@@ -1,0 +1,59 @@
+/* Provenance: design/Trellis Studio.dc.html block 4b — column padding 13px 12px, gap 10px, 1px right rule, no ground; gate column #F0F5FF. */
+/* The last column's rule is drawn by the scroller edge, so it drops its own. */
+.column {
+  display: grid;
+  align-content: start;
+  gap: var(--ward-gap-boardColumn);
+  min-width: var(--ward-width-colFloor);
+  padding: var(--ward-pad-boardColumn);
+  border-right: var(--ward-border) solid var(--ward-color-line);
+}
+
+.column:last-child {
+  border-right: none;
+}
+
+.column[data-gate="true"] {
+  background: var(--ward-color-blueSoft);
+}
+
+.column[data-overcap="true"] {
+  background: var(--ward-color-overcapTint);
+}
+
+.head {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+  background: inherit;
+}
+
+.label {
+  min-width: 0;
+  font: var(--ward-type-columnLabel);
+  color: var(--ward-color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.count {
+  margin-left: auto;
+  font: var(--ward-type-columnCount);
+  font-variant-numeric: var(--ward-type-columnCount-numeric);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+}
+
+.column[data-overcap="true"] .count {
+  font: var(--ward-type-overCapCount);
+  font-variant-numeric: var(--ward-type-overCapCount-numeric);
+  color: var(--ward-color-red);
+}
+
+.list {
+  display: grid;
+  gap: var(--ward-gap-boardColumn);
+}

@@ -1,0 +1,43 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.row {
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.cell {
+  padding: var(--ward-space-2) var(--ward-space-3);
+  vertical-align: top;
+}
+
+.condition {
+  font: var(--ward-type-monoId);
+  color: var(--ward-color-text);
+  padding-left: var(--ward-space-2);
+  white-space: nowrap;
+}
+
+.action {
+  font: var(--ward-type-body);
+  color: var(--ward-color-text);
+}
+
+/* contract: design/Trellis Studio.dc.html 2a "04 · Handoff rules" row, the same box as HandoffRuleRow. */
+.contract {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-gap-ruleRow);
+  padding: var(--ward-pad-ruleRow);
+  background: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+}
+
+.contractCondition {
+  min-width: 0;
+  font: var(--ward-type-ruleCond);
+  color: var(--ward-color-text);
+}
+
+.contractAction {
+  min-width: 0;
+  font: var(--ward-type-ruleAct);
+  color: var(--ward-color-text);
+}

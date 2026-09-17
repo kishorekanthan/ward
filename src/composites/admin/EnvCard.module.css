@@ -1,0 +1,79 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.card {
+  display: grid;
+  align-content: start;
+  gap: var(--ward-space-1);
+  padding: var(--ward-space-3);
+  background: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ward-space-2);
+}
+
+.env {
+  font: var(--ward-type-micro);
+  letter-spacing: var(--ward-type-micro-tracking);
+  text-transform: var(--ward-type-micro-transform);
+  color: var(--ward-color-muted);
+}
+
+.version {
+  font: var(--ward-type-monoId);
+  font-variant-numeric: var(--ward-type-monoId-numeric);
+  color: var(--ward-color-text);
+  white-space: nowrap;
+}
+
+.meta {
+  font: var(--ward-type-meta);
+  color: var(--ward-color-muted);
+}
+
+.webCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-space-2);
+  min-width: 0;
+  padding: var(--ward-pad-adminCard);
+  background: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+}
+
+.webRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ward-space-2);
+}
+
+/* Trellis Admin 5e: the env name is the card's kicker; doubled class outranks the web stage-title rule. */
+.webCard .webTitle {
+  font: var(--ward-type-microHead);
+  letter-spacing: var(--ward-type-microHead-tracking);
+  text-transform: var(--ward-type-microHead-transform);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.webLine {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.webCard .webVersion {
+  font: var(--ward-type-stat);
+  font-variant-numeric: var(--ward-type-stat-numeric);
+}
+
+.webCard .webMeta {
+  font: var(--ward-type-monoId);
+}

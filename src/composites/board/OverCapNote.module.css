@@ -1,0 +1,5 @@
+/* Provenance: design/Trellis Studio.dc.html block 4b note after the cards — 500 11px/1.45 prose; red not #9A410C, since the Ward spec keeps over cap red. */
+.note {
+  font: var(--ward-type-overCapNote);
+  color: var(--ward-color-red);
+}

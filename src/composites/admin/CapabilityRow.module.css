@@ -1,0 +1,75 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.frame {
+  overflow-x: auto;
+}
+
+.row {
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.headCell,
+.cell {
+  box-sizing: border-box;
+  padding: var(--ward-pad-row);
+  text-align: left;
+  vertical-align: top;
+}
+
+.headCell {
+  display: table-cell;
+  font-weight: inherit;
+}
+
+.name {
+  display: block;
+  font: var(--ward-type-title);
+  color: var(--ward-color-text);
+}
+
+.consequence {
+  display: block;
+  font: var(--ward-type-secondary);
+  color: var(--ward-color-muted);
+}
+
+/* muted, not faint: this carries content, and faint is decoration-only (tokens.json $meta.rules). */
+.governed {
+  display: block;
+  font: var(--ward-type-meta);
+  color: var(--ward-color-muted);
+}
+
+.control {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+}
+
+.byRole {
+  font: var(--ward-type-secondary);
+  color: var(--ward-color-muted);
+}
+
+/* Table cells cannot take row padding or flex gap: the comp's 11px 0 row and 8px gap
+   live on the cell as padding, and as padding-left after the first cell. */
+.cell + .cell {
+  padding-left: var(--ward-gap-row);
+}
+
+.webControl {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+}
+
+.webConsequence {
+  margin: 0;
+  font: var(--ward-type-secondary);
+  color: var(--ward-color-muted);
+}
+
+.webGoverned {
+  font: var(--ward-type-meta);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+}

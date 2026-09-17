@@ -1,0 +1,43 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.strip {
+  padding: var(--ward-pad-tabs);
+  display: flex;
+  align-items: stretch;
+  gap: var(--ward-space-4);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  height: var(--ward-height-control);
+  padding: 0;
+  font: var(--ward-type-tabLabel);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+  border-bottom: var(--ward-underline) solid transparent;
+  transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
+}
+
+.tab[aria-selected="true"] {
+  color: var(--ward-color-text);
+  border-bottom-color: var(--ward-color-blue);
+}
+
+.strip[data-level="2"] .tab[aria-selected="true"] {
+  border-bottom-color: var(--ward-color-text);
+}
+
+/* Comp tabs read "Queue · 14": the count shares the label's face and colour. */
+.count {
+  margin-inline-start: var(--ward-space-1);
+  font-variant-numeric: var(--ward-type-monoId-numeric);
+}
+
+/* Intake 12b scope row: 14px above, no rule of its own; the list below draws the line. */
+.strip[data-level="2"] {
+  padding: var(--ward-pad-scopeTabs);
+  border-bottom: 0;
+}

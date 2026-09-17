@@ -1,0 +1,53 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.row {
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.cell {
+  box-sizing: border-box;
+  padding: var(--ward-pad-row);
+  vertical-align: middle;
+  font: var(--ward-type-body);
+  color: var(--ward-color-text);
+}
+
+.cell[data-mono="true"] {
+  font: var(--ward-type-monoId);
+  font-variant-numeric: var(--ward-type-monoId-numeric);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+}
+
+.cell[data-align="end"] {
+  text-align: right;
+}
+
+.name {
+  font: var(--ward-type-title);
+  color: var(--ward-color-text);
+}
+
+.note {
+  font: var(--ward-type-secondary);
+  color: var(--ward-color-muted);
+}
+
+/* Table cells cannot take row padding or flex gap: the comp's 11px 0 row and 8px gap
+   live on the cell as padding, and as padding-left after the first cell. */
+.cell + .cell {
+  padding-left: var(--ward-gap-row);
+}
+
+.webName {
+  font: var(--ward-type-monoId);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.webMeta {
+  font: var(--ward-type-monoId);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

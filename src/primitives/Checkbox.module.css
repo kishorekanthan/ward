@@ -1,0 +1,73 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-space-1);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+}
+
+.box {
+  accent-color: var(--ward-color-blue);
+  width: var(--ward-space-3);
+  height: var(--ward-space-3);
+  flex: none;
+}
+
+.label {
+  font: var(--ward-type-body);
+  color: var(--ward-color-text);
+}
+
+.lockedNote {
+  font: var(--ward-type-micro);
+  letter-spacing: var(--ward-type-micro-tracking);
+  text-transform: var(--ward-type-micro-transform);
+  color: var(--ward-color-muted);
+  margin-left: var(--ward-space-2);
+}
+
+.consequence {
+  font: var(--ward-type-secondary);
+  color: var(--ward-color-muted);
+  padding-left: calc(var(--ward-space-3) + var(--ward-space-2));
+}
+
+/* Studio 4a card anatomy: an inset-ruled cell; an unchecked field reads muted. */
+.root[data-variant="cell"] {
+  align-items: stretch;
+  padding: var(--ward-pad-fieldCell);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+  border: 0;
+}
+
+.root[data-variant="cell"] .row {
+  gap: var(--ward-gap-fieldCell);
+}
+
+.root[data-variant="cell"] .box {
+  width: var(--ward-height-radio);
+  height: var(--ward-height-radio);
+  min-height: 0;
+  margin: 0;
+}
+
+.root[data-variant="cell"] .label {
+  flex: 1;
+  min-width: 0;
+  font: var(--ward-type-inputText);
+}
+
+.root[data-variant="cell"] .box:not(:checked) + .label {
+  color: var(--ward-color-muted);
+}
+
+.sample {
+  font: var(--ward-type-sampleValue);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+}

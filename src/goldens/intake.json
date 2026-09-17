@@ -1,0 +1,31 @@
+{
+  "$source": "Transcribed by hand from ward/screens/Trellis Intake and Rerun.dc.html block 12c 'Intake conversation' (thread, turns, reply row, split grid) and block 11d 'Loop policy' (policy rows, value column).",
+  "split": {
+    "columns": "minmax(0, 1.4fr) minmax(0, 1fr)"
+  },
+  "thread": {
+    "gap": "13px",
+    "turnGap": "6px",
+    "who": "400 11.5px/1.55 'Source Sans 3'"
+  },
+  "bubble": {
+    "padding": "11px 13px",
+    "ink": "#2B3648",
+    "agentWidth": "56ch",
+    "agentRing": "inset 0 0 0 1px #E2E6EC",
+    "requesterWidth": "52ch",
+    "requesterGround": "#F0F5FF"
+  },
+  "reply": {
+    "padding": "11px 13px",
+    "gap": "8px",
+    "ring": "inset 0 0 0 1px #C9D2DE"
+  },
+  "policy": {
+    "padding": "13px 15px",
+    "gap": "10px",
+    "name": "500 13px/1.55 'Source Sans 3'",
+    "note": "400 11.5px/1.55 'Source Sans 3'",
+    "valueColumn": "150px"
+  }
+}

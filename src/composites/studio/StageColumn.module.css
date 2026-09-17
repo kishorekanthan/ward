@@ -1,0 +1,210 @@
+/* Provenance: standard mode not established. Workflow mode MEASURED from design/Trellis Studio.dc.html block 3c. */
+.column {
+  display: grid;
+  gap: var(--ward-space-3);
+  align-content: start;
+  min-width: var(--ward-width-colFloor);
+  padding: var(--ward-space-3);
+  background: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+  transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
+}
+
+.column[data-kind="gate"] {
+  background: var(--ward-color-blueSoft);
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ward-space-2);
+}
+
+.index {
+  font: var(--ward-type-monoId);
+  font-variant-numeric: var(--ward-type-monoId-numeric);
+  color: var(--ward-color-muted);
+}
+
+.name {
+  flex: 1;
+  font: var(--ward-type-title);
+  color: var(--ward-color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meta {
+  display: flex;
+  gap: var(--ward-space-3);
+}
+
+.mono {
+  font: var(--ward-type-monoId);
+  font-variant-numeric: var(--ward-type-monoId-numeric);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+}
+
+.gate {
+  display: grid;
+  gap: var(--ward-space-2);
+  padding: var(--ward-space-3);
+  border: var(--ward-border) dashed var(--ward-color-line2);
+}
+
+.reviewersLabel {
+  font: var(--ward-type-micro);
+  letter-spacing: var(--ward-type-micro-tracking);
+  text-transform: var(--ward-type-micro-transform);
+  color: var(--ward-color-muted);
+}
+
+.reviewers {
+  display: grid;
+  gap: var(--ward-space-1);
+}
+
+.reviewer {
+  font: var(--ward-type-secondary);
+  color: var(--ward-color-text);
+}
+
+.agents {
+  display: grid;
+  gap: var(--ward-space-2);
+}
+
+.workflowColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-gap-stageColumn);
+  min-width: 0;
+  padding: var(--ward-pad-stageColumn);
+  border-right: var(--ward-border) solid var(--ward-color-line);
+}
+
+.workflowColumn:last-child {
+  border-right: 0;
+}
+
+.workflowColumn[data-kind="gate"] {
+  background: var(--ward-color-surface);
+}
+
+.workflowHead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-gap-stageHead);
+}
+
+.stageRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ward-gap-stageTag);
+}
+
+.stageLabel {
+  font: var(--ward-type-microHead);
+  letter-spacing: var(--ward-type-microHead-tracking);
+  text-transform: var(--ward-type-microHead-transform);
+  color: var(--ward-color-muted);
+}
+
+.workflowTitle {
+  font: var(--ward-type-stageName);
+  color: var(--ward-color-text);
+  overflow-wrap: anywhere;
+}
+
+.workflowMeta {
+  font: var(--ward-type-rowNote);
+  color: var(--ward-color-muted);
+}
+
+.workflowGate {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-gap-gatePanel);
+  padding: var(--ward-pad-workCard);
+  border: var(--ward-border) dashed var(--ward-color-line2);
+}
+
+.gateNote {
+  font: var(--ward-type-gateNote);
+  color: var(--ward-color-muted);
+}
+
+.cardNote {
+  font: var(--ward-type-cardNote);
+  color: var(--ward-color-muted);
+}
+
+.cardNote[data-accent="amber"] {
+  color: var(--ward-color-amber);
+}
+
+.reviewerList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-gap-reviewerList);
+}
+
+.reviewerRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-gap-reviewer);
+}
+
+.reviewerMark {
+  flex: none;
+  width: var(--ward-height-reviewerMark);
+  height: var(--ward-height-reviewerMark);
+  font: var(--ward-type-reviewerMark);
+  text-align: center;
+  color: var(--ward-color-text);
+  background: var(--ward-color-surface2);
+}
+
+.reviewerName {
+  min-width: 0;
+  font: var(--ward-type-reviewerName);
+  color: var(--ward-color-text);
+}
+
+.terminalCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-gap-terminalCard);
+  padding: var(--ward-pad-workCard);
+  background: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+}
+
+.terminalCount {
+  font: var(--ward-type-terminalCount);
+  font-variant-numeric: var(--ward-type-terminalCount-numeric);
+  color: var(--ward-color-text);
+}
+
+.workflowAgents {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-gap-stageColumn);
+}
+
+.mount {
+  align-self: flex-start;
+  padding: 0;
+  font: var(--ward-type-reviewerName);
+  color: var(--ward-color-blue);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.mount:hover {
+  text-decoration: underline;
+}

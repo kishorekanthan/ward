@@ -1,0 +1,116 @@
+/* Provenance: mirrors `.tr` in design/Trellis Intake and Rerun.dc.html. */
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-gap-row);
+  padding: var(--ward-pad-row);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+  overflow-x: auto;
+}
+
+.title {
+  flex: 1;
+  font: var(--ward-type-title);
+  color: var(--ward-color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.turns,
+.waiting,
+.resolved,
+.activity {
+  font: var(--ward-type-secondary);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+}
+
+.cost,
+.link {
+  font: var(--ward-type-monoId);
+  font-variant-numeric: var(--ward-type-monoId-numeric);
+  white-space: nowrap;
+  min-width: var(--ward-space-7);
+}
+
+.cost {
+  color: var(--ward-color-text);
+  text-align: right;
+}
+
+.link {
+  color: var(--ward-color-blue);
+}
+
+/* Intake 12b `.tr`: 11px rows, 8px column gap, a 14px gutter after the session column. */
+tr.tableRow > td {
+  padding: var(--ward-pad-sessionCell);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+  font: var(--ward-type-useText);
+  color: var(--ward-color-muted);
+  vertical-align: top;
+}
+
+tr.tableRow:last-child > td {
+  border-bottom: 0;
+}
+
+tr.tableRow > td.tableTitle {
+  padding: var(--ward-pad-sessionTitle);
+}
+
+.tableTitle,
+.tableResolved {
+  min-width: 0;
+}
+
+.tableLink {
+  display: block;
+  color: var(--ward-color-text);
+  font: var(--ward-type-sessionTitle);
+  text-decoration: none;
+}
+
+.tableLink:hover {
+  text-decoration: underline;
+}
+
+.tableRow[data-state="expired"] .tableLink {
+  color: var(--ward-color-muted);
+}
+
+.tableMeta {
+  display: block;
+  margin-top: var(--ward-space-1);
+  color: var(--ward-color-muted);
+  font: var(--ward-type-useText);
+}
+
+.tableCost,
+.tableActivity {
+  font-variant-numeric: var(--ward-type-monoId-numeric);
+  white-space: nowrap;
+}
+
+tr.tableRow > td.tableCost,
+tr.tableRow > td.tableActivity {
+  font: var(--ward-type-monoText);
+}
+
+.tableState {
+  white-space: nowrap;
+}
+
+.tableState > span {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ward-space-1);
+}
+
+.tableRecord {
+  font: var(--ward-type-monoText);
+  color: var(--ward-color-blue);
+  text-decoration: none;
+}

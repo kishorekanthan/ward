@@ -1,0 +1,100 @@
+/* Provenance: design/Trellis Studio.dc.html block 4b card — padding 11px, gap 8px, 1px line inset, min-height 96px, no stream stripe; drift 2px #BF5310, selected 2px blue (Board Item 8a). */
+.card {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: var(--ward-gap-row);
+  min-height: var(--ward-height-card);
+  padding: var(--ward-pad-workCard);
+  overflow: hidden;
+  background: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+  transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
+}
+
+.card[data-selected="true"] {
+  box-shadow: inset 0 0 0 var(--ward-underline) var(--ward-color-blue);
+}
+
+.card[data-flagged="true"] {
+  box-shadow: inset 0 0 0 var(--ward-underline) var(--ward-color-orangeFill);
+}
+
+.hit {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  z-index: 1;
+}
+
+.head {
+  display: flex;
+  gap: var(--ward-space-2);
+  flex-wrap: wrap;
+}
+
+.title {
+  overflow: hidden;
+  font: var(--ward-type-workTitle);
+  color: var(--ward-color-text);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.meta,
+.fields {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ward-space-2);
+  font: var(--ward-type-meta);
+  color: var(--ward-color-muted);
+  min-width: 0;
+}
+
+.meta {
+  font: var(--ward-type-rowNote);
+}
+
+.who {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.sep {
+  color: var(--ward-color-faint);
+}
+
+.mono,
+.field {
+  font: var(--ward-type-monoId);
+  font-variant-numeric: var(--ward-type-monoId-numeric);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ward-space-1) var(--ward-space-3);
+}
+
+.last {
+  font: var(--ward-type-monoId);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.last[data-stale="true"] {
+  color: var(--ward-color-warnInk);
+}
+
+.reason {
+  font: var(--ward-type-meta);
+  color: var(--ward-color-red);
+  overflow-wrap: anywhere;
+}

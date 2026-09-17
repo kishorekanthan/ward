@@ -1,0 +1,28 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.root {
+  display: inline-flex;
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line2);
+}
+
+.segment {
+  height: var(--ward-height-controlSm);
+  padding: 0 var(--ward-space-3);
+  font: var(--ward-type-control);
+  color: var(--ward-color-text);
+  white-space: nowrap;
+  transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
+}
+
+.segment + .segment {
+  box-shadow: inset var(--ward-border) 0 0 0 var(--ward-color-line2);
+}
+
+.segment[aria-checked="true"] {
+  background: var(--ward-color-text);
+  color: var(--ward-color-surface);
+  box-shadow: none;
+}
+
+.segment:disabled {
+  cursor: default;
+}

@@ -1,0 +1,18 @@
+{
+  "pageHeader": {
+    "padding": "18px 20px 14px",
+    "bleed": "calc(-1 * var(--ward-page-inset))",
+    "rowAlign": "flex-start",
+    "titleFont": "600 24px/1 Archivo, system-ui, sans-serif",
+    "titleTracking": "-0.022em",
+    "crumbFont": "500 9px/1 \"IBM Plex Mono\", ui-monospace, Menlo, monospace",
+    "crumbTracking": "0.13em",
+    "crumbTransform": "uppercase",
+    "actionGap": "8px"
+  },
+  "tabs": {
+    "cap": 7,
+    "levelOneUnderline": "var(--ward-color-blue)",
+    "levelTwoUnderline": "var(--ward-color-text)"
+  }
+}

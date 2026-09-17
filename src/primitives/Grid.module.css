@@ -1,0 +1,81 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.frame {
+  container-type: inline-size;
+}
+
+.table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.th,
+.td {
+  box-sizing: border-box;
+  padding: var(--ward-space-2) var(--ward-space-3);
+  text-align: left;
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.th {
+  font: var(--ward-type-micro);
+  letter-spacing: var(--ward-type-micro-tracking);
+  text-transform: var(--ward-type-micro-transform);
+  color: var(--ward-color-muted);
+  background: var(--ward-color-surface2);
+  white-space: nowrap;
+}
+
+.td {
+  font: var(--ward-type-body);
+  color: var(--ward-color-text);
+}
+
+.td[data-mono="true"] {
+  font: var(--ward-type-monoId);
+  font-variant-numeric: var(--ward-type-monoId-numeric);
+  white-space: nowrap;
+}
+
+.th[data-align="end"],
+.td[data-align="end"] {
+  text-align: right;
+}
+
+.sort {
+  font: inherit;
+  color: inherit;
+  padding: 0;
+}
+
+.row[data-selected="true"] {
+  background: var(--ward-color-blueSoft);
+}
+
+.row[data-locked="true"] {
+  background: var(--ward-color-surface2);
+}
+
+.empty {
+  padding: var(--ward-space-5);
+}
+
+@container (max-width: 687.98px) {
+  .th[data-drop="1"],
+  .td[data-drop="1"] {
+    display: none;
+  }
+}
+
+@container (max-width: 471.98px) {
+  .th[data-drop="2"],
+  .td[data-drop="2"] {
+    display: none;
+  }
+}
+
+.row[data-locked="true"] .td {
+  color: var(--ward-color-muted);
+}

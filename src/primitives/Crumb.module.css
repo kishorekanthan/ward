@@ -1,0 +1,41 @@
+/* Provenance: the crumb is the Admin comp .k kicker above the page title (500 9px/1 mono, .13em, uppercase). */
+.nav {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+}
+
+.list {
+  display: flex;
+  gap: var(--ward-space-2);
+  align-items: baseline;
+  white-space: nowrap;
+}
+
+.item {
+  font: var(--ward-type-microHead);
+  letter-spacing: var(--ward-type-microHead-tracking);
+  text-transform: var(--ward-type-microHead-transform);
+  color: var(--ward-color-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.link {
+  color: var(--ward-color-muted);
+  text-decoration: none;
+}
+
+.link:hover {
+  color: var(--ward-color-text);
+}
+
+.current {
+  color: var(--ward-color-text);
+}
+
+.chips {
+  display: inline-flex;
+  gap: var(--ward-space-2);
+  padding-left: var(--ward-space-2);
+}

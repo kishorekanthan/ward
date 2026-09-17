@@ -1,0 +1,46 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.strip {
+  display: grid;
+  gap: var(--ward-space-3);
+  padding: var(--ward-space-3);
+  background: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+}
+
+.name {
+  font: var(--ward-type-title);
+  color: var(--ward-color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chart {
+  display: block;
+  width: 100%;
+  height: var(--ward-space-2);
+}
+
+.segment[data-draft="true"] {
+  stroke: var(--ward-color-blue);
+  stroke-width: var(--ward-border);
+  vector-effect: non-scaling-stroke;
+}
+
+.detailedChart {
+  display: grid;
+  gap: var(--ward-space-2);
+  margin: 0;
+}
+
+.detailedChart svg {
+  display: block;
+  width: 100%;
+  height: var(--ward-height-chart);
+}

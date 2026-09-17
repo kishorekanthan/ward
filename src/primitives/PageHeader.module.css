@@ -1,0 +1,110 @@
+/* Provenance: Admin comp page head — .row padding 18px 20px 14px, align-items flex-start; .ttl 600 24px/1 Archivo, -.022em. */
+.root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-space-2);
+  padding: var(--ward-pad-pageHeader);
+  /* Full-bleed band: undefined outside a shell column, which leaves the margin at 0. */
+  margin-inline: calc(-1 * var(--ward-page-inset));
+}
+
+.context {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+  min-width: 0;
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ward-space-4);
+}
+
+.heading {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-space-2);
+}
+
+.headingWrap {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.chips {
+  display: flex;
+  gap: var(--ward-space-2);
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.title {
+  font: var(--ward-type-pageTitle);
+  letter-spacing: var(--ward-type-pageTitle-tracking);
+  color: var(--ward-color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.consequence {
+  font: var(--ward-type-secondary);
+  color: var(--ward-color-muted);
+}
+
+.actionsWrap {
+  margin-left: auto;
+  min-width: 0;
+  overflow: hidden;
+  flex: 0 1 auto;
+}
+
+.actions {
+  display: flex;
+  gap: var(--ward-space-2);
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.action {
+  display: inline-flex;
+}
+
+.measure {
+  position: absolute;
+  display: flex;
+  gap: var(--ward-space-2);
+  visibility: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Board Item 8b case head: padding 16px 20px 13px, title 600 19px -0.02em. */
+.root[data-density="record"] {
+  padding: var(--ward-pad-caseHead);
+}
+
+.root[data-density="record"] .title {
+  font: var(--ward-type-caseTitle);
+  letter-spacing: var(--ward-type-caseTitle-tracking);
+}
+
+@media (max-width: 767.98px) {
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .actionsWrap {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .actions {
+    justify-content: flex-start;
+  }
+}

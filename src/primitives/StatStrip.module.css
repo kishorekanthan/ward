@@ -1,0 +1,54 @@
+/* Provenance: mirrors design/Trellis Studio.dc.html. */
+.strip {
+  display: flex;
+  gap: var(--ward-space-6);
+}
+
+.cell {
+  display: grid;
+  gap: var(--ward-space-1);
+}
+
+.value {
+  font: var(--ward-type-stat);
+  font-variant-numeric: var(--ward-type-stat-numeric);
+  color: var(--ward-color-text);
+}
+
+/* text, not blue: blue is reserved for action, current, selection, focus, brand and flash. */
+.cell[data-accent="blue"] .value {
+  color: var(--ward-color-text);
+}
+
+.cell[data-accent="amber"] .value {
+  color: var(--ward-color-amber);
+}
+
+.label {
+  font: var(--ward-type-micro);
+  letter-spacing: var(--ward-type-micro-tracking);
+  text-transform: var(--ward-type-micro-transform);
+  color: var(--ward-color-muted);
+}
+
+.strip[data-divided] {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 0;
+}
+
+.strip[data-divided] .cell {
+  gap: var(--ward-gap-metricCell);
+  padding: var(--ward-pad-metricCell);
+}
+
+.strip[data-divided] .cell + .cell {
+  box-shadow: inset var(--ward-border) 0 0 0 var(--ward-color-line);
+}
+
+.strip[data-divided] .label {
+  font: var(--ward-type-microHead);
+  letter-spacing: var(--ward-type-microHead-tracking);
+  text-transform: var(--ward-type-microHead-transform);
+}

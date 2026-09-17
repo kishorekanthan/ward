@@ -1,0 +1,80 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.runbook {
+  display: grid;
+  gap: var(--ward-space-4);
+}
+
+.list {
+  display: grid;
+  gap: var(--ward-space-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.step {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ward-space-3);
+}
+
+.numeral {
+  flex: none;
+  font: var(--ward-type-monoId);
+  font-variant-numeric: var(--ward-type-monoId-numeric);
+  color: var(--ward-color-muted);
+}
+
+.body {
+  display: grid;
+  gap: var(--ward-space-1);
+  min-width: 0;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+}
+
+.title {
+  font: var(--ward-type-title);
+  color: var(--ward-color-text);
+}
+
+.detail {
+  font: var(--ward-type-secondary);
+  color: var(--ward-color-muted);
+}
+
+.actions {
+  display: flex;
+  gap: var(--ward-space-2);
+}
+
+/* Web runbook, Trellis Admin 5c: ruled rows, title over a mono detail, state chip at the row's end. */
+.webList {
+  gap: 0;
+}
+
+.webStep {
+  gap: var(--ward-gap-runbookStep);
+  padding: var(--ward-pad-runbookStep);
+  border-top: var(--ward-border) solid var(--ward-color-line);
+}
+
+.webBody {
+  flex: 1 1 auto;
+}
+
+.webBody > .head > :nth-child(2) {
+  margin-inline-start: auto;
+}
+
+.webTitle {
+  font: var(--ward-type-traceTitle);
+}
+
+.webDetail {
+  font: var(--ward-type-monoId);
+}

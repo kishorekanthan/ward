@@ -1,0 +1,118 @@
+{
+  "$source": "Transcribed by hand from ward/screens/Trellis Studio.dc.html block 3c 'Stream detail' (.k, .tag, stage columns, agent cards, gate panel, terminal card) and block 3a 'Streams' (stream rows), and block 3b 'New stream' (modal head, sections, stage rows, policy cards), and block 4a 'Board configuration' (config rows, card anatomy cells, live preview rail).",
+  "column": {
+    "padding": "14px 12px",
+    "gap": "11px",
+    "rule": "1px solid #E2E6EC",
+    "gateGround": "#FFFFFF"
+  },
+  "head": {
+    "gap": "5px",
+    "tagGap": "6px",
+    "label": "500 9px/1 'IBM Plex Mono'",
+    "labelTracking": "0.13em",
+    "name": "500 13px/1 Archivo",
+    "count": "400 10.5px/1 'Source Sans 3'"
+  },
+  "tag": {
+    "font": "500 9.5px/1 'IBM Plex Mono'",
+    "tracking": "0.07em",
+    "padding": "4px 6px",
+    "quietBg": "#EDF0F4",
+    "quietFg": "#5A6474"
+  },
+  "card": {
+    "padding": "11px",
+    "gap": "7px",
+    "mark": "6px",
+    "name": "600 11.5px/1.25 'Source Sans 3'",
+    "note": "400 10.5px/1.4 'Source Sans 3'",
+    "tagGap": "5px",
+    "selectedGround": "#F0F5FF",
+    "selectedRing": "inset 0 0 0 1px #0066F5"
+  },
+  "gate": {
+    "padding": "11px",
+    "gap": "8px",
+    "border": "1px dashed #C9D2DE",
+    "note": "400 10.5px/1.5 'Source Sans 3'",
+    "listGap": "6px",
+    "rowGap": "7px",
+    "mark": "18px",
+    "markType": "600 8.5px/18px 'Source Sans 3'",
+    "markGround": "#EDF0F4",
+    "reviewer": "500 11px/1 'Source Sans 3'"
+  },
+  "terminal": {
+    "padding": "11px",
+    "gap": "6px",
+    "count": "500 18px/1 Archivo"
+  },
+  "mount": {
+    "font": "500 11px/1 'Source Sans 3'",
+    "color": "#0066F5"
+  },
+  "streamRow": {
+    "padding": "15px 20px",
+    "cellGap": "8px",
+    "stack": "6px",
+    "statGap": "5px",
+    "chainGap": "5px",
+    "name": "600 14px/1 Archivo",
+    "owner": "400 11px/1 'Source Sans 3'",
+    "ownerIndent": "16px",
+    "value": "600 13px/1 Archivo",
+    "sub": "400 10.5px/1.3 'Source Sans 3'",
+    "policyId": "500 11.5px/1 'Source Sans 3'",
+    "draftGround": "#FCFCFD",
+    "draftMark": "inset 0 0 0 1px #5A6474",
+    "workflowEnd": "16px"
+  },
+  "newStream": {
+    "headPadding": "15px 18px",
+    "headGap": "6px",
+    "title": "600 18px/1 Archivo",
+    "titleTracking": "-0.018em",
+    "sectionPadding": "16px 0",
+    "sectionGap": "11px",
+    "inputPadding": "9px 10px",
+    "labelGap": "6px",
+    "keyWidth": "110px",
+    "swatch": "22px",
+    "swatchGap": "5px",
+    "stageList": "6px",
+    "stagePadding": "9px 11px",
+    "stageGap": "10px",
+    "gateGround": "#F0F5FF",
+    "gateRing": "inset 0 0 0 1px #0066F5",
+    "cardPadding": "10px 11px",
+    "cardGap": "10px"
+  },
+  "boardConfig": {
+    "gateRowGround": "#F0F5FF",
+    "subGap": "4px",
+    "sub": "400 10.5px/1 'Source Sans 3'",
+    "stateGap": "7px",
+    "state": "400 11px/1 'Source Sans 3'",
+    "cellPadding": "8px 10px",
+    "cellRing": "inset 0 0 0 1px #E2E6EC",
+    "cellGap": "9px",
+    "cellBox": "13px",
+    "cellLabel": "400 11.5px/1 'Source Sans 3'",
+    "sample": "400 10px/1 'IBM Plex Mono'",
+    "counter": "400 10.5px/1 'Source Sans 3'",
+    "railRule": "1px solid #E2E6EC",
+    "railPadding": "14px",
+    "railSectionGap": "11px",
+    "effectsGap": "9px",
+    "skeletonGap": "5px",
+    "skeletonPadding": "8px 7px",
+    "skeletonLabel": "500 9.5px/1.2 'Source Sans 3'",
+    "skeletonBar": "12px",
+    "skeletonGround": "#EDF0F4",
+    "skeletonGateRing": "inset 0 0 0 1px #071D49",
+    "skeletonGateBar": "#D7E3F7",
+    "columnsNote": "400 10.5px/1.45 'Source Sans 3'",
+    "effectText": "400 11.5px/1.35 'Source Sans 3'"
+  }
+}

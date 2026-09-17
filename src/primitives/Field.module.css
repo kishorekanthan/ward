@@ -1,0 +1,140 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-space-1);
+}
+
+.label {
+  font: var(--ward-type-micro);
+  letter-spacing: var(--ward-type-micro-tracking);
+  text-transform: var(--ward-type-micro-transform);
+  color: var(--ward-color-muted);
+}
+
+.labelHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.control {
+  font: var(--ward-type-inputText);
+  color: var(--ward-color-text);
+  background: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line2);
+  padding: var(--ward-pad-input);
+  width: 100%;
+}
+
+.control:disabled {
+  background: var(--ward-color-surface2);
+  color: var(--ward-color-faint);
+  cursor: default;
+}
+
+.control[aria-invalid="true"] {
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-red);
+}
+
+.mono {
+  font: var(--ward-type-monoId);
+  font-variant-numeric: var(--ward-type-monoId-numeric);
+}
+
+.area {
+  height: auto;
+  padding: var(--ward-space-2);
+  font: var(--ward-type-secondary);
+  resize: vertical;
+}
+
+.invalid {
+  font: var(--ward-type-meta);
+  color: var(--ward-color-red);
+}
+
+.control:focus {
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-blue);
+}
+
+/* Studio 3b: a 10.5px label 6px above a 9px 10px input set at row-name weight. */
+.field[data-variant="form"] {
+  gap: var(--ward-gap-formLabel);
+}
+
+.field[data-variant="form"] .label {
+  font: var(--ward-type-rowNote);
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.field[data-variant="form"] .control {
+  height: auto;
+  padding: var(--ward-pad-modalInput);
+  font: var(--ward-type-rowName);
+}
+
+.field[data-variant="form"] .mono {
+  font: var(--ward-type-inputMono);
+}
+
+.field[data-variant="inline"] .control {
+  height: auto;
+  padding: 0;
+  font: var(--ward-type-rowName);
+  background: transparent;
+  box-shadow: none;
+}
+
+.field[data-variant="inline"] .control::placeholder {
+  color: var(--ward-color-faint);
+}
+
+.field[data-variant="inline"] .control:focus {
+  box-shadow: inset 0 calc(-1 * var(--ward-border)) 0 var(--ward-color-blue);
+}
+
+.field[data-variant="reply"] .control {
+  height: auto;
+  padding: 0;
+  font: var(--ward-type-useText);
+  background: transparent;
+  box-shadow: none;
+}
+
+.field[data-variant="reply"] .control::placeholder {
+  color: var(--ward-color-muted);
+}
+
+.field[data-variant="tag"] .control {
+  width: auto;
+  height: auto;
+  appearance: none;
+  cursor: pointer;
+  padding: var(--ward-pad-chip);
+  font: var(--ward-type-tag);
+  letter-spacing: var(--ward-type-tag-tracking);
+  text-transform: var(--ward-type-tag-transform);
+  color: var(--ward-color-muted);
+  background: transparent;
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+}
+
+.field[data-variant="tagGate"] .control {
+  width: auto;
+  height: auto;
+  appearance: none;
+  cursor: pointer;
+  padding: var(--ward-pad-chip);
+  font: var(--ward-type-tag);
+  letter-spacing: var(--ward-type-tag-tracking);
+  text-transform: var(--ward-type-tag-transform);
+  color: var(--ward-chip-gate-fg);
+  background: var(--ward-chip-gate-bg);
+  box-shadow: none;
+}

@@ -1,0 +1,124 @@
+/* Provenance: mirrors design/Trellis Studio.dc.html — the column-config table, flex rows 10px gap with cells 22 / flex:1 / 150 / 84 / 88. */
+.frame {
+  display: grid;
+  overflow-x: auto;
+}
+
+.frame > div {
+  min-width: 0;
+}
+
+.head,
+.line {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-gap-configRow);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.head {
+  padding: var(--ward-pad-configHead);
+  font: var(--ward-type-microHead);
+  letter-spacing: var(--ward-type-microHead-tracking);
+  text-transform: var(--ward-type-microHead-transform);
+  color: var(--ward-color-muted);
+}
+
+.line {
+  padding: var(--ward-pad-configRow);
+}
+
+/* Shared by head cells and row cells so the two line up; the name column flexes.
+   No ARIA table roles: the comp is divs, with nothing to host a role="table". */
+.cHandle {
+  flex: none;
+  width: var(--ward-width-configHandle);
+}
+
+.cName {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-gap-configSub);
+  flex: 1;
+  min-width: 0;
+}
+
+.nameLine {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-gap-configName);
+  min-width: 0;
+}
+
+.cLabel {
+  flex: none;
+  width: var(--ward-width-configLabel);
+}
+
+.cCap {
+  flex: none;
+  width: var(--ward-width-configCap);
+}
+
+.cShown {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-gap-configName);
+  flex: none;
+  width: var(--ward-width-configShown);
+}
+
+/* Studio 4a: the human-gate row is tinted, the terminal row's name and label are muted. */
+.line[data-kind="gate"] {
+  background: var(--ward-color-blueSoft);
+}
+
+.line[data-kind="terminal"] .name,
+.line[data-kind="terminal"] .cLabel input {
+  color: var(--ward-color-muted);
+}
+
+.line[data-kind="terminal"] .cLabel input {
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+}
+
+.noCap {
+  padding: var(--ward-pad-input);
+  font: var(--ward-type-inputText);
+  color: var(--ward-color-muted);
+}
+
+.cCap input {
+  font: var(--ward-type-inputStrong);
+}
+
+.cCap input:placeholder-shown {
+  font: var(--ward-type-inputText);
+}
+
+.state {
+  font: var(--ward-type-stateLabel);
+  color: var(--ward-color-muted);
+}
+
+.handle {
+  font: var(--ward-type-handleMark);
+  color: var(--ward-color-muted);
+  padding: 0;
+}
+
+.name {
+  font: var(--ward-type-rowName);
+  color: var(--ward-color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sub {
+  font: var(--ward-type-rowNote);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

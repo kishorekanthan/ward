@@ -1,0 +1,58 @@
+/* Provenance: mirrors design/Trellis Board Item.dc.html 8b Cost — 600 20px total, 12px use-text ceiling, 4px bar, use-line labels with muted mono amounts, 9px rhythm. */
+.root {
+  display: grid;
+  gap: var(--ward-gap-drawerBlock);
+}
+
+.figure {
+  font: var(--ward-type-costTotal);
+  font-variant-numeric: var(--ward-type-costTotal-numeric);
+  color: var(--ward-color-text);
+}
+
+.of {
+  font: var(--ward-type-costCeiling);
+  color: var(--ward-color-muted);
+}
+
+.bar {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: var(--ward-height-bar);
+  background: var(--ward-color-surface2);
+}
+
+.bar::-webkit-meter-bar {
+  background: var(--ward-color-surface2);
+  height: var(--ward-height-bar);
+  border: 0;
+}
+
+/* text, not blue: blue is reserved for action, current, selection, focus, brand and flash. */
+.bar::-webkit-meter-optimum-value,
+.bar::-moz-meter-bar {
+  background: var(--ward-color-text);
+}
+
+.rows {
+  display: grid;
+  gap: var(--ward-gap-drawerBlock);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ward-space-3);
+}
+
+.label {
+  font: var(--ward-type-useText);
+  color: var(--ward-color-muted);
+}
+
+.amount {
+  font: var(--ward-type-monoText);
+  font-variant-numeric: tabular-nums;
+  color: var(--ward-color-muted);
+}

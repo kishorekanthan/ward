@@ -1,0 +1,47 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.tree {
+  display: grid;
+}
+
+.item {
+  display: grid;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+  min-height: var(--ward-height-control);
+  padding: 0 var(--ward-space-3);
+  font: var(--ward-type-body);
+  color: var(--ward-color-text);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+  transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+  min-width: 0;
+  width: 100%;
+  color: inherit;
+  font: inherit;
+}
+
+.row[data-depth="1"] {
+  padding-left: var(--ward-space-7);
+}
+
+.row[data-depth="2"] {
+  padding-left: calc(var(--ward-space-7) + var(--ward-space-7));
+}
+
+.row[data-inherited="true"] {
+  color: var(--ward-color-muted);
+}
+
+.row[data-unresolved="true"] {
+  box-shadow: inset var(--ward-underline) 0 0 0 var(--ward-color-warnLine);
+  background: var(--ward-color-warnSurface);
+}

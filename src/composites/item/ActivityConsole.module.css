@@ -1,0 +1,84 @@
+/* Provenance: mirrors design/Trellis Board Item.dc.html — `.cons` / `.cl`; the console surface is one value in both themes, so its inks are too. */
+.root {
+  display: grid;
+  gap: var(--ward-gap-console);
+  padding: var(--ward-pad-console);
+  background: var(--ward-color-console);
+}
+
+.list {
+  display: grid;
+  gap: var(--ward-gap-console);
+  max-height: 40vh;
+  overflow: auto;
+}
+
+.line {
+  display: flex;
+  gap: var(--ward-space-2);
+  font: var(--ward-type-consoleLine);
+  font-variant-numeric: tabular-nums;
+  color: var(--ward-color-consoleInfo);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--ward-motion-reveal);
+}
+
+.line[data-revealed="true"] {
+  opacity: 1;
+}
+
+.line[data-kind="ok"] {
+  color: var(--ward-color-consoleOk);
+}
+
+.line[data-kind="warn"] {
+  color: var(--ward-color-consoleWarn);
+}
+
+.line[data-kind="dim"] {
+  color: var(--ward-color-consoleDim);
+}
+
+.at {
+  flex: none;
+}
+
+.text {
+  white-space: nowrap;
+}
+
+.foot {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+  font: var(--ward-type-consoleLine);
+  /* Keep-list: the idle line keeps the target's consoleFaint ink, not the source's consoleInfo. */
+  color: var(--ward-color-consoleFaint);
+  border-top: var(--ward-border) solid var(--ward-color-consoleDim);
+  padding-top: var(--ward-gap-console);
+}
+
+.idle {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.caret {
+  width: var(--ward-size-marker6);
+  height: var(--ward-size-marker9);
+  background: var(--ward-color-consoleInk);
+  flex: none;
+}
+
+.jump {
+  justify-self: start;
+  background: none;
+  border: var(--ward-border) solid var(--ward-color-consoleInk);
+  color: var(--ward-color-consoleInk);
+  font: var(--ward-type-monoId);
+  cursor: pointer;
+  padding: var(--ward-space-1) var(--ward-space-2);
+}

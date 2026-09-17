@@ -1,0 +1,54 @@
+/* Provenance: mirrors `.fld` in design/Trellis Intake and Rerun.dc.html — the key-value
+   review row in "Resolved so far": flex, gap 10px, padding 11px 0, align-items flex-start. */
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ward-gap-field);
+  padding: var(--ward-pad-field);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+/* Fixed, not flexed: the comp pins the key column at 116px so keys line up down the
+   panel and only the value column takes up the slack. */
+.key {
+  flex: none;
+  width: var(--ward-width-keyColWide);
+  font: var(--ward-type-keyCol);
+  letter-spacing: var(--ward-type-keyCol-tracking);
+  text-transform: var(--ward-type-keyCol-transform);
+  color: var(--ward-color-muted);
+}
+
+/* The comp stacks the value over its evidence, so a wrapping value pushes its evidence
+   down rather than squeezing it — which is also why the row aligns to flex-start. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-space-1);
+  flex: 1;
+  min-width: 0;
+}
+
+.value {
+  font: var(--ward-type-body);
+  color: var(--ward-color-text);
+}
+
+/* type.monoText, not type.monoId: evidence is a RID or session id, not a column of
+   numbers that has to align with the row above. */
+.evidence {
+  font: var(--ward-type-monoText);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mark {
+  display: inline-flex;
+  flex: none;
+}
+
+.row[data-state="unresolved"] .value {
+  color: var(--ward-color-muted);
+}

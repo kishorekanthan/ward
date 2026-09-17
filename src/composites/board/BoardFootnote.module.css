@@ -1,0 +1,23 @@
+/* Provenance: Studio 4b footer strip — padding 12px 20px (pad.bar), 1px top rule, meta note, blue control link. */
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ward-gap-row);
+  margin-inline: calc(-1 * var(--ward-page-inset));
+  padding: var(--ward-pad-bar);
+  background: var(--ward-color-surface);
+  border-top: var(--ward-border) solid var(--ward-color-line);
+}
+
+.note {
+  min-width: 0;
+  font: var(--ward-type-meta);
+  color: var(--ward-color-muted);
+}
+
+.link {
+  margin-left: auto;
+  font: var(--ward-type-control);
+  color: var(--ward-color-blue);
+}

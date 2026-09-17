@@ -1,0 +1,26 @@
+/* Provenance: mirrors design/Trellis Intake and Rerun.dc.html — `.ok`/`.no`, 14px square, 700 9px/14px glyph. */
+/* Fill comes from the chip.done pair, not color.green, so dark theme gets a gated pair; the comp's margin-top:2px is replaced by baseline alignment. */
+.mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--ward-height-mark);
+  height: var(--ward-height-mark);
+  font: var(--ward-type-markGlyph);
+}
+
+.mark[data-state="met"] {
+  background: var(--ward-chip-done-bg);
+  color: var(--ward-chip-done-fg);
+}
+
+/* Derived: no comp specifies failed; ValidationList needs it, and the failed chip pair keeps both themes gated. */
+.mark[data-state="failed"] {
+  background: var(--ward-chip-failed-bg);
+  color: var(--ward-chip-failed-fg);
+}
+
+.mark[data-state="unmet"] {
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line2);
+}

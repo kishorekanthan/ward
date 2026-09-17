@@ -1,0 +1,102 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-gap-bar);
+  padding: var(--ward-pad-bar);
+  background: var(--ward-color-surface);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+}
+
+.skip:focus-visible {
+  position: static;
+  font: var(--ward-type-control);
+  color: var(--ward-color-blue);
+}
+
+.mark {
+  font: var(--ward-type-micro);
+  letter-spacing: var(--ward-type-micro-tracking);
+  text-transform: var(--ward-type-micro-transform);
+  color: var(--ward-color-text);
+  white-space: nowrap;
+}
+
+.nav {
+  flex: 1;
+}
+
+.list {
+  display: flex;
+  gap: var(--ward-space-4);
+  font: var(--ward-type-control);
+}
+
+.select {
+  display: none;
+  height: var(--ward-height-controlSm);
+  font: var(--ward-type-control);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line2);
+}
+
+.dest {
+  font: var(--ward-type-control);
+  color: var(--ward-color-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: var(--ward-underline) solid transparent;
+  transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
+}
+
+.dest[aria-current="page"] {
+  color: var(--ward-color-text);
+  border-bottom-color: var(--ward-color-blue);
+}
+
+.actor {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  padding: var(--ward-pad-chip);
+  font: var(--ward-type-chip);
+  letter-spacing: var(--ward-type-chip-tracking);
+  text-transform: var(--ward-type-chip-transform);
+  color: var(--ward-color-muted);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+  white-space: nowrap;
+}
+
+.actorMark {
+  display: none;
+}
+
+@media (max-width: 1023.98px) {
+  .actorLabel {
+    display: none;
+  }
+
+  .actorMark {
+    display: inline;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .list {
+    display: none;
+  }
+
+  .select {
+    display: block;
+  }
+}
+
+.tagline {
+  font: var(--ward-type-micro);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+}

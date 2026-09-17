@@ -1,0 +1,9 @@
+{
+  "$source": "Transcribed by hand from design/Trellis Studio.dc.html block 4b 'The board this produces' (shots/board.png).",
+  "head": { "padding": "16px 20px 12px", "title": "600 21px/1 Archivo", "tracking": "-0.02em", "rollup": "400 11.5px/1 'Source Sans 3'" },
+  "grid": { "borderTop": "1px solid #E2E6EC", "gap": "0" },
+  "column": { "padding": "13px 12px", "gap": "10px", "rule": "1px solid #E2E6EC", "label": "600 12px/1 Archivo", "count": "400 10.5px/1 'IBM Plex Mono'" },
+  "card": { "padding": "11px", "gap": "8px", "minHeight": "96px", "frame": "inset 0 0 0 1px #E2E6EC", "title": "500 12.5px/1.3 Archivo" },
+  "overCapNote": { "font": "500 11px/1.45 'Source Sans 3'" },
+  "footer": { "padding": "12px 20px", "borderTop": "1px solid #E2E6EC", "background": "#FFFFFF", "gap": "8px", "note": "400 11.5px/1.4 'Source Sans 3'", "link": "600 11.5px/1 'Source Sans 3'", "linkColor": "#0066F5" }
+}

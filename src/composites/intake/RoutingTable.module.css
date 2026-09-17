@@ -1,0 +1,13 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.cell {
+  font: inherit;
+  color: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cell[data-norerun="true"] {
+  color: var(--ward-color-warnInk);
+}
+

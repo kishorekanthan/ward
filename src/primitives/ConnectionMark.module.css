@@ -1,0 +1,25 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.root {
+  display: inline-flex;
+  gap: var(--ward-space-2);
+  align-items: center;
+  font: var(--ward-type-meta);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+}
+
+.chip {
+  display: inline-block;
+  font: var(--ward-type-chip);
+  letter-spacing: var(--ward-type-chip-tracking);
+  text-transform: var(--ward-type-chip-transform);
+  color: var(--ward-chip-warn-fg);
+  background: var(--ward-chip-warn-bg);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-chip-warn-line);
+  padding: var(--ward-space-1) var(--ward-space-2);
+  white-space: nowrap;
+}
+
+.noCase {
+  text-transform: none;
+}

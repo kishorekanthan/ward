@@ -1,0 +1,75 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.ladder {
+  display: grid;
+  gap: var(--ward-space-2);
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+  padding: var(--ward-pad-ruleRow);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+  transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
+}
+
+.cell[aria-checked="true"] {
+  box-shadow: inset 0 0 0 var(--ward-underline) var(--ward-color-blue);
+}
+
+/* Opacity is deliberate: the cell is a colour swatch, and the label still says why it is unavailable. */
+.cell[data-unavailable="true"] {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.empty {
+  display: inline-block;
+  flex: none;
+  width: var(--ward-space-4);
+  height: var(--ward-space-4);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line2);
+}
+
+.name {
+  flex: 1;
+  font: var(--ward-type-body);
+  color: var(--ward-color-text);
+}
+
+.holder {
+  font: var(--ward-type-meta);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+}
+
+.request {
+  cursor: default;
+}
+
+/* Studio 3b: 22px squares 5px apart; the picked one is ringed in ink. */
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ward-gap-swatch);
+  padding: var(--ward-pad-swatchRow);
+}
+
+.swatch {
+  width: var(--ward-height-swatch);
+  height: var(--ward-height-swatch);
+  flex: none;
+  cursor: pointer;
+  background: var(--stream);
+}
+
+.swatch[aria-checked="true"] {
+  box-shadow: 0 0 0 var(--ward-border) var(--ward-color-text);
+}
+
+/* An outline alone marks a step that cannot be picked; the label says why. */
+.swatch[data-unavailable="true"] {
+  cursor: default;
+  background: transparent;
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line2);
+}

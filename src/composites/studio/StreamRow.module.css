@@ -1,0 +1,169 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.frame {
+  overflow-x: auto;
+}
+
+.row {
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.cell {
+  padding: var(--ward-space-2) var(--ward-space-3);
+  vertical-align: middle;
+}
+
+.cell[data-align="end"] {
+  text-align: right;
+}
+
+.name {
+  font: var(--ward-type-body);
+  color: var(--ward-color-text);
+  text-decoration: none;
+  padding-right: var(--ward-space-2);
+}
+
+.chain {
+  display: inline-flex;
+  gap: var(--ward-space-1);
+  flex-wrap: nowrap;
+}
+
+.owner {
+  font: var(--ward-type-secondary);
+  color: var(--ward-color-text);
+  padding-right: var(--ward-space-2);
+}
+
+.mono {
+  font: var(--ward-type-monoId);
+  font-variant-numeric: var(--ward-type-monoId-numeric);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+}
+
+.compactRow {
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+  background: var(--ward-color-surface);
+}
+
+.compactRow[data-draft="true"] {
+  background: var(--ward-color-surface3);
+}
+
+.compactCell {
+  padding: var(--ward-pad-streamCell);
+  vertical-align: top;
+}
+
+.compactCell:first-child {
+  padding-left: var(--ward-width-streamEdge);
+}
+
+.compactCell:last-child {
+  padding-right: var(--ward-width-streamEdge);
+}
+
+.compactCell:nth-child(2) {
+  padding-right: calc(var(--ward-width-streamIndent) + var(--ward-space-1));
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ward-gap-streamCell);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ward-gap-streamChain);
+}
+
+.identityLine {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ward-gap-row);
+}
+
+.identity {
+  flex: none;
+  width: var(--ward-size-marker8);
+  height: var(--ward-size-marker8);
+  background: var(--stream, var(--ward-color-line2));
+}
+
+.identity[data-draft="true"] {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--ward-color-muted);
+}
+
+.compactName {
+  color: var(--ward-color-text);
+  font: var(--ward-type-streamName);
+  text-decoration: none;
+}
+
+.compactName[data-draft="true"] {
+  color: var(--ward-color-muted);
+}
+
+.compactName:hover {
+  text-decoration: underline;
+}
+
+.ownerLine {
+  padding-left: var(--ward-width-streamIndent);
+  color: var(--ward-color-muted);
+  font: var(--ward-type-stateLabel);
+}
+
+.chain {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ward-gap-streamChain);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ward-gap-streamChain);
+}
+
+.emptyChain {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ward-gap-row);
+}
+
+.arrow,
+.muted {
+  color: var(--ward-color-muted);
+  font: var(--ward-type-inputText);
+}
+
+.define {
+  color: var(--ward-color-blue);
+  font: var(--ward-type-inputStrong);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.statValue {
+  font: var(--ward-type-cardTitle);
+  font-variant-numeric: tabular-nums;
+  color: var(--ward-color-text);
+}
+
+.policyId {
+  font: var(--ward-type-inputStrong);
+  color: var(--ward-color-text);
+}
+
+.sub {
+  color: var(--ward-color-muted);
+  font: var(--ward-type-cellSub);
+}

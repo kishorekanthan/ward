@@ -1,0 +1,43 @@
+/* Provenance: design/Trellis Studio.dc.html 2a "03 · Tools granted" rows — padding 9px 0, gap 10px, rule above, name 150 wide. */
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-gap-toolRow);
+  padding: var(--ward-pad-toolRow);
+  border-top: var(--ward-border) solid var(--ward-color-line);
+}
+
+/* The comp dims the whole locked row rather than greying its ground. */
+.row[data-locked="true"] {
+  opacity: 0.5;
+}
+
+.name {
+  flex: none;
+  width: var(--ward-width-toolName);
+  overflow: hidden;
+  font: var(--ward-type-toolName);
+  color: var(--ward-color-text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.scope {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font: var(--ward-type-toolScope);
+  color: var(--ward-color-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 2a draws a 14px box; the app-wide option min-height would stretch the row. */
+.row > input {
+  flex: none;
+  width: var(--ward-height-mark);
+  height: var(--ward-height-mark);
+  min-height: 0;
+  margin: 0;
+  accent-color: var(--ward-color-blue);
+}

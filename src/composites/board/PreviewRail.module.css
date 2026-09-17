@@ -1,0 +1,88 @@
+/* Provenance: mirrors ward/screens/Trellis Studio.dc.html block 4a — the "Live preview" rail. */
+.rail {
+  display: flex;
+  flex-direction: column;
+  width: var(--ward-width-preview);
+  min-width: 0;
+  background: var(--ward-color-surface);
+  border-left: var(--ward-border) solid var(--ward-color-line);
+}
+
+.k {
+  font: var(--ward-type-microHead);
+  letter-spacing: var(--ward-type-microHead-tracking);
+  text-transform: var(--ward-type-microHead-transform);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+}
+
+.head {
+  padding: var(--ward-pad-railSection);
+  color: var(--ward-color-text);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-gap-sectionBlock);
+  padding: var(--ward-pad-railSection);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.section:last-child {
+  gap: var(--ward-gap-effects);
+  border-bottom: 0;
+}
+
+.card {
+  display: grid;
+}
+
+.strip {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(var(--ward-width-colFloor), 1fr);
+  gap: var(--ward-space-2);
+  overflow-x: auto;
+}
+
+.strip[data-strip="skeleton"] {
+  display: flex;
+  align-items: stretch;
+  gap: var(--ward-gap-skeleton);
+}
+
+.skeleton {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--ward-gap-skeleton);
+  min-width: 0;
+  padding: var(--ward-pad-skeletonColumn);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+}
+
+.skeleton[data-kind="gate"] {
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-text);
+}
+
+.skeletonLabel {
+  font: var(--ward-type-skeletonLabel);
+  color: var(--ward-color-text);
+  overflow-wrap: anywhere;
+}
+
+.bar {
+  height: var(--ward-height-skeletonBar);
+  background: var(--ward-color-surface2);
+}
+
+.skeleton[data-kind="gate"] .bar {
+  background: var(--ward-color-runningTint);
+}
+
+.note {
+  font: var(--ward-type-previewNote);
+  color: var(--ward-color-muted);
+}

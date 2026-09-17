@@ -1,0 +1,27 @@
+/* Provenance: mirrors design/Trellis Studio.dc.html — "04 · Handoff rules" row, padding 11px 13px, gap 9px, inset 1px line. */
+/* WHEN/THEN pills are chip.system/chip.meta exactly, so dark theme comes from pairs gate 2 already measures. */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-gap-row);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-gap-ruleRow);
+  padding: var(--ward-pad-ruleRow);
+  background: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+}
+
+.condition {
+  font: var(--ward-type-ruleCond);
+  color: var(--ward-color-text);
+}
+
+/* 500 against the condition's 400, as the comp has it: the weight carries the "then" emphasis. */
+.action {
+  font: var(--ward-type-ruleAct);
+  color: var(--ward-color-text);
+}

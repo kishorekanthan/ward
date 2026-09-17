@@ -1,0 +1,172 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.frame {
+  container-type: inline-size;
+  overflow-x: auto;
+}
+
+.label {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--ward-space-2);
+  min-width: 0;
+}
+
+.name {
+  flex: 1;
+  font: var(--ward-type-body);
+  color: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.column {
+  box-sizing: border-box;
+  flex: none;
+  padding-right: var(--ward-space-3);
+  font: var(--ward-type-body);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.column[data-mono="true"] {
+  font: var(--ward-type-monoId);
+  font-variant-numeric: var(--ward-type-monoId-numeric);
+}
+
+.column[data-align="end"] {
+  text-align: right;
+}
+
+@container (max-width: 687.98px) {
+  .column[data-drop="1"] {
+    display: none;
+  }
+}
+
+@container (max-width: 471.98px) {
+  .column[data-drop="2"] {
+    display: none;
+  }
+}
+
+/* Web matrix: Trellis Admin 5b .th head, scope/role/person rows, fixed AD group | People | Requested via columns. */
+.webFrame {
+  container-type: inline-size;
+  border-top: var(--ward-border) solid var(--ward-color-line);
+}
+
+.webHead {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+  padding: var(--ward-space-2) calc(var(--ward-space-3) + var(--ward-space-2));
+  font: var(--ward-type-microHead);
+  letter-spacing: var(--ward-type-microHead-tracking);
+  text-transform: var(--ward-type-microHead-transform);
+  color: var(--ward-color-muted);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.webHeadLabel {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Tree lists are grids; a 0 minimum keeps a long label from widening the matrix past its frame. */
+.webFrame [role="tree"],
+.webFrame [role="tree"] > li {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.webFrame [role="treeitem"] > button > span:nth-child(2) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.webFrame [role="treeitem"][data-depth="0"] {
+  background: var(--ward-color-surface2);
+  font: var(--ward-type-scopeName);
+  letter-spacing: var(--ward-type-scopeName-tracking);
+}
+
+.webFrame [role="treeitem"][data-depth="1"] {
+  padding-left: var(--ward-width-roleIndent);
+  font: var(--ward-type-rowName);
+  box-shadow: inset var(--ward-underline) 0 0 0 var(--ward-color-line);
+}
+
+.webFrame [role="treeitem"][data-depth="2"] {
+  padding-left: var(--ward-width-personIndent);
+  font: var(--ward-type-personName);
+  box-shadow: inset var(--ward-underline) 0 0 0 var(--ward-color-line);
+}
+
+.webFrame [role="treeitem"][data-unresolved="true"] {
+  box-shadow: inset var(--ward-underline) 0 0 0 var(--ward-color-warnLine);
+}
+
+.webLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+  min-width: 0;
+}
+
+.webColumns {
+  display: flex;
+  flex: none;
+  align-items: center;
+}
+
+.webGroup,
+.webPeople,
+.webVia {
+  box-sizing: border-box;
+  flex: none;
+  min-width: 0;
+  padding-right: var(--ward-space-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.webGroup {
+  width: var(--ward-width-roleGroup);
+}
+
+.webPeople {
+  width: var(--ward-width-rolePeople);
+  font: var(--ward-type-body);
+  color: var(--ward-color-text);
+}
+
+.webVia {
+  width: var(--ward-width-roleVia);
+}
+
+.webHead .webPeople {
+  font: inherit;
+  color: inherit;
+}
+
+.webMeta {
+  font: var(--ward-type-monoId);
+  color: var(--ward-color-muted);
+}
+
+/* The web matrix gives up Requested via before its labels start to clip. */
+@container (max-width: 791.98px) {
+  .webVia {
+    display: none;
+  }
+}
+
+@container (max-width: 471.98px) {
+  .webPeople {
+    display: none;
+  }
+}

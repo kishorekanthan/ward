@@ -1,0 +1,59 @@
+{
+  "font": {
+    "named": "Archivo, system-ui, sans-serif",
+    "prose": "'Source Sans 3', system-ui, sans-serif",
+    "mono": "'IBM Plex Mono', ui-monospace, Menlo, monospace"
+  },
+  "color": {
+    "bg": "#F7F8FA",
+    "surface": "#FFFFFF",
+    "surface2": "#EDF0F4",
+    "line": "#E2E6EC",
+    "line2": "#C9D2DE",
+    "text": "#071D49",
+    "muted": "#5A6474",
+    "faint": "#616C7E",
+    "blue": "#0066F5",
+    "blueSoft": "#F0F5FF",
+    "runningTint": "#D7E3F7",
+    "green": "#0C7A4D",
+    "orange": "#B14E12",
+    "amber": "#8A5A00",
+    "red": "#B4232A",
+    "warnInk": "#9A410C",
+    "warnSurface": "#FFF8F2",
+    "warnLine": "#E8C4A6",
+    "console": "#0B1631"
+  },
+  "chip": {
+    "done": { "bg": "#0C7A4D", "fg": "#FFFFFF", "line": "#0C7A4D" },
+    "attention": { "bg": "#8A5A00", "fg": "#FFFFFF", "line": "#8A5A00" },
+    "write": { "bg": "#B14E12", "fg": "#FFFFFF", "line": "#B14E12" },
+    "failed": { "bg": "#B4232A", "fg": "#FFFFFF", "line": "#B4232A" },
+    "running": { "bg": "#D7E3F7", "fg": "#071D49", "line": "#D7E3F7" }
+  },
+  "stream": {
+    "steps": [
+      { "step": 1, "id": "#00897B", "chip": "#00776B", "chipText": "#FFFFFF" },
+      { "step": 2, "id": "#7038C8", "chip": "#7038C8", "chipText": "#FFFFFF" },
+      { "step": 3, "id": "#BF5310", "chip": "#BF5310", "chipText": "#FFFFFF" },
+      { "step": 4, "id": "#1C6FB8", "chip": "#1C6FB8", "chipText": "#FFFFFF" },
+      { "step": 5, "id": "#8A6A00", "chip": "#8A6A00", "chipText": "#FFFFFF" },
+      { "step": 6, "id": "#A02C6B", "chip": "#A02C6B", "chipText": "#FFFFFF" }
+    ]
+  },
+  "space": { "1": 4, "2": 8, "3": 12, "4": 16, "5": 20, "6": 24, "7": 32, "page": 24 },
+  "width": { "max": 1240, "drawer": 430, "dryrun": 316, "preview": 356, "colFloor": 240 },
+  "height": { "control": 30, "controlSm": 26, "card": 96, "touch": 44, "topbar": 44 },
+  "radius": 0,
+  "border": 1,
+  "underline": 2,
+  "type": {
+    "h1": { "family": "named", "weight": 600, "size": 19, "leading": 1.2, "tracking": "-0.2px" },
+    "body": { "family": "prose", "weight": 400, "size": 13, "leading": 1.55 },
+    "control": { "family": "prose", "weight": 600, "size": 11.5, "leading": 1 },
+    "monoId": { "family": "mono", "weight": 400, "size": 10.5, "leading": 1.45 },
+    "chip": { "family": "mono", "weight": 500, "size": 10, "leading": 1, "tracking": "0.07em", "transform": "uppercase" }
+  },
+  "motion": { "fast": "0.12s", "flash": "300ms", "reveal": "320ms" }
+}

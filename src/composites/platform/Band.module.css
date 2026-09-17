@@ -1,0 +1,66 @@
+/* Provenance: mirrors design/Trellis Platform Surface.dc.html — `.band` 170px + 4 cells, `.bh` 16px 16px 18px, `.c` 14px 14px 16px, gap 7px. */
+.band {
+  display: grid;
+  grid-template-columns: var(--ward-width-bandHead) repeat(4, minmax(0, 1fr));
+  border-top: var(--ward-border) solid var(--ward-color-line);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-gap-band);
+  padding: var(--ward-pad-bandHead);
+  background: var(--ward-color-surface);
+  border-right: var(--ward-border) solid var(--ward-color-line);
+}
+
+/* min-width: 0 is the comp's own declaration. Without it a long unbroken token
+   in a cell body widens its 1fr track and squeezes the other three. */
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-gap-band);
+  min-width: 0;
+  overflow-wrap: anywhere;
+  padding: var(--ward-pad-bandCell);
+  border-right: var(--ward-border) solid var(--ward-color-line);
+}
+
+.cell:last-child {
+  border-right: 0;
+}
+
+/* `.k` here is 500 9px/1 mono at .13em, not the 600 10px/.09em of colHead —
+   the comps carry two different micro labels and this is the narrower one. */
+.index {
+  font: var(--ward-type-microHead);
+  letter-spacing: var(--ward-type-microHead-tracking);
+  text-transform: var(--ward-type-microHead-transform);
+  color: var(--ward-color-muted);
+}
+
+.title {
+  font: var(--ward-type-bandTitle);
+  letter-spacing: var(--ward-type-bandTitle-tracking);
+  color: var(--ward-color-text);
+}
+
+.note {
+  font: var(--ward-type-bandNote);
+  color: var(--ward-color-muted);
+}
+
+.cellTitle {
+  font: var(--ward-type-cellTitle);
+  color: var(--ward-color-text);
+}
+
+.cellBody {
+  font: var(--ward-type-cellBody);
+  color: var(--ward-color-muted);
+}
+
+/* The comp sets align-self on the tag inline, on every one of the 24 cells. */
+.tag {
+  align-self: flex-start;
+}

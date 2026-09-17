@@ -1,0 +1,70 @@
+/* Provenance: MEASURED from design/Trellis Studio.dc.html block 3c (agent card inside a stage column). */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-gap-agentCard);
+  padding: var(--ward-pad-workCard);
+  background: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+  transition: opacity var(--ward-motion-fast);
+}
+
+.card[data-selected="true"] {
+  background: var(--ward-color-blueSoft);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-blue);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-gap-stageTag);
+  min-width: 0;
+  font: var(--ward-type-agentName);
+}
+
+.mark {
+  flex: none;
+  width: var(--ward-height-traceDot);
+  height: var(--ward-height-traceDot);
+  background: var(--stream);
+}
+
+.card[data-paused="true"] .mark {
+  background: transparent;
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-muted);
+}
+
+.name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: var(--ward-color-text);
+  text-decoration: none;
+}
+
+.card[data-paused="true"] .name {
+  color: var(--ward-color-muted);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ward-gap-agentTags);
+}
+
+.description {
+  font: var(--ward-type-cardNote);
+  color: var(--ward-color-muted);
+}
+
+.run {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--ward-space-2);
+  font: var(--ward-type-cardNote);
+  color: var(--ward-color-muted);
+}
+
+.sep {
+  color: var(--ward-color-faint);
+}

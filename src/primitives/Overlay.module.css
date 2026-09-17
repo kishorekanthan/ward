@@ -1,0 +1,102 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.scrim {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  background: var(--ward-color-scrim);
+  z-index: 50;
+}
+
+.drawer {
+  justify-content: flex-end;
+}
+
+.sheet {
+  align-items: flex-end;
+}
+
+.modal {
+  align-items: center;
+  justify-content: center;
+}
+
+.panel {
+  position: relative;
+  background: var(--ward-color-surface);
+  box-shadow: var(--ward-shadow-overlay);
+  overflow: auto;
+  transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
+}
+
+.panel.drawer {
+  height: 100%;
+  width: var(--ward-width-drawer);
+  border-left: var(--ward-border) solid var(--ward-color-line);
+}
+
+.panel.sheet {
+  width: 100%;
+  height: 88vh;
+}
+
+.panel.modal {
+  width: min(var(--ward-width-drawer), calc(100% - 2 * var(--ward-space-6)));
+  max-height: calc(100% - 2 * var(--ward-space-6));
+}
+
+.panel[data-wide="true"] {
+  width: min(var(--ward-width-overlayWide), calc(100% - 2 * var(--ward-space-6)));
+}
+
+.header {
+  min-height: calc(var(--ward-height-control) + 2 * var(--ward-space-3));
+  display: flex;
+  align-items: center;
+  padding: var(--ward-space-3) calc(var(--ward-height-control) + 2 * var(--ward-space-3)) var(--ward-space-3) var(--ward-space-5);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.title {
+  font: var(--ward-type-title);
+}
+
+.body {
+  padding: var(--ward-space-5);
+}
+
+/* Derived: with no header row, content starts under the absolutely placed close button so a long first line cannot run beneath it. */
+.body[data-untitled] {
+  padding-top: calc(var(--ward-space-3) + var(--ward-height-control));
+}
+
+/* A flush body hands its bands the full panel width; each band keeps its own padding. */
+.body[data-flush] {
+  padding: 0;
+}
+
+@media (max-width: 1023.98px) {
+  .panel.drawer {
+    width: 100%;
+    height: 88vh;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .panel.drawer {
+    height: 100%;
+  }
+}
+
+.close {
+  position: absolute;
+  top: var(--ward-space-3);
+  right: var(--ward-space-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ward-height-control);
+  height: var(--ward-height-control);
+  font: var(--ward-type-control);
+  color: var(--ward-color-muted);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line2);
+}

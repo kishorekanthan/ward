@@ -1,0 +1,11 @@
+{
+  "$source": "Transcribed by hand from design/Trellis Board Item.dc.html block 8b 'Case file' (.sec, .k, .ac, .tl, gate rows, Cost block).",
+  "head": { "padding": "16px 20px 13px", "title": "600 19px/1 Archivo", "tracking": "-0.02em" },
+  "grid": { "rule": "1px solid #E2E6EC" },
+  "sec": { "padding": "13px 18px", "gap": "10px", "key": "600 10px/1 'IBM Plex Mono'", "keyTracking": "0.09em", "note": "400 11.5px/1.55 'Source Sans 3'" },
+  "blocks": { "block": "15px 18px", "criteria": "6px 18px 14px", "history": "8px 18px 16px", "rail": "14px 16px", "railList": "6px 16px 14px", "gap": "10px", "costGap": "9px" },
+  "criterion": { "padding": "10px 0", "gap": "10px", "markTop": "2px", "bodyGap": "4px", "evidence": "400 11.5px/1.45 'IBM Plex Mono'", "unmetEvidence": "#9A410C", "rule": "400 11px/1.5 'Source Sans 3'" },
+  "entry": { "padding": "11px 0 11px 14px", "gap": "11px", "nodeTop": "4px", "stage": "500 13px/1.55 'Source Sans 3'", "sentence": "400 11.5px/1.55 'Source Sans 3'", "meta": "400 11.5px/1.45 'IBM Plex Mono'" },
+  "gate": { "padding": "9px 0", "gap": "8px", "tag": "70px", "actor": "78px", "actorType": "400 11.5px/1.55 'Source Sans 3'" },
+  "cost": { "total": "600 20px/1 Archivo", "ceiling": "400 12px/1.55 'Source Sans 3'", "bar": "4px", "gap": "9px", "amount": "400 11.5px/1.45 'IBM Plex Mono'" }
+}

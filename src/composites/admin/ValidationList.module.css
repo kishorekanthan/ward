@@ -1,0 +1,42 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.list {
+  display: grid;
+  gap: var(--ward-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.check {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ward-space-2);
+}
+
+.body {
+  display: grid;
+  flex: 1;
+  gap: var(--ward-space-1);
+  min-width: 0;
+}
+
+.text {
+  font: var(--ward-type-body);
+  color: var(--ward-color-text);
+}
+
+.check[data-pending="true"] .text {
+  color: var(--ward-color-muted);
+}
+
+.pending {
+  font: var(--ward-type-meta);
+  color: var(--ward-color-muted);
+}
+
+.measured {
+  font: var(--ward-type-monoId);
+  font-variant-numeric: var(--ward-type-monoId-numeric);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+}

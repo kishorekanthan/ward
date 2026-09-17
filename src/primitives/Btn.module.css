@@ -1,0 +1,53 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: var(--ward-type-control);
+  height: var(--ward-height-control);
+  padding: 0 var(--ward-space-3);
+  white-space: nowrap;
+  transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
+}
+
+.primary {
+  padding: var(--ward-pad-controlPrimary);
+  background: var(--ward-color-blue);
+  color: var(--ward-color-surface);
+}
+
+.primary:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.secondary {
+  color: var(--ward-color-text);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line2);
+}
+
+.ghost {
+  color: var(--ward-btn-ghost-ink, var(--ward-color-blue));
+  padding: 0 var(--ward-space-1);
+}
+
+.ghost:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+.overflow {
+  color: var(--ward-color-text);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line2);
+  width: var(--ward-height-control);
+  padding: 0;
+}
+
+.sm {
+  height: var(--ward-height-controlSm);
+}
+
+.disabled {
+  background: var(--ward-color-surface2);
+  color: var(--ward-color-faint);
+  box-shadow: none;
+  cursor: default;
+}

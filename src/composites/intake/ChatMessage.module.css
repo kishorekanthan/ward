@@ -1,0 +1,72 @@
+/* Provenance: mirrors `.msg` in design/Trellis Collaboration.dc.html — padding 14px 15px,
+   10px between rows, white surface with a 1px inset rule. */
+.thread {
+  display: grid;
+  gap: var(--ward-space-4);
+}
+
+.turn {
+  display: grid;
+  gap: var(--ward-gap-message);
+  max-width: 56ch;
+  padding: var(--ward-pad-message);
+  text-align: left;
+}
+
+.turn[data-turn="requester"] {
+  justify-self: end;
+  background: var(--ward-color-blueSoft);
+}
+
+.turn[data-turn="agent"] {
+  justify-self: start;
+  background: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+}
+
+.who {
+  font: var(--ward-type-meta);
+  color: var(--ward-color-muted);
+}
+
+.body {
+  font: var(--ward-type-body);
+  color: var(--ward-color-text);
+}
+
+/* Mirrors ward/screens/Trellis Intake and Rerun.dc.html block 12c — who line above the bubble (6px), 11px 13px bubbles, 13px apart. */
+.thread[data-density="intake"] {
+  gap: var(--ward-gap-intakeThread);
+}
+
+.thread[data-density="intake"] .turn,
+.thread[data-density="intake"] .turn[data-turn] {
+  justify-self: stretch;
+  justify-items: start;
+  gap: var(--ward-gap-intakeTurn);
+  max-width: none;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.thread[data-density="intake"] .turn[data-turn="requester"] {
+  justify-items: end;
+}
+
+.thread[data-density="intake"] .who {
+  font: var(--ward-type-useText);
+}
+
+.thread[data-density="intake"] .body {
+  max-width: 56ch;
+  padding: var(--ward-pad-intakeTurn);
+  color: var(--ward-color-ink2);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+}
+
+.thread[data-density="intake"] .turn[data-turn="requester"] .body {
+  max-width: 52ch;
+  background: var(--ward-color-blueSoft);
+  box-shadow: none;
+}

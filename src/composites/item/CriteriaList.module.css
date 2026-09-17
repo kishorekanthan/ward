@@ -1,0 +1,58 @@
+/* Provenance: mirrors design/Trellis Board Item.dc.html 8b `.ac` rows — gap 10px, padding 10px 0, ruled, 14px box at margin-top 2px, body gap 4px. */
+.list {
+  display: grid;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ward-gap-section);
+  padding: var(--ward-pad-criterion);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.item:last-child {
+  border-bottom: 0;
+}
+
+.item > [data-testid="marker"] {
+  margin-top: var(--ward-gap-criterionMark);
+}
+
+.body {
+  display: grid;
+  gap: var(--ward-gap-entryBody);
+  min-width: 0;
+}
+
+.text {
+  font: var(--ward-type-body);
+  color: var(--ward-color-text);
+}
+
+.item[data-met="false"] .text {
+  color: var(--ward-color-muted);
+}
+
+.evidence {
+  font: var(--ward-type-monoText);
+  color: var(--ward-color-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item[data-met="false"] .evidence {
+  color: var(--ward-color-warnInk);
+}
+
+.consequence {
+  font: var(--ward-type-ruleNote);
+  color: var(--ward-color-warnInk);
+}
+
+.note {
+  padding-top: var(--ward-space-3);
+  font: var(--ward-type-ruleNote);
+  color: var(--ward-color-muted);
+}

@@ -1,0 +1,40 @@
+/* Provenance: mirrors `.tr` in design/Trellis Intake and Rerun.dc.html. Rows carry their own
+   padding and rule, so the list must not add a gap or the rules float apart. */
+.list {
+  display: grid;
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ward-gap-row);
+  padding: var(--ward-pad-row);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+  color: var(--ward-color-text);
+}
+
+.row[data-failed="true"] {
+  color: var(--ward-color-red);
+}
+
+.label {
+  flex: 1;
+  font: var(--ward-type-body);
+  color: inherit;
+}
+
+.n {
+  font: var(--ward-type-monoId);
+  font-variant-numeric: var(--ward-type-monoId-numeric);
+  color: inherit;
+  white-space: nowrap;
+}
+
+.cause {
+  flex: 1;
+  font: var(--ward-type-secondary);
+  color: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
