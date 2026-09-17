@@ -12,6 +12,7 @@ export type PageHeaderProps = {
         connection: LiveConnection;
         since: string;
     };
+    /** Replaces the built-in panel that lists collapsed actions. */
     onOverflow?: () => void;
     /** "record" is Board Item 8b's case head: 16px 20px 13px with a 19px title. */
     density?: "page" | "record";

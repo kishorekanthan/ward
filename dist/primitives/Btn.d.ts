@@ -8,6 +8,9 @@ type Base = {
     children?: ReactNode;
     label?: ReactNode;
     className?: string;
+    /** Disclosure state for a button that shows and hides a panel it controls. */
+    expanded?: boolean;
+    controls?: string;
 };
 export type BtnProps = (Base & {
     disabled?: false;

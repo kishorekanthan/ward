@@ -74,6 +74,17 @@
   display: inline-flex;
 }
 
+/* Collapsed actions stack under the title row; no comp block exists for this state. */
+.overflowPanel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ward-space-2);
+}
+
+.overflowPanel[hidden] {
+  display: none;
+}
+
 .measure {
   position: absolute;
   display: flex;

@@ -11,6 +11,9 @@ type Base = {
   children?: ReactNode;
   label?: ReactNode;
   className?: string;
+  /** Disclosure state for a button that shows and hides a panel it controls. */
+  expanded?: boolean;
+  controls?: string;
 };
 
 export type BtnProps = (Base & { disabled?: false; describedBy?: string }) | (Base & { disabled: true; describedBy: string });
@@ -23,8 +26,12 @@ function classNames(variant: BtnVariant, size: "md" | "sm", disabled: boolean, c
     .join(" ");
 }
 
-function overflowProps(variant: BtnVariant): { "aria-label"?: string; "aria-haspopup"?: "menu" } {
-  return variant === "overflow" ? { "aria-label": "More actions", "aria-haspopup": "menu" } : {};
+type OverflowAria = { "aria-label"?: string; "aria-haspopup"?: "menu" };
+
+// A disclosure (controls set) is not a menu, so it must not announce one.
+function overflowProps(variant: BtnVariant, controls?: string): OverflowAria {
+  if (variant !== "overflow") return {};
+  return controls ? { "aria-label": "More actions" } : { "aria-label": "More actions", "aria-haspopup": "menu" };
 }
 
 function validate(props: BtnProps): void {
@@ -49,7 +56,9 @@ export function Btn(props: BtnProps) {
       disabled={disabled}
       aria-describedby={props.describedBy}
       onClick={props.onClick}
-      {...overflowProps(variant)}
+      aria-expanded={props.expanded}
+      aria-controls={props.controls}
+      {...overflowProps(variant, props.controls)}
     >
       {buttonContent(props)}
     </button>

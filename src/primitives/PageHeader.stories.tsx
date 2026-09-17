@@ -84,3 +84,9 @@ export const NoActions = {
 export const Overflow = {
   args: { crumb, title: "intake-advisor v3", actions, onOverflow: () => {} },
 };
+
+// No onOverflow: Ward's own panel lists the actions; narrow the viewport to see it.
+export const OverflowPanel = {
+  args: { crumb, title: "intake-advisor v3", actions },
+  parameters: { viewport: { defaultViewport: "mobile1" } },
+};

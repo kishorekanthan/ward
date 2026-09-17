@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode, type RefObject } from "react";
 import type { LiveConnection } from "../live/types";
 import { Btn } from "./Btn";
 import { Chip, type ChipProps } from "./Chip";
@@ -13,6 +13,7 @@ export type PageHeaderProps = {
   consequence?: string;
   actions?: ReactNode[];
   connection?: { connection: LiveConnection; since: string };
+  /** Replaces the built-in panel that lists collapsed actions. */
   onOverflow?: () => void;
   /** "record" is Board Item 8b's case head: 16px 20px 13px with a 19px title. */
   density?: "page" | "record";
@@ -27,9 +28,44 @@ function Heading({ title, consequence }: Pick<PageHeaderProps, "title" | "conseq
   );
 }
 
-function ActionItems({ actions, collapsed, onOverflow }: { actions: ReactNode[]; collapsed: boolean; onOverflow?: () => void }) {
-  if (collapsed) return <Btn variant="overflow" onClick={onOverflow}>···</Btn>;
+type Disclosure = { open: boolean; panelId: string; toggle: () => void };
+
+function ActionList({ actions }: { actions: ReactNode[] }) {
   return actions.map((action, index) => <span key={index} className={s.action} data-action="">{action}</span>);
+}
+
+function ActionItems({ actions, collapsed, onOverflow, disclosure }: { actions: ReactNode[]; collapsed: boolean; onOverflow?: () => void; disclosure: Disclosure }) {
+  if (!collapsed) return <ActionList actions={actions} />;
+  if (onOverflow) return <Btn variant="overflow" onClick={onOverflow}>···</Btn>;
+  return (
+    <Btn variant="overflow" onClick={disclosure.toggle} expanded={disclosure.open} controls={disclosure.panelId}>
+      ···
+    </Btn>
+  );
+}
+
+function OverflowPanel({ actions, disclosure, onEscape }: { actions: ReactNode[]; disclosure: Disclosure; onEscape: () => void }) {
+  const onKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "Escape") onEscape();
+  };
+  return (
+    <div id={disclosure.panelId} className={s.overflowPanel} data-ward-overflow-panel="" hidden={!disclosure.open} onKeyDown={onKeyDown}>
+      <ActionList actions={actions} />
+    </div>
+  );
+}
+
+// Open state only counts while collapsed, so widening the header closes the panel.
+function useDisclosure(collapsed: boolean, actionsRef: RefObject<HTMLDivElement | null>) {
+  const panelId = useId();
+  const [requested, setRequested] = useState(false);
+  const open = requested && collapsed;
+  const toggle = () => setRequested(!open);
+  const close = () => {
+    setRequested(false);
+    actionsRef.current?.querySelector<HTMLButtonElement>("button")?.focus();
+  };
+  return { disclosure: { open, panelId, toggle }, close };
 }
 
 function HeaderContext({ crumb, chips }: Pick<PageHeaderProps, "crumb" | "chips">) {
@@ -45,10 +81,15 @@ function missingMeasure(...elements: Array<HTMLElement | null>): boolean {
   return elements.some((element) => element === null);
 }
 
+// "normal" or an unresolved gap parses to NaN, which would silently disable collapsing.
+function columnGap(row: HTMLDivElement): number {
+  return Number.parseFloat(getComputedStyle(row).columnGap) || 0;
+}
+
 function needsCollapse(row: HTMLDivElement, heading: HTMLDivElement | null, box: HTMLDivElement | null, measure: HTMLDivElement | null, actionCount: number): boolean {
   if (actionCount === 0 || missingMeasure(heading, box, measure)) return false;
   const [readyHeading, readyBox, readyMeasure] = [heading, box, measure] as [HTMLDivElement, HTMLDivElement, HTMLDivElement];
-  const gap = Number.parseFloat(getComputedStyle(row).columnGap);
+  const gap = columnGap(row);
   const available = Math.max(0, row.clientWidth - readyHeading.offsetWidth - gap);
   return readyMeasure.offsetWidth > available || readyBox.scrollWidth > readyBox.clientWidth + 1;
 }
@@ -81,6 +122,7 @@ function Connection({ connection }: Pick<PageHeaderProps, "connection">) {
 
 export function PageHeader({ crumb, chips, title, consequence, actions = [], connection, onOverflow, density = "page" }: PageHeaderProps) {
   const { rowRef, headingRef, actionsRef, measureRef, collapsed } = useActionOverflow(actions);
+  const { disclosure, close } = useDisclosure(collapsed, actionsRef);
   return (
     <header className={s.root} data-density={density}>
       <HeaderContext crumb={crumb} chips={chips} />
@@ -91,10 +133,11 @@ export function PageHeader({ crumb, chips, title, consequence, actions = [], con
         <div className={s.actionsWrap}>
           <Connection connection={connection} />
           <div className={s.actions} ref={actionsRef} data-ward-actions>
-            <ActionItems actions={actions} collapsed={collapsed} onOverflow={onOverflow} />
+            <ActionItems actions={actions} collapsed={collapsed} onOverflow={onOverflow} disclosure={disclosure} />
           </div>
         </div>
       </div>
+      {collapsed && !onOverflow ? <OverflowPanel actions={actions} disclosure={disclosure} onEscape={close} /> : null}
       <div className={s.measure} ref={measureRef} aria-hidden="true">
         {actions.map((action, index) => <span key={index}>{action}</span>)}
       </div>
