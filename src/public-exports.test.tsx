@@ -18,7 +18,10 @@ import {
   StageColumn,
   SubjectRail,
   Tabs,
+  Visible,
+  VisibilityProvider,
   WorkCard,
+  money,
 } from "./index";
 
 describe("public Ward exports", () => {
@@ -41,6 +44,17 @@ describe("public Ward exports", () => {
     expect(screen.getByRole("radio", { name: "A" }).getAttribute("aria-checked")).toBe("true");
     expect(screen.getByRole("link", { name: "Home" }).getAttribute("aria-current")).toBe("page");
     expect(screen.getByText("No records.").closest("[role='status']")).not.toBeNull();
+  });
+
+  it("publishes the show/hide wrapper and sub-cent money from the root", () => {
+    render(
+      <VisibilityProvider hidden={["usage.tokens"]}>
+        <Visible id="usage.costs"><span>{money(0.0004)}</span></Visible>
+        <Visible id="usage.tokens"><span>120,000 tokens</span></Visible>
+      </VisibilityProvider>,
+    );
+    expect(screen.getByText("<$0.01")).toBeDefined();
+    expect(screen.queryByText("120,000 tokens")).toBeNull();
   });
 
   it("keeps interaction on the public controls", () => {

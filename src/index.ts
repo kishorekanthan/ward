@@ -8,6 +8,9 @@ export { count } from "./fmt/count";
 export { ratio } from "./fmt/ratio";
 export { clock } from "./fmt/clock";
 
+export { Visible, VisibilityProvider, useVisible } from "./visibility/Visible";
+export type { VisibilityProviderProps, VisibleProps } from "./visibility/Visible";
+
 export { useFocusTrap } from "./a11y/useFocusTrap";
 export { useReturnFocus } from "./a11y/useReturnFocus";
 export { useRovingTabindex } from "./a11y/useRovingTabindex";
