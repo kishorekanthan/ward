@@ -2,6 +2,12 @@
 
 Ward (`@trellis/ward`) is a standalone React 19 UI library. It must never import app code.
 
+## Tickets
+- No code change without a ticket. Before editing code, `tickets/W-NNN-<slug>.md` must exist with **Why** (the problem, who it's for), **What** (scope, and what is out of scope) and **Acceptance criteria** (checkable statements, each verified by a test or a named manual check). No ticket, no code: write the ticket first. Template: `tickets/README.md`.
+- Commits and PR titles name the ticket (`W-NNN: ...`); the PR body links the ticket file.
+- When done, the ticket gets `Status: done` plus **Verify** and **Follow-up** sections.
+- Numbering: Ward has its own W-NNN sequence, continuing the older unprefixed tickets (`01`–`15`, `rebuild/01`–`03`, now history). Next number above the highest used (W-016 onward).
+
 ## Scope
 - Work only inside this folder. Consumers (e.g. `products/trellis/web`) pin Ward by git tag.
 
