@@ -38,3 +38,7 @@ npm run test:consumer
 ```
 
 `check` verifies generated tokens, contrast, strict TypeScript, complexity ≤ 5, CSS rules, and tests. `test:consumer` packs Ward, installs the tarball into a clean temporary app, imports its root and CSS entries, renders on the server, and creates a production build.
+
+## Contributing
+
+Bug reports, ideas and pull requests are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md). Please report security problems privately, as described in [SECURITY.md](SECURITY.md). Everyone taking part follows the [Code of Conduct](CODE_OF_CONDUCT.md).

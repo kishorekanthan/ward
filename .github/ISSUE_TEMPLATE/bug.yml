@@ -1,0 +1,47 @@
+name: Bug report
+description: Something in Ward does not work the way it should.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Please do **not** use this form for security problems; see [SECURITY.md](https://github.com/kishorekanthan/ward/blob/main/SECURITY.md) instead.
+  - type: input
+    id: version
+    attributes:
+      label: Ward version
+      description: The version or git tag you use, for example `v0.2.2`. You can find it in your app's `package.json`.
+      placeholder: v0.2.2
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: The exact steps someone else can follow to see the bug. A small code example helps most.
+      placeholder: |
+        1. Render `<WorkCard item={...} />` with a title of 200 characters.
+        2. Make the browser window 320px wide.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+      description: What should have happened.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead
+      description: What actually happened. Include any error message and a screenshot if you can.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and system
+      description: For example "Chrome 130 on macOS 15" or "Safari on iPhone 16". Optional.
+    validations:
+      required: false
