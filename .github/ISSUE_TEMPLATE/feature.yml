@@ -1,0 +1,46 @@
+name: Feature or change
+description: Ask for something new in Ward, or a change to how something works.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Ward. Every change starts with an issue like this one, so we agree on the problem before anyone writes code.
+        Please check the [open issues](https://github.com/kishorekanthan/ward/issues) first in case someone has already asked.
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      description: What problem are you trying to solve, and who has it? Describe the problem, not the fix.
+      placeholder: "When I show a long list of work items on a phone, the item titles are cut off, so people can't tell items apart."
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What
+      description: What should change? Then list what this issue will *not* cover (out of scope), so the work stays small.
+      placeholder: |
+        Let WorkCard wrap long titles onto two lines on narrow screens.
+
+        Out of scope: changing the card's layout on wide screens.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: |
+        A short list of statements that must all be true when the work is done. Each one should be something you can check: by an automated test, or by a named manual check (for example "open the WorkCard story at 320px wide").
+      placeholder: |
+        - A title longer than the card wraps onto at most two lines, then ends with "…". Test: WorkCard.test.tsx.
+        - Nothing changes above 768px wide. Manual check: WorkCard story at 1024px.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Anything else
+      description: Screenshots, links, or ideas about how to build it. Optional.
+    validations:
+      required: false
