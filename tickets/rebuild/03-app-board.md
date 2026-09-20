@@ -1,4 +1,10 @@
-# rebuild/03: App board — rebuild apps/trellis on the new API
+# rebuild/03: App board — rebuild apps/trellis on the new API (historical target: apps/trellis no longer exists)
+
+**Historical note (added on archive freeze, 2026-09-20):** `apps/trellis` no longer
+exists in this repo. Ward split out to standalone, and the web app is now the separate
+`products/trellis/web` repo. This ticket's target moved out from under it; nothing in
+this tree can confirm or deny whether the work described below ever happened, because it
+was never this repo's work to do after the split.
 
 **What to build:** the front-end app board matching mock 4b + drawer 8a, so the result
 is visible in the browser.

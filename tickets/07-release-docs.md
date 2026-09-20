@@ -9,7 +9,7 @@ docs, and the full CI gate chain.
 
 - [ ] Pinned Node/package-manager versions and monorepo tooling for reproducible installs
 - [ ] React 19 only (peer `^19`, devDeps, types): re-install and re-run layers 01/02/05/06 green under 19; anything verified under 18 is re-verified, not assumed
-- [ ] In-package toolchain only: all installs, tests, and typechecks run inside `packages/ward/` — scratch mirrors and `/tmp` verification are banned
+- [ ] In-package toolchain only: all installs, tests, and typechecks run inside the repo root (called `packages/ward/` in the monorepo this repo split out of; Ward is standalone now) — scratch mirrors and `/tmp` verification are banned
 - [ ] Library build (ESM + CJS + `.d.ts`), peer-dep discipline, no deep imports; apply the collected barrel export lines from layers 01/02/05/06
 - [ ] Changesets for versioning; token changes always minor or above
 - [ ] README (install, theme override via variable, dark pass notes), full dark review pass, Storybook published
