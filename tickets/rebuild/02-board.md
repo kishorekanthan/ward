@@ -28,9 +28,16 @@ evidence. Treat this ticket's own status field as stale documentation, not stall
 
 Folded from the root `REVIEW-DELTA.md` on archive freeze (2026-09-20); the root file is
 deleted, git history keeps the original. `REVIEW-DELTA.md` is the rationale tickets
-09–15 were written to implement on top of the pre-rebuild tree; the rebuild delivered the
-same scope fresh instead, as this ticket's own checklist above. No stale paths found in
-it, so nothing below is corrected or annotated.
+09–15 were written to implement on top of the pre-rebuild tree; the same scope exists in
+the current tree, though which work delivered it does not verify (see `SUPERSEDED.md`).
+
+**Every source path named below is lost.** `Trellis/Claude outputs/WARD-REVIEW.md`,
+`Trellis/Claude outputs/SCREENS-REVIEW.md`, `Trellis/Understood design handoff/ward/HANDOFF.md`
+and its `tokens.json` 0.1.0 were monorepo paths that did not come across the split, and are
+not in this repo's history — `ff22b1c` is the first commit and does not contain them. They
+are unrecoverable here. The text below is reproduced as written, so it still refers to them
+in the present tense; read every such reference as naming a document that no longer exists.
+Nothing else in it was corrected.
 
 # Ward delta — reconciliation to WARD-REVIEW / SCREENS-REVIEW
 

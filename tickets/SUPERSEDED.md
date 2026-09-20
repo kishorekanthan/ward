@@ -40,25 +40,31 @@ way.
 
 ## Delta — tickets 09–15
 
-**Status: superseded**, and unlike 01–08, these were never executed as written — every
-checkbox in 09–15 is unchecked. `REVIEW-DELTA.md` (folded into `tickets/rebuild/02-board.md`'s
-`## Verify` section) describes the same functional scope these tickets specify: Chip
-role enum, tokens 0.2.0, Switch/Overlay/Marker/ConnectionMark/CostMeter primitives, the
-live layer, board contract changes, colour-role corrections. That scope was delivered
-fresh through the rebuild instead — `src/primitives/{Switch,Overlay,Marker,ConnectionMark,CostMeter}.tsx`,
-`src/live/*`, and `src/composites/board/BoardHeader.tsx` all exist, and `src/primitives/Chip.tsx`
-implements a role enum. These tickets' own text was never the vehicle; treat them as
-superseded specification, not partial progress.
+**Status: superseded. Delivery attribution: unknown.** Every checkbox in 09–15 is
+unchecked, and the scope they specify — Chip role enum, tokens 0.2.0,
+Switch/Overlay/Marker/ConnectionMark/CostMeter primitives, the live layer, board contract
+changes, colour-role corrections — is visibly present in the tree today:
+`src/primitives/{Switch,Overlay,Marker,ConnectionMark,CostMeter}.tsx`, `src/live/*` and
+`src/composites/board/BoardHeader.tsx` all exist, and `src/primitives/Chip.tsx` implements a
+role enum.
+
+Which work delivered it cannot be established here. An unchecked box is not evidence that a
+ticket did not run — it is evidence that nobody ticked it, which `rebuild/02-board.md` proves
+happens in this repo. And because history was squashed to `ff22b1c`, there is no commit
+sequence to attribute any of it to. The earlier version of this index said the rebuild
+delivered the scope "instead"; that was inferred from ticket prose and unchecked boxes,
+which is exactly what this index is not allowed to do. The outcome is verifiable; the
+authorship is not, and is recorded as unknown throughout the table below.
 
 | File | Status | Evidence |
 |---|---|---|
-| `09-tokens-02.md` | superseded, unexecuted | Unchecked. Scope (tokens 0.2.0, `elapsed`/`count`/`ratio` fmt) matches what `rebuild/01`'s checklist delivered instead. |
-| `10-primitives-delta.md` | superseded, unexecuted | Unchecked. Every primitive it names (Switch, Overlay, Marker, Tabs, ConnectionMark, CostMeter) exists in `src/primitives/` today, delivered via `rebuild/01`/`rebuild/02`, not this ticket. |
-| `11-live.md` | superseded, unexecuted | Unchecked. `src/live/{useLiveFeed,useTicker,useBorderFlash,LiveIndicator}` all exist, delivered via `rebuild/01`. |
-| `12-board-delta.md` | superseded, unexecuted | Unchecked. `src/composites/board/{WorkCard,BoardHeader,BoardColumn,ItemDrawer,ConfigRow}.tsx` all exist, delivered via `rebuild/02`. |
-| `13-corrections-migration.md` | superseded, unexecuted | Unchecked. `NotificationCard` does not exist anywhere in `src/` (consistent with this ticket's plan to retire it), and `src/primitives/Chip.tsx` is role-enum shaped, not the legacy tone/classification/stream props this ticket set out to migrate away from. |
+| `09-tokens-02.md` | superseded; delivery unknown | Unchecked. Its scope (tokens 0.2.0, `elapsed`/`count`/`ratio` fmt) is present in the tree and also appears on `rebuild/01`'s checklist. Which of the two delivered it does not verify. |
+| `10-primitives-delta.md` | superseded; delivery unknown | Unchecked. Every primitive it names (Switch, Overlay, Marker, Tabs, ConnectionMark, CostMeter) exists in `src/primitives/` today. `rebuild/01`/`rebuild/02` list the same scope; attribution between them does not verify. |
+| `11-live.md` | superseded; delivery unknown | Unchecked. `src/live/{useLiveFeed,useTicker,useBorderFlash,LiveIndicator}` all exist. `rebuild/01` names the same layer; which delivered it does not verify. |
+| `12-board-delta.md` | superseded; delivery unknown | Unchecked. `src/composites/board/{WorkCard,BoardHeader,BoardColumn,ItemDrawer,ConfigRow}.tsx` all exist. `rebuild/02` names the same components and is itself an unticked ticket whose work shipped, so an unchecked box here settles nothing. |
+| `13-corrections-migration.md` | superseded; delivery unknown | Unchecked. The end state it describes holds: `NotificationCard` exists nowhere in `src/`, and `src/primitives/Chip.tsx` is role-enum shaped rather than carrying the legacy tone/classification/stream props. Whether this ticket or the rebuild got it there does not verify. |
 | `14-*.md` | **never written** | No file `tickets/14-*.md` exists. `tickets/13-corrections-migration.md` and `tickets/15-reaudit.md` are adjacent; nothing fills the gap. Stated here as fact, not inferred. |
-| `15-reaudit.md` | superseded, unexecuted | Unchecked. Blocked by `09–14`; `14` was never written and `09–13` were superseded before completion, so this ticket was never actionable. Its unchecked line about updating `AUDIT.md` is now additionally stale: that file no longer exists at the root (folded into `08-final-audit.md`'s `## Verify` section). |
+| `15-reaudit.md` | superseded; no re-audit on record | Unchecked. It depends on `09–14`, and `14` was never written. No re-audit artefact exists in the tree, so unlike 09–13 there is no delivered outcome to attribute to anyone. Its line about updating `AUDIT.md` is additionally stale: that file no longer exists at the root (folded into `08-final-audit.md`'s `## Verify` section). |
 
 ## Rebuild — `tickets/rebuild/`
 
@@ -73,11 +79,12 @@ ever written; `rebuild/04–08` do not exist and never did. Stated here as fact.
 | `rebuild/03-app-board.md` | **not applicable to this repo** | Its target, `apps/trellis`, does not exist here — Ward split to standalone and the web app is now the separate `products/trellis/web` repo. Annotated inline in the ticket. Nothing in this tree can confirm or deny whether this work happened elsewhere; that repo is out of scope for this archive. |
 | `rebuild/04–08` | **never written** | No such files exist. Yet the tree contains their presumed scope and more: `src/composites/studio/`, `src/composites/admin/`, `src/composites/intake/`, `src/composites/item/`, `src/composites/platform/`, `src/layout/`, and `src/visibility/` are all populated — including items `REVIEW-DELTA.md` explicitly deferred (`CredentialRow`, `McpServerRow`, `RunbookSteps`, `EnvCard`, `ComponentRow`, `GateLadder`). This work shipped with no ticket ever recording it. That gap is not resolved by this index — it is stated as a fact of the archive. A new GitHub Issue would be the place to decide whether it needs backfilled ticket records at all. |
 
-## `SPEC.md`
+## The two index-level files
 
-Moved into this folder from the repo root (was live-policy-shaped, is now archived
-alongside the tickets it specced). Its "source of truth" section is annotated in place:
-the four `open-code/Trellis` files it names are gone from disk and not recoverable.
+| File | Status | Evidence |
+|---|---|---|
+| `SPEC.md` | **archived, annotated** | Moved into this folder from the repo root: it was live-policy-shaped and is now archived alongside the tickets it specced. Its "source of truth" section is annotated in place — the four `open-code/Trellis` files it names are gone from disk and are not in this repo's history, so they are unrecoverable here. |
+| `SUPERSEDED.md` | **live** | This file. The one thing in `tickets/` that is not frozen history: it is the index, and it is maintained when the archive's facts change. Its own claims are the ones a reader should check first, because everything else here is dated. |
 
 ## The four folded reports
 
