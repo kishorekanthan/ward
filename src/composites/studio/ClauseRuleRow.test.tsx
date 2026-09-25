@@ -49,11 +49,14 @@ describe("ClauseRuleRow", () => {
     expect(onRemove).toHaveBeenCalledTimes(1);
   });
 
-  it("shows a clause's invalid message against its field", () => {
-    const bad = { ...rule, clauses: [{ ...rule.clauses[0], invalid: "names no change" }] };
+  it("shows a clause's invalid message against its own field only", () => {
+    const bad = { ...rule, clauses: [rule.clauses[0], { ...rule.clauses[1], invalid: "names no approver" }] };
     inList(<ClauseRuleRow rule={bad} onChange={vi.fn()} />);
-    expect(screen.getByLabelText("kpi-in-inventory When").getAttribute("aria-invalid")).toBe("true");
-    expect(screen.getByText("names no change")).toBeTruthy();
+    const approver = screen.getByLabelText("kpi-in-inventory Approved by");
+    expect(approver.getAttribute("aria-invalid")).toBe("true");
+    expect(document.getElementById(approver.getAttribute("aria-describedby") ?? "")?.textContent).toBe("names no approver");
+    expect(screen.getByLabelText("kpi-in-inventory When").getAttribute("aria-invalid")).toBeNull();
+    expect(screen.getAllByText("names no approver")).toHaveLength(1);
   });
 
   it("puts rules in a labelled ordered list", () => {
