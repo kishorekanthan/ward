@@ -129,12 +129,13 @@ describe("ClarificationRow", () => {
   });
 
   // Recorded from v0.2.2, when the notes named Jira unconditionally.
-  const V022: Record<"queued" | "delivered", string> = {
+  const V022: Record<"queued" | "delivered" | "failed", string> = {
     queued: "Still in the outbox — editing replaces the queued row and recomputes req_hash, so Jira receives one comment, not two.",
     delivered: "Already in Jira, so an edit is a Jira edit: it will show as edited by you there, and the original stays in the audit row.",
+    failed: "Delivery failed — edit and resend, or cancel the delivery.",
   };
 
-  it.each(["queued", "delivered"] as const)("keeps the v0.2.2 %s note when no tracker is named", (delivery) => {
+  it.each(["queued", "delivered", "failed"] as const)("keeps the v0.2.2 %s note when no tracker is named", (delivery) => {
     render(<ClarificationRow comment={{ ...comment, delivery }} {...noop} />);
     expect(screen.getByText(V022[delivery])).not.toBeNull();
   });
