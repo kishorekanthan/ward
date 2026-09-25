@@ -1,0 +1,80 @@
+/* Provenance: not established — no comp block identified; row box follows HandoffRuleRow's measured padding, gap and inset line. */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-gap-row);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: grid;
+  gap: var(--ward-gap-ruleRow);
+  padding: var(--ward-pad-ruleRow);
+  background: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+}
+
+.row[data-locked="true"] {
+  background: var(--ward-color-surface2);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ward-gap-ruleRow);
+}
+
+.id {
+  font: var(--ward-type-toolName);
+  color: var(--ward-color-text);
+}
+
+.lock {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ward-gap-configName);
+}
+
+.reason {
+  font: var(--ward-type-meta);
+  color: var(--ward-color-muted);
+}
+
+.remove {
+  margin-left: auto;
+}
+
+.clauses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ward-gap-ruleRow);
+  margin: 0;
+}
+
+.clause {
+  display: grid;
+  flex: 1 1 auto;
+  gap: var(--ward-gap-traceBody);
+  min-width: 0;
+}
+
+.label {
+  font: var(--ward-type-colHead);
+  letter-spacing: var(--ward-type-colHead-tracking);
+  text-transform: var(--ward-type-colHead-transform);
+  color: var(--ward-color-muted);
+}
+
+.cell {
+  margin: 0;
+  min-width: 0;
+}
+
+.value {
+  font: var(--ward-type-ruleCond);
+  color: var(--ward-color-text);
+  overflow-wrap: anywhere;
+}

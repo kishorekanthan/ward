@@ -93,6 +93,7 @@ export * from './composites/board/types';
 export { LegacyBoardColumn, LegacyBoardHeader, LegacyConfigRow, LegacyItemDrawer, LegacyOverCapNote, LegacyPreviewRail, LegacyWorkCard, } from './composites/board/compat';
 export type { LegacyBoardColumnDef, LegacyBoardColumnProps, LegacyBoardHeaderProps, LegacyBoardItemView, LegacyCardRoving, LegacyCardField, LegacyConfigRowProps, LegacyConfigStage, LegacyDrawerItem, LegacyItemDrawerProps, LegacyLiveFeed, LegacyOverCapNoteProps, LegacyPreviewEffect, LegacyPreviewRailProps, LegacyStageConfig, LegacyWorkCardProps, } from './composites/board/compat';
 export * from './composites/studio/AgentCard';
+export * from './composites/studio/ClauseRuleRow';
 export * from './composites/studio/ColourLadder';
 export * from './composites/studio/DryRunRail';
 export * from './composites/studio/GateChecklist';
