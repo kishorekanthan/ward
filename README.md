@@ -5,7 +5,7 @@ Ward is Trellis’s standalone React 19 UI package. It owns the tokens, reset, f
 ## Install and use
 
 ```sh
-npm install "github:kishorekanthan/ward#v0.2.2" react react-dom
+npm install "github:kishorekanthan/ward#v0.2.3" react react-dom
 ```
 
 Use the package root for every public component, hook, formatter, token, and type. Deep imports are intentionally private.

@@ -21,3 +21,4 @@ export const Delivered = {
 };
 export const Retrying = { args: { comment: { ...base, delivery: "retrying", etaOrAttempt: "attempt 2 of 5" }, ...handlers } };
 export const Failed = { args: { comment: { ...base, delivery: "failed", etaOrAttempt: "gave up after 5 attempts" }, ...handlers } };
+export const BuiltInTracker = { args: { comment: { ...base, delivery: "delivered", etaOrAttempt: "delivered 02:14" }, ...handlers, tracker: "Trellis" } };

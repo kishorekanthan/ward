@@ -128,6 +128,27 @@ describe("ClarificationRow", () => {
     expect(screen.queryByText("Cancel delivery")).toBeNull();
   });
 
+  // Recorded from v0.2.2, when the notes named Jira unconditionally.
+  const V022: Record<"queued" | "delivered", string> = {
+    queued: "Still in the outbox — editing replaces the queued row and recomputes req_hash, so Jira receives one comment, not two.",
+    delivered: "Already in Jira, so an edit is a Jira edit: it will show as edited by you there, and the original stays in the audit row.",
+  };
+
+  it.each(["queued", "delivered"] as const)("keeps the v0.2.2 %s note when no tracker is named", (delivery) => {
+    render(<ClarificationRow comment={{ ...comment, delivery }} {...noop} />);
+    expect(screen.getByText(V022[delivery])).not.toBeNull();
+  });
+
+  it.each([
+    ["queued", "Still in the outbox — editing replaces the queued row and recomputes req_hash, so Trellis receives one comment, not two."],
+    ["delivered", "Already in Trellis, so an edit is a Trellis edit: it will show as edited by you there, and the original stays in the audit row."],
+    ["retrying", "Edit is unavailable mid-flight: a delivery may already have reached Trellis. Cancel first, then edit."],
+  ] as const)("names the tenant's tracker in every delivery note (%s)", (delivery, note) => {
+    const { container } = render(<ClarificationRow comment={{ ...comment, delivery }} {...noop} tracker="Trellis" />);
+    expect(screen.getByText(note)).not.toBeNull();
+    expect(container.textContent).not.toMatch(/Jira/);
+  });
+
   it("offers a failed delivery a secondary edit and a withdraw", () => {
     const onWithdraw = vi.fn();
     render(<ClarificationRow comment={{ ...comment, delivery: "failed" }} {...noop} onWithdraw={onWithdraw} />);
