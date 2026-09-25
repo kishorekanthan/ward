@@ -46,6 +46,17 @@ describe("StageListEditor", () => {
     expect(onChange.mock.lastCall?.[0][3]).toEqual({ name: "", kind: "agent" });
   });
 
+  it("names stages in a free-text input when no catalogue is given", () => {
+    const onChange = vi.fn();
+    render(<StageListEditor stages={STAGES} onChange={onChange} />);
+    const first = screen.getByLabelText("Stage 1 name") as HTMLInputElement;
+    expect(first.tagName).toBe("INPUT");
+    expect(first.getAttribute("placeholder")).toBe("Name this stage");
+    expect(first.getAttribute("aria-invalid")).toBeNull();
+    fireEvent.change(first, { target: { value: "Anything typed" } });
+    expect(onChange.mock.lastCall?.[0][0]).toEqual({ name: "Anything typed", kind: "entry" });
+  });
+
   it("offers exactly the catalogue names, with no free-text name input", () => {
     const onChange = vi.fn();
     const rows: StageListRow[] = [{ name: "triage", kind: "entry" }, { name: "implement", kind: "agent" }];
