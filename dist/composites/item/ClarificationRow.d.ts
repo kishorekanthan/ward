@@ -14,5 +14,7 @@ export type ClarificationRowProps = {
     onCancelDelivery?: () => void;
     onViewOriginal?: () => void;
     unavailable?: string;
+    /** Display name of the tracker the comment is delivered to. */
+    tracker?: string;
 };
 export declare function ClarificationRow(props: ClarificationRowProps): import("react").JSX.Element;

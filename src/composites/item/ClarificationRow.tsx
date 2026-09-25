@@ -22,6 +22,8 @@ export type ClarificationRowProps = {
   onCancelDelivery?: () => void;
   onViewOriginal?: () => void;
   unavailable?: string;
+  /** Display name of the tracker the comment is delivered to. */
+  tracker?: string;
 };
 
 const CHIP: Record<Delivery, { role: ChipRole; label: string }> = {
@@ -31,12 +33,14 @@ const CHIP: Record<Delivery, { role: ChipRole; label: string }> = {
   failed: { role: "failed", label: "FAILED" },
 };
 
-const NOTE: Record<Delivery, string> = {
-  queued: "Still in the outbox — editing replaces the queued row and recomputes req_hash, so Jira receives one comment, not two.",
-  delivered: "Already in Jira, so an edit is a Jira edit: it will show as edited by you there, and the original stays in the audit row.",
-  retrying: "Edit is unavailable mid-flight: a delivery may already have reached Jira. Cancel first, then edit.",
-  failed: "Delivery failed — edit and resend, or cancel the delivery.",
-};
+function notes(tracker: string): Record<Delivery, string> {
+  return {
+    queued: `Still in the outbox — editing replaces the queued row and recomputes req_hash, so ${tracker} receives one comment, not two.`,
+    delivered: `Already in ${tracker}, so an edit is a ${tracker} edit: it will show as edited by you there, and the original stays in the audit row.`,
+    retrying: `Edit is unavailable mid-flight: a delivery may already have reached ${tracker}. Cancel first, then edit.`,
+    failed: "Delivery failed — edit and resend, or cancel the delivery.",
+  };
+}
 
 function Actions({ comment, reasonId, onEdit, onWithdraw, onCancelDelivery, onViewOriginal }: ClarificationRowProps & { reasonId: string }) {
   if (comment.delivery === "queued")
@@ -125,7 +129,7 @@ export function ClarificationRow(props: ClarificationRowProps) {
         {comment.editedAt !== undefined ? <span className={s.edited}>{"edited " + comment.editedAt}</span> : null}
       </div>
       <p className={s.body}>{comment.body}</p>
-      <p className={s.reason} id={reasonId}>{NOTE[comment.delivery]}</p>
+      <p className={s.reason} id={reasonId}>{notes(props.tracker ?? "Jira")[comment.delivery]}</p>
       <div className={s.actions}>
         <RowActions {...props} reasonId={reasonId} unavailableId={unavailableId} />
       </div>
