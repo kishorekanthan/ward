@@ -8,6 +8,8 @@ export type StageListRow = { name: string; kind: "entry" | "agent" | "gate" | "t
 export type StageListEditorProps = {
   stages: StageListRow[];
   onChange: (stages: StageListRow[]) => void;
+  // Given, each name is picked from these; left out, names are free text.
+  catalogue?: string[];
 };
 
 const KINDS = [
@@ -16,6 +18,20 @@ const KINDS = [
   { value: "gate", label: "human gate" },
   { value: "terminal", label: "terminal" },
 ];
+
+const OUTSIDE = "not in catalogue";
+
+function catalogueOptions(catalogue: string[], name: string) {
+  const offered = catalogue.map((value) => ({ value, label: value }));
+  return catalogue.includes(name) ? offered : [{ value: name, label: `${name || "(unnamed)"} — ${OUTSIDE}` }, ...offered];
+}
+
+function NameField({ stage, index, catalogue, onName }: { stage: StageListRow; index: number; catalogue?: string[]; onName: (name: string) => void }): ReactElement {
+  const label = `Stage ${index + 1} name`;
+  if (!catalogue) return <Field variant="inline" labelHidden placeholder="Name this stage" label={label} value={stage.name} onChange={onName} />;
+  const invalid = catalogue.includes(stage.name) ? undefined : `${stage.name || "This stage"} is ${OUTSIDE}`;
+  return <Field variant="inline" kind="select" labelHidden label={label} value={stage.name} options={catalogueOptions(catalogue, stage.name)} invalid={invalid} onChange={onName} />;
+}
 
 function stageName(stage: StageListRow, index: number): string {
   return stage.name || `stage ${index + 1}`;
@@ -30,8 +46,9 @@ function useRowIds(count: number): { current: string[] } {
   return ids;
 }
 
-function StageRow({ id, stage, index, total, onReplace, onMove }: {
+function StageRow({ id, stage, index, total, catalogue, onReplace, onMove }: {
   id: string;
+  catalogue?: string[];
   stage: StageListRow;
   index: number;
   total: number;
@@ -44,7 +61,7 @@ function StageRow({ id, stage, index, total, onReplace, onMove }: {
     <li className={`${s.webStage} ward-stageedit`} data-gate={gate ? "true" : undefined}>
       <span className={s.webIndex} aria-hidden="true">{String(index + 1)}</span>
       <div className={s.webStageName}>
-        <Field variant="inline" labelHidden placeholder="Name this stage" label={`Stage ${index + 1} name`} value={stage.name} onChange={(value) => onReplace({ ...stage, name: value })} />
+        <NameField stage={stage} index={index} catalogue={catalogue} onName={(value) => onReplace({ ...stage, name: value })} />
       </div>
       <Field variant={gate ? "tagGate" : "tag"} labelHidden kind="select" label={`Stage ${index + 1} kind`} value={stage.kind} options={KINDS} onChange={(kind) => onReplace({ ...stage, kind: kind as StageListRow["kind"] })} />
       <span className={s.webMoves}>
@@ -55,7 +72,7 @@ function StageRow({ id, stage, index, total, onReplace, onMove }: {
   );
 }
 
-export function StageListEditor({ stages, onChange }: StageListEditorProps): ReactElement {
+export function StageListEditor({ stages, onChange, catalogue }: StageListEditorProps): ReactElement {
   const ids = useRowIds(stages.length);
   const focus = useMoveFocus<HTMLOListElement>();
   const move = (index: number, direction: Direction) => {
@@ -69,7 +86,7 @@ export function StageListEditor({ stages, onChange }: StageListEditorProps): Rea
     <div className={s.webStages}>
       <ol ref={focus.root} className={s.webStageList} aria-label="Workflow stages in order">
         {stages.map((stage, index) => (
-          <StageRow key={ids.current[index]} id={ids.current[index]} stage={stage} index={index} total={stages.length} onReplace={(next) => replace(index, next)} onMove={(direction) => move(index, direction)} />
+          <StageRow key={ids.current[index]} id={ids.current[index]} stage={stage} index={index} total={stages.length} catalogue={catalogue} onReplace={(next) => replace(index, next)} onMove={(direction) => move(index, direction)} />
         ))}
       </ol>
       <MoveAnnouncer text={focus.announcement} />

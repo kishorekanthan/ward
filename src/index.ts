@@ -144,6 +144,7 @@ export type {
 } from "./composites/board/compat";
 
 export * from "./composites/studio/AgentCard";
+export * from "./composites/studio/ClauseRuleRow";
 export * from "./composites/studio/ColourLadder";
 export * from "./composites/studio/DryRunRail";
 export * from "./composites/studio/GateChecklist";

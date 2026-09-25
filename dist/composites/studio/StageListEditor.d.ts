@@ -6,5 +6,6 @@ export type StageListRow = {
 export type StageListEditorProps = {
     stages: StageListRow[];
     onChange: (stages: StageListRow[]) => void;
+    catalogue?: string[];
 };
-export declare function StageListEditor({ stages, onChange }: StageListEditorProps): ReactElement;
+export declare function StageListEditor({ stages, onChange, catalogue }: StageListEditorProps): ReactElement;
