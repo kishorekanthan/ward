@@ -74,6 +74,10 @@ describe("stream detail geometry against Studio 3c", () => {
     expect(value(CARD, "\\.facts", "font")).toMatch(font(cardFacts.type));
     expect(value(CARD, "\\.fact", "display")).toBe("contents");
     expect(value(CARD, "\\.factValue", "overflow-wrap")).toBe(cardFacts.wrap);
+    expect(value(CARD, "\\.factValue", "white-space")).toBe("");
+    expect(value(CARD, "\\.factValue", "text-overflow")).toBe("");
+    expect(value(CARD, "\\.factLabel", "color")).toBe(cardFacts.labelInk);
+    expect(value(CARD, "\\.factValue", "color")).toBe(cardFacts.valueInk);
   });
 
   it("draws the gate panel with reviewer squares", () => {

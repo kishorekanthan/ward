@@ -85,6 +85,7 @@ describe("AgentCard facts", () => {
     expect(Array.from(list!.querySelectorAll("dd"), (value) => value.textContent)).toEqual(["claude-sonnet", "Intake · Review", "done · DE-12"]);
     const chip = within(card).getByText("V7 DRAFT");
     expect(chip.compareDocumentPosition(list!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(within(card).getAllByRole("link")).toHaveLength(1);
   });
 
   it("draws no list when facts are omitted or empty", () => {
