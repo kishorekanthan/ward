@@ -166,6 +166,7 @@ const BLUE_USES: Record<Category, string[]> = {
     "primitives/Radio.module.css .set[data-variant=\"cards\"] .row:has(.input:checked) blue",
     "primitives/Radio.module.css .set[data-variant=\"cards\"] .row:has(.input:checked) blueSoft",
     "composites/studio/ColourLadder.module.css .cell[aria-checked=\"true\"] blue",
+    "composites/studio/ColourLadder.module.css .tile[aria-checked=\"true\"] blue",
     "composites/admin/AppearanceStrip.module.css .segment[data-draft=\"true\"] blue",
   ],
   focus: [

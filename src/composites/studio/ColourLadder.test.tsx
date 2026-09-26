@@ -2,6 +2,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { ColourLadder, type LadderStep } from "./ColourLadder";
+import { streamHex } from "../../tokens";
 
 const steps = [
   { step: 1 as const, name: "Data" },
@@ -111,5 +112,74 @@ describe("ColourLadder (spec)", () => {
     render(<ColourLadder label="Stream colour" steps={specSteps} value={1} onChange={onChange} takenBy={{ 2: "front-end" }} />);
     fireEvent.keyDown(screen.getByRole("radio", { name: "Step 2 — taken by front-end" }), { key: "Enter" });
     expect(onChange).not.toHaveBeenCalled();
+  });
+});
+
+describe("ColourLadder tiles (Studio 9a)", () => {
+  const tiles = (value: number | null, onChange = vi.fn()) =>
+    render(<ColourLadder presentation="tiles" steps={SIX_AND_RESERVED} value={value} onChange={onChange} takenBy={{ 2: "UI / UX", 3: "Integration" }} />);
+  const texts = (container: HTMLElement, cls: string) => Array.from(container.querySelectorAll(`.ward-ladder-${cls}`), (node) => node.textContent);
+
+  it("shows each step's hex and holder in order, then the request tile", () => {
+    const { container } = tiles(1);
+    expect(texts(container, "hex")).toEqual(["#00897B", "#7038C8", "#BF5310", "#1C6FB8", "#8A6A00", "#A02C6B", "step 07", "request"]);
+    expect(texts(container, "note")).toEqual([
+      "Step 01 · yours",
+      "Step 02 · UI / UX",
+      "Step 03 · Integration",
+      "Step 04 · not validated",
+      "Step 05 · not validated",
+      "Step 06 · not validated",
+      "Reserved — needs revalidation",
+      "Ask design for a new step",
+    ]);
+  });
+
+  it("names the picked step yours and a free one free, for sight and for screen readers", () => {
+    tiles(null);
+    expect(screen.getByRole("radio", { name: "Step 1 — free" }).querySelector(".ward-ladder-note")?.textContent).toBe("Step 01 · free");
+    expect(screen.getByRole("radio", { name: "Step 2 — taken by UI / UX" })).toBeDefined();
+  });
+
+  it("labels the picked tile yours and marks it checked", () => {
+    tiles(1);
+    expect(screen.getByRole("radio", { name: "Step 1 — yours" }).getAttribute("aria-checked")).toBe("true");
+  });
+
+  it("picks a free tile by click or key, never a taken, partial or reserved one", () => {
+    const onChange = vi.fn();
+    tiles(null, onChange);
+    const radios = screen.getAllByRole("radio");
+    fireEvent.click(radios[0]);
+    fireEvent.keyDown(radios[0], { key: "Enter" });
+    fireEvent.keyDown(radios[0], { key: " " });
+    for (const index of [1, 3, 6]) fireEvent.click(radios[index]);
+    expect(onChange.mock.calls).toEqual([[1], [1], [1]]);
+    expect(radios.map((radio) => radio.getAttribute("aria-disabled"))).toEqual([null, "true", "true", "true", "true", "true", "true"]);
+  });
+
+  it("gives every tile a colour bar and sets the grid inside the group it reflows against", () => {
+    const { container } = tiles(1);
+    const group = screen.getByRole("radiogroup");
+    expect(container.querySelectorAll(".ward-ladder-cell > .ward-ladder-bar")).toHaveLength(8);
+    expect(group.className).toMatch(/tilesFrame/);
+    expect(group.children).toHaveLength(1);
+    expect(group.firstElementChild?.className).toMatch(/tiles(?!Frame)/);
+    expect(group.firstElementChild?.querySelectorAll("[role='radio']")).toHaveLength(7);
+  });
+
+  it("paints each bar from its stream token", () => {
+    tiles(null);
+    expect(screen.getByRole("radio", { name: "Step 3 — taken by Integration" }).style.getPropertyValue("--stream")).toBe("var(--ward-stream-3-id)");
+  });
+});
+
+describe("streamHex", () => {
+  it("returns each step's identity hex from the tokens", () => {
+    expect([1, 2, 3, 4, 5, 6].map(streamHex)).toEqual(["#00897B", "#7038C8", "#BF5310", "#1C6FB8", "#8A6A00", "#A02C6B"]);
+  });
+
+  it("refuses a step with no token", () => {
+    expect(() => streamHex(7)).toThrow(/unvalidated stream step/);
   });
 });
