@@ -286,6 +286,13 @@ export function buildTokens(tokens) {
     "  return `var(--ward-stream-${step}-chip)`;",
     "}",
     "",
+    `const STREAM_HEX: Record<StreamStep, string> = ${JSON.stringify(Object.fromEntries(tokens.stream.steps.map((s) => [s.step, s.id])))};`,
+    "",
+    "export function streamHex(step: number): string {",
+    "  if (!isStreamStep(step)) throw new Error('unvalidated stream step');",
+    "  return STREAM_HEX[step];",
+    "}",
+    "",
   );
   return lines.join("\n");
 }

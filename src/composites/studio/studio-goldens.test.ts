@@ -219,3 +219,34 @@ describe("board configuration geometry against Studio 4a", () => {
     expect(value(RAIL, '\\.skeleton\\[data-kind="gate"\\] \\.bar', "background")).toBe(c.skeletonGateBar);
   });
 });
+
+describe("colour ladder tiles against Studio 9a", () => {
+  const LADDER = "ColourLadder.module.css";
+
+  it("lays the steps four to a row, each a bar, hex and note", () => {
+    const { identity } = golden;
+    expect(value(LADDER, "\\.tiles", "grid-template-columns")).toBe(identity.columns);
+    expect(value(LADDER, "\\.tiles", "gap")).toBe(identity.gridGap);
+    expect(value(LADDER, "\\.tile", "gap")).toBe(identity.tileGap);
+    expect(value(LADDER, "\\.tile", "padding")).toBe(identity.tilePadding);
+    expect(value(LADDER, "\\.bar", "height")).toBe(identity.bar);
+    expect(value(LADDER, "\\.hex", "font")).toMatch(font(identity.hex));
+    expect(value(LADDER, "\\.note", "font")).toMatch(font(identity.note));
+  });
+
+  it("drops to two tiles a row when its own width falls under the narrow container breakpoint", () => {
+    const css = read(LADDER);
+    expect(value(LADDER, "\\.tilesFrame", "container-type")).toBe("inline-size");
+    const narrow = css.match(/@container \(max-width: 471\.98px\) \{\s*\.tiles \{\s*grid-template-columns: ([^;]+);/)?.[1];
+    expect(narrow).toBe(golden.identity.narrowColumns);
+  });
+
+  it("rings the picked, free and taken tiles and grounds the reserved one", () => {
+    const { identity } = golden;
+    expect(value(LADDER, '\\.tile\\[aria-checked="true"\\]', "box-shadow")).toBe(identity.picked);
+    expect(value(LADDER, "\\.tile", "box-shadow")).toBe(identity.free);
+    expect(value(LADDER, '\\.tile\\[data-unavailable="true"\\]', "box-shadow")).toBe(identity.taken);
+    expect(value(LADDER, '\\.tile\\[data-unavailable="true"\\]', "opacity")).toBe(identity.takenOpacity);
+    expect(value(LADDER, '\\.tile\\[data-validation="reserved"\\],\\s*\\.tile\\[data-validation="request"\\]', "background")).toBe(identity.reservedGround);
+  });
+});

@@ -23,7 +23,7 @@ export type ColourLadderCompatibilityProps = {
     value: number | null;
     onChange?: (step: number) => void;
     takenBy?: Record<number, string>;
-    presentation?: "swatches";
+    presentation?: "swatches" | "tiles";
 };
 type Validation = "validated" | "partial" | "reserved";
 export declare const PARTIAL_STEP_REASON = "not validated \u2014 needs CVD matrix and dark stepping";
