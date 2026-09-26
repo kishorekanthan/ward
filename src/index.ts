@@ -35,6 +35,8 @@ export { Checkbox } from "./primitives/Checkbox";
 export type { CheckboxProps } from "./primitives/Checkbox";
 export { Chip } from "./primitives/Chip";
 export type { ChipProps, ChipSemantic } from "./primitives/Chip";
+export { streamColour, streamChipProps, validatedStep } from "./primitives/streamColour";
+export type { StreamColourPart } from "./primitives/streamColour";
 export { Crumb } from "./primitives/Crumb";
 export type { CrumbPath, CrumbProps } from "./primitives/Crumb";
 export { Field } from "./primitives/Field";

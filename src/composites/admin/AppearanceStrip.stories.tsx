@@ -47,3 +47,15 @@ export const Running = {
     />
   ),
 };
+
+export const NoValidatedColour = {
+  render: () => (
+    <AppearanceStrip
+      draft={{ name: "KPI config", key: "KPI", streamStep: null }}
+      sample={sample}
+      streams={streams}
+      presentation="detailed"
+      identities={[{ name: "KPI config", key: "KPI", streamStep: 4 }, ...streams]}
+    />
+  ),
+};

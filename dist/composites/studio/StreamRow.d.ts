@@ -2,7 +2,7 @@ import { StreamStep } from '../../tokens';
 export type Stream = {
     name: string;
     key: string;
-    streamStep: StreamStep;
+    streamStep: StreamStep | null;
     owner: string;
     members: number;
     stages: {
@@ -25,7 +25,7 @@ export type Stream = {
 export type StreamRowSummary = {
     name: string;
     key: string;
-    streamStep: StreamStep;
+    streamStep: StreamStep | null;
     owner: string;
     members?: number;
     stages: {

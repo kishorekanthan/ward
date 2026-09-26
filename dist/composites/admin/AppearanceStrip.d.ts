@@ -4,7 +4,7 @@ import { StreamStep } from '../../tokens';
 export type Identity = {
     name: string;
     key: string;
-    streamStep: StreamStep;
+    streamStep: StreamStep | null;
 };
 export type AppearanceIdentity = {
     name: string;

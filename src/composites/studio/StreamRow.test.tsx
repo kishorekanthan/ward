@@ -102,4 +102,23 @@ describe("StreamRow (spec)", () => {
     wrap();
     expect(screen.getByRole("link", { name: "Data engineering" }).getAttribute("href")).toBe("/studio/streams/data-eng");
   });
+
+  it("draws a stream with no validated colour step neutral in both presentations, with a meta key chip", () => {
+    const summary = { name: "KPI Config", key: "KPI", owner: "R. Okonjo", stages: [] };
+    const colourOf = (streamStep: 2 | 4 | null) => {
+      const { container, unmount } = render(table(<StreamRow stream={{ ...summary, streamStep }} href="#kpi" presentation={{ columns: 5 }} />));
+      const value = container.querySelector<HTMLElement>("tr")?.style.getPropertyValue("--stream");
+      unmount();
+      return value;
+    };
+    expect([colourOf(2), colourOf(4), colourOf(null)]).toEqual(["var(--ward-stream-2-chip)", "var(--ward-color-line2)", "var(--ward-color-line2)"]);
+    const chipOf = (streamStep: 2 | 4 | null) => {
+      const { container, unmount } = render(table(<StreamRow stream={{ ...stream, streamStep }} href="#de" />));
+      const chip = Array.from(container.querySelectorAll("[data-ward-chip]")).find((el) => el.textContent === "DE");
+      const role = chip?.getAttribute("data-ward-chip");
+      unmount();
+      return role;
+    };
+    expect([chipOf(2), chipOf(4), chipOf(null)]).toEqual(["stream", "meta", "meta"]);
+  });
 });

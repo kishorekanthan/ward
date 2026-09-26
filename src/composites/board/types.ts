@@ -15,7 +15,7 @@ export type BoardItem = {
   stage: string;
   timeInStage: number;
   waitsOn: string;
-  streamStep: StreamStep;
+  streamStep: StreamStep | null;
   changedAt: string;
   state?: { role: ChipRole; label: string };
   lastAgentAction?: string;

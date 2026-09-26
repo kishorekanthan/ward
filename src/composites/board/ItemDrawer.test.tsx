@@ -110,4 +110,15 @@ describe("ItemDrawer resolve slot", () => {
     expect(within(panel).getByRole("heading", { level: 3 }).textContent).toBe("Unblock this item");
     expect(screen.queryByRole("region", { name: "Ways out of this hold" })).toBeNull();
   });
+
+  it("labels the stream of an item with no validated colour step with a meta NO COLOUR chip", () => {
+    const chipOf = (streamStep: 2 | 4 | null) => {
+      const { unmount } = render(drawer({ item: { ...item, streamStep } }));
+      const chip = Array.from(document.querySelectorAll("[data-ward-chip]")).find((el) => /STEP|NO COLOUR/.test(el.textContent ?? ""));
+      const found = [chip?.getAttribute("data-ward-chip"), chip?.textContent];
+      unmount();
+      return found;
+    };
+    expect([chipOf(2), chipOf(4), chipOf(null)]).toEqual([["stream", "STEP 2"], ["meta", "NO COLOUR"], ["meta", "NO COLOUR"]]);
+  });
 });

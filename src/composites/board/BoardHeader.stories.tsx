@@ -46,3 +46,7 @@ export const QuietBoard = {
 export const OtherStream = {
   args: { ...base, stream: { name: "integration", key: "IN", streamStep: 3 } },
 };
+
+export const NoValidatedColour = {
+  args: { ...base, stream: { name: "KPI config", key: "KPI", streamStep: null } },
+};

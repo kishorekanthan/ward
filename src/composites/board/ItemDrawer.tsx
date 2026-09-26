@@ -5,6 +5,7 @@ import { LiveIndicator } from "../../live/LiveIndicator";
 import { duration } from "../../fmt/duration";
 import type { BoardItem } from "./types";
 import type { WorkCardFeed } from "./WorkCard";
+import { streamChipProps, validatedStep } from "../../primitives/streamColour";
 import s from "./ItemDrawer.module.css";
 
 export type ItemDetail = BoardItem & {
@@ -38,9 +39,14 @@ function runningRows(item: ItemDetail, feed?: WorkCardFeed | null): [string, Rea
   return [["Running", <LiveIndicator key="l" startedAt={item.run.startedAt} connection={connection} turn={item.run.turn} lastEvent={item.run.lastStep} />]];
 }
 
+function stepLabel(step: number | null): string {
+  const valid = validatedStep(step);
+  return valid === null ? "NO COLOUR" : `STEP ${valid}`;
+}
+
 function detailRows(item: ItemDetail, feed?: WorkCardFeed | null): [string, ReactNode][] {
   const rows: [string, ReactNode][] = [
-    ["Stream", item.streamName ?? <Chip key="s" role="stream" label={`STEP ${item.streamStep}`} streamStep={item.streamStep} />],
+    ["Stream", item.streamName ?? <Chip key="s" {...streamChipProps(stepLabel(item.streamStep), item.streamStep)} />],
     ["Workflow", item.workflow],
     ["State", item.stateLabel],
     ["Time in stage", duration(item.timeInStage)],

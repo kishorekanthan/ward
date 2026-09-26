@@ -13,7 +13,7 @@ export type BoardHeaderProps = {
     stream: {
         name: string;
         key: string;
-        streamStep: StreamStep;
+        streamStep: StreamStep | null;
         markRef?: string | null;
     };
     rollups: BoardRollups;

@@ -3,6 +3,7 @@ import { Chip } from "../../primitives/Chip";
 import { LiveIndicator } from "../../live/LiveIndicator";
 import type { LiveConnection } from "../../live/types";
 import type { StreamStep } from "../../tokens";
+import { streamColour } from "../../primitives/streamColour";
 import s from "./AgentCard.module.css";
 
 export type AgentVersion = { v: string; status: "live" | "draft" | "paused"; label?: string; by?: string; at?: string };
@@ -10,7 +11,7 @@ export type AgentVersion = { v: string; status: "live" | "draft" | "paused"; lab
 export type Agent = {
   id: string;
   name: string;
-  streamStep: StreamStep;
+  streamStep: StreamStep | null;
   description?: string;
   versions: AgentVersion[];
   run?: { itemKey: string; startedAt: string; turn?: [number, number] };
@@ -80,7 +81,7 @@ function isPaused(versions: AgentVersion[]): true | undefined {
 }
 
 export function AgentCard({ agent, href, selected, connection = "live", lastEvent, facts, className }: AgentCardProps) {
-  const style = { "--stream": `var(--ward-stream-${agent.streamStep}-id)` } as CSSProperties;
+  const style = { "--stream": streamColour(agent.streamStep, "id") } as CSSProperties;
   const current = selected ? "true" : undefined;
   return (
     <article

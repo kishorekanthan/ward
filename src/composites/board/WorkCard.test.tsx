@@ -143,4 +143,15 @@ describe("WorkCard", () => {
     hit.click();
     expect(onOpen).toHaveBeenCalledWith("FL-229", hit);
   });
+
+  it("draws a stream with no validated colour step on the neutral rail, not another stream's colour", () => {
+    const railOf = (streamStep: BoardItem["streamStep"]) => {
+      const { container, unmount } = render(<WorkCard item={{ ...item, streamStep }} />);
+      const rail = Array.from(container.querySelectorAll<HTMLElement>("*")).find((el) => el.style.getPropertyValue("--stream") !== "");
+      const value = rail?.style.getPropertyValue("--stream");
+      unmount();
+      return value;
+    };
+    expect([railOf(2), railOf(4), railOf(null)]).toEqual(["var(--ward-stream-2-id)", "var(--ward-color-line2)", "var(--ward-color-line2)"]);
+  });
 });

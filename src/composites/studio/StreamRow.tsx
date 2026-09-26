@@ -3,12 +3,13 @@ import { count } from "../../fmt/count";
 import { duration } from "../../fmt/duration";
 import type { CSSProperties, ReactElement } from "react";
 import type { StreamStep } from "../../tokens";
+import { streamChipProps, streamColour } from "../../primitives/streamColour";
 import s from "./StreamRow.module.css";
 
 export type Stream = {
   name: string;
   key: string;
-  streamStep: StreamStep;
+  streamStep: StreamStep | null;
   owner: string;
   members: number;
   stages: { name: string; gate: boolean }[];
@@ -22,7 +23,7 @@ export type Stream = {
 export type StreamRowSummary = {
   name: string;
   key: string;
-  streamStep: StreamStep;
+  streamStep: StreamStep | null;
   owner: string;
   members?: number;
   stages: { name: string; gate?: boolean }[];
@@ -111,7 +112,7 @@ function agentsTotal(agents: StreamRowSummary["agents"]): string | undefined {
 function compactRow({ stream, href, presentation }: CompactStreamRowProps) {
   const rowClass = compactClassName(presentation.className);
   return (
-    <tr className={`${rowClass} ward-streamrow`} data-draft={stream.draft === true} style={{ "--stream": `var(--ward-stream-${stream.streamStep}-chip)` } as CSSProperties}>
+    <tr className={`${rowClass} ward-streamrow`} data-draft={stream.draft === true} style={{ "--stream": streamColour(stream.streamStep, "chip") } as CSSProperties}>
       {identityCell(stream, href)}
       {stagesCell(stream.stages, href)}
       {statCell(agentsTotal(stream.agents), stream.agents === undefined ? undefined : agentsLine(stream.agents), "—")}
@@ -134,7 +135,7 @@ export function StreamRow(props: StreamRowProps) {
         <a className={s.name} href={href}>
           {stream.name}
         </a>
-        <Chip role="stream" label={stream.key} streamStep={stream.streamStep} />
+        <Chip {...streamChipProps(stream.key, stream.streamStep)} />
         {stream.draft && <Chip role="running" label="DRAFT" />}
       </td>
       <td className={s.cell}>

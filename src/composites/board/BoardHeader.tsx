@@ -7,6 +7,7 @@ import { duration } from "../../fmt/duration";
 import type { LiveConnection } from "../../live/types";
 import type { FieldOption } from "../../primitives/Field";
 import type { StreamStep } from "../../tokens";
+import { streamColour } from "../../primitives/streamColour";
 import s from "./BoardHeader.module.css";
 
 export type BoardRollups = {
@@ -18,7 +19,7 @@ export type BoardRollups = {
 };
 
 export type BoardHeaderProps = {
-  stream: { name: string; key: string; streamStep: StreamStep; markRef?: string | null };
+  stream: { name: string; key: string; streamStep: StreamStep | null; markRef?: string | null };
   rollups: BoardRollups;
   connection: LiveConnection;
   lastEventAt: string | null;
@@ -52,8 +53,8 @@ function initialsOf(markRef: string) {
 }
 
 // Without a mark_ref the stream draws as the comp's 8px swatch; uploaded marks are referenced by id only, so they draw as a plain tile.
-function StreamMark({ markRef, streamStep }: { markRef?: string | null; streamStep: StreamStep }) {
-  const style = { "--stream": `var(--ward-stream-${streamStep}-id)` } as CSSProperties;
+function StreamMark({ markRef, streamStep }: { markRef?: string | null; streamStep: StreamStep | null }) {
+  const style = { "--stream": streamColour(streamStep, "id") } as CSSProperties;
   if (!markRef) return <span className={s.swatch} style={style} data-ward-stream-swatch="" aria-hidden="true" />;
   return (
     <span className={`${s.mark} ward-stream-mark`} style={style} data-mark-ref={markRef} aria-hidden="true">

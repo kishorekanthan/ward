@@ -94,4 +94,14 @@ describe("AgentCard facts", () => {
     rerender(<AgentCard agent={specAgent} href="/x" facts={[]} />);
     expect(container.querySelector("dl")).toBeNull();
   });
+
+  it("draws an agent on a stream with no validated colour step neutral", () => {
+    const railOf = (streamStep: 2 | 4 | null) => {
+      const { container, unmount } = render(<AgentCard agent={{ ...agent, streamStep }} href="#a" />);
+      const value = container.querySelector<HTMLElement>("article")?.style.getPropertyValue("--stream");
+      unmount();
+      return value;
+    };
+    expect([railOf(2), railOf(4), railOf(null)]).toEqual(["var(--ward-stream-2-id)", "var(--ward-color-line2)", "var(--ward-color-line2)"]);
+  });
 });
