@@ -314,6 +314,7 @@
   --ward-gap-reviewer: 7px;
   --ward-gap-terminalCard: 6px;
   --ward-gap-formLabel: 6px;
+  --ward-gap-formStack: 11px;
   --ward-gap-swatch: 5px;
   --ward-gap-stageList: 6px;
   --ward-gap-choiceBody: 3px;
@@ -345,6 +346,7 @@
   --ward-width-colPin: 108px;
   --ward-width-colConn: 120px;
   --ward-width-overlayWide: 720px;
+  --ward-width-form: 624px;
   --ward-width-drawerKey: 120px;
   --ward-width-maxWide: 1928px;
   --ward-width-sidebar: 236px;

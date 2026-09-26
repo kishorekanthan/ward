@@ -71,7 +71,7 @@ describe("public Ward exports", () => {
 
   it("publishes every promoted composite from the package root", () => {
     const expected = [
-      "AppShell", "PageFrame", "SubjectRail", "RecordSection", "SectionBand", "BoardScroller",
+      "AppShell", "PageFrame", "SubjectRail", "RecordSection", "FormStack", "SectionBand", "BoardScroller",
       "BoardColumn", "BoardHeader", "ConfigRow", "ItemDrawer", "OverCapNote", "PreviewRail", "WorkCard",
       "ActivityConsole", "ClarificationRow", "Composer", "CriteriaList", "GateLadder", "RequeueSheet", "ResolveBlock", "StageHistory",
       "ChatMessage", "DeliveryHealth", "ReadyChecklist", "ResolvedFieldRow", "RoutingTable", "SessionRow", "TypedInputBlock",

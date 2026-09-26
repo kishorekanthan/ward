@@ -1,0 +1,9 @@
+{
+  "source": "Trellis Studio.dc.html block 3b (New stream), read by hand: section col gap:11px; label col gap:6px; footer row padding-top:16px, gap:8px, buttons last after a flex:1 note; card width:660px with body padding:18px.",
+  "fieldGap": "11px",
+  "labelGap": "6px",
+  "actionsTop": "16px",
+  "actionsGap": "8px",
+  "actionsJustify": "flex-end",
+  "maxWidth": "624px"
+}
