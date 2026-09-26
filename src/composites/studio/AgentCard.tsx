@@ -16,6 +16,8 @@ export type Agent = {
   run?: { itemKey: string; startedAt: string; turn?: [number, number] };
 };
 
+export type AgentFact = { label: string; value: string };
+
 const ROLE = { live: "done", draft: "running", paused: "meta" } as const;
 
 export type AgentCardProps = {
@@ -24,6 +26,7 @@ export type AgentCardProps = {
   selected?: boolean;
   connection?: LiveConnection;
   lastEvent?: { label: string; at: string };
+  facts?: AgentFact[];
   className?: string;
 };
 
@@ -58,11 +61,25 @@ function Run({ run, connection, lastEvent }: Pick<AgentCardProps, "connection" |
   );
 }
 
+function Facts({ facts }: { facts: AgentFact[] | undefined }) {
+  if (facts === undefined || facts.length === 0) return null;
+  return (
+    <dl className={s.facts}>
+      {facts.map((fact) => (
+        <div className={s.fact} key={fact.label}>
+          <dt className={s.factLabel}>{fact.label}</dt>
+          <dd className={s.factValue}>{fact.value}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
 function isPaused(versions: AgentVersion[]): true | undefined {
   return versions.length > 0 && versions.every((v) => v.status === "paused") ? true : undefined;
 }
 
-export function AgentCard({ agent, href, selected, connection = "live", lastEvent, className }: AgentCardProps) {
+export function AgentCard({ agent, href, selected, connection = "live", lastEvent, facts, className }: AgentCardProps) {
   const style = { "--stream": `var(--ward-stream-${agent.streamStep}-id)` } as CSSProperties;
   const current = selected ? "true" : undefined;
   return (
@@ -82,6 +99,7 @@ export function AgentCard({ agent, href, selected, connection = "live", lastEven
       <Description description={agent.description} />
       <Run run={agent.run} connection={connection} lastEvent={lastEvent} />
       <Versions versions={agent.versions} />
+      <Facts facts={facts} />
     </article>
   );
 }

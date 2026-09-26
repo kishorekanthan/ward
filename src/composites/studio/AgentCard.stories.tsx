@@ -69,3 +69,24 @@ export const OtherStream = {
     },
   },
 };
+
+export const WithFacts = {
+  args: {
+    ...base,
+    agent,
+    facts: [
+      { label: "Model", value: "claude-sonnet" },
+      { label: "Stages", value: "Intake · Triage" },
+      { label: "Last run", value: "done · DE-104 · Intake · 2026-09-26 09:14" },
+      { label: "Runs, 7 days", value: "38 · Cost, 7 days: $4.12" },
+    ],
+  },
+};
+
+export const LongFactValue = {
+  args: {
+    ...base,
+    agent,
+    facts: [{ label: "Model", value: "vendor-hosted-model-with-an-unbroken-identifier-2026-09-26-preview" }],
+  },
+};

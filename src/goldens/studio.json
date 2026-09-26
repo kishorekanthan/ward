@@ -31,6 +31,16 @@
     "selectedGround": "#F0F5FF",
     "selectedRing": "inset 0 0 0 1px #0066F5"
   },
+  "cardFacts": {
+    "columns": "max-content minmax(0, 1fr)",
+    "gap": "4px 8px",
+    "above": "8px",
+    "rule": "inset 0 1px 0 #E2E6EC",
+    "type": "400 10.5px/1.4 'Source Sans 3'",
+    "wrap": "anywhere",
+    "labelInk": "#5A6474",
+    "valueInk": "#071D49"
+  },
   "gate": {
     "padding": "11px",
     "gap": "8px",
