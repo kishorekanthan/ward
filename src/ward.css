@@ -216,6 +216,7 @@
   --ward-pad-boardHead: 16px 20px 12px;
   --ward-pad-boardColumn: 13px 12px;
   --ward-pad-workCard: 11px;
+  --ward-pad-ladderTile: 11px;
   --ward-pad-trace: 7px 0;
   --ward-pad-metricCell: 12px 14px;
   --ward-pad-railSection: 14px;
@@ -315,6 +316,8 @@
   --ward-gap-terminalCard: 6px;
   --ward-gap-formLabel: 6px;
   --ward-gap-formStack: 11px;
+  --ward-gap-ladderGrid: 9px;
+  --ward-gap-ladderTile: 7px;
   --ward-gap-swatch: 5px;
   --ward-gap-stageList: 6px;
   --ward-gap-choiceBody: 3px;
@@ -395,6 +398,7 @@
   --ward-height-agentDot: 7px;
   --ward-height-reviewerMark: 18px;
   --ward-height-swatch: 22px;
+  --ward-height-ladderBar: 34px;
   --ward-height-radio: 13px;
   --ward-height-skeletonBar: 12px;
   --ward-size-marker6: 6px;
@@ -488,6 +492,7 @@
   --ward-type-stageName: 500 13px/1 Archivo, system-ui, sans-serif;
   --ward-type-agentName: 600 11.5px/1.25 'Source Sans 3', system-ui, sans-serif;
   --ward-type-cardNote: 400 10.5px/1.4 'Source Sans 3', system-ui, sans-serif;
+  --ward-type-ladderNote: 400 10.5px/1.35 'Source Sans 3', system-ui, sans-serif;
   --ward-type-gateNote: 400 10.5px/1.5 'Source Sans 3', system-ui, sans-serif;
   --ward-type-reviewerName: 500 11px/1 'Source Sans 3', system-ui, sans-serif;
   --ward-type-reviewerMark: 600 8.5px/18px 'Source Sans 3', system-ui, sans-serif;

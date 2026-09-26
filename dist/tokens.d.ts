@@ -153,6 +153,7 @@ export declare const v: {
         readonly boardHead: "var(--ward-pad-boardHead)";
         readonly boardColumn: "var(--ward-pad-boardColumn)";
         readonly workCard: "var(--ward-pad-workCard)";
+        readonly ladderTile: "var(--ward-pad-ladderTile)";
         readonly trace: "var(--ward-pad-trace)";
         readonly metricCell: "var(--ward-pad-metricCell)";
         readonly railSection: "var(--ward-pad-railSection)";
@@ -254,6 +255,8 @@ export declare const v: {
         readonly terminalCard: "var(--ward-gap-terminalCard)";
         readonly formLabel: "var(--ward-gap-formLabel)";
         readonly formStack: "var(--ward-gap-formStack)";
+        readonly ladderGrid: "var(--ward-gap-ladderGrid)";
+        readonly ladderTile: "var(--ward-gap-ladderTile)";
         readonly swatch: "var(--ward-gap-swatch)";
         readonly stageList: "var(--ward-gap-stageList)";
         readonly choiceBody: "var(--ward-gap-choiceBody)";
@@ -338,6 +341,7 @@ export declare const v: {
         readonly agentDot: "var(--ward-height-agentDot)";
         readonly reviewerMark: "var(--ward-height-reviewerMark)";
         readonly swatch: "var(--ward-height-swatch)";
+        readonly ladderBar: "var(--ward-height-ladderBar)";
         readonly radio: "var(--ward-height-radio)";
         readonly skeletonBar: "var(--ward-height-skeletonBar)";
     };
@@ -437,6 +441,7 @@ export declare const v: {
         readonly stageName: "var(--ward-type-stageName)";
         readonly agentName: "var(--ward-type-agentName)";
         readonly cardNote: "var(--ward-type-cardNote)";
+        readonly ladderNote: "var(--ward-type-ladderNote)";
         readonly gateNote: "var(--ward-type-gateNote)";
         readonly reviewerName: "var(--ward-type-reviewerName)";
         readonly reviewerMark: "var(--ward-type-reviewerMark)";
@@ -493,3 +498,4 @@ export declare function isStreamStep(step: number): step is StreamStep;
 export declare function isValidatedStreamStep(step: number): step is ValidatedStreamStep;
 export declare function streamVars(step: number): Record<string, string>;
 export declare function streamChip(step: number): string;
+export declare function streamHex(step: number): string;

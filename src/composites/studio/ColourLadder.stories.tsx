@@ -43,3 +43,13 @@ export const ReservedOnly = {
 export const Swatches = {
   args: { ...base, value: 2, presentation: "swatches", takenBy: { 1: "data-eng" } },
 };
+
+const ladder9a = [{ step: 1 }, { step: 2 }, { step: 3 }, { step: 4 }, { step: 5 }, { step: 6 }, { step: 7, reserved: true }];
+
+export const Tiles = {
+  args: { label: "Stream colour — validated steps only", onChange: () => {}, presentation: "tiles", steps: ladder9a, value: 1, takenBy: { 2: "UI / UX", 3: "Integration" } },
+};
+
+export const TilesNothingPicked = {
+  args: { ...Tiles.args, value: null, takenBy: { 2: "UI / UX" } },
+};

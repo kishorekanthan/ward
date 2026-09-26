@@ -156,6 +156,7 @@ export const v = {
     boardHead: 'var(--ward-pad-boardHead)',
     boardColumn: 'var(--ward-pad-boardColumn)',
     workCard: 'var(--ward-pad-workCard)',
+    ladderTile: 'var(--ward-pad-ladderTile)',
     trace: 'var(--ward-pad-trace)',
     metricCell: 'var(--ward-pad-metricCell)',
     railSection: 'var(--ward-pad-railSection)',
@@ -257,6 +258,8 @@ export const v = {
     terminalCard: 'var(--ward-gap-terminalCard)',
     formLabel: 'var(--ward-gap-formLabel)',
     formStack: 'var(--ward-gap-formStack)',
+    ladderGrid: 'var(--ward-gap-ladderGrid)',
+    ladderTile: 'var(--ward-gap-ladderTile)',
     swatch: 'var(--ward-gap-swatch)',
     stageList: 'var(--ward-gap-stageList)',
     choiceBody: 'var(--ward-gap-choiceBody)',
@@ -341,6 +344,7 @@ export const v = {
     agentDot: 'var(--ward-height-agentDot)',
     reviewerMark: 'var(--ward-height-reviewerMark)',
     swatch: 'var(--ward-height-swatch)',
+    ladderBar: 'var(--ward-height-ladderBar)',
     radio: 'var(--ward-height-radio)',
     skeletonBar: 'var(--ward-height-skeletonBar)',
   },
@@ -438,6 +442,7 @@ export const v = {
     stageName: 'var(--ward-type-stageName)',
     agentName: 'var(--ward-type-agentName)',
     cardNote: 'var(--ward-type-cardNote)',
+    ladderNote: 'var(--ward-type-ladderNote)',
     gateNote: 'var(--ward-type-gateNote)',
     reviewerName: 'var(--ward-type-reviewerName)',
     reviewerMark: 'var(--ward-type-reviewerMark)',
@@ -511,4 +516,11 @@ export function streamVars(step: number): Record<string, string> {
 export function streamChip(step: number): string {
   if (!isStreamStep(step)) throw new Error('unvalidated stream step');
   return `var(--ward-stream-${step}-chip)`;
+}
+
+const STREAM_HEX: Record<StreamStep, string> = {"1":"#00897B","2":"#7038C8","3":"#BF5310","4":"#1C6FB8","5":"#8A6A00","6":"#A02C6B"};
+
+export function streamHex(step: number): string {
+  if (!isStreamStep(step)) throw new Error('unvalidated stream step');
+  return STREAM_HEX[step];
 }
