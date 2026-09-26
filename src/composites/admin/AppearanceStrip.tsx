@@ -23,7 +23,7 @@ const SEGMENTS: StreamStep[] = [1, 2, 3, 4, 5, 6];
 const SEGMENT_WIDTH = 100;
 
 function fillOf(step: StreamStep, taken: Set<number | null>) {
-  return taken.has(step) ? `var(--ward-stream-${step}-id, var(--ward-color-line2))` : "var(--ward-color-line)";
+  return taken.has(step) ? streamColour(step, "id") : "var(--ward-color-line)";
 }
 
 function CompactChart({ draft, streams }: { draft: Identity; streams: Identity[] }) {

@@ -107,11 +107,14 @@ describe("AppearanceStrip spec", () => {
   });
 
   it("draws a draft with no validated colour step neutral in both presentations, without throwing", () => {
-    const kpi = { key: "KPI", name: "KPI Config", streamStep: 4 } as unknown as Identity;
-    const compact = render(<AppearanceStrip draft={kpi} sample={specSample} streams={[]} />);
-    expect([streamOf(compact.container, "[data-ward-card]"), streamOf(compact.container, "section")]).toEqual(["var(--ward-color-line2)", "var(--ward-color-line2)"]);
-    expect(compact.getAllByText("KPI")[0].className).toContain("ward-chip--meta");
-    compact.unmount();
+    for (const streamStep of [4, null]) {
+      const kpi = { key: "KPI", name: "KPI Config", streamStep } as unknown as Identity;
+      const compact = render(<AppearanceStrip draft={kpi} sample={specSample} streams={[]} />);
+      expect([streamOf(compact.container, "[data-ward-card]"), streamOf(compact.container, "section")]).toEqual(["var(--ward-color-line2)", "var(--ward-color-line2)"]);
+      expect(compact.getAllByText("KPI")[0].className).toContain("ward-chip--meta");
+      expect([...compact.container.querySelectorAll("svg rect")].map((r) => r.getAttribute("fill"))[3]).toBe(streamStep === 4 ? "var(--ward-color-line2)" : "var(--ward-color-line)");
+      compact.unmount();
+    }
     const validated = render(<AppearanceStrip draft={specDraft} sample={specSample} streams={[]} presentation="detailed" identities={[specDraft]} />);
     expect(firstChipRole(validated.container)).toBe("stream");
     validated.unmount();
