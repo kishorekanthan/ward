@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { AgentCard, type Agent } from "./AgentCard";
 
@@ -66,5 +66,31 @@ describe("AgentCard (spec)", () => {
   it("marks the selected card for assistive tech", () => {
     render(<AgentCard agent={specAgent} href="/x" selected />);
     expect(screen.getByRole("link").getAttribute("aria-current")).toBe("true");
+  });
+});
+
+describe("AgentCard facts", () => {
+  const facts = [
+    { label: "Model", value: "claude-sonnet" },
+    { label: "Stages", value: "Intake · Review" },
+    { label: "Last run", value: "done · DE-12" },
+  ];
+
+  it("lists each fact as a term and its value inside the card, after the version chips", () => {
+    render(<AgentCard agent={specAgent} href="/x" facts={facts} />);
+    const card = screen.getByRole("article");
+    const list = card.querySelector("dl");
+    expect(list).not.toBeNull();
+    expect(Array.from(list!.querySelectorAll("dt"), (term) => term.textContent)).toEqual(["Model", "Stages", "Last run"]);
+    expect(Array.from(list!.querySelectorAll("dd"), (value) => value.textContent)).toEqual(["claude-sonnet", "Intake · Review", "done · DE-12"]);
+    const chip = within(card).getByText("V7 DRAFT");
+    expect(chip.compareDocumentPosition(list!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it("draws no list when facts are omitted or empty", () => {
+    const { container, rerender } = render(<AgentCard agent={specAgent} href="/x" />);
+    expect(container.querySelector("dl")).toBeNull();
+    rerender(<AgentCard agent={specAgent} href="/x" facts={[]} />);
+    expect(container.querySelector("dl")).toBeNull();
   });
 });

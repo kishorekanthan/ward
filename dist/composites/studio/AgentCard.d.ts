@@ -19,6 +19,10 @@ export type Agent = {
         turn?: [number, number];
     };
 };
+export type AgentFact = {
+    label: string;
+    value: string;
+};
 export type AgentCardProps = {
     agent: Agent;
     href: string;
@@ -28,6 +32,7 @@ export type AgentCardProps = {
         label: string;
         at: string;
     };
+    facts?: AgentFact[];
     className?: string;
 };
-export declare function AgentCard({ agent, href, selected, connection, lastEvent, className }: AgentCardProps): import("react").JSX.Element;
+export declare function AgentCard({ agent, href, selected, connection, lastEvent, facts, className }: AgentCardProps): import("react").JSX.Element;

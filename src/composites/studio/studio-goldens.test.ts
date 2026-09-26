@@ -65,6 +65,17 @@ describe("stream detail geometry against Studio 3c", () => {
     expect(value(CARD, '\\.card\\[data-selected="true"\\]', "box-shadow")).toBe(card.selectedRing);
   });
 
+  it("sets agent card facts as a ruled two-column list whose values wrap", () => {
+    const { cardFacts } = golden;
+    expect(value(CARD, "\\.facts", "grid-template-columns")).toBe(cardFacts.columns);
+    expect(value(CARD, "\\.facts", "gap")).toBe(cardFacts.gap);
+    expect(value(CARD, "\\.facts", "padding-top")).toBe(cardFacts.above);
+    expect(value(CARD, "\\.facts", "box-shadow")).toBe(cardFacts.rule);
+    expect(value(CARD, "\\.facts", "font")).toMatch(font(cardFacts.type));
+    expect(value(CARD, "\\.fact", "display")).toBe("contents");
+    expect(value(CARD, "\\.factValue", "overflow-wrap")).toBe(cardFacts.wrap);
+  });
+
   it("draws the gate panel with reviewer squares", () => {
     const { gate } = golden;
     expect(value(COLUMN, "\\.workflowGate", "padding")).toBe(gate.padding);
