@@ -113,6 +113,21 @@ describe("BoardHeader rollups and actions", () => {
     expect(markOf(container)).toBeNull();
     expect(container.querySelector("[data-ward-stream-swatch]")?.nextElementSibling?.textContent).toBe("Order Recovery");
   });
+
+  it("draws the swatch and the initials mark of a stream with no validated colour step neutral", () => {
+    const view = (streamStep: 2 | 4 | null, markRef?: string) => (
+      <BoardHeader stream={{ ...stream, streamStep, markRef }} rollups={{ inFlight: 0, loadedThisWeek: 0 }} connection="live" lastEventAt={null} />
+    );
+    const colourOf = (selector: string, streamStep: 2 | 4 | null, markRef?: string) => {
+      const { container, unmount } = render(view(streamStep, markRef));
+      const value = container.querySelector<HTMLElement>(selector)?.style.getPropertyValue("--stream");
+      unmount();
+      return value;
+    };
+    const swatch = "[data-ward-stream-swatch]";
+    expect([colourOf(swatch, 2), colourOf(swatch, 4), colourOf(swatch, null)]).toEqual(["var(--ward-stream-2-id)", "var(--ward-color-line2)", "var(--ward-color-line2)"]);
+    expect([colourOf("[data-mark-ref]", 4, "initials:kpi"), colourOf("[data-mark-ref]", null, "initials:kpi")]).toEqual(["var(--ward-color-line2)", "var(--ward-color-line2)"]);
+  });
 });
 
 function markOf(container: HTMLElement): HTMLElement | null {

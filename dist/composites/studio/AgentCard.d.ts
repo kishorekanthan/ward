@@ -10,7 +10,7 @@ export type AgentVersion = {
 export type Agent = {
     id: string;
     name: string;
-    streamStep: StreamStep;
+    streamStep: StreamStep | null;
     description?: string;
     versions: AgentVersion[];
     run?: {

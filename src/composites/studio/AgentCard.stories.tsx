@@ -90,3 +90,5 @@ export const LongFactValue = {
     facts: [{ label: "Model", value: "vendor-hosted-model-with-an-unbroken-identifier-2026-09-26-preview" }],
   },
 };
+
+export const NoValidatedColour = { args: { ...base, agent: { ...agent, streamStep: null } } };

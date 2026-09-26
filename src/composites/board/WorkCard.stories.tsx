@@ -100,3 +100,5 @@ export const EventFlash = {
     }),
   },
 };
+
+export const NoValidatedColour = { args: { ...base, item: { ...item, streamStep: null } } };

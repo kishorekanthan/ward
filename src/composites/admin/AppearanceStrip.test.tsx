@@ -100,8 +100,40 @@ describe("AppearanceStrip spec", () => {
   });
 
   it("renders a real work card and the stream head", () => {
-    render(<AppearanceStrip draft={specDraft} sample={specSample} streams={[]} />);
+    const { container } = render(<AppearanceStrip draft={specDraft} sample={specSample} streams={[]} />);
+    expect(container.querySelector<HTMLElement>("section")?.style.getPropertyValue("--stream")).toBe("var(--ward-stream-2-id)");
     expect(screen.getByText(specSample.title)).not.toBeNull();
     expect(screen.getByText("FIN").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-stream-2-chip)");
   });
+
+  it("draws a draft with no validated colour step neutral in both presentations, without throwing", () => {
+    const kpi = { key: "KPI", name: "KPI Config", streamStep: 4 } as unknown as Identity;
+    const compact = render(<AppearanceStrip draft={kpi} sample={specSample} streams={[]} />);
+    expect([streamOf(compact.container, "[data-ward-card]"), streamOf(compact.container, "section")]).toEqual(["var(--ward-color-line2)", "var(--ward-color-line2)"]);
+    expect(compact.getAllByText("KPI")[0].className).toContain("ward-chip--meta");
+    compact.unmount();
+    const validated = render(<AppearanceStrip draft={specDraft} sample={specSample} streams={[]} presentation="detailed" identities={[specDraft]} />);
+    expect(firstChipRole(validated.container)).toBe("stream");
+    validated.unmount();
+    for (const streamStep of [4, null]) {
+      const draft = { key: "KPI", name: "KPI Config", streamStep };
+      const { container, getAllByText, unmount } = render(<AppearanceStrip draft={specDraft} sample={specSample} streams={[]} presentation="detailed" identities={[draft]} />);
+      expect(streamOf(container, "[data-ward-card]")).toBe("var(--ward-color-line2)");
+      expect(firstSegmentStyle(container)).toContain("var(--ward-color-line2)");
+      expect(getAllByText("KPI")[0].className).toContain("ward-chip--meta");
+      unmount();
+    }
+  });
 });
+
+function streamOf(container: HTMLElement, selector: string): string | undefined {
+  return container.querySelector<HTMLElement>(selector)?.style.getPropertyValue("--stream");
+}
+
+function firstChipRole(container: HTMLElement): string | null | undefined {
+  return container.querySelector("[data-ward-chip]")?.getAttribute("data-ward-chip");
+}
+
+function firstSegmentStyle(container: HTMLElement): string | null | undefined {
+  return container.querySelector("svg rect")?.getAttribute("style");
+}

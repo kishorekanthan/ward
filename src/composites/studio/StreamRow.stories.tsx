@@ -104,3 +104,12 @@ export const Summary = {
     </Table>
   ),
 };
+
+export const NoValidatedColour = {
+  render: () => (
+    <Table>
+      <StreamRow stream={{ ...stream, name: "KPI Config", key: "KPI", streamStep: null }} href="/studio/kpi" />
+      <StreamRow stream={{ ...summary, name: "KPI Config", key: "KPI", streamStep: null }} href="/studio/kpi" presentation={{ columns: 5 }} />
+    </Table>
+  ),
+};

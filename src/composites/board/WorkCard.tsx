@@ -6,6 +6,7 @@ import { duration } from "../../fmt/duration";
 import { money } from "../../fmt/money";
 import type { LiveConnection, LiveEvent } from "../../live/types";
 import type { BoardField, BoardItem } from "./types";
+import { streamColour } from "../../primitives/streamColour";
 import s from "./WorkCard.module.css";
 
 export type WorkCardFeed = {
@@ -114,7 +115,7 @@ function Fields({ item, fields }: { item: BoardItem; fields: BoardField[] }) {
 const flag = (on?: boolean) => (on ? true : undefined);
 
 function cardStyle(item: BoardItem): CSSProperties {
-  return { "--stream": `var(--ward-stream-${item.streamStep}-id)` } as CSSProperties;
+  return { "--stream": streamColour(item.streamStep, "id") } as CSSProperties;
 }
 
 // Hands the hit button over because a mouse click does not focus it in every browser.
