@@ -11,9 +11,14 @@ const root = dirname(fileURLToPath(import.meta.url));
 const golden = JSON.parse(readFileSync(join(root, "..", "goldens", "form.json"), "utf8")) as Record<string, string>;
 const formCss = readFileSync(join(root, "FormStack.module.css"), "utf8");
 const wardCss = readFileSync(join(root, "..", "ward.css"), "utf8");
+const fieldCss = readFileSync(join(root, "..", "primitives", "Field.module.css"), "utf8");
 
-function declaration(selector: string, property: string): string {
-  const block = formCss.match(new RegExp(`${selector}\\s*\\{([^}]*)\\}`))?.[1] ?? "";
+function ruleBlock(css: string, selector: string): string {
+  return css.match(new RegExp(`${selector}\\s*\\{([^}]*)\\}`))?.[1] ?? "";
+}
+
+function declaration(selector: string, property: string, css = formCss): string {
+  const block = ruleBlock(css, selector);
   return block.match(new RegExp(`(?:^|;|\\s)${property}\\s*:\\s*([^;]+)`))?.[1].trim() ?? "";
 }
 
@@ -27,11 +32,15 @@ function resolved(selector: string, property: string): string {
 
 describe("FormStack geometry (comp 3b)", () => {
   it("stacks fields 11px apart with each label 6px above its control", () => {
+    expect([declaration("\\.fields", "display"), declaration("\\.fields", "flex-direction")]).toEqual(["flex", "column"]);
+    // The label gap only lands while Field's root is itself a flex column.
+    expect([declaration("\\.field", "display", fieldCss), declaration("\\.field", "flex-direction", fieldCss)]).toEqual(["flex", "column"]);
     expect(resolved("\\.fields", "gap")).toBe(golden.fieldGap);
     expect(resolved("\\.fields > \\[data-ward-field\\]", "gap")).toBe(golden.labelGap);
   });
 
   it("sets the action row 16px below the fields, 8px apart, at the end", () => {
+    expect(declaration("\\.actions", "display")).toBe("flex");
     expect(resolved("\\.actions", "padding-top")).toBe(golden.actionsTop);
     expect(resolved("\\.actions", "gap")).toBe(golden.actionsGap);
     expect(resolved("\\.actions", "justify-content")).toBe(golden.actionsJustify);
@@ -60,6 +69,7 @@ describe("FormStack", () => {
     const [fields, actions] = Array.from(form.children);
     expect(form.children).toHaveLength(2);
     expect(Array.from(fields.querySelectorAll("label")).map((label) => label.textContent)).toEqual(["Agent name", "Copy from"]);
+    expect(Array.from(fields.children).every((field) => field.matches("[data-ward-field]"))).toBe(true);
     expect(actions).toBe(screen.getByRole("group", { name: "New agent actions" }));
     expect(Array.from(actions.querySelectorAll("button")).map((button) => button.textContent)).toEqual(["Cancel", "Save draft"]);
   });
