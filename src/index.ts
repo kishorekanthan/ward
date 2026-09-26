@@ -89,6 +89,8 @@ export { SubjectRail } from "./layout/SubjectRail";
 export type { SubjectRailProps } from "./layout/SubjectRail";
 export { RecordSection } from "./layout/RecordSection";
 export type { RecordSectionProps } from "./layout/RecordSection";
+export { FormStack } from "./layout/FormStack";
+export type { FormStackProps } from "./layout/FormStack";
 export { SectionBand } from "./layout/SectionBand";
 export type { SectionBandProps } from "./layout/SectionBand";
 export { BoardScroller } from "./layout/BoardScroller";

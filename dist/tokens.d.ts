@@ -253,6 +253,7 @@ export declare const v: {
         readonly reviewer: "var(--ward-gap-reviewer)";
         readonly terminalCard: "var(--ward-gap-terminalCard)";
         readonly formLabel: "var(--ward-gap-formLabel)";
+        readonly formStack: "var(--ward-gap-formStack)";
         readonly swatch: "var(--ward-gap-swatch)";
         readonly stageList: "var(--ward-gap-stageList)";
         readonly choiceBody: "var(--ward-gap-choiceBody)";
@@ -286,6 +287,7 @@ export declare const v: {
         readonly colPin: "var(--ward-width-colPin)";
         readonly colConn: "var(--ward-width-colConn)";
         readonly overlayWide: "var(--ward-width-overlayWide)";
+        readonly form: "var(--ward-width-form)";
         readonly drawerKey: "var(--ward-width-drawerKey)";
         readonly maxWide: "var(--ward-width-maxWide)";
         readonly sidebar: "var(--ward-width-sidebar)";

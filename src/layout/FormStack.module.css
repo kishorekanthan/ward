@@ -1,0 +1,26 @@
+/* Provenance: Trellis Studio 3b (New stream) — section col gap:11px, label col gap:6px, footer padding-top:16px gap:8px, 660px card less 18px padding. */
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--ward-width-form);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-gap-formStack);
+}
+
+.fields > [data-ward-field] {
+  gap: var(--ward-gap-formLabel);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ward-gap-modalFooter);
+  padding-top: var(--ward-space-4);
+}
