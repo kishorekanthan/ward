@@ -249,4 +249,13 @@ describe("colour ladder tiles against Studio 9a", () => {
     expect(value(LADDER, '\\.tile\\[data-unavailable="true"\\]', "opacity")).toBe(identity.takenOpacity);
     expect(value(LADDER, '\\.tile\\[data-validation="reserved"\\],\\s*\\.tile\\[data-validation="request"\\]', "background")).toBe(identity.reservedGround);
   });
+
+  it("keeps the reserved and request tiles at full strength with an outlined bar and muted ink", () => {
+    const { identity } = golden;
+    const RESERVED = '\\.tile\\[data-validation="reserved"\\],\\s*\\.tile\\[data-validation="request"\\]';
+    expect(value(LADDER, RESERVED, "opacity")).toBe(identity.reservedOpacity);
+    expect(value(LADDER, RESERVED, "box-shadow")).toBe(identity.reservedRing);
+    expect(value(LADDER, `${RESERVED.replace(",", " \\.bar,")} \\.bar`, "box-shadow")).toBe(identity.reservedBar);
+    expect(value(LADDER, `${RESERVED.replace(",", " \\.hex,")} \\.hex`, "color")).toBe(identity.reservedInk);
+  });
 });

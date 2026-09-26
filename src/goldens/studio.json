@@ -127,6 +127,10 @@
     "taken": "inset 0 0 0 1px #E2E6EC",
     "takenOpacity": "0.55",
     "reservedGround": "#FCFCFD",
+    "reservedRing": "inset 0 0 0 1px #E2E6EC",
+    "reservedOpacity": "1",
+    "reservedBar": "inset 0 0 0 1px #C9D2DE",
+    "reservedInk": "#5A6474",
     "hex": "400 10.5px/1.45 'IBM Plex Mono'",
     "note": "400 10.5px/1.35 'Source Sans 3'"
   }
