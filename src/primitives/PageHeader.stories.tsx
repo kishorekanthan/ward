@@ -90,3 +90,20 @@ export const OverflowPanel = {
   args: { crumb, title: "intake-advisor v3", actions },
   parameters: { viewport: { defaultViewport: "mobile1" } },
 };
+
+// Comp 3c: secondary actions sit behind ··· at every width.
+export const WithMore = {
+  args: {
+    crumb,
+    title: "Data Engineering",
+    actions,
+    more: [
+      <Btn key="rules" variant="ghost" onClick={() => {}}>
+        Rule builder
+      </Btn>,
+      <Btn key="intake" variant="ghost" onClick={() => {}}>
+        Intake
+      </Btn>,
+    ],
+  },
+};
