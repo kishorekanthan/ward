@@ -39,6 +39,7 @@ export type StageColumnSummary = {
   reviewers?: StageColumnReviewer[];
   gateShare?: number;
   closedThisWeek?: number;
+  rolledBackThisWeek?: number;
 };
 
 export type StageColumnWorkflowProps = {
@@ -167,11 +168,16 @@ function WorkflowGatePanel({ stage }: { stage: StageColumnSummary }) {
   );
 }
 
+function closedNote(rolledBack: number | undefined): string {
+  if (rolledBack === undefined) return "items closed this week";
+  return `items closed · ${rolledBack} ${rolledBack === 1 ? "rollback" : "rollbacks"}`;
+}
+
 function WorkflowTerminalCounter({ stage }: { stage: StageColumnSummary }) {
   return (
     <div className={s.terminalCard}>
       <span className={s.terminalCount}>{weekCount(stage.closedThisWeek)}</span>
-      <span className={s.cardNote}>items closed this week</span>
+      <span className={s.cardNote}>{closedNote(stage.rolledBackThisWeek)}</span>
     </div>
   );
 }

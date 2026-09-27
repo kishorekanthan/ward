@@ -33,6 +33,7 @@ export type StageColumnSummary = {
     reviewers?: StageColumnReviewer[];
     gateShare?: number;
     closedThisWeek?: number;
+    rolledBackThisWeek?: number;
 };
 export type StageColumnWorkflowProps = {
     stage: StageColumnSummary;

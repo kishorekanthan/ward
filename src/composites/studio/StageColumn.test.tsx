@@ -89,6 +89,17 @@ describe("StageColumn", () => {
     expect(screen.queryByRole("button", { name: "+ Mount agent" })).toBeNull();
   });
 
+  it("counts the terminal stage's rollbacks beside its closed items", () => {
+    const stage = { index: 5, name: "Loaded", kind: "terminal" as const, closedThisWeek: 41 };
+    const { rerender } = render(<StageColumn stage={{ ...stage, rolledBackThisWeek: 0 }} presentation={{ mode: "workflow" }} />);
+    expect(screen.getByText("41").nextElementSibling?.textContent).toBe("items closed · 0 rollbacks");
+    rerender(<StageColumn stage={{ ...stage, rolledBackThisWeek: 1 }} presentation={{ mode: "workflow" }} />);
+    expect(screen.getByText("41").nextElementSibling?.textContent).toBe("items closed · 1 rollback");
+    rerender(<StageColumn stage={{ ...stage, rolledBackThisWeek: 3 }} presentation={{ mode: "workflow" }} />);
+    expect(screen.getByText("41").nextElementSibling?.textContent).toBe("items closed · 3 rollbacks");
+    expect(screen.getByText("41 this week")).toBeDefined();
+  });
+
   it("lists every gate reviewer when two share initials, and drops only the removed one", () => {
     const errors = vi.spyOn(console, "error").mockImplementation(() => {});
     const ada = { initials: "AL", name: "Ada Lovelace" };
