@@ -60,7 +60,7 @@ describe("PageHeader", () => {
 
     const header = container.querySelector("header") as HTMLElement;
     const context = header.firstElementChild as HTMLElement;
-    expect(context.textContent).toBe("StudioStreamsData Eng");
+    expect(context.textContent).toBe("Studio›StreamsData Eng");
     expect(header.querySelector("h1")?.textContent).toBe("Board configuration");
     expect(header.querySelector("p")?.textContent).toBe("Changes affect every person opening this board.");
   });

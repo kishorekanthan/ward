@@ -23,6 +23,7 @@
 
 .tab[aria-selected="true"] {
   color: var(--ward-color-text);
+  font-weight: 600;
   border-bottom-color: var(--ward-color-blue);
 }
 

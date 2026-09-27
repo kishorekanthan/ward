@@ -1,6 +1,15 @@
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { Tabs } from "./Tabs";
+
+const tabsCss = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "Tabs.module.css"), "utf8");
+
+function ruleBlock(selector: string): string {
+  return tabsCss.match(new RegExp(`(?:^|\\n)${selector.replace(/[.[\]"=]/g, "\\$&")}\\s*\\{([^}]*)\\}`))?.[1] ?? "";
+}
 
 const seven = Array.from({ length: 7 }, (_, i) => ({ id: `t${i}`, label: `Tab ${i}` }));
 
@@ -40,5 +49,10 @@ describe("Tabs", () => {
     render(<Tabs label="Stream" tabs={seven.slice(0, 3)} active="t0" onChange={onChange} />);
     fireEvent.click(screen.getAllByRole("tab")[2]);
     expect(onChange).toHaveBeenCalledWith("t2");
+  });
+
+  it("sets the selected tab in bold, and only the selected tab", () => {
+    expect(ruleBlock('.tab[aria-selected="true"]')).toMatch(/font-weight:\s*600;/);
+    expect(ruleBlock(".tab")).not.toMatch(/font-weight/);
   });
 });
