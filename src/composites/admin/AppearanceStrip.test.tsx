@@ -177,7 +177,7 @@ describe("AppearanceStrip detailed rail (comp 9a)", () => {
 
   it("with no sample keeps the index row and chart, and says why Board card is empty", () => {
     const { container } = detailed({ sample: undefined, sampleEmpty: "Nothing in flight." });
-    expect(container.querySelector("[data-ward-card]")).toBeNull();
+    expect(screen.queryByRole("button")).toBeNull();
     expect(sectionOf("Board card").textContent).toBe("Board cardNothing in flight.");
     expect(sectionOf("Streams index row").textContent).toBe("Streams index rowData EngineeringDE");
     expect(container.querySelectorAll("svg rect")).toHaveLength(6);
@@ -194,8 +194,9 @@ describe("AppearanceStrip detailed rail (comp 9a)", () => {
   });
 
   it("omits the card from a compact strip with no sample", () => {
+    // A card built from no sample has no key, so data-ward-card alone cannot see it; its open button can.
     const { container } = render(<AppearanceStrip draft={de} streams={[]} />);
-    expect(container.querySelector("[data-ward-card]")).toBeNull();
+    expect(screen.queryByRole("button")).toBeNull();
     expect(container.querySelectorAll("svg rect")).toHaveLength(6);
   });
 });
