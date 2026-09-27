@@ -21,13 +21,19 @@
   text-overflow: ellipsis;
 }
 
+/* A step you can go back to reads as a link, not as muted text. */
 .link {
-  color: var(--ward-color-muted);
-  text-decoration: none;
+  color: var(--ward-color-blue);
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
 }
 
 .link:hover {
   color: var(--ward-color-text);
+}
+
+.sep {
+  padding-inline-end: var(--ward-space-2);
 }
 
 .current {

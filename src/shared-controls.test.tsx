@@ -136,6 +136,7 @@ const BLUE_USES: Record<Category, string[]> = {
     "primitives/Btn.module.css .primary blue",
     "primitives/Btn.module.css .ghost blue",
     "composites/board/BoardFootnote.module.css .link blue",
+    "primitives/Crumb.module.css .link blue",
     "composites/intake/SessionRow.module.css .link blue",
     "composites/intake/SessionRow.module.css .tableRecord blue",
     "layout/Sidebar.module.css .new blue",
