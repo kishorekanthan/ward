@@ -140,3 +140,62 @@ function firstChipRole(container: HTMLElement): string | null | undefined {
 function firstSegmentStyle(container: HTMLElement): string | null | undefined {
   return container.querySelector("svg rect")?.getAttribute("style");
 }
+
+describe("AppearanceStrip detailed rail (comp 9a)", () => {
+  const de = { key: "DE", name: "Data Engineering", streamStep: 1 as const };
+  const detailed = (extra: Partial<Parameters<typeof AppearanceStrip>[0]> = {}) =>
+    render(<AppearanceStrip draft={de} sample={sample} streams={[]} presentation="detailed" identities={[de]} {...extra} />);
+  const sectionOf = (name: string) => screen.getByRole("region", { name });
+
+  it("labels its sections in the comp's order", () => {
+    const { container } = detailed();
+    expect([...container.querySelectorAll("section h4")].map((h) => h.textContent)).toEqual(["Board card", "Streams index row", "Overview chart segment", "Not themeable"]);
+  });
+
+  it("reads the index row marker, name, key chip, the marker in the draft's colour", () => {
+    detailed();
+    const row = sectionOf("Streams index row").querySelector("p") as HTMLElement;
+    expect([...row.children].map((c) => c.textContent)).toEqual(["", "Data Engineering", "DE"]);
+    expect(row.children[0].className).toContain("ward-marker--stream");
+    expect(row.style.getPropertyValue("--stream")).toBe("var(--ward-stream-1-id)");
+  });
+
+  it("draws an unvalidated draft's index marker neutral", () => {
+    detailed({ identities: [{ key: "KPI", name: "KPI Config", streamStep: 4 }] });
+    expect((sectionOf("Streams index row").querySelector("p") as HTMLElement).style.getPropertyValue("--stream")).toBe("var(--ward-color-line2)");
+  });
+
+  it("puts the chart note after the chart and shows the Not themeable sentence", () => {
+    detailed();
+    const chart = [...sectionOf("Overview chart segment").children].map((c) => c.tagName);
+    expect(chart).toEqual(["H4", "FIGURE", "P"]);
+    expect(sectionOf("Overview chart segment").textContent).toContain("six adjacent segments, direct-labelled, no legend to lean on.");
+    expect(sectionOf("Not themeable").textContent).toBe(
+      "Not themeableThe action blue, the navy gate chip, the state colours and every rule stay fixed. A stream owns a colour and a mark — not a theme. Two teams theming the same product produces two products.",
+    );
+  });
+
+  it("with no sample keeps the index row and chart, and says why Board card is empty", () => {
+    const { container } = detailed({ sample: undefined, sampleEmpty: "Nothing in flight." });
+    expect(container.querySelector("[data-ward-card]")).toBeNull();
+    expect(sectionOf("Board card").textContent).toBe("Board cardNothing in flight.");
+    expect(sectionOf("Streams index row").textContent).toBe("Streams index rowData EngineeringDE");
+    expect(container.querySelectorAll("svg rect")).toHaveLength(6);
+  });
+
+  it("falls back to the default Board card sentence", () => {
+    detailed({ sample: undefined });
+    expect(sectionOf("Board card").textContent).toBe("Board cardNo item in flight to preview.");
+  });
+
+  it("draws the sample card inside Board card", () => {
+    detailed();
+    expect(sectionOf("Board card").querySelector("[data-ward-card]")).not.toBeNull();
+  });
+
+  it("omits the card from a compact strip with no sample", () => {
+    const { container } = render(<AppearanceStrip draft={de} streams={[]} />);
+    expect(container.querySelector("[data-ward-card]")).toBeNull();
+    expect(container.querySelectorAll("svg rect")).toHaveLength(6);
+  });
+});

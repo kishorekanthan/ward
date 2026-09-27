@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactElement } from "react";
+import { useId, type CSSProperties, type ReactElement, type ReactNode } from "react";
 import { Chip } from "../../primitives/Chip";
 import { Marker } from "../../primitives/Marker";
 import { WorkCard } from "../board/WorkCard";
@@ -12,12 +12,19 @@ export type AppearanceIdentity = { name: string; key: string; streamStep: number
 
 export type AppearanceStripProps = {
   draft: Identity;
-  sample: BoardItem;
+  sample?: BoardItem;
+  // Board card's sentence when there is no sample to draw (detailed presentation).
+  sampleEmpty?: string;
   streams: Identity[];
   onOpen?: (key: string) => void;
   presentation?: "compact" | "detailed";
   identities?: AppearanceIdentity[];
 };
+
+const SAMPLE_EMPTY = "No item in flight to preview.";
+const CHART_NOTE = "This is the view the validation exists for — six adjacent segments, direct-labelled, no legend to lean on.";
+const NOT_THEMEABLE =
+  "The action blue, the navy gate chip, the state colours and every rule stay fixed. A stream owns a colour and a mark — not a theme. Two teams theming the same product produces two products.";
 
 const SEGMENTS: StreamStep[] = [1, 2, 3, 4, 5, 6];
 const SEGMENT_WIDTH = 100;
@@ -79,20 +86,51 @@ function keyOnly(onOpen?: (key: string) => void): (key: string) => void {
   return (key) => onOpen?.(key);
 }
 
+function RailSection({ label, children }: { label: string; children: ReactNode }): ReactElement {
+  const id = useId();
+  return (
+    <section className={s.section} aria-labelledby={id}>
+      <h4 id={id} className={s.label}>{label}</h4>
+      {children}
+    </section>
+  );
+}
+
+function BoardCardPreview({ sample, sampleEmpty, draft, onOpen }: Omit<AppearanceStripProps, "draft"> & { draft: AppearanceIdentity }): ReactElement {
+  if (sample === undefined) return <p className={s.note}>{sampleEmpty ?? SAMPLE_EMPTY}</p>;
+  return <WorkCard item={{ ...sample, streamStep: validatedStep(draft.streamStep) }} onOpen={keyOnly(onOpen)} feed={null} />;
+}
+
+function IndexRowPreview({ draft }: { draft: AppearanceIdentity }): ReactElement {
+  const style = { "--stream": streamColour(draft.streamStep, "id") } as CSSProperties;
+  return (
+    <p className={s.head} style={style}>
+      <Marker size={8} kind="stream" />
+      <span className={s.name}>{draft.name}</span>
+      <Chip {...streamChipProps(draft.key, draft.streamStep)} />
+    </p>
+  );
+}
+
 function DetailedAppearance(props: AppearanceStripProps): ReactElement {
   const identities = detailedIdentities(props.identities ?? [props.draft, ...props.streams]);
   const draft = identities[0];
   return (
-    <section className={`${s.strip} ward-appearance`} aria-label="Appearance">
-      <WorkCard item={{ ...props.sample, streamStep: validatedStep(draft.streamStep) }} onOpen={keyOnly(props.onOpen)} feed={null} />
-      <p className={`${s.head} ward-envrow ward-appearance-head`}>
-        <span className="ward-identity" aria-hidden="true" />
-        <Chip {...streamChipProps(draft.key, draft.streamStep)} />
-        <span className={`${s.name} ward-rowlink`}>{draft.name}</span>
-      </p>
-      <p className="ward-checklist-note">This is the view the validation exists for — six adjacent segments, direct-labelled, no legend to lean on.</p>
-      <DetailedChart identities={identities} />
-    </section>
+    <div className={s.rail} role="group" aria-label="Appearance">
+      <RailSection label="Board card">
+        <BoardCardPreview {...props} draft={draft} />
+      </RailSection>
+      <RailSection label="Streams index row">
+        <IndexRowPreview draft={draft} />
+      </RailSection>
+      <RailSection label="Overview chart segment">
+        <DetailedChart identities={identities} />
+        <p className={s.note}>{CHART_NOTE}</p>
+      </RailSection>
+      <RailSection label="Not themeable">
+        <p className={s.note}>{NOT_THEMEABLE}</p>
+      </RailSection>
+    </div>
   );
 }
 
@@ -105,7 +143,7 @@ function CompactAppearance({ draft, sample, streams, onOpen }: AppearanceStripPr
         <span className={s.name}>{draft.name}</span>
         <Chip {...streamChipProps(draft.key, draft.streamStep)} />
       </div>
-      <WorkCard item={{ ...sample, streamStep: draft.streamStep }} onOpen={keyOnly(onOpen)} />
+      {sample === undefined ? null : <WorkCard item={{ ...sample, streamStep: draft.streamStep }} onOpen={keyOnly(onOpen)} />}
       <CompactChart draft={draft} streams={streams} />
     </section>
   );

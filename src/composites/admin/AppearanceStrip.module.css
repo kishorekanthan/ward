@@ -1,4 +1,4 @@
-/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+/* Provenance: mirrors design/Trellis Studio.dc.html 9a, the 'Where it appears' column (detailed); compact is comp-transcribed. */
 .strip {
   display: grid;
   gap: var(--ward-space-3);
@@ -43,4 +43,49 @@
   display: block;
   width: 100%;
   height: var(--ward-height-chart);
+}
+
+/* Detailed: the 9a rail's sections, 14px pad, ruled off by line, last one open. */
+.rail {
+  display: grid;
+  align-content: start;
+  background: var(--ward-color-surface);
+}
+
+.section {
+  display: grid;
+  gap: var(--ward-gap-sectionBlock);
+  padding: var(--ward-pad-railSection);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+.rail > :last-child {
+  border-bottom: none;
+}
+
+.label {
+  margin: 0;
+  font: var(--ward-type-microHead);
+  letter-spacing: var(--ward-type-microHead-tracking);
+  text-transform: var(--ward-type-microHead-transform);
+  color: var(--ward-color-muted);
+}
+
+.rail .head {
+  margin: 0;
+  gap: var(--ward-gap-row);
+}
+
+.rail .name {
+  font: var(--ward-type-cardTitle);
+}
+
+.note {
+  margin: 0;
+  font: var(--ward-type-previewNote);
+  color: var(--ward-color-muted);
+}
+
+.rail > :last-child .note {
+  font: var(--ward-type-cellBody);
 }

@@ -59,3 +59,11 @@ export const NoValidatedColour = {
     />
   ),
 };
+
+export const DetailedRail = {
+  render: () => <AppearanceStrip draft={streams[0]} sample={sample} streams={streams.slice(1)} presentation="detailed" />,
+};
+
+export const DetailedNothingInFlight = {
+  render: () => <AppearanceStrip draft={streams[0]} streams={streams.slice(1)} presentation="detailed" sampleEmpty="Nothing is in flight on this stream." />,
+};

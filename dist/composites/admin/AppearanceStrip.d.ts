@@ -13,7 +13,8 @@ export type AppearanceIdentity = {
 };
 export type AppearanceStripProps = {
     draft: Identity;
-    sample: BoardItem;
+    sample?: BoardItem;
+    sampleEmpty?: string;
     streams: Identity[];
     onOpen?: (key: string) => void;
     presentation?: "compact" | "detailed";
