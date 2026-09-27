@@ -79,3 +79,74 @@ describe("PageHeader on a narrow row", () => {
     expect(document.querySelector("[data-ward-overflow-panel]")).toBeNull();
   });
 });
+
+const moreItems = [<Btn key="rules">Rule builder</Btn>, <Btn key="intake">Intake</Btn>];
+
+function panelOf(toggle: HTMLElement): string[] {
+  const panel = document.getElementById(String(toggle.getAttribute("aria-controls"))) as HTMLElement;
+  return panel.hidden ? [] : Array.from(panel.querySelectorAll("button"), (b) => String(b.textContent));
+}
+
+describe("PageHeader with more items", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
+  it("draws one ··· before the actions that shows and hides the more items", () => {
+    render(<PageHeader crumb={crumb} title="Data engineering" actions={twoActions} more={moreItems} />);
+    const strip = document.querySelector("[data-ward-actions]") as HTMLElement;
+    expect(Array.from(strip.querySelectorAll("button"), (b) => b.getAttribute("aria-label") ?? b.textContent)).toEqual(["More actions", "Configure", "New stream"]);
+    const more = screen.getByRole("button", { name: "More actions" });
+    expect(panelOf(more)).toEqual([]);
+    fireEvent.click(more);
+    expect(more.getAttribute("aria-expanded")).toBe("true");
+    expect(panelOf(more)).toEqual(["Rule builder", "Intake"]);
+    fireEvent.click(more);
+    expect(more.getAttribute("aria-expanded")).toBe("false");
+    expect(panelOf(more)).toEqual([]);
+  });
+
+  it("closes on Escape and hands focus back to ···", () => {
+    render(<PageHeader crumb={crumb} title="Data engineering" actions={twoActions} more={moreItems} />);
+    const more = screen.getByRole("button", { name: "More actions" });
+    fireEvent.click(more);
+    fireEvent.keyDown(screen.getByRole("button", { name: "Intake" }), { key: "Escape" });
+    expect(more.getAttribute("aria-expanded")).toBe("false");
+    expect(document.activeElement).toBe(more);
+  });
+
+  it("keeps a single ··· when collapsed, listing the more items then the actions", () => {
+    narrowLayout();
+    render(<PageHeader crumb={crumb} title="Data engineering" actions={twoActions} more={moreItems} />);
+    const toggles = screen.getAllByRole("button", { name: "More actions" });
+    expect(toggles).toHaveLength(1);
+    fireEvent.click(toggles[0] as HTMLElement);
+    expect(panelOf(toggles[0] as HTMLElement)).toEqual(["Rule builder", "Intake", "Configure", "New stream"]);
+  });
+
+  it("draws no ··· without more items while the actions fit", () => {
+    render(<PageHeader crumb={crumb} title="Data engineering" actions={twoActions} more={[]} />);
+    expect(screen.queryByRole("button", { name: "More actions" })).toBeNull();
+    expect(document.querySelector("[data-ward-overflow-panel]")).toBeNull();
+  });
+});
+
+describe("PageHeader deciding to collapse with more items", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
+  // Each measured control is 120px on a 300px row: two actions fit, two plus ··· do not.
+  it("counts the ··· when measuring whether the actions fit", () => {
+    vi.stubGlobal("ResizeObserver", class { observe() {} disconnect() {} unobserve() {} });
+    vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(300);
+    vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockImplementation(function (this: HTMLElement) {
+      return this.getAttribute("aria-hidden") === "true" ? this.childElementCount * 120 : 0;
+    });
+    render(<PageHeader crumb={crumb} title="Data engineering" actions={twoActions} more={moreItems} />);
+    expect(screen.queryByRole("button", { name: "Configure" })).toBeNull();
+    expect(screen.getAllByRole("button", { name: "More actions" })).toHaveLength(1);
+  });
+});

@@ -12,6 +12,8 @@ export type PageHeaderProps = {
   title: string;
   consequence?: string;
   actions?: ReactNode[];
+  /** Secondary actions behind an always-present ··· button, before the actions. */
+  more?: ReactNode[];
   connection?: { connection: LiveConnection; since: string };
   /** Replaces the built-in panel that lists collapsed actions. */
   onOverflow?: () => void;
@@ -34,9 +36,7 @@ function ActionList({ actions }: { actions: ReactNode[] }) {
   return actions.map((action, index) => <span key={index} className={s.action} data-action="">{action}</span>);
 }
 
-function ActionItems({ actions, collapsed, onOverflow, disclosure }: { actions: ReactNode[]; collapsed: boolean; onOverflow?: () => void; disclosure: Disclosure }) {
-  if (!collapsed) return <ActionList actions={actions} />;
-  if (onOverflow) return <Btn variant="overflow" onClick={onOverflow}>···</Btn>;
+function DisclosureToggle({ disclosure }: { disclosure: Disclosure }) {
   return (
     <Btn variant="overflow" onClick={disclosure.toggle} expanded={disclosure.open} controls={disclosure.panelId}>
       ···
@@ -44,7 +44,22 @@ function ActionItems({ actions, collapsed, onOverflow, disclosure }: { actions: 
   );
 }
 
-function OverflowPanel({ actions, disclosure, onEscape }: { actions: ReactNode[]; disclosure: Disclosure; onEscape: () => void }) {
+type ActionItemsProps = { actions: ReactNode[]; hasMore: boolean; collapsed: boolean; onOverflow?: () => void; disclosure: Disclosure };
+
+function ActionItems({ actions, hasMore, collapsed, onOverflow, disclosure }: ActionItemsProps) {
+  if (!collapsed) return hasMore ? [<DisclosureToggle key="more" disclosure={disclosure} />, <ActionList key="actions" actions={actions} />] : <ActionList actions={actions} />;
+  if (onOverflow) return <Btn variant="overflow" onClick={onOverflow}>···</Btn>;
+  return <DisclosureToggle disclosure={disclosure} />;
+}
+
+// Collapsed, the panel lists everything the strip no longer shows; otherwise only the more items.
+function panelItems(more: ReactNode[], actions: ReactNode[], collapsed: boolean, onOverflow?: () => void): ReactNode[] | null {
+  if (collapsed) return onOverflow ? null : [...more, ...actions];
+  return more.length > 0 ? more : null;
+}
+
+function OverflowPanel({ actions, disclosure, onEscape }: { actions: ReactNode[] | null; disclosure: Disclosure; onEscape: () => void }) {
+  if (actions === null) return null;
   const onKeyDown = (event: KeyboardEvent) => {
     if (event.key === "Escape") onEscape();
   };
@@ -55,11 +70,11 @@ function OverflowPanel({ actions, disclosure, onEscape }: { actions: ReactNode[]
   );
 }
 
-// Open state only counts while collapsed, so widening the header closes the panel.
-function useDisclosure(collapsed: boolean, actionsRef: RefObject<HTMLDivElement | null>) {
+// Without more items, open state only counts while collapsed, so widening the header closes the panel.
+function useDisclosure(togglable: boolean, actionsRef: RefObject<HTMLDivElement | null>) {
   const panelId = useId();
   const [requested, setRequested] = useState(false);
-  const open = requested && collapsed;
+  const open = requested && togglable;
   const toggle = () => setRequested(!open);
   const close = () => {
     setRequested(false);
@@ -116,13 +131,25 @@ function useActionOverflow(actions: ReactNode[]) {
   return { rowRef, headingRef, actionsRef, measureRef, collapsed };
 }
 
+// Off-screen copy of the strip, ··· included, that decides whether the actions still fit.
+function Measure({ actions, hasMore, measureRef }: { actions: ReactNode[]; hasMore: boolean; measureRef: RefObject<HTMLDivElement | null> }) {
+  return (
+    <div className={s.measure} ref={measureRef} aria-hidden="true">
+      {hasMore ? <span><Btn variant="overflow">···</Btn></span> : null}
+      {actions.map((action, index) => <span key={index}>{action}</span>)}
+    </div>
+  );
+}
+
 function Connection({ connection }: Pick<PageHeaderProps, "connection">) {
   return connection ? <ConnectionMark connection={connection.connection} since={connection.since} /> : null;
 }
 
-export function PageHeader({ crumb, chips, title, consequence, actions = [], connection, onOverflow, density = "page" }: PageHeaderProps) {
+export function PageHeader({ crumb, chips, title, consequence, actions = [], more = [], connection, onOverflow, density = "page" }: PageHeaderProps) {
   const { rowRef, headingRef, actionsRef, measureRef, collapsed } = useActionOverflow(actions);
-  const { disclosure, close } = useDisclosure(collapsed, actionsRef);
+  const hasMore = more.length > 0;
+  const { disclosure, close } = useDisclosure(collapsed || hasMore, actionsRef);
+  const panel = panelItems(more, actions, collapsed, onOverflow);
   return (
     <header className={s.root} data-density={density}>
       <HeaderContext crumb={crumb} chips={chips} />
@@ -133,14 +160,12 @@ export function PageHeader({ crumb, chips, title, consequence, actions = [], con
         <div className={s.actionsWrap}>
           <Connection connection={connection} />
           <div className={s.actions} ref={actionsRef} data-ward-actions>
-            <ActionItems actions={actions} collapsed={collapsed} onOverflow={onOverflow} disclosure={disclosure} />
+            <ActionItems actions={actions} hasMore={hasMore} collapsed={collapsed} onOverflow={onOverflow} disclosure={disclosure} />
           </div>
         </div>
       </div>
-      {collapsed && !onOverflow ? <OverflowPanel actions={actions} disclosure={disclosure} onEscape={close} /> : null}
-      <div className={s.measure} ref={measureRef} aria-hidden="true">
-        {actions.map((action, index) => <span key={index}>{action}</span>)}
-      </div>
+      <OverflowPanel actions={panel} disclosure={disclosure} onEscape={close} />
+      <Measure actions={actions} hasMore={hasMore} measureRef={measureRef} />
     </header>
   );
 }
