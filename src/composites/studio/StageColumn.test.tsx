@@ -88,6 +88,33 @@ describe("StageColumn", () => {
     expect(screen.getByText("TERMINAL")).toBeDefined();
     expect(screen.queryByRole("button", { name: "+ Mount agent" })).toBeNull();
   });
+
+  it("lists every gate reviewer when two share initials, and drops only the removed one", () => {
+    const errors = vi.spyOn(console, "error").mockImplementation(() => {});
+    const ada = { initials: "AL", name: "Ada Lovelace" };
+    const alan = { initials: "AL", name: "Alan Lee" };
+    const stage = { index: 3, name: "Sign-off", kind: "gate" as const, count: 1 };
+    const { container, rerender } = render(<StageColumn stage={{ ...stage, reviewers: [ada, alan] }} presentation={{ mode: "workflow" }} />);
+    expect(Array.from(container.querySelectorAll("li"), (row) => row.textContent)).toEqual(["ALAda Lovelace", "ALAlan Lee"]);
+    rerender(<StageColumn stage={{ ...stage, reviewers: [alan] }} presentation={{ mode: "workflow" }} />);
+    expect(Array.from(container.querySelectorAll("li"), (row) => row.textContent)).toEqual(["ALAlan Lee"]);
+    expect(errors.mock.calls.map((call) => String(call[0])).filter((message) => message.includes("same key"))).toEqual([]);
+    errors.mockRestore();
+  });
+
+  it("reads an absent terminal week count as unknown, not zero", () => {
+    const { container, rerender } = render(<StageColumn stage={{ index: 5, name: "Loaded", kind: "terminal" }} presentation={{ mode: "workflow" }} />);
+    expect(screen.getByText("— this week")).toBeDefined();
+    expect(screen.getByText("—").nextElementSibling?.textContent).toBe("items closed this week");
+    rerender(<StageColumn stage={{ index: 5, name: "Loaded", kind: "terminal", closedThisWeek: 0 }} presentation={{ mode: "workflow" }} />);
+    expect(screen.getByText("0 this week")).toBeDefined();
+    expect(container.textContent).not.toContain("—");
+  });
+
+  it("reads an absent closed-this-week cell as unknown in the standard column", () => {
+    render(<StageColumn stage={{ index: 4, name: "Done", kind: "terminal", count: 12 }} />);
+    expect(screen.getByText("—").nextElementSibling?.textContent).toBe("Closed this week");
+  });
 });
 
 describe("StageColumn (spec)", () => {
