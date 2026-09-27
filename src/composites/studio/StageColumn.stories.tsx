@@ -40,6 +40,10 @@ export const Terminal = {
   args: { stage: { index: 4, name: "Done", kind: "terminal", count: 12, closedThisWeek: 31 } },
 };
 
+export const WorkflowTerminalRollbacks = {
+  args: { stage: { index: 5, name: "Loaded", kind: "terminal", closedThisWeek: 41, rolledBackThisWeek: 0 }, presentation: { mode: "workflow" } },
+};
+
 export const TerminalWeekUnknown = {
   args: { stage: { index: 4, name: "Done", kind: "terminal", count: 12 } },
 };
