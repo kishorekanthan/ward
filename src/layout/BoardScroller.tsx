@@ -1,4 +1,4 @@
-import { Fragment, useState, type ReactNode } from "react";
+import { Fragment, useState, type CSSProperties, type ReactNode } from "react";
 import { Field } from "../primitives/Field";
 import s from "./layout.module.css";
 import { useMediaQuery } from "./useMediaQuery";
@@ -15,9 +15,11 @@ export type BoardScrollerProps = {
 // Same phone edge as the 767.98px rules in layout.module.css.
 const BOARD_PHONE_QUERY = "(max-width: 767.98px)";
 
-function Scroller({ label, children }: { label: string; children: ReactNode }) {
+// A lane count lets the lanes share the board width before it scrolls.
+function Scroller({ label, children, laneCount }: { label: string; children: ReactNode; laneCount?: number }) {
+  const style = laneCount === undefined ? undefined : ({ "--ward-board-lanes": laneCount } as CSSProperties);
   return (
-    <div className={s.scroller} role="region" aria-label={label} tabIndex={0} data-ward-board-scroller="">
+    <div className={s.scroller} role="region" aria-label={label} tabIndex={0} data-ward-board-scroller="" style={style}>
       {children}
     </div>
   );
@@ -39,5 +41,5 @@ export function BoardScroller({ children, label = "Workflow board", lanes, laneL
   const phone = useMediaQuery(BOARD_PHONE_QUERY);
   if (lanes === undefined) return <Scroller label={label}>{children}</Scroller>;
   if (phone) return <PhoneLanes lanes={lanes} label={label} laneLabel={laneLabel} />;
-  return <Scroller label={label}>{lanes.map((lane) => <Fragment key={lane.id}>{lane.content}</Fragment>)}</Scroller>;
+  return <Scroller label={label} laneCount={lanes.length}>{lanes.map((lane) => <Fragment key={lane.id}>{lane.content}</Fragment>)}</Scroller>;
 }

@@ -1887,7 +1887,7 @@ function $n(e) {
     t && e.children ? /* @__PURE__ */ n("ul", { role: "group", children: e.children }) : null
   ] });
 }
-const gc = "_frame_9lntd_2", Nc = "_subjectRail_9lntd_21", yc = "_subject_9lntd_21", kc = "_rail_9lntd_41", $c = "_record_9lntd_63", Cc = "_recordBody_9lntd_68", Sc = "_band_9lntd_111", Rc = "_bandBody_9lntd_120", Tc = "_bandActions_9lntd_125", Lc = "_scroller_9lntd_132", xc = "_lanes_9lntd_150", de = {
+const gc = "_frame_fdzvs_2", Nc = "_subjectRail_fdzvs_21", yc = "_subject_fdzvs_21", kc = "_rail_fdzvs_41", $c = "_record_fdzvs_63", Cc = "_recordBody_fdzvs_68", Sc = "_band_fdzvs_111", Rc = "_bandBody_fdzvs_120", Tc = "_bandActions_fdzvs_125", Lc = "_scroller_fdzvs_133", xc = "_lanes_fdzvs_151", de = {
   frame: gc,
   subjectRail: Nc,
   subject: yc,
@@ -1939,8 +1939,9 @@ function Mk({ children: e, actions: a, label: t }) {
   ] });
 }
 const Ic = "(max-width: 767.98px)";
-function Aa({ label: e, children: a }) {
-  return /* @__PURE__ */ n("div", { className: de.scroller, role: "region", "aria-label": e, tabIndex: 0, "data-ward-board-scroller": "", children: a });
+function Aa({ label: e, children: a, laneCount: t }) {
+  const r = t === void 0 ? void 0 : { "--ward-board-lanes": t };
+  return /* @__PURE__ */ n("div", { className: de.scroller, role: "region", "aria-label": e, tabIndex: 0, "data-ward-board-scroller": "", style: r, children: a });
 }
 function Mc({ lanes: e, label: a, laneLabel: t }) {
   const [r, o] = g(null), i = e.find((s) => s.id === r) ?? e[0], c = e.map((s) => ({ value: s.id, label: `${s.label} · ${s.count}` }));
@@ -1951,7 +1952,7 @@ function Mc({ lanes: e, label: a, laneLabel: t }) {
 }
 function Bk({ children: e, label: a = "Workflow board", lanes: t, laneLabel: r = "Column" }) {
   const o = Nn(Ic);
-  return t === void 0 ? /* @__PURE__ */ n(Aa, { label: a, children: e }) : o ? /* @__PURE__ */ n(Mc, { lanes: t, label: a, laneLabel: r }) : /* @__PURE__ */ n(Aa, { label: a, children: t.map((i) => /* @__PURE__ */ n(ct, { children: i.content }, i.id)) });
+  return t === void 0 ? /* @__PURE__ */ n(Aa, { label: a, children: e }) : o ? /* @__PURE__ */ n(Mc, { lanes: t, label: a, laneLabel: r }) : /* @__PURE__ */ n(Aa, { label: a, laneCount: t.length, children: t.map((i) => /* @__PURE__ */ n(ct, { children: i.content }, i.id)) });
 }
 const Bc = "_block_1o5o7_2", Pc = "_sentence_1o5o7_15", Dc = "_meta_1o5o7_20", Oc = "_action_1o5o7_25", Hc = "_strip_1o5o7_29", Fc = "_loading_1o5o7_48", jc = "_label_1o5o7_56", Wc = "_counter_1o5o7_63", he = {
   block: Bc,
@@ -2154,7 +2155,7 @@ function ga(e) {
     }
   );
 }
-const ps = "_column_14784_3", gs = "_head_14784_24", Ns = "_label_14784_33", ys = "_count_14784_42", ks = "_list_14784_56", Ke = {
+const ps = "_column_10sxg_3", gs = "_head_10sxg_24", Ns = "_label_10sxg_33", ys = "_count_10sxg_42", ks = "_list_10sxg_56", Ke = {
   column: ps,
   head: gs,
   label: Ns,
