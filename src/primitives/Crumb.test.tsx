@@ -30,6 +30,11 @@ describe("Crumb", () => {
     expect(screen.getAllByRole("link").map((a) => a.textContent)).toEqual(["Studio", "Streams"]);
   });
 
+  it("does not link the current page even when it carries an href", () => {
+    render(<Crumb path={[...path.slice(0, 2), { label: "Data engineering", href: "/studio/streams/de" }]} />);
+    expect(screen.queryByRole("link", { name: "Data engineering" })).toBeNull();
+  });
+
   it("carries inline chips inside the breadcrumb landmark", () => {
     render(<Crumb path={path} chips={[{ role: "stream", label: "DATA-ENG", streamStep: 1 }]} />);
     const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
@@ -42,6 +47,7 @@ describe("Crumb", () => {
     const chevrons = [...container.querySelectorAll('[aria-hidden="true"]')].map((el) => el.textContent);
     expect(chevrons).toEqual(["›", "›"]);
     expect(screen.getByRole("link", { name: "Studio" })).toBeTruthy();
+    expect(screen.getByRole("link", { name: "Streams" })).toBeTruthy();
   });
 
   it("draws a step you can go back to as an underlined link", () => {
