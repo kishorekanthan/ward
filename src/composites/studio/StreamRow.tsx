@@ -51,8 +51,12 @@ function compactClassName(className: string | undefined): string {
   return className === undefined ? s.compactRow : `${s.compactRow} ${className}`;
 }
 
+function membersText(members: number): string {
+  return `${count(members)} ${members === 1 ? "member" : "members"}`;
+}
+
 function ownerLine(stream: StreamRowSummary): string {
-  return stream.members === undefined ? stream.owner : `${stream.owner} · ${stream.members} members`;
+  return stream.members === undefined ? stream.owner : `${stream.owner} · ${membersText(stream.members)}`;
 }
 
 function identityCell(stream: StreamRowSummary, href: string): ReactElement {
@@ -152,7 +156,7 @@ export function StreamRow(props: StreamRowProps) {
       </td>
       <td className={s.cell}>
         <span className={s.owner}>{stream.owner}</span>
-        <span className={s.mono}>{count(stream.members)} members</span>
+        <span className={s.mono}>{membersText(stream.members)}</span>
       </td>
       <td className={s.cell} data-align="end">
         <span className={s.mono}>{count(stream.inFlight)}</span>
