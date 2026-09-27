@@ -40,6 +40,10 @@ export const Terminal = {
   args: { stage: { index: 4, name: "Done", kind: "terminal", count: 12, closedThisWeek: 31 } },
 };
 
+export const TerminalWeekUnknown = {
+  args: { stage: { index: 4, name: "Done", kind: "terminal", count: 12 } },
+};
+
 export const NoAgentsMounted = {
   args: { stage: { index: 2, name: "Build", kind: "agent", count: 0 }, agents: [], onMount: () => {} },
 };

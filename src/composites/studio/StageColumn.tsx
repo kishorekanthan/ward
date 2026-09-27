@@ -52,6 +52,11 @@ type RenderProps = StageColumnProps | StageColumnWorkflowProps;
 
 const KIND_LABEL: Record<StageKind, string> = { entry: "ENTRY", agent: "AGENT", gate: "GATE", terminal: "TERMINAL" };
 
+// An absent week count is unknown, never a quiet week.
+function weekCount(closed: number | undefined, format: (n: number) => string = String): string {
+  return closed === undefined ? "—" : format(closed);
+}
+
 function percent(fraction: number): string {
   return `${Math.round(fraction * 100)}%`;
 }
@@ -77,7 +82,7 @@ function GatePanel({ stage }: { stage: Stage }) {
 function TerminalCounter({ stage }: { stage: Stage }) {
   return <StatStrip cells={[
     { value: count(stage.count), label: "In stage" },
-    { value: count(stage.closedThisWeek ?? 0), label: "Closed this week" },
+    { value: weekCount(stage.closedThisWeek, count), label: "Closed this week" },
   ]} />;
 }
 
@@ -135,8 +140,8 @@ const WORKFLOW_TAG: Partial<Record<StageKind, ChipProps>> = {
 function ReviewerList({ reviewers }: { reviewers: StageColumnReviewer[] }) {
   return (
     <ul className={s.reviewerList}>
-      {reviewers.map((reviewer) => (
-        <li key={reviewer.initials} className={s.reviewerRow}>
+      {reviewers.map((reviewer, index) => (
+        <li key={`${index}-${reviewer.name}`} className={s.reviewerRow}>
           <span className={s.reviewerMark} aria-hidden="true">{reviewer.initials}</span>
           <span className={s.reviewerName}>{reviewer.name}</span>
         </li>
@@ -165,7 +170,7 @@ function WorkflowGatePanel({ stage }: { stage: StageColumnSummary }) {
 function WorkflowTerminalCounter({ stage }: { stage: StageColumnSummary }) {
   return (
     <div className={s.terminalCard}>
-      <span className={s.terminalCount}>{stage.closedThisWeek ?? 0}</span>
+      <span className={s.terminalCount}>{weekCount(stage.closedThisWeek)}</span>
       <span className={s.cardNote}>items closed this week</span>
     </div>
   );
@@ -176,7 +181,7 @@ function itemCount(count = 0): string {
 }
 
 function workflowCountLine(stage: StageColumnSummary): string {
-  if (stage.kind === "terminal") return `${stage.closedThisWeek ?? 0} this week`;
+  if (stage.kind === "terminal") return `${weekCount(stage.closedThisWeek)} this week`;
   const items = itemCount(stage.count);
   return stage.medianWait === undefined ? items : `${items} · median wait ${stage.medianWait}`;
 }
