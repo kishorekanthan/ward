@@ -29,6 +29,22 @@ describe("StreamRow", () => {
     expect(container.textContent).toContain("2d 0h");
   });
 
+  it("says member for a stream of one", () => {
+    const { container } = render(table(<StreamRow stream={{ ...stream, members: 1 }} href="#de" />));
+    expect(container.textContent).toContain("Priya Nayar1 member");
+    expect(container.textContent).not.toContain("1 members");
+  });
+
+  it("counts members on the summary owner line, singular for one", () => {
+    const line = (members: number) => {
+      const { container } = render(table(<StreamRow stream={{ name: "DE", key: "DE", streamStep: 2, owner: "Priya Nayar", members, stages: [] }} href="#de" presentation={{ columns: 5 }} />));
+      return container.querySelector("td")?.textContent;
+    };
+    expect(line(1)).toBe("DEDEPriya Nayar · 1 member");
+    expect(line(0)).toBe("DEDEPriya Nayar · 0 members");
+    expect(line(1200)).toBe("DEDEPriya Nayar · 1,200 members");
+  });
+
   it("provides a five-cell summary without inventing missing optional details", () => {
     const { container } = render(table(<StreamRow stream={{ name: "Regulatory Ops", key: "REG", streamStep: 3, owner: "unassigned", stages: [], draft: true }} href="#reg" presentation={{ columns: 5 }} />));
     expect(container.querySelectorAll("td")).toHaveLength(5);
