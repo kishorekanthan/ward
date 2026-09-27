@@ -30,6 +30,22 @@ describe("BoardScroller lanes", () => {
     expect(screen.queryByRole("combobox")).toBeNull();
   });
 
+  it("tells the board how many lanes share its width above the phone edge, and only there", () => {
+    stubMatchMedia(false);
+    const view = render(<BoardScroller lanes={lanes()} />);
+    expect(screen.getByRole("region").style.getPropertyValue("--ward-board-lanes")).toBe("3");
+    view.rerender(<BoardScroller lanes={lanes(["build", "gate"])} />);
+    expect(screen.getByRole("region").style.getPropertyValue("--ward-board-lanes")).toBe("2");
+    view.rerender(<BoardScroller><section>Loose</section></BoardScroller>);
+    expect(screen.getByRole("region").style.getPropertyValue("--ward-board-lanes")).toBe("");
+  });
+
+  it("leaves the lane count unset on the phone's single lane", () => {
+    stubMatchMedia(true);
+    render(<BoardScroller lanes={lanes()} />);
+    expect(screen.getByRole("region").style.getPropertyValue("--ward-board-lanes")).toBe("");
+  });
+
   it("shows one lane on phone and switches it from a labelled selector with counts", () => {
     stubMatchMedia(true);
     render(<BoardScroller lanes={lanes()} />);

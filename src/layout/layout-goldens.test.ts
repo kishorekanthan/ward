@@ -7,7 +7,7 @@ const root = dirname(fileURLToPath(import.meta.url));
 const expected = JSON.parse(readFileSync(join(root, "..", "goldens", "layout.json"), "utf8")) as {
   subjectRail: { dryrun: string; preview: string; border: string };
   drawer: { width: string; border: string; shadow: string };
-  board: { colFloor: string; tracks: string; overflowX: string; columnMinWidth: string };
+  board: { colFloor: string; laneFloor: string; tracks: string; overflowX: string; columnMinWidth: string };
 };
 const layoutCss = readFileSync(join(root, "layout.module.css"), "utf8");
 const overlayCss = readFileSync(join(root, "..", "primitives", "Overlay.module.css"), "utf8");
@@ -32,8 +32,9 @@ describe("shared rail geometry goldens", () => {
     expect(declaration(overlayCss, "\\.panel(?!\\.)", "box-shadow")).toBe(expected.drawer.shadow);
   });
 
-  it("keeps board columns on a 240px floor and scrolls overflow inside the board region", () => {
+  it("shares the board width between lanes, 176px to 240px each, and scrolls overflow inside the board region", () => {
     expect(wardCss.match(/--ward-width-colFloor\s*:\s*([^;]+);/)?.[1].trim()).toBe(expected.board.colFloor);
+    expect(wardCss.match(/--ward-width-stageColumn\s*:\s*([^;]+);/)?.[1].trim()).toBe(expected.board.laneFloor);
     expect(declaration(layoutCss, "\\.scroller", "grid-auto-columns")).toBe(expected.board.tracks);
     expect(declaration(layoutCss, "\\.scroller", "overflow-x")).toBe(expected.board.overflowX);
     expect(declaration(layoutCss, "\\.scroller", "min-width")).toBe("0");

@@ -4,7 +4,7 @@
   display: grid;
   align-content: start;
   gap: var(--ward-gap-boardColumn);
-  min-width: var(--ward-width-colFloor);
+  min-width: var(--ward-width-stageColumn);
   padding: var(--ward-pad-boardColumn);
   border-right: var(--ward-border) solid var(--ward-color-line);
 }

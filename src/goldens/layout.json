@@ -11,8 +11,9 @@
   },
   "board": {
     "colFloor": "240px",
-    "tracks": "minmax(var(--ward-width-colFloor), 1fr)",
+    "laneFloor": "176px",
+    "tracks": "minmax(clamp(var(--ward-width-stageColumn), 100% / var(--ward-board-lanes, 1), var(--ward-width-colFloor)), 1fr)",
     "overflowX": "auto",
-    "columnMinWidth": "var(--ward-width-colFloor)"
+    "columnMinWidth": "var(--ward-width-stageColumn)"
   }
 }
