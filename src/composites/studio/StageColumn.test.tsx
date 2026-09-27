@@ -102,6 +102,22 @@ describe("StageColumn", () => {
     errors.mockRestore();
   });
 
+  it("lists two gate reviewers who share a name without a duplicate key", () => {
+    const errors = vi.spyOn(console, "error").mockImplementation(() => {});
+    const sam = { initials: "SK", name: "Sam Kerr" };
+    render(<StageColumn stage={{ index: 3, name: "Sign-off", kind: "gate", count: 1, reviewers: [sam, { ...sam }] }} presentation={{ mode: "workflow" }} />);
+    expect(screen.getAllByText("Sam Kerr")).toHaveLength(2);
+    expect(errors.mock.calls.map((call) => String(call[0])).filter((message) => message.includes("same key"))).toEqual([]);
+    errors.mockRestore();
+  });
+
+  it("reads a zero or large closed-this-week cell as a formatted count in the standard column", () => {
+    const { rerender } = render(<StageColumn stage={{ index: 4, name: "Done", kind: "terminal", count: 12, closedThisWeek: 0 }} />);
+    expect(screen.getByText("0").nextElementSibling?.textContent).toBe("Closed this week");
+    rerender(<StageColumn stage={{ index: 4, name: "Done", kind: "terminal", count: 12, closedThisWeek: 1234 }} />);
+    expect(screen.getByText("1,234").nextElementSibling?.textContent).toBe("Closed this week");
+  });
+
   it("reads an absent terminal week count as unknown, not zero", () => {
     const { container, rerender } = render(<StageColumn stage={{ index: 5, name: "Loaded", kind: "terminal" }} presentation={{ mode: "workflow" }} />);
     expect(screen.getByText("— this week")).toBeDefined();
