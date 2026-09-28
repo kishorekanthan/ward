@@ -17,3 +17,32 @@ describe("Field labelHidden", () => {
     expect(label.classList.contains("ward-field-label")).toBe(true);
   });
 });
+
+describe("Field secret", () => {
+  it("masks the input and keeps it out of autofill and spell check", () => {
+    render(<Field kind="input" label="Provider key" value="sk-typed" onChange={() => {}} secret />);
+    const control = screen.getByLabelText("Provider key");
+    expect(control.tagName).toBe("INPUT");
+    expect(control.getAttribute("type")).toBe("password");
+    expect(control.getAttribute("autocomplete")).toBe("off");
+    expect(control.getAttribute("spellcheck")).toBe("false");
+  });
+
+  it("leaves a plain input as text with no autocomplete or spellcheck override", () => {
+    render(<Field kind="input" label="Model name" value="" onChange={() => {}} />);
+    const control = screen.getByLabelText("Model name");
+    expect(control.getAttribute("type")).toBeNull();
+    expect(control.hasAttribute("autocomplete")).toBe(false);
+    expect(control.hasAttribute("spellcheck")).toBe(false);
+  });
+
+  it("has no effect on a textarea or a select", () => {
+    render(<Field kind="textarea" label="Notes" value="" onChange={() => {}} secret />);
+    render(<Field kind="select" label="Store" value="a" options={[{ value: "a", label: "A" }]} onChange={() => {}} secret />);
+    for (const label of ["Notes", "Store"]) {
+      const control = screen.getByLabelText(label);
+      expect(control.hasAttribute("type")).toBe(false);
+      expect(control.hasAttribute("autocomplete")).toBe(false);
+    }
+  });
+});

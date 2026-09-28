@@ -21,6 +21,8 @@ export type FieldProps = {
   labelHidden?: boolean;
   variant?: FieldVariant;
   placeholder?: string;
+  // Masks an input and keeps it out of autofill and spell check, for write-only keys.
+  secret?: boolean;
 };
 
 type ControlProps = {
@@ -35,8 +37,11 @@ type ControlProps = {
 
 type FieldControlProps = { props: FieldProps; controlProps: ControlProps; cls: string };
 
-function InputControl({ controlProps, cls }: FieldControlProps) {
-  return <input className={cls} {...controlProps} />;
+const SECRET_INPUT = { type: "password", autoComplete: "off", spellCheck: false } as const;
+
+function InputControl({ props, controlProps, cls }: FieldControlProps) {
+  const secret = props.secret ? SECRET_INPUT : {};
+  return <input className={cls} {...secret} {...controlProps} />;
 }
 
 function SelectControl({ props, controlProps, cls }: FieldControlProps) {

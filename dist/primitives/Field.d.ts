@@ -17,5 +17,6 @@ export type FieldProps = {
     labelHidden?: boolean;
     variant?: FieldVariant;
     placeholder?: string;
+    secret?: boolean;
 };
 export declare function Field(props: FieldProps): import("react").JSX.Element;
