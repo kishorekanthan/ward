@@ -103,6 +103,20 @@ describe("AppShell top bar", () => {
     expect(screen.queryByRole("main")).toBeNull();
   });
 
+  it("draws the name, separator and role inside one chip", () => {
+    render(<AppShell actor="P. Nayar" metadata="platform admin · DE">Content</AppShell>);
+    const chip = screen.getByText("P. Nayar").parentElement;
+    expect(chip).toBe(screen.getByText("platform admin · DE").parentElement);
+    expect(chip?.textContent).toBe("P. Nayar · platform admin · DE");
+  });
+
+  it("borders only the identity chip, never the name inside it", () => {
+    expect(rule(".metadata")).toMatch(/border: 1px solid/);
+    const nameRules = Array.from(css.matchAll(/([^{}]+)\{([^}]*)\}/g)).filter((m) => m[1].split(",").some((sel) => sel.trim() === ".actor"));
+    expect(nameRules.length).toBeGreaterThan(0);
+    for (const [, , body] of nameRules) expect(body).not.toMatch(/\b(border|padding|min-height)\b/);
+  });
+
   it("places consumer tools in the bar after the identity, not in the page content", () => {
     const { container } = render(
       <AppShell actor="P. Nayar" tools={<button type="button">Sign out</button>}>
