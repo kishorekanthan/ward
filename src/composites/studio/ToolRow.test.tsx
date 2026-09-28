@@ -66,6 +66,12 @@ const css = readFileSync("src/composites/studio/ToolRow.module.css", "utf8");
 const nameRule = /\.name\s*\{([^}]*)\}/.exec(css)?.[1] ?? "";
 
 describe("ToolRow names (#35)", () => {
+  it("keeps a tool name too wide for the minimum column in the story", () => {
+    const story = readFileSync("src/composites/studio/ToolRow.stories.tsx", "utf8");
+    const name = /export const LongName\s*=\s*\{[\s\S]*?name:\s*"([^"]+)"/.exec(story)?.[1] ?? "";
+    expect(name.length).toBeGreaterThan(25);
+  });
+
   it("gives the name the comp's width as a minimum, never a fixed width or an ellipsis", () => {
     expect(nameRule).toMatch(/min-width:\s*var\(--ward-width-toolName\)/);
     expect(nameRule).not.toMatch(/(^|[\s;])width:/);
