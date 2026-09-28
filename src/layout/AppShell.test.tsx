@@ -24,6 +24,17 @@ function resolved(text: string): string {
   return text.replace(/var\((--ward-[\w-]+)\)/g, (whole, name: string) => rootVars.get(name) ?? whole).replace(/'/g, '"');
 }
 
+// Bodies of every rule whose selector list names this class on its own.
+function rulesFor(className: string): string[] {
+  const rules = Array.from(css.matchAll(/([^{}]+)\{([^}]*)\}/g));
+  return rules.filter((m) => m[1].split(",").some((sel) => sel.trim() === "." + className)).map((m) => m[2]);
+}
+
+function isBordered(el: Element): boolean {
+  const names = Array.from(el.classList, (c) => c.replace(/^_(.+)_[0-9a-f]+$/, "$1"));
+  return names.some((name) => rulesFor(name).some((body) => /\bborder(-(top|right|bottom|left))?\s*:/.test(body)));
+}
+
 function rule(selector: string): string {
   const start = css.indexOf(selector + " {");
   return start === -1 ? "" : resolved(css.slice(start, css.indexOf("}", start)));
@@ -101,6 +112,27 @@ describe("AppShell top bar", () => {
     expect(screen.getByText("P. Nayar")).not.toBeNull();
     expect(screen.getByText("platform admin · DE")).not.toBeNull();
     expect(screen.queryByRole("main")).toBeNull();
+  });
+
+  it("draws the name, separator and role inside one chip", () => {
+    render(<AppShell actor="P. Nayar" metadata="platform admin · DE">Content</AppShell>);
+    const chip = screen.getByText("P. Nayar").parentElement;
+    expect(chip).toBe(screen.getByText("platform admin · DE").parentElement);
+    expect(chip?.textContent).toBe("P. Nayar · platform admin · DE");
+  });
+
+  it("borders only the identity chip, never the name inside it", () => {
+    expect(rule(".metadata")).toMatch(/border: 1px solid/);
+    const nameRules = rulesFor("actor");
+    expect(nameRules.length).toBeGreaterThan(0);
+    for (const body of nameRules) expect(body).not.toMatch(/\b(border|padding|min-height)\b/);
+  });
+
+  it("draws no border around or inside the identity chip but its own", () => {
+    render(<AppShell actor="P. Nayar" metadata="platform admin · DE">Content</AppShell>);
+    const chip = screen.getByText("P. Nayar").parentElement as HTMLElement;
+    const identity = chip.parentElement as HTMLElement;
+    expect([identity, ...identity.querySelectorAll("*")].filter(isBordered)).toEqual([chip]);
   });
 
   it("places consumer tools in the bar after the identity, not in the page content", () => {

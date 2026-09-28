@@ -756,7 +756,7 @@ function ge({ startedAt: e, lastEvent: a, connection: t, turn: r }) {
     ] })
   ] });
 }
-const Bt = "_app_lrbcc_1", Pt = "_side_lrbcc_18", Dt = "_main_lrbcc_26", Ot = "_rail_lrbcc_33", Ht = "_page_lrbcc_40", Ft = "_root_lrbcc_91", jt = "_topbar_lrbcc_98", Wt = "_mark_lrbcc_109", zt = "_brand_lrbcc_116", Gt = "_tagline_lrbcc_122", Kt = "_identity_lrbcc_128", Ut = "_tools_lrbcc_129", Vt = "_actor_lrbcc_138", Yt = "_metadata_lrbcc_139", Jt = "_detail_lrbcc_155", Xt = "_nav_lrbcc_160", Qt = "_content_lrbcc_195", Zt = "_skip_lrbcc_218", D = {
+const Bt = "_app_bcfqb_1", Pt = "_side_bcfqb_18", Dt = "_main_bcfqb_26", Ot = "_rail_bcfqb_33", Ht = "_page_bcfqb_40", Ft = "_root_bcfqb_91", jt = "_topbar_bcfqb_98", Wt = "_mark_bcfqb_109", zt = "_brand_bcfqb_116", Gt = "_tagline_bcfqb_122", Kt = "_identity_bcfqb_128", Ut = "_tools_bcfqb_129", Vt = "_metadata_bcfqb_138", Yt = "_actor_bcfqb_153", Jt = "_detail_bcfqb_154", Xt = "_nav_bcfqb_159", Qt = "_content_bcfqb_194", Zt = "_skip_bcfqb_217", D = {
   app: Bt,
   side: Pt,
   main: Dt,
@@ -769,8 +769,8 @@ const Bt = "_app_lrbcc_1", Pt = "_side_lrbcc_18", Dt = "_main_lrbcc_26", Ot = "_
   tagline: Gt,
   identity: Kt,
   tools: Ut,
-  actor: Vt,
-  metadata: Yt,
+  metadata: Vt,
+  actor: Yt,
   detail: Jt,
   nav: Xt,
   content: Qt,

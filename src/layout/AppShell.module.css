@@ -135,7 +135,6 @@
   overflow: hidden;
 }
 
-.actor,
 .metadata {
   display: inline-flex;
   align-items: center;
