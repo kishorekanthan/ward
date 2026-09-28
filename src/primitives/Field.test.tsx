@@ -73,7 +73,12 @@ function focusedField(variant?: FieldVariant): HTMLElement {
 
 function hasOutline(el: Element): boolean {
   const outline = getComputedStyle(el).outline.trim();
-  return outline !== "" && !/\bnone\b/.test(outline);
+  return outline !== "" && !/\b(none|transparent)\b/.test(outline);
+}
+
+// Forced colours drop box-shadow but repaint a transparent outline, so the ring must stay drawn.
+function keepsForcedColoursRing(el: Element): boolean {
+  return /\bsolid\b/.test(getComputedStyle(el).outline);
 }
 
 describe("Field focus mark", () => {
@@ -84,6 +89,7 @@ describe("Field focus mark", () => {
     const control = focusedField(variant);
     expect(control.matches(":focus-visible")).toBe(true);
     expect(hasOutline(control)).toBe(false);
+    expect(keepsForcedColoursRing(control)).toBe(true);
     expect(getComputedStyle(control).boxShadow).toContain("--ward-color-blue");
   });
 
