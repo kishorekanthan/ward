@@ -1,0 +1,19 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-space-s2);
+}
+
+.line {
+  margin: 0;
+  font: var(--ward-type-meta);
+  color: var(--ward-color-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--ward-space-s2);
+}

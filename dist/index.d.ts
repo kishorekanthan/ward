@@ -113,6 +113,7 @@ export * from './composites/admin/CapabilityRow';
 export * from './composites/admin/ComponentRow';
 export * from './composites/admin/CredentialRow';
 export * from './composites/admin/EnvCard';
+export * from './composites/admin/KeyPanel';
 export * from './composites/admin/MarkUpload';
 export * from './composites/admin/McpServerRow';
 export * from './composites/admin/PolicyRow';
