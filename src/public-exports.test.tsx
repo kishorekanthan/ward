@@ -76,7 +76,7 @@ describe("public Ward exports", () => {
       "ActivityConsole", "ClarificationRow", "Composer", "CriteriaList", "GateLadder", "RequeueSheet", "ResolveBlock", "StageHistory",
       "ChatMessage", "DeliveryHealth", "ReadyChecklist", "ResolvedFieldRow", "RoutingTable", "SessionRow", "TypedInputBlock",
       "AgentCard", "ColourLadder", "DryRunRail", "GateChecklist", "NewStreamModal", "RuleRow", "StageColumn", "StageListEditor", "StreamRow", "ToolRow",
-      "AppearanceStrip", "CapabilityRow", "ComponentRow", "CredentialRow", "EnvCard", "MarkUpload", "McpServerRow", "PolicyRow", "RoleMatrixRow", "RunbookSteps", "ValidationList",
+      "AppearanceStrip", "CapabilityRow", "ComponentRow", "CredentialRow", "EnvCard", "KeyPanel", "MarkUpload", "McpServerRow", "PolicyRow", "RoleMatrixRow", "RunbookSteps", "ValidationList",
     ] as const;
     expect(expected.every((name) => typeof Ward[name] === "function")).toBe(true);
   });
