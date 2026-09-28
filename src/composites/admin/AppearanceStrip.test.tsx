@@ -171,7 +171,7 @@ describe("AppearanceStrip detailed rail (comp 9a)", () => {
     expect(chart).toEqual(["H4", "FIGURE", "P"]);
     expect(sectionOf("Overview chart segment").textContent).toContain("six adjacent segments, direct-labelled, no legend to lean on.");
     expect(sectionOf("Not themeable").textContent).toBe(
-      "Not themeableThe action blue, the navy gate chip, the state colours and every rule stay fixed. A stream owns a colour and a mark — not a theme. Two teams theming the same product produces two products.",
+      "Not themeableThe action blue, the navy gate chip, the state colours and every rule stay fixed. A stream owns a colour and a mark, not a theme. Two teams theming the same product produces two products.",
     );
   });
 

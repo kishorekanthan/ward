@@ -20,7 +20,7 @@ describe("CriteriaList", () => {
 
   it("keeps the consequence on an unmet criterion that carries its own reason", () => {
     render(<CriteriaList criteria={[{ met: false, text: "Ops sign-off", why: "Ops has not replied" }]} />);
-    expect(screen.getByText("Ops has not replied — keeps the item held")).not.toBeNull();
+    expect(screen.getByText("Ops has not replied · keeps the item held")).not.toBeNull();
   });
 
   it("says nothing about consequence for a met criterion", () => {
@@ -36,7 +36,7 @@ describe("CriteriaList", () => {
   });
 
   it("adds the hold note under the list only while a criterion is unmet", () => {
-    const note = "A criterion with no evidence keeps the item held — nothing advances until it has evidence or a human overrides it on the record.";
+    const note = "A criterion with no evidence keeps the item held. Nothing advances until it has evidence or a human overrides it on the record.";
     const { rerender } = render(<CriteriaList criteria={criteria} />);
     expect(screen.getByText(note).tagName).toBe("P");
     rerender(<CriteriaList criteria={[criteria[0]]} />);
@@ -46,9 +46,9 @@ describe("CriteriaList", () => {
   it("names each row as one sentence, with the evidence and consequence set apart", () => {
     render(<CriteriaList criteria={[...criteria, { met: false, text: "Ops sign-off", evidence: "none", why: "Ops has not replied" }]} />);
     expect(screen.getAllByRole("checkbox").map((row) => row.textContent)).toEqual([
-      "Signed off by the data product manager — sig:8f21c4",
+      "Signed off by the data product manager · sig:8f21c4",
       "Late-arrival window agreed with Ops · keeps the item held",
-      "Ops sign-off — none · Ops has not replied — keeps the item held",
+      "Ops sign-off · none · Ops has not replied · keeps the item held",
     ]);
   });
 });

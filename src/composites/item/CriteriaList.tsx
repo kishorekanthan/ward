@@ -18,14 +18,14 @@ function Separator({ text }: { text: string }) {
 }
 
 function consequence(why?: string): string {
-  return why ? `${why} — keeps the item held` : "keeps the item held";
+  return why ? `${why} · keeps the item held` : "keeps the item held";
 }
 
 function CriterionDetails({ criterion }: { criterion: Criterion }) {
   return (
     <span className={s.body}>
       <span className={s.text}>{criterion.text}</span>
-      {criterion.evidence ? <><Separator text=" — " /><code className={s.evidence} title={criterion.evidence}>{criterion.evidence}</code></> : null}
+      {criterion.evidence ? <><Separator text=" · " /><code className={s.evidence} title={criterion.evidence}>{criterion.evidence}</code></> : null}
       {criterion.met ? null : <><Separator text=" · " /><span className={s.consequence}>{consequence(criterion.why)}</span></>}
     </span>
   );
@@ -48,7 +48,7 @@ export function CriteriaList({ criteria }: { criteria: Criterion[] }) {
       </ul>
       {criteria.some((criterion) => !criterion.met) ? (
         <p className={s.note}>
-          A criterion with no evidence keeps the item held — nothing advances until it has evidence or a human overrides it on the record.
+          A criterion with no evidence keeps the item held. Nothing advances until it has evidence or a human overrides it on the record.
         </p>
       ) : null}
     </div>

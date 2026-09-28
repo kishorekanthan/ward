@@ -50,7 +50,7 @@ function CellControl({
   return (
     <span className={s.control}>
       <Switch
-        label={`${capability.name} — ${cell.stream}`}
+        label={`${capability.name} · ${cell.stream}`}
         checked={cell.value !== "off"}
         onChange={(on) => onChange(cell.streamStep, on)}
       />
@@ -88,7 +88,7 @@ function WebCellControl({ name, cell, onChange }: { name: string; cell: WebCapab
   if (cell.value === "byRole") return <span className={`${s.webControl} ${s.byRole} ward-envrow`}>by role</span>;
   const control = (
     <Switch
-      label={`${name} — step ${cell.streamStep}`}
+      label={`${name} · step ${cell.streamStep}`}
       checked={cell.value === "on"}
       disabled={onChange === undefined}
       onChange={(on) => onChange?.(cell.streamStep, on ? "on" : "off")}

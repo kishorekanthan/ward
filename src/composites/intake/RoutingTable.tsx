@@ -29,7 +29,7 @@ const COLUMNS: GridColumn[] = [
 function reEntryText(row: RoutingRow): string {
   if (!row.noRerun) return row.reEntersAt ?? "—";
   if (!row.why) return "No rerun";
-  return `No rerun — ${row.why}`;
+  return `No rerun: ${row.why}`;
 }
 
 function validateRows(rows: RoutingRow[], requireNoRerunReason: boolean) {

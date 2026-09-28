@@ -30,8 +30,8 @@ describe("CapabilityRow", () => {
     const head = container.querySelector("th[scope='row']");
     expect(head?.textContent).toBe("Agents may runMaster switch.governed by platform admin · T-015");
     expect(container.querySelectorAll("td")).toHaveLength(3);
-    expect(screen.getByRole("switch", { name: "Agents may run — Design" }).getAttribute("aria-checked")).toBe("true");
-    fireEvent.click(screen.getByRole("switch", { name: "Agents may run — Data" }));
+    expect(screen.getByRole("switch", { name: "Agents may run · Design" }).getAttribute("aria-checked")).toBe("true");
+    fireEvent.click(screen.getByRole("switch", { name: "Agents may run · Data" }));
     expect(onChange).toHaveBeenCalledWith(1, true);
   });
 
@@ -48,15 +48,15 @@ describe("CapabilityRow", () => {
       />,
     );
     const cells = Array.from(container.querySelectorAll("td")).map((td) => td.textContent);
-    expect(cells).toEqual(["Agents may runMaster switch.", "Agents may run — step 1", "PILOTAgents may run — step 2", "by role", "platform admin · T-015"]);
+    expect(cells).toEqual(["Agents may runMaster switch.", "Agents may run · step 1", "PILOTAgents may run · step 2", "by role", "platform admin · T-015"]);
     expect(container.querySelector("th")).toBeNull();
     expect(container.querySelector(".ward-cellmeta")?.textContent).toBe("platform admin · T-015");
   });
 
   it("disables web switches without onChange and leaves the pilot switch unchecked", () => {
     inTable(<CapabilityRow presentation="web" capability={capability} cells={[{ streamStep: 1, value: "on" }, { streamStep: 2, value: "pilot" }]} />);
-    const on = screen.getByRole("switch", { name: "Agents may run — step 1" });
-    const pilot = screen.getByRole("switch", { name: "Agents may run — step 2" });
+    const on = screen.getByRole("switch", { name: "Agents may run · step 1" });
+    const pilot = screen.getByRole("switch", { name: "Agents may run · step 2" });
     expect(on.hasAttribute("disabled")).toBe(true);
     expect(on.getAttribute("aria-checked")).toBe("true");
     expect(pilot.getAttribute("aria-checked")).toBe("false");
@@ -74,8 +74,8 @@ describe("CapabilityRow", () => {
       />,
     );
     expect(container.querySelector(".ward-cellmeta")?.textContent).toBe("stream admin");
-    fireEvent.click(screen.getByRole("switch", { name: "Dry run only — step 2" }));
-    fireEvent.click(screen.getByRole("switch", { name: "Dry run only — step 3" }));
+    fireEvent.click(screen.getByRole("switch", { name: "Dry run only · step 2" }));
+    fireEvent.click(screen.getByRole("switch", { name: "Dry run only · step 3" }));
     expect(onChange.mock.calls).toEqual([[2, "on"], [3, "off"]]);
   });
 });
@@ -121,19 +121,19 @@ describe("CapabilityRow spec", () => {
 
   it("names each switch by capability and stream", () => {
     renderRow();
-    expect(screen.getByRole("switch", { name: "Card buttons respect role — Data engineering" })).not.toBeNull();
+    expect(screen.getByRole("switch", { name: "Card buttons respect role · Data engineering" })).not.toBeNull();
   });
 
   it("shows a pilot as on plus the pilot chip", () => {
     renderRow();
-    expect(screen.getByRole("switch", { name: "Card buttons respect role — Finance" }).getAttribute("aria-checked")).toBe("true");
+    expect(screen.getByRole("switch", { name: "Card buttons respect role · Finance" }).getAttribute("aria-checked")).toBe("true");
     expect(screen.getByText("PILOT").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-running-bg)");
   });
 
   it("reports the stream it was changed for", () => {
     const onChange = vi.fn();
     renderRow(onChange);
-    fireEvent.click(screen.getByRole("switch", { name: "Card buttons respect role — Data engineering" }));
+    fireEvent.click(screen.getByRole("switch", { name: "Card buttons respect role · Data engineering" }));
     expect(onChange).toHaveBeenCalledWith(1, false);
   });
 

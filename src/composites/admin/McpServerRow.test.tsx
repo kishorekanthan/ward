@@ -99,7 +99,7 @@ describe("McpServerRow web presentation", () => {
       <McpServerRow presentation="web" server={{ name: "foundry", pinned_version: "v2.4.1", restart: { implemented: false } }} onRestart={vi.fn()} onPin={vi.fn()} />,
     );
     expect(buttonLabels(container)).toEqual([]);
-    expect(cellTexts(container)[5]).toBe("Restart unavailable — no supervisor configured");
+    expect(cellTexts(container)[5]).toBe("Restart unavailable: no supervisor configured");
   });
 
   it("shows no actions at all without handlers", () => {

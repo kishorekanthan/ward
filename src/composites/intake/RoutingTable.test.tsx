@@ -13,7 +13,7 @@ describe("RoutingTable", () => {
     const { container, getAllByRole } = render(<RoutingTable rows={rows} />);
     expect(getAllByRole("columnheader").map((header) => header.textContent)).toEqual(["Rejected by", "Re-enters at", "Skips", "Typed input"]);
     expect(container.querySelectorAll("tbody tr")[1]?.querySelectorAll("[data-norerun='true']")).toHaveLength(4);
-    expect(container.textContent).toContain("No rerun — Approval is final");
+    expect(container.textContent).toContain("No rerun: Approval is final");
   });
 
   it("uses a dash for omitted route stages and a positional key when an id is omitted", () => {
@@ -28,7 +28,7 @@ describe("RoutingTable", () => {
 
   it("says why a row will not rerun, in warn ink", () => {
     render(<RoutingTable rows={rows} />);
-    expect(screen.getByText("No rerun — Approval is final").getAttribute("data-norerun")).toBe("true");
+    expect(screen.getByText("No rerun: Approval is final").getAttribute("data-norerun")).toBe("true");
   });
 
   it("leaves an ordinary row unmarked", () => {

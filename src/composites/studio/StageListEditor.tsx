@@ -23,7 +23,7 @@ const OUTSIDE = "not in catalogue";
 
 function catalogueOptions(catalogue: string[], name: string) {
   const offered = catalogue.map((value) => ({ value, label: value }));
-  return catalogue.includes(name) ? offered : [{ value: name, label: `${name || "(unnamed)"} — ${OUTSIDE}` }, ...offered];
+  return catalogue.includes(name) ? offered : [{ value: name, label: `${name || "(unnamed)"} · ${OUTSIDE}` }, ...offered];
 }
 
 function NameField({ stage, index, catalogue, onName }: { stage: StageListRow; index: number; catalogue?: string[]; onName: (name: string) => void }): ReactElement {

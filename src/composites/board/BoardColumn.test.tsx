@@ -20,7 +20,7 @@ const column = { id: "waiting", label: "Waiting on us", cap: 2, gate: false };
 describe("BoardColumn", () => {
   it("says it is over cap in words as well as tint", () => {
     render(<BoardColumn column={column} items={items} sort="oldest" onOpen={() => {}} />);
-    expect(screen.getByRole("status").textContent).toBe("Waiting on us is over cap now — 3 items against 2");
+    expect(screen.getByRole("status").textContent).toBe("Waiting on us is over cap now: 3 items against 2");
   });
 
   it("hands card keystrokes to the caller on the column itself, so no wrapper sits between it and the board grid", () => {

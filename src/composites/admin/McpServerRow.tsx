@@ -139,7 +139,7 @@ function WebPinned({ pinned }: { pinned: string | null }): ReactElement {
 function WebRestart({ server, onRestart }: Pick<WebMcpServerRowProps, "server" | "onRestart">): ReactElement | null {
   if (onRestart === undefined) return null;
   if (server.restart?.implemented !== true) {
-    return <span className={`${s.webMeta} ward-cellmeta`}>Restart unavailable — no supervisor configured</span>;
+    return <span className={`${s.webMeta} ward-cellmeta`}>Restart unavailable: no supervisor configured</span>;
   }
   return (
     <Btn size="sm" onClick={() => onRestart(server.name)}>

@@ -25,6 +25,11 @@ function roleChip(requiredRole: string): "write" | "meta" {
   return requiredRole === "APPROVER" ? "write" : "meta";
 }
 
+// Only the first path is primary, whether or not it is yours to take.
+function variant(primary: boolean): "primary" | "secondary" {
+  return primary ? "primary" : "secondary";
+}
+
 type PathProps = { path: ResolvePath; primary: boolean; onChoose: (kind: ResolveKind) => void };
 
 // A path you cannot take stays visible but disabled, and names who to ask instead.
@@ -33,7 +38,7 @@ function PathAction({ path, primary, onChoose }: PathProps) {
   if (!path.allowed) {
     return (
       <>
-        <Btn variant="primary" size="sm" disabled describedBy={askId}>
+        <Btn variant={variant(primary)} size="sm" disabled describedBy={askId}>
           {LABEL[path.kind]}
         </Btn>
         <span className={s.ask} id={askId}>
@@ -43,7 +48,7 @@ function PathAction({ path, primary, onChoose }: PathProps) {
     );
   }
   return (
-    <Btn variant={primary ? "primary" : "secondary"} size="sm" onClick={() => onChoose(path.kind)}>
+    <Btn variant={variant(primary)} size="sm" onClick={() => onChoose(path.kind)}>
       {LABEL[path.kind]}
     </Btn>
   );

@@ -22,9 +22,9 @@ export type AppearanceStripProps = {
 };
 
 const SAMPLE_EMPTY = "No item in flight to preview.";
-const CHART_NOTE = "This is the view the validation exists for — six adjacent segments, direct-labelled, no legend to lean on.";
+const CHART_NOTE = "This is the view the validation exists for: six adjacent segments, direct-labelled, no legend to lean on.";
 const NOT_THEMEABLE =
-  "The action blue, the navy gate chip, the state colours and every rule stay fixed. A stream owns a colour and a mark — not a theme. Two teams theming the same product produces two products.";
+  "The action blue, the navy gate chip, the state colours and every rule stay fixed. A stream owns a colour and a mark, not a theme. Two teams theming the same product produces two products.";
 
 const SEGMENTS: StreamStep[] = [1, 2, 3, 4, 5, 6];
 const SEGMENT_WIDTH = 100;
