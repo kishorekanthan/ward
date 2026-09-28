@@ -209,7 +209,7 @@ export function LegacyWorkCard(props: LegacyWorkCardProps): ReactElement {
 export type LegacyOverCapNoteProps = { count: number; cap: number };
 
 export function LegacyOverCapNote({ count, cap }: LegacyOverCapNoteProps): ReactElement {
-  return <p className="ward-overcap" role="status">{String(count) + " items in a column capped at " + String(cap) + " — move " + String(count - cap) + " out or raise the cap"}</p>;
+  return <p className="ward-overcap" role="status">{String(count) + " items in a column capped at " + String(cap) + ". Move " + String(count - cap) + " out or raise the cap."}</p>;
 }
 
 export type LegacyBoardColumnDef = { id: string; label: string; cap?: number; gate?: boolean };

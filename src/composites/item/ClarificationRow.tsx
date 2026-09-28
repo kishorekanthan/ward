@@ -35,10 +35,10 @@ const CHIP: Record<Delivery, { role: ChipRole; label: string }> = {
 
 function notes(tracker: string): Record<Delivery, string> {
   return {
-    queued: `Still in the outbox — editing replaces the queued row and recomputes req_hash, so ${tracker} receives one comment, not two.`,
+    queued: `Still in the outbox. Editing replaces it, so ${tracker} gets one comment, not two.`,
     delivered: `Already in ${tracker}, so an edit is a ${tracker} edit: it will show as edited by you there, and the original stays in the audit row.`,
     retrying: `Edit is unavailable mid-flight: a delivery may already have reached ${tracker}. Cancel first, then edit.`,
-    failed: "Delivery failed — edit and resend, or cancel the delivery.",
+    failed: "Delivery failed. Edit and resend, or cancel the delivery.",
   };
 }
 

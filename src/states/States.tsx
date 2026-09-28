@@ -51,10 +51,10 @@ export function LoadFailed({ sentence, at, onRetry }: LoadFailedProps) {
 
 export type StaleStripProps = { lastReachableAt: string; snapshotAt: string };
 export function StaleStrip({ lastReachableAt, snapshotAt }: StaleStripProps) {
-  return <div className={s.strip} role="status" data-tone="warn">Live data stopped {stamp(lastReachableAt)} — showing snapshot from {stamp(snapshotAt)}</div>;
+  return <div className={s.strip} role="status" data-tone="warn">Live data stopped {stamp(lastReachableAt)}. Showing snapshot from {stamp(snapshotAt)}</div>;
 }
 
 export type WriteUnavailableStripProps = { queued: number; since: string };
 export function WriteUnavailableStrip({ queued, since }: WriteUnavailableStripProps) {
-  return <div className={s.strip} role="alert" data-tone="failed">Writes unavailable — {queued} requests queued since {stamp(since)}</div>;
+  return <div className={s.strip} role="alert" data-tone="failed">Writes unavailable: {queued} requests queued since {stamp(since)}</div>;
 }

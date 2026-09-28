@@ -38,6 +38,22 @@ describe("ResolveBlock", () => {
     expect(() => render(<ResolveBlock paths={[orphan]} onChoose={() => {}} />)).toThrow(/askInstead is required/);
   });
 
+  it("draws only the first path primary, even when a later one is refused", () => {
+    const refused: ResolvePath = { ...paths[1], kind: "requeue", askInstead: "Ask J. Rao to requeue." };
+    render(<ResolveBlock paths={[...paths, refused]} onChoose={() => {}} />);
+    const variants = screen.getAllByRole("button").map((button) => [button.textContent, button.getAttribute("data-ward-btn")]);
+    expect(variants).toEqual([
+      ["Ask a clarifying question", "primary"],
+      ["Override and advance", "secondary"],
+      ["Requeue the agent", "secondary"],
+    ]);
+  });
+
+  it("keeps a refused first path primary", () => {
+    render(<ResolveBlock paths={[paths[1]]} onChoose={() => {}} />);
+    expect(screen.getByRole("button", { name: "Override and advance" }).getAttribute("data-ward-btn")).toBe("primary");
+  });
+
   it("takes an allowed path", () => {
     const onChoose = vi.fn();
     render(<ResolveBlock paths={paths} onChoose={onChoose} />);

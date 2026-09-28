@@ -74,7 +74,7 @@ describe("StageListEditor", () => {
     const rows: StageListRow[] = [{ name: "apply_config", kind: "agent" }];
     render(<StageListEditor stages={rows} onChange={vi.fn()} catalogue={["triage", "implement"]} />);
     const field = screen.getByLabelText("Stage 1 name") as HTMLSelectElement;
-    expect([...field.options].map((o) => o.label)).toEqual(["apply_config — not in catalogue", "triage", "implement"]);
+    expect([...field.options].map((o) => o.label)).toEqual(["apply_config · not in catalogue", "triage", "implement"]);
     expect(field.value).toBe("apply_config");
     expect(field.getAttribute("aria-invalid")).toBe("true");
     expect(screen.getByText("apply_config is not in catalogue")).toBeTruthy();

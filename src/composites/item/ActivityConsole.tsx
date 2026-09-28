@@ -43,7 +43,7 @@ function LastEventTime({ at }: { at?: string }) {
 function IdleLine({ connection, idleSince, last, children }: IdleLineProps) {
   const idleAt = [idleSince, last?.at, ""].find(Boolean) as string;
   const copy = {
-    stale: `no new events — as of ${time(idleAt)}`,
+    stale: `no new events as of ${time(idleAt)}`,
     live: "waiting for the next event…",
     reconnecting: "waiting for the next event…",
   }[connection];

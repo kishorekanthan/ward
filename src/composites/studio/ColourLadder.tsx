@@ -30,7 +30,7 @@ type RenderProps = ColourLadderProps | ColourLadderCompatibilityProps;
 type Validation = "validated" | "partial" | "reserved";
 
 // tokens.json ships steps 4–6 without dark stepping or the CVD matrix, so they show but cannot be picked.
-export const PARTIAL_STEP_REASON = "not validated — needs CVD matrix and dark stepping";
+export const PARTIAL_STEP_REASON = "not validated yet, pending a CVD matrix and dark stepping";
 
 export function ladderValidation(step: CompatibilityLadderStep): Validation {
   if (step.reserved) return "reserved";
@@ -83,7 +83,7 @@ const twoDigit = (step: number) => String(step).padStart(2, "0");
 
 // The picked step reads as the viewer's own; otherwise the tile names its holder as the list does.
 function tileHolder(validation: Validation, taken: string | undefined, checked: boolean): string {
-  if (validation === "reserved") return "Reserved — needs revalidation";
+  if (validation === "reserved") return "Reserved until revalidated";
   if (checked) return "yours";
   return taken ?? holderOf(validation, undefined);
 }
@@ -118,7 +118,7 @@ function cellView({ step, value, taken, onChange, presentation }: CellProps): Ce
   const select = () => {
     if (!unavailable) onChange(step.step);
   };
-  const label = `${name} — ${presentation === "tiles" && checked ? "yours" : holder}`;
+  const label = `${name} · ${presentation === "tiles" && checked ? "yours" : holder}`;
   const shared = { role: "radio", "aria-label": label, ...cellAttributes(unavailable, checked), "data-validation": validation, style: cellStyle(step, validation), onClick: select, onKeyDown: (event: KeyboardEvent) => onActivate(event, select) };
   return { shared, label, name, holder, validation, note: tileHolder(validation, taken, checked), step: step.step };
 }
@@ -197,7 +197,7 @@ export function ColourLadder(props: RenderProps): ReactElement {
   );
   // Tiles reflow on their own width, so the grid sits inside the group it queries.
   return (
-    <div role="radiogroup" aria-label={props.label ?? "Stream colour — validated steps only"} className={`${GROUP_CLASS[presentation]} ward-ladder`}>
+    <div role="radiogroup" aria-label={props.label ?? "Stream colour, validated steps only"} className={`${GROUP_CLASS[presentation]} ward-ladder`}>
       {presentation === "tiles" ? <div className={s.tiles}>{cells}</div> : cells}
     </div>
   );

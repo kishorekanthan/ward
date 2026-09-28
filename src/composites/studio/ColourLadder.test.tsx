@@ -17,15 +17,15 @@ describe("ColourLadder", () => {
     const onChange = vi.fn();
     render(<ColourLadder label="Stream colour" steps={steps} value={1} onChange={onChange} takenBy={{ 2: "Design" }} />);
     expect(screen.getByRole("radiogroup", { name: "Stream colour" })).toBeDefined();
-    expect(screen.getByRole("radio", { name: "Data — free" }).getAttribute("data-checked")).toBe("true");
-    fireEvent.click(screen.getByRole("radio", { name: "Data — free" }));
+    expect(screen.getByRole("radio", { name: "Data · free" }).getAttribute("data-checked")).toBe("true");
+    fireEvent.click(screen.getByRole("radio", { name: "Data · free" }));
     expect(onChange).toHaveBeenCalledWith(1);
   });
 
   it("marks taken and reserved radios unavailable through the attribute, not inline opacity", () => {
     render(<ColourLadder label="Stream colour" steps={steps} value={1} onChange={() => undefined} takenBy={{ 2: "Design" }} />);
-    const taken = screen.getByRole("radio", { name: "Design — taken by Design" });
-    const reserved = screen.getByRole("radio", { name: "Reserved — reserved" });
+    const taken = screen.getByRole("radio", { name: "Design · taken by Design" });
+    const reserved = screen.getByRole("radio", { name: "Reserved · reserved" });
     expect([taken, reserved].map((cell) => cell.getAttribute("aria-disabled"))).toEqual(["true", "true"]);
     expect([taken, reserved].map((cell) => cell.getAttribute("data-unavailable"))).toEqual(["true", "true"]);
     expect([taken.style.opacity, reserved.style.opacity]).toEqual(["", ""]);
@@ -38,13 +38,13 @@ describe("ColourLadder", () => {
     const { container } = render(<ColourLadder steps={SIX_AND_RESERVED} value={null} onChange={onChange} takenBy={{ 2: "UI / UX" }} />);
     const radios = screen.getAllByRole("radio");
     expect(radios.map((radio) => radio.getAttribute("aria-label"))).toEqual([
-      "Step 1 — free",
-      "Step 2 — taken by UI / UX",
-      "Step 3 — free",
-      "Step 4 — not validated",
-      "Step 5 — not validated",
-      "Step 6 — not validated",
-      "Step 7 — reserved",
+      "Step 1 · free",
+      "Step 2 · taken by UI / UX",
+      "Step 3 · free",
+      "Step 4 · not validated",
+      "Step 5 · not validated",
+      "Step 6 · not validated",
+      "Step 7 · reserved",
     ]);
     expect(radios.map((radio) => radio.getAttribute("aria-disabled"))).toEqual([null, "true", null, "true", "true", "true", "true"]);
     expect(radios[4].style.getPropertyValue("--stream")).toBe("var(--ward-stream-5-id)");
@@ -77,7 +77,7 @@ describe("ColourLadder (spec)", () => {
   it("refuses an unvalidated step rather than offering it", () => {
     const onChange = vi.fn();
     render(<ColourLadder label="Stream colour" steps={specSteps} value={1} onChange={onChange} />);
-    const four = screen.getByRole("radio", { name: "Step 4 — not validated" });
+    const four = screen.getByRole("radio", { name: "Step 4 · not validated" });
     expect(four.getAttribute("aria-disabled")).toBe("true");
     fireEvent.click(four);
     expect(onChange).not.toHaveBeenCalled();
@@ -85,13 +85,13 @@ describe("ColourLadder (spec)", () => {
 
   it("names who holds a taken step instead of only dimming it", () => {
     render(<ColourLadder label="Stream colour" steps={specSteps} value={1} onChange={() => {}} takenBy={{ 2: "front-end" }} />);
-    expect(screen.getByRole("radio", { name: "Step 2 — taken by front-end" })).not.toBeNull();
+    expect(screen.getByRole("radio", { name: "Step 2 · taken by front-end" })).not.toBeNull();
   });
 
   it("takes a free validated step", () => {
     const onChange = vi.fn();
     render(<ColourLadder label="Stream colour" steps={specSteps} value={1} onChange={onChange} />);
-    fireEvent.click(screen.getByRole("radio", { name: "Step 3 — free" }));
+    fireEvent.click(screen.getByRole("radio", { name: "Step 3 · free" }));
     expect(onChange).toHaveBeenCalledWith(3);
   });
 
@@ -103,14 +103,14 @@ describe("ColourLadder (spec)", () => {
   it("selects a free step from the keyboard, not by pointer alone", () => {
     const onChange = vi.fn();
     render(<ColourLadder label="Stream colour" steps={specSteps} value={1} onChange={onChange} />);
-    fireEvent.keyDown(screen.getByRole("radio", { name: "Step 3 — free" }), { key: "Enter" });
+    fireEvent.keyDown(screen.getByRole("radio", { name: "Step 3 · free" }), { key: "Enter" });
     expect(onChange).toHaveBeenCalledWith(3);
   });
 
   it("stays inert on the keyboard for a step nobody may take", () => {
     const onChange = vi.fn();
     render(<ColourLadder label="Stream colour" steps={specSteps} value={1} onChange={onChange} takenBy={{ 2: "front-end" }} />);
-    fireEvent.keyDown(screen.getByRole("radio", { name: "Step 2 — taken by front-end" }), { key: "Enter" });
+    fireEvent.keyDown(screen.getByRole("radio", { name: "Step 2 · taken by front-end" }), { key: "Enter" });
     expect(onChange).not.toHaveBeenCalled();
   });
 });
@@ -130,20 +130,20 @@ describe("ColourLadder tiles (Studio 9a)", () => {
       "Step 04 · not validated",
       "Step 05 · not validated",
       "Step 06 · not validated",
-      "Reserved — needs revalidation",
+      "Reserved until revalidated",
       "Ask design for a new step",
     ]);
   });
 
   it("names the picked step yours and a free one free, for sight and for screen readers", () => {
     tiles(null);
-    expect(screen.getByRole("radio", { name: "Step 1 — free" }).querySelector(".ward-ladder-note")?.textContent).toBe("Step 01 · free");
-    expect(screen.getByRole("radio", { name: "Step 2 — taken by UI / UX" })).toBeDefined();
+    expect(screen.getByRole("radio", { name: "Step 1 · free" }).querySelector(".ward-ladder-note")?.textContent).toBe("Step 01 · free");
+    expect(screen.getByRole("radio", { name: "Step 2 · taken by UI / UX" })).toBeDefined();
   });
 
   it("labels the picked tile yours and marks it checked", () => {
     tiles(1);
-    expect(screen.getByRole("radio", { name: "Step 1 — yours" }).getAttribute("aria-checked")).toBe("true");
+    expect(screen.getByRole("radio", { name: "Step 1 · yours" }).getAttribute("aria-checked")).toBe("true");
   });
 
   it("picks a free tile by click or key, never a taken, partial or reserved one", () => {
@@ -170,7 +170,7 @@ describe("ColourLadder tiles (Studio 9a)", () => {
 
   it("paints each bar from its stream token", () => {
     tiles(null);
-    expect(screen.getByRole("radio", { name: "Step 3 — taken by Integration" }).style.getPropertyValue("--stream")).toBe("var(--ward-stream-3-id)");
+    expect(screen.getByRole("radio", { name: "Step 3 · taken by Integration" }).style.getPropertyValue("--stream")).toBe("var(--ward-stream-3-id)");
   });
 });
 

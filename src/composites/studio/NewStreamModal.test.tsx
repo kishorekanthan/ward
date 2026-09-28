@@ -46,7 +46,7 @@ describe("NewStreamModal", () => {
     fireEvent.change(screen.getByLabelText("Stage 1 name"), { target: { value: "Triage" } });
     fireEvent.change(screen.getByLabelText("Stage 2 name"), { target: { value: "Map fields" } });
     expect((screen.getByRole("button", { name: "Create stream" }) as HTMLButtonElement).disabled).toBe(true);
-    fireEvent.click(screen.getByRole("radio", { name: "Step 3 — free" }));
+    fireEvent.click(screen.getByRole("radio", { name: "Step 3 · free" }));
     fireEvent.click(screen.getByRole("button", { name: "Create stream" }));
     expect(onCreate).toHaveBeenCalledTimes(1);
     expect(onCreate).toHaveBeenCalledWith({
@@ -70,13 +70,13 @@ describe("NewStreamModal", () => {
     fireEvent.change(screen.getByLabelText("Stage 1 name"), { target: { value: "Triage" } });
     fireEvent.change(screen.getByLabelText("Stage 2 name"), { target: { value: "Map fields" } });
     const status = () => container.ownerDocument.querySelector("[data-colour-status]")?.textContent;
-    expect(status()).toBe("Colour: none picked — choose a free validated step; steps 4–6 are not validated — needs CVD matrix and dark stepping.");
-    const partial = screen.getByRole("radio", { name: "Step 4 — not validated" });
+    expect(status()).toBe("Colour: none picked. Choose a free validated step; steps 4–6 are not validated yet, pending a CVD matrix and dark stepping.");
+    const partial = screen.getByRole("radio", { name: "Step 4 · not validated" });
     fireEvent.click(partial);
     expect(partial.getAttribute("aria-checked")).toBe("false");
     expect((screen.getByRole("button", { name: "Create stream" }) as HTMLButtonElement).disabled).toBe(true);
-    fireEvent.click(screen.getByRole("radio", { name: "Step 2 — free" }));
-    expect(status()).toBe("Colour: step 2 — validated and free.");
+    fireEvent.click(screen.getByRole("radio", { name: "Step 2 · free" }));
+    expect(status()).toBe("Colour: step 2 is validated and free.");
     fireEvent.click(screen.getByRole("button", { name: "Create stream" }));
     expect(onCreate.mock.calls[0][0].colourStep).toBe(2);
   });
@@ -201,8 +201,8 @@ describe("NewStreamModal (spec)", () => {
   it("keeps a taken colour off the initial choice and names its holder", () => {
     const { dialog } = setup({ takenBy: { 1: "front-end" } });
     const group = within(dialog).getByRole("radiogroup", { name: "Stream colour" });
-    expect(within(group).getByRole("radio", { name: "Teal — taken by front-end" }).getAttribute("aria-checked")).toBe("false");
-    expect(within(group).getByRole("radio", { name: "Violet — free" }).getAttribute("aria-checked")).toBe("true");
+    expect(within(group).getByRole("radio", { name: "Teal · taken by front-end" }).getAttribute("aria-checked")).toBe("false");
+    expect(within(group).getByRole("radio", { name: "Violet · free" }).getAttribute("aria-checked")).toBe("true");
   });
 
   // The reorder announcer is keep-list; saving a draft must not speak through it.

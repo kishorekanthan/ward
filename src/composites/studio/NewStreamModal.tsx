@@ -213,9 +213,9 @@ function hasNamedWebStages(draft: WebNewStreamDraft): boolean {
 }
 
 export function colourStatus(colourStep: number | null, takenBy: Record<number, string>): string {
-  if (colourStep === null) return `Colour: none picked — choose a free validated step; steps 4–6 are ${PARTIAL_STEP_REASON}.`;
+  if (colourStep === null) return `Colour: none picked. Choose a free validated step; steps 4–6 are ${PARTIAL_STEP_REASON}.`;
   if (!freeValidatedStep({ step: colourStep }, takenBy)) return `Colour: step ${colourStep} cannot be used.`;
-  return `Colour: step ${colourStep} — validated and free.`;
+  return `Colour: step ${colourStep} is validated and free.`;
 }
 
 function WebAgentNote({ stage }: { stage: WebStreamStageDraft | undefined }): ReactElement {
@@ -289,13 +289,13 @@ function WebNewStreamModal(props: WebNewStreamModalProps): ReactElement {
   const colour = (
     <div className={s.colourCell}>
       <span className={s.formLabel}>Colour</span>
-      <ColourLadder presentation="swatches" label="Stream colour — validated steps only" steps={props.ladder} value={colourStep} onChange={setColourStep} takenBy={takenBy} />
+      <ColourLadder presentation="swatches" label="Stream colour, validated steps only" steps={props.ladder} value={colourStep} onChange={setColourStep} takenBy={takenBy} />
     </div>
   );
   const ownerField = (
     <>
       <p className={s.colourStatus} data-colour-status="">{colourStatus(colourStep, takenBy)}</p>
-      <Field variant="form" kind="select" label="Owner — accountable for every agent published here" value={owner} options={props.owners.map((person) => ({ value: person, label: person }))} onChange={setOwner} />
+      <Field variant="form" kind="select" label="Owner, accountable for every agent published here" value={owner} options={props.owners.map((person) => ({ value: person, label: person }))} onChange={setOwner} />
     </>
   );
   return (
@@ -311,7 +311,7 @@ function WebNewStreamModal(props: WebNewStreamModalProps): ReactElement {
           <StageListEditor stages={stages} onChange={setStages} />
         </section>
         <section className={s.webSection}>
-          <Radio variant="cards" legend="03 · Write policy — inherited by every agent on this stream" value={policy} options={WEB_POLICIES} onChange={setPolicy} />
+          <Radio variant="cards" legend="03 · Write policy, inherited by every agent on this stream" value={policy} options={WEB_POLICIES} onChange={setPolicy} />
         </section>
         <WebFooter ready={ready} draft={draft} agentStage={agentStage} onCreate={props.onCreate} onDraft={props.onDraft} reasonId={reasonId} />
       </div>

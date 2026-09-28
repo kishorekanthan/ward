@@ -23,7 +23,7 @@ describe("ActivityConsole", () => {
   it("freezes stale copy and jumps to the newest event text", () => {
     render(<ActivityConsole lines={LINES} connection="stale" idleSince="2026-09-04T02:14:03Z" />);
 
-    expect(screen.getByText(/no new events — as of/).textContent).toContain("03:14:03");
+    expect(screen.getByText(/no new events as of/).textContent).toContain("03:14:03");
     fireEvent.click(screen.getByRole("button", { name: "Jump to latest" }));
     expect(document.activeElement?.textContent).toBe("usage 1,412 in · 380 out · $0.13");
   });
@@ -58,7 +58,7 @@ describe("ActivityConsole", () => {
     const { rerender } = render(<ActivityConsole lines={lines} connection="live" idleSince="2026-09-06T02:14:00Z" />);
     expect(screen.getByText("last event 03:14:00")).not.toBeNull();
     rerender(<ActivityConsole lines={lines} connection="stale" idleSince="2026-09-06T02:14:00Z" />);
-    expect(screen.getByText("no new events — as of 03:14:00")).not.toBeNull();
+    expect(screen.getByText("no new events as of 03:14:00")).not.toBeNull();
   });
 
   it("keeps the idle caret and the jump control on the foot, outside the event list", () => {

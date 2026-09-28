@@ -94,7 +94,7 @@ describe("DryRunRail", () => {
     const btn = screen.getByRole("button", { name: "Publish" }) as HTMLButtonElement;
     expect(btn.disabled).toBe(true);
     expect(document.getElementById(btn.getAttribute("aria-describedby") as string)?.textContent).toBe(
-      "Publish is disabled: 1 of 2 gate conditions unmet — Dry run replayed on a real item.",
+      "Publish is disabled: 1 of 2 gate conditions unmet: Dry run replayed on a real item.",
     );
     fireEvent.click(btn);
     expect(onPublish).not.toHaveBeenCalled();

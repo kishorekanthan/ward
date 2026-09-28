@@ -38,7 +38,7 @@ function foundryPresentation(props: DryRunRailProps): props is FoundryProps { re
 function wardPublishReason(run: DryRun, checklist: GateItem[]): string | null {
   if (run.status === "running") return "Publish is disabled: dry run in progress.";
   const unmet = checklist.filter((item) => !item.met);
-  if (unmet.length > 0) return `Publish is disabled: ${unmet.length} of ${checklist.length} gate conditions unmet — ${unmet[0].text}`;
+  if (unmet.length > 0) return `Publish is disabled: ${unmet.length} of ${checklist.length} gate conditions unmet: ${unmet[0].text}`;
   return run.status === "passed" ? null : "Publish is disabled: the dry run has not passed.";
 }
 
