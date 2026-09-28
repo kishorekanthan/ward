@@ -29,6 +29,10 @@ export const WriteTool = {
   },
 };
 
+export const LongName = {
+  args: { ...base, tool: { ...read, name: "foundry_actions.lookup_catalogue_entries", scope: "read-only · Foundry action catalogue" } },
+};
+
 export const Locked = {
   args: {
     ...base,

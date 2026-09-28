@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+import { readFileSync } from "node:fs";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { ToolRow, type Tool } from "./ToolRow";
@@ -58,5 +59,32 @@ describe("ToolRow (spec)", () => {
     render(<ToolRow tool={tool} onChange={onChange} />);
     fireEvent.click(screen.getByRole("checkbox"));
     expect(onChange).toHaveBeenCalledWith(true);
+  });
+});
+
+const css = readFileSync("src/composites/studio/ToolRow.module.css", "utf8");
+const nameRule = /\.name\s*\{([^}]*)\}/.exec(css)?.[1] ?? "";
+
+describe("ToolRow names (#35)", () => {
+  it("keeps a tool name too wide for the minimum column in the story", () => {
+    const story = readFileSync("src/composites/studio/ToolRow.stories.tsx", "utf8");
+    const name = /export const LongName\s*=\s*\{[\s\S]*?name:\s*"([^"]+)"/.exec(story)?.[1] ?? "";
+    expect(name.length).toBeGreaterThan(25);
+  });
+
+  it("gives the name the comp's width as a minimum, never a fixed width or an ellipsis", () => {
+    expect(nameRule).toMatch(/min-width:\s*var\(--ward-width-toolName\)/);
+    expect(nameRule).not.toMatch(/(^|[\s;])width:/);
+    expect(nameRule).not.toMatch(/text-overflow|overflow:\s*hidden|white-space:\s*nowrap/);
+  });
+
+  it("wraps a name too long for the row instead of overflowing it", () => {
+    expect(nameRule).toMatch(/overflow-wrap:\s*anywhere/);
+  });
+
+  it("labels the checkbox with the whole of a long name", () => {
+    const name = "foundry_actions.lookup_catalogue_entries";
+    render(<ToolRow tool={{ ...tool, name }} onChange={() => {}} />);
+    expect(screen.getByRole("checkbox", { name }).id).toBe(screen.getByText(name).getAttribute("for"));
   });
 });

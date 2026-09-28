@@ -12,14 +12,13 @@
   opacity: 0.5;
 }
 
+/* A tool name is an identifier: 150px keeps short names aligned, a long one grows or wraps, never cut. */
 .name {
-  flex: none;
-  width: var(--ward-width-toolName);
-  overflow: hidden;
+  flex: 0 1 auto;
+  min-width: var(--ward-width-toolName);
   font: var(--ward-type-toolName);
   color: var(--ward-color-text);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 .scope {
