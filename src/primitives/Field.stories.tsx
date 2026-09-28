@@ -17,6 +17,10 @@ export const Input = {
   args: { kind: "input", label: "Column label", value: "In review", onChange: () => {} },
 };
 
+export const Secret = {
+  args: { kind: "input", label: "Provider key", value: "sk-example-key", secret: true, onChange: () => {} },
+};
+
 export const Select = {
   args: { kind: "select", label: "Owner", value: "a.whyte", options: owners, onChange: () => {} },
 };
