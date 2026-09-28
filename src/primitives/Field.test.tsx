@@ -1,6 +1,10 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
-import { Field } from "./Field";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { cleanup, render, screen } from "@testing-library/react";
+import { afterEach, beforeAll, describe, expect, it } from "vitest";
+import { Field, type FieldVariant } from "./Field";
+import s from "./Field.module.css";
 
 describe("Field labelHidden", () => {
   it("keeps the label tied to the control while hiding it visually", () => {
@@ -44,5 +48,57 @@ describe("Field secret", () => {
       expect(control.hasAttribute("type")).toBe(false);
       expect(control.hasAttribute("autocomplete")).toBe(false);
     }
+  });
+});
+
+const here = dirname(fileURLToPath(import.meta.url));
+const classNames = s as Record<string, string>;
+
+// Field.module.css with its class names hashed as rendered, after Ward's global sheet.
+function loadWardSheets(): void {
+  const module = readFileSync(join(here, "Field.module.css"), "utf8").replace(/\.([A-Za-z]+)\b/g, (whole, name: string) =>
+    classNames[name] ? "." + classNames[name] : whole,
+  );
+  const style = document.createElement("style");
+  style.textContent = readFileSync(join(here, "..", "ward.css"), "utf8") + "\n" + module;
+  document.head.append(style);
+}
+
+function focusedField(variant?: FieldVariant): HTMLElement {
+  render(<Field kind="input" label="Version" value="" onChange={() => {}} variant={variant} />);
+  const control = screen.getByLabelText("Version");
+  control.focus();
+  return control;
+}
+
+function hasOutline(el: Element): boolean {
+  const outline = getComputedStyle(el).outline.trim();
+  return outline !== "" && !/\b(none|transparent)\b/.test(outline);
+}
+
+// Forced colours drop box-shadow but repaint a transparent outline, so the ring must stay drawn.
+function keepsForcedColoursRing(el: Element): boolean {
+  return /\bsolid\b/.test(getComputedStyle(el).outline);
+}
+
+describe("Field focus mark", () => {
+  beforeAll(loadWardSheets);
+  afterEach(cleanup);
+
+  it.each([undefined, "form", "inline"] as const)("draws only its own border when focused (%s)", (variant) => {
+    const control = focusedField(variant);
+    expect(control.matches(":focus-visible")).toBe(true);
+    expect(hasOutline(control)).toBe(false);
+    expect(keepsForcedColoursRing(control)).toBe(true);
+    expect(getComputedStyle(control).boxShadow).toContain("--ward-color-blue");
+  });
+
+  it.each(["reply", "tag", "tagGate"] as const)("keeps the focus ring on a variant with no focus border (%s)", (variant) => {
+    expect(hasOutline(focusedField(variant))).toBe(true);
+  });
+
+  it("leaves the global focus ring for buttons and links unscoped", () => {
+    const global = readFileSync(join(here, "..", "ward.css"), "utf8").match(/(^|\})\s*:focus-visible\s*\{([^}]*)\}/);
+    expect(global?.[2]).toMatch(/outline:\s*var\(--ward-border\) solid var\(--ward-color-blue\)/);
   });
 });
