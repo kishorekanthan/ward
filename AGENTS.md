@@ -26,6 +26,8 @@ Ward (`@trellis/ward`) is a standalone React 19 UI library. It must never import
 - Never raise the complexity threshold or add `eslint-disable`.
 - Never run prettier on Ward files; edit `tokens.json` textually, then `npm run gen`.
 - `dist/` is committed: run `npm run build` and commit `dist/` with any `src/` change.
-- Release: `make pr-check PR=N` before merging, bump `version` in package.json, `make check`, commit, `git tag vX.Y.Z`, push the tag.
+- Release: `make pr-check PR=N` before merging, bump `version` in package.json, `make check`, commit, `git tag -s vX.Y.Z -m vX.Y.Z`, `git tag -v vX.Y.Z`, push the tag. Consumers pin the tag's commit sha, never the tag.
+- Tags are signed with SSH keys listed in `.github/allowed_signers`; `make signing` points this clone's git at that file (repo config, so every worktree shares it) and at `~/.ssh/id_ed25519.pub`.
+- `make check` fails when `dist/` differs by one byte from a fresh build (`scripts/dist-fresh.mjs`).
 - Comments: one or two lines max. No tautological tests.
 - No Claude attribution in commits or PRs. Never `git add -A`; stage paths explicitly.
