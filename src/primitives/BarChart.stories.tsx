@@ -33,6 +33,16 @@ export const Hours = {
   },
 };
 
+export const MissingMark = {
+  args: {
+    title: "Time by stage",
+    categories: ["intake", "build", "review", "load"],
+    series: [{ name: "Hours", values: [2.5, 30, 12.25, null] }],
+    format: (value: number) => `${value} h`,
+    missing: "-",
+  },
+};
+
 export const Empty = {
   args: { title: "Done per week", categories: weeks, series: [{ name: "Done", values: [0, 0, 0, 0] }], empty: "No items finished yet." },
 };

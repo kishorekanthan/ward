@@ -34,6 +34,12 @@ describe("BarChart", () => {
     expect(barOf("15 Sep", 1)).toBeNull();
   });
 
+  it("shows the given missing mark for a missing value and keeps a zero as its value", () => {
+    render(<BarChart title="Done per week" categories={weeks} series={two} missing="-" />);
+    const row = within(screen.getByRole("row", { name: /15 Sep/ })).getAllByRole("cell");
+    expect(row.map((cell) => cell.textContent)).toEqual(["0", "-"]);
+  });
+
   it("reads as a captioned table with named rows and columns and every value as text", () => {
     render(<BarChart title="Hours by stage" categories={["build", "review"]} series={[{ name: "Hours", values: [1.5, 12] }]} format={(v) => `${v} h`} />);
     const table = screen.getByRole("table", { name: "Hours by stage" });
