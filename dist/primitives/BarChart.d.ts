@@ -9,5 +9,6 @@ export type BarChartProps = {
     format?: (value: number) => string;
     categoryHead?: string;
     empty?: string;
+    missing?: string;
 };
-export declare function BarChart({ title, categories, series, format, categoryHead, empty }: BarChartProps): import("react").JSX.Element;
+export declare function BarChart(props: BarChartProps): import("react").JSX.Element;

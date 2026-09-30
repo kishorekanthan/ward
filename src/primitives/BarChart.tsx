@@ -11,6 +11,7 @@ export type BarChartProps = {
   format?: (value: number) => string;
   categoryHead?: string;
   empty?: string;
+  missing?: string;
 };
 
 const EMPTY_MARK = "—";
@@ -33,13 +34,13 @@ function stepOf(index: number, total: number): number | undefined {
   return total > 1 ? index + 1 : undefined;
 }
 
-type CellProps = { value: number | null; top: number; step?: number; format: (value: number) => string };
+type CellProps = { value: number | null; top: number; step?: number; format: (value: number) => string; missing: string };
 
 function shareOf(value: number | null, top: number): number {
   return value !== null && top > 0 ? (value / top) * 100 : 0;
 }
 
-function Cell({ value, top, step, format }: CellProps) {
+function Cell({ value, top, step, format, missing }: CellProps) {
   const percent = shareOf(value, top);
   const share = { "--share": `${percent}%` } as CSSProperties;
   return (
@@ -48,7 +49,7 @@ function Cell({ value, top, step, format }: CellProps) {
         <span className={s.lane}>
           {percent > 0 ? <span className={`${s.bar} ward-barchart-bar`} data-step={step} style={share} aria-hidden="true" /> : null}
         </span>
-        <span className={s.value}>{value === null ? EMPTY_MARK : format(value)}</span>
+        <span className={s.value}>{value === null ? missing : format(value)}</span>
       </span>
     </td>
   );
@@ -67,17 +68,16 @@ function Head({ series }: { series: BarSeries[] }) {
   );
 }
 
-export function BarChart({ title, categories, series, format = count, categoryHead = "Category", empty = "Nothing to chart yet." }: BarChartProps) {
-  validate(categories, series);
-  const top = largest(series);
-  if (top === 0) {
-    return (
-      <section className={`${s.root} ward-barchart`} aria-label={title}>
-        <p className={s.caption}>{title}</p>
-        <p className={s.empty}>{empty}</p>
-      </section>
-    );
-  }
+function EmptyChart({ title, empty = "Nothing to chart yet." }: Pick<BarChartProps, "title" | "empty">) {
+  return (
+    <section className={`${s.root} ward-barchart`} aria-label={title}>
+      <p className={s.caption}>{title}</p>
+      <p className={s.empty}>{empty}</p>
+    </section>
+  );
+}
+
+function Chart({ title, categories, series, top, format = count, categoryHead = "Category", missing = EMPTY_MARK }: BarChartProps & { top: number }) {
   return (
     <div className={`${s.root} ward-barchart`}>
       <table className={s.table}>
@@ -95,7 +95,7 @@ export function BarChart({ title, categories, series, format = count, categoryHe
             <tr key={category}>
               <th scope="row" className={s.category}>{category}</th>
               {series.map((line, index) => (
-                <Cell key={line.name} value={line.values[row]} top={top} step={stepOf(index, series.length)} format={format} />
+                <Cell key={line.name} value={line.values[row]} top={top} step={stepOf(index, series.length)} format={format} missing={missing} />
               ))}
             </tr>
           ))}
@@ -103,4 +103,10 @@ export function BarChart({ title, categories, series, format = count, categoryHe
       </table>
     </div>
   );
+}
+
+export function BarChart(props: BarChartProps) {
+  validate(props.categories, props.series);
+  const top = largest(props.series);
+  return top === 0 ? <EmptyChart title={props.title} empty={props.empty} /> : <Chart {...props} top={top} />;
 }
