@@ -29,8 +29,7 @@ describe("distDrift", () => {
   });
 
   it("names a file only the build has and a file only dist/ has", () => {
-    const { "index.css": _css, ...withoutCss } = BUILD;
-    const dist = tree({ ...withoutCss, "stale/Old.d.ts": "export {};\n" });
+    const dist = tree({ "index.js": BUILD["index.js"], "primitives/Button.d.ts": BUILD["primitives/Button.d.ts"], "stale/Old.d.ts": "export {};\n" });
     expect(distDrift(tree(BUILD), dist)).toEqual(["index.css", "stale/Old.d.ts"]);
   });
 
