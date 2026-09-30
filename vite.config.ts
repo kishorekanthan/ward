@@ -8,7 +8,7 @@ const entry = join(dirname(fileURLToPath(import.meta.url)), "src", "index.ts");
 
 export default defineConfig({
   // Stories import from .storybook, which would lift the declaration root above src and bury index.d.ts.
-  plugins: [react(), dts({ include: ["src"], exclude: ["src/**/*.stories.tsx"] })],
+  plugins: [react(), dts({ include: ["src"], exclude: ["src/**/*.stories.tsx", "src/**/*.test.*", "src/test-setup.ts"] })],
   build: {
     lib: {
       entry,

@@ -24,6 +24,11 @@ function linkRuntime(modules) {
   }
 }
 
+function assertShipsNoInternals(files) {
+  const leaked = files.map((file) => file.path).filter((path) => /\.test\.|\.stories\.|test-setup|(^|\/)goldens\//.test(path));
+  assert(leaked.length === 0, `packed tarball ships internals: ${leaked.slice(0, 5).join(", ")}`);
+}
+
 function builtCss(appRoot) {
   const html = readFileSync(join(appRoot, "dist", "index.html"), "utf8");
   const asset = html.match(/assets\/(index-[^"]+\.css)/)?.[1];
@@ -35,6 +40,7 @@ try {
   const env = { ...process.env, NPM_CONFIG_CACHE: join(temporary, "npm-cache") };
   run("npm", ["run", "build"], root, env);
   const packed = JSON.parse(run("npm", ["pack", "--json", "--pack-destination", temporary], root, env));
+  assertShipsNoInternals(packed[0].files);
   const archive = join(temporary, packed[0].filename);
   mkdirSync(app);
   writeFileSync(join(app, "package.json"), JSON.stringify({ name: "ward-external-consumer", private: true, type: "module" }));
