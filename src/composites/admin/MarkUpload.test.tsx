@@ -36,6 +36,9 @@ const FURTHER_REFERENCES = [
   '<linearGradient id="g" xlink:href="https://attacker.example/g.svg#x"/>',
   '<rect fill="url(https://attacker.example/p.svg#g)"/>',
   '<rect style="fill:url(https://attacker.example/p.svg#g)"/>',
+  '<rect mask="u\\72l(https://attacker.example/m.svg#m)"/>',
+  '<rect fill="u\\72l(https://attacker.example/p.svg#g)"/>',
+  '<rect mask="image-set(\'https://attacker.example/m.png\' 1x)"/>',
   '<animate attributeName="fill" to="red"/>',
   '<set attributeName="fill" to="red"/>',
 ];
@@ -54,6 +57,11 @@ describe("validateMark sanitiser", () => {
     expect(validateMark(`${SVG_OPEN}${inner}</svg>`)).toEqual({ ok: false, reasons: ["links or external references"] });
   });
 
+  it("keeps a quoted fill that points at a gradient inside the mark", () => {
+    const quoted = '<svg viewBox="0 0 24 24"><defs><linearGradient id="g"><stop offset="0" stop-color="#00776B"/></linearGradient></defs><path fill="url(\'#g\')" d="M0 0h24v24H0z"/></svg>';
+    expect(validateMark(quoted)).toEqual({ ok: true, svg: quoted });
+  });
+
   it("keeps a fill that points at a gradient inside the mark", () => {
     const gradient = '<svg viewBox="0 0 24 24"><defs><linearGradient id="g"><stop offset="0" stop-color="#00776B"/></linearGradient></defs><path fill="url(#g)" d="M0 0h24v24H0z"/></svg>';
     expect(validateMark(gradient)).toEqual({ ok: true, svg: gradient });
@@ -67,6 +75,10 @@ describe("validateMark sanitiser", () => {
       }
     });
     expect(validateMark(ENTITY_HANDLER)).toEqual({ ok: false, reasons: ["script elements or event handlers"] });
+  });
+
+  it("treats an svg root outside the SVG namespace as invalid", () => {
+    expect(validateMark('<svg xmlns="urn:not-svg" viewBox="0 0 24 24"><path fill="#00776B" d="M0 0h24v24H0z"/></svg>')).toEqual({ ok: false, reasons: ["embedded rasters"] });
   });
 
   it("returns the allow-listed tree serialised, not the uploaded source", () => {

@@ -31,7 +31,9 @@ const ALLOWED_ATTRIBUTES = new Set([
   "maskUnits", "maskContentUnits", "gradientUnits", "gradientTransform", "spreadMethod",
   "offset", "stop-color", "stop-opacity",
 ]);
-const EXTERNAL_URL = /url\s*\(\s*['"]?\s*(?!#)/i;
+const FRAGMENT_URL = /url\(\s*(['"]?)#[^'"()\\\s]*\1\s*\)/gi;
+// Once in-mark url(#id) is removed, any url(, string (image-set, src) or CSS escape can name a remote resource.
+const REMOTE_REFERENCE = /url\s*\(|['"\\]/i;
 
 function invalidSvg(): MarkValidation {
   return { ok: false, reasons: [REJECT_REASONS[1]] };
@@ -63,9 +65,13 @@ function elementReason(element: Element): string | undefined {
   return ELEMENT_REASONS.get(element.localName) ?? (element.localName.startsWith("animate") ? LINKS : undefined);
 }
 
+function isRemoteReference(value: string): boolean {
+  return REMOTE_REFERENCE.test(value.replace(FRAGMENT_URL, ""));
+}
+
 function attributeReason(attribute: Attr): string | undefined {
   if (/^on/i.test(attribute.localName)) return SCRIPT;
-  return attribute.localName === "href" || EXTERNAL_URL.test(attribute.value) ? LINKS : undefined;
+  return attribute.localName === "href" || isRemoteReference(attribute.value) ? LINKS : undefined;
 }
 
 function contentReasons(svg: SVGSVGElement): string[] {
