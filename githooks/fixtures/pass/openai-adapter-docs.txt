@@ -1,0 +1,3 @@
+TRELLIS-148: OpenAI adapter docs
+
+Document the OpenAI adapter's model settings and the api.openai.com base URL.

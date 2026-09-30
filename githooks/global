@@ -1,0 +1,8 @@
+#!/bin/sh
+# Usage: global HOOK ARGS... — runs HOOK from the global core.hooksPath, unless that is this folder.
+hook="$1"
+shift
+folder=$(git config --global --type=path --get core.hooksPath)
+[ -n "$folder" ] && [ -x "$folder/$hook" ] || exit 0
+[ "$(cd "$folder" && pwd -P)" = "$(cd "$(dirname "$0")" && pwd -P)" ] && exit 0
+exec "$folder/$hook" "$@"

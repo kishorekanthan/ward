@@ -1,0 +1,3 @@
+TRELLIS-120: Gemini price row
+
+Add the Gemini and Claude prices to the cost table.
