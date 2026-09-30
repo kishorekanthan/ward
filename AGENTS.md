@@ -17,7 +17,8 @@ Ward (`@trellis/ward`) is a standalone React 19 UI library. It must never import
 - Work only inside this folder. Consumers (e.g. `products/trellis/web`) pin Ward by git tag.
 
 ## Commands
-- `make install` — `npm ci`
+- `make install` — `npm ci`, and `make hooks`: `core.hooksPath` → `githooks/`, whose `commit-msg` refuses AI attribution (patterns: `githooks/attribution-patterns.txt`, kept identical to trellis-api's and trellis-web's) and then runs the global hooks it shadows.
+- `make pr-check PR=N` — refuses a PR whose title, body or commits carry AI attribution, naming each.
 - `make check` — token/story/provenance checks, lint (complexity <= 5), tests, build, packed-consumer check. Must pass before commit.
 - `npm run storybook` — local component catalogue.
 
@@ -25,6 +26,6 @@ Ward (`@trellis/ward`) is a standalone React 19 UI library. It must never import
 - Never raise the complexity threshold or add `eslint-disable`.
 - Never run prettier on Ward files; edit `tokens.json` textually, then `npm run gen`.
 - `dist/` is committed: run `npm run build` and commit `dist/` with any `src/` change.
-- Release: bump `version` in package.json, `make check`, commit, `git tag vX.Y.Z`, push the tag.
+- Release: `make pr-check PR=N` before merging, bump `version` in package.json, `make check`, commit, `git tag vX.Y.Z`, push the tag.
 - Comments: one or two lines max. No tautological tests.
 - No Claude attribution in commits or PRs. Never `git add -A`; stage paths explicitly.

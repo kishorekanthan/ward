@@ -1,0 +1,9 @@
+# AI attribution RULES.md bans: one regex per line, matched per line, case-insensitive.
+# The same file is in trellis-api, trellis-web and Ward; keep them identical.
+# A trailer (Co-Authored-By:, Reviewed-by:, Signed-off-by: ...) naming an assistant or provider.
+^\s*[a-z-]*-by:.*\b(claude|codex|chatgpt|gpt|openai|copilot|gemini|anthropic)\b
+# "Generated with ..." naming an assistant or provider, however decorated.
+\bgenerated\s+(with|by|using|via)\b.*\b(claude|codex|chatgpt|gpt|openai|copilot|gemini|anthropic)\b
+# A provider's address: noreply@anthropic.com, codex@openai.com, Copilot's GitHub noreply.
+@(anthropic|openai)\.com\b
+\bcopilot@users\.noreply\.github\.com\b

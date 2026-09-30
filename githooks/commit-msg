@@ -1,0 +1,4 @@
+#!/bin/sh
+# Refuses AI attribution (#49), then runs the global hook this folder shadows.
+node "$(dirname "$0")/../scripts/attribution.mjs" msg "$1" || exit 1
+exec "$(dirname "$0")/global" commit-msg "$@"

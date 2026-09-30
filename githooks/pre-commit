@@ -1,0 +1,3 @@
+#!/bin/sh
+# This repo's core.hooksPath shadows the global hooks folder; keep its pre-commit running.
+exec "$(dirname "$0")/global" pre-commit "$@"
