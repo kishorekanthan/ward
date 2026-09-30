@@ -44,6 +44,12 @@ export declare const v: {
         readonly line3: "var(--ward-color-line3)";
         readonly ink2: "var(--ward-color-ink2)";
         readonly surface3: "var(--ward-color-surface3)";
+        readonly series1: "var(--ward-color-series1)";
+        readonly series2: "var(--ward-color-series2)";
+        readonly series3: "var(--ward-color-series3)";
+        readonly series4: "var(--ward-color-series4)";
+        readonly series5: "var(--ward-color-series5)";
+        readonly series6: "var(--ward-color-series6)";
     };
     readonly chip: {
         readonly gate: {

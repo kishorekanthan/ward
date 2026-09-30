@@ -73,6 +73,18 @@ const low = pairs.filter(([fg, bg]) => !fg.startsWith("rgba") && contrast(fg, bg
 if (low.length === 0) pass("token contrast", `${pairs.length} pairs >= ${NEED}:1, both themes, computed from tokens.json`);
 else fail("token contrast", low.map((p) => `${p[2]} ${p[0]} on ${p[1]} = ${contrast(p[0], p[1]).toFixed(2)}`).join("; "));
 
+// 2b. chart series are graphics, so they need the 3:1 non-text floor on both grounds in each theme
+const GRAPHIC = 3;
+const seriesPairs = [];
+for (const [theme, colors] of [["light", tokens.color], ["dark", tokens.dark]]) {
+  for (const key of Object.keys(colors).filter((k) => /^series\d$/.test(k))) {
+    for (const ground of ["surface", "surface2"]) seriesPairs.push([colors[key], colors[ground], `${theme} ${key}/${ground}`]);
+  }
+}
+const faintSeries = seriesPairs.filter(([fg, bg]) => contrast(fg, bg) < GRAPHIC);
+if (seriesPairs.length === 24 && faintSeries.length === 0) pass("series contrast", `${seriesPairs.length} pairs >= ${GRAPHIC}:1`);
+else fail("series contrast", `${seriesPairs.length} pairs; ` + faintSeries.map((p) => p[2]).join("; "));
+
 // 3. no hex outside the generated files; comments are stripped so naming a value in a reason does not trip it
 const files = walk(src, []);
 const modules = files.filter((f) => f.endsWith(".module.css"));

@@ -1,0 +1,88 @@
+/* Provenance: not established — no comp draws a chart; built from Ward's type, space and colour tokens (Ward #45). */
+.root {
+  display: grid;
+  gap: var(--ward-space-2);
+  overflow-x: auto;
+  min-width: 0;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.caption {
+  font: var(--ward-type-micro);
+  letter-spacing: var(--ward-type-micro-tracking);
+  text-transform: var(--ward-type-micro-transform);
+  color: var(--ward-color-muted);
+  text-align: start;
+  padding-block-end: var(--ward-space-2);
+}
+
+.series {
+  font: var(--ward-type-rowNote);
+  color: var(--ward-color-muted);
+  text-align: start;
+  padding: var(--ward-space-1) var(--ward-space-2);
+  white-space: nowrap;
+}
+
+.category {
+  font: var(--ward-type-useText);
+  color: var(--ward-color-text);
+  text-align: start;
+  padding: var(--ward-space-1) var(--ward-space-2) var(--ward-space-1) 0;
+  white-space: nowrap;
+}
+
+.cell {
+  padding: var(--ward-space-1) var(--ward-space-2);
+  width: 100%;
+}
+
+/* A fixed value column keeps every lane in a column the same length, so bars compare. */
+.track {
+  display: grid;
+  grid-template-columns: minmax(var(--ward-space-7), 1fr) 9ch;
+  align-items: center;
+  gap: var(--ward-space-2);
+}
+
+.lane {
+  display: block;
+}
+
+.bar {
+  display: block;
+  width: var(--share);
+  height: var(--ward-space-2);
+  background: var(--ward-color-text);
+}
+
+.value {
+  font: var(--ward-type-monoText);
+  font-variant-numeric: tabular-nums;
+  color: var(--ward-color-text);
+  white-space: nowrap;
+}
+
+.swatch {
+  display: inline-block;
+  width: var(--ward-space-2);
+  height: var(--ward-space-2);
+  margin-inline-end: var(--ward-space-1);
+  background: var(--ward-color-text);
+}
+
+.empty {
+  font: var(--ward-type-useText);
+  color: var(--ward-color-muted);
+}
+
+[data-step="1"] { background: var(--ward-color-series1); }
+[data-step="2"] { background: var(--ward-color-series2); }
+[data-step="3"] { background: var(--ward-color-series3); }
+[data-step="4"] { background: var(--ward-color-series4); }
+[data-step="5"] { background: var(--ward-color-series5); }
+[data-step="6"] { background: var(--ward-color-series6); }

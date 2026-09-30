@@ -114,6 +114,12 @@
   --ward-color-line3: #B9C6DB;
   --ward-color-ink2: #2B3648;
   --ward-color-surface3: #FCFCFD;
+  --ward-color-series1: #00776B;
+  --ward-color-series2: #7038C8;
+  --ward-color-series3: #BF5310;
+  --ward-color-series4: #1C6FB8;
+  --ward-color-series5: #8A6A00;
+  --ward-color-series6: #A02C6B;
   --ward-chip-gate-bg: #071D49;
   --ward-chip-gate-fg: #FFFFFF;
   --ward-chip-gate-line: #071D49;
@@ -557,6 +563,12 @@
   --ward-color-line3: #4E5868;
   --ward-color-ink2: #C3CBD8;
   --ward-color-surface3: #1A2030;
+  --ward-color-series1: #45C4B4;
+  --ward-color-series2: #C0A2F0;
+  --ward-color-series3: #F0A46B;
+  --ward-color-series4: #7FB2FF;
+  --ward-color-series5: #E0B84D;
+  --ward-color-series6: #F08CC0;
   --ward-chip-gate-bg: #101C33;
   --ward-chip-gate-fg: #9CC2FF;
   --ward-chip-gate-line: #101C33;
@@ -644,6 +656,12 @@
   --ward-color-line3: #B9C6DB;
   --ward-color-ink2: #2B3648;
   --ward-color-surface3: #FCFCFD;
+  --ward-color-series1: #00776B;
+  --ward-color-series2: #7038C8;
+  --ward-color-series3: #BF5310;
+  --ward-color-series4: #1C6FB8;
+  --ward-color-series5: #8A6A00;
+  --ward-color-series6: #A02C6B;
   --ward-chip-gate-bg: #071D49;
   --ward-chip-gate-fg: #FFFFFF;
   --ward-chip-gate-line: #071D49;

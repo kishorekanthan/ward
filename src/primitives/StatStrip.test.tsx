@@ -25,6 +25,21 @@ describe("StatStrip", () => {
   });
 });
 
+describe("StatStrip links", () => {
+  it("renders a cell with href as a link named by label and value", () => {
+    render(<StatStrip cells={[{ ...cells[0], href: "#/board?stream=pay" }, cells[1]]} />);
+    const link = screen.getByRole("link", { name: "In flight: 14" });
+    expect(link.getAttribute("href")).toBe("#/board?stream=pay");
+    expect(link.textContent).toBe("14");
+  });
+
+  it("leaves a cell without href as plain text", () => {
+    render(<StatStrip cells={cells} />);
+    expect(screen.queryByRole("link")).toBeNull();
+    expect(screen.getByText("14").tagName).toBe("DD");
+  });
+});
+
 describe("StatStrip divided", () => {
   it("marks itself divided only when asked", () => {
     const plain = render(<StatStrip cells={cells} />).container.querySelector("dl");
