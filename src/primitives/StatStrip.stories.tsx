@@ -70,3 +70,12 @@ export const DividedFour = {
     ],
   },
 };
+
+export const Linked = {
+  args: {
+    cells: [
+      { value: "14", label: "In flight", href: "#/board" },
+      { value: "3", label: "Failed runs, last 24 hours", href: "#/runs" },
+    ],
+  },
+};

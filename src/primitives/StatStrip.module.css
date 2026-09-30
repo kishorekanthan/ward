@@ -24,6 +24,18 @@
   color: var(--ward-color-amber);
 }
 
+.link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--ward-color-line2);
+  text-decoration-thickness: var(--ward-border);
+  text-underline-offset: var(--ward-space-1);
+}
+
+.link:hover {
+  text-decoration-color: currentColor;
+}
+
 .label {
   font: var(--ward-type-micro);
   letter-spacing: var(--ward-type-micro-tracking);

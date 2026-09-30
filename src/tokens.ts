@@ -47,6 +47,12 @@ export const v = {
     line3: 'var(--ward-color-line3)',
     ink2: 'var(--ward-color-ink2)',
     surface3: 'var(--ward-color-surface3)',
+    series1: 'var(--ward-color-series1)',
+    series2: 'var(--ward-color-series2)',
+    series3: 'var(--ward-color-series3)',
+    series4: 'var(--ward-color-series4)',
+    series5: 'var(--ward-color-series5)',
+    series6: 'var(--ward-color-series6)',
   },
   chip: {
     gate: {

@@ -68,6 +68,8 @@ export { ConnectionMark } from "./primitives/ConnectionMark";
 export type { ConnectionMarkProps } from "./primitives/ConnectionMark";
 export { Callout } from "./primitives/Callout";
 export type { CalloutProps } from "./primitives/Callout";
+export { BarChart } from "./primitives/BarChart";
+export type { BarChartProps, BarSeries } from "./primitives/BarChart";
 export { CostMeter } from "./primitives/CostMeter";
 export type { CostMeterProps } from "./primitives/CostMeter";
 export { Grid } from "./primitives/Grid";
