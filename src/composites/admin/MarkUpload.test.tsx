@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { MarkUpload, validateMark, type ValidationResult } from "./MarkUpload";
 
 const CLEAN = '<svg viewBox="0 0 24 24"><path fill="#00776B" d="M0 0h24v24H0z"/></svg>';
@@ -20,6 +20,58 @@ describe("validateMark", () => {
       ok: false,
       reasons: ["multiple fills", "embedded rasters", "text elements", "script elements or event handlers", "a stroke under 1.5px at 22px"],
     });
+  });
+});
+
+const SVG_OPEN = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24">';
+const BYPASSES = [
+  '<a xlink:href="javascript:alert(document.domain)"><rect/></a>',
+  '<a href="javascript:alert(1)"><rect/></a>',
+  '<style>@import url("https://attacker.example/x.css")</style>',
+  '<use href="https://attacker.example/x.svg#p"/>',
+  '<feImage href="https://attacker.example/t.png"/>',
+];
+const FURTHER_REFERENCES = [
+  '<linearGradient id="g" href="https://attacker.example/g.svg#x"/>',
+  '<linearGradient id="g" xlink:href="https://attacker.example/g.svg#x"/>',
+  '<rect fill="url(https://attacker.example/p.svg#g)"/>',
+  '<rect style="fill:url(https://attacker.example/p.svg#g)"/>',
+  '<animate attributeName="fill" to="red"/>',
+  '<set attributeName="fill" to="red"/>',
+];
+// Entity-expanding parsers (Gecko's expat) build <rect onclick> from this; the source never spells "onclick=".
+const ENTITY_HANDLER = '<!DOCTYPE svg [<!ENTITY r "<rect o&#110;click=\'alert(1)\'/>">]><svg viewBox="0 0 24 24">&r;</svg>';
+const EXPANDED_HANDLER = '<svg viewBox="0 0 24 24"><rect onclick="alert(1)"/></svg>';
+
+describe("validateMark sanitiser", () => {
+  afterEach(() => vi.unstubAllGlobals());
+
+  it.each(BYPASSES)("rejects %s as a link or external reference", (inner) => {
+    expect(validateMark(`${SVG_OPEN}${inner}</svg>`)).toEqual({ ok: false, reasons: ["links or external references"] });
+  });
+
+  it.each(FURTHER_REFERENCES)("rejects %s as a link or external reference", (inner) => {
+    expect(validateMark(`${SVG_OPEN}${inner}</svg>`)).toEqual({ ok: false, reasons: ["links or external references"] });
+  });
+
+  it("keeps a fill that points at a gradient inside the mark", () => {
+    const gradient = '<svg viewBox="0 0 24 24"><defs><linearGradient id="g"><stop offset="0" stop-color="#00776B"/></linearGradient></defs><path fill="url(#g)" d="M0 0h24v24H0z"/></svg>';
+    expect(validateMark(gradient)).toEqual({ ok: true, svg: gradient });
+  });
+
+  it("judges handlers on the parsed tree, not the source text", () => {
+    const RealParser = DOMParser;
+    vi.stubGlobal("DOMParser", class {
+      parseFromString(source: string, type: DOMParserSupportedType) {
+        return new RealParser().parseFromString(source === ENTITY_HANDLER ? EXPANDED_HANDLER : source, type);
+      }
+    });
+    expect(validateMark(ENTITY_HANDLER)).toEqual({ ok: false, reasons: ["script elements or event handlers"] });
+  });
+
+  it("returns the allow-listed tree serialised, not the uploaded source", () => {
+    const stray = '<svg viewBox="0 0 24 24"><!-- editor --><metadata>x</metadata><path fill="#00776B" data-x="1" d="M0 0h24v24H0z"/></svg>';
+    expect(validateMark(stray)).toEqual({ ok: true, svg: '<svg viewBox="0 0 24 24"><path fill="#00776B" d="M0 0h24v24H0z"/></svg>' });
   });
 });
 

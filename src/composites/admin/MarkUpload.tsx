@@ -3,19 +3,48 @@ import { Btn } from "../../primitives/Btn";
 import s from "./MarkUpload.module.css";
 
 export type ValidationResult = { ok: boolean; reasons: string[] };
+// ok: the mark meets the style rules; svg is the allow-listed tree serialised, never the raw source.
 export type MarkValidation = { ok: true; svg: string } | { ok: false; reasons: string[] };
 
 const STROKE_LIMIT = 1.5;
 const MARK_BOX = 22;
+const SCRIPT = "script elements or event handlers";
+const LINKS = "links or external references";
 const REJECT_REASONS = ["multiple fills", "embedded rasters", "text elements", `a stroke under ${STROKE_LIMIT}px at ${MARK_BOX}px`] as const;
+const CONTENT_REASONS = [REJECT_REASONS[1], REJECT_REASONS[2], SCRIPT, LINKS];
+const ELEMENT_REASONS = new Map<string, string>([
+  ["image", REJECT_REASONS[1]],
+  ["text", REJECT_REASONS[2]], ["tspan", REJECT_REASONS[2]], ["textPath", REJECT_REASONS[2]],
+  ["script", SCRIPT], ["foreignObject", SCRIPT],
+  ["a", LINKS], ["use", LINKS], ["style", LINKS], ["feImage", LINKS], ["set", LINKS],
+]);
+const SVG_NS = "http://www.w3.org/2000/svg";
+const XMLNS_NS = "http://www.w3.org/2000/xmlns/";
+const ALLOWED_ELEMENTS = new Set([
+  "svg", "path", "rect", "circle", "ellipse", "line", "polyline", "polygon", "g", "defs",
+  "clipPath", "mask", "linearGradient", "radialGradient", "stop", "title", "desc",
+]);
+const ALLOWED_ATTRIBUTES = new Set([
+  "viewBox", "width", "height", "preserveAspectRatio", "version", "id", "class", "transform",
+  "d", "x", "y", "cx", "cy", "r", "rx", "ry", "x1", "y1", "x2", "y2", "fx", "fy", "fr", "points", "pathLength",
+  "fill", "fill-rule", "fill-opacity", "opacity", "clip-path", "clip-rule", "clipPathUnits", "mask",
+  "maskUnits", "maskContentUnits", "gradientUnits", "gradientTransform", "spreadMethod",
+  "offset", "stop-color", "stop-opacity",
+]);
+const EXTERNAL_URL = /url\s*\(\s*['"]?\s*(?!#)/i;
 
 function invalidSvg(): MarkValidation {
   return { ok: false, reasons: [REJECT_REASONS[1]] };
 }
 
+function isSvgNamespace(node: Element): boolean {
+  return node.namespaceURI === SVG_NS || node.namespaceURI === null;
+}
+
 function svgOf(source: string): SVGSVGElement | null {
   try {
-    return new DOMParser().parseFromString(source, "image/svg+xml").querySelector("svg");
+    const root = new DOMParser().parseFromString(source, "image/svg+xml").documentElement;
+    return root.localName === "svg" && isSvgNamespace(root) ? (root as unknown as SVGSVGElement) : null;
   } catch {
     return null;
   }
@@ -30,12 +59,22 @@ function fillReasons(svg: SVGSVGElement): string[] {
   return fills.size > 1 ? [REJECT_REASONS[0]] : [];
 }
 
-function contentReasons(svg: SVGSVGElement, source: string): string[] {
-  const reasons: string[] = [];
-  if (svg.querySelector("image") !== null) reasons.push(REJECT_REASONS[1]);
-  if (svg.querySelector("text") !== null) reasons.push(REJECT_REASONS[2]);
-  if (svg.querySelector("script, foreignObject") !== null || /on[a-z]+\s*=/i.test(source)) reasons.push("script elements or event handlers");
-  return reasons;
+function elementReason(element: Element): string | undefined {
+  return ELEMENT_REASONS.get(element.localName) ?? (element.localName.startsWith("animate") ? LINKS : undefined);
+}
+
+function attributeReason(attribute: Attr): string | undefined {
+  if (/^on/i.test(attribute.localName)) return SCRIPT;
+  return attribute.localName === "href" || EXTERNAL_URL.test(attribute.value) ? LINKS : undefined;
+}
+
+function contentReasons(svg: SVGSVGElement): string[] {
+  const found = new Set<string | undefined>();
+  for (const element of [svg, ...Array.from(svg.querySelectorAll("*"))]) {
+    found.add(elementReason(element));
+    for (const attribute of Array.from(element.attributes)) found.add(attributeReason(attribute));
+  }
+  return CONTENT_REASONS.filter((reason) => found.has(reason));
 }
 
 function strokeReasons(svg: SVGSVGElement): string[] {
@@ -48,11 +87,35 @@ function strokeReasons(svg: SVGSVGElement): string[] {
   }) ? [REJECT_REASONS[3]] : [];
 }
 
+function isAllowedAttribute(attribute: Attr): boolean {
+  if (attribute.namespaceURI === XMLNS_NS) return true;
+  const name = attribute.localName;
+  return attribute.namespaceURI === null && (ALLOWED_ATTRIBUTES.has(name) || name.startsWith("stroke"));
+}
+
+function isKeptChild(child: Node): boolean {
+  if (child.nodeType === Node.TEXT_NODE) return true;
+  const element = child as Element;
+  return child.nodeType === Node.ELEMENT_NODE && isSvgNamespace(element) && ALLOWED_ELEMENTS.has(element.localName);
+}
+
+function sanitiseChild(parent: Element, child: Node): void {
+  if (!isKeptChild(child)) parent.removeChild(child);
+  else if (child.nodeType === Node.ELEMENT_NODE) sanitise(child as Element);
+}
+
+function sanitise(element: Element): Element {
+  for (const attribute of Array.from(element.attributes)) if (!isAllowedAttribute(attribute)) element.removeAttributeNode(attribute);
+  for (const child of Array.from(element.childNodes)) sanitiseChild(element, child);
+  return element;
+}
+
 export function validateMark(source: string): MarkValidation {
   const svg = svgOf(source);
   if (svg === null) return invalidSvg();
-  const reasons = [...fillReasons(svg), ...contentReasons(svg, source), ...strokeReasons(svg)];
-  return reasons.length === 0 ? { ok: true, svg: source } : { ok: false, reasons };
+  const reasons = [...fillReasons(svg), ...contentReasons(svg), ...strokeReasons(svg)];
+  if (reasons.length > 0) return { ok: false, reasons };
+  return { ok: true, svg: new XMLSerializer().serializeToString(sanitise(svg)) };
 }
 
 type StatusPresentation = {
