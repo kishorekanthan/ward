@@ -1,4 +1,6 @@
 // @vitest-environment node
+import { mkdtempSync, rmdirSync, unlinkSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
@@ -51,12 +53,17 @@ describe("findingsFor", () => {
       "check.yml: org/repo/.github/workflows/x.yml@11d5960 is not pinned to a 40-hex commit sha",
       "check.yml: actions/checkout@v4 is not pinned to a 40-hex commit sha",
     ]);
+    expect(findingsFor("check.yml", hardened.replace(`@${SHA}`, `@${SHA}-rc`))).toHaveLength(1);
   });
 
   it("names a push trigger on every branch or on branches besides main", () => {
     const expected = ["check.yml: push must be restricted to main"];
     expect(findingsFor("check.yml", hardened.replace("  push:\n    branches: [main]\n", "  push:\n"))).toEqual(expected);
     expect(findingsFor("check.yml", hardened.replace("[main]", "[main, dev]"))).toEqual(expected);
+    expect(findingsFor("check.yml", hardened.replace("[main]", "[dev]"))).toEqual(expected);
+    expect(findingsFor("check.yml", hardened.replace("[main]\n", "[main]\n    tags: [v*]\n"))).toEqual(expected);
+    expect(findingsFor("check.yml", hardened.replace("branches: [main]", "branches-ignore: [dev]"))).toEqual(expected);
+    expect(findingsFor("check.yml", hardened.replace("[main]\n", "[main]\n    paths: [src/**]\n"))).toEqual([]);
     expect(findingsFor("check.yml", hardened.replace("on:\n  push:\n    branches: [main]\n  pull_request:\n", "on: [push, pull_request]\n"))).toEqual(expected);
   });
 });
@@ -64,5 +71,17 @@ describe("findingsFor", () => {
 describe("workflowFindings", () => {
   it("finds nothing in this repo's workflows", () => {
     expect(workflowFindings(join(ROOT, ".github", "workflows"))).toEqual([]);
+  });
+
+  it("reads .yaml files as well as .yml", () => {
+    const dir = mkdtempSync(join(tmpdir(), "ward-workflows-"));
+    const file = join(dir, "release.yaml");
+    writeFileSync(file, hardened.replace(`@${SHA}`, "@v4"));
+    try {
+      expect(workflowFindings(dir)).toEqual(["release.yaml: actions/checkout@v4 is not pinned to a 40-hex commit sha"]);
+    } finally {
+      unlinkSync(file);
+      rmdirSync(dir);
+    }
   });
 });

@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { parse } from "yaml";
 
 const PINNED = /@[0-9a-f]{40}$/;
+const PUSH_FILTERS = new Set(["branches", "paths", "paths-ignore"]);
 
 function isReadOnly(permissions) {
   const keys = Object.keys(permissions ?? {});
@@ -19,10 +20,16 @@ function triggers(on) {
   return on ?? {};
 }
 
-function pushBranches(workflow) {
+function pushFilters(workflow) {
   const on = triggers(workflow.on);
-  if (!Object.hasOwn(on, "push")) return undefined;
-  return on.push?.branches ?? [];
+  return Object.hasOwn(on, "push") ? (on.push ?? {}) : undefined;
+}
+
+// Tags and ignore-lists add refs beyond main, so only path filters may sit beside `branches: [main]`.
+function isMainOnly(push) {
+  const branches = push.branches ?? [];
+  const onlyPathFilters = Object.keys(push).every((k) => PUSH_FILTERS.has(k));
+  return onlyPathFilters && branches.length === 1 && branches[0] === "main";
 }
 
 function permissionFindings(workflow) {
@@ -36,9 +43,8 @@ function pinFindings(workflow) {
 }
 
 function pushFindings(workflow) {
-  const branches = pushBranches(workflow);
-  const mainOnly = branches === undefined || (branches.length === 1 && branches[0] === "main");
-  return mainOnly ? [] : ["push must be restricted to main"];
+  const push = pushFilters(workflow);
+  return push === undefined || isMainOnly(push) ? [] : ["push must be restricted to main"];
 }
 
 // Findings for one workflow file: token scope, moving action refs, and push triggers beyond main.
