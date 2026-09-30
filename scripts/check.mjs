@@ -3,6 +3,7 @@ import { readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { contrast, describeFailures, sweepRenderedContrast } from "./contrast.mjs";
+import { buildFresh, distDrift } from "./dist-fresh.mjs";
 import { FAMILY_OF, breakpoints, buildCss, buildTokens, containerBreakpoints, declaredFaces, readTokens } from "./gen-css.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -41,6 +42,15 @@ const cssFresh = readFileSync(join(src, "ward.css"), "utf8") === buildCss(tokens
 const tsFresh = readFileSync(join(src, "tokens.ts"), "utf8") === buildTokens(tokens);
 if (cssFresh && tsFresh) pass("generated output fresh", "ward.css + tokens.ts byte-identical to generator");
 else fail("generated output fresh", "run npm run gen");
+
+// 1b. committed dist/ is byte-identical to a fresh build, so a hand-edited or stale dist/ cannot ship
+try {
+  const drift = distDrift(buildFresh(root), join(root, "dist"));
+  if (drift.length === 0) pass("dist fresh", "dist/ byte-identical to a fresh vite build");
+  else fail("dist fresh", `run npm run build and commit dist/; differs: ${drift.slice(0, 10).join(", ")}${drift.length > 10 ? ` (+${drift.length - 10})` : ""}`);
+} catch (e) {
+  fail("dist fresh", "fresh build failed: " + ((e.stderr?.toString() ?? "") + (e.stdout?.toString() ?? "") || e.message).slice(-1500));
+}
 
 // 2. contrast, computed from tokens.json so a broken token fails here
 const NEED = 4.5;

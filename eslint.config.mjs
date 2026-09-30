@@ -6,7 +6,7 @@ export default tseslint.config(
   },
   ...tseslint.configs.recommended,
   {
-    files: ["src/**/*.{ts,tsx}", "*.{ts,mjs}", "scripts/attribution.mjs"],
+    files: ["src/**/*.{ts,tsx}", "*.{ts,mjs}", "scripts/attribution.mjs", "scripts/dist-fresh.mjs"],
     rules: {
       "complexity": ["error", 5],
     },
