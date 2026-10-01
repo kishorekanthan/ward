@@ -176,4 +176,17 @@ describe("ActivityConsole", () => {
     expect(onAnnounceChange.mock.calls).toEqual([[false]]);
     expect(announceState()).toEqual([["polite", "true"], ["polite", "true"]]);
   });
+
+  it("keeps the consumer's 'off' after a toggle the consumer did not apply", () => {
+    const onAnnounceChange = vi.fn();
+    render(
+      <ConsoleAnnounceProvider announce={false} onAnnounceChange={onAnnounceChange}>
+        <ActivityConsole lines={LINES} connection="live" label="Run" />
+        <ActivityConsole lines={LINES} connection="live" label="Test" />
+      </ConsoleAnnounceProvider>,
+    );
+    fireEvent.click(screen.getAllByRole("button", { name: "Read new events" })[0]);
+    expect(onAnnounceChange.mock.calls).toEqual([[true]]);
+    expect(announceState()).toEqual([["off", "false"], ["off", "false"]]);
+  });
 });
