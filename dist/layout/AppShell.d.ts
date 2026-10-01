@@ -21,8 +21,10 @@ export type TopBarShellProps = {
     brand?: string;
     tagline?: string;
     metadata?: ReactNode;
-    /** Controls at the bar's trailing edge, kept visible when the identity chips collapse. */
+    /** Controls at the bar's trailing edge; below 768px they sit behind one toggle. */
     tools?: ReactNode;
+    /** The toggle's visible label below 768px. */
+    toolsLabel?: string;
 };
 export type AppShellProps = StudioShellProps | TopBarShellProps;
 export declare function AppShell(props: AppShellProps): import("react").JSX.Element;

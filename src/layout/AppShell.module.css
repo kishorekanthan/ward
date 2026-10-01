@@ -203,6 +203,22 @@
   padding-bottom: 0;
 }
 
+/* Below 768px the tools open as a row under the bar, in flow, so the bar's own scroll never clips them. */
+.toolsPanel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ward-space-2);
+  padding: var(--ward-pad-bar);
+  border-bottom: var(--ward-border) solid var(--ward-color-line);
+  background: var(--ward-color-surface);
+  color: var(--ward-color-text);
+}
+
+.toolsPanel[hidden] {
+  display: none;
+}
+
 .identity + .tools {
   margin-left: 0;
 }
@@ -234,8 +250,9 @@
     overflow-x: auto;
   }
 
+  /* The nav shrinks and scrolls on its own, so the tools toggle stays in view. */
   .nav {
-    flex: 1 0 auto;
+    flex: 1 1 auto;
     margin-left: 0;
   }
 
