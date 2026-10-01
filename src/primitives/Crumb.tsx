@@ -1,5 +1,6 @@
 import s from "./Crumb.module.css";
 import { Chip, type ChipProps } from "./Chip";
+import { safeHref } from "./safeHref";
 
 export type CrumbPath = { label: string; href?: string };
 
@@ -19,7 +20,7 @@ export function Crumb({ path, chips }: CrumbProps) {
               ) : null}
               {i < path.length - 1 ? (
                 c.href ? (
-                  <a className={s.link} href={c.href}>
+                  <a className={s.link} href={safeHref(c.href)}>
                     {c.label}
                   </a>
                 ) : (

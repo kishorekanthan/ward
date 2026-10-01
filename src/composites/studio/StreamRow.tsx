@@ -5,6 +5,7 @@ import type { CSSProperties, ReactElement } from "react";
 import type { StreamStep } from "../../tokens";
 import { streamChipProps, streamColour } from "../../primitives/streamColour";
 import s from "./StreamRow.module.css";
+import { safeHref } from "../../primitives/safeHref";
 
 export type Stream = {
   name: string;
@@ -65,7 +66,7 @@ function identityCell(stream: StreamRowSummary, href: string): ReactElement {
     <span className={s.stack}>
       <span className={s.identityLine}>
         <span className={`${s.identity} ward-identity`} data-draft={draft} aria-hidden="true" />
-        <a className={`${s.compactName} ward-rowlink`} href={href} data-draft={draft}>{stream.name}</a>
+        <a className={`${s.compactName} ward-rowlink`} href={safeHref(href)} data-draft={draft}>{stream.name}</a>
         <Chip role="meta" size="tag" label={draft ? `${stream.key} · DRAFT` : stream.key} />
       </span>
       <span className={s.ownerLine}>{ownerLine(stream)}</span>
@@ -87,7 +88,7 @@ function stageChain(stages: StreamRowSummary["stages"]): ReactElement {
 
 function stagesCell(stages: StreamRowSummary["stages"], href: string): ReactElement {
   return <td className={s.compactCell}>
-    {stages.length === 0 ? <span className={s.emptyChain}><span className={s.muted}>No stages yet</span><a className={s.define} href={href}>Define workflow</a></span> : stageChain(stages)}
+    {stages.length === 0 ? <span className={s.emptyChain}><span className={s.muted}>No stages yet</span><a className={s.define} href={safeHref(href)}>Define workflow</a></span> : stageChain(stages)}
   </td>;
 }
 
@@ -136,7 +137,7 @@ export function StreamRow(props: StreamRowProps) {
   return (
     <tr className={s.row}>
       <td className={s.cell}>
-        <a className={s.name} href={href}>
+        <a className={s.name} href={safeHref(href)}>
           {stream.name}
         </a>
         <Chip {...streamChipProps(stream.key, stream.streamStep)} />
