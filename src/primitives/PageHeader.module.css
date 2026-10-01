@@ -105,6 +105,16 @@
 }
 
 @media (max-width: 767.98px) {
+  .context {
+    flex-wrap: wrap;
+  }
+
+  /* Own line under the crumb, each chip whole: a phone cannot afford a chip cut to one letter. */
+  .chips {
+    flex: 1 0 100%;
+    flex-wrap: wrap;
+  }
+
   .row {
     flex-direction: column;
     align-items: flex-start;

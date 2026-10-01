@@ -107,3 +107,18 @@ export const WithMore = {
     ],
   },
 };
+
+// Below 768px the chips take their own line under the breadcrumb, whole, and wrap among themselves.
+export const PhoneWidth = {
+  args: {
+    crumb,
+    title: "intake-advisor v3",
+    chips: [
+      { role: "stream", label: "data-eng", streamStep: 1 },
+      { role: "running", label: "DRAFT" },
+      { role: "gate", label: "AWAITING REVIEW" },
+    ],
+    actions,
+  },
+  parameters: { viewport: { defaultViewport: "mobile1" } },
+};

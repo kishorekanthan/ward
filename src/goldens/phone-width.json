@@ -1,0 +1,25 @@
+{
+  "viewport": { "width": 375, "height": 812 },
+  "tabs": {
+    "story": "primitives-tabs--phone-width",
+    "stripScrolls": true,
+    "activeTabInView": true,
+    "lastTabReachedByScroll": true,
+    "fadeAtStartAfterReveal": true,
+    "pageScrollsSideways": false
+  },
+  "pageHeader": {
+    "story": "primitives-pageheader--phone-width",
+    "chipsBelowCrumb": true,
+    "titleBelowChips": true,
+    "everyChipWhole": true,
+    "pageScrollsSideways": false
+  },
+  "statStrip": {
+    "story": "primitives-statstrip--phone-width",
+    "label": "Items waiting at a review gate",
+    "labelLines": 2,
+    "labelClipped": false,
+    "pageScrollsSideways": false
+  }
+}

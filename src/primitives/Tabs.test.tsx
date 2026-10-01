@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { Tabs } from "./Tabs";
 
 const tabsCss = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "Tabs.module.css"), "utf8");
@@ -12,6 +12,29 @@ function ruleBlock(selector: string): string {
 }
 
 const seven = Array.from({ length: 7 }, (_, i) => ({ id: `t${i}`, label: `Tab ${i}` }));
+
+// A 300px strip holding seven 90px tabs on a 100px pitch: 700px of content.
+const STRIP = { client: 300, scroll: 700 };
+
+function rectAt(left: number, width: number): DOMRect {
+  return { left, right: left + width, width, top: 0, bottom: 40, height: 40, x: left, y: 0, toJSON: () => ({}) } as DOMRect;
+}
+
+function mockStripLayout(): void {
+  vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockImplementation(function (this: HTMLElement) {
+    return this.getAttribute("role") === "tablist" ? STRIP.client : 0;
+  });
+  vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockImplementation(function (this: HTMLElement) {
+    return this.getAttribute("role") === "tablist" ? STRIP.scroll : 0;
+  });
+  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
+    if (this.getAttribute("role") !== "tab") return rectAt(0, STRIP.client);
+    const strip = this.parentElement as HTMLElement;
+    return rectAt(Number(this.id.replace("tab-t", "")) * 100 - strip.scrollLeft, 90);
+  });
+}
+
+afterEach(() => vi.restoreAllMocks());
 
 describe("Tabs", () => {
   it("refuses a set above the cap rather than wrapping or scrolling", () => {
@@ -54,5 +77,61 @@ describe("Tabs", () => {
   it("sets the selected tab in bold, and only the selected tab", () => {
     expect(ruleBlock('.tab[aria-selected="true"]')).toMatch(/font-weight:\s*600;/);
     expect(ruleBlock(".tab")).not.toMatch(/font-weight/);
+  });
+
+  it("scrolls the strip, not the page, so a selected tab past the right edge is in view on mount", () => {
+    mockStripLayout();
+    render(<Tabs label="Admin" tabs={seven} active="t6" onChange={() => {}} />);
+    // Tab 6 spans 600-690 in a 300px window: its right edge needs 690 - 300 = 390.
+    expect(screen.getByRole("tablist").scrollLeft).toBe(390);
+  });
+
+  it("brings back a selected tab that sits left of the scrolled window", () => {
+    mockStripLayout();
+    const { rerender } = render(<Tabs label="Admin" tabs={seven} active="t6" onChange={() => {}} />);
+    rerender(<Tabs label="Admin" tabs={seven} active="t1" onChange={() => {}} />);
+    expect(screen.getByRole("tablist").scrollLeft).toBe(100);
+  });
+
+  it("leaves the strip where it is when the selected tab is already in view", () => {
+    mockStripLayout();
+    render(<Tabs label="Admin" tabs={seven} active="t1" onChange={() => {}} />);
+    expect(screen.getByRole("tablist").scrollLeft).toBe(0);
+  });
+
+  it("fades only the edges that hide tabs, following the scroll", () => {
+    mockStripLayout();
+    render(<Tabs label="Admin" tabs={seven} active="t0" onChange={() => {}} />);
+    const strip = screen.getByRole("tablist");
+    const fades = () => [strip.hasAttribute("data-fade-start"), strip.hasAttribute("data-fade-end")];
+    expect(fades()).toEqual([false, true]);
+    strip.scrollLeft = 200;
+    fireEvent.scroll(strip);
+    expect(fades()).toEqual([true, true]);
+    strip.scrollLeft = 400;
+    fireEvent.scroll(strip);
+    expect(fades()).toEqual([true, false]);
+  });
+
+  it("reaches the last of seven tabs by keyboard, from the first and from its neighbour", () => {
+    render(<Tabs label="Admin" tabs={seven} active="t0" onChange={() => {}} />);
+    const tabs = screen.getAllByRole("tab");
+    const strip = screen.getByRole("tablist");
+    fireEvent.keyDown(strip, { key: "End" });
+    expect(document.activeElement).toBe(tabs[6]);
+    expect(tabs[6].getAttribute("tabindex")).toBe("0");
+    fireEvent.keyDown(strip, { key: "Home" });
+    for (let step = 0; step < 6; step++) fireEvent.keyDown(strip, { key: "ArrowRight" });
+    expect(document.activeElement).toBe(tabs[6]);
+  });
+
+  it("makes the selected last tab the strip's one tab stop", () => {
+    render(<Tabs label="Admin" tabs={seven} active="t6" onChange={() => {}} />);
+    expect(screen.getAllByRole("tab").map((t) => t.getAttribute("tabindex"))).toEqual(["-1", "-1", "-1", "-1", "-1", "-1", "0"]);
+  });
+
+  it("scrolls an overflowing strip instead of wrapping its tabs", () => {
+    expect(ruleBlock(".strip")).toMatch(/overflow-x:\s*auto;/);
+    expect(ruleBlock(".strip")).toMatch(/flex-wrap:\s*nowrap;/);
   });
 });

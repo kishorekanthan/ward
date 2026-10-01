@@ -4,6 +4,7 @@ import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { contrast, describeFailures, sweepRenderedContrast } from "./contrast.mjs";
 import { buildFresh, distDrift } from "./dist-fresh.mjs";
+import { sweepPhoneWidth } from "./phone-width.mjs";
 import { workflowFindings } from "./workflows.mjs";
 import { FAMILY_OF, breakpoints, buildCss, buildTokens, containerBreakpoints, declaredFaces, readTokens } from "./gen-css.mjs";
 
@@ -209,6 +210,11 @@ if (rendered.broken.length) fail("stories render", rendered.broken.join(" | "));
 else pass("stories render", `${rendered.stories} stories, no empty root and no console errors`);
 if (rendered.failures.length === 0) pass("rendered contrast", detail);
 else fail("rendered contrast", describeFailures(rendered.failures));
+
+// 7. phone width: Tabs, PageHeader chips and StatStrip labels at 375px against src/goldens/phone-width.json
+const phoneDiffs = await sweepPhoneWidth();
+if (phoneDiffs.length === 0) pass("phone width", "Tabs, PageHeader chips and StatStrip labels match the 375px golden");
+else fail("phone width", phoneDiffs.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);
 process.exitCode = failures === 0 ? 0 : 1;

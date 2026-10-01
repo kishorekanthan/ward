@@ -79,3 +79,16 @@ export const Linked = {
     ],
   },
 };
+
+// A 30-character label at phone width wraps to two lines rather than clipping.
+export const PhoneWidth = {
+  args: {
+    cells: [
+      { value: "14", label: "In flight" },
+      { value: "3", label: "Items waiting at a review gate" },
+      { value: "4", label: "Agents working" },
+      { value: "2d 4h", label: "p90 in stage" },
+    ],
+  },
+  parameters: { viewport: { defaultViewport: "mobile1" } },
+};
