@@ -8,6 +8,7 @@ const original = window.matchMedia;
 afterEach(() => {
   window.matchMedia = original;
   vi.restoreAllMocks();
+  vi.unstubAllGlobals();
 });
 
 // Five 240px lanes in a 1000px board scroll 200px sideways; in a 1200px board they fit.
@@ -113,6 +114,23 @@ describe("BoardScroller overflow", () => {
     region.scrollLeft = 200;
     fireEvent.scroll(region);
     expect(laneCount()?.hidden).toBe(false);
+  });
+
+  it("shows the lane count and fade once a resize makes lanes overflow", () => {
+    const fires: (() => void)[] = [];
+    vi.stubGlobal("ResizeObserver", class {
+      constructor(cb: () => void) { fires.push(cb); }
+      observe() {}
+      disconnect() {}
+    });
+    stubMatchMedia(false);
+    mockBoardWidth(BOARD);
+    render(<BoardScroller lanes={five} />);
+    expect(laneCount()?.hidden).toBe(true);
+    mockBoardWidth(1200);
+    act(() => fires.forEach((fire) => fire()));
+    expect(laneCount()?.hidden).toBe(false);
+    expect(screen.getByRole("region").hasAttribute("data-fade-end")).toBe(true);
   });
 
   it("hides the lane count when every lane fits", () => {

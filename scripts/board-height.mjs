@@ -22,10 +22,30 @@ async function probeBoard() {
     laneCount: count && !count.hidden ? count.textContent : null,
     fadeEndAtStart: fadeMasked(),
     pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+    lanesOverflowSideways: region.scrollWidth > region.clientWidth,
+    laneOverflowY: getComputedStyle(lanes[0]).overflowY,
   };
   region.scrollLeft = region.scrollWidth;
   await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
   return { ...facts, fadeEndAtEnd: fadeMasked() };
+}
+
+// Which edge the fade paints: an 8px strip at each end of the lanes, shot with and without data-fade-end.
+async function fadeEdge(page) {
+  const region = page.locator("[data-ward-board-scroller]").first();
+  const box = await region.boundingBox();
+  const strip = (x) => page.screenshot({ clip: { x, y: box.y, width: 8, height: Math.min(box.height, 200) } });
+  const shoot = () => Promise.all([strip(box.x), strip(box.x + box.width - 8)]);
+  const faded = await shoot();
+  const was = await region.evaluate((el) => {
+    const on = el.hasAttribute("data-fade-end");
+    el.removeAttribute("data-fade-end");
+    return on;
+  });
+  const plain = await shoot();
+  await region.evaluate((el, on) => el.toggleAttribute("data-fade-end", on), was);
+  const [left, right] = [0, 1].map((i) => !faded[i].equals(plain[i]));
+  return ["none", "left", "right", "both"][Number(left) + 2 * Number(right)];
 }
 
 async function measure(browser, base, { story, viewport }) {
@@ -34,7 +54,8 @@ async function measure(browser, base, { story, viewport }) {
     await page.goto(`${base}/iframe.html?viewMode=story&id=${story}`, { waitUntil: "load", timeout: 30000 });
     await page.waitForFunction(() => document.querySelector("[data-ward-board-scroller]") !== null, null, { timeout: 8000 });
     await page.evaluate(() => document.fonts.ready);
-    return await page.evaluate(probeBoard);
+    const edge = await fadeEdge(page);
+    return { ...(await page.evaluate(probeBoard)), fadeEdge: edge };
   } finally {
     await page.close();
   }
