@@ -355,6 +355,7 @@ export const v = {
     ladderBar: 'var(--ward-height-ladderBar)',
     radio: 'var(--ward-height-radio)',
     skeletonBar: 'var(--ward-height-skeletonBar)',
+    target: 'var(--ward-height-target)',
   },
   size: {
     marker6: 'var(--ward-size-marker6)',
@@ -365,6 +366,7 @@ export const v = {
   radius: 'var(--ward-radius)',
   border: 'var(--ward-border)',
   underline: 'var(--ward-underline)',
+  focusOffset: 'var(--ward-focus-offset)',
   shadow: { overlay: 'var(--ward-shadow-overlay)' },
   type: {
     h1: 'var(--ward-type-h1)',

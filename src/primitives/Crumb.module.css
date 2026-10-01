@@ -17,7 +17,12 @@
   letter-spacing: var(--ward-type-microHead-tracking);
   text-transform: var(--ward-type-microHead-transform);
   color: var(--ward-color-muted);
-  overflow: hidden;
+  min-width: 0;
+  /* Clip sideways only, inside room for the focus ring; hidden would cut the ring and the 24px target. */
+  overflow-x: clip;
+  overflow-y: visible;
+  padding-inline: calc(var(--ward-border) + var(--ward-focus-offset));
+  margin-inline: calc(-1 * (var(--ward-border) + var(--ward-focus-offset)));
   text-overflow: ellipsis;
 }
 

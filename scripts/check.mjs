@@ -6,6 +6,7 @@ import { belowFloor, contrast, derivedDarkPairs, describeFailures, sweepRendered
 import { buildFresh, distDrift } from "./dist-fresh.mjs";
 import { sweepConsoleTheme } from "./console-theme.mjs";
 import { sweepPhoneWidth } from "./phone-width.mjs";
+import { sweepFocusTargets } from "./focus-targets.mjs";
 import { workflowFindings } from "./workflows.mjs";
 import { FAMILY_OF, breakpoints, buildCss, buildTokens, containerBreakpoints, declaredFaces, readTokens } from "./gen-css.mjs";
 
@@ -228,6 +229,11 @@ else fail("phone width", phoneDiffs.join("; "));
 const consoleDiffs = await sweepConsoleTheme();
 if (consoleDiffs.length === 0) pass("console theme", "light panel and dark block, ground, rail-card inset and inks match the golden");
 else fail("console theme", consoleDiffs.join("; "));
+
+// 9. focus and targets: Tab through every small link; each paints a ring on four sides and answers across 24px (src/goldens/focus-targets.json)
+const focusDiffs = await sweepFocusTargets();
+if (focusDiffs.length === 0) pass("focus and targets", "every small link shows its focus ring and has a 24px target");
+else fail("focus and targets", focusDiffs.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);
 process.exitCode = failures === 0 ? 0 : 1;

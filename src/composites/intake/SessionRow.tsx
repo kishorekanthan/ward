@@ -59,7 +59,7 @@ function SessionCost({ value }: { value?: number }) {
 }
 
 function LinkedRecord({ link }: { link?: Session["link"] }) {
-  return link === undefined ? null : <a className={s.tableRecord} href={safeHref(link.href)}>{`→ ${link.key}`}</a>;
+  return link === undefined ? null : <a className={`${s.tableRecord} ward-target`} href={safeHref(link.href)}>{`→ ${link.key}`}</a>;
 }
 
 function TableSessionRow({ session, href }: { session: Session; href: string }) {
@@ -67,7 +67,7 @@ function TableSessionRow({ session, href }: { session: Session; href: string }) 
   return (
     <tr className={s.tableRow} data-state={session.state}>
       <td className={s.tableTitle}>
-        <a className={s.tableLink} href={safeHref(href)}>{session.title}</a>
+        <a className={`${s.tableLink} ward-target`} href={safeHref(href)}>{session.title}</a>
         <span className={s.tableMeta}>{turnsText(session)}</span>
       </td>
       <td className={s.tableResolved}>
