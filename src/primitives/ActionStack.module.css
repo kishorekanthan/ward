@@ -1,0 +1,7 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.stack {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ward-space-s1);
+}
