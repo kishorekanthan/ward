@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { StreamRow, type Stream } from "./StreamRow";
 
@@ -53,10 +53,11 @@ describe("StreamRow", () => {
     expect(container.textContent).not.toContain("paused");
   });
 
-  it("marks a draft stream and links the empty workflow to its definition", () => {
+  it("marks a draft stream and says to define its workflow inside the row's one link", () => {
     const { container } = render(table(<StreamRow stream={{ name: "Regulatory Ops", key: "REG", streamStep: 3, owner: "unassigned", stages: [], draft: true }} href="#reg" presentation={{ columns: 5 }} />));
     expect(screen.getByText("REG · DRAFT")).toBeDefined();
-    expect(screen.getByRole("link", { name: "Define workflow" }).getAttribute("href")).toBe("#reg");
+    expect(screen.getByText("Define workflow").closest("a")).toBeNull();
+    expect(Array.from(container.querySelectorAll("a"), (a) => [a.textContent, a.getAttribute("href")])).toEqual([["Regulatory Ops", "#reg"]]);
     expect(container.querySelector("tr")?.getAttribute("data-draft")).toBe("true");
   });
 
@@ -174,5 +175,48 @@ describe("StreamRow in-flight hint", () => {
     expect(full.container.querySelector("[title]")).toBeNull();
     const compact = render(table(<StreamRow stream={summary} href="#de" presentation={{ columns: 5 }} />));
     expect(compact.container.querySelector("[title]")).toBeNull();
+  });
+});
+
+describe("StreamRow as one link", () => {
+  const hint = "Items running, held or blocked";
+  const summary = { name: "DE", key: "DE", streamStep: 2 as const, owner: "Priya Nayar", stages: [{ name: "Intake" }], inFlight: 7, p50: "2d", inFlightHint: hint };
+  const rows = [
+    ["full", table(<StreamRow stream={{ ...stream, inFlightHint: hint }} href="#de" />)],
+    ["summary", table(<StreamRow stream={summary} href="#de" presentation={{ columns: 5 }} />)],
+  ] as const;
+
+  function clicksOn(link: HTMLAnchorElement) {
+    const seen: { metaKey: boolean; shiftKey: boolean }[] = [];
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      seen.push({ metaKey: event.metaKey, shiftKey: event.shiftKey });
+    });
+    return seen;
+  }
+
+  it.each(rows)("marks the %s row as one link with a single anchor", (_, row) => {
+    const { container } = render(row);
+    expect(container.querySelector("tr")?.hasAttribute("data-ward-rowlink")).toBe(true);
+    expect(Array.from(container.querySelectorAll("a"), (a) => a.getAttribute("href"))).toEqual(["#de"]);
+  });
+
+  it.each(rows)("opens the %s row's link from a click on the hinted count, keeping modifier keys", (_, row) => {
+    const { container } = render(row);
+    const seen = clicksOn(container.querySelector("a")!);
+    const hinted = container.querySelector("[title]")!;
+    expect(hinted.hasAttribute("data-raised")).toBe(true);
+    fireEvent.click(hinted, { metaKey: true, shiftKey: true });
+    expect(seen).toEqual([{ metaKey: true, shiftKey: true }]);
+  });
+
+  it.each(rows)("passes on nothing else in the %s row: a cell click and a click on the link itself are left alone", (_, row) => {
+    const { container } = render(row);
+    const link = container.querySelector("a")!;
+    const seen = clicksOn(link);
+    fireEvent.click(container.querySelectorAll("td")[1]);
+    expect(seen).toEqual([]);
+    fireEvent.click(link);
+    expect(seen).toHaveLength(1);
   });
 });

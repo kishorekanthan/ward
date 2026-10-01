@@ -58,7 +58,7 @@ const cases: [string, ReactElement, number][] = [
   ["TopBar", <TopBar wordmark="TRELLIS" destinations={[{ id: "board", label: "Board", href: BAD }, { id: "studio", label: "Studio", href: BAD }]} active="board" />, 2],
   ["AgentCard", <AgentCard agent={{ id: "x", name: "Extractor", streamStep: 1, versions: [{ v: "V1", status: "live" }] }} href={BAD} />, 1],
   ["StreamRow", row(<StreamRow stream={stream} href={BAD} />), 1],
-  ["StreamRow compact", row(<StreamRow stream={{ name: "DE", key: "DE", streamStep: 2, owner: "Priya Nayar", members: 3, stages: [] }} href={BAD} presentation={{ columns: 5 }} />), 2],
+  ["StreamRow compact", row(<StreamRow stream={{ name: "DE", key: "DE", streamStep: 2, owner: "Priya Nayar", members: 3, stages: [] }} href={BAD} presentation={{ columns: 5 }} />), 1],
   ["SessionRow table", row(<SessionRow session={session} presentation="table" href={BAD} />), 2],
   ["SessionRow card", <SessionRow session={session} />, 1],
   ["BoardFootnote", <BoardFootnote configureHref={BAD} />, 1],

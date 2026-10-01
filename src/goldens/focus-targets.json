@@ -34,14 +34,6 @@
       "hit24": true
     },
     {
-      "name": "Define workflow",
-      "focusVisible": true,
-      "wardRing": true,
-      "ring": true,
-      "tall": true,
-      "hit24": true
-    },
-    {
       "name": "ledger",
       "focusVisible": true,
       "wardRing": true,
@@ -130,6 +122,38 @@
       "ring": true,
       "tall": true,
       "hit24": true
+    }
+  ],
+  "rowLinks": [
+    {
+      "name": "Regulatory Ops",
+      "oneAnchor": true,
+      "covered": true,
+      "wholeHit": true,
+      "tall": true,
+      "raised": 1,
+      "underlined": true,
+      "hoverShade": true
+    },
+    {
+      "name": "ledger",
+      "oneAnchor": true,
+      "covered": true,
+      "wholeHit": true,
+      "tall": true,
+      "raised": 1,
+      "underlined": true,
+      "hoverShade": true
+    },
+    {
+      "name": "intake-advisor",
+      "oneAnchor": true,
+      "covered": true,
+      "wholeHit": true,
+      "tall": true,
+      "raised": 0,
+      "underlined": true,
+      "hoverShade": true
     }
   ]
 }
