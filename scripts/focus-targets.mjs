@@ -74,9 +74,21 @@ function bands({ x, y, width, height, reach }) {
   ];
 }
 
+// Runs in the page, focus gone: whether the last focused control draws an edge (border or inset ring) in a colour other than its ground.
+function restEdge() {
+  const clear = (colour) => /^rgba\(.*, 0\)$/.test(colour);
+  const groundOf = (at) => (at.parentElement && clear(getComputedStyle(at).backgroundColor) ? groundOf(at.parentElement) : getComputedStyle(at).backgroundColor);
+  const style = getComputedStyle(window.__wardFocused);
+  const ground = groundOf(window.__wardFocused);
+  const shows = (colour) => !clear(colour) && colour !== ground;
+  const side = (name) => Number.parseFloat(style[`border${name}Width`]) >= 1 && shows(style[`border${name}Color`]);
+  const inset = style.boxShadow.match(/^(rgba?\([^)]*\)) 0px 0px 0px ([\d.]+)px inset$/);
+  return ["Top", "Right", "Bottom", "Left"].every(side) || Boolean(inset && Number.parseFloat(inset[2]) >= 1 && shows(inset[1]));
+}
+
 const shoot = (page, clips) => Promise.all(clips.map((clip) => page.screenshot({ clip })));
 
-async function ringOnEverySide(page, box) {
+async function ringAndRestEdge(page, box) {
   const clips = bands(box);
   const focused = await shoot(page, clips);
   await page.evaluate(() => {
@@ -84,8 +96,9 @@ async function ringOnEverySide(page, box) {
     document.activeElement.blur();
   });
   const blurred = await shoot(page, clips);
+  const edged = await page.evaluate(restEdge);
   await page.evaluate(() => window.__wardFocused.focus());
-  return focused.every((shot, i) => !shot.equals(blurred[i]));
+  return { ring: focused.every((shot, i) => !shot.equals(blurred[i])), edged };
 }
 
 // Room for both themed copies of the story; too low a cap silently cuts the dark copy short.
@@ -100,8 +113,8 @@ async function tabThrough(page) {
       if (seen.length) break;
       continue;
     }
-    const ring = await ringOnEverySide(page, got.box);
-    seen.push({ theme: got.theme, name: got.name, focusVisible: got.focusVisible, wardRing: got.wardRing, ring, tall: got.height >= 24, hit24: got.hit24, underlineGap: got.underlineGap, height: got.height });
+    const { ring, edged } = await ringAndRestEdge(page, got.box);
+    seen.push({ theme: got.theme, name: got.name, focusVisible: got.focusVisible, wardRing: got.wardRing, ring, edged, tall: got.height >= 24, hit24: got.hit24, underlineGap: got.underlineGap, height: got.height });
   }
   return seen;
 }

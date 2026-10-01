@@ -3,7 +3,7 @@ import { Links } from "./FocusTargets.stories";
 
 // Tab links are full-height controls, so they need no band; the probe still checks their 24px reach.
 // jsdom has no layout, so the 24px band itself is read in Chromium by scripts/focus-targets.mjs; this pins which links carry it.
-// A linked stat cell is touch-tall on its own (the probe's touch fact), so it takes no band.
+// A linked stat cell is touch-tall on its own (the probe's touch fact), so it takes no band; nor does a small Btn (26px).
 describe("small links take the 24px target", () => {
   it("gives every link and link-like button in the story the ward-target band", () => {
     const { container } = render(Links.render());
@@ -16,7 +16,7 @@ describe("small links take the 24px target", () => {
       ["Late-arriving shipments view", true],
       ["→ FL-229", true],
       ["intake-advisor", true],
-      ["+ Mount agent", true],
+      ["+ Mount agent", false],
       ["Configure board", true],
       ["Skip to content", true],
       ["Board", true],

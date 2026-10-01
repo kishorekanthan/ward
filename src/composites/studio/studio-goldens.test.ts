@@ -94,13 +94,11 @@ describe("stream detail geometry against Studio 3c", () => {
     expect(value(COLUMN, "\\.reviewerName", "font")).toMatch(font(gate.reviewer));
   });
 
-  it("sets the terminal counter and the mount link", () => {
-    const { terminal, mount } = golden;
+  it("sets the terminal counter", () => {
+    const { terminal } = golden;
     expect(value(COLUMN, "\\.terminalCard", "padding")).toBe(terminal.padding);
     expect(value(COLUMN, "\\.terminalCard", "gap")).toBe(terminal.gap);
     expect(value(COLUMN, "\\.terminalCount", "font")).toMatch(font(terminal.count));
-    expect(value(COLUMN, "\\.mount", "font")).toMatch(font(mount.font));
-    expect(value(COLUMN, "\\.mount", "color")).toBe(mount.color);
   });
 });
 

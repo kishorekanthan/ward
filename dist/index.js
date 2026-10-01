@@ -3778,7 +3778,7 @@ function iC(e) {
   const a = Pf[((t = e.presentation) == null ? void 0 : t.cellLayout) ?? "two"];
   return /* @__PURE__ */ n(a, { ...e });
 }
-const Bf = "_column_k4nls_2", Of = "_head_k4nls_17", Df = "_index_k4nls_23", Hf = "_name_k4nls_29", jf = "_meta_k4nls_38", Ff = "_mono_k4nls_43", Wf = "_gate_k4nls_50", zf = "_reviewersLabel_k4nls_57", Gf = "_reviewers_k4nls_57", Uf = "_reviewer_k4nls_57", Kf = "_agents_k4nls_74", Vf = "_workflowColumn_k4nls_79", Yf = "_workflowHead_k4nls_96", Xf = "_stageRow_k4nls_102", Jf = "_stageLabel_k4nls_109", Qf = "_workflowTitle_k4nls_116", Zf = "_workflowMeta_k4nls_122", ev = "_workflowGate_k4nls_127", av = "_gateNote_k4nls_135", nv = "_cardNote_k4nls_140", tv = "_reviewerList_k4nls_145", rv = "_reviewerRow_k4nls_151", lv = "_reviewerMark_k4nls_157", ov = "_reviewerName_k4nls_167", iv = "_terminalCard_k4nls_173", sv = "_terminalCount_k4nls_182", cv = "_workflowAgents_k4nls_188", dv = "_mount_k4nls_194", k = {
+const Bf = "_column_1tf9e_2", Of = "_head_1tf9e_17", Df = "_index_1tf9e_23", Hf = "_name_1tf9e_29", jf = "_meta_1tf9e_38", Ff = "_mono_1tf9e_43", Wf = "_gate_1tf9e_50", zf = "_reviewersLabel_1tf9e_57", Gf = "_reviewers_1tf9e_57", Uf = "_reviewer_1tf9e_57", Kf = "_agents_1tf9e_74", Vf = "_workflowColumn_1tf9e_79", Yf = "_workflowHead_1tf9e_96", Xf = "_stageRow_1tf9e_102", Jf = "_stageLabel_1tf9e_109", Qf = "_workflowTitle_1tf9e_116", Zf = "_workflowMeta_1tf9e_122", ev = "_workflowGate_1tf9e_127", av = "_gateNote_1tf9e_135", nv = "_cardNote_1tf9e_140", tv = "_reviewerList_1tf9e_145", rv = "_reviewerRow_1tf9e_151", lv = "_reviewerMark_1tf9e_157", ov = "_reviewerName_1tf9e_167", iv = "_terminalCard_1tf9e_173", sv = "_terminalCount_1tf9e_182", cv = "_workflowAgents_1tf9e_188", dv = "_mount_1tf9e_194", k = {
   column: Bf,
   head: Of,
   index: Df,
@@ -3925,7 +3925,7 @@ function Rv(e) {
   return e === "entry" || e === "agent";
 }
 function Tv({ stage: e, onMount: a }) {
-  return a === void 0 || !Rv(e.kind) ? null : /* @__PURE__ */ n("button", { type: "button", className: `${k.mount} ward-target`, onClick: () => a(e.index), children: "+ Mount agent" });
+  return a === void 0 || !Rv(e.kind) ? null : /* @__PURE__ */ n(_, { variant: "secondary", size: "sm", className: k.mount, onClick: () => a(e.index), children: "+ Mount agent" });
 }
 function Lv({ stage: e, agentCards: a, onMount: t }) {
   const r = $();

@@ -193,14 +193,4 @@
 
 .mount {
   align-self: flex-start;
-  padding-inline: 0;
-  font: var(--ward-type-reviewerName);
-  color: var(--ward-color-blue);
-  background: none;
-  border: 0;
-  cursor: pointer;
-}
-
-.mount:hover {
-  text-decoration: underline;
 }
