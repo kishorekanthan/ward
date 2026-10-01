@@ -1,6 +1,6 @@
 # Ward — agent guide
 
-Ward (`@trellis/ward`) is a standalone React 19 UI library. It must never import app code.
+Ward (`@kishorekanthan/ward`) is a standalone React 19 UI library. It must never import app code.
 
 ## Issues
 - No code change without a GitHub issue. Before editing code, an issue must exist with **Why** (the problem, who it's for), **What** (scope, and what is out of scope) and **Acceptance criteria** (checkable statements, each verified by a test or a named manual check). No issue, no code: open the issue first (`.github/ISSUE_TEMPLATE/`).
