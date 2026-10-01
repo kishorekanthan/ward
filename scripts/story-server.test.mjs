@@ -1,5 +1,6 @@
 import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { request } from "node:http";
+import { connect } from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
@@ -24,6 +25,16 @@ function get(path, host = `127.0.0.1:${port}`) {
     });
     req.on("error", fail);
     req.end();
+  });
+}
+
+function getWithoutHost(path) {
+  return new Promise((done, fail) => {
+    const socket = connect(port, "127.0.0.1", () => socket.end(`GET ${path} HTTP/1.0\r\n\r\n`));
+    let raw = "";
+    socket.on("data", (c) => (raw += c));
+    socket.on("end", () => done(raw));
+    socket.on("error", fail);
   });
 }
 
@@ -52,6 +63,14 @@ describe("story server", () => {
 
   it("refuses any Host other than 127.0.0.1 and its port", async () => {
     expect(await get("/iframe.html", `localhost:${port}`)).toEqual({ status: 403, body: "" });
+    expect(await get("/iframe.html", `127.0.0.1.attacker.example:${port}`)).toEqual({ status: 403, body: "" });
+    expect(await get("/iframe.html", `127.0.0.1:${port + 1}`)).toEqual({ status: 403, body: "" });
+  });
+
+  it("refuses a request with no Host header", async () => {
+    const raw = await getWithoutHost("/iframe.html");
+    expect(raw).toMatch(/^HTTP\/1\.1 403 /);
+    expect(raw).not.toContain("story");
   });
 
   it("answers a malformed escape with 403 instead of throwing", async () => {
