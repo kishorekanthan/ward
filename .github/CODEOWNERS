@@ -1,3 +1,4 @@
 # A change to who can sign releases needs the owner's review once the main ruleset requires it (#100).
 /.github/allowed_signers @kishorekanthan
 /.github/CODEOWNERS @kishorekanthan
+/.github/unsigned_tags @kishorekanthan
