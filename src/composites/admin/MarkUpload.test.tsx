@@ -187,7 +187,7 @@ describe("MarkUpload preview colour", () => {
   let removeCss = () => {};
   afterEach(() => removeCss());
 
-  it.each(["url(https://example.test/p.png)", "#3366ff url(https://example.test/p.png)", "url(https://example.test/p.png)#333", "red", "var(--ward-stream-4-id)", "var(--ward-color-line2)", "#12", "#12345", "#1234567", "#3366ff801", "#33gg66"])(
+  it.each(["url(https://example.test/p.png)", "#3366ff url(https://example.test/p.png)", "url(https://example.test/p.png)#333", "red", "var(--ward-stream-4-id)", "var(--ward-color-line2)", "#12", "#12345", "#1234567", "#3366ff801", "#33gg66", "#3g6", "#3366ffgg"])(
     "drops %s and leaves the preview on its default colour",
     (colour) => {
       const preview = previewWith(colour);
