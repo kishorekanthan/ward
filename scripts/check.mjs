@@ -4,6 +4,7 @@ import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { contrast, describeFailures, sweepRenderedContrast } from "./contrast.mjs";
 import { buildFresh, distDrift } from "./dist-fresh.mjs";
+import { workflowFindings } from "./workflows.mjs";
 import { FAMILY_OF, breakpoints, buildCss, buildTokens, containerBreakpoints, declaredFaces, readTokens } from "./gen-css.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -51,6 +52,11 @@ try {
 } catch (e) {
   fail("dist fresh", "fresh build failed: " + ((e.stderr?.toString() ?? "") + (e.stdout?.toString() ?? "") || e.message).slice(-1500));
 }
+
+// 1c. CI token is read-only, actions are pinned by commit sha, and push runs only on main
+const workflowProblems = workflowFindings(join(root, ".github", "workflows"));
+if (workflowProblems.length === 0) pass("workflow hardening", "contents: read, actions sha-pinned, push on main only");
+else fail("workflow hardening", workflowProblems.join("; "));
 
 // 2. contrast, computed from tokens.json so a broken token fails here
 const NEED = 4.5;
