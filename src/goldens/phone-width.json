@@ -42,6 +42,7 @@
     "columnWidth": 176,
     "gridScrolls": true,
     "endFadeMaskedAtStart": true,
+    "bothFadesMaskedMidScroll": true,
     "startFadeMaskedAtEnd": true,
     "pageScrollsSideways": false
   }
