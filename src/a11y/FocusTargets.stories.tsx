@@ -29,6 +29,7 @@ const ledger: Stream = {
   agents: { live: 1, draft: 0, paused: 0 },
   policy: { id: "PLT-201", summary: "Hold every item at the gate." },
   inFlight: 2,
+  inFlightHint: "Items running, held or blocked in this stream",
 };
 
 const agent = {

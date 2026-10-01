@@ -4,7 +4,28 @@
 }
 
 .row {
+  position: relative;
   border-bottom: var(--ward-border) solid var(--ward-color-line);
+}
+
+/* Two classes, so a consumer's one-class link reset cannot hide the underline. */
+.row .name,
+.compactRow .compactName {
+  text-decoration: underline;
+}
+
+/* One link per row: the name's anchor stretches over the row; hinted values sit above it. */
+.row .name::after,
+.compactRow .compactName::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.row [data-raised],
+.compactRow [data-raised] {
+  position: relative;
+  z-index: 1;
 }
 
 .cell {
@@ -19,7 +40,6 @@
 .name {
   font: var(--ward-type-body);
   color: var(--ward-color-text);
-  text-decoration: none;
   padding-right: var(--ward-space-2);
 }
 
@@ -43,12 +63,18 @@
 }
 
 .compactRow {
+  position: relative;
   border-bottom: var(--ward-border) solid var(--ward-color-line);
   background: var(--ward-color-surface);
 }
 
 .compactRow[data-draft="true"] {
   background: var(--ward-color-surface3);
+}
+
+.row:hover,
+.compactRow:hover {
+  background: var(--ward-color-surface2);
 }
 
 .compactCell {
@@ -103,15 +129,10 @@
 .compactName {
   color: var(--ward-color-text);
   font: var(--ward-type-streamName);
-  text-decoration: none;
 }
 
 .compactName[data-draft="true"] {
   color: var(--ward-color-muted);
-}
-
-.compactName:hover {
-  text-decoration: underline;
 }
 
 .ownerLine {

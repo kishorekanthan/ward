@@ -63,6 +63,13 @@ describe("AgentCard (spec)", () => {
     expect(screen.queryByRole("timer")).toBeNull();
   });
 
+  it("is one link: a single anchor, named by the agent alone, on a card marked as a whole-card link", () => {
+    const { container } = render(<AgentCard agent={{ ...specAgent, run: { itemKey: "T-024", startedAt: "2026-09-06T02:14:00Z" } }} href="/studio/agents/triage" facts={[{ label: "Model", value: "claude-sonnet" }]} />);
+    expect(container.querySelector("article")?.hasAttribute("data-ward-rowlink")).toBe(true);
+    expect(Array.from(container.querySelectorAll("a"), (a) => a.getAttribute("href"))).toEqual(["/studio/agents/triage"]);
+    expect(screen.getByRole("link").textContent).toBe("triage");
+  });
+
   it("marks the selected card for assistive tech", () => {
     render(<AgentCard agent={specAgent} href="/x" selected />);
     expect(screen.getByRole("link").getAttribute("aria-current")).toBe("true");
