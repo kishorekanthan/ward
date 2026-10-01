@@ -3,6 +3,11 @@ import { describe, expect, it, vi } from "vitest";
 import * as mod from "./StageColumn";
 import { StageColumn, type Stage } from "./StageColumn";
 import type { AgentCardProps } from "./AgentCard";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const columnCss = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "StageColumn.module.css"), "utf8");
 
 const gate: Stage = {
   index: 3,
@@ -28,7 +33,8 @@ describe("StageColumn", () => {
     expect(screen.getByRole("heading", { name: "Review" })).toBeDefined();
     expect(screen.getByText("1d 2h median wait")).toBeDefined();
     expect(within(screen.getByText("Reviewers").closest('[data-panel="gate"]') as HTMLElement).getByText("J. Rao")).toBeDefined();
-    expect(container.querySelector('[data-accent="amber"]')?.textContent).toContain("68%");
+    expect(screen.getByText("68%").nextElementSibling?.textContent).toBe("Gate share");
+    expect(container.querySelector("[data-accent]")).toBeNull();
   });
 
   it("keeps default visuals and the no-argument mount callback", () => {
@@ -56,7 +62,9 @@ describe("StageColumn", () => {
     expect(screen.getByText("7 items · median wait 2d 4h")).toBeDefined();
     expect(screen.getByText(/^No agent can advance an item out of this stage\. Reviewers:$/)).toBeDefined();
     expect(screen.getByText("Priya Nayar").previousElementSibling?.textContent).toBe("PN");
-    expect(screen.getByText("68%").closest("[data-accent]")?.textContent).toBe("68% of elapsed time is spent here");
+    const note = screen.getByText("68%").parentElement;
+    expect(note?.textContent).toBe("68% of elapsed time is spent here");
+    expect(note?.getAttribute("data-accent")).toBeNull();
     expect(screen.queryByRole("button", { name: "+ Mount agent" })).toBeNull();
   });
 
@@ -149,12 +157,20 @@ describe("StageColumn (spec)", () => {
     expect(Object.keys(mod)).toEqual(["StageColumn"]);
   });
 
-  it("states the gate share as an amber stat — never drift orange, never the stream colour", () => {
+  it("states the gate share as information: a neutral stat, never amber, blue or the stream colour (#87)", () => {
     const { container } = render(<StageColumn stage={gate} />);
-    const cell = screen.getByText("68%").closest("[data-accent]");
-    expect(cell?.getAttribute("data-accent")).toBe("amber");
-    expect(container.querySelector('[data-accent="blue"]')).toBeNull();
+    expect(screen.getByText("68%").className).not.toMatch(/ward-stat-accent/);
+    expect(container.querySelector("[data-accent]")).toBeNull();
     expect(container.querySelector("section")?.getAttribute("style")).toBeNull();
+  });
+
+  it("gives the workflow gate note the plain card-note ink, with no amber rule in the column (#87)", () => {
+    render(<StageColumn stage={gate} presentation={{ mode: "workflow" }} />);
+    const note = screen.getByText("68%").parentElement as HTMLElement;
+    expect(note.className).toMatch(/^_cardNote_\w+$/);
+    // Whole markup, so an inline amber style on the note or its figure fails too.
+    expect(note.outerHTML).toBe(`<p class="${note.className}" data-note="gate-share"><span>68%</span> of elapsed time is spent here</p>`);
+    expect(columnCss).not.toMatch(/--ward-color-(amber|warning)/);
   });
 
   it("names a gate stage with a word and lists its reviewers in the dashed panel", () => {
