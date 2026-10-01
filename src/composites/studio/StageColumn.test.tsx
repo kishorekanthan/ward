@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import * as mod from "./StageColumn";
 import { StageColumn, type Stage } from "./StageColumn";
 import type { AgentCardProps } from "./AgentCard";
+import { WorkflowGate } from "./StageColumn.stories";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -199,5 +200,13 @@ describe("StageColumn (spec)", () => {
     const section = container.querySelector("section") as HTMLElement;
     expect(document.getElementById(section.getAttribute("aria-labelledby") as string)?.textContent).toBe("Build");
     expect(container.querySelector("[aria-live]")).toBeNull();
+  });
+
+  it("ships a workflow gate story whose panel shows the gate-share note", () => {
+    const { container } = render(<StageColumn {...WorkflowGate.args} />);
+    const note = container.querySelector('[data-panel="gate"] [data-note="gate-share"]');
+    expect(note?.textContent).toBe("68% of elapsed time is spent here");
+    expect([...container.querySelectorAll('[data-panel="gate"] li')].map((row) => row.textContent)).toEqual(["JRJ. Rao", "MCM. Chen"]);
+    expect(container.querySelector("header")?.textContent).toContain("6 items · median wait 2d 13h");
   });
 });
