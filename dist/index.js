@@ -3982,7 +3982,7 @@ function E$(e) {
   const { stream: a, href: t } = e;
   return /* @__PURE__ */ o("tr", { className: f.row, children: [
     /* @__PURE__ */ o("td", { className: f.cell, children: [
-      /* @__PURE__ */ n("a", { className: f.name, href: F(t), children: a.name }),
+      /* @__PURE__ */ n("a", { className: `${f.name} ward-target`, href: F(t), children: a.name }),
       /* @__PURE__ */ n(m, { ...Na(a.key, a.streamStep) }),
       a.draft && /* @__PURE__ */ n(m, { role: "running", label: "DRAFT" })
     ] }),
