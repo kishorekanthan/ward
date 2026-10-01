@@ -42,9 +42,14 @@ function pinFindings(workflow) {
   return usesOf(workflow).filter((u) => !PINNED.test(u)).map((ref) => `${ref} is not pinned to a 40-hex commit sha`);
 }
 
+// A tag-only push (#99, the tag signature job) runs on no branch, so it adds no branch beyond main.
+function isTagsOnly(push) {
+  return Object.keys(push).length === 1 && Array.isArray(push.tags) && push.tags.length > 0;
+}
+
 function pushFindings(workflow) {
   const push = pushFilters(workflow);
-  return push === undefined || isMainOnly(push) ? [] : ["push must be restricted to main"];
+  return push === undefined || isMainOnly(push) || isTagsOnly(push) ? [] : ["push must be restricted to main, or to tags only"];
 }
 
 // Findings for one workflow file: token scope, moving action refs, and push triggers beyond main.

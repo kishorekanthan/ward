@@ -19,6 +19,7 @@ Ward (`@trellis/ward`) is a standalone React 19 UI library. It must never import
 ## Commands
 - `make install` — `npm ci`, and `make hooks`: `core.hooksPath` → `githooks/`, whose `commit-msg` refuses AI attribution (patterns: `githooks/attribution-patterns.txt`, kept identical to trellis-api's and trellis-web's) and then runs the global hooks it shadows.
 - `make pr-check PR=N` — refuses a PR whose title, body or commits carry AI attribution, naming each.
+- `make rulesets` — fails when the repo's rulesets (main: PR and `check` required, no force-push or deletion; `v*` tags: no update or deletion) drift from `.github/rulesets.json`. `make rulesets-apply` writes them (repo admin).
 - `make check` — token/story/provenance checks, lint (complexity <= 5), tests, build, packed-consumer check. Must pass before commit.
 - `npm run storybook` — local component catalogue.
 
@@ -27,6 +28,7 @@ Ward (`@trellis/ward`) is a standalone React 19 UI library. It must never import
 - Never run prettier on Ward files; edit `tokens.json` textually, then `npm run gen`.
 - `dist/` is committed: run `npm run build` and commit `dist/` with any `src/` change.
 - Release: `make pr-check PR=N` before merging, bump `version` in package.json, `make check`, commit, `git tag -s vX.Y.Z -m vX.Y.Z`, `git tag -v vX.Y.Z`, push the tag. Consumers pin the tag's commit sha, never the tag.
+- The `tag signature` workflow runs `git verify-tag` on every pushed `v*` tag against main's `.github/allowed_signers`; a red run means an unsigned or unknown-key tag. `signature-test-*` tags run the same job outside the ruleset, for testing, and are deleted after.
 - Tags are signed with SSH keys listed in `.github/allowed_signers`; `make signing` points this clone's git at that file (repo config, so every worktree shares it) and at `~/.ssh/id_ed25519.pub`.
 - `make check` fails when `dist/` differs by one byte from a fresh build (`scripts/dist-fresh.mjs`).
 - Comments: one or two lines max. No tautological tests.

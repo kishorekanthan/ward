@@ -59,7 +59,7 @@ try {
 
 // 1c. CI token is read-only, actions are pinned by commit sha, and push runs only on main
 const workflowProblems = workflowFindings(join(root, ".github", "workflows"));
-if (workflowProblems.length === 0) pass("workflow hardening", "contents: read, actions sha-pinned, push on main only");
+if (workflowProblems.length === 0) pass("workflow hardening", "contents: read, actions sha-pinned, push on main or tags only");
 else fail("workflow hardening", workflowProblems.join("; "));
 
 // 2. contrast, computed from tokens.json so a broken token fails here
