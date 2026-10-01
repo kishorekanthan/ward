@@ -8,6 +8,7 @@ import { BoardFootnote } from "../composites/board/BoardFootnote";
 import { Sidebar } from "../layout/Sidebar";
 import { TopBar } from "../primitives/TopBar";
 import { StatStrip } from "../primitives/StatStrip";
+import { TabLinks } from "../primitives/TabLinks";
 
 // Every small link Ward draws, in tab order; scripts/focus-targets.mjs tabs through them against src/goldens/focus-targets.json.
 const session: Session = {
@@ -48,6 +49,12 @@ const destinations = [
   { id: "intake", label: "Intake", href: "#/intake" },
 ];
 
+const sections = [
+  { id: "streams", label: "Streams", href: "/studio/streams" },
+  { id: "gates", label: "Gates", href: "/studio/gates" },
+  { id: "audit", label: "Audit", href: "/studio/audit" },
+];
+
 const shared = { heading: "Shared", links: [{ label: "Tool registry", href: "/shared/tools" }, { label: "Prompt library", href: "/shared/prompts" }] };
 
 export default {
@@ -75,6 +82,7 @@ export const Links = {
         <StatStrip cells={[{ value: "2", label: "Items waiting at a gate", href: "/gates" }, { value: "5", label: "Done", href: "/done" }]} />
       </div>
       <Sidebar brand="Studio" nav={[]} agentsHeading="Agents" agents={[]} shared={shared} />
+      <TabLinks links={sections} active="gates" label="Studio sections" />
     </div>
   ),
 };

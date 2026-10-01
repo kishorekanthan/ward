@@ -1,6 +1,7 @@
 import { render } from "@testing-library/react";
 import { Links } from "./FocusTargets.stories";
 
+// Tab links are full-height controls, so they need no band; the probe still checks their 24px reach.
 // jsdom has no layout, so the 24px band itself is read in Chromium by scripts/focus-targets.mjs; this pins which links carry it.
 // A linked stat cell is touch-tall on its own (the probe's touch fact), so it takes no band.
 describe("small links take the 24px target", () => {
@@ -26,6 +27,9 @@ describe("small links take the 24px target", () => {
       ["5Done", false],
       ["Tool registry", true],
       ["Prompt library", true],
+      ["Streams", false],
+      ["Gates", false],
+      ["Audit", false],
     ]);
   });
 });

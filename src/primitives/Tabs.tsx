@@ -1,6 +1,7 @@
-import { useEffect, useLayoutEffect, useRef, type RefObject } from "react";
+import { useEffect, useRef } from "react";
 import { useRovingTabindex } from "../a11y/useRovingTabindex";
-import { markEdges, useEdgeFades } from "../layout/useEdgeFades";
+import { useEdgeFades } from "../layout/useEdgeFades";
+import { useRevealActive } from "./useRevealActive";
 import s from "./Tabs.module.css";
 
 export type Tab = { id: string; label: string; count?: number };
@@ -14,37 +15,15 @@ export type TabsProps = {
   level?: 1 | 2;
 };
 
-const MAX_TABS = 7;
+export const MAX_TABS = 7;
 
 function selectedIndex(tabs: Tab[], active: string): number {
   const index = tabs.findIndex((tab) => tab.id === active);
   return index < 0 ? 0 : index;
 }
 
-function tabClass(level: 1 | 2): string {
+export function tabClass(level: 1 | 2): string {
   return `${s.strip} ward-tabs${level === 2 ? " ward-tabs--level2" : ""}`;
-}
-
-// The fade width is the strip's scroll-padding, so a revealed tab clears the fade too.
-function revealedScrollLeft(strip: HTMLElement, tab: HTMLElement): number | null {
-  const inset = Number.parseFloat(getComputedStyle(strip).scrollPaddingInlineStart) || 0;
-  const left = tab.getBoundingClientRect().left - strip.getBoundingClientRect().left;
-  const right = left + tab.getBoundingClientRect().width;
-  if (left < inset) return strip.scrollLeft + left - inset;
-  if (right > strip.clientWidth - inset) return strip.scrollLeft + right - strip.clientWidth + inset;
-  return null;
-}
-
-// Scrolls the strip only, never the page, so a selected tab off the right edge is in view on mount.
-function useRevealActive(stripRef: RefObject<HTMLDivElement | null>, index: number): void {
-  useLayoutEffect(() => {
-    const strip = stripRef.current;
-    const tab = strip?.querySelectorAll<HTMLElement>('[role="tab"]')[index];
-    if (!strip || !tab) return;
-    const next = revealedScrollLeft(strip, tab);
-    if (next !== null) strip.scrollLeft = Math.max(0, next);
-    markEdges(strip);
-  }, [stripRef, index]);
 }
 
 export function Tabs({ tabs, active, onChange, label = "Tabs", level = 1 }: TabsProps) {
@@ -54,7 +33,7 @@ export function Tabs({ tabs, active, onChange, label = "Tabs", level = 1 }: Tabs
   useEffect(() => roving.setActive(index), [roving.setActive, index]);
   const stripRef = useRef<HTMLDivElement>(null);
   useEdgeFades(stripRef, tabs.length);
-  useRevealActive(stripRef, index);
+  useRevealActive(stripRef, index, '[role="tab"]');
   return (
     <div
       ref={stripRef}

@@ -145,6 +145,7 @@ const BLUE_USES: Record<Category, string[]> = {
     "composites/studio/StreamRow.module.css .define blue",
   ],
   current: [
+    "primitives/Tabs.module.css .tab[aria-current=\"page\"] blue",
     "primitives/Tabs.module.css .tab[aria-selected=\"true\"] blue",
     "primitives/TopBar.module.css .dest[aria-current=\"page\"]::after blue",
     "layout/AppShell.module.css .nav a[aria-current=\"page\"] blue",
