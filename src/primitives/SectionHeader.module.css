@@ -16,19 +16,16 @@
   white-space: nowrap;
 }
 
-/* A section kicker is a sentence, so it takes the title style and wraps; uppercase mono is for identifiers. */
+/* A section kicker is a sentence, so it takes the title style; uppercase mono is for identifiers.
+   The note shrinks first, as before #84; the kicker wraps only past a cap that keeps 3rem for a short note. */
 .root[data-kind="key"] .head {
   font: var(--ward-type-title);
   letter-spacing: normal;
   text-transform: none;
   color: var(--ward-color-text);
   white-space: normal;
-}
-
-/* The kicker gives up width first, so a short note stays on one line beside it. */
-.root[data-kind="key"] .note {
   flex-shrink: 0;
-  max-width: 50%;
+  max-width: calc(100% - min(50%, 3rem) - var(--ward-gap-section));
 }
 
 .index {

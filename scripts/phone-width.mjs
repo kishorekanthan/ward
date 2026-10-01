@@ -91,11 +91,14 @@ function probeStatStrip([text, longText]) {
   return { label, labelLines, labelClipped, longLabel, longLabelLines, longLabelClipped, pageScrollsSideways };
 }
 
-// innerText applies text-transform, so it reads the kicker as a viewer sees it.
+// innerText applies text-transform, so it reads the kicker as a viewer sees it; line counts pin a short kicker's row as before #84.
 function probeKicker() {
   const head = document.querySelector('#storybook-root [data-kind="key"] h2');
   const style = getComputedStyle(head);
+  const lines = (el) => Math.round(el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight));
   return {
+    headLines: lines(head),
+    noteLines: lines(head.nextElementSibling),
     seenText: head.innerText,
     fontSize: style.fontSize,
     family: style.fontFamily.split(",")[0].trim(),
@@ -202,7 +205,7 @@ function probeConsole() {
 }
 
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, kicker: probeKicker, longKicker: probeLongKicker, console: probeConsole, consoleFoot: probeConsoleFoot };
+const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, kicker: probeKicker, shortKicker: probeKicker, longKicker: probeLongKicker, console: probeConsole, consoleFoot: probeConsoleFoot };
 
 async function measure(page, base, key) {
   const { story, label, longLabel } = golden[key];

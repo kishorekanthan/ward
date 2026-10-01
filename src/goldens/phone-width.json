@@ -63,10 +63,18 @@
   },
   "kicker": {
     "story": "layout-recordsection--kicker",
+    "headLines": 1,
+    "noteLines": 2,
     "seenText": "Ways out of this hold",
     "fontSize": "15px",
     "family": "Archivo",
     "letterSpacing": "normal",
+    "pageScrollsSideways": false
+  },
+  "shortKicker": {
+    "story": "layout-recordsection--block",
+    "headLines": 1,
+    "noteLines": 1,
     "pageScrollsSideways": false
   },
   "longKicker": {
