@@ -1,4 +1,4 @@
-/* Renders the phone-width stories at 375px in a real browser and reads their geometry, because jsdom has no layout.
+/* Renders the phone-width stories at 375px (or a golden's own width) in a real browser and reads their geometry, because jsdom has no layout.
    Each probe returns the facts src/goldens/phone-width.json records; check.mjs compares them. */
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -226,14 +226,15 @@ function probeConsole() {
 }
 
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, kicker: probeKicker, shortKicker: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot };
+const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot };
 
 async function measure(page, base, key) {
-  const { story, label, longLabel } = golden[key];
+  const { story, label, longLabel, width = golden.viewport.width } = golden[key];
+  await page.setViewportSize({ ...golden.viewport, width });
   await page.goto(`${base}/iframe.html?viewMode=story&id=${story}`, { waitUntil: "load", timeout: 30000 });
   await page.waitForFunction(() => document.getElementById("storybook-root")?.children.length > 0, null, { timeout: 8000 });
   await page.evaluate(() => document.fonts.ready);
-  return { story, ...(await page.evaluate(PROBES[key], [label, longLabel])) };
+  return { story, width, ...(await page.evaluate(PROBES[key], [label, longLabel])) };
 }
 
 // Returns every fact that differs from the golden, as "key.fact: got X, want Y".

@@ -77,6 +77,13 @@
     "noteLines": 1,
     "pageScrollsSideways": false
   },
+  "kickerAt320": {
+    "story": "layout-recordsection--kicker",
+    "width": 320,
+    "headLines": 1,
+    "noteLines": 3,
+    "pageScrollsSideways": false
+  },
   "longKicker": {
     "story": "layout-recordsection--long-kicker",
     "headLines": 2,
