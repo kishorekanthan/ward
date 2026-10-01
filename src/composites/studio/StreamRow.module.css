@@ -133,6 +133,11 @@
   gap: var(--ward-gap-streamChain);
 }
 
+.gateMark {
+  color: var(--ward-color-text);
+  font: var(--ward-type-inputText);
+}
+
 .emptyChain {
   display: inline-flex;
   align-items: center;

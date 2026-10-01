@@ -55,6 +55,7 @@
 
 .foot {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--ward-space-2);
   font: var(--ward-type-consoleLine);
@@ -65,7 +66,8 @@
 }
 
 .idle {
-  flex: 1;
+  /* Two foot buttons wrap below the idle copy at phone width rather than push the page sideways. */
+  flex: 1 1 auto;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

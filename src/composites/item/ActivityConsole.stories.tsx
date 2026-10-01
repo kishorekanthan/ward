@@ -19,3 +19,5 @@ export const Reconnecting = { args: { lines, connection: "reconnecting", idleSin
 export const Stale = { args: { lines, connection: "stale", idleSince: "2026-09-06T02:14:00Z" } };
 export const Idle = { args: { lines: lines.slice(0, 1), connection: "live", idleSince: "2026-09-06T02:10:00Z" } };
 export const Empty = { args: { lines: [], connection: "live", idleSince: "2026-09-06T02:10:00Z" } };
+// A run longer than the console, so a reader can scroll up and bring back Jump to latest.
+export const History = { args: { lines: Array.from({ length: 8 }, () => lines).flat(), connection: "live", idleSince: "2026-09-06T02:14:00Z" } };
