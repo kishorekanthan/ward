@@ -1,6 +1,24 @@
 import { fireEvent, render, screen } from "@testing-library/react";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it, vi } from "vitest";
+import { injectModuleCss } from "../test-css";
 import { Btn } from "./Btn";
+import s from "./Btn.module.css";
+
+const here = dirname(fileURLToPath(import.meta.url));
+const wardCss = readFileSync(join(here, "..", "ward.css"), "utf8");
+// jsdom leaves var() unresolved, so each theme's block in ward.css supplies the value.
+function themeVar(selector: string, name: string): string | undefined {
+  const start = wardCss.indexOf(`${selector} {`);
+  const block = wardCss.slice(start, wardCss.indexOf("}", start));
+  return new RegExp(`${name}: ([^;]+);`).exec(block)?.[1];
+}
+const THEMES = { light: ":root", dark: '[data-theme="dark"]' } as const;
+function resolved(value: string, theme: keyof typeof THEMES): string {
+  return value.replace(/var\((--ward-[\w-]+)\)/g, (whole, name: string) => themeVar(THEMES[theme], name) ?? whole);
+}
 
 describe("Btn", () => {
   it("refuses a disabled action that does not state its condition", () => {
@@ -81,5 +99,14 @@ describe("Btn", () => {
     render(<Btn disabled describedBy="why" onClick={onClick}>Publish</Btn>);
     fireEvent.click(screen.getByRole("button"));
     expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it("fills a destructive action with the destructive colour, which is not the warning colour, in both themes", () => {
+    const removeCss = injectModuleCss(join(here, "Btn.module.css"), s);
+    render(<Btn variant="destructive">Override and advance</Btn>);
+    const fill = getComputedStyle(screen.getByRole("button", { name: "Override and advance" })).backgroundColor;
+    removeCss();
+    expect([resolved(fill, "light"), resolved(fill, "dark")]).toEqual(["#B4232A", "#FF8A93"]);
+    expect([resolved("var(--ward-color-warning)", "light"), resolved("var(--ward-color-warning)", "dark")]).toEqual(["#8A5A00", "#E0B84D"]);
   });
 });

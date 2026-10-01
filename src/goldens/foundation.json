@@ -22,8 +22,7 @@
     "red": "#B4232A",
     "warnInk": "#9A410C",
     "warnSurface": "#FFF8F2",
-    "warnLine": "#E8C4A6",
-    "console": "#0B1631"
+    "warnLine": "#E8C4A6"
   },
   "chip": {
     "done": { "bg": "#0C7A4D", "fg": "#FFFFFF", "line": "#0C7A4D" },

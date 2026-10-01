@@ -1,0 +1,23 @@
+{
+  "story": "item-activityconsole--live",
+  "light": {
+    "ground": "rgb(237, 240, 244)",
+    "padding": "14px 16px",
+    "radius": "0px",
+    "tool": "rgb(10, 85, 199)",
+    "warn": "rgb(138, 90, 0)",
+    "ok": "rgb(12, 122, 77)",
+    "dim": "rgb(90, 100, 116)",
+    "foot": "rgb(97, 108, 126)"
+  },
+  "dark": {
+    "ground": "rgb(11, 22, 49)",
+    "padding": "14px 16px",
+    "radius": "0px",
+    "tool": "rgb(127, 178, 255)",
+    "warn": "rgb(231, 197, 127)",
+    "ok": "rgb(127, 211, 160)",
+    "dim": "rgb(143, 163, 200)",
+    "foot": "rgb(139, 151, 171)"
+  }
+}

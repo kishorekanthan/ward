@@ -1,6 +1,6 @@
 {
   "name": "@trellis/ward",
-  "version": "0.18.14",
+  "version": "0.18.15",
   "description": "Shared React component library for Trellis — tokens, primitives, composites, patterns.",
   "license": "MIT",
   "type": "module",

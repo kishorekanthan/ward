@@ -12,7 +12,7 @@
 }
 
 .item[data-state="hold"] {
-  box-shadow: inset var(--ward-underline) 0 0 var(--ward-color-amber);
+  box-shadow: inset var(--ward-underline) 0 0 var(--ward-color-warning);
 }
 
 .node {
@@ -57,7 +57,7 @@
 }
 
 .item[data-state="hold"] .stage {
-  color: var(--ward-color-amber);
+  color: var(--ward-color-warning);
 }
 
 .item[data-state="pending"] {

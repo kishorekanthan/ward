@@ -20,6 +20,17 @@
   opacity: 0.85;
 }
 
+/* Its own token, not warning amber: an action that cannot be undone is never styled as a caution. */
+.destructive {
+  padding: var(--ward-pad-controlPrimary);
+  background-color: var(--ward-color-destructive);
+  color: var(--ward-color-surface);
+}
+
+.destructive:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
 .secondary {
   color: var(--ward-color-text);
   box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line2);
