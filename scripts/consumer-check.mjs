@@ -76,7 +76,7 @@ try {
 
   const modules = join(app, "node_modules");
   linkRuntime(modules);
-  const wardRoot = join(modules, "@trellis", "ward");
+  const wardRoot = join(modules, "@kishorekanthan", "ward");
   const manifest = JSON.parse(readFileSync(join(wardRoot, "package.json"), "utf8"));
   const css = readFileSync(join(wardRoot, "dist", "index.css"), "utf8");
   assert(manifest.exports["./styles.css"] === "./dist/index.css", "packed styles export is missing");
@@ -88,7 +88,7 @@ try {
   writeFileSync(join(app, "render.mjs"), `
     import React from "react";
     import { renderToStaticMarkup } from "react-dom/server";
-    import { ActivityConsole, Btn, NewStreamModal, PageFrame, SectionBand } from "@trellis/ward";
+    import { ActivityConsole, Btn, NewStreamModal, PageFrame, SectionBand } from "@kishorekanthan/ward";
     const html = renderToStaticMarkup(React.createElement(PageFrame, null,
       React.createElement(SectionBand, { label: "Actions" }, React.createElement(Btn, null, "Ship")),
       React.createElement(ActivityConsole, { lines: [{ at: "2026-09-04T02:06:11Z", kind: "ok", text: "External event" }], connection: "live" })));
@@ -100,8 +100,8 @@ try {
   writeFileSync(join(app, "main.js"), `
     import React from "react";
     import { createRoot } from "react-dom/client";
-    import { AppShell, PageFrame, WorkCard } from "@trellis/ward";
-    import "@trellis/ward/styles.css";
+    import { AppShell, PageFrame, WorkCard } from "@kishorekanthan/ward";
+    import "@kishorekanthan/ward/styles.css";
     const item = { id: "1", key: "TR-1", title: "External Ward consumer", streamStep: 1, timeInStage: 60, waitsOn: "review" };
     createRoot(document.getElementById("app")).render(React.createElement(AppShell, null,
       React.createElement(PageFrame, null, React.createElement(WorkCard, { item }))));

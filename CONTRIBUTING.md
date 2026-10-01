@@ -1,6 +1,6 @@
 # Contributing to Ward
 
-Thanks for your interest in Ward (`@trellis/ward`), a React 19 component library. This guide explains how to set up the project, how to check your work, and how to get a change merged. You don't need to have contributed to open source before.
+Thanks for your interest in Ward (`@kishorekanthan/ward`), a React 19 component library. This guide explains how to set up the project, how to check your work, and how to get a change merged. You don't need to have contributed to open source before.
 
 By taking part you agree to follow our [Code of Conduct](CODE_OF_CONDUCT.md).
 
