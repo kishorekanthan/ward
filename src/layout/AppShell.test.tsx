@@ -231,6 +231,16 @@ describe("AppShell top-bar tools at phone width", () => {
     expect(document.activeElement).toBe(toggle);
   });
 
+  it("closes again on a second press", () => {
+    stubMatchMedia(true);
+    render(shell(signOut));
+    const toggle = screen.getByRole("button", { name: "Settings" });
+    fireEvent.click(toggle);
+    fireEvent.click(toggle);
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
+    expect(screen.queryByRole("button", { name: "Sign out" })).toBeNull();
+  });
+
   it("names the toggle from toolsLabel", () => {
     stubMatchMedia(true);
     render(

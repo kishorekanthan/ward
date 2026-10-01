@@ -874,10 +874,10 @@ function Tr({ actor: e, metadata: a }) {
   ] });
 }
 function Er() {
-  const e = za("(max-width: 767.98px)"), a = k(), t = N(null), [r, l] = p(!1), i = r && e;
-  return { narrow: e, open: i, panelId: a, slotRef: t, toggle: () => l(!i), close: () => {
-    var s, u;
-    l(!1), (u = (s = t.current) == null ? void 0 : s.querySelector("button")) == null || u.focus();
+  const e = za("(max-width: 767.98px)"), a = k(), t = N(null), [r, l] = p(!1);
+  return { narrow: e, open: r, panelId: a, slotRef: t, toggle: () => l(!r), close: () => {
+    var c, s;
+    l(!1), (s = (c = t.current) == null ? void 0 : c.querySelector("button")) == null || s.focus();
   } };
 }
 function Lr({ tools: e, toolsLabel: a, menu: t }) {

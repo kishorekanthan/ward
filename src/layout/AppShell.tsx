@@ -79,18 +79,16 @@ function Identity({ actor, metadata }: Pick<TopBarShellProps, "actor" | "metadat
 
 type ToolsMenu = { narrow: boolean; open: boolean; panelId: string; slotRef: RefObject<HTMLSpanElement | null>; toggle: () => void; close: () => void };
 
-// Open only counts while narrow, so widening the bar puts the tools back inline.
 function useToolsMenu(): ToolsMenu {
   const narrow = useMediaQuery("(max-width: 767.98px)");
   const panelId = useId();
   const slotRef = useRef<HTMLSpanElement>(null);
-  const [requested, setRequested] = useState(false);
-  const open = requested && narrow;
+  const [open, setOpen] = useState(false);
   const close = () => {
-    setRequested(false);
+    setOpen(false);
     slotRef.current?.querySelector<HTMLButtonElement>("button")?.focus();
   };
-  return { narrow, open, panelId, slotRef, toggle: () => setRequested(!open), close };
+  return { narrow, open, panelId, slotRef, toggle: () => setOpen(!open), close };
 }
 
 function ToolsSlot({ tools, toolsLabel, menu }: Pick<TopBarShellProps, "tools" | "toolsLabel"> & { menu: ToolsMenu }) {
