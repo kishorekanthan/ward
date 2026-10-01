@@ -17,7 +17,7 @@ const session: Session = {
   link: { key: "FL-229", href: "/items/FL-229" },
 };
 
-const draft = { name: "Regulatory Ops", key: "REG", streamStep: 3 as const, owner: "unassigned", stages: [], draft: true };
+const draft = { name: "Regulatory Ops", key: "REG", streamStep: 3 as const, owner: "unassigned", stages: [], draft: true, inFlight: 0, inFlightHint: "Items running, held or blocked in this stream" };
 
 const ledger: Stream = {
   name: "ledger",
@@ -29,6 +29,7 @@ const ledger: Stream = {
   agents: { live: 1, draft: 0, paused: 0 },
   policy: { id: "PLT-201", summary: "Hold every item at the gate." },
   inFlight: 2,
+  inFlightHint: "Items running, held or blocked in this stream",
 };
 
 const agent = {

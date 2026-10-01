@@ -91,6 +91,7 @@ export function AgentCard({ agent, href, selected, connection = "live", lastEven
       style={style}
       data-selected={current}
       data-paused={isPaused(agent.versions)}
+      data-ward-rowlink
     >
       <h3 className={s.head}>
         <span className={s.mark} aria-hidden="true" />

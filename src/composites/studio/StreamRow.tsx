@@ -6,6 +6,7 @@ import type { StreamStep } from "../../tokens";
 import { streamChipProps, streamColour } from "../../primitives/streamColour";
 import s from "./StreamRow.module.css";
 import { safeHref } from "../../primitives/safeHref";
+import { forwardRaisedClick } from "../../primitives/rowLink";
 
 export type Stream = {
   name: string;
@@ -98,16 +99,20 @@ function stageChain(stages: StreamRowSummary["stages"]): ReactElement {
   </span>;
 }
 
-function stagesCell(stages: StreamRowSummary["stages"], href: string): ReactElement {
+function stagesCell(stages: StreamRowSummary["stages"]): ReactElement {
   return <td className={s.compactCell}>
-    {stages.length === 0 ? <span className={s.emptyChain}><span className={s.muted}>No stages yet</span><a className={`${s.define} ward-target`} href={safeHref(href)}>Define workflow</a></span> : stageChain(stages)}
+    {stages.length === 0 ? <span className={s.emptyChain}><span className={s.muted}>No stages yet</span><span className={s.define}>Define workflow</span></span> : stageChain(stages)}
   </td>;
+}
+
+function raised(hint: string | undefined): true | undefined {
+  return hint === undefined ? undefined : true;
 }
 
 function statCell(value: string | undefined, sub: string | undefined, fallback: string, hint?: string): ReactElement {
   return <td className={s.compactCell}>
     {value === undefined ? <span className={s.muted}>{fallback}</span> : <span className={s.stat}>
-      <span className={`${s.statValue} ward-stat-value`} title={hint}>{value}</span>
+      <span className={`${s.statValue} ward-stat-value`} title={hint} data-raised={raised(hint)}>{value}</span>
       {sub === undefined ? null : <span className={s.sub}>{sub}</span>}
     </span>}
   </td>;
@@ -129,9 +134,9 @@ function agentsTotal(agents: StreamRowSummary["agents"]): string | undefined {
 function compactRow({ stream, href, presentation }: CompactStreamRowProps) {
   const rowClass = compactClassName(presentation.className);
   return (
-    <tr className={`${rowClass} ward-streamrow`} data-draft={stream.draft === true} style={{ "--stream": streamColour(stream.streamStep, "chip") } as CSSProperties}>
+    <tr className={`${rowClass} ward-streamrow`} onClick={forwardRaisedClick} data-ward-rowlink data-draft={stream.draft === true} style={{ "--stream": streamColour(stream.streamStep, "chip") } as CSSProperties}>
       {identityCell(stream, href)}
-      {stagesCell(stream.stages, href)}
+      {stagesCell(stream.stages)}
       {statCell(agentsTotal(stream.agents), stream.agents === undefined ? undefined : agentsLine(stream.agents), "—")}
       {policyCell(stream.policy)}
       {statCell(stream.inFlight === undefined ? undefined : String(stream.inFlight), stream.p50 === undefined ? undefined : `P50 ${stream.p50}`, "—", stream.inFlightHint)}
@@ -147,7 +152,7 @@ export function StreamRow(props: StreamRowProps) {
   if (isCompact(props)) return compactRow(props);
   const { stream, href } = props;
   return (
-    <tr className={s.row}>
+    <tr className={s.row} onClick={forwardRaisedClick} data-ward-rowlink>
       <td className={s.cell}>
         <a className={`${s.name} ward-target`} href={safeHref(href)}>
           {stream.name}
@@ -172,7 +177,7 @@ export function StreamRow(props: StreamRowProps) {
         <span className={s.mono}>{membersText(stream.members)}</span>
       </td>
       <td className={s.cell} data-align="end">
-        <span className={s.mono} title={stream.inFlightHint}>{count(stream.inFlight)}</span>
+        <span className={s.mono} title={stream.inFlightHint} data-raised={raised(stream.inFlightHint)}>{count(stream.inFlight)}</span>
       </td>
       <td className={s.cell} data-align="end">
         <span className={s.mono}>{stream.p50 === undefined ? "" : duration(stream.p50)}</span>

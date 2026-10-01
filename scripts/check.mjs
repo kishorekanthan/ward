@@ -231,9 +231,9 @@ const consoleDiffs = await sweepConsoleTheme();
 if (consoleDiffs.length === 0) pass("console theme", "light panel and dark block, ground, rail-card inset and inks match the golden");
 else fail("console theme", consoleDiffs.join("; "));
 
-// 9. focus and targets: Tab through every small link; each paints a ring on four sides and answers across 24px (src/goldens/focus-targets.json)
+// 9. focus and targets: Tab through every small link in both themes; each paints a ring on four sides and answers across 24px; row links open from anywhere (src/goldens/focus-targets.json)
 const focusDiffs = await sweepFocusTargets();
-if (focusDiffs.length === 0) pass("focus and targets", "every small link shows its focus ring and has a 24px target");
+if (focusDiffs.length === 0) pass("focus and targets", "every small link shows its focus ring in both themes and has a 24px target; whole-row links open from anywhere on the row");
 else fail("focus and targets", focusDiffs.join("; "));
 
 // 10. board height: the full-page board fills the viewport and its lanes scroll, not the page; the right-edge fade and lane count follow overflow (src/goldens/board-height.json)
