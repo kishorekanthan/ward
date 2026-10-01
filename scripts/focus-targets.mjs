@@ -20,10 +20,13 @@ function readFocused() {
   const x = r.left + r.width / 2;
   const hits = (y) => document.elementFromPoint(x, y)?.closest("a, button") === el;
   const mid = r.top + r.height / 2;
-  // px from the bottom of the link's text to the top of its ::after underline; null without one.
+  // An underline drawn by the link itself and as wide as it; a static link would hand its ::after to an ancestor.
+  const spansLink = (line, box) =>
+    line.content !== "none" && line.position === "absolute" && style.position !== "static" && Math.abs(Number.parseFloat(line.width) - box.width) < 1;
+  // px from the bottom of the link's text to the top of its ::after underline; null without one spanning the link.
   const underlineGap = (box) => {
     const line = getComputedStyle(el, "::after");
-    if (line.content === "none" || line.position !== "absolute") return null;
+    if (!spansLink(line, box)) return null;
     const text = document.createRange();
     text.selectNodeContents(el);
     return Math.round((box.bottom - Number.parseFloat(line.bottom) - Number.parseFloat(line.height) - text.getBoundingClientRect().bottom) * 10) / 10;
