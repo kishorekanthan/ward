@@ -1,0 +1,45 @@
+{
+  "fiveLanes": {
+    "story": "layout-boardscroller--board-page-five-lanes",
+    "viewport": { "width": 1024, "height": 768 },
+    "pageHeightIsViewport": true,
+    "longLaneScrolls": true,
+    "columnSelectShown": false,
+    "laneCount": null,
+    "fadeEndAtStart": false,
+    "fadeEndAtEnd": false,
+    "pageScrollsSideways": false,
+    "lanesOverflowSideways": false,
+    "fadeEdge": "none"
+  },
+  "fiveLanesPhone": {
+    "story": "layout-boardscroller--board-page-five-lanes",
+    "viewport": { "width": 375, "height": 667 },
+    "pageHeightIsViewport": true,
+    "longLaneScrolls": true,
+    "columnSelectShown": true,
+    "laneCount": null,
+    "pageScrollsSideways": false
+  },
+  "nineLanes": {
+    "story": "layout-boardscroller--board-page-nine-lanes",
+    "viewport": { "width": 1024, "height": 768 },
+    "pageHeightIsViewport": true,
+    "longLaneScrolls": true,
+    "columnSelectShown": false,
+    "laneCount": "9 lanes",
+    "fadeEndAtStart": true,
+    "fadeEndAtEnd": false,
+    "pageScrollsSideways": false,
+    "lanesOverflowSideways": true,
+    "fadeEdge": "right"
+  },
+  "embeddedPhone": {
+    "story": "layout-boardscroller--children",
+    "viewport": { "width": 375, "height": 667 },
+    "lanesOverflowSideways": true,
+    "laneOverflowY": "visible",
+    "fadeEndAtStart": false,
+    "fadeEdge": "none"
+  }
+}
