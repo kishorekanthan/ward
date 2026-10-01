@@ -78,7 +78,8 @@ export type ConsoleAnnounceProviderProps = {
   children: ReactNode;
 };
 
-// One 'Read new events' preference for every console inside; pass announce to persist it yourself.
+// One 'Read new events' preference for every console inside. To restore a persisted value, pass it
+// as announce; onAnnounceChange alone only reports changes.
 export function ConsoleAnnounceProvider({ announce, onAnnounceChange, children }: ConsoleAnnounceProviderProps) {
   const [own, setOwn] = useState(false);
   const share = useMemo<AnnounceShare>(() => ({
