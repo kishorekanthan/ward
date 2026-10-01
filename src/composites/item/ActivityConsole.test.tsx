@@ -52,6 +52,17 @@ describe("ActivityConsole", () => {
     expect([list.getAttribute("aria-live"), toggle.getAttribute("aria-pressed")]).toEqual(["off", "false"]);
   });
 
+  it("keeps announcing when a new event arrives, and announces the added line", () => {
+    const next: ConsoleLine = { at: "2026-09-04T02:15:00Z", kind: "warn", text: "retry 2 of 3" };
+    const { rerender } = render(<ActivityConsole lines={LINES} connection="live" />);
+    fireEvent.click(screen.getByRole("button", { name: "Read new events" }));
+    rerender(<ActivityConsole lines={[...LINES, next]} connection="live" />);
+    const list = screen.getByRole("list");
+    expect([list.getAttribute("aria-live"), list.getAttribute("aria-relevant")]).toEqual(["polite", null]);
+    expect(screen.getByRole("button", { name: "Read new events" }).getAttribute("aria-pressed")).toBe("true");
+    expect(list.contains(screen.getByText("retry 2 of 3"))).toBe(true);
+  });
+
   it("gives the keyboard a way to reach the newest line", () => {
     render(<ActivityConsole lines={lines} connection="live" idleSince="2026-09-06T02:14:00Z" />);
     fireEvent.click(screen.getByText("Jump to latest"));
