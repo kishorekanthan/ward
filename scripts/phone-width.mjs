@@ -66,6 +66,16 @@ function probePageHeader() {
   };
 }
 
+// Actions wider than the screen collapse to ···; their hidden measure copy keeps its width but stays inside the header.
+function probePageHeaderWideActions() {
+  const header = document.querySelector("#storybook-root header");
+  return {
+    actionsCollapsed: header.querySelectorAll("[data-ward-actions] button").length === 1,
+    measureWiderThanScreen: header.querySelector("[data-ward-measure]").getBoundingClientRect().width > innerWidth,
+    pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+  };
+}
+
 function probeStatStrip([text, longText]) {
   const read = (wanted) => {
     const label = Array.from(document.querySelectorAll("#storybook-root dt")).find((d) => d.textContent === wanted);
@@ -192,7 +202,7 @@ function probeConsole() {
 }
 
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, kicker: probeKicker, longKicker: probeLongKicker, console: probeConsole, consoleFoot: probeConsoleFoot };
+const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, kicker: probeKicker, longKicker: probeLongKicker, console: probeConsole, consoleFoot: probeConsoleFoot };
 
 async function measure(page, base, key) {
   const { story, label, longLabel } = golden[key];
