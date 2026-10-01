@@ -28,6 +28,12 @@
     "chipsBelowCrumb": true,
     "chipLines": 1
   },
+  "pageHeaderWideActions": {
+    "story": "primitives-pageheader--phone-width-wide-actions",
+    "actionsCollapsed": true,
+    "measureWiderThanScreen": true,
+    "pageScrollsSideways": false
+  },
   "statStrip": {
     "story": "primitives-statstrip--phone-width",
     "label": "Items waiting at a review gate",

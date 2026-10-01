@@ -85,6 +85,12 @@
   display: none;
 }
 
+/* Clips the measure copy, so a strip wider than the screen never widens the page. */
+.measureClip {
+  position: absolute;
+  overflow: hidden;
+}
+
 .measure {
   position: absolute;
   display: flex;

@@ -135,3 +135,23 @@ export const PhoneWidthOneChip = {
   },
   parameters: { viewport: { defaultViewport: "mobile1" } },
 };
+
+// Actions wider than a phone: they collapse, and the hidden measure copy must not widen the page.
+export const PhoneWidthWideActions = {
+  args: {
+    crumb,
+    title: "intake-advisor v3",
+    actions: [
+      <Btn key="promote" variant="primary" disabled disabledReason="Nothing to promote: this item is not waiting at a gate.">
+        Promote to the next stage
+      </Btn>,
+      <Btn key="changes" onClick={() => {}}>
+        Request changes from the owner
+      </Btn>,
+      <Btn key="jira" onClick={() => {}}>
+        Open in Jira
+      </Btn>,
+    ],
+  },
+  parameters: { viewport: { defaultViewport: "mobile1" } },
+};
