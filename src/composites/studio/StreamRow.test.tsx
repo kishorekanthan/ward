@@ -64,7 +64,7 @@ describe("StreamRow", () => {
     const summary = { name: "Data Engineering", key: "DE", streamStep: 2 as const, owner: "Priya Nayar", members: 9, stages: [{ name: "Intake" }, { name: "Review", gate: true }, { name: "Loaded" }], agents: { live: 3, draft: 1, paused: 0 }, policy: { id: "DE-04", summary: "no direct writes" }, inFlight: 18, p50: "4.2h" };
     const { container } = render(table(<StreamRow stream={summary} href="#de" presentation={{ columns: 5 }} />));
     const cells = Array.from(container.querySelectorAll("td"), (cell) => cell.textContent);
-    expect(cells).toEqual(["Data EngineeringDEPriya Nayar · 9 members", "Intake→Review (human gate)→Loaded", "43 live · 1 draft", "DE-04no direct writes", "18P50 4.2h"]);
+    expect(cells).toEqual(["Data EngineeringDEPriya Nayar · 9 members", "Intake→◆Review (human gate)→Loaded", "43 live · 1 draft", "DE-04no direct writes", "18P50 4.2h"]);
   });
 });
 
@@ -97,6 +97,16 @@ describe("StreamRow (spec)", () => {
   it("marks the gate stage as a gate, never with the stream colour", () => {
     wrap();
     expect(screen.getByText("DPM sign-off").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-gate-bg)");
+  });
+
+  it("marks a gate stage with a shape as well as colour, and leaves other stages unmarked", () => {
+    wrap();
+    const gateLink = screen.getByText("DPM sign-off").parentElement as HTMLElement;
+    const triageLink = screen.getByText("Triage").parentElement as HTMLElement;
+    expect(gateLink.querySelector("[data-gate-mark]")?.textContent).toBe("◆");
+    expect(gateLink.querySelector("[data-gate-mark]")?.getAttribute("aria-hidden")).toBe("true");
+    expect(gateLink.textContent).toBe("◆DPM sign-off (human gate)");
+    expect(triageLink.textContent).not.toMatch(/◆|human gate/);
   });
 
   it("keeps the rest of the stage chain neutral", () => {

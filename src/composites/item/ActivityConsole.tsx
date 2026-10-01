@@ -60,6 +60,7 @@ function IdleLine({ connection, idleSince, last, children }: IdleLineProps) {
 export function ActivityConsole({ lines, connection, idleSince, label = "Live activity" }: ActivityConsoleProps) {
   const listRef = useRef<HTMLOListElement>(null);
   const [revealed, setRevealed] = useState(0);
+  const [announce, setAnnounce] = useState(false);
   const last = lines.at(-1);
 
   useEffect(() => {
@@ -76,7 +77,7 @@ export function ActivityConsole({ lines, connection, idleSince, label = "Live ac
 
   return (
     <div className={s.root}>
-      <ol className={s.list} ref={listRef} aria-live="off" aria-label={label}>
+      <ol className={s.list} ref={listRef} aria-live={announce ? "polite" : "off"} aria-label={label}>
         {lines.map((l, i) => (
           <li className={`${s.line} ward-consline ward-reveal ward-consline--${l.kind}`} key={`${l.at}-${i}`} data-kind={l.kind} data-revealed={i < revealed}>
             <span className={s.at}>{time(l.at)}</span>
@@ -86,6 +87,7 @@ export function ActivityConsole({ lines, connection, idleSince, label = "Live ac
         ))}
       </ol>
       <IdleLine connection={connection} idleSince={idleSince} last={last}>
+        <button type="button" className={`${s.jump} ward-consannounce`} aria-pressed={announce} onClick={() => setAnnounce(!announce)}>Read new events</button>
         <button type="button" className={`${s.jump} ward-consjump`} onClick={jump}>Jump to latest</button>
       </IdleLine>
     </div>

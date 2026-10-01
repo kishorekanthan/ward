@@ -221,7 +221,7 @@ else fail("rendered contrast", describeFailures(rendered.failures));
 
 // 7. phone width: Tabs, PageHeader chips, StatStrip labels, StageGrid, the top-bar tools and the section kicker at 375px against src/goldens/phone-width.json
 const phoneDiffs = await sweepPhoneWidth();
-if (phoneDiffs.length === 0) pass("phone width", "Tabs, PageHeader chips, StatStrip labels, StageGrid, the top-bar tools and the section kicker match the 375px golden");
+if (phoneDiffs.length === 0) pass("phone width", "Tabs, PageHeader chips, StatStrip labels, StageGrid, the top-bar tools, the section kicker and the console foot match the 375px golden");
 else fail("phone width", phoneDiffs.join("; "));
 
 // 8. console theme: the light theme gets a light panel, dark keeps the comp's block, against src/goldens/console-theme.json

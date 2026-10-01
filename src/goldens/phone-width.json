@@ -62,5 +62,12 @@
     "family": "Archivo",
     "letterSpacing": "normal",
     "pageScrollsSideways": false
+  },
+  "consoleFoot": {
+    "story": "item-activityconsole--live",
+    "buttons": "Read new events | Jump to latest",
+    "everyButtonWhole": true,
+    "idleCopyWhole": true,
+    "pageScrollsSideways": false
   }
 }

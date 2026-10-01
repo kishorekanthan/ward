@@ -41,6 +41,17 @@ describe("ActivityConsole", () => {
     expect(container.querySelector('[aria-live="polite"], [aria-live="assertive"], [role="status"], [role="alert"]')).toBeNull();
   });
 
+  it("announces new events politely only while the reader asks it to", () => {
+    render(<ActivityConsole lines={lines} connection="live" />);
+    const list = screen.getByRole("list");
+    const toggle = screen.getByRole("button", { name: "Read new events" });
+    expect([list.getAttribute("aria-live"), toggle.getAttribute("aria-pressed")]).toEqual(["off", "false"]);
+    fireEvent.click(toggle);
+    expect([list.getAttribute("aria-live"), toggle.getAttribute("aria-pressed")]).toEqual(["polite", "true"]);
+    fireEvent.click(toggle);
+    expect([list.getAttribute("aria-live"), toggle.getAttribute("aria-pressed")]).toEqual(["off", "false"]);
+  });
+
   it("gives the keyboard a way to reach the newest line", () => {
     render(<ActivityConsole lines={lines} connection="live" idleSince="2026-09-06T02:14:00Z" />);
     fireEvent.click(screen.getByText("Jump to latest"));

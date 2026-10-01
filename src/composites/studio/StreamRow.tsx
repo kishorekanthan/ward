@@ -78,13 +78,21 @@ function identityCell(stream: StreamRowSummary, href: string): ReactElement {
   </td>;
 }
 
+// A gate differs from other stages by a shape and spoken text, never by colour alone.
+function StageChip({ name, gate, size }: { name: string; gate: boolean; size?: "tag" }): ReactElement {
+  return <>
+    {gate ? <span className={s.gateMark} aria-hidden="true" data-gate-mark>◆</span> : null}
+    <Chip role={gate ? "gate" : "soft"} size={size} label={name} />
+    {gate ? <span className="ward-visually-hidden"> (human gate)</span> : null}
+  </>;
+}
+
 function stageChain(stages: StreamRowSummary["stages"]): ReactElement {
   return <span className={`${s.chain} ward-chiprow`}>
     {stages.map((stage, index) => (
       <span key={`${stage.name}${index}`} className={s.link}>
         {index === 0 ? null : <span className={s.arrow} aria-hidden="true">→</span>}
-        <Chip role={stage.gate === true ? "gate" : "soft"} size="tag" label={stage.name} />
-        {stage.gate === true ? <span className="ward-visually-hidden"> (human gate)</span> : null}
+        <StageChip name={stage.name} gate={stage.gate === true} size="tag" />
       </span>
     ))}
   </span>;
@@ -150,7 +158,7 @@ export function StreamRow(props: StreamRowProps) {
       <td className={s.cell}>
         <span className={s.chain}>
           {stream.stages.map((st) => (
-            <Chip key={st.name} role={st.gate ? "gate" : "soft"} label={st.name} />
+            <span key={st.name} className={s.link}><StageChip name={st.name} gate={st.gate} /></span>
           ))}
         </span>
       </td>
