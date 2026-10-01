@@ -10,16 +10,16 @@ export function readTokens() {
 
 // One face per (family, weight) a type token asks for; check.mjs gates the correspondence because CSS substitutes silently.
 const FONTS = [
-  { family: "Archivo", weight: 500, url: "https://fonts.gstatic.com/s/archivo/v25/k3kPo8UDI-1M0wlSV9XAw6lQkqWY8Q82sLydOxKsv4Rn.woff2", local: ["Archivo Medium", "Archivo-Medium"] },
-  { family: "Archivo", weight: 600, url: "https://fonts.gstatic.com/s/archivo/v25/k3kPo8UDI-1M0wlSV9XAw6lQkqWY8Q82sLydOxKsv4Rn.woff2", local: ["Archivo SemiBold", "Archivo-SemiBold"] },
-  { family: "Source Sans 3", weight: 400, url: "https://fonts.gstatic.com/s/sourcesans3/v19/nwpStKy2OAdR1K-IwhWudF-R3w8aZejf5Hc.woff2", local: ["Source Sans 3", "SourceSans3-Regular"] },
-  { family: "Source Sans 3", weight: 500, url: "https://fonts.gstatic.com/s/sourcesans3/v19/nwpStKy2OAdR1K-IwhWudF-R3w8aZejf5Hc.woff2", local: ["Source Sans 3 Medium", "SourceSans3-Medium"] },
-  { family: "Source Sans 3", weight: 600, url: "https://fonts.gstatic.com/s/sourcesans3/v19/nwpStKy2OAdR1K-IwhWudF-R3w8aZejf5Hc.woff2", local: ["Source Sans 3 SemiBold", "SourceSans3-Semibold"] },
-  { family: "Source Sans 3", weight: 700, url: "https://fonts.gstatic.com/s/sourcesans3/v19/nwpStKy2OAdR1K-IwhWudF-R3w8aZejf5Hc.woff2", local: ["Source Sans 3 Bold", "SourceSans3-Bold"] },
-  { family: "IBM Plex Mono", weight: 400, url: "https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q131nj-o.woff2", local: ["IBM Plex Mono", "IBMPlexMono"] },
-  { family: "IBM Plex Mono", weight: 500, url: "https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgsAXHNk.woff2", local: ["IBM Plex Mono Medium", "IBMPlexMono-Medium"] },
-  { family: "IBM Plex Mono", weight: 600, url: "https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgsAXHNk.woff2", local: ["IBM Plex Mono SemiBold", "IBMPlexMono-SemiBold"] },
-  { family: "IBM Plex Mono", weight: 700, url: "https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3pQPwlBFgsAXHNk.woff2", local: ["IBM Plex Mono Bold", "IBMPlexMono-Bold"] },
+  { family: "Archivo", weight: 500, file: "archivo-500.woff2", local: ["Archivo Medium", "Archivo-Medium"] },
+  { family: "Archivo", weight: 600, file: "archivo-600.woff2", local: ["Archivo SemiBold", "Archivo-SemiBold"] },
+  { family: "Source Sans 3", weight: 400, file: "source-sans-3-400.woff2", local: ["Source Sans 3", "SourceSans3-Regular"] },
+  { family: "Source Sans 3", weight: 500, file: "source-sans-3-500.woff2", local: ["Source Sans 3 Medium", "SourceSans3-Medium"] },
+  { family: "Source Sans 3", weight: 600, file: "source-sans-3-600.woff2", local: ["Source Sans 3 SemiBold", "SourceSans3-Semibold"] },
+  { family: "Source Sans 3", weight: 700, file: "source-sans-3-700.woff2", local: ["Source Sans 3 Bold", "SourceSans3-Bold"] },
+  { family: "IBM Plex Mono", weight: 400, file: "ibm-plex-mono-400.woff2", local: ["IBM Plex Mono", "IBMPlexMono"] },
+  { family: "IBM Plex Mono", weight: 500, file: "ibm-plex-mono-500.woff2", local: ["IBM Plex Mono Medium", "IBMPlexMono-Medium"] },
+  { family: "IBM Plex Mono", weight: 600, file: "ibm-plex-mono-600.woff2", local: ["IBM Plex Mono SemiBold", "IBMPlexMono-SemiBold"] },
+  { family: "IBM Plex Mono", weight: 700, file: "ibm-plex-mono-700.woff2", local: ["IBM Plex Mono Bold", "IBMPlexMono-Bold"] },
 ];
 
 export const FAMILY_OF = { named: "Archivo", prose: "Source Sans 3", mono: "IBM Plex Mono" };
@@ -38,6 +38,7 @@ const block = (lines) => lines.join("\n");
 const rule = (selector, decls) => block([selector + " {", ...decls.map((d) => "  " + d), "}"]);
 const px = (n) => (typeof n === "number" ? n + "px" : n);
 
+// ?no-inline: library builds otherwise inline every asset as base64; the files ship in dist/assets instead.
 function fontFaces() {
   return FONTS.map((f) =>
     rule("@font-face", [
@@ -45,7 +46,7 @@ function fontFaces() {
       "font-style: normal;",
       `font-weight: ${f.weight};`,
       "font-display: swap;",
-      `src: url('${f.url}') format('woff2'), ${f.local.map((l) => `local('${l}')`).join(", ")};`,
+      `src: url('./fonts/${f.file}?no-inline') format('woff2'), ${f.local.map((l) => `local('${l}')`).join(", ")};`,
     ]),
   ).join("\n\n");
 }
