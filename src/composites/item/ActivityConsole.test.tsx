@@ -5,6 +5,18 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { ActivityConsole, type ConsoleLine } from "./ActivityConsole";
 
+// jsdom has no layout: give the list a scroll box, each line 20px tall in a 30px view.
+function scrollBox(list: HTMLElement, scrollTop: number) {
+  Object.defineProperty(list, "clientHeight", { configurable: true, get: () => 30 });
+  Object.defineProperty(list, "scrollHeight", { configurable: true, get: () => 20 * list.children.length });
+  Object.defineProperty(list, "scrollTop", { configurable: true, writable: true, value: scrollTop });
+}
+
+function scrollUp(list: HTMLElement) {
+  scrollBox(list, 0);
+  fireEvent.scroll(list);
+}
+
 const LINES: ConsoleLine[] = [
   { at: "2026-09-04T02:06:11Z", kind: "tool", text: "foundry.query manifest → 1 row" },
   { at: "2026-09-04T02:14:03Z", kind: "ok", text: "usage 1,412 in · 380 out · $0.13" },
@@ -24,6 +36,7 @@ describe("ActivityConsole", () => {
     render(<ActivityConsole lines={LINES} connection="stale" idleSince="2026-09-04T02:14:03Z" />);
 
     expect(screen.getByText(/no new events as of/).textContent).toContain("03:14:03");
+    scrollUp(screen.getByRole("list"));
     fireEvent.click(screen.getByRole("button", { name: "Jump to latest" }));
     expect(document.activeElement?.textContent).toBe("usage 1,412 in · 380 out · $0.13");
   });
@@ -43,6 +56,7 @@ describe("ActivityConsole", () => {
 
   it("gives the keyboard a way to reach the newest line", () => {
     render(<ActivityConsole lines={lines} connection="live" idleSince="2026-09-06T02:14:00Z" />);
+    scrollUp(screen.getByRole("list"));
     fireEvent.click(screen.getByText("Jump to latest"));
     expect(document.activeElement?.textContent).toContain("draft written");
   });
@@ -63,11 +77,39 @@ describe("ActivityConsole", () => {
 
   it("keeps the idle caret and the jump control on the foot, outside the event list", () => {
     const { container } = render(<ActivityConsole lines={lines} connection="live" idleSince="2026-09-06T02:14:00Z" />);
+    scrollUp(screen.getByRole("list"));
     const foot = screen.getByText("waiting for the next event…").parentElement as HTMLElement;
     expect(foot.tagName).toBe("P");
     expect(foot.querySelector(".ward-caret")?.getAttribute("aria-hidden")).toBe("true");
     expect(foot.querySelector("button.ward-consjump")?.textContent).toBe("Jump to latest");
     expect(container.querySelector("ol")?.contains(foot)).toBe(false);
+  });
+
+  it("offers Jump to latest only after the reader scrolls up, and drops it once used", () => {
+    const many = Array.from({ length: 12 }, (_, i) => ({ at: "2026-09-06T02:14:00Z", kind: "tool" as const, text: `line ${i + 1}` }));
+    render(<ActivityConsole lines={many} connection="live" />);
+    const list = screen.getByRole("list");
+    scrollBox(list, 210);
+    fireEvent.scroll(list);
+    expect(screen.queryByRole("button", { name: "Jump to latest" })).toBeNull();
+    list.scrollTop = 100;
+    fireEvent.scroll(list);
+    fireEvent.click(screen.getByRole("button", { name: "Jump to latest" }));
+    expect(document.activeElement?.textContent).toBe("line 12");
+    expect(list.scrollTop).toBe(240);
+    expect(screen.queryByRole("button", { name: "Jump to latest" })).toBeNull();
+  });
+
+  it("follows an appended line at the bottom, and stays put when scrolled up", () => {
+    const at = "2026-09-06T02:15:00Z";
+    const { rerender } = render(<ActivityConsole lines={lines} connection="live" />);
+    const list = screen.getByRole("list");
+    scrollBox(list, 0);
+    rerender(<ActivityConsole lines={[...lines, { at, kind: "tool", text: "one more" }]} connection="live" />);
+    expect(list.scrollTop).toBe(80);
+    scrollUp(list);
+    rerender(<ActivityConsole lines={[...lines, { at, kind: "tool", text: "one more" }, { at, kind: "ok", text: "and another" }]} connection="live" />);
+    expect(list.scrollTop).toBe(0);
   });
 
   it("inks the idle foot in consoleFaint, the keep-list console ink", () => {

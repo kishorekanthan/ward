@@ -8,7 +8,11 @@
 
 .list {
   display: grid;
+  align-content: start;
   gap: var(--ward-gap-console);
+  font: var(--ward-type-consoleLine);
+  /* Six console lines tall before the first event, so the block never collapses to a sliver. */
+  min-height: calc(6lh + 5 * var(--ward-gap-console));
   max-height: 40vh;
   overflow: auto;
 }
