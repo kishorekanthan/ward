@@ -2,8 +2,8 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
-import { ActivityConsole, type ConsoleLine } from "./ActivityConsole";
+import { describe, expect, it, vi } from "vitest";
+import { ActivityConsole, ConsoleAnnounceProvider, type ConsoleLine } from "./ActivityConsole";
 
 // jsdom has no layout: give the list a scroll box, each line 20px tall in a 30px view.
 function scrollBox(list: HTMLElement, scrollTop: number) {
@@ -139,5 +139,54 @@ describe("ActivityConsole", () => {
     const foot = /\n\.foot \{([^}]*)\}/.exec(css)?.[1] ?? "";
     expect(foot).toContain("color: var(--ward-color-consoleFaint);");
     expect(/\n\.idle \{([^}]*)\}/.exec(css)?.[1]).not.toContain("color:");
+  });
+
+  const announceState = () =>
+    screen.getAllByRole("list").map((list, i) => [list.getAttribute("aria-live"), screen.getAllByRole("button", { name: "Read new events" })[i].getAttribute("aria-pressed")]);
+
+  it("shares one 'Read new events' preference across every console under the provider", () => {
+    render(
+      <ConsoleAnnounceProvider>
+        <ActivityConsole lines={LINES} connection="live" label="Run" />
+        <ActivityConsole lines={LINES} connection="stale" label="Test" />
+      </ConsoleAnnounceProvider>,
+    );
+    fireEvent.click(screen.getAllByRole("button", { name: "Read new events" })[0]);
+    expect(announceState()).toEqual([["polite", "true"], ["polite", "true"]]);
+    fireEvent.click(screen.getAllByRole("button", { name: "Read new events" })[1]);
+    expect(announceState()).toEqual([["off", "false"], ["off", "false"]]);
+  });
+
+  it("keeps each console's preference its own without a provider", () => {
+    render(<><ActivityConsole lines={LINES} connection="live" label="Run" /><ActivityConsole lines={LINES} connection="live" label="Test" /></>);
+    fireEvent.click(screen.getAllByRole("button", { name: "Read new events" })[0]);
+    expect(announceState()).toEqual([["polite", "true"], ["off", "false"]]);
+  });
+
+  it("lets the consumer hold the shared preference and persist each change", () => {
+    const onAnnounceChange = vi.fn();
+    render(
+      <ConsoleAnnounceProvider announce onAnnounceChange={onAnnounceChange}>
+        <ActivityConsole lines={LINES} connection="live" label="Run" />
+        <ActivityConsole lines={LINES} connection="live" label="Test" />
+      </ConsoleAnnounceProvider>,
+    );
+    expect(announceState()).toEqual([["polite", "true"], ["polite", "true"]]);
+    fireEvent.click(screen.getAllByRole("button", { name: "Read new events" })[1]);
+    expect(onAnnounceChange.mock.calls).toEqual([[false]]);
+    expect(announceState()).toEqual([["polite", "true"], ["polite", "true"]]);
+  });
+
+  it("keeps the consumer's 'off' after a toggle the consumer did not apply", () => {
+    const onAnnounceChange = vi.fn();
+    render(
+      <ConsoleAnnounceProvider announce={false} onAnnounceChange={onAnnounceChange}>
+        <ActivityConsole lines={LINES} connection="live" label="Run" />
+        <ActivityConsole lines={LINES} connection="live" label="Test" />
+      </ConsoleAnnounceProvider>,
+    );
+    fireEvent.click(screen.getAllByRole("button", { name: "Read new events" })[0]);
+    expect(onAnnounceChange.mock.calls).toEqual([[true]]);
+    expect(announceState()).toEqual([["off", "false"], ["off", "false"]]);
   });
 });

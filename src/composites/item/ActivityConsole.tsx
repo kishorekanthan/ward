@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { LiveConnection } from "../../live/types";
 import s from "./ActivityConsole.module.css";
 
@@ -69,10 +69,38 @@ function JumpToLatest({ shown, onJump }: { shown: boolean; onJump: () => void })
   return <button type="button" className={`${s.jump} ward-consjump`} onClick={onJump}>Jump to latest</button>;
 }
 
+type AnnounceShare = { announce: boolean; setAnnounce: (announce: boolean) => void };
+const SharedAnnounce = createContext<AnnounceShare | null>(null);
+
+export type ConsoleAnnounceProviderProps = {
+  announce?: boolean;
+  onAnnounceChange?: (announce: boolean) => void;
+  children: ReactNode;
+};
+
+// One 'Read new events' preference for every console inside; pass announce to persist it yourself.
+export function ConsoleAnnounceProvider({ announce, onAnnounceChange, children }: ConsoleAnnounceProviderProps) {
+  const [own, setOwn] = useState(false);
+  const share = useMemo<AnnounceShare>(() => ({
+    announce: announce ?? own,
+    setAnnounce: (next) => {
+      setOwn(next);
+      onAnnounceChange?.(next);
+    },
+  }), [announce, own, onAnnounceChange]);
+  return <SharedAnnounce.Provider value={share}>{children}</SharedAnnounce.Provider>;
+}
+
+function useAnnounce(): [boolean, (announce: boolean) => void] {
+  const shared = useContext(SharedAnnounce);
+  const [own, setOwn] = useState(false);
+  return shared ? [shared.announce, shared.setAnnounce] : [own, setOwn];
+}
+
 export function ActivityConsole({ lines, connection, idleSince, label = "Live activity" }: ActivityConsoleProps) {
   const listRef = useRef<HTMLOListElement>(null);
   const [revealed, setRevealed] = useState(0);
-  const [announce, setAnnounce] = useState(false);
+  const [announce, setAnnounce] = useAnnounce();
   const [away, setAway] = useState(false);
   const last = lines.at(-1);
 
