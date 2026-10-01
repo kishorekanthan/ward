@@ -103,7 +103,8 @@
       "wardRing": true,
       "ring": true,
       "tall": true,
-      "hit24": true
+      "hit24": true,
+      "underlineGap": 0
     },
     {
       "name": "Intake",
@@ -111,7 +112,8 @@
       "wardRing": true,
       "ring": true,
       "tall": true,
-      "hit24": true
+      "hit24": true,
+      "underlineGap": 0
     },
     {
       "name": "14",

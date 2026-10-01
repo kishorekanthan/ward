@@ -20,6 +20,14 @@ function readFocused() {
   const x = r.left + r.width / 2;
   const hits = (y) => document.elementFromPoint(x, y)?.closest("a, button") === el;
   const mid = r.top + r.height / 2;
+  // px from the bottom of the link's text to the top of its ::after underline; null without one.
+  const underlineGap = (box) => {
+    const line = getComputedStyle(el, "::after");
+    if (line.content === "none" || line.position !== "absolute") return null;
+    const text = document.createRange();
+    text.selectNodeContents(el);
+    return Math.round((box.bottom - Number.parseFloat(line.bottom) - Number.parseFloat(line.height) - text.getBoundingClientRect().bottom) * 10) / 10;
+  };
   // The browser's own focus ring also paints, so the ring must be Ward's: solid, in this copy's theme blue.
   const blue = document.createElement("span");
   blue.style.color = "var(--ward-color-blue)";
@@ -33,6 +41,7 @@ function readFocused() {
     wardRing,
     height: r.height,
     hit24: hits(mid - 11.5) && hits(mid + 11.5),
+    underlineGap: underlineGap(r),
     box: { x: r.left, y: r.top, width: r.width, height: r.height, reach },
   };
 }
@@ -85,7 +94,7 @@ async function tabThrough(page) {
       continue;
     }
     const ring = await ringOnEverySide(page, got.box);
-    seen.push({ theme: got.theme, name: got.name, focusVisible: got.focusVisible, wardRing: got.wardRing, ring, tall: got.height >= 24, hit24: got.hit24, height: got.height });
+    seen.push({ theme: got.theme, name: got.name, focusVisible: got.focusVisible, wardRing: got.wardRing, ring, tall: got.height >= 24, hit24: got.hit24, underlineGap: got.underlineGap, height: got.height });
   }
   return seen;
 }
