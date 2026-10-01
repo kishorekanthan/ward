@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { ensureBuild, serve } from "./contrast.mjs";
+import { launchChromium } from "./browser.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 export const golden = JSON.parse(readFileSync(join(root, "src", "goldens", "console-theme.json"), "utf8"));
@@ -27,10 +28,9 @@ function probeConsole(theme) {
 
 export async function sweepConsoleTheme() {
   ensureBuild();
-  const { chromium } = await import("playwright");
   const server = serve();
   await new Promise((r) => server.listen(0, "127.0.0.1", r));
-  const browser = await chromium.launch();
+  const browser = await launchChromium();
   const diffs = [];
   try {
     const page = await browser.newPage();

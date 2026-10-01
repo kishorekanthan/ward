@@ -141,7 +141,6 @@ const BLUE_USES: Record<Category, string[]> = {
     "composites/intake/SessionRow.module.css .tableRecord blue",
     "layout/Sidebar.module.css .new blue",
     "composites/studio/NewStreamModal.module.css .addStageButton blue",
-    "composites/studio/StageColumn.module.css .mount blue",
     "composites/studio/StreamRow.module.css .define blue",
   ],
   current: [

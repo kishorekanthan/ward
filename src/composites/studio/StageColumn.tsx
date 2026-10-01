@@ -212,7 +212,7 @@ function canMount(kind: StageKind): boolean {
 
 function WorkflowMount({ stage, onMount }: Pick<StageColumnWorkflowProps, "stage" | "onMount">) {
   if (onMount === undefined || !canMount(stage.kind)) return null;
-  return <button type="button" className={`${s.mount} ward-target`} onClick={() => onMount(stage.index)}>+ Mount agent</button>;
+  return <Btn variant="secondary" size="sm" className={s.mount} onClick={() => onMount(stage.index)}>+ Mount agent</Btn>;
 }
 
 function WorkflowColumn({ stage, agentCards, onMount }: StageColumnWorkflowProps) {

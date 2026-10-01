@@ -58,10 +58,6 @@
     "gap": "6px",
     "count": "500 18px/1 Archivo"
   },
-  "mount": {
-    "font": "500 11px/1 'Source Sans 3'",
-    "color": "#0066F5"
-  },
   "streamRow": {
     "padding": "15px 20px",
     "cellGap": "8px",
