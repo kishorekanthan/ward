@@ -1,4 +1,4 @@
-.PHONY: check install hooks pr-check rulesets rulesets-apply signing
+.PHONY: check install hooks pr-check rulesets rulesets-apply signing verify-tag
 
 install: hooks
 	npm ci
@@ -7,11 +7,15 @@ install: hooks
 hooks:
 	git config core.hooksPath githooks
 
-# Signed release tags (git tag -s / -v); repo config, run from the repo root so the relative signers path resolves.
+# Signs release tags (repo config); no signers file, so a bare git tag -v cannot trust the checked-out tree's list (#100).
 signing:
 	git config gpg.format ssh
 	git config user.signingkey $(HOME)/.ssh/id_ed25519.pub
-	git config gpg.ssh.allowedSignersFile .github/allowed_signers
+	git config --unset-all gpg.ssh.allowedSignersFile || true
+
+# Verifies a release tag against main's .github/allowed_signers: make verify-tag TAG=vX.Y.Z.
+verify-tag:
+	node scripts/verify-tag.mjs $(TAG)
 
 # Refuses a PR whose title, body or commits carry AI attribution: make pr-check PR=N.
 pr-check:
