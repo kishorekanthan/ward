@@ -203,8 +203,10 @@ describe("StageColumn (spec)", () => {
   });
 
   it("ships a workflow gate story whose panel shows the gate-share note", () => {
-    const { container } = render(<StageColumn {...(WorkflowGate.args as Parameters<typeof StageColumn>[0])} />);
+    const { container } = render(<StageColumn {...WorkflowGate.args} />);
     const note = container.querySelector('[data-panel="gate"] [data-note="gate-share"]');
     expect(note?.textContent).toBe("68% of elapsed time is spent here");
+    expect([...container.querySelectorAll('[data-panel="gate"] li')].map((row) => row.textContent)).toEqual(["JRJ. Rao", "MCM. Chen"]);
+    expect(container.querySelector("header")?.textContent).toContain("6 items · median wait 2d 13h");
   });
 });
