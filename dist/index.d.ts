@@ -31,6 +31,7 @@ export { Chip } from './primitives/Chip';
 export type { ChipProps, ChipSemantic } from './primitives/Chip';
 export { streamColour, streamChipProps, validatedStep } from './primitives/streamColour';
 export type { StreamColourPart } from './primitives/streamColour';
+export { safeHref, UNSAFE_HREF } from './primitives/safeHref';
 export { Crumb } from './primitives/Crumb';
 export type { CrumbPath, CrumbProps } from './primitives/Crumb';
 export { Field } from './primitives/Field';
