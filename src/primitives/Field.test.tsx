@@ -28,8 +28,10 @@ describe("Field secret", () => {
     const control = screen.getByLabelText("Provider key");
     expect(control.tagName).toBe("INPUT");
     expect(control.getAttribute("type")).toBe("password");
-    expect(control.getAttribute("autocomplete")).toBe("off");
+    expect(control.getAttribute("autocomplete")).toBe("new-password");
     expect(control.getAttribute("spellcheck")).toBe("false");
+    expect(control.hasAttribute("data-1p-ignore")).toBe(true);
+    expect(control.getAttribute("data-lpignore")).toBe("true");
   });
 
   it("leaves a plain input as text with no autocomplete or spellcheck override", () => {
@@ -38,6 +40,8 @@ describe("Field secret", () => {
     expect(control.getAttribute("type")).toBeNull();
     expect(control.hasAttribute("autocomplete")).toBe(false);
     expect(control.hasAttribute("spellcheck")).toBe(false);
+    expect(control.hasAttribute("data-1p-ignore")).toBe(false);
+    expect(control.hasAttribute("data-lpignore")).toBe(false);
   });
 
   it("has no effect on a textarea or a select", () => {
@@ -47,6 +51,8 @@ describe("Field secret", () => {
       const control = screen.getByLabelText(label);
       expect(control.hasAttribute("type")).toBe(false);
       expect(control.hasAttribute("autocomplete")).toBe(false);
+      expect(control.hasAttribute("data-1p-ignore")).toBe(false);
+      expect(control.hasAttribute("data-lpignore")).toBe(false);
     }
   });
 });
