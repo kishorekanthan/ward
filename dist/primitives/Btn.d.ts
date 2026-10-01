@@ -12,12 +12,20 @@ type Base = {
     expanded?: boolean;
     controls?: string;
 };
-export type BtnProps = (Base & {
+type Available = Base & {
     disabled?: false;
     describedBy?: string;
-}) | (Base & {
+    disabledReason?: string;
+};
+type Unavailable = Base & {
     disabled: true;
+} & ({
     describedBy: string;
+    disabledReason?: string;
+} | {
+    describedBy?: string;
+    disabledReason: string;
 });
+export type BtnProps = Available | Unavailable;
 export declare function Btn(props: BtnProps): import("react").JSX.Element;
 export {};
