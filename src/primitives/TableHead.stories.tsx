@@ -5,6 +5,10 @@ export default {
   title: "Primitives/TableHead",
   component: TableHead,
   decorators: [bothThemes],
+  tags: ["autodocs"],
+  parameters: {
+    docs: { description: { component: "Labels truncate only under `table-layout: fixed`; in an auto-layout table a long label widens its column instead." } },
+  },
 };
 
 export const OwnRows = {
