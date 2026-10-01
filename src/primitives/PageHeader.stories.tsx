@@ -124,3 +124,14 @@ export const PhoneWidth = {
   },
   parameters: { viewport: { defaultViewport: "mobile1" } },
 };
+
+// One chip would fit beside a short crumb; below 768px it still takes its own line.
+export const PhoneWidthOneChip = {
+  args: {
+    crumb: [{ label: "Studio", href: "/studio" }, { label: "data-eng" }],
+    title: "intake-advisor v3",
+    chips: [{ role: "running", label: "DRAFT" }],
+    actions,
+  },
+  parameters: { viewport: { defaultViewport: "mobile1" } },
+};

@@ -68,7 +68,8 @@ function probeStatStrip([text, longText]) {
   return { label, labelLines, labelClipped, longLabel, longLabelLines, longLabelClipped, pageScrollsSideways };
 }
 
-const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, statStrip: probeStatStrip };
+// One chip fits beside a short crumb, so only that story shows chips still take their own line.
+const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, statStrip: probeStatStrip };
 
 async function measure(page, base, key) {
   const { story, label, longLabel } = golden[key];

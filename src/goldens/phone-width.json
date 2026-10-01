@@ -20,6 +20,11 @@
     "everyChipWhole": true,
     "pageScrollsSideways": false
   },
+  "pageHeaderOneChip": {
+    "story": "primitives-pageheader--phone-width-one-chip",
+    "chipsBelowCrumb": true,
+    "chipLines": 1
+  },
   "statStrip": {
     "story": "primitives-statstrip--phone-width",
     "label": "Items waiting at a review gate",
