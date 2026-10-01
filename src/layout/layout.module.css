@@ -108,6 +108,38 @@
   border-bottom: 0;
 }
 
+/* A prose section keeps its text to a reading measure; the body's rule still spans the column. */
+.recordBody[data-measure="prose"] > * {
+  max-width: 72ch;
+}
+
+/* Stage columns share the width down to a floor, then scroll inside the grid with an edge fade. */
+.stageGrid {
+  --ward-stage-grid-floor: var(--ward-width-stageColumn);
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(var(--ward-stage-grid-columns), minmax(var(--ward-stage-grid-floor), 1fr));
+  align-items: stretch;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.stageGrid[data-floor="column"] {
+  --ward-stage-grid-floor: var(--ward-width-colFloor);
+}
+
+.stageGrid[data-fade-start] {
+  mask-image: linear-gradient(to right, transparent, currentColor var(--ward-space-6));
+}
+
+.stageGrid[data-fade-end] {
+  mask-image: linear-gradient(to left, transparent, currentColor var(--ward-space-6));
+}
+
+.stageGrid[data-fade-start][data-fade-end] {
+  mask-image: linear-gradient(to right, transparent, currentColor var(--ward-space-6), currentColor calc(100% - var(--ward-space-6)), transparent);
+}
+
 .band {
   display: flex;
   align-items: center;

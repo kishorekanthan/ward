@@ -1,0 +1,8 @@
+/* Provenance: not established — no comp block identified; an unstyled list for pages that lay out their own rows. */
+.list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}

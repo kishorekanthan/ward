@@ -5,7 +5,7 @@ export type SectionHeaderProps = {
   title: string;
   // Optional: the comp's `.sec` is an unnumbered label; Studio's ordered sections add the number.
   index?: string;
-  note?: string;
+  note?: ReactNode;
   counter?: string;
   // "key" is Board Item's `.k` label; "micro" is the Studio section head; "bare" is Studio 4a's unbanded head.
   kind?: "micro" | "key" | "bare";

@@ -80,8 +80,28 @@ function probeStatStrip([text, longText]) {
   return { label, labelLines, labelClipped, longLabel, longLabelLines, longLabelClipped, pageScrollsSideways };
 }
 
+// Six stage columns at 375px: the grid scrolls, not the page, and each lone fade masks its edge.
+async function probeStageGrid() {
+  const grid = document.querySelector("#storybook-root [data-ward-stage-grid]");
+  const settle = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const loneFade = (on, off) => grid.hasAttribute(on) && !grid.hasAttribute(off) && /gradient/.test(getComputedStyle(grid).maskImage);
+  grid.scrollLeft = 0;
+  await settle();
+  const endFadeMaskedAtStart = loneFade("data-fade-end", "data-fade-start");
+  grid.scrollLeft = grid.scrollWidth;
+  await settle();
+  const startFadeMaskedAtEnd = loneFade("data-fade-start", "data-fade-end");
+  return {
+    columnWidth: Math.round(grid.firstElementChild.getBoundingClientRect().width),
+    gridScrolls: grid.scrollWidth > grid.clientWidth && getComputedStyle(grid).overflowX === "auto",
+    endFadeMaskedAtStart,
+    startFadeMaskedAtEnd,
+    pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+  };
+}
+
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, statStrip: probeStatStrip };
+const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, statStrip: probeStatStrip, stageGrid: probeStageGrid };
 
 async function measure(page, base, key) {
   const { story, label, longLabel } = golden[key];

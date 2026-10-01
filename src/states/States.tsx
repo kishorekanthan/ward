@@ -6,7 +6,7 @@ import s from "./states.module.css";
 export type StateAction = { label: string; onClick: () => void };
 export type EmptyStateProps = { sentence: string; action?: StateAction };
 
-type BlockProps = EmptyStateProps & { children?: ReactNode; role?: "status" | "alert"; tone?: "failed" };
+type BlockProps = EmptyStateProps & { children?: ReactNode; role?: "status" | "alert"; tone?: "failed"; kind?: string };
 
 function Action({ action }: { action?: StateAction }) {
   if (action === undefined) return null;
@@ -17,9 +17,9 @@ function Action({ action }: { action?: StateAction }) {
   );
 }
 
-function Block({ sentence, action, children, role = "status", tone }: BlockProps) {
+function Block({ sentence, action, children, role = "status", tone, kind }: BlockProps) {
   return (
-    <div className={`${s.block} ward-state`} role={role} data-tone={tone}>
+    <div className={`${s.block} ward-state${kind === undefined ? "" : ` ${kind}`}`} role={role} data-tone={tone}>
       <p className={s.sentence}>{sentence}</p>
       {children}
       <Action action={action} />
@@ -28,7 +28,7 @@ function Block({ sentence, action, children, role = "status", tone }: BlockProps
 }
 
 export function EmptyState(props: EmptyStateProps) {
-  return <Block {...props} />;
+  return <Block {...props} kind="ward-emptystate" />;
 }
 
 export type FilteredEmptyProps = { sentence: string; total: number; action?: StateAction };
