@@ -244,7 +244,8 @@ export async function sweepPhoneWidth() {
   const server = serve();
   await new Promise((r) => server.listen(0, "127.0.0.1", r));
   const base = `http://127.0.0.1:${server.address().port}`;
-  const browser = await chromium.launch();
+  // Linux Chromium hints glyph advances to whole pixels, which wraps PageHeader's chips a line early (#110); macOS ignores the flag.
+  const browser = await chromium.launch({ args: ["--font-render-hinting=none"] });
   const diffs = [];
   try {
     const page = await browser.newPage({ viewport: golden.viewport });
