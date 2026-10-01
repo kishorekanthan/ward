@@ -50,11 +50,12 @@ function movedByTargets() {
 }
 
 // The four bands just outside the box where the outline paints; each must change when focus leaves.
+// Top and bottom bands skip the corners, so the side lines cannot stand in for a clipped edge.
 function bands({ x, y, width, height, reach }) {
   const r = Math.max(reach, 1);
   return [
-    { x: x - r, y: y - r, width: width + 2 * r, height: r },
-    { x: x - r, y: y + height, width: width + 2 * r, height: r },
+    { x, y: y - r, width, height: r },
+    { x, y: y + height, width, height: r },
     { x: x - r, y, width: r, height },
     { x: x + width, y, width: r, height },
   ];
