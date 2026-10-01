@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, type RefObject } from "react";
 import { useRovingTabindex } from "../a11y/useRovingTabindex";
+import { markEdges, useEdgeFades } from "../layout/useEdgeFades";
 import s from "./Tabs.module.css";
 
 export type Tab = { id: string; label: string; count?: number };
@@ -22,37 +23,6 @@ function selectedIndex(tabs: Tab[], active: string): number {
 
 function tabClass(level: 1 | 2): string {
   return `${s.strip} ward-tabs${level === 2 ? " ward-tabs--level2" : ""}`;
-}
-
-type Edges = { start: boolean; end: boolean };
-
-function hiddenEdges(strip: HTMLElement): Edges {
-  const end = strip.scrollWidth - strip.clientWidth - strip.scrollLeft;
-  return { start: strip.scrollLeft > 1, end: end > 1 };
-}
-
-// Data attributes, not state, so scrolling never re-renders the strip.
-function markEdges(strip: HTMLElement): void {
-  const edges = hiddenEdges(strip);
-  strip.toggleAttribute("data-fade-start", edges.start);
-  strip.toggleAttribute("data-fade-end", edges.end);
-}
-
-function useEdgeFades(stripRef: RefObject<HTMLDivElement | null>, count: number): void {
-  useEffect(() => {
-    const strip = stripRef.current;
-    if (!strip) return;
-    const mark = () => markEdges(strip);
-    strip.addEventListener("scroll", mark, { passive: true });
-    const ro = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(mark);
-    // The tabs too: a web font swapping in changes scrollWidth without resizing the strip.
-    for (const el of [strip, ...strip.children]) ro?.observe(el);
-    mark();
-    return () => {
-      strip.removeEventListener("scroll", mark);
-      ro?.disconnect();
-    };
-  }, [stripRef, count]);
 }
 
 // The fade width is the strip's scroll-padding, so a revealed tab clears the fade too.

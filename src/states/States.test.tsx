@@ -1,6 +1,21 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { EmptyState, LoadFailed, StaleStrip, WriteUnavailableStrip } from "./States";
+import { DeniedState, EmptyState, FilteredEmpty, LoadFailed, StaleStrip, WriteUnavailableStrip } from "./States";
+
+describe("empty-state card class", () => {
+  it("marks only EmptyState with .ward-emptystate, so a page can count its empty cards", () => {
+    const { container } = render(
+      <>
+        <EmptyState sentence="No description in Jira yet." />
+        <DeniedState sentence="Only stream admins see this." />
+        <FilteredEmpty sentence="Nothing matches." total={4} />
+      </>,
+    );
+    const cards = container.querySelectorAll(".ward-emptystate");
+    expect(cards).toHaveLength(1);
+    expect(cards[0].textContent).toBe("No description in Jira yet.");
+  });
+});
 
 describe("state tones", () => {
   it("marks a load failure as failed, an empty state as untoned", () => {

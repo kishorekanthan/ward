@@ -211,9 +211,9 @@ else pass("stories render", `${rendered.stories} stories, no empty root and no c
 if (rendered.failures.length === 0) pass("rendered contrast", detail);
 else fail("rendered contrast", describeFailures(rendered.failures));
 
-// 7. phone width: Tabs, PageHeader chips, StatStrip labels, the top-bar tools and the section kicker at 375px against src/goldens/phone-width.json
+// 7. phone width: Tabs, PageHeader chips, StatStrip labels, StageGrid, the top-bar tools and the section kicker at 375px against src/goldens/phone-width.json
 const phoneDiffs = await sweepPhoneWidth();
-if (phoneDiffs.length === 0) pass("phone width", "Tabs, PageHeader chips, StatStrip labels, the top-bar tools and the section kicker match the 375px golden");
+if (phoneDiffs.length === 0) pass("phone width", "Tabs, PageHeader chips, StatStrip labels, StageGrid, the top-bar tools and the section kicker match the 375px golden");
 else fail("phone width", phoneDiffs.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);

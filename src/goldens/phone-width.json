@@ -38,6 +38,15 @@
     "longLabelClipped": true,
     "pageScrollsSideways": false
   },
+  "stageGrid": {
+    "story": "layout-stagegrid--phone-width",
+    "columnWidth": 176,
+    "gridScrolls": true,
+    "endFadeMaskedAtStart": true,
+    "bothFadesMaskedMidScroll": true,
+    "startFadeMaskedAtEnd": true,
+    "pageScrollsSideways": false
+  },
   "topBar": {
     "story": "layout-appshell--top-bar-phone-width",
     "toggleInView": true,
