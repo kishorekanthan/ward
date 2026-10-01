@@ -36,9 +36,19 @@ function packedFonts(css, wardRoot) {
   const remote = urls.filter((url) => !url.startsWith("./assets/"));
   assert(sources.length > 0 && urls.length === sources.length, "packed @font-face rules lack one url each");
   assert(remote.length === 0, `packed font src is not vendored: ${remote.join(", ")}`);
+  assert(new Set(urls).size === urls.length, `packed @font-face rules share a file: ${urls.join(", ")}`);
   const missing = urls.filter((url) => !existsSync(join(wardRoot, "dist", url)));
   assert(missing.length === 0, `packed tarball lacks fonts: ${missing.join(", ")}`);
-  return urls.map((url) => url.slice("./assets/".length, -".woff2".length));
+  const fonts = urls.map((url) => url.slice("./assets/".length, -".woff2".length));
+  assertShipsLicences(fonts, wardRoot);
+  return fonts;
+}
+
+// The OFL lets the fonts ship only together with their licence.
+function assertShipsLicences(fonts, wardRoot) {
+  const families = [...new Set(fonts.map((font) => font.replace(/-\d+$/, "")))];
+  const unlicensed = families.filter((family) => !existsSync(join(wardRoot, "src", "fonts", `LICENSE-${family}.txt`)));
+  assert(unlicensed.length === 0, `packed tarball lacks font licences: ${unlicensed.join(", ")}`);
 }
 
 function assertBuildShipsFonts(appRoot, fonts) {
