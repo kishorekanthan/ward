@@ -11,6 +11,7 @@ describe("small links take the 24px target", () => {
       ["data-eng", true],
       ["Regulatory Ops", true],
       ["Define workflow", true],
+      ["ledger", true],
       ["Late-arriving shipments view", true],
       ["→ FL-229", true],
       ["intake-advisor", true],

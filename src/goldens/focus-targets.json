@@ -38,6 +38,14 @@
       "hit24": true
     },
     {
+      "name": "ledger",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
       "name": "Late-arriving shipments view",
       "focusVisible": true,
       "wardRing": true,

@@ -1,6 +1,6 @@
 import { bothThemes } from "../../.storybook/bothThemes";
 import { Crumb } from "../primitives/Crumb";
-import { StreamRow } from "../composites/studio/StreamRow";
+import { StreamRow, type Stream } from "../composites/studio/StreamRow";
 import { AgentCard } from "../composites/studio/AgentCard";
 import { StageColumn } from "../composites/studio/StageColumn";
 import { SessionRow, type Session } from "../composites/intake/SessionRow";
@@ -18,6 +18,18 @@ const session: Session = {
 };
 
 const draft = { name: "Regulatory Ops", key: "REG", streamStep: 3 as const, owner: "unassigned", stages: [], draft: true };
+
+const ledger: Stream = {
+  name: "ledger",
+  key: "LG",
+  streamStep: 2,
+  owner: "J. Rao",
+  members: 4,
+  stages: [{ name: "Intake", gate: false }],
+  agents: { live: 1, draft: 0, paused: 0 },
+  policy: { id: "PLT-201", summary: "Hold every item at the gate." },
+  inFlight: 2,
+};
 
 const agent = {
   id: "intake-advisor",
@@ -39,6 +51,7 @@ export const Links = {
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <tbody>
           <StreamRow stream={draft} href="/studio/reg" presentation={{ columns: 5 }} />
+          <StreamRow stream={ledger} href="/studio/ledger" />
           <SessionRow session={session} presentation="table" href="/intake/42" />
         </tbody>
       </table>

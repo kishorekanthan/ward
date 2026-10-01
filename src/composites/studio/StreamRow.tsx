@@ -141,7 +141,7 @@ export function StreamRow(props: StreamRowProps) {
   return (
     <tr className={s.row}>
       <td className={s.cell}>
-        <a className={s.name} href={safeHref(href)}>
+        <a className={`${s.name} ward-target`} href={safeHref(href)}>
           {stream.name}
         </a>
         <Chip {...streamChipProps(stream.key, stream.streamStep)} />
