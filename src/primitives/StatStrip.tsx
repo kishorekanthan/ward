@@ -1,7 +1,7 @@
 import s from "./StatStrip.module.css";
 import { safeHref } from "./safeHref";
 
-export type StatCell = { value: string; label: string; accent?: "blue" | "amber"; href?: string };
+export type StatCell = { value: string; label: string; accent?: "blue" | "amber"; href?: string; hint?: string };
 
 function validate(cells: StatCell[]): void {
   if (cells.length < 2 || cells.length > 4) {
@@ -27,7 +27,7 @@ export function StatStrip({ cells, divided = false }: { cells: StatCell[]; divid
     <dl className={`${s.strip} ward-statstrip`} data-divided={divided || undefined}>
       {cells.map((c) => (
         <div className={s.cell} key={c.label} data-accent={c.accent}>
-          <dd className={`${s.value} ward-stat-value${c.accent ? ` ward-stat-accent--${c.accent}` : ""}`}>
+          <dd className={`${s.value} ward-stat-value${c.accent ? ` ward-stat-accent--${c.accent}` : ""}`} title={c.hint}>
             <Value cell={c} />
           </dd>
           <dt className={`${s.label} ward-stat-label`}>{c.label}</dt>

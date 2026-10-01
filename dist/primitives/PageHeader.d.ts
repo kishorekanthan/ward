@@ -7,6 +7,8 @@ export type PageHeaderProps = {
     chips?: ChipProps[];
     title: string;
     consequence?: string;
+    /** Tooltip saying what the consequence line counts. */
+    consequenceHint?: string;
     actions?: ReactNode[];
     /** Secondary actions behind an always-present ··· button, before the actions. */
     more?: ReactNode[];
@@ -19,4 +21,4 @@ export type PageHeaderProps = {
     /** "record" is Board Item 8b's case head: 16px 20px 13px with a 19px title. */
     density?: "page" | "record";
 };
-export declare function PageHeader({ crumb, chips, title, consequence, actions, more, connection, onOverflow, density }: PageHeaderProps): import("react").JSX.Element;
+export declare function PageHeader({ crumb, chips, title, consequence, consequenceHint, actions, more, connection, onOverflow, density }: PageHeaderProps): import("react").JSX.Element;

@@ -4,6 +4,8 @@ import { FieldOption } from '../../primitives/Field';
 import { StreamStep } from '../../tokens';
 export type BoardRollups = {
     inFlight: number;
+    /** Tooltip saying what "in flight" counts. */
+    inFlightHint?: string;
     loadedThisWeek?: number;
     agentsWorking?: number;
     p50?: number;

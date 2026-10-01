@@ -150,3 +150,19 @@ describe("PageHeader deciding to collapse with more items", () => {
     expect(screen.getAllByRole("button", { name: "More actions" })).toHaveLength(1);
   });
 });
+
+describe("PageHeader consequence hint", () => {
+  const consequence = "14 in flight across 3 streams";
+
+  it("puts the hint on the consequence line, leaving its text as is", () => {
+    render(<PageHeader crumb={crumb} title="Data engineering" consequence={consequence} consequenceHint="Items running, held or blocked" />);
+    const line = screen.getByText(consequence);
+    expect(line.getAttribute("title")).toBe("Items running, held or blocked");
+    expect(line.textContent).toBe(consequence);
+  });
+
+  it("adds no title without a hint", () => {
+    render(<PageHeader crumb={crumb} title="Data engineering" consequence={consequence} />);
+    expect(screen.getByText(consequence).hasAttribute("title")).toBe(false);
+  });
+});

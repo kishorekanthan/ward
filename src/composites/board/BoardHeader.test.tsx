@@ -24,8 +24,9 @@ describe("BoardHeader", () => {
   });
 
   it("puts the rollup through the formatters, never raw numbers", () => {
-    render(<BoardHeader {...full} />);
-    const line = screen.getByText(/in flight/);
+    const { container } = render(<BoardHeader {...full} />);
+    const line = container.querySelector("[aria-live='polite']") as HTMLElement;
+    expect(line.textContent).toContain("14 in flight");
     expect(line.textContent).toContain("1,204 loaded this week");
     expect(line.textContent).toContain("P50 3d 4h");
   });
@@ -139,3 +140,23 @@ function requiredMark(container: HTMLElement): HTMLElement {
   if (mark === null) throw new Error("no stream mark");
   return mark;
 }
+
+describe("BoardHeader in-flight hint", () => {
+  const rollups = { inFlight: 3, loadedThisWeek: 1 };
+
+  it("puts the hint on the in-flight part of the rollup line only", () => {
+    const { container } = render(
+      <BoardHeader stream={stream} rollups={{ ...rollups, inFlightHint: "Items running, held or blocked" }} connection="live" lastEventAt={null} />,
+    );
+    const hinted = container.querySelectorAll("[title]");
+    expect(hinted).toHaveLength(1);
+    expect(hinted[0].getAttribute("title")).toBe("Items running, held or blocked");
+    expect(hinted[0].textContent).toBe("3 in flight");
+    expect(container.querySelector("[aria-live='polite']")?.textContent).toBe("3 in flight · 1 loaded this week");
+  });
+
+  it("adds no title without a hint", () => {
+    const { container } = render(<BoardHeader stream={stream} rollups={rollups} connection="live" lastEventAt={null} />);
+    expect(container.querySelector("[title]")).toBeNull();
+  });
+});

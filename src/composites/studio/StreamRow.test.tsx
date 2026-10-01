@@ -138,3 +138,31 @@ describe("StreamRow (spec)", () => {
     expect([chipOf(2), chipOf(4), chipOf(null)]).toEqual(["stream", "meta", "meta"]);
   });
 });
+
+describe("StreamRow in-flight hint", () => {
+  const hint = "Items running, held or blocked";
+  const summary = { name: "DE", key: "DE", streamStep: 2 as const, owner: "Priya Nayar", stages: [], inFlight: 7, p50: "2d" };
+
+  it("puts the hint on the in-flight count of the full row", () => {
+    const { container } = render(table(<StreamRow stream={{ ...stream, inFlightHint: hint }} href="#de" />));
+    const hinted = container.querySelectorAll("[title]");
+    expect(hinted).toHaveLength(1);
+    expect(hinted[0].getAttribute("title")).toBe(hint);
+    expect(hinted[0].textContent).toBe("18");
+  });
+
+  it("puts the hint on the in-flight count of the summary row", () => {
+    const { container } = render(table(<StreamRow stream={{ ...summary, inFlightHint: hint }} href="#de" presentation={{ columns: 5 }} />));
+    const hinted = container.querySelectorAll("[title]");
+    expect(hinted).toHaveLength(1);
+    expect(hinted[0].getAttribute("title")).toBe(hint);
+    expect(hinted[0].textContent).toBe("7");
+  });
+
+  it("adds no title without a hint", () => {
+    const full = render(table(<StreamRow stream={stream} href="#de" />));
+    expect(full.container.querySelector("[title]")).toBeNull();
+    const compact = render(table(<StreamRow stream={summary} href="#de" presentation={{ columns: 5 }} />));
+    expect(compact.container.querySelector("[title]")).toBeNull();
+  });
+});
