@@ -30,6 +30,10 @@ The root JavaScript entry bundles Ward’s CSS side effect for ordinary client b
 
 Components provide usable labels and layout defaults; props such as `brand`, `destinations`, `actor`, `metadata`, `width`, `railLabel`, and `inset` override them without app-specific dependencies. Theme a subtree with `data-theme="dark"` or override any `--ward-*` variable after the stylesheet import.
 
+## Typography
+
+Uppercase mono (`chip`, `colHead`, `micro`) is for identifiers only: keys, ids, statuses, stage codes. Never set a sentence in it. A section kicker or label that reads as words uses a prose or named style in sentence case, such as `title` (what `RecordSection` renders).
+
 ## Verify the package
 
 ```sh

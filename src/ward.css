@@ -426,13 +426,13 @@
   --ward-type-control: 600 11.5px/1 'Source Sans 3', system-ui, sans-serif;
   --ward-type-monoId: 400 10.5px/1.45 'IBM Plex Mono', ui-monospace, Menlo, monospace;
   --ward-type-monoId-numeric: tabular-nums;
-  --ward-type-chip: 500 10px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-chip: 500 11px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace;
   --ward-type-chip-tracking: 0.07em;
   --ward-type-chip-transform: uppercase;
   --ward-type-micro: 700 10px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace;
   --ward-type-micro-tracking: 0.8px;
   --ward-type-micro-transform: uppercase;
-  --ward-type-colHead: 600 10px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-colHead: 600 11px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace;
   --ward-type-colHead-tracking: 0.09em;
   --ward-type-colHead-transform: uppercase;
   --ward-type-rowName: 500 12.5px/1 'Source Sans 3', system-ui, sans-serif;

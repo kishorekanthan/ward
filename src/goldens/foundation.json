@@ -53,7 +53,8 @@
     "body": { "family": "prose", "weight": 400, "size": 13, "leading": 1.55 },
     "control": { "family": "prose", "weight": 600, "size": 11.5, "leading": 1 },
     "monoId": { "family": "mono", "weight": 400, "size": 10.5, "leading": 1.45 },
-    "chip": { "family": "mono", "weight": 500, "size": 10, "leading": 1, "tracking": "0.07em", "transform": "uppercase" }
+    "chip": { "family": "mono", "weight": 500, "size": 11, "leading": 1, "tracking": "0.07em", "transform": "uppercase" },
+    "colHead": { "family": "mono", "weight": 600, "size": 11, "leading": 1, "tracking": "0.09em", "transform": "uppercase" }
   },
   "motion": { "fast": "0.12s", "flash": "300ms", "reveal": "320ms" }
 }
