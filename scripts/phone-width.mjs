@@ -108,8 +108,9 @@ function probeKicker() {
   };
 }
 
-// A long kicker wraps inside its band beside a short note kept whole; a long note then wraps rather than widening the page.
+// A long kicker wraps inside its band beside a short note kept whole, taking all the room the note leaves (#122); a long note then wraps rather than widening the page.
 async function probeLongKicker() {
+  const bandEnd = (band) => band.getBoundingClientRect().right - Number.parseFloat(getComputedStyle(band).paddingRight);
   const head = document.querySelector('#storybook-root [data-kind="key"] h2');
   const note = head.nextElementSibling;
   const lines = (el) => Math.round(el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight));
@@ -119,6 +120,7 @@ async function probeLongKicker() {
     headInView: box.right <= innerWidth + 0.5,
     noteOnFirstLine: note.getBoundingClientRect().top < box.top + parseFloat(getComputedStyle(head).lineHeight) / 2,
     noteLines: lines(note),
+    noteReachesBandEnd: Math.abs(bandEnd(note.parentElement) - note.getBoundingClientRect().right) <= 0.5,
   };
   note.textContent = "pick one to release the item before the nightly cut-off closes";
   await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));

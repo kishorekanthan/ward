@@ -90,6 +90,7 @@
     "headInView": true,
     "noteOnFirstLine": true,
     "noteLines": 1,
+    "noteReachesBandEnd": true,
     "longNoteInView": true,
     "pageScrollsSideways": false
   },
