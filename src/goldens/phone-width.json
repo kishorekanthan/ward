@@ -62,5 +62,12 @@
     "family": "Archivo",
     "letterSpacing": "normal",
     "pageScrollsSideways": false
+  },
+  "console": {
+    "story": "item-activityconsole--empty",
+    "listLines": 6,
+    "jumpShown": false,
+    "idleClipped": false,
+    "pageScrollsSideways": false
   }
 }

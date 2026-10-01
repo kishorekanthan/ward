@@ -138,8 +138,24 @@ async function probeTopBar() {
   };
 }
 
+// The Empty story: the event list keeps six console lines of height, and the foot has no jump button to clip the idle line.
+function probeConsole() {
+  const list = document.querySelector("#storybook-root ol");
+  const style = getComputedStyle(list);
+  const line = Number.parseFloat(style.lineHeight);
+  const gap = Number.parseFloat(style.rowGap) || 0;
+  const foot = list.nextElementSibling;
+  const idle = foot.children[1];
+  return {
+    listLines: Math.round((list.getBoundingClientRect().height + gap) / (line + gap)),
+    jumpShown: foot.querySelector("button") !== null,
+    idleClipped: idle.scrollWidth > idle.clientWidth + 0.5,
+    pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+  };
+}
+
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, kicker: probeKicker };
+const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, kicker: probeKicker, console: probeConsole };
 
 async function measure(page, base, key) {
   const { story, label, longLabel } = golden[key];
