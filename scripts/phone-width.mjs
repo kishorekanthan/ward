@@ -151,8 +151,13 @@ function probeLongKickerLongNote() {
 // Scrolled up, the console foot carries both buttons beside the idle copy; all stay whole and in view at 375px.
 async function probeConsoleFoot() {
   document.querySelector("#storybook-root ol").scrollTop = 0;
-  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
   const foot = document.querySelector("#storybook-root .ward-caret").parentElement;
+  const jumpShown = () => Array.from(foot.querySelectorAll("button")).some((b) => b.textContent === "Jump to latest");
+  const deadline = performance.now() + 3000;
+  while (!jumpShown()) {
+    if (performance.now() > deadline) throw new Error("consoleFoot: Jump to latest did not appear within 3s of scrolling the log to the top");
+    await new Promise((r) => requestAnimationFrame(r));
+  }
   const box = foot.getBoundingClientRect();
   const buttons = Array.from(foot.querySelectorAll("button"));
   const idle = foot.querySelector(".ward-caret + span");
