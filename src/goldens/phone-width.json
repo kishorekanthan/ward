@@ -38,6 +38,14 @@
     "longLabelClipped": true,
     "pageScrollsSideways": false
   },
+  "topBar": {
+    "story": "layout-appshell--top-bar-phone-width",
+    "toggleInView": true,
+    "panelHiddenBeforePress": true,
+    "panelBelowBar": true,
+    "panelInView": true,
+    "pageScrollsSideways": false
+  },
   "kicker": {
     "story": "layout-recordsection--kicker",
     "seenText": "Ways out of this hold",

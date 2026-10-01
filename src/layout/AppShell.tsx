@@ -1,6 +1,8 @@
-import { useId, type ReactNode } from "react";
+import { useId, useRef, useState, type KeyboardEvent, type ReactNode, type RefObject } from "react";
 import s from "./AppShell.module.css";
+import { Btn } from "../primitives/Btn";
 import { safeHref } from "../primitives/safeHref";
+import { useMediaQuery } from "./useMediaQuery";
 
 export type AppShellDestination = {
   id: string;
@@ -26,8 +28,10 @@ export type TopBarShellProps = {
   brand?: string;
   tagline?: string;
   metadata?: ReactNode;
-  /** Controls at the bar's trailing edge, kept visible when the identity chips collapse. */
+  /** Controls at the bar's trailing edge; below 768px they sit behind one toggle. */
   tools?: ReactNode;
+  /** The toggle's visible label below 768px. */
+  toolsLabel?: string;
 };
 
 export type AppShellProps = StudioShellProps | TopBarShellProps;
@@ -73,7 +77,45 @@ function Identity({ actor, metadata }: Pick<TopBarShellProps, "actor" | "metadat
   );
 }
 
-function ShellHeader(props: Omit<TopBarShellProps, "children">) {
+type ToolsMenu = { narrow: boolean; open: boolean; panelId: string; slotRef: RefObject<HTMLSpanElement | null>; toggle: () => void; close: () => void };
+
+function useToolsMenu(): ToolsMenu {
+  const narrow = useMediaQuery("(max-width: 767.98px)");
+  const panelId = useId();
+  const slotRef = useRef<HTMLSpanElement>(null);
+  const [open, setOpen] = useState(false);
+  const close = () => {
+    setOpen(false);
+    slotRef.current?.querySelector<HTMLButtonElement>("button")?.focus();
+  };
+  return { narrow, open, panelId, slotRef, toggle: () => setOpen(!open), close };
+}
+
+function ToolsSlot({ tools, toolsLabel, menu }: Pick<TopBarShellProps, "tools" | "toolsLabel"> & { menu: ToolsMenu }) {
+  if (tools === undefined) return null;
+  if (!menu.narrow) return <span className={s.tools}>{tools}</span>;
+  return (
+    <span ref={menu.slotRef} className={s.tools}>
+      <Btn variant="ghost" size="sm" onClick={menu.toggle} expanded={menu.open} controls={menu.panelId}>
+        {toolsLabel ?? "Settings"}
+      </Btn>
+    </span>
+  );
+}
+
+function ToolsPanel({ tools, menu }: Pick<TopBarShellProps, "tools"> & { menu: ToolsMenu }) {
+  if (tools === undefined || !menu.narrow) return null;
+  const onKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "Escape") menu.close();
+  };
+  return (
+    <div id={menu.panelId} className={s.toolsPanel} hidden={!menu.open} onKeyDown={onKeyDown}>
+      {tools}
+    </div>
+  );
+}
+
+function ShellHeader(props: Omit<TopBarShellProps, "children"> & { menu: ToolsMenu }) {
   return (
     <header className={s.topbar}>
       <span className={s.mark} data-ward-shell-mark="" aria-hidden="true" />
@@ -83,19 +125,21 @@ function ShellHeader(props: Omit<TopBarShellProps, "children">) {
       <span className={s.identity}>
         <Identity actor={props.actor} metadata={props.metadata} />
       </span>
-      <OptionalText value={props.tools} className={s.tools} />
+      <ToolsSlot tools={props.tools} toolsLabel={props.toolsLabel} menu={props.menu} />
     </header>
   );
 }
 
 function TopBarShell(props: TopBarShellProps) {
   const contentId = useId();
+  const menu = useToolsMenu();
   return (
     <div className={`${s.root} ward-root`} data-ward-shell="">
       <a className={s.skip} href={`#${contentId}`}>
         Skip to content
       </a>
-      <ShellHeader {...props} />
+      <ShellHeader {...props} menu={menu} />
+      <ToolsPanel tools={props.tools} menu={menu} />
       <div id={contentId} className={s.content}>
         {props.children}
       </div>
