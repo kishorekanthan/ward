@@ -124,6 +124,27 @@ async function probeLongKicker() {
   return { ...facts, longNoteInView: note.getBoundingClientRect().right <= innerWidth + 0.5, pageScrollsSideways: document.documentElement.scrollWidth > innerWidth };
 }
 
+// A long note beside a long kicker: its shortest wrapped line (the last excepted) is counted in characters, per #107.
+function probeLongKickerLongNote() {
+  const note = document.querySelector('#storybook-root [data-kind="key"] h2').nextElementSibling;
+  const text = note.firstChild;
+  const range = document.createRange();
+  const perLine = new Map();
+  for (let i = 0; i < text.length; i++) {
+    range.setStart(text, i);
+    range.setEnd(text, i + 1);
+    const top = Math.round(range.getBoundingClientRect().top);
+    perLine.set(top, (perLine.get(top) ?? 0) + 1);
+  }
+  const counts = [...perLine.values()];
+  const band = note.parentElement.getBoundingClientRect();
+  return {
+    noteCharsPerLineAtLeast: Math.min(...counts.slice(0, -1)),
+    noteInBand: note.getBoundingClientRect().right <= band.right - Number.parseFloat(getComputedStyle(note.parentElement).paddingRight) + 0.5,
+    pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+  };
+}
+
 // Scrolled up, the console foot carries both buttons beside the idle copy; all stay whole and in view at 375px.
 async function probeConsoleFoot() {
   document.querySelector("#storybook-root ol").scrollTop = 0;
@@ -205,7 +226,7 @@ function probeConsole() {
 }
 
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, kicker: probeKicker, shortKicker: probeKicker, longKicker: probeLongKicker, console: probeConsole, consoleFoot: probeConsoleFoot };
+const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, kicker: probeKicker, shortKicker: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot };
 
 async function measure(page, base, key) {
   const { story, label, longLabel } = golden[key];
@@ -229,7 +250,8 @@ export async function sweepPhoneWidth() {
     for (const key of Object.keys(PROBES)) {
       const got = await measure(page, base, key);
       for (const [fact, want] of Object.entries(golden[key])) {
-        if (got[fact] !== want) diffs.push(`${key}.${fact}: got ${JSON.stringify(got[fact])}, want ${JSON.stringify(want)}`);
+        const met = fact.endsWith("AtLeast") ? got[fact] >= want : got[fact] === want;
+        if (!met) diffs.push(`${key}.${fact}: got ${JSON.stringify(got[fact])}, want ${JSON.stringify(want)}`);
       }
     }
   } finally {

@@ -86,6 +86,12 @@
     "longNoteInView": true,
     "pageScrollsSideways": false
   },
+  "longKickerLongNote": {
+    "story": "layout-recordsection--long-kicker-long-note",
+    "noteCharsPerLineAtLeast": 12,
+    "noteInBand": true,
+    "pageScrollsSideways": false
+  },
   "console": {
     "story": "item-activityconsole--empty",
     "listLines": 6,
