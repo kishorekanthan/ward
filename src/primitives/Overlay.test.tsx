@@ -248,6 +248,25 @@ describe("Overlay", () => {
     expect(decoy.hasAttribute("inert")).toBe(false);
   });
 
+  it("inerts every level outside a nested container's path to body, releasing on close", () => {
+    const wrapper = document.createElement("div");
+    const outside = document.createElement("button");
+    const parent = document.createElement("div");
+    const target = document.createElement("div");
+    const pathSibling = document.createElement("p");
+    wrapper.setAttribute("data-overlay-test-fixture", "");
+    parent.append(pathSibling, target);
+    wrapper.append(outside, parent);
+    document.body.appendChild(wrapper);
+
+    const { container: app } = render(<Harness kind="drawer" container={target} />);
+
+    expect([outside, pathSibling, app].map((element) => element.hasAttribute("inert"))).toEqual([true, true, true]);
+    expect([wrapper, parent, target, document.head].map((element) => element.hasAttribute("inert"))).toEqual([false, false, false, false]);
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect([outside, pathSibling, app].map((element) => element.hasAttribute("inert"))).toEqual([false, false, false]);
+  });
+
   it("takes its portal target from context when no container prop is given", () => {
     const host = document.createElement("section");
     host.setAttribute("data-overlay-test-fixture", "");
