@@ -14,7 +14,7 @@ function validate(cells: StatCell[]): void {
 function Value({ cell }: { cell: StatCell }) {
   if (cell.href === undefined) return <>{cell.value}</>;
   return (
-    <a className={`${s.link} ward-stat-link`} href={safeHref(cell.href)} aria-label={`${cell.label}: ${cell.value}`}>
+    <a className={`${s.link} ward-stat-link ward-target`} href={safeHref(cell.href)} aria-label={`${cell.label}: ${cell.value}`}>
       {cell.value}
     </a>
   );

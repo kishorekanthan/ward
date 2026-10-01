@@ -8,24 +8,26 @@ import { ensureBuild, serve } from "./contrast.mjs";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 export const golden = JSON.parse(readFileSync(join(root, "src", "goldens", "focus-targets.json"), "utf8"));
 
-// Runs in the page: the focused link inside the first themed copy, or null once Tab has left it.
+// Runs in the page: the focused link and the themed copy it sits in, or null once Tab has left the story.
 function readFocused() {
   const el = document.activeElement;
-  const copy = document.querySelector("#storybook-root > div");
-  if (!el || !copy.contains(el) || !el.matches("a, button")) return null;
+  const copy = el?.closest("#storybook-root > [data-theme]");
+  if (!copy || !el.matches("a, button")) return null;
+  el.scrollIntoView({ block: "center" });
   const r = el.getClientRects()[0];
   const style = getComputedStyle(el);
   const reach = (Number.parseFloat(style.outlineOffset) || 0) + (Number.parseFloat(style.outlineWidth) || 0);
   const x = r.left + r.width / 2;
   const hits = (y) => document.elementFromPoint(x, y)?.closest("a, button") === el;
   const mid = r.top + r.height / 2;
-  // The browser's own focus ring also paints, so the ring must be Ward's: solid, in the theme's blue.
+  // The browser's own focus ring also paints, so the ring must be Ward's: solid, in this copy's theme blue.
   const blue = document.createElement("span");
   blue.style.color = "var(--ward-color-blue)";
   copy.append(blue);
   const wardRing = style.outlineStyle === "solid" && style.outlineColor === getComputedStyle(blue).color;
   blue.remove();
   return {
+    theme: copy.dataset.theme,
     name: el.textContent.trim(),
     focusVisible: el.matches(":focus-visible"),
     wardRing,
@@ -37,7 +39,7 @@ function readFocused() {
 
 // Runs in the page: elements outside the targets whose box shifts when every ward-target band is taken away.
 function movedByTargets() {
-  const copy = document.querySelector("#storybook-root > div");
+  const copy = document.getElementById("storybook-root");
   const others = [...copy.querySelectorAll("*")].filter((el) => !el.closest(".ward-target"));
   const boxes = () => others.map((el) => JSON.stringify(el.getBoundingClientRect()));
   const targets = [...copy.querySelectorAll(".ward-target")];
@@ -75,7 +77,7 @@ async function ringOnEverySide(page, box) {
 
 async function tabThrough(page) {
   const seen = [];
-  for (let step = 0; step < 40; step++) {
+  for (let step = 0; step < 80; step++) {
     await page.keyboard.press("Tab");
     const got = await page.evaluate(readFocused);
     if (got === null) {
@@ -83,12 +85,27 @@ async function tabThrough(page) {
       continue;
     }
     const ring = await ringOnEverySide(page, got.box);
-    seen.push({ name: got.name, focusVisible: got.focusVisible, wardRing: got.wardRing, ring, tall: got.height >= 24, hit24: got.hit24, height: got.height });
+    seen.push({ theme: got.theme, name: got.name, focusVisible: got.focusVisible, wardRing: got.wardRing, ring, tall: got.height >= 24, hit24: got.hit24, height: got.height });
   }
   return seen;
 }
 
-// Returns every fact that differs from the golden, as "name.fact: got X, want Y".
+// Each theme copy must tab through the same links with the same facts; every diff names its theme.
+function themeDiffs(theme, seen) {
+  const diffs = [];
+  const names = seen.map((t) => t.name);
+  const want = golden.targets.map((t) => t.name);
+  if (JSON.stringify(names) !== JSON.stringify(want)) diffs.push(`${theme} tab order: got ${JSON.stringify(names)}, want ${JSON.stringify(want)}`);
+  golden.targets.forEach((target, i) => {
+    const got = seen[i];
+    for (const [fact, value] of Object.entries(target)) {
+      if (got && got[fact] !== value) diffs.push(`${theme} ${target.name}.${fact}: got ${JSON.stringify(got[fact])}, want ${JSON.stringify(value)} (height ${got.height.toFixed(1)})`);
+    }
+  });
+  return diffs;
+}
+
+// Returns every fact that differs from the golden, as "theme name.fact: got X, want Y".
 export async function sweepFocusTargets() {
   ensureBuild();
   const { chromium } = await import("playwright");
@@ -105,15 +122,7 @@ export async function sweepFocusTargets() {
     const moved = await page.evaluate(movedByTargets);
     if (moved.length) diffs.push(`layout: ${moved.length} element(s) move with the 24px bands, want 0 (${moved.slice(0, 3).join(", ")})`);
     const seen = await tabThrough(page);
-    const names = seen.map((t) => t.name);
-    const want = golden.targets.map((t) => t.name);
-    if (JSON.stringify(names) !== JSON.stringify(want)) diffs.push(`tab order: got ${JSON.stringify(names)}, want ${JSON.stringify(want)}`);
-    for (const target of golden.targets) {
-      const got = seen.find((t) => t.name === target.name);
-      for (const [fact, value] of Object.entries(target)) {
-        if (got && got[fact] !== value) diffs.push(`${target.name}.${fact}: got ${JSON.stringify(got[fact])}, want ${JSON.stringify(value)} (height ${got.height.toFixed(1)})`);
-      }
-    }
+    for (const theme of golden.themes) diffs.push(...themeDiffs(theme, seen.filter((t) => t.theme === theme)));
   } finally {
     await browser.close();
     server.close();

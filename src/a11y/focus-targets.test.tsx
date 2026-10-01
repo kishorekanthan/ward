@@ -17,6 +17,11 @@ describe("small links take the 24px target", () => {
       ["intake-advisor", true],
       ["+ Mount agent", true],
       ["Configure board", true],
+      ["Skip to content", true],
+      ["Board", true],
+      ["Intake", true],
+      ["14", true],
+      ["Tool registry", true],
     ]);
   });
 });

@@ -4,6 +4,10 @@
     "height": 900
   },
   "story": "a11y-focustargets--links",
+  "themes": [
+    "light",
+    "dark"
+  ],
   "targets": [
     {
       "name": "Studio",
@@ -79,6 +83,46 @@
     },
     {
       "name": "Configure board",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "Skip to content",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "Board",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "Intake",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "14",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "Tool registry",
       "focusVisible": true,
       "wardRing": true,
       "ring": true,

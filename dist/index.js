@@ -1274,7 +1274,7 @@ function so({ agent: e }) {
 function co({ shared: e }) {
   return e ? /* @__PURE__ */ o("div", { className: R.foot, children: [
     /* @__PURE__ */ n("span", { className: R.footName, children: e.heading }),
-    /* @__PURE__ */ n("div", { className: R.footLinks, children: e.links.map((a) => /* @__PURE__ */ n("a", { className: R.footLink, href: W(a.href), children: a.label }, a.href)) })
+    /* @__PURE__ */ n("div", { className: R.footLinks, children: e.links.map((a) => /* @__PURE__ */ n("a", { className: `${R.footLink} ward-target`, href: W(a.href), children: a.label }, a.href)) })
   ] }) : null;
 }
 function uo({ brand: e, nav: a, agentsHeading: t, agents: r, newAction: l, shared: i }) {
@@ -1907,7 +1907,7 @@ function zs(e) {
   if (e.filter((a) => a.accent).length > 1) throw new Error("StatStrip: only the cell carrying the argument may be accented");
 }
 function Gs({ cell: e }) {
-  return e.href === void 0 ? /* @__PURE__ */ n(S, { children: e.value }) : /* @__PURE__ */ n("a", { className: `${Xe.link} ward-stat-link`, href: W(e.href), "aria-label": `${e.label}: ${e.value}`, children: e.value });
+  return e.href === void 0 ? /* @__PURE__ */ n(S, { children: e.value }) : /* @__PURE__ */ n("a", { className: `${Xe.link} ward-stat-link ward-target`, href: W(e.href), "aria-label": `${e.label}: ${e.value}`, children: e.value });
 }
 function ya({ cells: e, divided: a = !1 }) {
   return zs(e), /* @__PURE__ */ n("dl", { className: `${Xe.strip} ward-statstrip`, "data-divided": a || void 0, children: e.map((t) => /* @__PURE__ */ o("div", { className: Xe.cell, "data-accent": t.accent, children: [
@@ -1952,7 +1952,7 @@ function Oe({ label: e, checked: a, onChange: t, disabled: r, locked: l, describ
     ] })
   ] });
 }
-const Zs = "_bar_1u2kl_2", ec = "_skip_1u2kl_11", ac = "_mark_1u2kl_22", nc = "_nav_1u2kl_30", tc = "_list_1u2kl_34", rc = "_select_1u2kl_40", lc = "_dest_1u2kl_47", oc = "_actor_1u2kl_61", ic = "_actorMark_1u2kl_74", sc = "_actorLabel_1u2kl_79", cc = "_tagline_1u2kl_98", de = {
+const Zs = "_bar_1o04s_2", ec = "_skip_1o04s_11", ac = "_mark_1o04s_22", nc = "_nav_1o04s_30", tc = "_list_1o04s_34", rc = "_select_1o04s_40", lc = "_dest_1o04s_47", oc = "_actor_1o04s_75", ic = "_actorMark_1o04s_88", sc = "_actorLabel_1o04s_93", cc = "_tagline_1o04s_112", de = {
   bar: Zs,
   skip: ec,
   mark: ac,
@@ -1974,14 +1974,14 @@ function uc(e) {
 function d$({ wordmark: e = "Trellis", destinations: a, active: t, actor: r, tagline: l, onNavigate: i, skipTo: s = "main" }) {
   const c = uc(r);
   return /* @__PURE__ */ o("header", { className: de.bar, children: [
-    /* @__PURE__ */ n("a", { className: de.skip, href: `#${s}`, children: "Skip to content" }),
+    /* @__PURE__ */ n("a", { className: `${de.skip} ward-target`, href: `#${s}`, children: "Skip to content" }),
     /* @__PURE__ */ n("span", { className: de.mark, children: e }),
     l && /* @__PURE__ */ n("span", { className: de.tagline, children: l }),
     /* @__PURE__ */ o("nav", { className: de.nav, "aria-label": "Primary", children: [
       /* @__PURE__ */ n("ul", { className: de.list, children: a.map((d) => /* @__PURE__ */ n("li", { children: /* @__PURE__ */ n(
         "a",
         {
-          className: de.dest,
+          className: `${de.dest} ward-target`,
           href: W(d.href),
           "aria-current": d.id === t ? "page" : void 0,
           onClick: () => i == null ? void 0 : i(d.id),
