@@ -17,6 +17,8 @@ export type Stream = {
   agents: { live: number; draft: number; paused: number };
   policy: { id: string; summary: string };
   inFlight: number;
+  /** Tooltip saying what the in-flight count counts. */
+  inFlightHint?: string;
   p50?: number;
   draft?: boolean;
 };
@@ -31,6 +33,8 @@ export type StreamRowSummary = {
   agents?: { live: number; draft: number; paused: number };
   policy?: { id: string; summary: string };
   inFlight?: number;
+  /** Tooltip saying what the in-flight count counts. */
+  inFlightHint?: string;
   p50?: string;
   draft?: boolean;
 };
@@ -92,10 +96,10 @@ function stagesCell(stages: StreamRowSummary["stages"], href: string): ReactElem
   </td>;
 }
 
-function statCell(value: string | undefined, sub: string | undefined, fallback: string): ReactElement {
+function statCell(value: string | undefined, sub: string | undefined, fallback: string, hint?: string): ReactElement {
   return <td className={s.compactCell}>
     {value === undefined ? <span className={s.muted}>{fallback}</span> : <span className={s.stat}>
-      <span className={`${s.statValue} ward-stat-value`}>{value}</span>
+      <span className={`${s.statValue} ward-stat-value`} title={hint}>{value}</span>
       {sub === undefined ? null : <span className={s.sub}>{sub}</span>}
     </span>}
   </td>;
@@ -122,7 +126,7 @@ function compactRow({ stream, href, presentation }: CompactStreamRowProps) {
       {stagesCell(stream.stages, href)}
       {statCell(agentsTotal(stream.agents), stream.agents === undefined ? undefined : agentsLine(stream.agents), "—")}
       {policyCell(stream.policy)}
-      {statCell(stream.inFlight === undefined ? undefined : String(stream.inFlight), stream.p50 === undefined ? undefined : `P50 ${stream.p50}`, "—")}
+      {statCell(stream.inFlight === undefined ? undefined : String(stream.inFlight), stream.p50 === undefined ? undefined : `P50 ${stream.p50}`, "—", stream.inFlightHint)}
     </tr>
   );
 }
@@ -160,7 +164,7 @@ export function StreamRow(props: StreamRowProps) {
         <span className={s.mono}>{membersText(stream.members)}</span>
       </td>
       <td className={s.cell} data-align="end">
-        <span className={s.mono}>{count(stream.inFlight)}</span>
+        <span className={s.mono} title={stream.inFlightHint}>{count(stream.inFlight)}</span>
       </td>
       <td className={s.cell} data-align="end">
         <span className={s.mono}>{stream.p50 === undefined ? "" : duration(stream.p50)}</span>

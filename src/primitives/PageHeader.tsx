@@ -11,6 +11,8 @@ export type PageHeaderProps = {
   chips?: ChipProps[];
   title: string;
   consequence?: string;
+  /** Tooltip saying what the consequence line counts. */
+  consequenceHint?: string;
   actions?: ReactNode[];
   /** Secondary actions behind an always-present ··· button, before the actions. */
   more?: ReactNode[];
@@ -21,11 +23,11 @@ export type PageHeaderProps = {
   density?: "page" | "record";
 };
 
-function Heading({ title, consequence }: Pick<PageHeaderProps, "title" | "consequence">) {
+function Heading({ title, consequence, consequenceHint }: Pick<PageHeaderProps, "title" | "consequence" | "consequenceHint">) {
   return (
     <div className={s.heading}>
       <h1 className={s.title}>{title}</h1>
-      {consequence && <p className={s.consequence}>{consequence}</p>}
+      {consequence && <p className={s.consequence} title={consequenceHint}>{consequence}</p>}
     </div>
   );
 }
@@ -145,7 +147,7 @@ function Connection({ connection }: Pick<PageHeaderProps, "connection">) {
   return connection ? <ConnectionMark connection={connection.connection} since={connection.since} /> : null;
 }
 
-export function PageHeader({ crumb, chips, title, consequence, actions = [], more = [], connection, onOverflow, density = "page" }: PageHeaderProps) {
+export function PageHeader({ crumb, chips, title, consequence, consequenceHint, actions = [], more = [], connection, onOverflow, density = "page" }: PageHeaderProps) {
   const { rowRef, headingRef, actionsRef, measureRef, collapsed } = useActionOverflow(actions);
   const hasMore = more.length > 0;
   const { disclosure, close } = useDisclosure(collapsed || hasMore, actionsRef);
@@ -155,7 +157,7 @@ export function PageHeader({ crumb, chips, title, consequence, actions = [], mor
       <HeaderContext crumb={crumb} chips={chips} />
       <div className={s.row} ref={rowRef}>
         <div ref={headingRef} className={s.headingWrap}>
-          <Heading title={title} consequence={consequence} />
+          <Heading title={title} consequence={consequence} consequenceHint={consequenceHint} />
         </div>
         <div className={s.actionsWrap}>
           <Connection connection={connection} />

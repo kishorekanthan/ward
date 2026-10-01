@@ -12,6 +12,8 @@ import s from "./BoardHeader.module.css";
 
 export type BoardRollups = {
   inFlight: number;
+  /** Tooltip saying what "in flight" counts. */
+  inFlightHint?: string;
   loadedThisWeek?: number;
   agentsWorking?: number;
   p50?: number;
@@ -38,12 +40,21 @@ function loadedPart(loaded: number | undefined) {
 }
 
 // Unknown optional rollups are omitted so the line gets shorter instead of showing an invented zero.
-function rollupLine(r: BoardRollups) {
-  const parts = [`${count(r.inFlight)} in flight`, loadedPart(r.loadedThisWeek)];
+function restOfRollup(r: BoardRollups) {
+  const parts = [loadedPart(r.loadedThisWeek)];
   if (r.agentsWorking !== undefined) parts.push(`${count(r.agentsWorking)} agents working`);
   if (r.p50 !== undefined) parts.push(`P50 ${duration(r.p50)}`);
   if (r.p90 !== undefined) parts.push(`P90 ${duration(r.p90)}`);
   return parts.join(" · ");
+}
+
+// The in-flight figure is its own span so its hint names only that figure.
+function rollupLine(r: BoardRollups) {
+  return (
+    <>
+      <span title={r.inFlightHint}>{count(r.inFlight)} in flight</span> · {restOfRollup(r)}
+    </>
+  );
 }
 
 function initialsOf(markRef: string) {
