@@ -78,6 +78,11 @@ describe("validateMark sanitiser", () => {
     expect(validateMark(scrim)).toEqual({ ok: true, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22"><rect width="22" height="22"/></svg>' });
   });
 
+  it("drops an unreferenced id on the root and keeps a mixed-case referenced id, renamed", () => {
+    const exported = '<svg xmlns="http://www.w3.org/2000/svg" id="config" viewBox="0 0 24 24"><defs><linearGradient id="SVGID_1_"><stop offset="0" stop-color="#00776B"/></linearGradient></defs><path fill="url(#SVGID_1_)" d="M0 0h24v24H0z"/></svg>';
+    expect(validateMark(exported)).toEqual({ ok: true, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><linearGradient id="ward-mark-6e6cyb-0"><stop offset="0" stop-color="#00776B"/></linearGradient></defs><path fill="url(#ward-mark-6e6cyb-0)" d="M0 0h24v24H0z"/></svg>' });
+  });
+
   it("points a url(#id) with no matching element at nothing the host page owns", () => {
     const dangling = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="url(#host)" clip-path="url(#)" d="M0 0h24v24H0z"/></svg>';
     expect(validateMark(dangling)).toEqual({ ok: true, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="url(#ward-mark-hha23m-0)" clip-path="url(#)" d="M0 0h24v24H0z"/></svg>' });
