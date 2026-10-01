@@ -51,6 +51,25 @@ describe("Btn", () => {
     expect(container.textContent).toBe("Publish");
   });
 
+  it("keeps only the page description while enabled", () => {
+    render(<Btn describedBy="hint" disabledReason="A dry run has to pass first">Publish</Btn>);
+    const btn = screen.getByRole("button", { name: "Publish" });
+    expect(btn.getAttribute("aria-describedby")).toBe("hint");
+    expect(btn.hasAttribute("title")).toBe(false);
+  });
+
+  it("points each disabled button at its own reason", () => {
+    render(
+      <>
+        <Btn disabled disabledReason="Viewers cannot publish">Publish</Btn>
+        <Btn disabled disabledReason="Nothing to archive">Archive</Btn>
+      </>,
+    );
+    const reasonOf = (name: string) =>
+      document.getElementById(screen.getByRole("button", { name }).getAttribute("aria-describedby") ?? "")?.textContent;
+    expect([reasonOf("Publish"), reasonOf("Archive")]).toEqual(["Viewers cannot publish", "Nothing to archive"]);
+  });
+
   it("names the overflow button and declares its menu", () => {
     render(<Btn variant="overflow">···</Btn>);
     const btn = screen.getByRole("button", { name: "More actions" });
