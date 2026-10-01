@@ -18,14 +18,22 @@ function probeTabs() {
     const r = el.getBoundingClientRect();
     return r.left >= box.left - 0.5 && r.right <= box.right + 0.5 && r.right <= innerWidth;
   };
-  const fadeAtStart = strip.hasAttribute("data-fade-start");
+  // A fade is as wide as the strip's scroll-padding; a tab under a live fade is half-hidden.
+  const fade = Number.parseFloat(getComputedStyle(strip).scrollPaddingInlineStart) || 0;
+  const r = active.getBoundingClientRect();
+  const clearOfFades =
+    fade > 0 &&
+    (!strip.hasAttribute("data-fade-start") || r.left >= box.left + fade - 0.5) &&
+    (!strip.hasAttribute("data-fade-end") || r.right <= box.right - fade + 0.5);
+  const masked = strip.hasAttribute("data-fade-end") && /gradient/.test(getComputedStyle(strip).maskImage);
   const activeInView = inView(active);
   strip.scrollLeft = strip.scrollWidth;
   return {
     stripScrolls: strip.scrollWidth > strip.clientWidth && getComputedStyle(strip).overflowX === "auto",
     activeTabInView: activeInView,
+    activeTabClearOfFades: clearOfFades,
+    fadesMasked: masked,
     lastTabReachedByScroll: inView(tabs[tabs.length - 1]),
-    fadeAtStartAfterReveal: fadeAtStart,
     pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
   };
 }
@@ -38,32 +46,36 @@ function probePageHeader() {
   const whole = ({ c, r }) => c.scrollWidth <= c.clientWidth + 0.5 && r.right <= header.getBoundingClientRect().right + 0.5;
   return {
     chipsBelowCrumb: chipBoxes.length > 0 && chipBoxes.every(({ r }) => r.top >= crumb.bottom - 0.5),
+    chipLines: new Set(chipBoxes.map(({ r }) => Math.round(r.top))).size,
     titleBelowChips: chipBoxes.every(({ r }) => title.top >= r.bottom - 0.5),
     everyChipWhole: chipBoxes.every(whole),
     pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
   };
 }
 
-function probeStatStrip(text) {
-  const label = Array.from(document.querySelectorAll("#storybook-root dt")).find((d) => d.textContent === text);
-  const lineHeight = Number.parseFloat(getComputedStyle(label).lineHeight);
-  return {
-    label: label.textContent,
-    labelLines: Math.round(label.getBoundingClientRect().height / lineHeight),
+function probeStatStrip([text, longText]) {
+  const read = (wanted) => {
+    const label = Array.from(document.querySelectorAll("#storybook-root dt")).find((d) => d.textContent === wanted);
+    const lineHeight = Number.parseFloat(getComputedStyle(label).lineHeight);
+    const lines = Math.round(label.getBoundingClientRect().height / lineHeight);
     // Half a line of slack: a 10px line box lets glyph ink overflow by a pixel, which is not a hidden line.
-    labelClipped: label.scrollHeight > label.clientHeight + lineHeight / 2 || label.scrollWidth > label.clientWidth + 0.5,
-    pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+    const clipped = label.scrollHeight > label.clientHeight + lineHeight / 2 || label.scrollWidth > label.clientWidth + 0.5;
+    return [label.textContent, lines, clipped];
   };
+  const [label, labelLines, labelClipped] = read(text);
+  const [longLabel, longLabelLines, longLabelClipped] = read(longText);
+  const pageScrollsSideways = document.documentElement.scrollWidth > innerWidth;
+  return { label, labelLines, labelClipped, longLabel, longLabelLines, longLabelClipped, pageScrollsSideways };
 }
 
 const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, statStrip: probeStatStrip };
 
 async function measure(page, base, key) {
-  const { story, label } = golden[key];
+  const { story, label, longLabel } = golden[key];
   await page.goto(`${base}/iframe.html?viewMode=story&id=${story}`, { waitUntil: "load", timeout: 30000 });
   await page.waitForFunction(() => document.getElementById("storybook-root")?.children.length > 0, null, { timeout: 8000 });
   await page.evaluate(() => document.fonts.ready);
-  return { story, ...(await page.evaluate(PROBES[key], label)) };
+  return { story, ...(await page.evaluate(PROBES[key], [label, longLabel])) };
 }
 
 // Returns every fact that differs from the golden, as "key.fact: got X, want Y".

@@ -4,15 +4,12 @@
   gap: var(--ward-space-6);
 }
 
-/* min-width 0 lets a narrow strip shrink its cells, so a long label wraps instead of pushing the page wide. */
 .cell {
   display: grid;
   gap: var(--ward-space-1);
-  min-width: 0;
 }
 
 .value {
-  white-space: nowrap;
   font: var(--ward-type-stat);
   font-variant-numeric: var(--ward-type-stat-numeric);
   color: var(--ward-color-text);
@@ -44,7 +41,6 @@
   letter-spacing: var(--ward-type-micro-tracking);
   text-transform: var(--ward-type-micro-transform);
   color: var(--ward-color-muted);
-  overflow-wrap: break-word;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;

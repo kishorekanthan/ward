@@ -117,6 +117,8 @@ export const PhoneWidth = {
       { role: "stream", label: "data-eng", streamStep: 1 },
       { role: "running", label: "DRAFT" },
       { role: "gate", label: "AWAITING REVIEW" },
+      { role: "attention", label: "2 GATES OVERDUE" },
+      { role: "meta", label: "OWNER PLATFORM" },
     ],
     actions,
   },

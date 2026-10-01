@@ -1833,7 +1833,7 @@ function Nc({ title: e, index: a, note: t, counter: r, kind: l = "micro", traili
     i === void 0 ? null : /* @__PURE__ */ n("span", { className: Me.trailing, children: i })
   ] });
 }
-const yc = "_strip_lkqpl_2", kc = "_cell_lkqpl_8", $c = "_value_lkqpl_14", Cc = "_link_lkqpl_30", Sc = "_label_lkqpl_42", Xe = {
+const yc = "_strip_1cfs3_2", kc = "_cell_1cfs3_7", $c = "_value_1cfs3_12", Cc = "_link_1cfs3_27", Sc = "_label_1cfs3_39", Xe = {
   strip: yc,
   cell: kc,
   value: $c,

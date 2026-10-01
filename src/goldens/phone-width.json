@@ -1,16 +1,21 @@
 {
-  "viewport": { "width": 375, "height": 812 },
+  "viewport": {
+    "width": 375,
+    "height": 812
+  },
   "tabs": {
     "story": "primitives-tabs--phone-width",
     "stripScrolls": true,
     "activeTabInView": true,
+    "activeTabClearOfFades": true,
+    "fadesMasked": true,
     "lastTabReachedByScroll": true,
-    "fadeAtStartAfterReveal": true,
     "pageScrollsSideways": false
   },
   "pageHeader": {
     "story": "primitives-pageheader--phone-width",
     "chipsBelowCrumb": true,
+    "chipLines": 2,
     "titleBelowChips": true,
     "everyChipWhole": true,
     "pageScrollsSideways": false
@@ -20,6 +25,9 @@
     "label": "Items waiting at a review gate",
     "labelLines": 2,
     "labelClipped": false,
+    "longLabel": "Failed agent runs across every stream, last 24 hours",
+    "longLabelLines": 2,
+    "longLabelClipped": true,
     "pageScrollsSideways": false
   }
 }
