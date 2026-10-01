@@ -26,6 +26,8 @@ export declare const v: {
         readonly orange: "var(--ward-color-orange)";
         readonly amber: "var(--ward-color-amber)";
         readonly red: "var(--ward-color-red)";
+        readonly warning: "var(--ward-color-warning)";
+        readonly destructive: "var(--ward-color-destructive)";
         readonly warnInk: "var(--ward-color-warnInk)";
         readonly warnSurface: "var(--ward-color-warnSurface)";
         readonly warnLine: "var(--ward-color-warnLine)";

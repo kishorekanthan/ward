@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-export type BtnVariant = "primary" | "secondary" | "ghost" | "overflow";
+export type BtnVariant = "primary" | "destructive" | "secondary" | "ghost" | "overflow";
 type Base = {
     variant?: BtnVariant;
     size?: "md" | "sm";

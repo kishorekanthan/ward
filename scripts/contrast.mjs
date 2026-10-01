@@ -42,6 +42,22 @@ export function contrast(a, b) {
   return (hi + 0.05) / (lo + 0.05);
 }
 
+// Dark line3/ink2/surface3 are derived, not measured, so each pair is held to AA here: 4.5:1 for text, 3:1 for line3's track.
+export function derivedDarkPairs(dark) {
+  const text = ["surface", "surface2", "surface3"].map((ground) => [dark.ink2, dark[ground], `dark ink2/${ground}`, 4.5]);
+  const onSurface3 = ["text", "muted", "faint"].map((ink) => [dark[ink], dark.surface3, `dark ${ink}/surface3`, 4.5]);
+  return [...text, ...onSurface3, [dark.line3, dark.surface, "dark line3/surface", 3]];
+}
+
+export function belowFloor(pairs) {
+  return pairs.filter(([fg, bg, , need]) => contrast(fg, bg) < need).map(([fg, bg, label, need]) => `${label} ${fg} on ${bg} = ${contrast(fg, bg).toFixed(2)} (needs ${need}:1)`);
+}
+
+// A named total: inline `a + b === 0` parses as `a + (b === 0)` and exited 0 on a broken story.
+export function contrastProblems(derived, sweep) {
+  return derived.length + sweep.broken.length + sweep.failures.length;
+}
+
 function walk(dir, out = []) {
   for (const e of readdirSync(dir)) {
     const p = join(dir, e);
@@ -288,14 +304,15 @@ export function describeFailures(failures) {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const derived = belowFloor(derivedDarkPairs(JSON.parse(readFileSync(join(root, "tokens.json"), "utf8")).dark));
+  if (derived.length) console.log(`FAIL derived dark tokens: ${derived.join("; ")}`);
   const r = await sweepRenderedContrast();
   const exempt = Object.entries(r.exempt).map(([k, n]) => `${k} ${n}`).join(", ") || "none";
   console.log(`${r.build}; swept ${r.stories} stories in ${r.seconds}s`);
   console.log(`${r.nodes} text nodes — ${r.measured} measured (${r.large} large), exempt: ${exempt}`);
   if (r.broken.length) console.log(`BROKEN (${r.broken.length}): ${r.broken.join(" | ")}`);
   if (r.failures.length) console.log(`FAIL ${r.failures.length}: ${describeFailures(r.failures)}`);
-  // A named total: inline `a + b === 0` parses as `a + (b === 0)` and exited 0 on a broken story.
-  const bad = r.broken.length + r.failures.length;
+  const bad = contrastProblems(derived, r);
   if (bad === 0) console.log("contrast: green");
   process.exitCode = bad === 0 ? 0 : 1;
 }

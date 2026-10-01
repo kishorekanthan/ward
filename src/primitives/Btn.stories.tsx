@@ -11,6 +11,10 @@ export const Primary = {
   args: { variant: "primary", children: "Publish v3" },
 };
 
+export const Destructive = {
+  args: { variant: "destructive", children: "Override and advance" },
+};
+
 export const Secondary = {
   args: { variant: "secondary", children: "Configure board" },
 };
