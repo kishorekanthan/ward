@@ -35,6 +35,19 @@ function readFocused() {
   };
 }
 
+// Runs in the page: elements outside the targets whose box shifts when every ward-target band is taken away.
+function movedByTargets() {
+  const copy = document.querySelector("#storybook-root > div");
+  const others = [...copy.querySelectorAll("*")].filter((el) => !el.closest(".ward-target"));
+  const boxes = () => others.map((el) => JSON.stringify(el.getBoundingClientRect()));
+  const targets = [...copy.querySelectorAll(".ward-target")];
+  const banded = boxes();
+  targets.forEach((el) => el.classList.remove("ward-target"));
+  const bare = boxes();
+  targets.forEach((el) => el.classList.add("ward-target"));
+  return others.filter((_, i) => banded[i] !== bare[i]).map((el) => el.tagName.toLowerCase() + (el.className ? `.${el.className}` : ""));
+}
+
 // The four bands just outside the box where the outline paints; each must change when focus leaves.
 function bands({ x, y, width, height, reach }) {
   const r = Math.max(reach, 1);
@@ -89,6 +102,8 @@ export async function sweepFocusTargets() {
     await page.goto(`${base}/iframe.html?viewMode=story&id=${golden.story}`, { waitUntil: "load", timeout: 30000 });
     await page.waitForFunction(() => document.getElementById("storybook-root")?.children.length > 0, null, { timeout: 8000 });
     await page.evaluate(() => document.fonts.ready);
+    const moved = await page.evaluate(movedByTargets);
+    if (moved.length) diffs.push(`layout: ${moved.length} element(s) move with the 24px bands, want 0 (${moved.slice(0, 3).join(", ")})`);
     const seen = await tabThrough(page);
     const names = seen.map((t) => t.name);
     const want = golden.targets.map((t) => t.name);
