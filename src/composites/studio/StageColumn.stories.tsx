@@ -36,6 +36,13 @@ export const Gate = {
   },
 };
 
+export const WorkflowGate = {
+  args: {
+    stage: { index: 3, name: "Review", kind: "gate", count: 6, medianWait: 219_600_000, reviewers: ["J. Rao", "M. Chen"], gateShare: 0.68 },
+    presentation: { mode: "workflow" },
+  },
+};
+
 export const Terminal = {
   args: { stage: { index: 4, name: "Done", kind: "terminal", count: 12, closedThisWeek: 31 } },
 };
