@@ -72,7 +72,7 @@ function GatePanel({ stage }: { stage: Stage }) {
       </ul>
       {stage.gateShare === undefined ? null : (
         <StatStrip cells={[
-          { value: percent(stage.gateShare), label: "Gate share", accent: "amber" },
+          { value: percent(stage.gateShare), label: "Gate share" },
           { value: count(stage.count), label: "In stage" },
         ]} />
       )}
@@ -160,7 +160,7 @@ function WorkflowGatePanel({ stage }: { stage: StageColumnSummary }) {
       </p>
       {reviewers.length === 0 ? null : <ReviewerList reviewers={reviewers} />}
       {stage.gateShare === undefined ? null : (
-        <p className={s.cardNote} data-accent="amber">
+        <p className={s.cardNote} data-note="gate-share">
           <span>{percent(stage.gateShare)}</span> of elapsed time is spent here
         </p>
       )}
