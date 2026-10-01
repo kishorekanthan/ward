@@ -6,7 +6,7 @@ import { injectModuleCss } from "../../test-css";
 import { MarkUpload, validateMark, type ValidationResult } from "./MarkUpload";
 import s from "./MarkUpload.module.css";
 
-const CLEAN = '<svg viewBox="0 0 24 24"><path fill="#00776B" d="M0 0h24v24H0z"/></svg>';
+const CLEAN = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#00776B" d="M0 0h24v24H0z"/></svg>';
 
 function choose(svg: string): void {
   const input = screen.getByLabelText("Mark file") as HTMLInputElement;
@@ -19,7 +19,7 @@ describe("validateMark", () => {
   });
 
   it("rejects unsafe and unsupported SVG content with the established reasons", () => {
-    const invalid = '<svg viewBox="0 0 240 240"><path fill="#00776B"/><circle fill="#BF5310"/><image/><text>x</text><script>x</script><rect stroke-width="4"/></svg>';
+    const invalid = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"><path fill="#00776B"/><circle fill="#BF5310"/><image/><text>x</text><script>x</script><rect stroke-width="4"/></svg>';
     expect(validateMark(invalid)).toEqual({
       ok: false,
       reasons: ["multiple fills", "embedded rasters", "text elements", "script elements or event handlers", "a stroke under 1.5px at 22px"],
@@ -47,8 +47,8 @@ const FURTHER_REFERENCES = [
   '<set attributeName="fill" to="red"/>',
 ];
 // Entity-expanding parsers (Gecko's expat) build <rect onclick> from this; the source never spells "onclick=".
-const ENTITY_HANDLER = '<!DOCTYPE svg [<!ENTITY r "<rect o&#110;click=\'alert(1)\'/>">]><svg viewBox="0 0 24 24">&r;</svg>';
-const EXPANDED_HANDLER = '<svg viewBox="0 0 24 24"><rect onclick="alert(1)"/></svg>';
+const ENTITY_HANDLER = '<!DOCTYPE svg [<!ENTITY r "<rect o&#110;click=\'alert(1)\'/>">]><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">&r;</svg>';
+const EXPANDED_HANDLER = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect onclick="alert(1)"/></svg>';
 
 describe("validateMark sanitiser", () => {
   afterEach(() => vi.unstubAllGlobals());
@@ -61,14 +61,39 @@ describe("validateMark sanitiser", () => {
     expect(validateMark(`${SVG_OPEN}${inner}</svg>`)).toEqual({ ok: false, reasons: ["links or external references"] });
   });
 
-  it("keeps a quoted fill that points at a gradient inside the mark", () => {
-    const quoted = '<svg viewBox="0 0 24 24"><defs><linearGradient id="g"><stop offset="0" stop-color="#00776B"/></linearGradient></defs><path fill="url(\'#g\')" d="M0 0h24v24H0z"/></svg>';
-    expect(validateMark(quoted)).toEqual({ ok: true, svg: quoted });
+  // Prefixes are FNV-1a of each source in base 36, computed outside the code under test.
+  it("keeps a quoted fill that points at a gradient inside the mark, under a rewritten id", () => {
+    const quoted = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><linearGradient id="g"><stop offset="0" stop-color="#00776B"/></linearGradient></defs><path fill="url(\'#g\')" d="M0 0h24v24H0z"/></svg>';
+    expect(validateMark(quoted)).toEqual({ ok: true, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><linearGradient id="ward-mark-1oqx1d3-0"><stop offset="0" stop-color="#00776B"/></linearGradient></defs><path fill="url(\'#ward-mark-1oqx1d3-0\')" d="M0 0h24v24H0z"/></svg>' });
   });
 
-  it("keeps a fill that points at a gradient inside the mark", () => {
-    const gradient = '<svg viewBox="0 0 24 24"><defs><linearGradient id="g"><stop offset="0" stop-color="#00776B"/></linearGradient></defs><path fill="url(#g)" d="M0 0h24v24H0z"/></svg>';
-    expect(validateMark(gradient)).toEqual({ ok: true, svg: gradient });
+  it("keeps a fill that points at a gradient inside the mark, under a rewritten id", () => {
+    const gradient = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><linearGradient id="g"><stop offset="0" stop-color="#00776B"/></linearGradient></defs><path fill="url(#g)" d="M0 0h24v24H0z"/></svg>';
+    expect(validateMark(gradient)).toEqual({ ok: true, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><linearGradient id="ward-mark-lqtwih-0"><stop offset="0" stop-color="#00776B"/></linearGradient></defs><path fill="url(#ward-mark-lqtwih-0)" d="M0 0h24v24H0z"/></svg>' });
+  });
+
+  it("gives each referenced id its own rewritten name, shared by every reference to it", () => {
+    const two = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><linearGradient id="a"><stop offset="0" stop-color="#00776B"/></linearGradient><clipPath id="b"><rect width="12" height="24"/></clipPath></defs><path fill="url(#a)" clip-path="url(#b)" d="M0 0h24v24H0z"/><circle fill="url(#a)" r="4"/></svg>';
+    expect(validateMark(two)).toEqual({ ok: true, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><linearGradient id="ward-mark-e7pt23-0"><stop offset="0" stop-color="#00776B"/></linearGradient><clipPath id="ward-mark-e7pt23-1"><rect width="12" height="24"/></clipPath></defs><path fill="url(#ward-mark-e7pt23-0)" clip-path="url(#ward-mark-e7pt23-1)" d="M0 0h24v24H0z"/><circle fill="url(#ward-mark-e7pt23-0)" r="4"/></svg>' });
+  });
+
+  it("drops class and every id no url(#id) names", () => {
+    const scrim = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22" class="modal-scrim"><rect id="config" width="22" height="22"/></svg>';
+    expect(validateMark(scrim)).toEqual({ ok: true, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22"><rect width="22" height="22"/></svg>' });
+  });
+
+  it("drops an unreferenced id on the root and keeps a mixed-case referenced id, renamed", () => {
+    const exported = '<svg xmlns="http://www.w3.org/2000/svg" id="config" viewBox="0 0 24 24"><defs><linearGradient id="SVGID_1_"><stop offset="0" stop-color="#00776B"/></linearGradient></defs><path fill="url(#SVGID_1_)" d="M0 0h24v24H0z"/></svg>';
+    expect(validateMark(exported)).toEqual({ ok: true, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><defs><linearGradient id="ward-mark-6e6cyb-0"><stop offset="0" stop-color="#00776B"/></linearGradient></defs><path fill="url(#ward-mark-6e6cyb-0)" d="M0 0h24v24H0z"/></svg>' });
+  });
+
+  it("points a url(#id) with no matching element at nothing the host page owns", () => {
+    const dangling = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="url(#host)" clip-path="url(#)" d="M0 0h24v24H0z"/></svg>';
+    expect(validateMark(dangling)).toEqual({ ok: true, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="url(#ward-mark-hha23m-0)" clip-path="url(#)" d="M0 0h24v24H0z"/></svg>' });
+  });
+
+  it("treats an svg root with no namespace as invalid", () => {
+    expect(validateMark('<svg viewBox="0 0 22 22"/>')).toEqual({ ok: false, reasons: ["embedded rasters"] });
   });
 
   it("judges handlers on the parsed tree, not the source text", () => {
@@ -86,8 +111,8 @@ describe("validateMark sanitiser", () => {
   });
 
   it("returns the allow-listed tree serialised, not the uploaded source", () => {
-    const stray = '<svg viewBox="0 0 24 24"><!-- editor --><metadata>x</metadata><path fill="#00776B" data-x="1" d="M0 0h24v24H0z"/></svg>';
-    expect(validateMark(stray)).toEqual({ ok: true, svg: '<svg viewBox="0 0 24 24"><path fill="#00776B" d="M0 0h24v24H0z"/></svg>' });
+    const stray = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><!-- editor --><metadata>x</metadata><path fill="#00776B" data-x="1" d="M0 0h24v24H0z"/></svg>';
+    expect(validateMark(stray)).toEqual({ ok: true, svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#00776B" d="M0 0h24v24H0z"/></svg>' });
   });
 });
 
