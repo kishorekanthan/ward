@@ -70,6 +70,7 @@
       "focusVisible": true,
       "wardRing": true,
       "ring": true,
+      "edged": true,
       "tall": true,
       "hit24": true
     },
