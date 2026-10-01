@@ -63,11 +63,12 @@ function movedByTargets() {
 }
 
 // The four bands just outside the box where the outline paints; each must change when focus leaves.
+// Top and bottom bands skip the corners, so the side lines cannot stand in for a clipped edge.
 function bands({ x, y, width, height, reach }) {
   const r = Math.max(reach, 1);
   return [
-    { x: x - r, y: y - r, width: width + 2 * r, height: r },
-    { x: x - r, y: y + height, width: width + 2 * r, height: r },
+    { x, y: y - r, width, height: r },
+    { x, y: y + height, width, height: r },
     { x: x - r, y, width: r, height },
     { x: x + width, y, width: r, height },
   ];
@@ -87,9 +88,12 @@ async function ringOnEverySide(page, box) {
   return focused.every((shot, i) => !shot.equals(blurred[i]));
 }
 
+// Room for both themed copies of the story; too low a cap silently cuts the dark copy short.
+const MAX_TABS = 80;
+
 async function tabThrough(page) {
   const seen = [];
-  for (let step = 0; step < 40; step++) {
+  for (let step = 0; step < MAX_TABS; step++) {
     await page.keyboard.press("Tab");
     const got = await page.evaluate(readFocused);
     if (got === null) {

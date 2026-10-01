@@ -10,6 +10,12 @@
   scroll-padding-inline: var(--ward-space-6);
 }
 
+/* The scrolling strip clips its top edge; a gutter the size of the focus ring, cancelled by margin, keeps the ring whole. */
+.strip[data-level="1"] {
+  padding-block-start: calc(var(--ward-border) + var(--ward-focus-offset));
+  margin-block-start: calc(-1 * (var(--ward-border) + var(--ward-focus-offset)));
+}
+
 /* A strip wider than its column scrolls; the fade says which edge hides more tabs. */
 .strip[data-fade-start] {
   mask-image: linear-gradient(to right, transparent, currentColor var(--ward-space-6));
@@ -43,6 +49,26 @@
 
 .strip[data-level="2"] .tab[aria-selected="true"] {
   border-bottom-color: var(--ward-color-text);
+}
+
+/* TabLinks marks its current page as Tabs marks its selected tab. */
+.tab[aria-current="page"] {
+  color: var(--ward-color-text);
+  font-weight: 600;
+  border-bottom-color: var(--ward-color-blue);
+}
+
+.strip[data-level="2"] .tab[aria-current="page"] {
+  border-bottom-color: var(--ward-color-text);
+}
+
+/* A tab link reads as a tab, not as body text; hover takes the current tab's ink. */
+a.tab {
+  text-decoration: none;
+}
+
+a.tab:hover {
+  color: var(--ward-color-text);
 }
 
 /* Comp tabs read "Queue · 14": the count shares the label's face and colour. */
