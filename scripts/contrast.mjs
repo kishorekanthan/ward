@@ -53,6 +53,11 @@ export function belowFloor(pairs) {
   return pairs.filter(([fg, bg, , need]) => contrast(fg, bg) < need).map(([fg, bg, label, need]) => `${label} ${fg} on ${bg} = ${contrast(fg, bg).toFixed(2)} (needs ${need}:1)`);
 }
 
+// A named total: inline `a + b === 0` parses as `a + (b === 0)` and exited 0 on a broken story.
+export function contrastProblems(derived, sweep) {
+  return derived.length + sweep.broken.length + sweep.failures.length;
+}
+
 function walk(dir, out = []) {
   for (const e of readdirSync(dir)) {
     const p = join(dir, e);
@@ -307,8 +312,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   console.log(`${r.nodes} text nodes — ${r.measured} measured (${r.large} large), exempt: ${exempt}`);
   if (r.broken.length) console.log(`BROKEN (${r.broken.length}): ${r.broken.join(" | ")}`);
   if (r.failures.length) console.log(`FAIL ${r.failures.length}: ${describeFailures(r.failures)}`);
-  // A named total: inline `a + b === 0` parses as `a + (b === 0)` and exited 0 on a broken story.
-  const bad = derived.length + r.broken.length + r.failures.length;
+  const bad = contrastProblems(derived, r);
   if (bad === 0) console.log("contrast: green");
   process.exitCode = bad === 0 ? 0 : 1;
 }

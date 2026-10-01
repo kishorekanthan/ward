@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { belowFloor, derivedDarkPairs } from "./contrast.mjs";
+import { belowFloor, contrastProblems, derivedDarkPairs } from "./contrast.mjs";
 
 const tokens = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "tokens.json"), "utf8"));
 
@@ -24,5 +24,19 @@ describe("derived dark contrast", () => {
   it("fails a surface3 lifted until faint text on it drops below 4.5:1", () => {
     const low = belowFloor(derivedDarkPairs({ ...tokens.dark, surface3: "#4E5868" }));
     expect(low.map((l) => l.split(" ")[1])).toEqual(["ink2/surface3", "muted/surface3", "faint/surface3"]);
+  });
+});
+
+describe("check:contrast exit", () => {
+  const clean = { broken: [], failures: [] };
+
+  it("counts a derived dark pair below its floor even when every story sweeps clean", () => {
+    const derived = belowFloor(derivedDarkPairs({ ...tokens.dark, ink2: "#3A4453" }));
+    expect(contrastProblems(derived, clean)).toBe(3);
+  });
+
+  it("counts broken stories and rendered failures alongside derived pairs", () => {
+    expect(contrastProblems([], clean)).toBe(0);
+    expect(contrastProblems(["d"], { broken: ["b1", "b2"], failures: [{}] })).toBe(4);
   });
 });
