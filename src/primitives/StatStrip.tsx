@@ -10,13 +10,29 @@ function validate(cells: StatCell[]): void {
   if (cells.filter((c) => c.accent).length > 1) throw new Error("StatStrip: only the cell carrying the argument may be accented");
 }
 
-// The link's name keeps the label, since the value alone ("14") says nothing out of context.
-function Value({ cell }: { cell: StatCell }) {
-  if (cell.href === undefined) return <>{cell.value}</>;
+const valueClass = (c: StatCell): string => `${s.value} ward-stat-value${c.accent ? ` ward-stat-accent--${c.accent}` : ""}`;
+
+function PlainCell({ cell }: { cell: StatCell }) {
   return (
-    <a className={`${s.link} ward-stat-link ward-target`} href={safeHref(cell.href)} aria-label={`${cell.label}: ${cell.value}`}>
-      {cell.value}
-    </a>
+    <div className={s.cell} data-accent={cell.accent}>
+      <dd className={valueClass(cell)} title={cell.hint}>{cell.value}</dd>
+      <dt className={`${s.label} ward-stat-label`}>{cell.label}</dt>
+    </div>
+  );
+}
+
+// One link holds value and label; the term stays for assistive tech, and the link's name keeps the label.
+function LinkedCell({ cell, href }: { cell: StatCell; href: string }) {
+  return (
+    <div className={s.cell} data-accent={cell.accent} data-ward-rowlink>
+      <dt className="ward-visually-hidden">{cell.label}</dt>
+      <dd className={valueClass(cell)} title={cell.hint}>
+        <a className={`${s.link} ward-stat-link`} href={safeHref(href)} aria-label={`${cell.label}: ${cell.value}`}>
+          <span className={s.linkValue}>{cell.value}</span>
+          <span className={`${s.label} ward-stat-label`}>{cell.label}</span>
+        </a>
+      </dd>
+    </div>
   );
 }
 
@@ -25,14 +41,7 @@ export function StatStrip({ cells, divided = false }: { cells: StatCell[]; divid
   validate(cells);
   return (
     <dl className={`${s.strip} ward-statstrip`} data-divided={divided || undefined}>
-      {cells.map((c) => (
-        <div className={s.cell} key={c.label} data-accent={c.accent}>
-          <dd className={`${s.value} ward-stat-value${c.accent ? ` ward-stat-accent--${c.accent}` : ""}`} title={c.hint}>
-            <Value cell={c} />
-          </dd>
-          <dt className={`${s.label} ward-stat-label`}>{c.label}</dt>
-        </div>
-      ))}
+      {cells.map((c) => (c.href === undefined ? <PlainCell key={c.label} cell={c} /> : <LinkedCell key={c.label} cell={c} href={c.href} />))}
     </dl>
   );
 }

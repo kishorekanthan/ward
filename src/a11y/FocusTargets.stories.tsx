@@ -70,7 +70,10 @@ export const Links = {
       <StageColumn stage={{ index: 2, name: "Build", kind: "agent", count: 0 }} presentation={{ mode: "workflow" }} onMount={() => {}} />
       <BoardFootnote configureHref="#/studio/streams/ledger" />
       <TopBar destinations={destinations} active="board" />
-      <StatStrip cells={[{ value: "14", label: "In flight", href: "#/board" }, { value: "3", label: "At a gate" }]} />
+      <StatStrip cells={[{ value: "14", label: "In flight", href: "/board" }, { value: "0", label: "Failed runs 24h", href: "/runs" }]} />
+      <div style={{ width: "var(--ward-width-streamKey)" }}>
+        <StatStrip cells={[{ value: "2", label: "Items waiting at a gate", href: "/gates" }, { value: "5", label: "Done", href: "/done" }]} />
+      </div>
       <Sidebar brand="Studio" nav={[]} agentsHeading="Agents" agents={[]} shared={shared} />
     </div>
   ),
