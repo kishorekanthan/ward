@@ -11,4 +11,6 @@ export type TabsProps = {
     label?: string;
     level?: 1 | 2;
 };
+export declare const MAX_TABS = 7;
+export declare function tabClass(level: 1 | 2): string;
 export declare function Tabs({ tabs, active, onChange, label, level }: TabsProps): import("react").JSX.Element;

@@ -38,6 +38,8 @@ export { Field } from './primitives/Field';
 export type { FieldOption, FieldProps } from './primitives/Field';
 export { Tabs } from './primitives/Tabs';
 export type { Tab, TabDef, TabsProps } from './primitives/Tabs';
+export { TabLinks } from './primitives/TabLinks';
+export type { TabLink, TabLinksProps } from './primitives/TabLinks';
 export { SegmentedControl } from './primitives/SegmentedControl';
 export type { Segment, SegmentOption, SegmentedControlProps } from './primitives/SegmentedControl';
 export type { LinkSidebarProps, SidebarAgent, SidebarDestination, SidebarItem, SidebarLink, SidebarNavItem, SidebarProps, StudioSidebarProps, } from './layout/Sidebar';

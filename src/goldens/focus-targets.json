@@ -80,6 +80,30 @@
       "ring": true,
       "tall": true,
       "hit24": true
+    },
+    {
+      "name": "Streams",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "Gates",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "Audit",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
     }
   ],
   "rowLinks": [
