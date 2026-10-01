@@ -5,6 +5,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { serveStatic } from "./story-server.mjs";
+import { launchChromium } from "./browser.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const staticDir = join(root, "storybook-static");
@@ -64,12 +65,11 @@ function probe() {
   return rows;
 }
 
-const { chromium } = await import("playwright");
 const index = JSON.parse(readFileSync(join(staticDir, "index.json"), "utf8"));
 const ids = Object.values(index.entries)
   .filter((e) => e.type === "story")
   .map((e) => e.id);
-const browser = await chromium.launch();
+const browser = await launchChromium();
 const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
 const all = [];
 const queue = ids.slice();

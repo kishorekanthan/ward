@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { ensureBuild, serve } from "./contrast.mjs";
+import { launchChromium } from "./browser.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 export const golden = JSON.parse(readFileSync(join(root, "src", "goldens", "phone-width.json"), "utf8"));
@@ -240,12 +241,10 @@ async function measure(page, base, key) {
 // Returns every fact that differs from the golden, as "key.fact: got X, want Y".
 export async function sweepPhoneWidth() {
   ensureBuild();
-  const { chromium } = await import("playwright");
   const server = serve();
   await new Promise((r) => server.listen(0, "127.0.0.1", r));
   const base = `http://127.0.0.1:${server.address().port}`;
-  // Linux Chromium hints glyph advances to whole pixels, which wraps PageHeader's chips a line early (#110); macOS ignores the flag.
-  const browser = await chromium.launch({ args: ["--font-render-hinting=none"] });
+  const browser = await launchChromium();
   const diffs = [];
   try {
     const page = await browser.newPage({ viewport: golden.viewport });

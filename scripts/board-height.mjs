@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { ensureBuild, serve } from "./contrast.mjs";
+import { launchChromium } from "./browser.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 export const golden = JSON.parse(readFileSync(join(root, "src", "goldens", "board-height.json"), "utf8"));
@@ -64,11 +65,10 @@ async function measure(browser, base, { story, viewport }) {
 // Returns every fact that differs from the golden, as "case.fact: got X, want Y".
 export async function sweepBoardHeight() {
   ensureBuild();
-  const { chromium } = await import("playwright");
   const server = serve();
   await new Promise((r) => server.listen(0, "127.0.0.1", r));
   const base = `http://127.0.0.1:${server.address().port}`;
-  const browser = await chromium.launch();
+  const browser = await launchChromium();
   const diffs = [];
   try {
     for (const [key, { story, viewport, ...want }] of Object.entries(golden)) {
