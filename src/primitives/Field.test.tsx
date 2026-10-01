@@ -52,6 +52,7 @@ describe("Field secret", () => {
       expect(control.hasAttribute("type")).toBe(false);
       expect(control.hasAttribute("autocomplete")).toBe(false);
       expect(control.hasAttribute("data-1p-ignore")).toBe(false);
+      expect(control.hasAttribute("data-lpignore")).toBe(false);
     }
   });
 });
