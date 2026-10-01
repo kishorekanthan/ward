@@ -8,6 +8,7 @@ vi.mock("playwright", () => ({ chromium: { launch } }));
 const { launchChromium } = await import("./browser.mjs");
 
 const scripts = dirname(fileURLToPath(import.meta.url));
+const LAUNCHES_CHROMIUM = /chromium\s*\.\s*launch|import\(\s*["']playwright["']\s*\)|from\s*["']playwright["']/;
 
 describe("launchChromium", () => {
   it("launches with font hinting off, so Linux CI measures text like macOS", async () => {
@@ -19,7 +20,7 @@ describe("launchChromium", () => {
     const others = readdirSync(scripts).filter(
       (f) => f.endsWith(".mjs") && !f.endsWith(".test.mjs") && f !== "browser.mjs",
     );
-    const launching = others.filter((f) => /chromium\s*\.\s*launch|import\(\s*["']playwright["']\s*\)/.test(readFileSync(join(scripts, f), "utf8")));
+    const launching = others.filter((f) => LAUNCHES_CHROMIUM.test(readFileSync(join(scripts, f), "utf8")));
     expect(others.length).toBeGreaterThan(5);
     expect(launching).toEqual([]);
   });
