@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -29,6 +29,24 @@ function assertShipsNoInternals(files) {
   assert(leaked.length === 0, `packed tarball ships internals: ${leaked.slice(0, 5).join(", ")}`);
 }
 
+// Every @font-face src url must be a file the package ships; a remote host leaks viewer IPs and needs a CSP exception.
+function packedFonts(css, wardRoot) {
+  const sources = [...css.matchAll(/@font-face\{[^}]*?src:([^;}]*)/g)].map((face) => face[1]);
+  const urls = sources.flatMap((source) => [...source.matchAll(/url\(([^)]*)\)/g)].map((url) => url[1].replace(/["']/g, "")));
+  const remote = urls.filter((url) => !url.startsWith("./assets/"));
+  assert(sources.length > 0 && urls.length === sources.length, "packed @font-face rules lack one url each");
+  assert(remote.length === 0, `packed font src is not vendored: ${remote.join(", ")}`);
+  const missing = urls.filter((url) => !existsSync(join(wardRoot, "dist", url)));
+  assert(missing.length === 0, `packed tarball lacks fonts: ${missing.join(", ")}`);
+  return urls.map((url) => url.slice("./assets/".length, -".woff2".length));
+}
+
+function assertBuildShipsFonts(appRoot, fonts) {
+  const built = readdirSync(join(appRoot, "dist", "assets"));
+  const absent = fonts.filter((font) => !built.some((file) => file.startsWith(font + "-") && file.endsWith(".woff2")));
+  assert(absent.length === 0, `external build omitted fonts: ${absent.join(", ")}`);
+}
+
 function builtCss(appRoot) {
   const html = readFileSync(join(appRoot, "dist", "index.html"), "utf8");
   const asset = html.match(/assets\/(index-[^"]+\.css)/)?.[1];
@@ -55,6 +73,7 @@ try {
   assert(Object.keys(manifest.exports).sort().join(",") === ".,./styles.css", "packed deep imports leaked");
   assert(css.includes("@font-face") && css.includes("box-sizing:border-box"), "packed fonts or reset are missing");
   assert(!readFileSync(join(wardRoot, "dist", "index.js"), "utf8").includes("foundryloop-v2"), "packed code depends on app internals");
+  const fonts = packedFonts(css, wardRoot);
 
   writeFileSync(join(app, "render.mjs"), `
     import React from "react";
@@ -80,7 +99,8 @@ try {
   run(join(root, "node_modules", ".bin", "vite"), ["build"], app, env);
   assert(existsSync(join(app, "dist", "index.html")), "external production build is missing");
   assert(builtCss(app).includes("--ward-color-bg"), "external build omitted Ward CSS");
-  console.log("packed Ward consumer: install + import + render + build green");
+  assertBuildShipsFonts(app, fonts);
+  console.log(`packed Ward consumer: install + import + render + build green, ${fonts.length} vendored fonts`);
 } finally {
   rmSync(temporary, { recursive: true, force: true });
 }
