@@ -25,6 +25,8 @@ const replaced = [
   "\u0001data:text/html,x",
   "java\tscript:alert(1)",
   "da\nta:text/html,x",
+  "jav\rascript:alert(1)",
+  "ms-msdt:/id PCWDiagnostic",
   "vbscript:msgbox(1)",
   "file:///etc/passwd",
   "ftp://example.com/x",
