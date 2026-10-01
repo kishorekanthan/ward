@@ -116,8 +116,11 @@ describe("tag sweep workflow", () => {
     expect(workflow.on.push).toEqual({ tags: ["signature-test-*"] });
   });
 
-  it("checks out every tag and runs the sweep", () => {
+  it("checks out every tag, re-fetches the tag objects, then runs the sweep", () => {
     expect(steps[0].with["fetch-depth"]).toBe(0);
-    expect(steps.map((s) => s.run)).toContain("node scripts/verify-tags.mjs");
+    const runs = steps.map((s) => s.run);
+    const fetch = runs.indexOf('git fetch --force --no-tags origin "+refs/tags/*:refs/tags/*"');
+    expect(fetch).toBeGreaterThan(0);
+    expect(runs.indexOf("node scripts/verify-tags.mjs")).toBe(fetch + 1);
   });
 });

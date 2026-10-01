@@ -19,5 +19,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 0
+      # checkout writes a pushed tag as a lightweight ref, so fetch the real tag objects.
+      - run: git fetch --force --no-tags origin "+refs/tags/*:refs/tags/*"
       - name: git verify-tag on every v* and signature-test-* tag against main's allowed signers
         run: node scripts/verify-tags.mjs
