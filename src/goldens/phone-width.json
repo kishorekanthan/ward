@@ -63,6 +63,15 @@
     "letterSpacing": "normal",
     "pageScrollsSideways": false
   },
+  "longKicker": {
+    "story": "layout-recordsection--long-kicker",
+    "headLines": 2,
+    "headInView": true,
+    "noteOnFirstLine": true,
+    "noteLines": 1,
+    "longNoteInView": true,
+    "pageScrollsSideways": false
+  },
   "console": {
     "story": "item-activityconsole--empty",
     "listLines": 6,
