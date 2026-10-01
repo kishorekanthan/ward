@@ -15,6 +15,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+  min-height: 0;
   max-width: none;
 }
 
@@ -174,9 +175,38 @@
 }
 
 /* Only the board page runs its columns full-bleed under a rule; an embedded preview keeps its own box. */
+/* There the lanes fill the height left under the header and each scrolls on its own, so the page does not. */
 .frame[data-inset="board"] .scroller {
+  grid-template-rows: minmax(0, 1fr);
+  min-height: 0;
   margin-inline: calc(-1 * var(--ward-page-inset));
   border-top: var(--ward-border) solid var(--ward-color-line);
+}
+
+.frame[data-inset="board"] .scroller > * {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.frame[data-inset="board"] .scroller[data-fade-end] {
+  mask-image: linear-gradient(to left, transparent, currentColor var(--ward-space-6));
+}
+
+.board {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.laneCount {
+  align-self: flex-end;
+  margin: 0 0 var(--ward-space-2);
+  font: var(--ward-type-micro);
+  letter-spacing: var(--ward-type-micro-tracking);
+  text-transform: var(--ward-type-micro-transform);
+  color: var(--ward-color-muted);
 }
 
 /* The lane picker keeps the page inset; only the lane itself runs full-bleed. */
@@ -186,6 +216,7 @@
   flex-direction: column;
   gap: var(--ward-space-3);
   min-width: 0;
+  min-height: 0;
 }
 
 @media (max-width: 767.98px) {

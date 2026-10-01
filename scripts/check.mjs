@@ -7,6 +7,7 @@ import { buildFresh, distDrift } from "./dist-fresh.mjs";
 import { sweepConsoleTheme } from "./console-theme.mjs";
 import { sweepPhoneWidth } from "./phone-width.mjs";
 import { sweepFocusTargets } from "./focus-targets.mjs";
+import { sweepBoardHeight } from "./board-height.mjs";
 import { workflowFindings } from "./workflows.mjs";
 import { FAMILY_OF, breakpoints, buildCss, buildTokens, containerBreakpoints, declaredFaces, readTokens } from "./gen-css.mjs";
 
@@ -234,6 +235,11 @@ else fail("console theme", consoleDiffs.join("; "));
 const focusDiffs = await sweepFocusTargets();
 if (focusDiffs.length === 0) pass("focus and targets", "every small link shows its focus ring and has a 24px target");
 else fail("focus and targets", focusDiffs.join("; "));
+
+// 10. board height: the full-page board fills the viewport and its lanes scroll, not the page; the right-edge fade and lane count follow overflow (src/goldens/board-height.json)
+const boardDiffs = await sweepBoardHeight();
+if (boardDiffs.length === 0) pass("board height", "at 1024x768 and 375x667 the page never scrolls, the long lane does, and the fade and lane count show only on overflow");
+else fail("board height", boardDiffs.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);
 process.exitCode = failures === 0 ? 0 : 1;
