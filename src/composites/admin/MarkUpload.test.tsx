@@ -1,6 +1,10 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { injectModuleCss } from "../../test-css";
 import { MarkUpload, validateMark, type ValidationResult } from "./MarkUpload";
+import s from "./MarkUpload.module.css";
 
 const CLEAN = '<svg viewBox="0 0 24 24"><path fill="#00776B" d="M0 0h24v24H0z"/></svg>';
 
@@ -146,5 +150,34 @@ describe("MarkUpload spec", () => {
     render(<MarkUpload onUpload={() => ({ ok: true, reasons: [] })} onUseInitials={onUseInitials} />);
     fireEvent.click(screen.getByRole("button", { name: "Use initials" }));
     expect(onUseInitials).toHaveBeenCalledTimes(1);
+  });
+});
+
+function previewWith(colour: string): HTMLElement {
+  render(<MarkUpload current={{ svg: CLEAN, colour }} onUpload={() => ({ ok: true, reasons: [] })} onUseInitials={() => {}} />);
+  return screen.getByAltText("Current mark").parentElement as HTMLElement;
+}
+
+describe("MarkUpload preview colour", () => {
+  let removeCss = () => {};
+  afterEach(() => removeCss());
+
+  it.each(["url(https://example.test/p.png)", "#3366ff url(https://example.test/p.png)", "url(https://example.test/p.png)#333", "red", "var(--ward-stream-4-id)", "var(--ward-color-line2)", "#12", "#3366ff801", "#33gg66"])(
+    "drops %s and leaves the preview on its default colour",
+    (colour) => {
+      const preview = previewWith(colour);
+      expect(preview.getAttribute("style") ?? "").not.toContain("url(");
+      expect(preview.style.getPropertyValue("--mark")).toBe("");
+    },
+  );
+
+  it.each(["#3366ff", "#3366FF", "#36f", "#3366ff80", "var(--ward-stream-1-id)", "var(--ward-stream-3-chip)"])("applies %s unchanged", (colour) => {
+    expect(previewWith(colour).style.getPropertyValue("--mark")).toBe(colour);
+  });
+
+  it("paints --mark as a background colour, never a background image", () => {
+    removeCss = injectModuleCss(join(dirname(fileURLToPath(import.meta.url)), "MarkUpload.module.css"), s);
+    const style = getComputedStyle(previewWith("#3366ff"));
+    expect({ color: style.backgroundColor, image: style.backgroundImage }).toEqual({ color: "var(--mark, var(--ward-color-surface2))", image: "none" });
   });
 });

@@ -1,5 +1,7 @@
 import { useRef, useState, type CSSProperties } from "react";
 import { Btn } from "../../primitives/Btn";
+import { streamColour } from "../../primitives/streamColour";
+import { validatedStreamSteps } from "../../tokens";
 import s from "./MarkUpload.module.css";
 
 export type ValidationResult = { ok: boolean; reasons: string[] };
@@ -144,11 +146,18 @@ export type MarkUploadProps = {
 };
 
 const ACCEPTED = "Mark accepted.";
+const HEX_COLOUR = /^#[0-9a-f]{3,8}$/i;
+const STREAM_COLOURS = new Set(validatedStreamSteps.flatMap((step) => [streamColour(step, "id"), streamColour(step, "chip")]));
+
+// Only a hex or a resolved stream step reaches --mark; anything else (a url(), an image) falls back to the default.
+function markColour(colour: string | undefined): string | undefined {
+  return colour !== undefined && (HEX_COLOUR.test(colour) || STREAM_COLOURS.has(colour)) ? colour : undefined;
+}
 
 function Preview({ current }: { current?: MarkUploadProps["current"] }) {
   const src = current ? `data:image/svg+xml;utf8,${encodeURIComponent(current.svg)}` : undefined;
   return (
-    <div className={s.preview} style={{ "--mark": current?.colour } as CSSProperties}>
+    <div className={s.preview} style={{ "--mark": markColour(current?.colour) } as CSSProperties}>
       {src ? <img className={s.mark} src={src} alt="Current mark" /> : <span className={s.empty} />}
     </div>
   );
