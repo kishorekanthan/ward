@@ -9,6 +9,8 @@
     "activeTabInView": true,
     "activeTabClearOfFades": true,
     "fadesMasked": true,
+    "endFadeMaskedAtStart": true,
+    "startFadeMaskedAtEnd": true,
     "lastTabReachedByScroll": true,
     "pageScrollsSideways": false
   },

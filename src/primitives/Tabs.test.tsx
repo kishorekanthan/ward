@@ -34,7 +34,10 @@ function mockStripLayout(): void {
   });
 }
 
-afterEach(() => vi.restoreAllMocks());
+afterEach(() => {
+  vi.restoreAllMocks();
+  vi.unstubAllGlobals();
+});
 
 describe("Tabs", () => {
   it("refuses a set above the cap rather than wrapping or scrolling", () => {
@@ -111,6 +114,50 @@ describe("Tabs", () => {
     strip.scrollLeft = 400;
     fireEvent.scroll(strip);
     expect(fades()).toEqual([true, false]);
+  });
+
+  it("stops a revealed tab clear of the edge fade, the strip's 24px scroll-padding", () => {
+    mockStripLayout();
+    const computed = window.getComputedStyle;
+    vi.spyOn(window, "getComputedStyle").mockImplementation((el) =>
+      el.getAttribute("role") === "tablist" ? ({ scrollPaddingInlineStart: "24px" } as CSSStyleDeclaration) : computed(el),
+    );
+    const { rerender } = render(<Tabs label="Admin" tabs={seven} active="t2" onChange={() => {}} />);
+    const strip = screen.getByRole("tablist");
+    // Tab 2 ends at 290, inside the 300px window but under the right fade: 290 - 300 + 24 = 14.
+    expect(strip.scrollLeft).toBe(14);
+    rerender(<Tabs label="Admin" tabs={seven} active="t6" onChange={() => {}} />);
+    expect(strip.scrollLeft).toBe(414);
+    // Tab 6 ends at 690: 690 - 300 + 24 = 414. Tab 1 then starts at -314: 414 - 314 - 24 = 76.
+    rerender(<Tabs label="Admin" tabs={seven} active="t1" onChange={() => {}} />);
+    expect(strip.scrollLeft).toBe(76);
+  });
+
+  it("drops the end fade when a tab shrinks and the strip no longer overflows, as when a web font swaps in", () => {
+    const observers: { targets: Set<Element>; fire: () => void }[] = [];
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        targets = new Set<Element>();
+        constructor(cb: () => void) {
+          observers.push({ targets: this.targets, fire: cb });
+        }
+        observe(el: Element) {
+          this.targets.add(el);
+        }
+        disconnect() {
+          this.targets.clear();
+        }
+      },
+    );
+    mockStripLayout();
+    render(<Tabs label="Admin" tabs={seven} active="t0" onChange={() => {}} />);
+    const strip = screen.getByRole("tablist");
+    expect(strip.hasAttribute("data-fade-end")).toBe(true);
+    vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockReturnValue(STRIP.client);
+    const tab = screen.getAllByRole("tab")[3];
+    for (const o of observers) if (o.targets.has(tab)) o.fire();
+    expect(strip.hasAttribute("data-fade-end")).toBe(false);
   });
 
   it("reaches the last of seven tabs by keyboard, from the first and from its neighbour", () => {

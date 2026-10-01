@@ -1078,17 +1078,18 @@ function Tn(e) {
   const a = yl(e);
   e.toggleAttribute("data-fade-start", a.start), e.toggleAttribute("data-fade-end", a.end);
 }
-function kl(e) {
+function kl(e, a) {
   A(() => {
-    const a = e.current;
-    if (!a) return;
-    const t = () => Tn(a);
-    a.addEventListener("scroll", t, { passive: !0 });
-    const r = typeof ResizeObserver > "u" ? null : new ResizeObserver(t);
-    return r == null || r.observe(a), t(), () => {
-      a.removeEventListener("scroll", t), r == null || r.disconnect();
+    const t = e.current;
+    if (!t) return;
+    const r = () => Tn(t);
+    t.addEventListener("scroll", r, { passive: !0 });
+    const l = typeof ResizeObserver > "u" ? null : new ResizeObserver(r);
+    for (const i of [t, ...t.children]) l == null || l.observe(i);
+    return r(), () => {
+      t.removeEventListener("scroll", r), l == null || l.disconnect();
     };
-  }, [e]);
+  }, [e, a]);
 }
 function $l(e, a) {
   const t = Number.parseFloat(getComputedStyle(e).scrollPaddingInlineStart) || 0, r = a.getBoundingClientRect().left - e.getBoundingClientRect().left, l = r + a.getBoundingClientRect().width;
@@ -1107,7 +1108,7 @@ function q1({ tabs: e, active: a, onChange: t, label: r = "Tabs", level: l = 1 }
   const i = ba({ orientation: "horizontal" }), c = gl(e, a);
   A(() => i.setActive(c), [i.setActive, c]);
   const d = N(null);
-  return kl(d), Cl(d, c), /* @__PURE__ */ n(
+  return kl(d, e.length), Cl(d, c), /* @__PURE__ */ n(
     "div",
     {
       ref: d,

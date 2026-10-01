@@ -38,20 +38,21 @@ function markEdges(strip: HTMLElement): void {
   strip.toggleAttribute("data-fade-end", edges.end);
 }
 
-function useEdgeFades(stripRef: RefObject<HTMLDivElement | null>): void {
+function useEdgeFades(stripRef: RefObject<HTMLDivElement | null>, count: number): void {
   useEffect(() => {
     const strip = stripRef.current;
     if (!strip) return;
     const mark = () => markEdges(strip);
     strip.addEventListener("scroll", mark, { passive: true });
     const ro = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(mark);
-    ro?.observe(strip);
+    // The tabs too: a web font swapping in changes scrollWidth without resizing the strip.
+    for (const el of [strip, ...strip.children]) ro?.observe(el);
     mark();
     return () => {
       strip.removeEventListener("scroll", mark);
       ro?.disconnect();
     };
-  }, [stripRef]);
+  }, [stripRef, count]);
 }
 
 // The fade width is the strip's scroll-padding, so a revealed tab clears the fade too.
@@ -82,7 +83,7 @@ export function Tabs({ tabs, active, onChange, label = "Tabs", level = 1 }: Tabs
   const index = selectedIndex(tabs, active);
   useEffect(() => roving.setActive(index), [roving.setActive, index]);
   const stripRef = useRef<HTMLDivElement>(null);
-  useEdgeFades(stripRef);
+  useEdgeFades(stripRef, tabs.length);
   useRevealActive(stripRef, index);
   return (
     <div
