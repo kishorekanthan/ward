@@ -37,7 +37,14 @@ type ControlProps = {
 
 type FieldControlProps = { props: FieldProps; controlProps: ControlProps; cls: string };
 
-const SECRET_INPUT = { type: "password", autoComplete: "off", spellCheck: false } as const;
+// Password managers ignore autocomplete="off" on password fields; these opt-outs they honour.
+const SECRET_INPUT = {
+  type: "password",
+  autoComplete: "new-password",
+  spellCheck: false,
+  "data-1p-ignore": "",
+  "data-lpignore": "true",
+} as const;
 
 function InputControl({ props, controlProps, cls }: FieldControlProps) {
   const secret = props.secret ? SECRET_INPUT : {};
