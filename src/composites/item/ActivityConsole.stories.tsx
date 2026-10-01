@@ -1,5 +1,5 @@
 import { bothThemes } from "../../../.storybook/bothThemes";
-import { ActivityConsole } from "./ActivityConsole";
+import { ActivityConsole, ConsoleAnnounceProvider, type ConsoleLine } from "./ActivityConsole";
 
 export default {
   title: "Item/ActivityConsole",
@@ -7,7 +7,7 @@ export default {
   decorators: [bothThemes],
 };
 
-const lines = [
+const lines: ConsoleLine[] = [
   { at: "2026-09-06T02:10:00Z", kind: "dim", text: "run.started · triage v2 · turn 1/8" },
   { at: "2026-09-06T02:12:00Z", kind: "tool", text: "foundry.query dataset:shipments · 1.2s" },
   { at: "2026-09-06T02:13:00Z", kind: "warn", text: "late rows outside the agreed window" },
@@ -21,3 +21,12 @@ export const Idle = { args: { lines: lines.slice(0, 1), connection: "live", idle
 export const Empty = { args: { lines: [], connection: "live", idleSince: "2026-09-06T02:10:00Z" } };
 // A run longer than the console, so a reader can scroll up and bring back Jump to latest.
 export const History = { args: { lines: Array.from({ length: 8 }, () => lines).flat(), connection: "live", idleSince: "2026-09-06T02:14:00Z" } };
+// Two consoles under one provider: 'Read new events' on either turns both on.
+export const SharedAnnounce = {
+  render: () => (
+    <ConsoleAnnounceProvider>
+      <ActivityConsole lines={lines} connection="live" label="Run activity" />
+      <ActivityConsole lines={lines.slice(0, 2)} connection="stale" label="Console run" idleSince="2026-09-06T02:12:00Z" />
+    </ConsoleAnnounceProvider>
+  ),
+};
