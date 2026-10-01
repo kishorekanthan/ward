@@ -31,6 +31,6 @@ export const SharedAnnounce = {
     </ConsoleAnnounceProvider>
   ),
   parameters: {
-    docs: { description: { story: "To restore a persisted preference, pass `announce` with the stored value; `onAnnounceChange` alone only reports changes." } },
+    docs: { description: { story: "To restore a persisted preference, pass `announce` with the stored value and update it from `onAnnounceChange`: `announce` is controlled, so a value you never update stops the toggle, and `onAnnounceChange` alone only reports changes." } },
   },
 };
