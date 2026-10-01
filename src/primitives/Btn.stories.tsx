@@ -38,6 +38,11 @@ export const Disabled = {
   ),
 };
 
+export const DisabledWithReason = {
+  name: "disabled with reason",
+  args: { variant: "primary", disabled: true, disabledReason: "A dry run has to pass before intake-advisor v3 can go live.", children: "Publish v3" },
+};
+
 export const Submit = {
   args: { variant: "primary", type: "submit", children: "Save the draft" },
 };
