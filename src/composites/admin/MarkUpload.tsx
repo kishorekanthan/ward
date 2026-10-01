@@ -189,7 +189,7 @@ export type MarkUploadProps = {
 };
 
 const ACCEPTED = "Mark accepted.";
-const HEX_COLOUR = /^#[0-9a-f]{3,8}$/i;
+const HEX_COLOUR = /^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
 const STREAM_COLOURS = new Set(validatedStreamSteps.flatMap((step) => [streamColour(step, "id"), streamColour(step, "chip")]));
 
 // Only a hex or a resolved stream step reaches --mark; anything else (a url(), an image) falls back to the default.

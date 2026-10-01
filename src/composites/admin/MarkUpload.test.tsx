@@ -187,7 +187,7 @@ describe("MarkUpload preview colour", () => {
   let removeCss = () => {};
   afterEach(() => removeCss());
 
-  it.each(["url(https://example.test/p.png)", "#3366ff url(https://example.test/p.png)", "url(https://example.test/p.png)#333", "red", "var(--ward-stream-4-id)", "var(--ward-color-line2)", "#12", "#3366ff801", "#33gg66"])(
+  it.each(["url(https://example.test/p.png)", "#3366ff url(https://example.test/p.png)", "url(https://example.test/p.png)#333", "red", "var(--ward-stream-4-id)", "var(--ward-color-line2)", "#12", "#12345", "#1234567", "#3366ff801", "#33gg66", "#3g6", "#3366ffgg"])(
     "drops %s and leaves the preview on its default colour",
     (colour) => {
       const preview = previewWith(colour);
@@ -196,7 +196,7 @@ describe("MarkUpload preview colour", () => {
     },
   );
 
-  it.each(["#3366ff", "#3366FF", "#36f", "#3366ff80", "var(--ward-stream-1-id)", "var(--ward-stream-3-chip)"])("applies %s unchanged", (colour) => {
+  it.each(["#3366ff", "#3366FF", "#36f", "#36ff", "#3366ff80", "var(--ward-stream-1-id)", "var(--ward-stream-3-chip)"])("applies %s unchanged", (colour) => {
     expect(previewWith(colour).style.getPropertyValue("--mark")).toBe(colour);
   });
 
