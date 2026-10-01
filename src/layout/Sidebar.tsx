@@ -2,6 +2,7 @@ import type { CSSProperties, ReactNode } from "react";
 import { count } from "../fmt/count";
 import { stream, type StreamStep } from "../tokens";
 import s from "./Sidebar.module.css";
+import { safeHref } from "../primitives/safeHref";
 
 export type SidebarDestination = { id: string; label: string; href: string; note?: string };
 export type SidebarItem = SidebarDestination;
@@ -48,7 +49,7 @@ function Agent({ agent }: { agent: SidebarAgent }) {
     <li>
       <a
         className={s.agent}
-        href={agent.href}
+        href={safeHref(agent.href)}
         aria-current={agent.current === true ? "page" : undefined}
         data-paused={paused ? "true" : undefined}
       >
@@ -73,7 +74,7 @@ function SharedLinks({ shared }: Pick<StudioSidebarProps, "shared">) {
       <span className={s.footName}>{shared.heading}</span>
       <div className={s.footLinks}>
         {shared.links.map((link) => (
-          <a key={link.href} className={s.footLink} href={link.href}>
+          <a key={link.href} className={s.footLink} href={safeHref(link.href)}>
             {link.label}
           </a>
         ))}
@@ -92,7 +93,7 @@ function StudioSidebar({ brand, nav, agentsHeading, agents, newAction, shared }:
       </div>
       <div className={s.nav}>
         {nav.map((item) => (
-          <a key={item.href} className={s.navItem} href={item.href} aria-current={item.current === true ? "page" : undefined}>
+          <a key={item.href} className={s.navItem} href={safeHref(item.href)} aria-current={item.current === true ? "page" : undefined}>
             {item.label}
           </a>
         ))}
@@ -102,7 +103,7 @@ function StudioSidebar({ brand, nav, agentsHeading, agents, newAction, shared }:
           {agentsHeading} · {count(agents.length)}
         </span>
         {newAction && (
-          <a className={s.new} href={newAction.href}>
+          <a className={s.new} href={safeHref(newAction.href)}>
             {newAction.label}
           </a>
         )}
@@ -131,7 +132,7 @@ function LinkFooter({ children }: { children?: ReactNode }) {
 
 function DestinationLink({ link, active }: { link: SidebarDestination; active: boolean }) {
   return (
-    <a href={link.href} aria-current={active ? "page" : undefined}>
+    <a href={safeHref(link.href)} aria-current={active ? "page" : undefined}>
       <span className={s.label}>{link.label}</span>
       {link.note === undefined ? null : <span className={s.note}>{link.note}</span>}
     </a>

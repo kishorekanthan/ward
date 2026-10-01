@@ -1,4 +1,5 @@
 import s from "./StatStrip.module.css";
+import { safeHref } from "./safeHref";
 
 export type StatCell = { value: string; label: string; accent?: "blue" | "amber"; href?: string };
 
@@ -13,7 +14,7 @@ function validate(cells: StatCell[]): void {
 function Value({ cell }: { cell: StatCell }) {
   if (cell.href === undefined) return <>{cell.value}</>;
   return (
-    <a className={`${s.link} ward-stat-link`} href={cell.href} aria-label={`${cell.label}: ${cell.value}`}>
+    <a className={`${s.link} ward-stat-link`} href={safeHref(cell.href)} aria-label={`${cell.label}: ${cell.value}`}>
       {cell.value}
     </a>
   );

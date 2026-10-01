@@ -1,5 +1,6 @@
 import { useId, type ReactNode } from "react";
 import s from "./AppShell.module.css";
+import { safeHref } from "../primitives/safeHref";
 
 export type AppShellDestination = {
   id: string;
@@ -49,7 +50,7 @@ function Navigation({ destinations, active }: { destinations: AppShellDestinatio
   return (
     <nav className={s.nav} aria-label="Primary">
       {destinations.map((destination) => (
-        <a key={destination.id} href={destination.href} aria-current={destination.id === active ? "page" : undefined}>
+        <a key={destination.id} href={safeHref(destination.href)} aria-current={destination.id === active ? "page" : undefined}>
           {destination.label}
         </a>
       ))}

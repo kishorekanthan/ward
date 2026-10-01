@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import s from "./TopBar.module.css";
+import { safeHref } from "./safeHref";
 
 export type Destination = { id: string; label: string; href: string };
 
@@ -41,7 +42,7 @@ export function TopBar({ wordmark = "Trellis", destinations, active, actor, tagl
             <li key={d.id}>
               <a
                 className={s.dest}
-                href={d.href}
+                href={safeHref(d.href)}
                 aria-current={d.id === active ? "page" : undefined}
                 onClick={() => onNavigate?.(d.id)}
               >
