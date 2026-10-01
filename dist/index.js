@@ -995,7 +995,13 @@ const Yr = "_field_fy549_2", Xr = "_label_fy549_8", Jr = "_labelHidden_fy549_15"
   mono: Zr,
   area: el,
   invalid: al
-}, nl = { type: "password", autoComplete: "off", spellCheck: !1 };
+}, nl = {
+  type: "password",
+  autoComplete: "new-password",
+  spellCheck: !1,
+  "data-1p-ignore": "",
+  "data-lpignore": "true"
+};
 function tl({ props: e, controlProps: a, cls: t }) {
   const r = e.secret ? nl : {};
   return /* @__PURE__ */ n("input", { className: t, ...r, ...a });

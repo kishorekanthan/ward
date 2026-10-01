@@ -24,7 +24,8 @@ describe("KeyPanel", () => {
     expect(screen.getByText("Set, ends in 4f2a.")).toBeTruthy();
     const input = screen.getByLabelText("New provider key");
     expect(input.getAttribute("type")).toBe("password");
-    expect(input.getAttribute("autocomplete")).toBe("off");
+    expect(input.getAttribute("autocomplete")).toBe("new-password");
+    expect(input.getAttribute("data-lpignore")).toBe("true");
     expect(screen.getByRole("button", { name: "Replace key" })).toBeTruthy();
     expect(screen.getByRole("status").textContent).toBe("Key saved.");
   });
