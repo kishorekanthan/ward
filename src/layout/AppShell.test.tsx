@@ -225,10 +225,24 @@ describe("AppShell top-bar tools at phone width", () => {
     render(shell(signOut));
     const toggle = screen.getByRole("button", { name: "Settings" });
     fireEvent.click(toggle);
+    fireEvent.keyDown(screen.getByRole("button", { name: "Sign out" }), { key: "Tab" });
+    expect(toggle.getAttribute("aria-expanded")).toBe("true");
     fireEvent.keyDown(screen.getByRole("button", { name: "Sign out" }), { key: "Escape" });
     expect(toggle.getAttribute("aria-expanded")).toBe("false");
     expect(screen.queryByRole("button", { name: "Sign out" })).toBeNull();
     expect(document.activeElement).toBe(toggle);
+  });
+
+  it("collapses below 768px, not at another width", () => {
+    stubMatchMedia(true);
+    const stubbed = window.matchMedia;
+    const queries: string[] = [];
+    window.matchMedia = ((query: string) => {
+      queries.push(query);
+      return stubbed(query);
+    }) as typeof window.matchMedia;
+    render(shell(signOut));
+    expect(queries).toContain("(max-width: 767.98px)");
   });
 
   it("closes again on a second press", () => {
