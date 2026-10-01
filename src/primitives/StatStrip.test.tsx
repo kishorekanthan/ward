@@ -30,7 +30,21 @@ describe("StatStrip links", () => {
     render(<StatStrip cells={[{ ...cells[0], href: "#/board?stream=pay" }, cells[1]]} />);
     const link = screen.getByRole("link", { name: "In flight: 14" });
     expect(link.getAttribute("href")).toBe("#/board?stream=pay");
-    expect(link.textContent).toBe("14");
+  });
+
+  it("puts the visible label inside the one link, beside the value", () => {
+    const { container } = render(<StatStrip cells={[{ ...cells[0], href: "#/board" }, { ...cells[1], href: "#/runs" }]} />);
+    const linked = [...container.querySelectorAll("dl > div")];
+    expect(linked.map((cell) => cell.querySelectorAll("a").length)).toEqual([1, 1]);
+    const link = screen.getByRole("link", { name: "Median cycle: 3.4 d" });
+    expect([...link.children].map((part) => part.textContent)).toEqual(["3.4 d", "Median cycle"]);
+  });
+
+  it("keeps a term for a linked cell, hidden from sight but not from assistive tech", () => {
+    render(<StatStrip cells={[{ ...cells[0], href: "#/board" }, cells[1]]} />);
+    const term = screen.getAllByRole("term").find((dt) => dt.textContent === "In flight");
+    expect(term?.className).toBe("ward-visually-hidden");
+    expect(term?.closest("div")?.querySelector("dd a")).not.toBeNull();
   });
 
   it("leaves a cell without href as plain text", () => {

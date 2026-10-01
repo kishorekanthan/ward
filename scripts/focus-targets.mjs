@@ -1,5 +1,5 @@
 /* Tabs through the A11y/FocusTargets story in a real browser, in both themes, because jsdom has neither layout nor :focus-visible.
-   Each focused link must paint a ring on all four sides and answer clicks across a 24px band; whole-row links must open from anywhere on the row. */
+   Each focused link must paint a ring on all four sides and answer clicks across a 24px band; whole-row links and linked stat cells must open from anywhere on their box. */
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -106,7 +106,7 @@ function rowLinkBoxes() {
       return hit === anchors[0] || (hit?.matches("[data-raised]") && box.contains(hit));
     };
     const underlined = getComputedStyle(anchors[0]).textDecorationLine.includes("underline");
-    return { name: anchors[0]?.textContent.trim(), href: anchors[0]?.getAttribute("href"), oneAnchor: anchors.length === 1, covered: grid.every(covered), tall: r.height >= 24, raised: onTop.length, underlined, ground: getComputedStyle(box).backgroundColor, centre: centre(r), points: [...grid, ...raised] };
+    return { name: anchors[0]?.textContent.trim(), href: anchors[0]?.getAttribute("href"), oneAnchor: anchors.length === 1, covered: grid.every(covered), tall: r.height >= 24, touch: r.height >= 44, raised: onTop.length, underlined, ground: getComputedStyle(box).backgroundColor, centre: centre(r), points: [...grid, ...raised] };
   });
 }
 
@@ -137,7 +137,7 @@ async function rowLinks(page) {
   const out = [];
   await page.mouse.move(0, 0);
   for (const box of boxes) {
-    const facts = { name: box.name, oneAnchor: box.oneAnchor, covered: box.covered, tall: box.tall, raised: box.raised, underlined: box.underlined };
+    const facts = { name: box.name, oneAnchor: box.oneAnchor, covered: box.covered, tall: box.tall, touch: box.touch, raised: box.raised, underlined: box.underlined };
     out.push({ ...facts, hoverShade: await hoverShade(page, box), wholeHit: await clickAcross(page, box) });
   }
   return out;
