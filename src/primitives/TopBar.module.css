@@ -58,7 +58,7 @@
   content: "";
   position: absolute;
   inset-inline: 0;
-  bottom: calc(var(--ward-target-pad, 0px) - var(--ward-underline));
+  bottom: calc(var(--ward-target-pad) - var(--ward-underline));
   height: var(--ward-underline);
   background: transparent;
   transition: background-color var(--ward-motion-fast);
