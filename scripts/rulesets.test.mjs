@@ -89,6 +89,11 @@ describe("rulesetFindings", () => {
     expect(findingsWith(liveMain(), { ...liveTags(), bypass_actors: bypass })).toEqual(['ruleset "release tags": bypass_actors differs']);
   });
 
+  it("names a ruleset moved to the other ref type, so its refs match nothing", () => {
+    expect(findingsWith(liveMain(), { ...liveTags(), target: "branch" })).toEqual(['ruleset "release tags": target differs']);
+    expect(findingsWith({ ...liveMain(), target: "tag" })).toEqual(['ruleset "main": target differs']);
+  });
+
   it("names conditions that narrow which refs the rules cover", () => {
     const narrowed = { ref_name: { exclude: ["refs/tags/v0*"], include: ["refs/tags/v*"] } };
     expect(findingsWith(liveMain(), { ...liveTags(), conditions: narrowed })).toEqual(['ruleset "release tags": conditions differs']);
@@ -122,5 +127,6 @@ describe("covers", () => {
     expect(covers([1], [1, 2])).toBe(false);
     expect(covers({ a: [] }, { a: null })).toBe(false);
     expect(covers({ a: 1 }, { a: 1, b: 2 })).toBe(true);
+    expect(covers({ a: 0 }, { a: false })).toBe(false);
   });
 });
