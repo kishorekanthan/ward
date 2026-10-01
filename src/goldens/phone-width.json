@@ -69,5 +69,12 @@
     "jumpShown": false,
     "idleClipped": false,
     "pageScrollsSideways": false
+  },
+  "consoleFoot": {
+    "story": "item-activityconsole--history",
+    "buttons": "Read new events | Jump to latest",
+    "everyButtonWhole": true,
+    "idleCopyWhole": true,
+    "pageScrollsSideways": false
   }
 }

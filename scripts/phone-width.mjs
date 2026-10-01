@@ -94,6 +94,26 @@ function probeKicker() {
   };
 }
 
+// Scrolled up, the console foot carries both buttons beside the idle copy; all stay whole and in view at 375px.
+async function probeConsoleFoot() {
+  document.querySelector("#storybook-root ol").scrollTop = 0;
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const foot = document.querySelector("#storybook-root .ward-caret").parentElement;
+  const box = foot.getBoundingClientRect();
+  const buttons = Array.from(foot.querySelectorAll("button"));
+  const idle = foot.querySelector(".ward-caret + span");
+  const whole = (b) => {
+    const r = b.getBoundingClientRect();
+    return b.scrollWidth <= b.clientWidth + 0.5 && r.left >= box.left - 0.5 && r.right <= Math.min(box.right, innerWidth) + 0.5;
+  };
+  return {
+    buttons: buttons.map((b) => b.textContent).join(" | "),
+    everyButtonWhole: buttons.length > 0 && buttons.every(whole),
+    idleCopyWhole: idle.scrollWidth <= idle.clientWidth + 0.5,
+    pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+  };
+}
+
 // Six stage columns at 375px: the grid scrolls, not the page; each lone fade, and both mid-scroll, mask their edges.
 async function probeStageGrid() {
   const grid = document.querySelector("#storybook-root [data-ward-stage-grid]");
@@ -138,7 +158,7 @@ async function probeTopBar() {
   };
 }
 
-// The Empty story: the event list keeps six console lines of height, and the foot has no jump button to clip the idle line.
+// The Empty story: the event list keeps six console lines of height, and the foot has no jump button.
 function probeConsole() {
   const list = document.querySelector("#storybook-root ol");
   const style = getComputedStyle(list);
@@ -148,14 +168,14 @@ function probeConsole() {
   const idle = foot.children[1];
   return {
     listLines: Math.round((list.getBoundingClientRect().height + gap) / (line + gap)),
-    jumpShown: foot.querySelector("button") !== null,
+    jumpShown: foot.querySelector(".ward-consjump") !== null,
     idleClipped: idle.scrollWidth > idle.clientWidth + 0.5,
     pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
   };
 }
 
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, kicker: probeKicker, console: probeConsole };
+const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, kicker: probeKicker, console: probeConsole, consoleFoot: probeConsoleFoot };
 
 async function measure(page, base, key) {
   const { story, label, longLabel } = golden[key];
