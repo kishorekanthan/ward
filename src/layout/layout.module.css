@@ -177,14 +177,11 @@
 /* Only the board page runs its columns full-bleed under a rule; an embedded preview keeps its own box. */
 /* There the lanes fill the height left under the header and each scrolls on its own, so the page does not. */
 .frame[data-inset="board"] .scroller {
-  grid-template-rows: minmax(0, 1fr);
-  min-height: 0;
   margin-inline: calc(-1 * var(--ward-page-inset));
   border-top: var(--ward-border) solid var(--ward-color-line);
 }
 
 .frame[data-inset="board"] .scroller > * {
-  min-height: 0;
   overflow-y: auto;
 }
 
