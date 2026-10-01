@@ -8,17 +8,22 @@ function hiddenEdges(scroller: HTMLElement): Edges {
 }
 
 // Data attributes, not state, so scrolling never re-renders the scroller.
-export function markEdges(scroller: HTMLElement): void {
+export function markEdges(scroller: HTMLElement): Edges {
   const edges = hiddenEdges(scroller);
   scroller.toggleAttribute("data-fade-start", edges.start);
   scroller.toggleAttribute("data-fade-end", edges.end);
+  return edges;
 }
 
-export function useEdgeFades(scrollerRef: RefObject<HTMLElement | null>, count: number): void {
+// onOverflow hears whether anything is hidden at either edge, each time the edges are marked.
+export function useEdgeFades(scrollerRef: RefObject<HTMLElement | null>, count: number, onOverflow?: (overflows: boolean) => void): void {
   useEffect(() => {
     const scroller = scrollerRef.current;
     if (!scroller) return;
-    const mark = () => markEdges(scroller);
+    const mark = () => {
+      const edges = markEdges(scroller);
+      onOverflow?.(edges.start || edges.end);
+    };
     scroller.addEventListener("scroll", mark, { passive: true });
     const ro = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(mark);
     // The children too: a web font swapping in changes scrollWidth without resizing the scroller.
@@ -28,5 +33,5 @@ export function useEdgeFades(scrollerRef: RefObject<HTMLElement | null>, count: 
       scroller.removeEventListener("scroll", mark);
       ro?.disconnect();
     };
-  }, [scrollerRef, count]);
+  }, [scrollerRef, count, onOverflow]);
 }

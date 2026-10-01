@@ -142,10 +142,6 @@
   color: var(--ward-color-muted);
 }
 
-.cardNote[data-accent="amber"] {
-  color: var(--ward-color-amber);
-}
-
 .reviewerList {
   display: flex;
   flex-direction: column;

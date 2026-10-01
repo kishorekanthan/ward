@@ -190,16 +190,19 @@
   gap: var(--ward-space-2);
 }
 
-/* A board page stretches to the viewport floor so its ruled columns reach the bottom. */
+/* A board page is exactly the viewport tall: its ruled columns reach the bottom and scroll inside, not the page. */
 .root:has(> .content > [data-inset="board"]) {
   display: flex;
   flex-direction: column;
+  height: 100dvh;
+  min-height: 0;
 }
 
 .content:has(> [data-inset="board"]) {
   display: flex;
   flex: 1;
   flex-direction: column;
+  min-height: 0;
   padding-bottom: 0;
 }
 

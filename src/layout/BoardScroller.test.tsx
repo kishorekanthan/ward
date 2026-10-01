@@ -1,5 +1,5 @@
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { BoardScroller, type BoardLane } from "../index";
 import { stubMatchMedia } from "../test-setup";
 
@@ -7,7 +7,24 @@ const original = window.matchMedia;
 
 afterEach(() => {
   window.matchMedia = original;
+  vi.restoreAllMocks();
+  vi.unstubAllGlobals();
 });
+
+// Five 240px lanes in a 1000px board scroll 200px sideways; in a 1200px board they fit.
+const BOARD = 1000;
+function mockBoardWidth(scroll: number): void {
+  const isBoard = (el: HTMLElement) => el.hasAttribute("data-ward-board-scroller");
+  vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockImplementation(function (this: HTMLElement) {
+    return isBoard(this) ? BOARD : 0;
+  });
+  vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockImplementation(function (this: HTMLElement) {
+    return isBoard(this) ? scroll : 0;
+  });
+}
+
+const five = ["build", "gate", "other", "build", "gate"].map((id, i) => ({ ...lanes([id])[0], id: `${id}${i}` }));
+const laneCount = () => document.querySelector<HTMLElement>("[data-ward-board-lane-count]");
 
 function lanes(ids: string[] = ["build", "gate", "other"]): BoardLane[] {
   const all: Record<string, BoardLane> = {
@@ -65,5 +82,72 @@ describe("BoardScroller lanes", () => {
     expect(visibleLanes()).toEqual(["Building lane"]);
     act(() => media.setMatches(false));
     expect(visibleLanes()).toEqual(["Building lane", "Gate lane"]);
+  });
+});
+
+describe("BoardScroller overflow", () => {
+  it("fades the right edge while lanes sit beyond it, and drops the fade once scrolled to the end", () => {
+    stubMatchMedia(false);
+    mockBoardWidth(1200);
+    render(<BoardScroller lanes={five} />);
+    const region = screen.getByRole("region");
+    expect(region.hasAttribute("data-fade-end")).toBe(true);
+    region.scrollLeft = 200;
+    fireEvent.scroll(region);
+    expect(region.hasAttribute("data-fade-end")).toBe(false);
+  });
+
+  it("shows no fade when every lane fits", () => {
+    stubMatchMedia(false);
+    mockBoardWidth(BOARD);
+    render(<BoardScroller lanes={five} />);
+    expect(screen.getByRole("region").hasAttribute("data-fade-end")).toBe(false);
+  });
+
+  it("shows the lane count only while lanes overflow, including at the scrolled end", () => {
+    stubMatchMedia(false);
+    mockBoardWidth(1200);
+    render(<BoardScroller lanes={five} />);
+    expect(laneCount()?.hidden).toBe(false);
+    expect(laneCount()?.textContent).toBe("5 lanes");
+    const region = screen.getByRole("region");
+    region.scrollLeft = 200;
+    fireEvent.scroll(region);
+    expect(laneCount()?.hidden).toBe(false);
+  });
+
+  it("shows the lane count and fade once a resize makes lanes overflow", () => {
+    const fires: (() => void)[] = [];
+    vi.stubGlobal("ResizeObserver", class {
+      constructor(cb: () => void) { fires.push(cb); }
+      observe() {}
+      disconnect() {}
+    });
+    stubMatchMedia(false);
+    mockBoardWidth(BOARD);
+    render(<BoardScroller lanes={five} />);
+    expect(laneCount()?.hidden).toBe(true);
+    mockBoardWidth(1200);
+    act(() => fires.forEach((fire) => fire()));
+    expect(laneCount()?.hidden).toBe(false);
+    expect(screen.getByRole("region").hasAttribute("data-fade-end")).toBe(true);
+  });
+
+  it("hides the lane count when every lane fits", () => {
+    stubMatchMedia(false);
+    mockBoardWidth(BOARD);
+    render(<BoardScroller lanes={five} />);
+    expect(laneCount()?.hidden).toBe(true);
+  });
+
+  it("has no lane count for loose children or the phone's single lane", () => {
+    mockBoardWidth(1200);
+    stubMatchMedia(false);
+    const view = render(<BoardScroller><section>Loose</section></BoardScroller>);
+    expect(laneCount()).toBeNull();
+    view.unmount();
+    stubMatchMedia(true);
+    render(<BoardScroller lanes={five} />);
+    expect(laneCount()).toBeNull();
   });
 });

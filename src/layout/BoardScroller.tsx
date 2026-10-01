@@ -1,6 +1,7 @@
-import { Fragment, useState, type CSSProperties, type ReactNode } from "react";
+import { Children, Fragment, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { Field } from "../primitives/Field";
 import s from "./layout.module.css";
+import { useEdgeFades } from "./useEdgeFades";
 import { useMediaQuery } from "./useMediaQuery";
 
 export type BoardLane = { id: string; label: string; count: number; content: ReactNode };
@@ -15,11 +16,15 @@ export type BoardScrollerProps = {
 // Same phone edge as the 767.98px rules in layout.module.css.
 const BOARD_PHONE_QUERY = "(max-width: 767.98px)";
 
+type ScrollerProps = { label: string; children: ReactNode; laneCount?: number; onOverflow?: (overflows: boolean) => void };
+
 // A lane count lets the lanes share the board width before it scrolls.
-function Scroller({ label, children, laneCount }: { label: string; children: ReactNode; laneCount?: number }) {
+function Scroller({ label, children, laneCount, onOverflow }: ScrollerProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEdgeFades(ref, laneCount ?? Children.count(children), onOverflow);
   const style = laneCount === undefined ? undefined : ({ "--ward-board-lanes": laneCount } as CSSProperties);
   return (
-    <div className={s.scroller} role="region" aria-label={label} tabIndex={0} data-ward-board-scroller="" style={style}>
+    <div ref={ref} className={s.scroller} role="region" aria-label={label} tabIndex={0} data-ward-board-scroller="" style={style}>
       {children}
     </div>
   );
@@ -37,9 +42,24 @@ function PhoneLanes({ lanes, label, laneLabel }: { lanes: BoardLane[]; label: st
   );
 }
 
+// The count says how many lanes there are only while some sit beyond an edge.
+function WideLanes({ lanes, label }: { lanes: BoardLane[]; label: string }) {
+  const [overflows, setOverflows] = useState(false);
+  return (
+    <div className={s.board} data-ward-board="">
+      <p className={s.laneCount} data-ward-board-lane-count="" hidden={!overflows}>
+        {lanes.length} lanes
+      </p>
+      <Scroller label={label} laneCount={lanes.length} onOverflow={setOverflows}>
+        {lanes.map((lane) => <Fragment key={lane.id}>{lane.content}</Fragment>)}
+      </Scroller>
+    </div>
+  );
+}
+
 export function BoardScroller({ children, label = "Workflow board", lanes, laneLabel = "Column" }: BoardScrollerProps) {
   const phone = useMediaQuery(BOARD_PHONE_QUERY);
   if (lanes === undefined) return <Scroller label={label}>{children}</Scroller>;
   if (phone) return <PhoneLanes lanes={lanes} label={label} laneLabel={laneLabel} />;
-  return <Scroller label={label} laneCount={lanes.length}>{lanes.map((lane) => <Fragment key={lane.id}>{lane.content}</Fragment>)}</Scroller>;
+  return <WideLanes lanes={lanes} label={label} />;
 }
