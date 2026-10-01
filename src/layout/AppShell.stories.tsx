@@ -1,5 +1,7 @@
 import { bothThemes } from "../../.storybook/bothThemes";
 import { AppShell } from "./AppShell";
+import { Btn } from "../primitives/Btn";
+import { SegmentedControl } from "../primitives/SegmentedControl";
 
 /* Slot filler only — the real Sidebar, TopBar and RightRail are separate
    components. Padding comes from tokens so the story does not plant raw px. */
@@ -46,4 +48,25 @@ export const LongWordInPage = {
       </p>
     ),
   },
+};
+
+const destinations = ["Home", "Board", "Studio", "Intake", "Tracker", "Admin"].map((label) => ({ id: label.toLowerCase(), label, href: `#/${label.toLowerCase()}` }));
+
+const themes = [
+  { value: "system", label: "System" },
+  { value: "light", label: "Light" },
+  { value: "dark", label: "Dark" },
+];
+
+const tools = (
+  <>
+    <SegmentedControl label="Theme" options={themes} value="system" onChange={() => {}} />
+    <Btn variant="ghost" size="sm">Sign out</Btn>
+  </>
+);
+
+// At phone width the theme switch and Sign out sit behind the Settings toggle, which opens a row under the bar.
+export const TopBarPhoneWidth = {
+  args: { destinations, active: "board", actor: "P. Nayar", metadata: "operator", tools, children: <p>Page content.</p> },
+  parameters: { viewport: { defaultViewport: "mobile1" } },
 };
