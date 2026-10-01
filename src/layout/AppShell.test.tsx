@@ -1,9 +1,11 @@
 import { readFileSync } from "node:fs";
+import type { ReactNode } from "react";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it } from "vitest";
 import { AppShell } from "./AppShell";
+import { stubMatchMedia } from "../test-setup";
 
 const sourceRoot = dirname(fileURLToPath(import.meta.url));
 const css = readFileSync(join(sourceRoot, "AppShell.module.css"), "utf8");
@@ -180,6 +182,111 @@ describe("AppShell top bar", () => {
     for (const column of [rule(".content"), rule(".page")]) {
       expect(column).toContain(`padding: ${golden.pageInset.padding}`);
       expect(column).toContain(`--ward-page-inset: ${golden.pageInset.inset}`);
+    }
+  });
+});
+
+describe("AppShell top-bar tools at phone width", () => {
+  const original = window.matchMedia;
+  afterEach(() => {
+    window.matchMedia = original;
+  });
+
+  const shell = (tools?: ReactNode) => (
+    <AppShell actor="P. Nayar" tools={tools}>
+      <p>Content</p>
+    </AppShell>
+  );
+  const signOut = <button type="button">Sign out</button>;
+
+  it("hides the tools behind a collapsed Settings toggle when narrow", () => {
+    stubMatchMedia(true);
+    render(shell(signOut));
+    const toggle = screen.getByRole("button", { name: "Settings" });
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
+    expect(screen.queryByRole("button", { name: "Sign out" })).toBeNull();
+    expect(toggle.closest("header")).not.toBeNull();
+  });
+
+  it("opens the tools in the panel the toggle controls, under the bar", () => {
+    stubMatchMedia(true);
+    const { container } = render(shell(signOut));
+    const toggle = screen.getByRole("button", { name: "Settings" });
+    fireEvent.click(toggle);
+    expect(toggle.getAttribute("aria-expanded")).toBe("true");
+    const panel = document.getElementById(toggle.getAttribute("aria-controls") ?? "");
+    expect(panel?.contains(screen.getByRole("button", { name: "Sign out" }))).toBe(true);
+    expect(panel?.closest("header")).toBeNull();
+    expect(container.querySelector("header")?.nextElementSibling).toBe(panel);
+  });
+
+  it("closes on Escape and returns focus to the toggle", () => {
+    stubMatchMedia(true);
+    render(shell(signOut));
+    const toggle = screen.getByRole("button", { name: "Settings" });
+    fireEvent.click(toggle);
+    fireEvent.keyDown(screen.getByRole("button", { name: "Sign out" }), { key: "Tab" });
+    expect(toggle.getAttribute("aria-expanded")).toBe("true");
+    fireEvent.keyDown(screen.getByRole("button", { name: "Sign out" }), { key: "Escape" });
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
+    expect(screen.queryByRole("button", { name: "Sign out" })).toBeNull();
+    expect(document.activeElement).toBe(toggle);
+  });
+
+  it("collapses below 768px, not at another width", () => {
+    stubMatchMedia(true);
+    const stubbed = window.matchMedia;
+    const queries: string[] = [];
+    window.matchMedia = ((query: string) => {
+      queries.push(query);
+      return stubbed(query);
+    }) as typeof window.matchMedia;
+    render(shell(signOut));
+    expect(queries).toContain("(max-width: 767.98px)");
+  });
+
+  it("closes again on a second press", () => {
+    stubMatchMedia(true);
+    render(shell(signOut));
+    const toggle = screen.getByRole("button", { name: "Settings" });
+    fireEvent.click(toggle);
+    fireEvent.click(toggle);
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
+    expect(screen.queryByRole("button", { name: "Sign out" })).toBeNull();
+  });
+
+  it("names the toggle from toolsLabel", () => {
+    stubMatchMedia(true);
+    render(
+      <AppShell tools={signOut} toolsLabel="Account">
+        <p>Content</p>
+      </AppShell>,
+    );
+    expect(screen.getByRole("button", { name: "Account" })).not.toBeNull();
+  });
+
+  it("puts the tools back inline when the bar widens", () => {
+    const media = stubMatchMedia(true);
+    render(shell(signOut));
+    fireEvent.click(screen.getByRole("button", { name: "Settings" }));
+    act(() => media.setMatches(false));
+    expect(screen.queryByRole("button", { name: "Settings" })).toBeNull();
+    expect(screen.getByRole("button", { name: "Sign out" }).closest("header")).not.toBeNull();
+  });
+
+  it("keeps the tools inline with no toggle when wide", () => {
+    stubMatchMedia(false);
+    render(shell(signOut));
+    expect(screen.queryByRole("button", { name: "Settings" })).toBeNull();
+    expect(screen.getByRole("button", { name: "Sign out" }).closest("header")).not.toBeNull();
+  });
+
+  it("draws no toggle without tools, at either width", () => {
+    for (const narrow of [true, false]) {
+      stubMatchMedia(narrow);
+      const { unmount } = render(shell());
+      expect(screen.queryByRole("button")).toBeNull();
+      unmount();
     }
   });
 });
