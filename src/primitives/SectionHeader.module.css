@@ -16,10 +16,12 @@
   white-space: nowrap;
 }
 
+/* A section kicker is a sentence, so it takes the title style; uppercase mono is for identifiers. */
 .root[data-kind="key"] .head {
-  font: var(--ward-type-colHead);
-  letter-spacing: var(--ward-type-colHead-tracking);
-  text-transform: var(--ward-type-colHead-transform);
+  font: var(--ward-type-title);
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--ward-color-text);
 }
 
 .index {

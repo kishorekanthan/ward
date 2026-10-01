@@ -41,6 +41,7 @@ describe("case file geometry against Board Item 8b", () => {
     expect(value(SECTION, "\\.root", "gap")).toBe(sec.gap);
     expect(value(SECTION, '\\.root\\[data-kind="key"\\] \\.head', "font")).toMatch(font(sec.key));
     expect(value(SECTION, '\\.root\\[data-kind="key"\\] \\.head', "letter-spacing")).toBe(sec.keyTracking);
+    expect(value(SECTION, '\\.root\\[data-kind="key"\\] \\.head', "text-transform")).toBe(sec.keyTransform);
     expect(value(SECTION, "\\.note", "font")).toMatch(font(sec.note));
   });
 

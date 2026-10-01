@@ -61,6 +61,7 @@ function probePageHeader() {
     chipLines: new Set(chipBoxes.map(({ r }) => Math.round(r.top))).size,
     titleBelowChips: chipBoxes.every(({ r }) => title.top >= r.bottom - 0.5),
     everyChipWhole: chipBoxes.every(whole),
+    chipFontSize: chipBoxes.length ? getComputedStyle(chipBoxes[0].c).fontSize : "",
     pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
   };
 }
@@ -80,8 +81,21 @@ function probeStatStrip([text, longText]) {
   return { label, labelLines, labelClipped, longLabel, longLabelLines, longLabelClipped, pageScrollsSideways };
 }
 
+// innerText applies text-transform, so it reads the kicker as a viewer sees it.
+function probeKicker() {
+  const head = document.querySelector('#storybook-root [data-kind="key"] h2');
+  const style = getComputedStyle(head);
+  return {
+    seenText: head.innerText,
+    fontSize: style.fontSize,
+    family: style.fontFamily.split(",")[0].trim(),
+    letterSpacing: style.letterSpacing,
+    pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+  };
+}
+
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, statStrip: probeStatStrip };
+const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, statStrip: probeStatStrip, kicker: probeKicker };
 
 async function measure(page, base, key) {
   const { story, label, longLabel } = golden[key];
