@@ -6,6 +6,7 @@ import { belowFloor, contrast, derivedDarkPairs, describeFailures, sweepRendered
 import { buildFresh, distDrift } from "./dist-fresh.mjs";
 import { sweepConsoleTheme } from "./console-theme.mjs";
 import { sweepPhoneWidth } from "./phone-width.mjs";
+import { sweepFocusTargets } from "./focus-targets.mjs";
 import { workflowFindings } from "./workflows.mjs";
 import { FAMILY_OF, breakpoints, buildCss, buildTokens, containerBreakpoints, declaredFaces, readTokens } from "./gen-css.mjs";
 
@@ -219,15 +220,20 @@ else pass("stories render", `${rendered.stories} stories, no empty root and no c
 if (rendered.failures.length === 0) pass("rendered contrast", detail);
 else fail("rendered contrast", describeFailures(rendered.failures));
 
-// 7. phone width: Tabs, PageHeader chips, StatStrip labels, StageGrid, the top-bar tools and the section kicker at 375px against src/goldens/phone-width.json
+// 7. phone width: Tabs, PageHeader chips, StatStrip labels, StageGrid, the top-bar tools, the section kicker and the activity console at 375px against src/goldens/phone-width.json
 const phoneDiffs = await sweepPhoneWidth();
-if (phoneDiffs.length === 0) pass("phone width", "Tabs, PageHeader chips, StatStrip labels, StageGrid, the top-bar tools, the section kicker and the console foot match the 375px golden");
+if (phoneDiffs.length === 0) pass("phone width", "Tabs, PageHeader chips, StatStrip labels, StageGrid, the top-bar tools, the section kicker, the activity console and the console foot match the 375px golden");
 else fail("phone width", phoneDiffs.join("; "));
 
 // 8. console theme: the light theme gets a light panel, dark keeps the comp's block, against src/goldens/console-theme.json
 const consoleDiffs = await sweepConsoleTheme();
 if (consoleDiffs.length === 0) pass("console theme", "light panel and dark block, ground, rail-card inset and inks match the golden");
 else fail("console theme", consoleDiffs.join("; "));
+
+// 9. focus and targets: Tab through every small link; each paints a ring on four sides and answers across 24px (src/goldens/focus-targets.json)
+const focusDiffs = await sweepFocusTargets();
+if (focusDiffs.length === 0) pass("focus and targets", "every small link shows its focus ring and has a 24px target");
+else fail("focus and targets", focusDiffs.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);
 process.exitCode = failures === 0 ? 0 : 1;

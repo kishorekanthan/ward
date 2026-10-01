@@ -9,7 +9,11 @@
 
 .list {
   display: grid;
+  align-content: start;
   gap: var(--ward-gap-console);
+  font: var(--ward-type-consoleLine);
+  /* Six console lines tall before the first event, so the block never collapses to a sliver. */
+  min-height: calc(6lh + 5 * var(--ward-gap-console));
   max-height: 40vh;
   overflow: auto;
 }
@@ -63,7 +67,7 @@
 
 .idle {
   /* Two foot buttons wrap below the idle copy at phone width rather than push the page sideways. */
-  flex: 1 1 12em;
+  flex: 1 1 auto;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

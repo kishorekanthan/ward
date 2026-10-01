@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import type { LiveConnection } from "../../live/types";
 import s from "./ActivityConsole.module.css";
 
@@ -57,27 +57,46 @@ function IdleLine({ connection, idleSince, last, children }: IdleLineProps) {
   );
 }
 
+// Within half a console line of the bottom, the reader is on the newest line.
+const AT_BOTTOM_SLACK_PX = 8;
+
+function scrolledUp(list: HTMLElement): boolean {
+  return list.scrollHeight - list.scrollTop - list.clientHeight > AT_BOTTOM_SLACK_PX;
+}
+
+function JumpToLatest({ shown, onJump }: { shown: boolean; onJump: () => void }) {
+  if (!shown) return null;
+  return <button type="button" className={`${s.jump} ward-consjump`} onClick={onJump}>Jump to latest</button>;
+}
+
 export function ActivityConsole({ lines, connection, idleSince, label = "Live activity" }: ActivityConsoleProps) {
   const listRef = useRef<HTMLOListElement>(null);
   const [revealed, setRevealed] = useState(0);
   const [announce, setAnnounce] = useState(false);
+  const [away, setAway] = useState(false);
   const last = lines.at(-1);
 
   useEffect(() => {
     setRevealed(lines.length);
   }, [lines.length]);
 
+  // Follow the newest line unless the reader has scrolled up to read an older one.
+  useLayoutEffect(() => {
+    const list = listRef.current;
+    if (list && !away) list.scrollTop = list.scrollHeight;
+  }, [lines.length, away]);
+
   const jump = () => {
     const list = listRef.current;
     if (!list) return;
-    list.scrollTop = list.scrollHeight;
     const eventTexts = list.querySelectorAll<HTMLElement>("[data-consline-text]");
     eventTexts.item(eventTexts.length - 1)?.focus();
+    setAway(false);
   };
 
   return (
     <div className={s.root}>
-      <ol className={s.list} ref={listRef} aria-live={announce ? "polite" : "off"} aria-label={label}>
+      <ol className={s.list} ref={listRef} aria-live={announce ? "polite" : "off"} aria-label={label} onScroll={(e) => setAway(scrolledUp(e.currentTarget))}>
         {lines.map((l, i) => (
           <li className={`${s.line} ward-consline ward-reveal ward-consline--${l.kind}`} key={`${l.at}-${i}`} data-kind={l.kind} data-revealed={i < revealed}>
             <span className={s.at}>{time(l.at)}</span>
@@ -88,7 +107,7 @@ export function ActivityConsole({ lines, connection, idleSince, label = "Live ac
       </ol>
       <IdleLine connection={connection} idleSince={idleSince} last={last}>
         <button type="button" className={`${s.jump} ward-consannounce`} aria-pressed={announce} onClick={() => setAnnounce(!announce)}>Read new events</button>
-        <button type="button" className={`${s.jump} ward-consjump`} onClick={jump}>Jump to latest</button>
+        <JumpToLatest shown={away} onJump={jump} />
       </IdleLine>
     </div>
   );

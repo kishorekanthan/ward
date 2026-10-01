@@ -352,6 +352,7 @@ export declare const v: {
         readonly ladderBar: "var(--ward-height-ladderBar)";
         readonly radio: "var(--ward-height-radio)";
         readonly skeletonBar: "var(--ward-height-skeletonBar)";
+        readonly target: "var(--ward-height-target)";
     };
     readonly size: {
         readonly marker6: "var(--ward-size-marker6)";
@@ -362,6 +363,7 @@ export declare const v: {
     readonly radius: "var(--ward-radius)";
     readonly border: "var(--ward-border)";
     readonly underline: "var(--ward-underline)";
+    readonly focusOffset: "var(--ward-focus-offset)";
     readonly shadow: {
         readonly overlay: "var(--ward-shadow-overlay)";
     };

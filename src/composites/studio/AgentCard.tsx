@@ -94,7 +94,7 @@ export function AgentCard({ agent, href, selected, connection = "live", lastEven
     >
       <h3 className={s.head}>
         <span className={s.mark} aria-hidden="true" />
-        <a className={`${s.name} ward-rowlink`} href={safeHref(href)} aria-current={current}>
+        <a className={`${s.name} ward-rowlink ward-target`} href={safeHref(href)} aria-current={current}>
           {agent.name}
         </a>
       </h3>

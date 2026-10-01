@@ -63,8 +63,15 @@
     "letterSpacing": "normal",
     "pageScrollsSideways": false
   },
+  "console": {
+    "story": "item-activityconsole--empty",
+    "listLines": 6,
+    "jumpShown": false,
+    "idleClipped": false,
+    "pageScrollsSideways": false
+  },
   "consoleFoot": {
-    "story": "item-activityconsole--live",
+    "story": "item-activityconsole--history",
     "buttons": "Read new events | Jump to latest",
     "everyButtonWhole": true,
     "idleCopyWhole": true,

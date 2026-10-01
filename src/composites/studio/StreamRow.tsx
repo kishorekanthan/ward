@@ -70,7 +70,7 @@ function identityCell(stream: StreamRowSummary, href: string): ReactElement {
     <span className={s.stack}>
       <span className={s.identityLine}>
         <span className={`${s.identity} ward-identity`} data-draft={draft} aria-hidden="true" />
-        <a className={`${s.compactName} ward-rowlink`} href={safeHref(href)} data-draft={draft}>{stream.name}</a>
+        <a className={`${s.compactName} ward-rowlink ward-target`} href={safeHref(href)} data-draft={draft}>{stream.name}</a>
         <Chip role="meta" size="tag" label={draft ? `${stream.key} · DRAFT` : stream.key} />
       </span>
       <span className={s.ownerLine}>{ownerLine(stream)}</span>
@@ -100,7 +100,7 @@ function stageChain(stages: StreamRowSummary["stages"]): ReactElement {
 
 function stagesCell(stages: StreamRowSummary["stages"], href: string): ReactElement {
   return <td className={s.compactCell}>
-    {stages.length === 0 ? <span className={s.emptyChain}><span className={s.muted}>No stages yet</span><a className={s.define} href={safeHref(href)}>Define workflow</a></span> : stageChain(stages)}
+    {stages.length === 0 ? <span className={s.emptyChain}><span className={s.muted}>No stages yet</span><a className={`${s.define} ward-target`} href={safeHref(href)}>Define workflow</a></span> : stageChain(stages)}
   </td>;
 }
 
@@ -149,7 +149,7 @@ export function StreamRow(props: StreamRowProps) {
   return (
     <tr className={s.row}>
       <td className={s.cell}>
-        <a className={s.name} href={safeHref(href)}>
+        <a className={`${s.name} ward-target`} href={safeHref(href)}>
           {stream.name}
         </a>
         <Chip {...streamChipProps(stream.key, stream.streamStep)} />
