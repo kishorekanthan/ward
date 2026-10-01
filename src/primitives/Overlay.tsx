@@ -52,10 +52,21 @@ function claimInert(entry: StackEntry, element: HTMLElement): void {
   element.setAttribute("inert", "");
 }
 
-// Scoped to the portal target's children: inerting body's children would inert a nested target's own ancestor.
+function claimChildren(entry: StackEntry, parent: HTMLElement, keep: HTMLElement | null): void {
+  for (const child of Array.from(parent.children) as HTMLElement[]) {
+    if (child !== keep && !isOverlayRoot(child)) claimInert(entry, child);
+  }
+}
+
+// Walks target up to body, inerting each level's other children; the target's own ancestors stay reachable.
 function claimBackground(entry: StackEntry, target: HTMLElement): void {
-  for (const child of Array.from(target.children) as HTMLElement[]) {
-    if (!isOverlayRoot(child)) claimInert(entry, child);
+  let keep: HTMLElement | null = null;
+  let level: HTMLElement | null = target;
+  while (level) {
+    claimChildren(entry, level, keep);
+    if (level === document.body) return;
+    keep = level;
+    level = level.parentElement;
   }
 }
 
