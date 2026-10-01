@@ -113,3 +113,13 @@ export const NoValidatedColour = {
     </Table>
   ),
 };
+
+export const SummaryChainHighlight = {
+  render: () => (
+    <Table>
+      <StreamRow stream={{ ...summary, name: "Data Engineering", key: "DE", streamStep: 2, stages: [{ name: "Intake" }, { name: "Review", gate: true }, { name: "Loaded" }] }} href="/studio/de" presentation={{ columns: 5 }} />
+      <StreamRow stream={{ ...summary, name: "UX Research", key: "UX", streamStep: 3, stages: [{ name: "Design review", gate: true }, { name: "Build" }, { name: "Sign-off", gate: true }] }} href="/studio/ux" presentation={{ columns: 5 }} />
+      <StreamRow stream={{ ...summary, name: "KPI Config", key: "KPI", streamStep: null, stages: [{ name: "Draft" }, { name: "Approve", gate: true }] }} href="/studio/kpi" presentation={{ columns: 5 }} />
+    </Table>
+  ),
+};
