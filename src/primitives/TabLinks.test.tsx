@@ -64,6 +64,11 @@ describe("TabLinks", () => {
     expect(screen.getAllByRole("link").map((link) => link.getAttribute("tabindex"))).toEqual([null, null, null]);
   });
 
+  it("shows a count after its label, as Tabs does", () => {
+    render(<TabLinks links={[{ id: "open", label: "Open", href: "#/open", count: 14 }, ...studio]} active="open" label="Item states" />);
+    expect(screen.getByRole("link", { current: "page" }).textContent).toBe("Open · 14");
+  });
+
   it("refuses a set above the cap, as Tabs does", () => {
     const eight = Array.from({ length: 8 }, (_, i) => ({ id: `l${i}`, label: `Link ${i}`, href: `#/${i}` }));
     expect(() => render(<TabLinks links={eight} active="l0" label="Sections" />)).toThrow(/8 links exceeds the cap of 7/);
