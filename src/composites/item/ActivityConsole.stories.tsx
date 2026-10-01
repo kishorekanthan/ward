@@ -5,6 +5,7 @@ export default {
   title: "Item/ActivityConsole",
   component: ActivityConsole,
   decorators: [bothThemes],
+  tags: ["autodocs"],
 };
 
 const lines: ConsoleLine[] = [
@@ -29,4 +30,7 @@ export const SharedAnnounce = {
       <ActivityConsole lines={lines.slice(0, 2)} connection="stale" label="Console run" idleSince="2026-09-06T02:12:00Z" />
     </ConsoleAnnounceProvider>
   ),
+  parameters: {
+    docs: { description: { story: "To restore a persisted preference, pass `announce` with the stored value and update it from `onAnnounceChange`: `announce` is controlled, so a value you never update stops the toggle, and `onAnnounceChange` alone only reports changes." } },
+  },
 };
