@@ -21,6 +21,7 @@ describe("small links take the 24px target", () => {
       ["Intake", true],
       ["14", true],
       ["Tool registry", true],
+      ["Prompt library", true],
     ]);
   });
 });

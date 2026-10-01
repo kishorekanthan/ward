@@ -48,7 +48,7 @@ const destinations = [
   { id: "intake", label: "Intake", href: "#/intake" },
 ];
 
-const shared = { heading: "Shared", links: [{ label: "Tool registry", href: "/shared/tools" }] };
+const shared = { heading: "Shared", links: [{ label: "Tool registry", href: "/shared/tools" }, { label: "Prompt library", href: "/shared/prompts" }] };
 
 export default {
   title: "A11y/FocusTargets",

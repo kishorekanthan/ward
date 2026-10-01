@@ -122,6 +122,14 @@
       "ring": true,
       "tall": true,
       "hit24": true
+    },
+    {
+      "name": "Prompt library",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
     }
   ],
   "rowLinks": [
