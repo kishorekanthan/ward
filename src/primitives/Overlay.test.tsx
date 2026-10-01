@@ -267,6 +267,22 @@ describe("Overlay", () => {
     expect([outside, pathSibling, app].map((element) => element.hasAttribute("inert"))).toEqual([false, false, false]);
   });
 
+  it("leaves an open overlay's root reachable at every level a nested container's walk passes", () => {
+    render(<Harness kind="drawer" />);
+    const firstRoot = screen.getByRole("dialog").closest("[data-ward-overlay-root]")!;
+    const wrapper = document.createElement("div");
+    const outside = document.createElement("button");
+    const target = document.createElement("div");
+    wrapper.setAttribute("data-overlay-test-fixture", "");
+    wrapper.append(outside, target);
+    document.body.appendChild(wrapper);
+
+    render(<Harness kind="drawer" container={target} />);
+
+    expect(outside.hasAttribute("inert")).toBe(true);
+    expect(firstRoot.hasAttribute("inert")).toBe(false);
+  });
+
   it("takes its portal target from context when no container prop is given", () => {
     const host = document.createElement("section");
     host.setAttribute("data-overlay-test-fixture", "");
