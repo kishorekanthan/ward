@@ -17,14 +17,13 @@
 }
 
 /* A section kicker is a sentence, so it takes the title style; uppercase mono is for identifiers.
-   The head may wrap to leave the note its own width, up to 28% of the row (#107). */
+   The head wraps to leave the note its own width; the note's 28% floor below bounds it (#107, #122). */
 .root[data-kind="key"] .head {
   font: var(--ward-type-title);
   letter-spacing: normal;
   text-transform: none;
   color: var(--ward-color-text);
   white-space: normal;
-  max-width: calc(100% - min(50%, 3rem) - var(--ward-gap-section));
 }
 
 /* Floor 28%, clamped to the note's own width and never shrunk; above ~29% the 320px Kicker row wraps. */
