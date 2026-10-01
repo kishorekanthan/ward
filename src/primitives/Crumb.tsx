@@ -20,7 +20,7 @@ export function Crumb({ path, chips }: CrumbProps) {
               ) : null}
               {i < path.length - 1 ? (
                 c.href ? (
-                  <a className={s.link} href={safeHref(c.href)}>
+                  <a className={`${s.link} ward-target`} href={safeHref(c.href)}>
                     {c.label}
                   </a>
                 ) : (

@@ -34,6 +34,10 @@ Components provide usable labels and layout defaults; props such as `brand`, `de
 
 Uppercase mono (`chip`, `colHead`, `micro`) is for identifiers only: keys, ids, statuses, stage codes. Never set a sentence in it. A section kicker or label that reads as words uses a prose or named style in sentence case, such as `title` (what `RecordSection` renders).
 
+## Focus and targets
+
+Every focusable element gets the global `:focus-visible` ring; an ancestor that clips keeps `border + --ward-focus-offset` of room so the ring is not cut. A small link or link-like button takes the `ward-target` class: it answers across 24 px (`--ward-height-target`, WCAG 2.5.8) without moving its line.
+
 ## Verify the package
 
 ```sh

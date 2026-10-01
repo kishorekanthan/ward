@@ -1,0 +1,81 @@
+{
+  "viewport": {
+    "width": 1280,
+    "height": 900
+  },
+  "story": "a11y-focustargets--links",
+  "targets": [
+    {
+      "name": "Studio",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "data-eng",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "Regulatory Ops",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "Define workflow",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "Late-arriving shipments view",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "→ FL-229",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "intake-advisor",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "+ Mount agent",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "Configure board",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    }
+  ]
+}

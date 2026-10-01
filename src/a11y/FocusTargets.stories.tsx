@@ -1,0 +1,50 @@
+import { bothThemes } from "../../.storybook/bothThemes";
+import { Crumb } from "../primitives/Crumb";
+import { StreamRow } from "../composites/studio/StreamRow";
+import { AgentCard } from "../composites/studio/AgentCard";
+import { StageColumn } from "../composites/studio/StageColumn";
+import { SessionRow, type Session } from "../composites/intake/SessionRow";
+import { BoardFootnote } from "../composites/board/BoardFootnote";
+
+// Every small link Ward draws, in tab order; scripts/focus-targets.mjs tabs through them against src/goldens/focus-targets.json.
+const session: Session = {
+  title: "Late-arriving shipments view",
+  turns: 6,
+  waitingOn: "you",
+  resolved: ["Stream", "Owner"],
+  lastActivity: "2026-09-06T02:14:00Z",
+  state: "created",
+  link: { key: "FL-229", href: "/items/FL-229" },
+};
+
+const draft = { name: "Regulatory Ops", key: "REG", streamStep: 3 as const, owner: "unassigned", stages: [], draft: true };
+
+const agent = {
+  id: "intake-advisor",
+  name: "intake-advisor",
+  streamStep: 1 as const,
+  description: "Reads an inbound request and proposes the stream it belongs to.",
+  versions: [{ v: "v3", status: "live" as const }],
+};
+
+export default {
+  title: "A11y/FocusTargets",
+  decorators: [bothThemes],
+};
+
+export const Links = {
+  render: () => (
+    <div style={{ display: "grid", gap: "var(--ward-space-4)", maxWidth: "var(--ward-width-form)" }}>
+      <Crumb path={[{ label: "Studio", href: "/studio" }, { label: "data-eng", href: "/studio/data-eng" }, { label: "intake-advisor" }]} />
+      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <tbody>
+          <StreamRow stream={draft} href="/studio/reg" presentation={{ columns: 5 }} />
+          <SessionRow session={session} presentation="table" href="/intake/42" />
+        </tbody>
+      </table>
+      <AgentCard agent={agent} href="/studio/data-eng/intake-advisor" />
+      <StageColumn stage={{ index: 2, name: "Build", kind: "agent", count: 0 }} presentation={{ mode: "workflow" }} onMount={() => {}} />
+      <BoardFootnote configureHref="#/studio/streams/ledger" />
+    </div>
+  ),
+};

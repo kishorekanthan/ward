@@ -92,6 +92,7 @@ function layoutVars(tokens) {
     `--ward-radius: ${px(tokens.radius)};`,
     `--ward-border: ${px(tokens.border)};`,
     `--ward-underline: ${px(tokens.underline)};`,
+    `--ward-focus-offset: ${px(tokens.focusOffset)};`,
     `--ward-shadow-overlay: ${tokens.shadow.overlay};`,
   ];
 }
@@ -160,7 +161,14 @@ export function buildCss(tokens) {
       "",
       rule(":focus-visible", [
         "outline: var(--ward-border) solid var(--ward-color-blue);",
-        "outline-offset: 2px;",
+        "outline-offset: var(--ward-focus-offset);",
+      ]),
+      "",
+      // WCAG 2.5.8: a small link answers across height.target; the negative margin gives the padding back so its line stays put.
+      rule(".ward-target", [
+        "--ward-target-pad: max(0px, calc((var(--ward-height-target) - 1em) / 2));",
+        "padding-block: var(--ward-target-pad);",
+        "margin-block: calc(-1 * var(--ward-target-pad));",
       ]),
       "",
       rule(".ward-visually-hidden", [
@@ -231,6 +239,7 @@ export function buildTokens(tokens) {
     "  radius: 'var(--ward-radius)',",
     "  border: 'var(--ward-border)',",
     "  underline: 'var(--ward-underline)',",
+    "  focusOffset: 'var(--ward-focus-offset)',",
     "  shadow: { overlay: 'var(--ward-shadow-overlay)' },",
   );
   lines.push("  type: {");

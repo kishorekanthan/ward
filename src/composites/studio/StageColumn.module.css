@@ -197,7 +197,7 @@
 
 .mount {
   align-self: flex-start;
-  padding: 0;
+  padding-inline: 0;
   font: var(--ward-type-reviewerName);
   color: var(--ward-color-blue);
   background: none;

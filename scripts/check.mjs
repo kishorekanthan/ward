@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { contrast, describeFailures, sweepRenderedContrast } from "./contrast.mjs";
 import { buildFresh, distDrift } from "./dist-fresh.mjs";
 import { sweepPhoneWidth } from "./phone-width.mjs";
+import { sweepFocusTargets } from "./focus-targets.mjs";
 import { workflowFindings } from "./workflows.mjs";
 import { FAMILY_OF, breakpoints, buildCss, buildTokens, containerBreakpoints, declaredFaces, readTokens } from "./gen-css.mjs";
 
@@ -215,6 +216,11 @@ else fail("rendered contrast", describeFailures(rendered.failures));
 const phoneDiffs = await sweepPhoneWidth();
 if (phoneDiffs.length === 0) pass("phone width", "Tabs, PageHeader chips, StatStrip labels, StageGrid, the top-bar tools and the section kicker match the 375px golden");
 else fail("phone width", phoneDiffs.join("; "));
+
+// 8. focus and targets: Tab through every small link; each paints a ring on four sides and answers across 24px (src/goldens/focus-targets.json)
+const focusDiffs = await sweepFocusTargets();
+if (focusDiffs.length === 0) pass("focus and targets", "every small link shows its focus ring and has a 24px target");
+else fail("focus and targets", focusDiffs.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);
 process.exitCode = failures === 0 ? 0 : 1;

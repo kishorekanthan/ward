@@ -407,6 +407,7 @@
   --ward-height-ladderBar: 34px;
   --ward-height-radio: 13px;
   --ward-height-skeletonBar: 12px;
+  --ward-height-target: 24px;
   --ward-size-marker6: 6px;
   --ward-size-marker8: 8px;
   --ward-size-marker9: 9px;
@@ -414,6 +415,7 @@
   --ward-radius: 0px;
   --ward-border: 1px;
   --ward-underline: 2px;
+  --ward-focus-offset: 2px;
   --ward-shadow-overlay: 0 24px 64px rgba(7,29,73,0.30);
   --ward-type-h1: 600 19px/1.2 Archivo, system-ui, sans-serif;
   --ward-type-h1-tracking: -0.2px;
@@ -760,7 +762,13 @@ img, svg {
 
 :focus-visible {
   outline: var(--ward-border) solid var(--ward-color-blue);
-  outline-offset: 2px;
+  outline-offset: var(--ward-focus-offset);
+}
+
+.ward-target {
+  --ward-target-pad: max(0px, calc((var(--ward-height-target) - 1em) / 2));
+  padding-block: var(--ward-target-pad);
+  margin-block: calc(-1 * var(--ward-target-pad));
 }
 
 .ward-visually-hidden {
