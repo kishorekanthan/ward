@@ -31,7 +31,7 @@ export function TopBar({ wordmark = "Trellis", destinations, active, actor, tagl
   const actorText = actorLabel(actor);
   return (
     <header className={s.bar}>
-      <a className={s.skip} href={`#${skipTo}`}>
+      <a className={`${s.skip} ward-target`} href={`#${skipTo}`}>
         Skip to content
       </a>
       <span className={s.mark}>{wordmark}</span>
@@ -41,7 +41,7 @@ export function TopBar({ wordmark = "Trellis", destinations, active, actor, tagl
           {destinations.map((d) => (
             <li key={d.id}>
               <a
-                className={s.dest}
+                className={`${s.dest} ward-target`}
                 href={safeHref(d.href)}
                 aria-current={d.id === active ? "page" : undefined}
                 onClick={() => onNavigate?.(d.id)}

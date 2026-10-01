@@ -147,7 +147,7 @@ const BLUE_USES: Record<Category, string[]> = {
   current: [
     "primitives/Tabs.module.css .tab[aria-current=\"page\"] blue",
     "primitives/Tabs.module.css .tab[aria-selected=\"true\"] blue",
-    "primitives/TopBar.module.css .dest[aria-current=\"page\"] blue",
+    "primitives/TopBar.module.css .dest[aria-current=\"page\"]::after blue",
     "layout/AppShell.module.css .nav a[aria-current=\"page\"] blue",
     "layout/Sidebar.module.css .root nav a[aria-current=\"page\"] blue",
     "layout/Sidebar.module.css .root nav a[aria-current=\"page\"] blueSoft",

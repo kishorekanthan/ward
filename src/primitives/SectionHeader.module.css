@@ -17,15 +17,20 @@
 }
 
 /* A section kicker is a sentence, so it takes the title style; uppercase mono is for identifiers.
-   The note shrinks first, as before #84; the kicker wraps only past a cap that keeps 3rem for a short note. */
+   The head may wrap to leave the note its own width, up to 28% of the row (#107). */
 .root[data-kind="key"] .head {
   font: var(--ward-type-title);
   letter-spacing: normal;
   text-transform: none;
   color: var(--ward-color-text);
   white-space: normal;
-  flex-shrink: 0;
   max-width: calc(100% - min(50%, 3rem) - var(--ward-gap-section));
+}
+
+/* Floor 28%, clamped to the note's own width and never shrunk; above ~29% the 320px Kicker row wraps. */
+.root[data-kind="key"] .note {
+  flex: 1 0 28%;
+  max-width: max-content;
 }
 
 .index {

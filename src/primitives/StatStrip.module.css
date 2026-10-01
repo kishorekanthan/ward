@@ -24,16 +24,29 @@
   color: var(--ward-color-amber);
 }
 
+/* A linked cell is one link holding value and label, at least a touch target tall; the lines stay where they were. */
 .link {
+  display: grid;
+  gap: var(--ward-space-1);
+  align-content: start;
+  min-block-size: var(--ward-height-touch);
   color: inherit;
+  text-decoration: none;
+}
+
+.linkValue {
   text-decoration: underline;
   text-decoration-color: var(--ward-color-line2);
   text-decoration-thickness: var(--ward-border);
   text-underline-offset: var(--ward-space-1);
 }
 
-.link:hover {
+.link:hover .linkValue {
   text-decoration-color: currentColor;
+}
+
+.link:hover .label {
+  color: var(--ward-color-text);
 }
 
 .label {
@@ -62,6 +75,10 @@
 
 .strip[data-divided] .cell + .cell {
   box-shadow: inset var(--ward-border) 0 0 0 var(--ward-color-line);
+}
+
+.strip[data-divided] .link {
+  gap: var(--ward-gap-metricCell);
 }
 
 .strip[data-divided] .label {

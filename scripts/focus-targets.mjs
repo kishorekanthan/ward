@@ -1,5 +1,5 @@
 /* Tabs through the A11y/FocusTargets story in a real browser, in both themes, because jsdom has neither layout nor :focus-visible.
-   Each focused link must paint a ring on all four sides and answer clicks across a 24px band; whole-row links must open from anywhere on the row. */
+   Each focused link must paint a ring on all four sides and answer clicks across a 24px band; whole-row links and linked stat cells must open from anywhere on their box. */
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -13,12 +13,24 @@ function readFocused() {
   const el = document.activeElement;
   const copy = el?.closest("#storybook-root > div");
   if (!copy || !el.matches("a, button")) return null;
+  el.scrollIntoView({ block: "center" });
   const r = el.getClientRects()[0];
   const style = getComputedStyle(el);
   const reach = (Number.parseFloat(style.outlineOffset) || 0) + (Number.parseFloat(style.outlineWidth) || 0);
   const x = r.left + r.width / 2;
   const hits = (y) => document.elementFromPoint(x, y)?.closest("a, button") === el;
   const mid = r.top + r.height / 2;
+  // An underline drawn by the link itself and as wide as it; a static link would hand its ::after to an ancestor.
+  const spansLink = (line, box) =>
+    line.content !== "none" && line.position === "absolute" && style.position !== "static" && Math.abs(Number.parseFloat(line.width) - box.width) < 1;
+  // px from the bottom of the link's text to the top of its ::after underline; null without one spanning the link.
+  const underlineGap = (box) => {
+    const line = getComputedStyle(el, "::after");
+    if (!spansLink(line, box)) return null;
+    const text = document.createRange();
+    text.selectNodeContents(el);
+    return Math.round((box.bottom - Number.parseFloat(line.bottom) - Number.parseFloat(line.height) - text.getBoundingClientRect().bottom) * 10) / 10;
+  };
   // The browser's own focus ring also paints, so the ring must be Ward's: solid, in the theme's blue.
   const blue = document.createElement("span");
   blue.style.color = "var(--ward-color-blue)";
@@ -32,6 +44,7 @@ function readFocused() {
     wardRing,
     height: r.height,
     hit24: hits(mid - 11.5) && hits(mid + 11.5),
+    underlineGap: underlineGap(r),
     box: { x: r.left, y: r.top, width: r.width, height: r.height, reach },
   };
 }
@@ -85,7 +98,7 @@ async function tabThrough(page) {
       continue;
     }
     const ring = await ringOnEverySide(page, got.box);
-    seen.push({ theme: got.theme, name: got.name, focusVisible: got.focusVisible, wardRing: got.wardRing, ring, tall: got.height >= 24, hit24: got.hit24, height: got.height });
+    seen.push({ theme: got.theme, name: got.name, focusVisible: got.focusVisible, wardRing: got.wardRing, ring, tall: got.height >= 24, hit24: got.hit24, underlineGap: got.underlineGap, height: got.height });
   }
   return seen;
 }
@@ -107,7 +120,7 @@ function rowLinkBoxes() {
       return hit === anchors[0] || (hit?.matches("[data-raised]") && box.contains(hit));
     };
     const underlined = getComputedStyle(anchors[0]).textDecorationLine.includes("underline");
-    return { name: anchors[0]?.textContent.trim(), href: anchors[0]?.getAttribute("href"), oneAnchor: anchors.length === 1, covered: grid.every(covered), tall: r.height >= 24, raised: onTop.length, underlined, ground: getComputedStyle(box).backgroundColor, centre: centre(r), points: [...grid, ...raised] };
+    return { name: anchors[0]?.textContent.trim(), href: anchors[0]?.getAttribute("href"), oneAnchor: anchors.length === 1, covered: grid.every(covered), tall: r.height >= 24, touch: r.height >= 44, raised: onTop.length, underlined, ground: getComputedStyle(box).backgroundColor, centre: centre(r), points: [...grid, ...raised] };
   });
 }
 
@@ -138,7 +151,7 @@ async function rowLinks(page) {
   const out = [];
   await page.mouse.move(0, 0);
   for (const box of boxes) {
-    const facts = { name: box.name, oneAnchor: box.oneAnchor, covered: box.covered, tall: box.tall, raised: box.raised, underlined: box.underlined };
+    const facts = { name: box.name, oneAnchor: box.oneAnchor, covered: box.covered, tall: box.tall, touch: box.touch, raised: box.raised, underlined: box.underlined };
     out.push({ ...facts, hoverShade: await hoverShade(page, box), wholeHit: await clickAcross(page, box) });
   }
   return out;

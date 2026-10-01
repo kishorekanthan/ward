@@ -77,6 +77,13 @@
     "noteLines": 1,
     "pageScrollsSideways": false
   },
+  "kickerAt320": {
+    "story": "layout-recordsection--kicker",
+    "width": 320,
+    "headLines": 1,
+    "noteLines": 3,
+    "pageScrollsSideways": false
+  },
   "longKicker": {
     "story": "layout-recordsection--long-kicker",
     "headLines": 2,
@@ -84,6 +91,12 @@
     "noteOnFirstLine": true,
     "noteLines": 1,
     "longNoteInView": true,
+    "pageScrollsSideways": false
+  },
+  "longKickerLongNote": {
+    "story": "layout-recordsection--long-kicker-long-note",
+    "noteCharsPerLineAtLeast": 12,
+    "noteInBand": true,
     "pageScrollsSideways": false
   },
   "console": {

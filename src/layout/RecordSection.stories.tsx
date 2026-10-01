@@ -27,6 +27,14 @@ export const LongKicker = {
   },
 };
 
+export const LongKickerLongNote = {
+  args: {
+    title: "Ways out of this hold before the nightly cut-off closes",
+    note: "pick one to release the item before the nightly cut-off closes",
+    children: <p>Override and advance, or send it back to intake.</p>,
+  },
+};
+
 export const InlineEmpty = {
   args: { title: "Clarifications", empty: "inline", children: "No questions asked on this item yet." },
 };
