@@ -4669,7 +4669,7 @@ function bC(e) {
   const t = [...sp(a), ...hp(a), ...mp(a)];
   return t.length > 0 ? { ok: !1, reasons: t } : { ok: !0, svg: new XMLSerializer().serializeToString(Np(gt(a), bp(e))) };
 }
-const yp = "Mark accepted.", kp = /^#[0-9a-f]{3,8}$/i, $p = new Set(An.flatMap((e) => [fe(e, "id"), fe(e, "chip")]));
+const yp = "Mark accepted.", kp = /^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i, $p = new Set(An.flatMap((e) => [fe(e, "id"), fe(e, "chip")]));
 function Cp(e) {
   return e !== void 0 && (kp.test(e) || $p.has(e)) ? e : void 0;
 }
