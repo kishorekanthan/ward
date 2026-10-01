@@ -1,6 +1,6 @@
 // Verifies a release tag against .github/allowed_signers as it is on protected main, never the checked-out tree (#100).
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, rmdirSync, unlinkSync, writeFileSync } from "node:fs";
+import { mkdtempSync, rmSync, rmdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -10,11 +10,11 @@ export function verifyTag(tag, cwd = process.cwd()) {
   git(["fetch", "--quiet", "origin", "main"], "inherit");
   const dir = mkdtempSync(join(tmpdir(), "ward-signers-"));
   const signers = join(dir, "allowed_signers");
-  writeFileSync(signers, git(["show", "origin/main:.github/allowed_signers"]));
   try {
+    writeFileSync(signers, git(["show", "origin/main:.github/allowed_signers"]));
     git(["-c", `gpg.ssh.allowedSignersFile=${signers}`, "verify-tag", tag], "inherit");
   } finally {
-    unlinkSync(signers);
+    rmSync(signers, { force: true });
     rmdirSync(dir);
   }
 }

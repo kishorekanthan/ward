@@ -15,6 +15,7 @@ signing:
 
 # Verifies a release tag against main's .github/allowed_signers: make verify-tag TAG=vX.Y.Z.
 verify-tag:
+	@test -n "$(TAG)" || { echo "usage: make verify-tag TAG=vX.Y.Z" >&2; exit 2; }
 	node scripts/verify-tag.mjs $(TAG)
 
 # Refuses a PR whose title, body or commits carry AI attribution: make pr-check PR=N.

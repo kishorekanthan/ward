@@ -1,8 +1,8 @@
 // @vitest-environment node
 import { execFileSync, spawnSync } from "node:child_process";
-import { appendFileSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { devNull, tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { beforeAll, describe, expect, it } from "vitest";
 
@@ -74,8 +74,37 @@ describe("verify-tag", () => {
     expect(result.stderr).toMatch(/Good "git" signature for owner@example.com/);
   });
 
+  it("removes its temp directory after verifying a good tag", () => {
+    const scratch = mkdtempSync(join(tmpdir(), "ward-verify-tag-ok-"));
+    const result = spawnSync("node", [SCRIPT, "v0.0.1"], { cwd: work, env: { ...ENV, TMPDIR: scratch }, encoding: "utf8" });
+    expect(result.status).toBe(0);
+    expect(readdirSync(scratch)).toEqual([]);
+  });
+
   it("the same forged tag passes against the working tree's file, the hole #100 closes", () => {
     const result = run("git", ["-c", "gpg.ssh.allowedSignersFile=.github/allowed_signers", "verify-tag", "v0.0.2"]);
     expect(result.status).toBe(0);
+  });
+
+  it("removes its temp directory when main has no allowed_signers", () => {
+    const root = mkdtempSync(join(tmpdir(), "ward-verify-tag-bare-"));
+    const bare = join(root, "bare");
+    const scratch = join(root, "tmp");
+    mkdirSync(scratch);
+    mkdirSync(bare);
+    git(["init", "--quiet", "-b", "main"], bare);
+    git(["commit", "--quiet", "--allow-empty", "-m", "no signers"], bare);
+    git(["remote", "add", "origin", bare], bare);
+    const result = spawnSync("node", [SCRIPT, "v0.0.1"], { cwd: bare, env: { ...ENV, TMPDIR: scratch }, encoding: "utf8" });
+    expect(result.status).not.toBe(0);
+    expect(readdirSync(scratch)).toEqual([]);
+  });
+
+  it("make verify-tag without TAG prints the usage line and fails", () => {
+    const result = spawnSync("make", ["verify-tag"], { cwd: join(dirname(SCRIPT), ".."), env: ENV, encoding: "utf8" });
+    expect(result.status).not.toBe(0);
+    expect(result.stderr).toContain("usage: make verify-tag TAG=vX.Y.Z");
+    expect(result.status).toBe(2);
+    expect(result.stdout).not.toContain("node scripts/verify-tag.mjs");
   });
 });
