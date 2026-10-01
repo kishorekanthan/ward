@@ -34,21 +34,26 @@ function signedTag(name, key) {
 }
 
 // main lists the owner's key; a branch adds a second key under the same email and checks it out.
+// The local origin/main is stale (retired key only), so verification must fetch main first.
 beforeAll(() => {
   const root = mkdtempSync(join(tmpdir(), "ward-verify-tag-"));
   keys = join(root, "keys");
   work = join(root, "work");
   mkdirSync(keys);
   mkdirSync(join(work, ".github"), { recursive: true });
+  const retired = keypair("retired");
   const owner = keypair("owner");
   const intruder = keypair("intruder");
   git(["init", "--quiet", "--bare", "-b", "main", join(root, "origin.git")], root);
   git(["init", "--quiet", "-b", "main"]);
   git(["remote", "add", "origin", join(root, "origin.git")]);
-  writeFileSync(join(work, ".github/allowed_signers"), owner.signer);
+  writeFileSync(join(work, ".github/allowed_signers"), retired.signer);
   git(["add", ".github/allowed_signers"]);
-  git(["commit", "--quiet", "-m", "owner key"]);
+  git(["commit", "--quiet", "-m", "retired key"]);
   git(["push", "--quiet", "origin", "main"]);
+  writeFileSync(join(work, ".github/allowed_signers"), owner.signer);
+  git(["commit", "--quiet", "-am", "owner key"]);
+  git(["push", "--quiet", join(root, "origin.git"), "main"]);
   git(["checkout", "--quiet", "-b", "add-key"]);
   appendFileSync(join(work, ".github/allowed_signers"), intruder.signer);
   git(["commit", "--quiet", "-am", "second key"]);
