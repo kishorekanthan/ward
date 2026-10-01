@@ -19,6 +19,8 @@ export type Stream = {
         summary: string;
     };
     inFlight: number;
+    /** Tooltip saying what the in-flight count counts. */
+    inFlightHint?: string;
     p50?: number;
     draft?: boolean;
 };
@@ -42,6 +44,8 @@ export type StreamRowSummary = {
         summary: string;
     };
     inFlight?: number;
+    /** Tooltip saying what the in-flight count counts. */
+    inFlightHint?: string;
     p50?: string;
     draft?: boolean;
 };

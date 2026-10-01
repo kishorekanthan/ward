@@ -105,8 +105,27 @@ async function probeStageGrid() {
   };
 }
 
+// Presses the Settings toggle, then reads where the tools row lands.
+async function probeTopBar() {
+  const header = document.querySelector("#storybook-root header");
+  const toggle = header.querySelector("button[aria-controls]");
+  const panel = document.getElementById(toggle.getAttribute("aria-controls"));
+  const inView = (r) => r.width > 0 && r.left >= -0.5 && r.right <= innerWidth + 0.5;
+  const panelHiddenBeforePress = panel.getBoundingClientRect().height === 0;
+  toggle.click();
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const box = panel.getBoundingClientRect();
+  return {
+    toggleInView: inView(toggle.getBoundingClientRect()),
+    panelHiddenBeforePress,
+    panelBelowBar: box.top >= header.getBoundingClientRect().bottom - 0.5,
+    panelInView: inView(box) && Array.from(panel.querySelectorAll("button")).every((b) => inView(b.getBoundingClientRect())),
+    pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+  };
+}
+
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, statStrip: probeStatStrip, stageGrid: probeStageGrid };
+const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar };
 
 async function measure(page, base, key) {
   const { story, label, longLabel } = golden[key];

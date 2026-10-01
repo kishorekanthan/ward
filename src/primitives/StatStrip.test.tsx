@@ -54,3 +54,19 @@ describe("StatStrip divided", () => {
     expect(() => render(<StatStrip cells={cells.slice(0, 1)} divided />)).toThrow(/takes two to four/);
   });
 });
+
+describe("StatStrip hints", () => {
+  it("puts a cell's hint on its value as tooltip and description, leaving the value as is", () => {
+    render(<StatStrip cells={[{ ...cells[0], hint: "Items running, held or blocked" }, cells[1]]} />);
+    const value = screen.getByText("14");
+    expect(value.tagName).toBe("DD");
+    expect(value.getAttribute("title")).toBe("Items running, held or blocked");
+    expect(screen.getByRole("definition", { description: "Items running, held or blocked" })).toBe(value);
+    expect(value.textContent).toBe("14");
+  });
+
+  it("adds no title without a hint", () => {
+    const { container } = render(<StatStrip cells={cells} />);
+    expect(container.querySelector("[title]")).toBeNull();
+  });
+});

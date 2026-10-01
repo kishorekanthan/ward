@@ -45,5 +45,13 @@
     "bothFadesMaskedMidScroll": true,
     "startFadeMaskedAtEnd": true,
     "pageScrollsSideways": false
+  },
+  "topBar": {
+    "story": "layout-appshell--top-bar-phone-width",
+    "toggleInView": true,
+    "panelHiddenBeforePress": true,
+    "panelBelowBar": true,
+    "panelInView": true,
+    "pageScrollsSideways": false
   }
 }
