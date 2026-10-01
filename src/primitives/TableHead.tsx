@@ -5,6 +5,7 @@ export type TableHeadColumn = { key: string; header: string; width?: number | st
 export type TableHeadProps = { columns: TableHeadColumn[] };
 
 // The head for a table that renders its own rows; Grid keeps its own header.
+// Labels truncate only under table-layout: fixed; in an auto-layout table a long label widens its column.
 export function TableHead({ columns }: TableHeadProps) {
   return (
     <thead data-ward-table-head="">
