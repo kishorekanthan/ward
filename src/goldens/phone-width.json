@@ -20,6 +20,7 @@
     "chipLines": 2,
     "titleBelowChips": true,
     "everyChipWhole": true,
+    "chipFontSize": "11px",
     "pageScrollsSideways": false
   },
   "pageHeaderOneChip": {
@@ -52,6 +53,14 @@
     "panelHiddenBeforePress": true,
     "panelBelowBar": true,
     "panelInView": true,
+    "pageScrollsSideways": false
+  },
+  "kicker": {
+    "story": "layout-recordsection--kicker",
+    "seenText": "Ways out of this hold",
+    "fontSize": "15px",
+    "family": "Archivo",
+    "letterSpacing": "normal",
     "pageScrollsSideways": false
   }
 }

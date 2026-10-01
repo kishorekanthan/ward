@@ -28,6 +28,12 @@ describe("Ward foundation goldens", () => {
     expect([actual.dark.console, actual.color.console]).toEqual(["#0B1631", "#EDF0F4"]);
   });
 
+  it("generates colHead and chip at 11px, the smallest readable size for small type", () => {
+    const wardCss = readFileSync(join(root, "src", "ward.css"), "utf8");
+    expect(wardCss).toContain("--ward-type-colHead: 600 11px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace;");
+    expect(wardCss).toContain("--ward-type-chip: 500 11px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace;");
+  });
+
   it("renders the default layout spine and explicit rail override", () => {
     render(
       <PageFrame>
