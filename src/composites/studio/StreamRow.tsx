@@ -1,9 +1,9 @@
-import { Chip } from "../../primitives/Chip";
+import { Chip, type ChipProps } from "../../primitives/Chip";
 import { count } from "../../fmt/count";
 import { duration } from "../../fmt/duration";
 import type { CSSProperties, ReactElement } from "react";
 import type { StreamStep } from "../../tokens";
-import { streamChipProps, streamColour } from "../../primitives/streamColour";
+import { streamChipProps, streamColour, validatedStep } from "../../primitives/streamColour";
 import s from "./StreamRow.module.css";
 import { safeHref } from "../../primitives/safeHref";
 import { forwardRaisedClick } from "../../primitives/rowLink";
@@ -79,29 +79,39 @@ function identityCell(stream: StreamRowSummary, href: string): ReactElement {
   </td>;
 }
 
+type StageLook = Pick<ChipProps, "role" | "streamStep">;
+
 // A gate differs from other stages by a shape and spoken text, never by colour alone.
-function StageChip({ name, gate, size }: { name: string; gate: boolean; size?: "tag" }): ReactElement {
+function StageChip({ name, gate, look, size }: { name: string; gate: boolean; look: StageLook; size?: "tag" }): ReactElement {
   return <>
     {gate ? <span className={s.gateMark} aria-hidden="true" data-gate-mark>◆</span> : null}
-    <Chip role={gate ? "gate" : "soft"} size={size} label={name} />
+    <Chip {...look} size={size} label={name} />
     {gate ? <span className="ward-visually-hidden"> (human gate)</span> : null}
   </>;
 }
 
-function stageChain(stages: StreamRowSummary["stages"]): ReactElement {
+// The compact chain highlights one stage, its first gate, in the stream's colour (comp 3a).
+function compactLook(index: number, firstGate: number, step: StreamStep | null): StageLook {
+  if (index !== firstGate) return { role: "soft" };
+  const valid = validatedStep(step);
+  return valid === null ? { role: "gate" } : { role: "stream", streamStep: valid };
+}
+
+function stageChain({ stages, streamStep }: StreamRowSummary): ReactElement {
+  const firstGate = stages.findIndex((stage) => stage.gate === true);
   return <span className={`${s.chain} ward-chiprow`}>
     {stages.map((stage, index) => (
       <span key={`${stage.name}${index}`} className={s.link}>
         {index === 0 ? null : <span className={s.arrow} aria-hidden="true">→</span>}
-        <StageChip name={stage.name} gate={stage.gate === true} size="tag" />
+        <StageChip name={stage.name} gate={stage.gate === true} look={compactLook(index, firstGate, streamStep)} size="tag" />
       </span>
     ))}
   </span>;
 }
 
-function stagesCell(stages: StreamRowSummary["stages"]): ReactElement {
+function stagesCell(stream: StreamRowSummary): ReactElement {
   return <td className={s.compactCell}>
-    {stages.length === 0 ? <span className={s.emptyChain}><span className={s.muted}>No stages yet</span><span className={s.define}>Define workflow</span></span> : stageChain(stages)}
+    {stream.stages.length === 0 ? <span className={s.emptyChain}><span className={s.muted}>No stages yet</span><span className={s.define}>Define workflow</span></span> : stageChain(stream)}
   </td>;
 }
 
@@ -136,7 +146,7 @@ function compactRow({ stream, href, presentation }: CompactStreamRowProps) {
   return (
     <tr className={`${rowClass} ward-streamrow`} onClick={forwardRaisedClick} data-ward-rowlink data-draft={stream.draft === true} style={{ "--stream": streamColour(stream.streamStep, "chip") } as CSSProperties}>
       {identityCell(stream, href)}
-      {stagesCell(stream.stages)}
+      {stagesCell(stream)}
       {statCell(agentsTotal(stream.agents), stream.agents === undefined ? undefined : agentsLine(stream.agents), "—")}
       {policyCell(stream.policy)}
       {statCell(stream.inFlight === undefined ? undefined : String(stream.inFlight), stream.p50 === undefined ? undefined : `P50 ${stream.p50}`, "—", stream.inFlightHint)}
@@ -163,7 +173,7 @@ export function StreamRow(props: StreamRowProps) {
       <td className={s.cell}>
         <span className={s.chain}>
           {stream.stages.map((st) => (
-            <span key={st.name} className={s.link}><StageChip name={st.name} gate={st.gate} /></span>
+            <span key={st.name} className={s.link}><StageChip name={st.name} gate={st.gate} look={{ role: st.gate ? "gate" : "soft" }} /></span>
           ))}
         </span>
       </td>

@@ -220,3 +220,34 @@ describe("StreamRow as one link", () => {
     expect(seen).toHaveLength(1);
   });
 });
+
+describe("StreamRow compact chain highlight", () => {
+  const chain = (streamStep: 3 | 4 | null, stages: { name: string; gate?: boolean }[]) => {
+    const { container } = render(table(<StreamRow stream={{ name: "DE", key: "DE", streamStep, owner: "Priya Nayar", stages }} href="#de" presentation={{ columns: 5 }} />));
+    const chips = Array.from(container.querySelectorAll("td")[1].querySelectorAll<HTMLElement>("[data-ward-chip]"));
+    return chips.map((chip) => [chip.textContent, chip.getAttribute("data-ward-chip"), chip.style.getPropertyValue("--ward-chip-bg"), chip.style.getPropertyValue("--ward-chip-fg")]);
+  };
+
+  it("draws the gate as the step-3 stream chip", () => {
+    expect(chain(3, [{ name: "Intake" }, { name: "Review", gate: true }])).toEqual([
+      ["Intake", "soft", "var(--ward-chip-soft-bg)", "var(--ward-chip-soft-fg)"],
+      ["Review", "stream", "var(--ward-stream-3-chip)", "var(--ward-stream-3-chipText)"],
+    ]);
+  });
+
+  it("highlights only the first of two gates, and both still read as human gates", () => {
+    const { container } = render(table(<StreamRow stream={{ name: "UX", key: "UX", streamStep: 3, owner: "A. Whyte", stages: [{ name: "Design review", gate: true }, { name: "Build" }, { name: "Sign-off", gate: true }] }} href="#ux" presentation={{ columns: 5 }} />));
+    expect(container.querySelectorAll("td")[1].textContent).toBe("◆Design review (human gate)→Build→◆Sign-off (human gate)");
+    expect(chain(3, [{ name: "Design review", gate: true }, { name: "Build" }, { name: "Sign-off", gate: true }]).map((chip) => chip[1])).toEqual(["stream", "soft", "soft"]);
+  });
+
+  it("keeps the navy gate chip for a stream with no validated step", () => {
+    const navy = ["Review", "gate", "var(--ward-chip-gate-bg)", "var(--ward-chip-gate-fg)"];
+    expect(chain(null, [{ name: "Intake" }, { name: "Review", gate: true }])[1]).toEqual(navy);
+    expect(chain(4, [{ name: "Intake" }, { name: "Review", gate: true }])[1]).toEqual(navy);
+  });
+
+  it("highlights nothing in a chain with no gate", () => {
+    expect(chain(3, [{ name: "Intake" }, { name: "Build" }]).map((chip) => chip[1])).toEqual(["soft", "soft"]);
+  });
+});
