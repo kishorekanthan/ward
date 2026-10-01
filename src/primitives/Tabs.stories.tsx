@@ -44,3 +44,9 @@ export const SecondLevel = {
 export const AtCap = {
   args: { tabs: admin, active: "roles", label: "Admin sections", onChange: () => {} },
 };
+
+// Seven tabs at phone width scroll inside the strip; the selected sixth tab starts in view, clear of the fades.
+export const PhoneWidth = {
+  args: { tabs: admin, active: "appearance", label: "Admin sections", onChange: () => {} },
+  parameters: { viewport: { defaultViewport: "mobile1" } },
+};

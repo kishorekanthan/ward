@@ -41,6 +41,11 @@
   letter-spacing: var(--ward-type-micro-tracking);
   text-transform: var(--ward-type-micro-transform);
   color: var(--ward-color-muted);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }
 
 .strip[data-divided] {
@@ -63,4 +68,13 @@
   font: var(--ward-type-microHead);
   letter-spacing: var(--ward-type-microHead-tracking);
   text-transform: var(--ward-type-microHead-transform);
+}
+
+/* Phone: two cells a row, so a long label gets half the strip and wraps to two lines, not a quarter and an ellipsis. */
+@media (max-width: 767.98px) {
+  .strip:not([data-divided]) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--ward-space-4) var(--ward-space-6);
+  }
 }

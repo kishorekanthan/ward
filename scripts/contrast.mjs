@@ -63,7 +63,7 @@ function inputHash() {
   return h.digest("hex");
 }
 
-function ensureBuild() {
+export function ensureBuild() {
   const stamp = join(staticDir, ".ward-inputs");
   const want = inputHash();
   const fresh = existsSync(stamp) && readFileSync(stamp, "utf8") === want && existsSync(join(staticDir, "index.json"));
@@ -84,7 +84,7 @@ const MIME = {
   ".png": "image/png",
 };
 
-function serve() {
+export function serve() {
   const server = createServer((req, res) => {
     const file = join(staticDir, decodeURIComponent(req.url.split("?")[0]));
     try {
