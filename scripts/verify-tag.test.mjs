@@ -74,6 +74,13 @@ describe("verify-tag", () => {
     expect(result.stderr).toMatch(/Good "git" signature for owner@example.com/);
   });
 
+  it("removes its temp directory after verifying a good tag", () => {
+    const scratch = mkdtempSync(join(tmpdir(), "ward-verify-tag-ok-"));
+    const result = spawnSync("node", [SCRIPT, "v0.0.1"], { cwd: work, env: { ...ENV, TMPDIR: scratch }, encoding: "utf8" });
+    expect(result.status).toBe(0);
+    expect(readdirSync(scratch)).toEqual([]);
+  });
+
   it("the same forged tag passes against the working tree's file, the hole #100 closes", () => {
     const result = run("git", ["-c", "gpg.ssh.allowedSignersFile=.github/allowed_signers", "verify-tag", "v0.0.2"]);
     expect(result.status).toBe(0);
