@@ -88,9 +88,12 @@ async function ringOnEverySide(page, box) {
   return focused.every((shot, i) => !shot.equals(blurred[i]));
 }
 
+// Room for both themed copies of the story; too low a cap silently cuts the dark copy short.
+const MAX_TABS = 80;
+
 async function tabThrough(page) {
   const seen = [];
-  for (let step = 0; step < 40; step++) {
+  for (let step = 0; step < MAX_TABS; step++) {
     await page.keyboard.press("Tab");
     const got = await page.evaluate(readFocused);
     if (got === null) {
