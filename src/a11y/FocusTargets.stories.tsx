@@ -5,6 +5,7 @@ import { AgentCard } from "../composites/studio/AgentCard";
 import { StageColumn } from "../composites/studio/StageColumn";
 import { SessionRow, type Session } from "../composites/intake/SessionRow";
 import { BoardFootnote } from "../composites/board/BoardFootnote";
+import { StatStrip } from "../primitives/StatStrip";
 
 // Every small link Ward draws, in tab order; scripts/focus-targets.mjs tabs through them against src/goldens/focus-targets.json.
 const session: Session = {
@@ -59,6 +60,10 @@ export const Links = {
       <AgentCard agent={agent} href="/studio/data-eng/intake-advisor" />
       <StageColumn stage={{ index: 2, name: "Build", kind: "agent", count: 0 }} presentation={{ mode: "workflow" }} onMount={() => {}} />
       <BoardFootnote configureHref="#/studio/streams/ledger" />
+      <StatStrip cells={[{ value: "14", label: "In flight", href: "/board" }, { value: "0", label: "Failed runs 24h", href: "/runs" }]} />
+      <div style={{ width: "var(--ward-width-streamKey)" }}>
+        <StatStrip cells={[{ value: "2", label: "Items waiting at a gate", href: "/gates" }, { value: "5", label: "Done", href: "/done" }]} />
+      </div>
     </div>
   ),
 };
