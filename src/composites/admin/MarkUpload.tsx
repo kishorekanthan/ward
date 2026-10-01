@@ -1,5 +1,7 @@
 import { useRef, useState, type CSSProperties } from "react";
 import { Btn } from "../../primitives/Btn";
+import { streamColour } from "../../primitives/streamColour";
+import { validatedStreamSteps } from "../../tokens";
 import s from "./MarkUpload.module.css";
 
 export type ValidationResult = { ok: boolean; reasons: string[] };
@@ -25,13 +27,13 @@ const ALLOWED_ELEMENTS = new Set([
   "clipPath", "mask", "linearGradient", "radialGradient", "stop", "title", "desc",
 ]);
 const ALLOWED_ATTRIBUTES = new Set([
-  "viewBox", "width", "height", "preserveAspectRatio", "version", "id", "class", "transform",
+  "viewBox", "width", "height", "preserveAspectRatio", "version", "id", "transform",
   "d", "x", "y", "cx", "cy", "r", "rx", "ry", "x1", "y1", "x2", "y2", "fx", "fy", "fr", "points", "pathLength",
   "fill", "fill-rule", "fill-opacity", "opacity", "clip-path", "clip-rule", "clipPathUnits", "mask",
   "maskUnits", "maskContentUnits", "gradientUnits", "gradientTransform", "spreadMethod",
   "offset", "stop-color", "stop-opacity",
 ]);
-const FRAGMENT_URL = /url\(\s*(['"]?)#[^'"()\\\s]*\1\s*\)/gi;
+const FRAGMENT_URL = /url\(\s*(['"]?)#([^'"()\\\s]*)\1\s*\)/gi;
 // Once in-mark url(#id) is removed, any url(, string (image-set, src) or CSS escape can name a remote resource.
 const REMOTE_REFERENCE = /url\s*\(|['"\\]/i;
 
@@ -40,7 +42,7 @@ function invalidSvg(): MarkValidation {
 }
 
 function isSvgNamespace(node: Element): boolean {
-  return node.namespaceURI === SVG_NS || node.namespaceURI === null;
+  return node.namespaceURI === SVG_NS;
 }
 
 function svgOf(source: string): SVGSVGElement | null {
@@ -116,12 +118,55 @@ function sanitise(element: Element): Element {
   return element;
 }
 
+function fragmentIds(value: string): string[] {
+  return Array.from(value.matchAll(FRAGMENT_URL), (match) => match[2]).filter((id) => id !== "");
+}
+
+// FNV-1a of the source, so two different marks inlined on one page never share an id.
+function markPrefix(source: string): string {
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < source.length; index += 1) hash = Math.imul(hash ^ source.charCodeAt(index), 0x01000193);
+  return `ward-mark-${(hash >>> 0).toString(36)}`;
+}
+
+function referencedIds(elements: Element[], prefix: string): Map<string, string> {
+  const ids = new Map<string, string>();
+  for (const element of elements) {
+    for (const attribute of Array.from(element.attributes)) {
+      for (const id of fragmentIds(attribute.value)) if (!ids.has(id)) ids.set(id, `${prefix}-${ids.size}`);
+    }
+  }
+  return ids;
+}
+
+function rewriteReferences(element: Element, ids: Map<string, string>): void {
+  for (const attribute of Array.from(element.attributes)) {
+    attribute.value = attribute.value.replace(FRAGMENT_URL, (match, _quote, id: string) => {
+      const renamed = ids.get(id);
+      return renamed === undefined ? match : match.replace(`#${id}`, `#${renamed}`);
+    });
+  }
+}
+
+// Only ids a url(#id) names survive, renamed, so an inlined mark never shadows a host global or element.
+function rewriteIds(svg: Element, prefix: string): Element {
+  const elements = [svg, ...Array.from(svg.querySelectorAll("*"))];
+  const ids = referencedIds(elements, prefix);
+  for (const element of elements) {
+    const renamed = ids.get(element.getAttribute("id") ?? "");
+    if (renamed === undefined) element.removeAttribute("id");
+    else element.setAttribute("id", renamed);
+    rewriteReferences(element, ids);
+  }
+  return svg;
+}
+
 export function validateMark(source: string): MarkValidation {
   const svg = svgOf(source);
   if (svg === null) return invalidSvg();
   const reasons = [...fillReasons(svg), ...contentReasons(svg), ...strokeReasons(svg)];
   if (reasons.length > 0) return { ok: false, reasons };
-  return { ok: true, svg: new XMLSerializer().serializeToString(sanitise(svg)) };
+  return { ok: true, svg: new XMLSerializer().serializeToString(rewriteIds(sanitise(svg), markPrefix(source))) };
 }
 
 type StatusPresentation = {
@@ -144,11 +189,18 @@ export type MarkUploadProps = {
 };
 
 const ACCEPTED = "Mark accepted.";
+const HEX_COLOUR = /^#[0-9a-f]{3,8}$/i;
+const STREAM_COLOURS = new Set(validatedStreamSteps.flatMap((step) => [streamColour(step, "id"), streamColour(step, "chip")]));
+
+// Only a hex or a resolved stream step reaches --mark; anything else (a url(), an image) falls back to the default.
+function markColour(colour: string | undefined): string | undefined {
+  return colour !== undefined && (HEX_COLOUR.test(colour) || STREAM_COLOURS.has(colour)) ? colour : undefined;
+}
 
 function Preview({ current }: { current?: MarkUploadProps["current"] }) {
   const src = current ? `data:image/svg+xml;utf8,${encodeURIComponent(current.svg)}` : undefined;
   return (
-    <div className={s.preview} style={{ "--mark": current?.colour } as CSSProperties}>
+    <div className={s.preview} style={{ "--mark": markColour(current?.colour) } as CSSProperties}>
       {src ? <img className={s.mark} src={src} alt="Current mark" /> : <span className={s.empty} />}
     </div>
   );

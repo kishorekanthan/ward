@@ -3,9 +3,9 @@
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
-import { createServer } from "node:http";
-import { dirname, extname, join } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { serveStatic } from "./story-server.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const staticDir = join(root, "storybook-static");
@@ -89,30 +89,8 @@ export function ensureBuild() {
   return "rebuilt storybook-static";
 }
 
-const MIME = {
-  ".html": "text/html",
-  ".js": "text/javascript",
-  ".css": "text/css",
-  ".json": "application/json",
-  ".woff2": "font/woff2",
-  ".woff": "font/woff",
-  ".svg": "image/svg+xml",
-  ".png": "image/png",
-};
-
 export function serve() {
-  const server = createServer((req, res) => {
-    const file = join(staticDir, decodeURIComponent(req.url.split("?")[0]));
-    try {
-      const body = readFileSync(file);
-      res.writeHead(200, { "content-type": MIME[extname(file)] ?? "application/octet-stream" });
-      res.end(body);
-    } catch {
-      res.writeHead(404);
-      res.end();
-    }
-  });
-  return server;
+  return serveStatic(staticDir);
 }
 
 // Runs inside the page: page.evaluate ships only this function, so every helper is nested.

@@ -2,9 +2,9 @@
    component's height; table cells and flex/grid containers are expected noise. */
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
-import { createServer } from "node:http";
-import { dirname, extname, join } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { serveStatic } from "./story-server.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const staticDir = join(root, "storybook-static");
@@ -12,27 +12,7 @@ if (!existsSync(join(staticDir, "index.json"))) {
   execFileSync("npm", ["run", "build-storybook"], { cwd: root, stdio: "pipe" });
 }
 
-const MIME = {
-  ".html": "text/html",
-  ".js": "text/javascript",
-  ".css": "text/css",
-  ".json": "application/json",
-  ".woff2": "font/woff2",
-  ".woff": "font/woff",
-  ".svg": "image/svg+xml",
-  ".png": "image/png",
-};
-const server = createServer((req, res) => {
-  const file = join(staticDir, decodeURIComponent(req.url.split("?")[0]));
-  try {
-    const body = readFileSync(file);
-    res.writeHead(200, { "content-type": MIME[extname(file)] ?? "application/octet-stream" });
-    res.end(body);
-  } catch {
-    res.writeHead(404);
-    res.end();
-  }
-});
+const server = serveStatic(staticDir);
 await new Promise((r) => server.listen(0, "127.0.0.1", r));
 const base = `http://127.0.0.1:${server.address().port}`;
 
