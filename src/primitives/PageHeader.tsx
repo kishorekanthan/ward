@@ -136,9 +136,11 @@ function useActionOverflow(actions: ReactNode[]) {
 // Off-screen copy of the strip, ··· included, that decides whether the actions still fit.
 function Measure({ actions, hasMore, measureRef }: { actions: ReactNode[]; hasMore: boolean; measureRef: RefObject<HTMLDivElement | null> }) {
   return (
-    <div className={s.measure} ref={measureRef} aria-hidden="true">
-      {hasMore ? <span><Btn variant="overflow">···</Btn></span> : null}
-      {actions.map((action, index) => <span key={index}>{action}</span>)}
+    <div className={s.measureClip}>
+      <div className={s.measure} ref={measureRef} aria-hidden="true" data-ward-measure>
+        {hasMore ? <span><Btn variant="overflow">···</Btn></span> : null}
+        {actions.map((action, index) => <span key={index}>{action}</span>)}
+      </div>
     </div>
   );
 }
