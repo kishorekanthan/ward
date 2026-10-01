@@ -6,6 +6,7 @@ import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from "
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { serveStatic } from "./story-server.mjs";
+import { launchChromium } from "./browser.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const staticDir = join(root, "storybook-static");
@@ -202,7 +203,6 @@ async function visit(page, base, id, out) {
 
 export async function sweepRenderedContrast() {
   const build = ensureBuild();
-  const { chromium } = await import("playwright");
   const index = JSON.parse(readFileSync(join(staticDir, "index.json"), "utf8"));
   const ids = Object.values(index.entries)
     .filter((e) => e.type === "story")
@@ -215,7 +215,7 @@ export async function sweepRenderedContrast() {
   const out = { rows: [], broken: [] };
   let browser;
   try {
-    browser = await chromium.launch();
+    browser = await launchChromium();
     /* One context shared by the pool so the asset cache is shared too; a
        context per story re-downloads the whole preview bundle each time. */
     const context = await browser.newContext({ viewport: VIEWPORT });

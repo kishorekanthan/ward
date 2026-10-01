@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { ensureBuild, serve } from "./contrast.mjs";
+import { launchChromium } from "./browser.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 export const golden = JSON.parse(readFileSync(join(root, "src", "goldens", "focus-targets.json"), "utf8"));
@@ -196,11 +197,10 @@ function diffFacts(want, got, label) {
 // Returns every fact that differs from the golden, as "name.fact: got X, want Y".
 export async function sweepFocusTargets() {
   ensureBuild();
-  const { chromium } = await import("playwright");
   const server = serve();
   await new Promise((r) => server.listen(0, "127.0.0.1", r));
   const base = `http://127.0.0.1:${server.address().port}`;
-  const browser = await chromium.launch();
+  const browser = await launchChromium();
   const diffs = [];
   try {
     const page = await browser.newPage({ viewport: golden.viewport });
