@@ -57,7 +57,7 @@ describe("findingsFor", () => {
   });
 
   it("names a push trigger on every branch or on branches besides main", () => {
-    const expected = ["check.yml: push must be restricted to main"];
+    const expected = ["check.yml: push must be restricted to main, or to tags only"];
     expect(findingsFor("check.yml", hardened.replace("  push:\n    branches: [main]\n", "  push:\n"))).toEqual(expected);
     expect(findingsFor("check.yml", hardened.replace("[main]", "[main, dev]"))).toEqual(expected);
     expect(findingsFor("check.yml", hardened.replace("[main]", "[dev]"))).toEqual(expected);
@@ -65,6 +65,15 @@ describe("findingsFor", () => {
     expect(findingsFor("check.yml", hardened.replace("branches: [main]", "branches-ignore: [dev]"))).toEqual(expected);
     expect(findingsFor("check.yml", hardened.replace("[main]\n", "[main]\n    paths: [src/**]\n"))).toEqual([]);
     expect(findingsFor("check.yml", hardened.replace("on:\n  push:\n    branches: [main]\n  pull_request:\n", "on: [push, pull_request]\n"))).toEqual(expected);
+  });
+
+  it("accepts a push on tags only, and names one that also runs on branches", () => {
+    const expected = ["tag.yml: push must be restricted to main, or to tags only"];
+    expect(findingsFor("tag.yml", hardened.replace("branches: [main]", "tags: [v*]"))).toEqual([]);
+    expect(findingsFor("tag.yml", hardened.replace("branches: [main]", "tags: [v*]\n    branches-ignore: [dev]"))).toEqual(expected);
+    expect(findingsFor("tag.yml", hardened.replace("branches: [main]", "tags: [v*]\n    paths: [src/**]"))).toEqual(expected);
+    expect(findingsFor("tag.yml", hardened.replace("branches: [main]", "tags: []"))).toEqual(expected);
+    expect(findingsFor("tag.yml", hardened.replace("branches: [main]", "tags: v*"))).toEqual(expected);
   });
 });
 

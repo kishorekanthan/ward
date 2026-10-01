@@ -1,4 +1,4 @@
-.PHONY: check install hooks pr-check signing verify-tag
+.PHONY: check install hooks pr-check rulesets rulesets-apply signing verify-tag
 
 install: hooks
 	npm ci
@@ -20,6 +20,13 @@ verify-tag:
 # Refuses a PR whose title, body or commits carry AI attribution: make pr-check PR=N.
 pr-check:
 	node scripts/attribution.mjs pr $(PR)
+
+# Release rules (#99): fails when the repo's rulesets drift from .github/rulesets.json; apply needs repo admin.
+rulesets:
+	node scripts/rulesets.mjs check
+
+rulesets-apply:
+	node scripts/rulesets.mjs apply
 
 # Lint carries the complexity gate (eslint complexity 5).
 check:
