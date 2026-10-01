@@ -5,6 +5,9 @@ import { AgentCard } from "../composites/studio/AgentCard";
 import { StageColumn } from "../composites/studio/StageColumn";
 import { SessionRow, type Session } from "../composites/intake/SessionRow";
 import { BoardFootnote } from "../composites/board/BoardFootnote";
+import { Sidebar } from "../layout/Sidebar";
+import { TopBar } from "../primitives/TopBar";
+import { StatStrip } from "../primitives/StatStrip";
 
 // Every small link Ward draws, in tab order; scripts/focus-targets.mjs tabs through them against src/goldens/focus-targets.json.
 const session: Session = {
@@ -40,6 +43,13 @@ const agent = {
   versions: [{ v: "v3", status: "live" as const }],
 };
 
+const destinations = [
+  { id: "board", label: "Board", href: "#/board" },
+  { id: "intake", label: "Intake", href: "#/intake" },
+];
+
+const shared = { heading: "Shared", links: [{ label: "Tool registry", href: "/shared/tools" }, { label: "Prompt library", href: "/shared/prompts" }] };
+
 export default {
   title: "A11y/FocusTargets",
   decorators: [bothThemes],
@@ -59,6 +69,12 @@ export const Links = {
       <AgentCard agent={agent} href="/studio/data-eng/intake-advisor" />
       <StageColumn stage={{ index: 2, name: "Build", kind: "agent", count: 0 }} presentation={{ mode: "workflow" }} onMount={() => {}} />
       <BoardFootnote configureHref="#/studio/streams/ledger" />
+      <TopBar destinations={destinations} active="board" />
+      <StatStrip cells={[{ value: "14", label: "In flight", href: "/board" }, { value: "0", label: "Failed runs 24h", href: "/runs" }]} />
+      <div style={{ width: "var(--ward-width-streamKey)" }}>
+        <StatStrip cells={[{ value: "2", label: "Items waiting at a gate", href: "/gates" }, { value: "5", label: "Done", href: "/done" }]} />
+      </div>
+      <Sidebar brand="Studio" nav={[]} agentsHeading="Agents" agents={[]} shared={shared} />
     </div>
   ),
 };

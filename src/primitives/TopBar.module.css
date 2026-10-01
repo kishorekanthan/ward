@@ -45,17 +45,31 @@
 }
 
 .dest {
+  position: relative;
   font: var(--ward-type-control);
   color: var(--ward-color-muted);
   text-decoration: none;
   white-space: nowrap;
-  border-bottom: var(--ward-underline) solid transparent;
-  transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
+  transition: opacity var(--ward-motion-fast);
+}
+
+/* The underline sits under the text, not under the 24px target band. */
+.dest::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: calc(var(--ward-target-pad) - var(--ward-underline));
+  height: var(--ward-underline);
+  background: transparent;
+  transition: background-color var(--ward-motion-fast);
 }
 
 .dest[aria-current="page"] {
   color: var(--ward-color-text);
-  border-bottom-color: var(--ward-color-blue);
+}
+
+.dest[aria-current="page"]::after {
+  background: var(--ward-color-blue);
 }
 
 .actor {

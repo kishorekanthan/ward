@@ -74,7 +74,7 @@ function SharedLinks({ shared }: Pick<StudioSidebarProps, "shared">) {
       <span className={s.footName}>{shared.heading}</span>
       <div className={s.footLinks}>
         {shared.links.map((link) => (
-          <a key={link.href} className={s.footLink} href={safeHref(link.href)}>
+          <a key={link.href} className={`${s.footLink} ward-target`} href={safeHref(link.href)}>
             {link.label}
           </a>
         ))}

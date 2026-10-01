@@ -80,6 +80,80 @@
       "ring": true,
       "tall": true,
       "hit24": true
+    },
+    {
+      "name": "Skip to content",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "Board",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true,
+      "underlineGap": 0
+    },
+    {
+      "name": "Intake",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true,
+      "underlineGap": 0
+    },
+    {
+      "name": "14In flight",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "0Failed runs 24h",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "2Items waiting at a gate",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "5Done",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "Tool registry",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
+      "name": "Prompt library",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": true,
+      "hit24": true
     }
   ],
   "rowLinks": [
@@ -112,6 +186,42 @@
       "raised": 0,
       "underlined": true,
       "hoverShade": true
+    },
+    {
+      "name": "14In flight",
+      "oneAnchor": true,
+      "covered": true,
+      "wholeHit": true,
+      "tall": true,
+      "touch": true,
+      "raised": 0
+    },
+    {
+      "name": "0Failed runs 24h",
+      "oneAnchor": true,
+      "covered": true,
+      "wholeHit": true,
+      "tall": true,
+      "touch": true,
+      "raised": 0
+    },
+    {
+      "name": "2Items waiting at a gate",
+      "oneAnchor": true,
+      "covered": true,
+      "wholeHit": true,
+      "tall": true,
+      "touch": true,
+      "raised": 0
+    },
+    {
+      "name": "5Done",
+      "oneAnchor": true,
+      "covered": true,
+      "wholeHit": true,
+      "tall": true,
+      "touch": true,
+      "raised": 0
     }
   ]
 }

@@ -139,7 +139,7 @@
 .footLinks {
   display: flex;
   flex-direction: column;
-  gap: var(--ward-space-2);
+  gap: var(--ward-space-4); /* 28 px pitch: each link's 24 px target clears the next, with room for sub-pixel hit testing (#91) */
   padding: var(--ward-pad-sidebarFootList);
 }
 
