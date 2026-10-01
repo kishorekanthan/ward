@@ -166,7 +166,10 @@ describe("StageColumn (spec)", () => {
 
   it("gives the workflow gate note the plain card-note ink, with no amber rule in the column (#87)", () => {
     render(<StageColumn stage={gate} presentation={{ mode: "workflow" }} />);
-    expect(screen.getByText("68%").parentElement?.className).toMatch(/^_cardNote_\w+$/);
+    const note = screen.getByText("68%").parentElement as HTMLElement;
+    expect(note.className).toMatch(/^_cardNote_\w+$/);
+    // Whole markup, so an inline amber style on the note or its figure fails too.
+    expect(note.outerHTML).toBe(`<p class="${note.className}" data-note="gate-share"><span>68%</span> of elapsed time is spent here</p>`);
     expect(columnCss).not.toMatch(/--ward-color-(amber|warning)/);
   });
 
