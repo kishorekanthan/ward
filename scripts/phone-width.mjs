@@ -1,4 +1,4 @@
-/* Renders the phone-width stories at 375px in a real browser and reads their geometry, because jsdom has no layout.
+/* Renders the phone-width stories at 375px (or a golden's own width) in a real browser and reads their geometry, because jsdom has no layout.
    Each probe returns the facts src/goldens/phone-width.json records; check.mjs compares them. */
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -124,6 +124,27 @@ async function probeLongKicker() {
   return { ...facts, longNoteInView: note.getBoundingClientRect().right <= innerWidth + 0.5, pageScrollsSideways: document.documentElement.scrollWidth > innerWidth };
 }
 
+// A long note beside a long kicker: its shortest wrapped line (the last excepted) is counted in characters, per #107.
+function probeLongKickerLongNote() {
+  const note = document.querySelector('#storybook-root [data-kind="key"] h2').nextElementSibling;
+  const text = note.firstChild;
+  const range = document.createRange();
+  const perLine = new Map();
+  for (let i = 0; i < text.length; i++) {
+    range.setStart(text, i);
+    range.setEnd(text, i + 1);
+    const top = Math.round(range.getBoundingClientRect().top);
+    perLine.set(top, (perLine.get(top) ?? 0) + 1);
+  }
+  const counts = [...perLine.values()];
+  const band = note.parentElement.getBoundingClientRect();
+  return {
+    noteCharsPerLineAtLeast: Math.min(...counts.slice(0, -1)),
+    noteInBand: note.getBoundingClientRect().right <= band.right - Number.parseFloat(getComputedStyle(note.parentElement).paddingRight) + 0.5,
+    pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+  };
+}
+
 // Scrolled up, the console foot carries both buttons beside the idle copy; all stay whole and in view at 375px.
 async function probeConsoleFoot() {
   document.querySelector("#storybook-root ol").scrollTop = 0;
@@ -205,14 +226,15 @@ function probeConsole() {
 }
 
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, kicker: probeKicker, shortKicker: probeKicker, longKicker: probeLongKicker, console: probeConsole, consoleFoot: probeConsoleFoot };
+const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot };
 
 async function measure(page, base, key) {
-  const { story, label, longLabel } = golden[key];
+  const { story, label, longLabel, width = golden.viewport.width } = golden[key];
+  await page.setViewportSize({ ...golden.viewport, width });
   await page.goto(`${base}/iframe.html?viewMode=story&id=${story}`, { waitUntil: "load", timeout: 30000 });
   await page.waitForFunction(() => document.getElementById("storybook-root")?.children.length > 0, null, { timeout: 8000 });
   await page.evaluate(() => document.fonts.ready);
-  return { story, ...(await page.evaluate(PROBES[key], [label, longLabel])) };
+  return { story, width, ...(await page.evaluate(PROBES[key], [label, longLabel])) };
 }
 
 // Returns every fact that differs from the golden, as "key.fact: got X, want Y".
@@ -229,7 +251,8 @@ export async function sweepPhoneWidth() {
     for (const key of Object.keys(PROBES)) {
       const got = await measure(page, base, key);
       for (const [fact, want] of Object.entries(golden[key])) {
-        if (got[fact] !== want) diffs.push(`${key}.${fact}: got ${JSON.stringify(got[fact])}, want ${JSON.stringify(want)}`);
+        const met = fact.endsWith("AtLeast") ? got[fact] >= want : got[fact] === want;
+        if (!met) diffs.push(`${key}.${fact}: got ${JSON.stringify(got[fact])}, want ${JSON.stringify(want)}`);
       }
     }
   } finally {
