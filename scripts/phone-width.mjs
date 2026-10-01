@@ -80,6 +80,31 @@ function probeStatStrip([text, longText]) {
   return { label, labelLines, labelClipped, longLabel, longLabelLines, longLabelClipped, pageScrollsSideways };
 }
 
+// Six stage columns at 375px: the grid scrolls, not the page; each lone fade, and both mid-scroll, mask their edges.
+async function probeStageGrid() {
+  const grid = document.querySelector("#storybook-root [data-ward-stage-grid]");
+  const settle = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const loneFade = (on, off) => grid.hasAttribute(on) && !grid.hasAttribute(off) && /gradient/.test(getComputedStyle(grid).maskImage);
+  grid.scrollLeft = 0;
+  await settle();
+  const endFadeMaskedAtStart = loneFade("data-fade-end", "data-fade-start");
+  grid.scrollLeft = (grid.scrollWidth - grid.clientWidth) / 2;
+  await settle();
+  const clearStops = getComputedStyle(grid).maskImage.match(/transparent|rgba\(0, 0, 0, 0\)/g) ?? [];
+  const bothFadesMaskedMidScroll = grid.hasAttribute("data-fade-start") && grid.hasAttribute("data-fade-end") && clearStops.length === 2;
+  grid.scrollLeft = grid.scrollWidth;
+  await settle();
+  const startFadeMaskedAtEnd = loneFade("data-fade-start", "data-fade-end");
+  return {
+    columnWidth: Math.round(grid.firstElementChild.getBoundingClientRect().width),
+    gridScrolls: grid.scrollWidth > grid.clientWidth && getComputedStyle(grid).overflowX === "auto",
+    endFadeMaskedAtStart,
+    bothFadesMaskedMidScroll,
+    startFadeMaskedAtEnd,
+    pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+  };
+}
+
 // Presses the Settings toggle, then reads where the tools row lands.
 async function probeTopBar() {
   const header = document.querySelector("#storybook-root header");
@@ -100,7 +125,7 @@ async function probeTopBar() {
 }
 
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, statStrip: probeStatStrip, topBar: probeTopBar };
+const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar };
 
 async function measure(page, base, key) {
   const { story, label, longLabel } = golden[key];
