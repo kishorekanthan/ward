@@ -2,8 +2,9 @@ import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
-import { contrast, describeFailures, sweepRenderedContrast } from "./contrast.mjs";
+import { belowFloor, contrast, derivedDarkPairs, describeFailures, sweepRenderedContrast } from "./contrast.mjs";
 import { buildFresh, distDrift } from "./dist-fresh.mjs";
+import { sweepConsoleTheme } from "./console-theme.mjs";
 import { sweepPhoneWidth } from "./phone-width.mjs";
 import { workflowFindings } from "./workflows.mjs";
 import { FAMILY_OF, breakpoints, buildCss, buildTokens, containerBreakpoints, declaredFaces, readTokens } from "./gen-css.mjs";
@@ -69,6 +70,8 @@ for (const [theme, colors, chips] of [
   pairs.push([colors.text, colors.bg, `${theme} text/bg`], [colors.text, colors.surface, `${theme} text/surface`]);
   pairs.push([colors.muted, colors.bg, `${theme} muted/bg`], [colors.muted, colors.surface, `${theme} muted/surface`]);
   pairs.push([colors.blue, colors.surface, `${theme} blue/surface`], [colors.warnInk, colors.warnSurface, `${theme} warnInk/warnSurface`]);
+  // Warning ink sits on surface; a destructive Btn sets surface ink on a destructive fill.
+  pairs.push([colors.warning, colors.surface, `${theme} warning/surface`], [colors.surface, colors.destructive, `${theme} surface/destructive`]);
   // Red is set as text for blocked reasons on cards and over-cap notes on columns.
   pairs.push([colors.red, colors.surface, `${theme} red/surface`], [colors.red, colors.surface2, `${theme} red/surface2`]);
   // Faint labels sit on every light ground and on a selected or warned row; the console has its own dim ink.
@@ -89,6 +92,11 @@ for (const s of tokens.stream.steps) {
 const low = pairs.filter(([fg, bg]) => !fg.startsWith("rgba") && contrast(fg, bg) < NEED);
 if (low.length === 0) pass("token contrast", `${pairs.length} pairs >= ${NEED}:1, both themes, computed from tokens.json`);
 else fail("token contrast", low.map((p) => `${p[2]} ${p[0]} on ${p[1]} = ${contrast(p[0], p[1]).toFixed(2)}`).join("; "));
+
+// 2a. the derived dark ramp is held to AA before dark ships
+const derivedLow = belowFloor(derivedDarkPairs(tokens.dark));
+if (derivedLow.length === 0) pass("derived dark contrast", `${derivedDarkPairs(tokens.dark).length} pairs: ink2, surface3 at 4.5:1, line3 at 3:1`);
+else fail("derived dark contrast", derivedLow.join("; "));
 
 // 2b. chart series are graphics, so they need the 3:1 non-text floor on both grounds in each theme
 const GRAPHIC = 3;
@@ -215,6 +223,11 @@ else fail("rendered contrast", describeFailures(rendered.failures));
 const phoneDiffs = await sweepPhoneWidth();
 if (phoneDiffs.length === 0) pass("phone width", "Tabs, PageHeader chips, StatStrip labels, StageGrid, the top-bar tools, the section kicker and the activity console match the 375px golden");
 else fail("phone width", phoneDiffs.join("; "));
+
+// 8. console theme: the light theme gets a light panel, dark keeps the comp's block, against src/goldens/console-theme.json
+const consoleDiffs = await sweepConsoleTheme();
+if (consoleDiffs.length === 0) pass("console theme", "light panel and dark block, ground, rail-card inset and inks match the golden");
+else fail("console theme", consoleDiffs.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);
 process.exitCode = failures === 0 ? 0 : 1;

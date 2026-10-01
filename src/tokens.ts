@@ -29,6 +29,8 @@ export const v = {
     orange: 'var(--ward-color-orange)',
     amber: 'var(--ward-color-amber)',
     red: 'var(--ward-color-red)',
+    warning: 'var(--ward-color-warning)',
+    destructive: 'var(--ward-color-destructive)',
     warnInk: 'var(--ward-color-warnInk)',
     warnSurface: 'var(--ward-color-warnSurface)',
     warnLine: 'var(--ward-color-warnLine)',

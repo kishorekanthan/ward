@@ -1,8 +1,9 @@
-/* Provenance: mirrors design/Trellis Board Item.dc.html — `.cons` / `.cl`; the console surface is one value in both themes, so its inks are too. */
+/* Provenance: mirrors design/Trellis Board Item.dc.html — `.cons` / `.cl` in dark; the light panel, radius and rail-card inset are Ward #67. */
 .root {
   display: grid;
   gap: var(--ward-gap-console);
-  padding: var(--ward-pad-console);
+  padding: var(--ward-pad-railBlock);
+  border-radius: var(--ward-radius);
   background: var(--ward-color-console);
 }
 

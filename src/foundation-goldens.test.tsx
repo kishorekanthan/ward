@@ -17,11 +17,15 @@ describe("Ward foundation goldens", () => {
   });
 
   // The comp's faint greys fail 4.5:1 on surface; these darkened pairs are the reviewed replacements,
-  // and consoleFaint is the separate ink the dark console panel needs in both themes.
+  // and consoleFaint is the separate ink the dark console panel needs; the light panel reuses faint (Ward #67).
   it("keeps the contrast-corrected faint inks rather than the comp's lighter greys", () => {
     expect([actual.color.faint, actual.dark.faint]).toEqual(["#616C7E", "#8491A3"]);
-    expect([actual.color.consoleFaint, actual.dark.consoleFaint]).toEqual(["#8B97AB", "#8B97AB"]);
-    expect(actual.color.faint).not.toBe(actual.color.consoleFaint);
+    expect([actual.color.consoleFaint, actual.dark.consoleFaint]).toEqual(["#616C7E", "#8B97AB"]);
+    expect(actual.dark.faint).not.toBe(actual.dark.consoleFaint);
+  });
+
+  it("keeps the comp's dark console block in dark and a light panel in light", () => {
+    expect([actual.dark.console, actual.color.console]).toEqual(["#0B1631", "#EDF0F4"]);
   });
 
   it("generates colHead and chip at 11px, the smallest readable size for small type", () => {

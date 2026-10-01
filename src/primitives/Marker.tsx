@@ -19,7 +19,7 @@ const KIND_VAR: Record<MarkerKind, string> = {
   finding: "var(--ward-color-orange)",
   action: "var(--ward-color-text)",
   hollow: "var(--ward-color-faint)",
-  attention: "var(--ward-color-amber)",
+  attention: "var(--ward-color-warning)",
   tick: "var(--ward-color-green)",
   box: "var(--ward-color-line2)",
 };
