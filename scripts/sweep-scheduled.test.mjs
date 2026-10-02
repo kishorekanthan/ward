@@ -58,7 +58,7 @@ describe("sweep-scheduled CLI", () => {
   const run = (workflow, runs) => {
     writeFileSync(join(dir, "workflow.json"), JSON.stringify(workflow));
     writeFileSync(join(dir, "runs.json"), JSON.stringify(runs));
-    writeFileSync(join(dir, "gh"), `#!/bin/sh\ncase "$2" in *runs*event=schedule*) cat "${dir}/runs.json";; *runs*) exit 1;; *) cat "${dir}/workflow.json";; esac\n`);
+    writeFileSync(join(dir, "gh"), `#!/bin/sh\ncase "$2" in */workflows/tag-sweep.yml/runs?event=schedule*) cat "${dir}/runs.json";; */workflows/tag-sweep.yml) cat "${dir}/workflow.json";; *) exit 1;; esac\n`);
     chmodSync(join(dir, "gh"), 0o755);
     return spawnSync("node", [SCRIPT], { env: { ...process.env, PATH: `${dir}:${process.env.PATH}` }, encoding: "utf8" });
   };
@@ -66,6 +66,12 @@ describe("sweep-scheduled CLI", () => {
   it("exits 0 for an active workflow with a fresh run", () => {
     const fresh = new Date(Date.now() - DAY).toISOString();
     expect(run(ACTIVE, ranAt(fresh)).status).toBe(0);
+  });
+
+  it("exits 1 naming the age when the last scheduled run is stale", () => {
+    const stale = new Date(Date.now() - 8.5 * DAY).toISOString();
+    const result = run(ACTIVE, ranAt(stale));
+    expect([result.status, result.stderr]).toEqual([1, "tag sweep last ran on schedule 8 days ago (limit 7)\n"]);
   });
 
   it("exits 1 naming the cause when the workflow is disabled", () => {
