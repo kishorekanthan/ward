@@ -1,11 +1,11 @@
 // @vitest-environment node
 import { execFileSync, spawnSync } from "node:child_process";
-import { appendFileSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { devNull, tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "yaml";
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 const SCRIPT = fileURLToPath(new URL("./verify-tags.mjs", import.meta.url));
 const ROOT = join(dirname(SCRIPT), "..");
@@ -21,6 +21,12 @@ const ENV = {
 };
 
 let keys;
+const roots = [];
+const tempRoot = (name) => {
+  const root = mkdtempSync(join(tmpdir(), name));
+  roots.push(root);
+  return root;
+};
 const git = (args, cwd) => execFileSync("git", args, { cwd, env: ENV, encoding: "utf8", stdio: "pipe" });
 const sweep = (cwd) => spawnSync("node", [SCRIPT], { cwd, env: ENV, encoding: "utf8" });
 
@@ -36,7 +42,7 @@ const signedTag = (cwd, name, key) => git(["-c", "gpg.format=ssh", "-c", `user.s
 // main lists the owner's key and grandfathers v0.0.0 at its commit and v0.0.5 at a sha it never had;
 // the checked-out branch adds a second key, which the sweep must not trust.
 function repo(name, owner, intruder) {
-  const root = mkdtempSync(join(tmpdir(), `ward-verify-tags-${name}-`));
+  const root = tempRoot(`ward-verify-tags-${name}-`);
   const work = join(root, "work");
   mkdirSync(join(work, ".github"), { recursive: true });
   git(["init", "--quiet", "--bare", "-b", "main", join(root, "origin.git")], root);
@@ -62,7 +68,7 @@ let clean;
 let noRelease;
 
 beforeAll(() => {
-  keys = mkdtempSync(join(tmpdir(), "ward-verify-tags-keys-"));
+  keys = tempRoot("ward-verify-tags-keys-");
   const owner = keypair("owner");
   const intruder = keypair("intruder");
   mixed = repo("mixed", owner, intruder);
@@ -80,6 +86,10 @@ beforeAll(() => {
   git(["tag", "-d", "v0.0.0"], noRelease);
   signedTag(noRelease, "signature-test-good", owner);
 }, 30_000);
+
+afterAll(() => {
+  for (const root of roots) rmSync(root, { recursive: true });
+});
 
 describe("verify-tags", () => {
   it("names every v* and signature-test-* tag that fails, and nothing else", () => {
