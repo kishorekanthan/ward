@@ -169,6 +169,16 @@ export const PhoneWidthLoneLink = {
   parameters: { viewport: { defaultViewport: "mobile1" } },
 };
 
+// A lone link too long for one line wraps inside the strip rather than overflowing it (#158).
+export const PhoneWidthLongLoneLink = {
+  args: {
+    crumb: [{ label: "data-eng", href: "/streams/data-eng" }, { label: "New request" }],
+    title: "New request",
+    actions: [<a key="advisor" className="ward-rowlink" style={linkStyle} href="#advisor">Ask the advisor to shape this request before you write it yourself</a>],
+  },
+  parameters: { viewport: { defaultViewport: "mobile1" } },
+};
+
 // Two links still fold behind ··· at 375px.
 export const PhoneWidthTwoLinks = {
   args: {
