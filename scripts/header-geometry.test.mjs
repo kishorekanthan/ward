@@ -24,6 +24,11 @@ describe("geometryDiffs", () => {
     expect(geometryDiffs({ "kicker@320": [] }, golden)).toEqual(["kicker@320 copy 0: missing, want root", "kicker@320 copy 0: missing, want 0:h2"]);
   });
 
+  it("fails a themed copy the golden lacks", () => {
+    const twice = { "kicker@320": [golden["kicker@320"][0], golden["kicker@320"][0]] };
+    expect(geometryDiffs(twice, golden)).toEqual(["kicker@320 copy 1: 2 rect(s) not in the golden"]);
+  });
+
   it("fails a child that changed element at the same place, and a story the golden lacks", () => {
     const swapped = { "kicker@320": [[rect("root", 0, 0, 248, 64), rect("0:span", 18, 13, 78, 19.5)]] };
     expect(geometryDiffs(swapped, golden)).toEqual(["kicker@320 copy 0: got 0:span, want 0:h2"]);
