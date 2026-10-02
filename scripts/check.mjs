@@ -10,7 +10,7 @@ import { sweepFocusTargets } from "./focus-targets.mjs";
 import { sweepBoardHeight } from "./board-height.mjs";
 import { sweepHeaderGeometry } from "./header-geometry.mjs";
 import { workflowFindings } from "./workflows.mjs";
-import { NAME, OLD_NAME, oldNameFiles } from "./old-name.mjs";
+import { NAME, OLD_NAME, OLD_TARBALL, oldNameFiles } from "./old-name.mjs";
 import { FAMILY_OF, breakpoints, buildCss, buildTokens, containerBreakpoints, declaredFaces, readTokens } from "./gen-css.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -67,8 +67,8 @@ else fail("workflow hardening", workflowProblems.join("; "));
 // 1d. no file outside tickets/ names the package's pre-#60 name (#137)
 try {
   const stale = oldNameFiles();
-  if (stale.length === 0) pass("package name", `no file outside tickets/ names ${OLD_NAME}`);
-  else fail("package name", `${stale.join(", ")} still name ${OLD_NAME}; Ward is ${NAME}`);
+  if (stale.length === 0) pass("package name", `no file outside tickets/ names ${OLD_NAME} or ${OLD_TARBALL}`);
+  else fail("package name", `${stale.join(", ")} still name ${OLD_NAME} or ${OLD_TARBALL}; Ward is ${NAME}`);
 } catch (e) {
   fail("package name", e.message);
 }
