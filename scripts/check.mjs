@@ -8,6 +8,7 @@ import { sweepConsoleTheme } from "./console-theme.mjs";
 import { sweepPhoneWidth } from "./phone-width.mjs";
 import { sweepFocusTargets } from "./focus-targets.mjs";
 import { sweepBoardHeight } from "./board-height.mjs";
+import { sweepHeaderGeometry } from "./header-geometry.mjs";
 import { workflowFindings } from "./workflows.mjs";
 import { NAME, OLD_NAME, OLD_TARBALL, oldNameFiles } from "./old-name.mjs";
 import { FAMILY_OF, breakpoints, buildCss, buildTokens, containerBreakpoints, declaredFaces, readTokens } from "./gen-css.mjs";
@@ -250,6 +251,11 @@ else fail("focus and targets", focusDiffs.join("; "));
 const boardDiffs = await sweepBoardHeight();
 if (boardDiffs.length === 0) pass("board height", "at 1024x768 and 375x667 the page never scrolls, the long lane does, and the fade and lane count show only on overflow");
 else fail("board height", boardDiffs.join("; "));
+
+// 11. header geometry: every RecordSection header rect at 320, 375 and 1280px within 0.5px of src/goldens/header-geometry.json (#143)
+const headerDiffs = await sweepHeaderGeometry();
+if (headerDiffs.length === 0) pass("header geometry", "7 RecordSection stories, both themes, root and each child at 320, 375 and 1280px match the golden within 0.5px");
+else fail("header geometry", headerDiffs.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);
 process.exitCode = failures === 0 ? 0 : 1;
