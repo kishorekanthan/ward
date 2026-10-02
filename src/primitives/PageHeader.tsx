@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode, type RefObject } from "react";
+import { isValidElement, useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode, type RefObject } from "react";
 import type { LiveConnection } from "../live/types";
 import { Btn } from "./Btn";
 import { Chip, type ChipProps } from "./Chip";
@@ -115,7 +115,16 @@ function canObserve(row: HTMLDivElement | null): row is HTMLDivElement {
   return row !== null && typeof ResizeObserver !== "undefined";
 }
 
-function useActionOverflow(actions: ReactNode[]) {
+function isLink(action: ReactNode): boolean {
+  return isValidElement<{ href?: unknown }>(action) && (action.type === "a" || typeof action.props.href === "string");
+}
+
+// A menu holding one link costs a tap and hides its name, so a lone link never folds.
+function isLoneLink(actions: ReactNode[], more: ReactNode[]): boolean {
+  return more.length === 0 && actions.length === 1 && isLink(actions[0]);
+}
+
+function useActionOverflow(actions: ReactNode[], keepShown: boolean) {
   const rowRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const actionsRef = useRef<HTMLDivElement>(null);
@@ -130,7 +139,7 @@ function useActionOverflow(actions: ReactNode[]) {
     fit();
     return () => ro.disconnect();
   }, [actions]);
-  return { rowRef, headingRef, actionsRef, measureRef, collapsed };
+  return { rowRef, headingRef, actionsRef, measureRef, collapsed: collapsed && !keepShown };
 }
 
 // Off-screen copy of the strip, ··· included, that decides whether the actions still fit.
@@ -150,7 +159,7 @@ function Connection({ connection }: Pick<PageHeaderProps, "connection">) {
 }
 
 export function PageHeader({ crumb, chips, title, consequence, consequenceHint, actions = [], more = [], connection, onOverflow, density = "page" }: PageHeaderProps) {
-  const { rowRef, headingRef, actionsRef, measureRef, collapsed } = useActionOverflow(actions);
+  const { rowRef, headingRef, actionsRef, measureRef, collapsed } = useActionOverflow(actions, isLoneLink(actions, more));
   const hasMore = more.length > 0;
   const { disclosure, close } = useDisclosure(collapsed || hasMore, actionsRef);
   const panel = panelItems(more, actions, collapsed, onOverflow);

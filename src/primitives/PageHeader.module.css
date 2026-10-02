@@ -74,6 +74,13 @@
   display: inline-flex;
 }
 
+/* A header link answers across the 24px target, like a Btn beside it. */
+.action > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--ward-height-target);
+}
+
 /* Collapsed actions stack under the title row; no comp block exists for this state. */
 .overflowPanel {
   display: flex;
