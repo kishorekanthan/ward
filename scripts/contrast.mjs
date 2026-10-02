@@ -50,6 +50,12 @@ export function derivedDarkPairs(dark) {
   return [...text, ...onSurface3, [dark.line3, dark.surface, "dark line3/surface", 3]];
 }
 
+// An edged control's boundary identifies it, so WCAG 1.4.11 holds color.edge to 3:1 on every ground, both themes (Ward #146).
+export function edgePairs(tokens) {
+  const themes = [["light", tokens.color], ["dark", tokens.dark]];
+  return themes.flatMap(([theme, c]) => ["bg", "surface", "surface2"].map((ground) => [c.edge, c[ground], `${theme} edge/${ground}`, 3]));
+}
+
 export function belowFloor(pairs) {
   return pairs.filter(([fg, bg, , need]) => contrast(fg, bg) < need).map(([fg, bg, label, need]) => `${label} ${fg} on ${bg} = ${contrast(fg, bg).toFixed(2)} (needs ${need}:1)`);
 }

@@ -75,6 +75,15 @@
       "hit24": true
     },
     {
+      "name": "···",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "edged": true,
+      "tall": true,
+      "hit24": true
+    },
+    {
       "name": "Configure board",
       "focusVisible": true,
       "wardRing": true,
@@ -194,6 +203,16 @@
       "focusVisible": true,
       "wardRing": true,
       "ring": true,
+      "tall": false,
+      "hit24": true,
+      "wide24": true
+    },
+    {
+      "name": "Hidden as a column",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "edged": false,
       "tall": false,
       "hit24": true,
       "wide24": true

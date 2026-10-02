@@ -19,6 +19,7 @@ export const v = {
     surface2: 'var(--ward-color-surface2)',
     line: 'var(--ward-color-line)',
     line2: 'var(--ward-color-line2)',
+    edge: 'var(--ward-color-edge)',
     text: 'var(--ward-color-text)',
     muted: 'var(--ward-color-muted)',
     faint: 'var(--ward-color-faint)',

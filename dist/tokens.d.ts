@@ -16,6 +16,7 @@ export declare const v: {
         readonly surface2: "var(--ward-color-surface2)";
         readonly line: "var(--ward-color-line)";
         readonly line2: "var(--ward-color-line2)";
+        readonly edge: "var(--ward-color-edge)";
         readonly text: "var(--ward-color-text)";
         readonly muted: "var(--ward-color-muted)";
         readonly faint: "var(--ward-color-faint)";

@@ -17,6 +17,7 @@ describe("small links take the 24px target", () => {
       ["→ FL-229", true],
       ["intake-advisor", true],
       ["+ Mount agent", false],
+      ["···", false],
       ["Configure board", true],
       ["Skip to content", true],
       ["Board", true],
@@ -32,6 +33,7 @@ describe("small links take the 24px target", () => {
       ["Audit", false],
       // The ConfigRow handle and its Switch centre their own 24px hit box; the probe reads it both ways.
       ["⠿", false],
+      ["", false],
       ["", false],
     ]);
   });

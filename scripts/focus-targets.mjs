@@ -77,22 +77,17 @@ function bands({ x, y, width, height, reach }) {
   ];
 }
 
-// Runs in the page, focus gone: whether the last focused control draws an edge (border or inset ring) no fainter on its ground than Ward's hairline.
+// Runs in the page, focus gone: whether the last focused control draws an edge (border or inset ring) at 3:1 on its ground (WCAG 1.4.11).
 function restEdge() {
   const clear = (colour) => /^rgba\(.*, 0\)$/.test(colour);
   const groundOf = (at) => (at.parentElement && clear(getComputedStyle(at).backgroundColor) ? groundOf(at.parentElement) : getComputedStyle(at).backgroundColor);
   const style = getComputedStyle(window.__wardFocused);
   const ground = groundOf(window.__wardFocused);
-  const hairline = document.createElement("i");
-  hairline.style.color = "var(--ward-color-line)";
-  window.__wardFocused.after(hairline);
-  const line = getComputedStyle(hairline).color;
-  hairline.remove();
   const rgb = (colour) => colour.match(/[\d.]+/g).map(Number);
   const over = (colour) => { const [r, g, b, a = 1] = rgb(colour); return [r, g, b].map((c, i) => a * c + (1 - a) * rgb(ground)[i]); };
   const luminance = (colour) => over(colour).map((c) => (c / 255 <= 0.04045 ? c / 255 / 12.92 : ((c / 255 + 0.055) / 1.055) ** 2.4)).reduce((sum, c, i) => sum + c * [0.2126, 0.7152, 0.0722][i], 0);
   const contrast = (colour) => { const [hi, lo] = [luminance(colour), luminance(ground)].sort((x, y) => y - x); return (hi + 0.05) / (lo + 0.05); };
-  const shows = (colour) => !clear(colour) && colour !== ground && contrast(colour) >= contrast(line);
+  const shows = (colour) => !clear(colour) && colour !== ground && contrast(colour) >= 3;
   const side = (name) => Number.parseFloat(style[`border${name}Width`]) >= 1 && shows(style[`border${name}Color`]);
   const inset = style.boxShadow.match(/^(rgba?\([^)]*\)) 0px 0px 0px ([\d.]+)px inset$/);
   return ["Top", "Right", "Bottom", "Left"].every(side) || Boolean(inset && Number.parseFloat(inset[2]) >= 1 && shows(inset[1]));

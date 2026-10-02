@@ -10,6 +10,8 @@ import { TopBar } from "../primitives/TopBar";
 import { StatStrip } from "../primitives/StatStrip";
 import { TabLinks } from "../primitives/TabLinks";
 import { ConfigRow } from "../composites/board/ConfigRow";
+import { Btn } from "../primitives/Btn";
+import { Switch } from "../primitives/Switch";
 
 // Every small link and small control Ward draws, in tab order; scripts/focus-targets.mjs tabs through them against src/goldens/focus-targets.json.
 const session: Session = {
@@ -76,6 +78,9 @@ export const Links = {
       </table>
       <AgentCard agent={agent} href="/studio/data-eng/intake-advisor" />
       <StageColumn stage={{ index: 2, name: "Build", kind: "agent", count: 0 }} presentation={{ mode: "workflow" }} onMount={() => {}} />
+      <div>
+        <Btn variant="overflow" onClick={() => {}}>···</Btn>
+      </div>
       <BoardFootnote configureHref="#/studio/streams/ledger" />
       <TopBar destinations={destinations} active="board" />
       <StatStrip cells={[{ value: "14", label: "In flight", href: "/board" }, { value: "0", label: "Failed runs 24h", href: "/runs" }]} />
@@ -85,6 +90,8 @@ export const Links = {
       <Sidebar brand="Studio" nav={[]} agentsHeading="Agents" agents={[]} shared={shared} />
       <TabLinks links={sections} active="gates" label="Studio sections" />
       <ConfigRow stage={{ id: "review", name: "Review", gate: false, terminal: false, agentsMounted: 0 }} config={{ label: "Review", shown: true }} onChange={() => {}} />
+      {/* Off, its line2 edge is below 3:1, so the probe's edged fact has a failing case (Ward #146). */}
+      <Switch label="Hidden as a column" labelHidden checked={false} onChange={() => {}} />
     </div>
   ),
 };
