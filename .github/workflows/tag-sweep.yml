@@ -1,0 +1,25 @@
+name: tag sweep
+
+# A tag on a commit that lacks or edits tag-signature.yml gets no red run, so main re-verifies every tag daily (#135).
+# signature-test-* pushes run it from the tagged commit, for testing; delete those tags after (#99).
+on:
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+  push:
+    tags: ["signature-test-*"]
+
+permissions:
+  contents: read
+
+jobs:
+  verify-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+      # checkout writes a pushed tag as a lightweight ref, so fetch the real tag objects.
+      - run: git fetch --force --no-tags origin "+refs/tags/*:refs/tags/*"
+      - name: git verify-tag on every v* and signature-test-* tag against main's allowed signers
+        run: node scripts/verify-tags.mjs
