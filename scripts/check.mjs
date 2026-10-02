@@ -65,7 +65,7 @@ else fail("workflow hardening", workflowProblems.join("; "));
 
 // 1d. no file outside tickets/ names the package's pre-#60 name (#137)
 try {
-  const stale = oldNameFiles(root);
+  const stale = oldNameFiles();
   if (stale.length === 0) pass("package name", `no file outside tickets/ names ${OLD_NAME}`);
   else fail("package name", `${stale.join(", ")} still name ${OLD_NAME}; Ward is ${NAME}`);
 } catch (e) {

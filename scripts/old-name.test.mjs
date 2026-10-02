@@ -3,8 +3,12 @@ import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
-import { OLD_NAME, oldNameFiles } from "./old-name.mjs";
+import { REPO_ROOT, oldNameFiles } from "./old-name.mjs";
+
+// Written out here, not imported, so a wrong name in old-name.mjs fails; split so this file passes the scan.
+const OLD_NAME = "@trellis" + "/ward";
 
 const roots = [];
 afterEach(() => roots.splice(0).forEach((root) => rmSync(root, { recursive: true })));
@@ -48,6 +52,12 @@ describe("oldNameFiles", () => {
   it("names a folder that only starts with tickets", () => {
     const root = repo({ "tickets-old/x.md": OLD_NAME });
     expect(oldNameFiles(root)).toEqual(["tickets-old/x.md"]);
+  });
+
+  it("scans this repository by default, where only tickets/ names the old package", () => {
+    const top = execFileSync("git", ["rev-parse", "--show-toplevel"], { cwd: dirname(fileURLToPath(import.meta.url)), encoding: "utf8" }).trim();
+    expect(realpathSync(REPO_ROOT)).toBe(realpathSync(top));
+    expect(oldNameFiles()).toEqual([]);
   });
 
   it("throws rather than passing when the folder is not a git repository", () => {
