@@ -179,6 +179,24 @@
       "ring": true,
       "tall": true,
       "hit24": true
+    },
+    {
+      "name": "\u283f",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": false,
+      "hit24": true,
+      "wide24": true
+    },
+    {
+      "name": "Shown as a column",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "tall": false,
+      "hit24": true,
+      "wide24": true
     }
   ],
   "rowLinks": [

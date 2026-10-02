@@ -16,6 +16,17 @@
   transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
 }
 
+/* A 24px hit box centred on the track; the track itself keeps its comp size. */
+.track::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, var(--ward-height-target));
+  height: max(100%, var(--ward-height-target));
+  transform: translate(-50%, -50%);
+}
+
 .track[data-on="true"] {
   background: var(--ward-color-blue);
   box-shadow: none;
@@ -62,7 +73,12 @@
 
 .label {
   font: var(--ward-type-body);
+  cursor: pointer;
   color: var(--ward-color-text);
+}
+
+.track:disabled + .label {
+  cursor: default;
 }
 
 .lockedNote {

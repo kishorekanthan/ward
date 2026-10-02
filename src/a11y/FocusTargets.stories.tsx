@@ -9,8 +9,9 @@ import { Sidebar } from "../layout/Sidebar";
 import { TopBar } from "../primitives/TopBar";
 import { StatStrip } from "../primitives/StatStrip";
 import { TabLinks } from "../primitives/TabLinks";
+import { ConfigRow } from "../composites/board/ConfigRow";
 
-// Every small link Ward draws, in tab order; scripts/focus-targets.mjs tabs through them against src/goldens/focus-targets.json.
+// Every small link and small control Ward draws, in tab order; scripts/focus-targets.mjs tabs through them against src/goldens/focus-targets.json.
 const session: Session = {
   title: "Late-arriving shipments view",
   turns: 6,
@@ -83,6 +84,7 @@ export const Links = {
       </div>
       <Sidebar brand="Studio" nav={[]} agentsHeading="Agents" agents={[]} shared={shared} />
       <TabLinks links={sections} active="gates" label="Studio sections" />
+      <ConfigRow stage={{ id: "review", name: "Review", gate: false, terminal: false, agentsMounted: 0 }} config={{ label: "Review", shown: true }} onChange={() => {}} />
     </div>
   ),
 };
