@@ -20,16 +20,24 @@ export function withMainSigners(cwd, fn) {
   }
 }
 
+// The name in the tag object's own header: a signed tag pushed again under another ref keeps its first name (#152).
+export function headerName(tag, cwd) {
+  return execFileSync("git", ["for-each-ref", "--format=%(tag)", `refs/tags/${tag}`], { cwd, encoding: "utf8" }).trim();
+}
+
 export function verifyTag(tag, cwd = process.cwd()) {
   withMainSigners(cwd, (signers) =>
     execFileSync("git", ["-c", `gpg.ssh.allowedSignersFile=${signers}`, "verify-tag", tag], { cwd, stdio: "inherit" }),
   );
+  const named = headerName(tag, cwd);
+  if (named !== tag) throw new Error(`tag ${tag} was signed as ${named}`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   try {
     verifyTag(process.argv[2]);
   } catch (error) {
+    if (!error.status) console.error(error.message);
     process.exit(error.status || 1);
   }
 }
