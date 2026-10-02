@@ -17,12 +17,14 @@ function labelClass(labelHidden?: boolean): string {
 
 export function Switch({ label, checked, onChange, disabled, locked, describedBy, labelHidden }: SwitchProps) {
   const id = useId();
+  const switchId = `${id}switch`;
   const on = locked ? true : checked;
   const off = disabled || locked;
   return (
     <span className={`${s.root} ward-switchrow`}>
       <button
         type="button"
+        id={switchId}
         role="switch"
         aria-checked={on}
         aria-label={label}
@@ -36,10 +38,10 @@ export function Switch({ label, checked, onChange, disabled, locked, describedBy
       >
         <span className={s.thumb} />
       </button>
-      <span id={id} className={labelClass(labelHidden)}>
+      <label id={id} htmlFor={switchId} className={labelClass(labelHidden)}>
         {label}
         {locked && <span className={s.lockedNote}>always on</span>}
-      </span>
+      </label>
     </span>
   );
 }

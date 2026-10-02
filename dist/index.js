@@ -1946,7 +1946,7 @@ function nc({ cell: e, href: a }) {
 function Ca({ cells: e, divided: a = !1 }) {
   return ec(e), /* @__PURE__ */ n("dl", { className: `${Le.strip} ward-statstrip`, "data-divided": a || void 0, children: e.map((t) => t.href === void 0 ? /* @__PURE__ */ n(ac, { cell: t }, t.label) : /* @__PURE__ */ n(nc, { cell: t, href: t.href }, t.label)) });
 }
-const tc = "_root_xk7sv_2", rc = "_track_xk7sv_8", lc = "_thumb_xk7sv_35", oc = "_labelHidden_xk7sv_53", ic = "_label_xk7sv_53", sc = "_lockedNote_xk7sv_68", Be = {
+const tc = "_root_34y38_2", rc = "_track_34y38_8", lc = "_thumb_34y38_46", oc = "_labelHidden_34y38_64", ic = "_label_34y38_64", sc = "_lockedNote_34y38_84", Be = {
   root: tc,
   track: rc,
   thumb: lc,
@@ -1958,26 +1958,27 @@ function cc(e) {
   return e ? `${Be.label} ${Be.labelHidden}` : Be.label;
 }
 function De({ label: e, checked: a, onChange: t, disabled: r, locked: l, describedBy: i, labelHidden: s }) {
-  const c = $(), d = l ? !0 : a, u = r || l;
+  const c = $(), d = `${c}switch`, u = l ? !0 : a, h = r || l;
   return /* @__PURE__ */ o("span", { className: `${Be.root} ward-switchrow`, children: [
     /* @__PURE__ */ n(
       "button",
       {
         type: "button",
+        id: d,
         role: "switch",
-        "aria-checked": d,
+        "aria-checked": u,
         "aria-label": e,
         "aria-labelledby": c,
         "aria-describedby": i,
         className: `${Be.track} ward-switch`,
-        "data-on": d,
+        "data-on": u,
         "data-locked": l ? !0 : void 0,
-        disabled: u,
-        onClick: () => !u && (t == null ? void 0 : t(!d)),
+        disabled: h,
+        onClick: () => !h && (t == null ? void 0 : t(!u)),
         children: /* @__PURE__ */ n("span", { className: Be.thumb })
       }
     ),
-    /* @__PURE__ */ o("span", { id: c, className: cc(s), children: [
+    /* @__PURE__ */ o("label", { id: c, htmlFor: d, className: cc(s), children: [
       e,
       l && /* @__PURE__ */ n("span", { className: Be.lockedNote, children: "always on" })
     ] })
@@ -2527,7 +2528,7 @@ function Y$({
     ] })
   ] });
 }
-const hu = "_head_kabyh_11", mu = "_line_kabyh_12", wu = "_cHandle_kabyh_33", _u = "_cName_kabyh_38", fu = "_nameLine_kabyh_46", vu = "_cLabel_kabyh_53", bu = "_cCap_kabyh_58", gu = "_cShown_kabyh_63", pu = "_name_kabyh_46", Nu = "_noCap_kabyh_85", yu = "_state_kabyh_99", ku = "_handle_kabyh_104", $u = "_sub_kabyh_118", P = {
+const hu = "_head_10555_11", mu = "_line_10555_12", wu = "_cHandle_10555_33", _u = "_cName_10555_38", fu = "_nameLine_10555_46", vu = "_cLabel_10555_53", bu = "_cCap_10555_58", gu = "_cShown_10555_63", pu = "_name_10555_46", Nu = "_noCap_10555_85", yu = "_state_10555_99", ku = "_handle_10555_104", $u = "_sub_10555_130", P = {
   head: hu,
   line: mu,
   cHandle: wu,

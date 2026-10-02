@@ -1,5 +1,5 @@
 /* Tabs through the A11y/FocusTargets story in a real browser, in both themes, because jsdom has neither layout nor :focus-visible.
-   Each focused link must paint a ring on all four sides and answer clicks across a 24px band; whole-row links and linked stat cells must open from anywhere on their box. */
+   Each focused link or control must paint a ring on all four sides and answer clicks across a 24px band; whole-row links and linked stat cells must open from anywhere on their box. */
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -13,13 +13,14 @@ export const golden = JSON.parse(readFileSync(join(root, "src", "goldens", "focu
 function readFocused() {
   const el = document.activeElement;
   const copy = el?.closest("#storybook-root > div");
-  if (!copy || !el.matches("a, button")) return null;
+  if (!copy) return null;
+  if (!el.matches("a, button")) return { skip: true };
   el.scrollIntoView({ block: "center" });
   const r = el.getClientRects()[0];
   const style = getComputedStyle(el);
   const reach = (Number.parseFloat(style.outlineOffset) || 0) + (Number.parseFloat(style.outlineWidth) || 0);
   const x = r.left + r.width / 2;
-  const hits = (y) => document.elementFromPoint(x, y)?.closest("a, button") === el;
+  const hits = (y, at = x) => document.elementFromPoint(at, y)?.closest("a, button") === el;
   const mid = r.top + r.height / 2;
   // An underline drawn by the link itself and as wide as it; a static link would hand its ::after to an ancestor.
   const spansLink = (line, box) =>
@@ -40,11 +41,12 @@ function readFocused() {
   blue.remove();
   return {
     theme: copy.dataset.theme,
-    name: el.textContent.trim(),
+    name: el.textContent.trim() || el.getAttribute("aria-label"),
     focusVisible: el.matches(":focus-visible"),
     wardRing,
     height: r.height,
     hit24: hits(mid - 11.5) && hits(mid + 11.5),
+    wide24: hits(mid, x - 11.5) && hits(mid, x + 11.5),
     underlineGap: underlineGap(r),
     box: { x: r.left, y: r.top, width: r.width, height: r.height, reach },
   };
@@ -123,8 +125,9 @@ async function tabThrough(page) {
       if (seen.length) break;
       continue;
     }
+    if (got.skip) continue;
     const { ring, edged } = await ringAndRestEdge(page, got.box);
-    seen.push({ theme: got.theme, name: got.name, focusVisible: got.focusVisible, wardRing: got.wardRing, ring, edged, tall: got.height >= 24, hit24: got.hit24, underlineGap: got.underlineGap, height: got.height });
+    seen.push({ theme: got.theme, name: got.name, focusVisible: got.focusVisible, wardRing: got.wardRing, ring, edged, tall: got.height >= 24, hit24: got.hit24, wide24: got.wide24, underlineGap: got.underlineGap, height: got.height });
   }
   return seen;
 }

@@ -102,9 +102,21 @@
 }
 
 .handle {
+  position: relative;
   font: var(--ward-type-handleMark);
   color: var(--ward-color-muted);
   padding: 0;
+}
+
+/* A 24px hit box centred on the mark; the mark keeps its size. */
+.handle::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, var(--ward-height-target));
+  height: max(100%, var(--ward-height-target));
+  transform: translate(-50%, -50%);
 }
 
 .name {

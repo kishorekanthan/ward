@@ -30,6 +30,9 @@ describe("small links take the 24px target", () => {
       ["Streams", false],
       ["Gates", false],
       ["Audit", false],
+      // The ConfigRow handle and its Switch centre their own 24px hit box; the probe reads it both ways.
+      ["⠿", false],
+      ["", false],
     ]);
   });
 });
