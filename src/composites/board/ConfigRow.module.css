@@ -101,6 +101,10 @@
   color: var(--ward-color-muted);
 }
 
+.state:not([data-fixed]) {
+  cursor: pointer;
+}
+
 .handle {
   position: relative;
   font: var(--ward-type-handleMark);
