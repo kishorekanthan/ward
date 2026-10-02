@@ -1,4 +1,4 @@
-.PHONY: check install hooks pr-check rulesets rulesets-apply signing verify-tag
+.PHONY: check install hooks pr-check rulesets rulesets-apply signing verify-tag verify-tags
 
 install: hooks
 	npm ci
@@ -17,6 +17,10 @@ signing:
 verify-tag:
 	@test -n "$(TAG)" || { echo "usage: make verify-tag TAG=vX.Y.Z" >&2; exit 2; }
 	node scripts/verify-tag.mjs $(TAG)
+
+# Verifies every local v* and signature-test-* tag, as the daily tag sweep does (#135); fetch tags first.
+verify-tags:
+	node scripts/verify-tags.mjs
 
 # Refuses a PR whose title, body or commits carry AI attribution: make pr-check PR=N.
 pr-check:
