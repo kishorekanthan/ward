@@ -18,7 +18,8 @@ function readFocused() {
   el.scrollIntoView({ block: "center" });
   const r = el.getClientRects()[0];
   const style = getComputedStyle(el);
-  const reach = (Number.parseFloat(style.outlineOffset) || 0) + (Number.parseFloat(style.outlineWidth) || 0);
+  const px = (value) => Number.parseFloat(value) || 0;
+  const reach = px(style.outlineOffset) + px(style.outlineWidth);
   const x = r.left + r.width / 2;
   const hits = (y, at = x) => document.elementFromPoint(at, y)?.closest("a, button") === el;
   const mid = r.top + r.height / 2;
@@ -34,19 +35,23 @@ function readFocused() {
     return Math.round((box.bottom - Number.parseFloat(line.bottom) - Number.parseFloat(line.height) - text.getBoundingClientRect().bottom) * 10) / 10;
   };
   // The browser's own focus ring also paints, so the ring must be Ward's: solid, in the theme's blue.
-  const blue = document.createElement("span");
-  blue.style.color = "var(--ward-color-blue)";
-  copy.append(blue);
-  const wardRing = style.outlineStyle === "solid" && style.outlineColor === getComputedStyle(blue).color;
-  blue.remove();
+  const isWardRing = () => {
+    const blue = document.createElement("span");
+    blue.style.color = "var(--ward-color-blue)";
+    copy.append(blue);
+    const ward = style.outlineStyle === "solid" && style.outlineColor === getComputedStyle(blue).color;
+    blue.remove();
+    return ward;
+  };
+  const label = () => el.textContent.trim() || el.getAttribute("aria-label");
   return {
     theme: copy.dataset.theme,
-    name: el.textContent.trim() || el.getAttribute("aria-label"),
+    name: label(),
     focusVisible: el.matches(":focus-visible"),
-    wardRing,
+    wardRing: isWardRing(),
     height: r.height,
-    hit24: hits(mid - 11.5) && hits(mid + 11.5),
-    wide24: hits(mid, x - 11.5) && hits(mid, x + 11.5),
+    hit24: [mid - 11.5, mid + 11.5].every((y) => hits(y)),
+    wide24: [x - 11.5, x + 11.5].every((at) => hits(mid, at)),
     underlineGap: underlineGap(r),
     box: { x: r.left, y: r.top, width: r.width, height: r.height, reach },
   };
@@ -181,15 +186,14 @@ async function rowLinks(page) {
   return out;
 }
 
-function diffFacts(want, got, label) {
-  const diffs = [];
-  for (const target of want) {
-    const found = got.find((t) => t.name === target.name);
-    for (const [fact, value] of Object.entries(target)) {
-      if (found?.[fact] !== value) diffs.push(`${label}${target.name}.${fact}: got ${JSON.stringify(found?.[fact])}, want ${JSON.stringify(value)}`);
-    }
-  }
-  return diffs;
+function targetDiffs(target, found, label) {
+  return Object.entries(target)
+    .filter(([fact, value]) => found?.[fact] !== value)
+    .map(([fact, value]) => `${label}${target.name}.${fact}: got ${JSON.stringify(found?.[fact])}, want ${JSON.stringify(value)}`);
+}
+
+export function diffFacts(want, got, label) {
+  return want.flatMap((target) => targetDiffs(target, got.find((t) => t.name === target.name), label));
 }
 
 // Returns every fact that differs from the golden, as "name.fact: got X, want Y".
