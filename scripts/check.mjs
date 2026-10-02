@@ -9,6 +9,7 @@ import { sweepPhoneWidth } from "./phone-width.mjs";
 import { sweepFocusTargets } from "./focus-targets.mjs";
 import { sweepBoardHeight } from "./board-height.mjs";
 import { workflowFindings } from "./workflows.mjs";
+import { NAME, OLD_NAME, oldNameFiles } from "./old-name.mjs";
 import { FAMILY_OF, breakpoints, buildCss, buildTokens, containerBreakpoints, declaredFaces, readTokens } from "./gen-css.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -61,6 +62,15 @@ try {
 const workflowProblems = workflowFindings(join(root, ".github", "workflows"));
 if (workflowProblems.length === 0) pass("workflow hardening", "contents: read, actions sha-pinned, push on main or tags only");
 else fail("workflow hardening", workflowProblems.join("; "));
+
+// 1d. no file outside tickets/ names the package's pre-#60 name (#137)
+try {
+  const stale = oldNameFiles();
+  if (stale.length === 0) pass("package name", `no file outside tickets/ names ${OLD_NAME}`);
+  else fail("package name", `${stale.join(", ")} still name ${OLD_NAME}; Ward is ${NAME}`);
+} catch (e) {
+  fail("package name", e.message);
+}
 
 // 2. contrast, computed from tokens.json so a broken token fails here
 const NEED = 4.5;

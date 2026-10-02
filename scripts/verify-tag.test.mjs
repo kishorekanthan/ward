@@ -1,10 +1,10 @@
 // @vitest-environment node
 import { execFileSync, spawnSync } from "node:child_process";
-import { appendFileSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { devNull, tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 const SCRIPT = fileURLToPath(new URL("./verify-tag.mjs", import.meta.url));
 const ENV = {
@@ -19,6 +19,12 @@ const ENV = {
 
 let work;
 let keys;
+const roots = [];
+const tempRoot = (name) => {
+  const root = mkdtempSync(join(tmpdir(), name));
+  roots.push(root);
+  return root;
+};
 const git = (args, cwd = work) => execFileSync("git", args, { cwd, env: ENV, stdio: "pipe" });
 const run = (cmd, args) => spawnSync(cmd, args, { cwd: work, env: ENV, encoding: "utf8" });
 
@@ -36,7 +42,7 @@ function signedTag(name, key) {
 // main lists the owner's key; a branch adds a second key under the same email and checks it out.
 // The local origin/main is stale (retired key only), so verification must fetch main first.
 beforeAll(() => {
-  const root = mkdtempSync(join(tmpdir(), "ward-verify-tag-"));
+  const root = tempRoot("ward-verify-tag-");
   keys = join(root, "keys");
   work = join(root, "work");
   mkdirSync(keys);
@@ -61,6 +67,10 @@ beforeAll(() => {
   signedTag("v0.0.2", intruder);
 }, 30_000);
 
+afterAll(() => {
+  for (const root of roots) rmSync(root, { recursive: true });
+});
+
 describe("verify-tag", () => {
   it("fails a tag signed with a key only the checked-out branch lists", () => {
     const result = run("node", [SCRIPT, "v0.0.2"]);
@@ -75,7 +85,7 @@ describe("verify-tag", () => {
   });
 
   it("removes its temp directory after verifying a good tag", () => {
-    const scratch = mkdtempSync(join(tmpdir(), "ward-verify-tag-ok-"));
+    const scratch = tempRoot("ward-verify-tag-ok-");
     const result = spawnSync("node", [SCRIPT, "v0.0.1"], { cwd: work, env: { ...ENV, TMPDIR: scratch }, encoding: "utf8" });
     expect(result.status).toBe(0);
     expect(readdirSync(scratch)).toEqual([]);
@@ -87,7 +97,7 @@ describe("verify-tag", () => {
   });
 
   it("removes its temp directory when main has no allowed_signers", () => {
-    const root = mkdtempSync(join(tmpdir(), "ward-verify-tag-bare-"));
+    const root = tempRoot("ward-verify-tag-bare-");
     const bare = join(root, "bare");
     const scratch = join(root, "tmp");
     mkdirSync(scratch);
