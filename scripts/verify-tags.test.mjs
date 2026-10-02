@@ -66,6 +66,7 @@ function repo(name, owner, intruder) {
 let mixed;
 let clean;
 let noRelease;
+let renamed;
 
 beforeAll(() => {
   keys = tempRoot("ward-verify-tags-keys-");
@@ -85,6 +86,10 @@ beforeAll(() => {
   noRelease = repo("none", owner, intruder);
   git(["tag", "-d", "v0.0.0"], noRelease);
   signedTag(noRelease, "signature-test-good", owner);
+  renamed = repo("renamed", owner, intruder);
+  signedTag(renamed, "v0.0.1", owner);
+  git(["push", "--quiet", "origin", "refs/tags/v0.0.1:refs/tags/v0.0.6"], renamed);
+  git(["fetch", "--quiet", "origin", "refs/tags/v0.0.6:refs/tags/v0.0.6"], renamed);
 }, 30_000);
 
 afterAll(() => {
@@ -108,6 +113,12 @@ describe("verify-tags", () => {
     const result = sweep(clean);
     expect(result.stderr).toBe("");
     expect(result.status).toBe(0);
+  });
+
+  it("names only a signed tag pushed again under a second ref name", () => {
+    const result = sweep(renamed);
+    expect(result.stderr.trim().split("\n")).toEqual(["unverified tag: v0.0.6"]);
+    expect(result.status).toBe(1);
   });
 
   it("fails when there is no v* tag to verify, so a run without fetched tags is not green", () => {
