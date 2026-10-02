@@ -81,11 +81,18 @@ function probePageHeaderWideActions() {
 function probePageHeaderLinks() {
   const strip = document.querySelector("#storybook-root header [data-ward-actions]");
   const links = Array.from(strip.querySelectorAll("a"));
+  // A flex link is one box however its text wraps, so count the line tops of the text itself.
+  const textLines = (element) => {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    return new Set(Array.from(range.getClientRects(), (r) => Math.round(r.top))).size;
+  };
   return {
     linksShown: links.length,
     toggleShown: strip.querySelector("button") !== null,
     linkTargetAtLeast: Math.min(...links.map((a) => Math.round(a.getBoundingClientRect().height))),
     linkInView: links.every((a) => a.getBoundingClientRect().right <= innerWidth + 0.5),
+    linkLines: Math.max(...links.map(textLines)),
     pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
   };
 }
@@ -247,7 +254,7 @@ function probeConsole() {
 }
 
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot };
+const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot };
 
 async function measure(page, base, key) {
   const { story, label, longLabel, width = golden.viewport.width } = golden[key];
