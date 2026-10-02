@@ -50,14 +50,15 @@ describe("oldNameFiles", () => {
     expect(oldNameFiles(root).sort()).toEqual(["docs/a/b.md", "new.mjs"]);
   });
 
-  it("names a script and a doc that reference the old tarball, but not tickets/ history", () => {
+  it("names a script, a glob and a doc that reference the old tarball, but not tickets/ history", () => {
     const root = repo({
       "scripts/consumer.mjs": `npm install ./${OLD_TARBALL}-0.18.0.tgz\n`,
+      "scripts/clean.sh": `rm ${OLD_TARBALL}*.tgz\n`,
       "docs/release.md": `Attach ${OLD_TARBALL}-0.1.0.tgz.\n`,
       "tickets/T-2.md": `${OLD_TARBALL}-0.1.0.tgz\n`,
       "README.md": "npm pack gives kishorekanthan-ward-0.18.47.tgz\n",
     });
-    expect(oldNameFiles(root).sort()).toEqual(["docs/release.md", "scripts/consumer.mjs"]);
+    expect(oldNameFiles(root).sort()).toEqual(["docs/release.md", "scripts/clean.sh", "scripts/consumer.mjs"]);
   });
 
   it("names a folder that only starts with tickets", () => {
