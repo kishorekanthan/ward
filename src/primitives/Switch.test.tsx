@@ -24,6 +24,18 @@ describe("Switch label click", () => {
     expect(seen).toEqual([true]);
   });
 
+  it("toggles only its own switch when several share a page", () => {
+    const seen: string[] = [];
+    render(
+      <>
+        <Switch label="Intake" checked={false} onChange={() => seen.push("Intake")} />
+        <Switch label="Review" checked={false} onChange={() => seen.push("Review")} />
+      </>,
+    );
+    fireEvent.click(screen.getByText("Review"));
+    expect(seen).toEqual(["Review"]);
+  });
+
   it("leaves a disabled or locked switch alone when its label is clicked", () => {
     const seen: boolean[] = [];
     render(
