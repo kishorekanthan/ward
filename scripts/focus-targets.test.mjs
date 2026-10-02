@@ -16,6 +16,10 @@ describe("focus targets diff", () => {
     ]);
   });
 
+  it("quotes a string fact on both sides", () => {
+    expect(diffFacts([{ name: "ledger", theme: "dark" }], [{ name: "ledger", theme: "light" }], "")).toEqual(['ledger.theme: got "light", want "dark"']);
+  });
+
   it("reports every fact of a target the page never reached", () => {
     expect(diffFacts(want.slice(1), [], "row link ")).toEqual([
       'row link ledger.name: got undefined, want "ledger"',
