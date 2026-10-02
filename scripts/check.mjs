@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
-import { belowFloor, contrast, derivedDarkPairs, describeFailures, sweepRenderedContrast } from "./contrast.mjs";
+import { belowFloor, contrast, derivedDarkPairs, edgePairs, describeFailures, sweepRenderedContrast } from "./contrast.mjs";
 import { buildFresh, distDrift } from "./dist-fresh.mjs";
 import { sweepConsoleTheme } from "./console-theme.mjs";
 import { sweepPhoneWidth } from "./phone-width.mjs";
@@ -110,6 +110,11 @@ else fail("token contrast", low.map((p) => `${p[2]} ${p[0]} on ${p[1]} = ${contr
 const derivedLow = belowFloor(derivedDarkPairs(tokens.dark));
 if (derivedLow.length === 0) pass("derived dark contrast", `${derivedDarkPairs(tokens.dark).length} pairs: ink2, surface3 at 4.5:1, line3 at 3:1`);
 else fail("derived dark contrast", derivedLow.join("; "));
+
+// 2a'. an edged control's boundary is 3:1 on its ground (WCAG 1.4.11)
+const edgeLow = belowFloor(edgePairs(tokens));
+if (edgeLow.length === 0) pass("edge contrast", `${edgePairs(tokens).length} pairs: edge on bg, surface, surface2 at 3:1, both themes`);
+else fail("edge contrast", edgeLow.join("; "));
 
 // 2b. chart series are graphics, so they need the 3:1 non-text floor on both grounds in each theme
 const GRAPHIC = 3;
