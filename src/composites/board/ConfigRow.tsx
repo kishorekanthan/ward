@@ -112,12 +112,15 @@ function CapCell({ stage, config, onChange }: CellProps) {
   );
 }
 
+// The state word is the switch's visible label, so it toggles the row; the switch keeps its own name.
 function ShownCell({ stage, config, onChange }: CellProps) {
   const view = stageView(stage, config.shown);
+  const fixed = stage.gate || stage.terminal;
+  const toggle = (next: boolean) => onChange({ ...config, shown: next });
   return (
     <span className={s.cShown}>
-      <Switch label="Shown as a column" labelHidden checked={view.shown} locked={stage.gate} disabled={stage.terminal} onChange={(next) => onChange({ ...config, shown: next })} />
-      <span className={s.state} aria-hidden="true">
+      <Switch label="Shown as a column" labelHidden checked={view.shown} locked={stage.gate} disabled={stage.terminal} onChange={toggle} />
+      <span className={s.state} data-fixed={fixed || undefined} aria-hidden="true" onClick={() => !fixed && toggle(!view.shown)}>
         {view.state}
       </span>
     </span>
