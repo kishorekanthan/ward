@@ -20,7 +20,7 @@ Ward (`@kishorekanthan/ward`) is a standalone React 19 UI library. It must never
 - `make install` — `npm ci`, and `make hooks`: `core.hooksPath` → `githooks/`, whose `commit-msg` refuses AI attribution (patterns: `githooks/attribution-patterns.txt`, kept identical to trellis-api's and trellis-web's) and then runs the global hooks it shadows.
 - `make pr-check PR=N` — refuses a PR whose title, body or commits carry AI attribution, naming each.
 - `make rulesets` — fails when the repo's rulesets (main: PR and `check` required, no force-push or deletion; `v*` tags: no update or deletion) drift from `.github/rulesets.json`. `make rulesets-apply` writes them (repo admin).
-- `make check` — token/story/provenance checks, lint (complexity <= 5), tests, build, packed-consumer check. Must pass before commit.
+- `make check` — token/story/provenance checks, old package name (`scripts/old-name.mjs`: no file outside `tickets/` names the pre-rename name), lint (complexity <= 5), tests, build, packed-consumer check. Must pass before commit.
 - `npm run storybook` — local component catalogue.
 
 ## Rules
