@@ -72,6 +72,39 @@ describe("ConfigRow", () => {
     expect(screen.getByRole("switch", { name: "Shown as a column" })).not.toBeNull();
   });
 
+  it("toggles only its own row when the visible state word is clicked", () => {
+    const first = vi.fn();
+    const second = vi.fn();
+    render(
+      <>
+        <ConfigRow stage={stage} config={config} onChange={first} />
+        <ConfigRow stage={{ ...stage, id: "review", name: "Review" }} config={{ ...config, shown: false }} onChange={second} />
+      </>,
+    );
+    fireEvent.click(screen.getByText("off"));
+    expect(second).toHaveBeenCalledWith({ ...config, shown: true });
+    expect(first).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByText("on"));
+    expect(first).toHaveBeenCalledWith({ ...config, shown: false });
+    expect(second).toHaveBeenCalledTimes(1);
+  });
+
+  it("keeps the switch named after its field, not its state word", () => {
+    row({});
+    expect(shown().getAttribute("aria-checked")).toBe("true");
+    expect(screen.getByRole("switch", { name: "Shown as a column" })).toBe(shown());
+  });
+
+  it("leaves a gate or terminal row alone when its state word is clicked", () => {
+    const gate = row({ gate: true });
+    fireEvent.click(screen.getByText("locked"));
+    cleanup();
+    const terminal = row({ terminal: true });
+    fireEvent.click(screen.getByText("off"));
+    expect(gate).not.toHaveBeenCalled();
+    expect(terminal).not.toHaveBeenCalled();
+  });
+
   it("has a header row whose columns match the row's", () => {
     const { container } = render(<ConfigRowHead />);
     expect(container.textContent).toContain("Stage");

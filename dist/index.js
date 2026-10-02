@@ -2528,7 +2528,7 @@ function Y$({
     ] })
   ] });
 }
-const hu = "_head_10555_11", mu = "_line_10555_12", wu = "_cHandle_10555_33", _u = "_cName_10555_38", fu = "_nameLine_10555_46", vu = "_cLabel_10555_53", bu = "_cCap_10555_58", gu = "_cShown_10555_63", pu = "_name_10555_46", Nu = "_noCap_10555_85", yu = "_state_10555_99", ku = "_handle_10555_104", $u = "_sub_10555_130", P = {
+const hu = "_head_589hw_11", mu = "_line_589hw_12", wu = "_cHandle_589hw_33", _u = "_cName_589hw_38", fu = "_nameLine_589hw_46", vu = "_cLabel_589hw_53", bu = "_cCap_589hw_58", gu = "_cShown_589hw_63", pu = "_name_589hw_46", Nu = "_noCap_589hw_85", yu = "_state_589hw_99", ku = "_handle_589hw_108", $u = "_sub_589hw_134", P = {
   head: hu,
   line: mu,
   cHandle: wu,
@@ -2596,10 +2596,10 @@ function Mu({ stage: e, config: a, onChange: t }) {
   return e.terminal ? /* @__PURE__ */ n("span", { className: `${P.cCap} ${P.noCap}`, "aria-hidden": "true", children: "—" }) : /* @__PURE__ */ n("span", { className: P.cCap, children: /* @__PURE__ */ n(A, { kind: "input", label: "WIP cap", labelHidden: !0, placeholder: "none", value: Au(a.cap), onChange: (r) => t({ ...a, cap: xu(r) }) }) });
 }
 function qu({ stage: e, config: a, onChange: t }) {
-  const r = Ru(e, a.shown);
+  const r = Ru(e, a.shown), l = e.gate || e.terminal, i = (s) => t({ ...a, shown: s });
   return /* @__PURE__ */ o("span", { className: P.cShown, children: [
-    /* @__PURE__ */ n(De, { label: "Shown as a column", labelHidden: !0, checked: r.shown, locked: e.gate, disabled: e.terminal, onChange: (l) => t({ ...a, shown: l }) }),
-    /* @__PURE__ */ n("span", { className: P.state, "aria-hidden": "true", children: r.state })
+    /* @__PURE__ */ n(De, { label: "Shown as a column", labelHidden: !0, checked: r.shown, locked: e.gate, disabled: e.terminal, onChange: i }),
+    /* @__PURE__ */ n("span", { className: P.state, "data-fixed": l || void 0, "aria-hidden": "true", onClick: () => !l && i(!r.shown), children: r.state })
   ] });
 }
 function Pu(e) {

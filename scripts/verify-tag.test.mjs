@@ -65,6 +65,7 @@ beforeAll(() => {
   git(["commit", "--quiet", "-am", "second key"]);
   signedTag("v0.0.1", owner);
   signedTag("v0.0.2", intruder);
+  git(["update-ref", "refs/tags/v0.0.9", "refs/tags/v0.0.1"]);
 }, 30_000);
 
 afterAll(() => {
@@ -82,6 +83,12 @@ describe("verify-tag", () => {
     const result = run("node", [SCRIPT, "v0.0.1"]);
     expect(result.status).toBe(0);
     expect(result.stderr).toMatch(/Good "git" signature for owner@example.com/);
+  });
+
+  it("fails a signed tag under a ref name it was not signed as", () => {
+    const result = run("node", [SCRIPT, "v0.0.9"]);
+    expect(result.stderr).toContain("tag v0.0.9 was signed as v0.0.1");
+    expect(result.status).toBe(1);
   });
 
   it("removes its temp directory after verifying a good tag", () => {
