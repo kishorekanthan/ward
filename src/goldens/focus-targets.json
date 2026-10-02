@@ -199,6 +199,16 @@
       "wide24": true
     },
     {
+      "name": "Column label",
+      "focusVisible": true,
+      "edged": true
+    },
+    {
+      "name": "WIP cap",
+      "focusVisible": true,
+      "edged": true
+    },
+    {
       "name": "Shown as a column",
       "focusVisible": true,
       "wardRing": true,
@@ -212,10 +222,29 @@
       "focusVisible": true,
       "wardRing": true,
       "ring": true,
-      "edged": false,
+      "edged": true,
       "tall": false,
       "hit24": true,
       "wide24": true
+    },
+    {
+      "name": "Stream name",
+      "focusVisible": true,
+      "edged": true
+    },
+    {
+      "name": "Workflow",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "edged": true
+    },
+    {
+      "name": "Below-floor edge",
+      "focusVisible": true,
+      "wardRing": true,
+      "ring": true,
+      "edged": false
     }
   ],
   "rowLinks": [

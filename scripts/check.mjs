@@ -113,7 +113,7 @@ else fail("derived dark contrast", derivedLow.join("; "));
 
 // 2a'. an edged control's boundary is 3:1 on its ground (WCAG 1.4.11)
 const edgeLow = belowFloor(edgePairs(tokens));
-if (edgeLow.length === 0) pass("edge contrast", `${edgePairs(tokens).length} pairs: edge on bg, surface, surface2 at 3:1, both themes`);
+if (edgeLow.length === 0) pass("edge contrast", `${edgePairs(tokens).length} pairs: edge on bg, surface, surface2, surface3 at 3:1, both themes`);
 else fail("edge contrast", edgeLow.join("; "));
 
 // 2b. chart series are graphics, so they need the 3:1 non-text floor on both grounds in each theme

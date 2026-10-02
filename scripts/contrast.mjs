@@ -53,7 +53,7 @@ export function derivedDarkPairs(dark) {
 // An edged control's boundary identifies it, so WCAG 1.4.11 holds color.edge to 3:1 on every ground, both themes (Ward #146).
 export function edgePairs(tokens) {
   const themes = [["light", tokens.color], ["dark", tokens.dark]];
-  return themes.flatMap(([theme, c]) => ["bg", "surface", "surface2"].map((ground) => [c.edge, c[ground], `${theme} edge/${ground}`, 3]));
+  return themes.flatMap(([theme, c]) => ["bg", "surface", "surface2", "surface3"].map((ground) => [c.edge, c[ground], `${theme} edge/${ground}`, 3]));
 }
 
 export function belowFloor(pairs) {

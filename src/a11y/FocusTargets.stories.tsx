@@ -12,6 +12,8 @@ import { TabLinks } from "../primitives/TabLinks";
 import { ConfigRow } from "../composites/board/ConfigRow";
 import { Btn } from "../primitives/Btn";
 import { Switch } from "../primitives/Switch";
+import { Field } from "../primitives/Field";
+import { SegmentedControl } from "../primitives/SegmentedControl";
 
 // Every small link and small control Ward draws, in tab order; scripts/focus-targets.mjs tabs through them against src/goldens/focus-targets.json.
 const session: Session = {
@@ -90,8 +92,13 @@ export const Links = {
       <Sidebar brand="Studio" nav={[]} agentsHeading="Agents" agents={[]} shared={shared} />
       <TabLinks links={sections} active="gates" label="Studio sections" />
       <ConfigRow stage={{ id: "review", name: "Review", gate: false, terminal: false, agentsMounted: 0 }} config={{ label: "Review", shown: true }} onChange={() => {}} />
-      {/* Off, its line2 edge is below 3:1, so the probe's edged fact has a failing case (Ward #146). */}
       <Switch label="Hidden as a column" labelHidden checked={false} onChange={() => {}} />
+      <Field label="Stream name" value="" onChange={() => {}} />
+      <SegmentedControl label="Presentation" options={[{ value: "workflow", label: "Workflow" }, { value: "board", label: "Board" }]} value="workflow" onChange={() => {}} />
+      {/* Not a Ward control: a line2 edge below 3:1, so the probe's edged fact keeps a failing case (Ward #168). */}
+      <div>
+        <button type="button" style={{ boxShadow: "inset 0 0 0 var(--ward-border) var(--ward-color-line2)" }}>Below-floor edge</button>
+      </div>
     </div>
   ),
 };
