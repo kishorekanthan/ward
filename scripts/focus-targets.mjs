@@ -197,7 +197,7 @@ function targetDiffs(target, found, label) {
     .map(([fact, value]) => `${label}${target.name}.${fact}: got ${JSON.stringify(found?.[fact])}, want ${JSON.stringify(value)}`);
 }
 
-function diffFacts(want, got, label) {
+export function diffFacts(want, got, label) {
   return want.flatMap((target) => targetDiffs(target, got.find((t) => t.name === target.name), label));
 }
 
