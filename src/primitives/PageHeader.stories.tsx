@@ -155,3 +155,29 @@ export const PhoneWidthWideActions = {
   },
   parameters: { viewport: { defaultViewport: "mobile1" } },
 };
+
+// Web styles its header links itself; the story does the same with the text token.
+const linkStyle = { color: "var(--ward-color-text)", fontWeight: 600 };
+
+// One link would fold into a menu of one, so at 375px it stays in the strip (#138).
+export const PhoneWidthLoneLink = {
+  args: {
+    crumb: [{ label: "data-eng", href: "/streams/data-eng" }, { label: "New request" }],
+    title: "New request",
+    actions: [<a key="advisor" className="ward-rowlink" style={linkStyle} href="#advisor">Ask the advisor first</a>],
+  },
+  parameters: { viewport: { defaultViewport: "mobile1" } },
+};
+
+// Two links still fold behind ··· at 375px.
+export const PhoneWidthTwoLinks = {
+  args: {
+    crumb: [{ label: "data-eng", href: "/streams/data-eng" }, { label: "Intake" }],
+    title: "Intake",
+    actions: [
+      <a key="advisor" className="ward-rowlink" style={linkStyle} href="#advisor">Ask the advisor first</a>,
+      <a key="raise" className="ward-rowlink" style={linkStyle} href="#raise">Write the request yourself</a>,
+    ],
+  },
+  parameters: { viewport: { defaultViewport: "mobile1" } },
+};

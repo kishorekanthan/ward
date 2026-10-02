@@ -34,6 +34,20 @@
     "measureWiderThanScreen": true,
     "pageScrollsSideways": false
   },
+  "pageHeaderLoneLink": {
+    "story": "primitives-pageheader--phone-width-lone-link",
+    "linksShown": 1,
+    "toggleShown": false,
+    "linkTargetAtLeast": 24,
+    "linkInView": true,
+    "pageScrollsSideways": false
+  },
+  "pageHeaderTwoLinks": {
+    "story": "primitives-pageheader--phone-width-two-links",
+    "linksShown": 0,
+    "toggleShown": true,
+    "pageScrollsSideways": false
+  },
   "statStrip": {
     "story": "primitives-statstrip--phone-width",
     "label": "Items waiting at a review gate",

@@ -80,6 +80,47 @@ describe("PageHeader on a narrow row", () => {
   });
 });
 
+const advisor = <a key="advisor" href="/advisor">Ask the advisor first</a>;
+
+describe("PageHeader with link actions on a narrow row", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
+  it("shows a lone link instead of folding it behind ···", () => {
+    narrowLayout();
+    render(<PageHeader crumb={crumb} title="New request" actions={[advisor]} />);
+    expect(screen.getByRole("link", { name: "Ask the advisor first" }).closest("[data-ward-actions]")).not.toBeNull();
+    expect(screen.queryByRole("button", { name: "More actions" })).toBeNull();
+  });
+
+  it("treats any element carrying an href as a link", () => {
+    narrowLayout();
+    const RouterLink = ({ href, children }: { href: string; children: string }) => <a href={href}>{children}</a>;
+    render(<PageHeader crumb={crumb} title="Advisor" actions={[<RouterLink key="raise" href="/raise">Write the request yourself</RouterLink>]} />);
+    expect(screen.getByRole("link", { name: "Write the request yourself" })).toBeTruthy();
+    expect(screen.queryByRole("button", { name: "More actions" })).toBeNull();
+  });
+
+  it("still folds two links behind ···", () => {
+    narrowLayout();
+    render(<PageHeader crumb={crumb} title="Intake" actions={[advisor, <a key="raise" href="/raise">Write the request yourself</a>]} />);
+    expect(screen.getByRole("button", { name: "More actions" })).toBeTruthy();
+    expect(screen.queryByRole("link", { name: "Ask the advisor first" })).toBeNull();
+  });
+
+  it("still folds a lone button, and a lone link with more items", () => {
+    narrowLayout();
+    const { unmount } = render(<PageHeader crumb={crumb} title="Data engineering" actions={[<Btn key="a">Configure</Btn>]} />);
+    expect(screen.getByRole("button", { name: "More actions" })).toBeTruthy();
+    unmount();
+    render(<PageHeader crumb={crumb} title="New request" actions={[advisor]} more={[<Btn key="rules">Rule builder</Btn>]} />);
+    expect(screen.getByRole("button", { name: "More actions" })).toBeTruthy();
+    expect(screen.queryByRole("link", { name: "Ask the advisor first" })).toBeNull();
+  });
+});
+
 const moreItems = [<Btn key="rules">Rule builder</Btn>, <Btn key="intake">Intake</Btn>];
 
 function panelOf(toggle: HTMLElement): string[] {
