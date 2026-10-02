@@ -1,4 +1,4 @@
-.PHONY: check install hooks pr-check rulesets rulesets-apply signing verify-tag verify-tags
+.PHONY: check install hooks pr-check rulesets rulesets-apply signing verify-tag verify-tags sweep-check
 
 install: hooks
 	npm ci
@@ -21,6 +21,10 @@ verify-tag:
 # Verifies every local v* and signature-test-* tag, as the daily tag sweep does (#135); fetch tags first.
 verify-tags:
 	node scripts/verify-tags.mjs
+
+# Fails when the tag sweep workflow is disabled or has not run on schedule in 7 days (#153); needs gh.
+sweep-check:
+	node scripts/sweep-scheduled.mjs
 
 # Refuses a PR whose title, body or commits carry AI attribution: make pr-check PR=N.
 pr-check:
