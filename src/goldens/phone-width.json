@@ -42,6 +42,14 @@
     "linkInView": true,
     "pageScrollsSideways": false
   },
+  "pageHeaderLongLoneLink": {
+    "story": "primitives-pageheader--phone-width-long-lone-link",
+    "linksShown": 1,
+    "toggleShown": false,
+    "linkInView": true,
+    "linkLines": 2,
+    "pageScrollsSideways": false
+  },
   "pageHeaderTwoLinks": {
     "story": "primitives-pageheader--phone-width-two-links",
     "linksShown": 0,
