@@ -14,14 +14,14 @@ function readFocused() {
   const el = document.activeElement;
   const copy = el?.closest("#storybook-root > div");
   if (!copy) return null;
-  if (!el.matches("a, button")) return { skip: true };
+  if (!el.matches("a, button, input, select, textarea")) return { skip: true };
   el.scrollIntoView({ block: "center" });
   const r = el.getClientRects()[0];
   const style = getComputedStyle(el);
   const px = (value) => Number.parseFloat(value) || 0;
   const reach = px(style.outlineOffset) + px(style.outlineWidth);
   const x = r.left + r.width / 2;
-  const hits = (y, at = x) => document.elementFromPoint(at, y)?.closest("a, button") === el;
+  const hits = (y, at = x) => document.elementFromPoint(at, y)?.closest("a, button, input, select, textarea") === el;
   const mid = r.top + r.height / 2;
   // An underline drawn by the link itself and as wide as it; a static link would hand its ::after to an ancestor.
   const spansLink = (line, box) =>
@@ -43,7 +43,7 @@ function readFocused() {
     blue.remove();
     return ward;
   };
-  const label = () => el.textContent.trim() || el.getAttribute("aria-label");
+  const label = () => el.textContent.trim() || el.getAttribute("aria-label") || el.labels?.[0]?.textContent.trim();
   return {
     theme: copy.dataset.theme,
     name: label(),
@@ -83,11 +83,13 @@ function bands({ x, y, width, height, reach }) {
 }
 
 // Runs in the page, focus gone: whether the last focused control draws an edge (border or inset ring) at 3:1 on its ground (WCAG 1.4.11).
+// A segment's boundary is its radio group's.
 function restEdge() {
   const clear = (colour) => /^rgba\(.*, 0\)$/.test(colour);
   const groundOf = (at) => (at.parentElement && clear(getComputedStyle(at).backgroundColor) ? groundOf(at.parentElement) : getComputedStyle(at).backgroundColor);
-  const style = getComputedStyle(window.__wardFocused);
-  const ground = groundOf(window.__wardFocused);
+  const control = window.__wardFocused.closest('[role="radiogroup"]') ?? window.__wardFocused;
+  const style = getComputedStyle(control);
+  const ground = groundOf(control);
   const rgb = (colour) => colour.match(/[\d.]+/g).map(Number);
   const over = (colour) => { const [r, g, b, a = 1] = rgb(colour); return [r, g, b].map((c, i) => a * c + (1 - a) * rgb(ground)[i]); };
   const luminance = (colour) => over(colour).map((c) => (c / 255 <= 0.04045 ? c / 255 / 12.92 : ((c / 255 + 0.055) / 1.055) ** 2.4)).reduce((sum, c, i) => sum + c * [0.2126, 0.7152, 0.0722][i], 0);

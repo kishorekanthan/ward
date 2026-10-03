@@ -35,12 +35,17 @@ describe("edge contrast", () => {
   // 1.34:1 is light line2 on surface2, the edge secondary Btn drew before #146.
   it("fails line2 as the light edge on every ground", () => {
     const low = belowFloor(edgePairs({ ...tokens, color: { ...tokens.color, edge: "#C9D2DE" } }));
-    expect(low).toEqual(["light edge/bg #C9D2DE on #F7F8FA = 1.44 (needs 3:1)", "light edge/surface #C9D2DE on #FFFFFF = 1.53 (needs 3:1)", "light edge/surface2 #C9D2DE on #EDF0F4 = 1.34 (needs 3:1)"]);
+    expect(low).toEqual(["light edge/bg #C9D2DE on #F7F8FA = 1.44 (needs 3:1)", "light edge/surface #C9D2DE on #FFFFFF = 1.53 (needs 3:1)", "light edge/surface2 #C9D2DE on #EDF0F4 = 1.34 (needs 3:1)", "light edge/surface3 #C9D2DE on #FCFCFD = 1.49 (needs 3:1)"]);
   });
 
   it("fails dark line2 as the dark edge on every ground", () => {
     const low = belowFloor(edgePairs({ ...tokens, dark: { ...tokens.dark, edge: "#3A4453" } }));
-    expect(low.map((l) => l.split(" ")[1])).toEqual(["edge/bg", "edge/surface", "edge/surface2"]);
+    expect(low.map((l) => l.split(" ")[1])).toEqual(["edge/bg", "edge/surface", "edge/surface2", "edge/surface3"]);
+  });
+
+  it("fails a dark surface3 lifted until the edge on it drops below 3:1", () => {
+    const low = belowFloor(edgePairs({ ...tokens, dark: { ...tokens.dark, surface3: "#2A3140" } }));
+    expect(low).toEqual(["dark edge/surface3 #67717F on #2A3140 = 2.63 (needs 3:1)"]);
   });
 });
 

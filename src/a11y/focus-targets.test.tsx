@@ -35,6 +35,9 @@ describe("small links take the 24px target", () => {
       ["⠿", false],
       ["", false],
       ["", false],
+      ["Workflow", false],
+      ["Board", false],
+      ["Below-floor edge", false],
     ]);
   });
 });

@@ -26,7 +26,7 @@
   font: var(--ward-type-inputText);
   color: var(--ward-color-text);
   background: var(--ward-color-surface);
-  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line2);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-edge);
   padding: var(--ward-pad-input);
   width: 100%;
 }
