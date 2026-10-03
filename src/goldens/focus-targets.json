@@ -225,7 +225,8 @@
       "edged": true,
       "tall": false,
       "hit24": true,
-      "wide24": true
+      "wide24": true,
+      "knob": true
     },
     {
       "name": "Stream name",
@@ -314,5 +315,32 @@
       "touch": true,
       "raised": 0
     }
-  ]
+  ],
+  "phone": {
+    "viewport": {
+      "width": 375,
+      "height": 812
+    },
+    "story": "a11y-focustargets--phone",
+    "targets": [
+      {
+        "name": "Skip to content",
+        "focusVisible": true,
+        "wardRing": true,
+        "ring": true,
+        "tall": true,
+        "hit24": true
+      },
+      {
+        "name": "Destination",
+        "focusVisible": true,
+        "wardRing": true,
+        "ring": true,
+        "edged": true,
+        "ink": true,
+        "tall": true,
+        "hit24": true
+      }
+    ]
+  }
 }

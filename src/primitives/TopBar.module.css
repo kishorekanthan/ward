@@ -41,7 +41,8 @@
   display: none;
   height: var(--ward-height-controlSm);
   font: var(--ward-type-control);
-  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line2);
+  background: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-edge);
 }
 
 .dest {
