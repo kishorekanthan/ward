@@ -29,21 +29,24 @@ function signedTag(cwd, name) {
   git(["-c", "gpg.format=ssh", "-c", `user.signingkey=${owner}`, "tag", "-s", name, "-m", name], cwd);
 }
 
-// A runner checkout: an empty repo that fetched only the pushed tag, with the repo's scripts beside it.
+// A runner checkout: like actions/checkout, the tag ref lands as a lightweight ref to the tagged commit.
 function runner(tag) {
   const dir = mkdtempSync(join(root, "runner-"));
+  const commit = git(["rev-parse", `${tag}^{commit}`], origin).toString().trim();
   git(["init", "--quiet", "-b", "main"], dir);
   git(["remote", "add", "origin", `file://${origin}`], dir);
-  git(["fetch", "--quiet", "--depth=1", "origin", `+refs/tags/${tag}:refs/tags/${tag}`], dir);
+  git(["fetch", "--quiet", "--no-tags", "--depth=1", "origin", `+${commit}:refs/tags/${tag}`], dir);
   git(["checkout", "--quiet", "--detach", tag], dir);
   return dir;
 }
 
-// Runs the workflow's own step as the runner would: bash -e, TAG and RUNNER_TEMP set.
+// Runs the workflow's own step as the runner would: bash -e, its env expressions filled from a tag push.
 function runStep(tag) {
   const cwd = runner(tag);
   const temp = mkdtempSync(join(root, "temp-"));
-  return spawnSync("bash", ["-e", "-c", step.run], { cwd, env: { ...ENV, TAG: tag, RUNNER_TEMP: temp }, encoding: "utf8" });
+  const github = { ref: `refs/tags/${tag}`, ref_name: tag };
+  const env = Object.fromEntries(Object.entries(step.env).map(([k, v]) => [k, v.replace(/\$\{\{ github\.(\w+) \}\}/g, (_, key) => github[key])]));
+  return spawnSync("bash", ["-e", "-c", step.run], { cwd, env: { ...ENV, ...env, RUNNER_TEMP: temp }, encoding: "utf8" });
 }
 
 beforeAll(() => {
@@ -76,6 +79,10 @@ afterAll(() => {
 });
 
 describe("tag signature workflow step", () => {
+  it("runs on every pushed v* and signature-test-* tag", () => {
+    expect(workflow.on.push.tags).toEqual(["v*", "signature-test-*"]);
+  });
+
   it("passes a signed v* tag named as it was signed", () => {
     expect(runStep("v0.0.1").status).toBe(0);
   });
