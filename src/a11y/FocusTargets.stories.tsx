@@ -102,3 +102,8 @@ export const Links = {
     </div>
   ),
 };
+
+// Below 768px TopBar swaps its links for a destination select, so the probe also tabs this story at phone width.
+export const Phone = {
+  render: () => <TopBar destinations={destinations} active="board" />,
+};

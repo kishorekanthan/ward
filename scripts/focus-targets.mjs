@@ -43,7 +43,9 @@ function readFocused() {
     blue.remove();
     return ward;
   };
-  const label = () => el.textContent.trim() || el.getAttribute("aria-label") || el.labels?.[0]?.textContent.trim();
+  // A select's text is every option, so it goes by its accessible name.
+  const ownText = () => (el.matches("select") ? "" : el.textContent.trim());
+  const label = () => ownText() || el.getAttribute("aria-label") || el.labels?.[0]?.textContent.trim();
   return {
     theme: copy.dataset.theme,
     name: label(),
@@ -82,22 +84,25 @@ function bands({ x, y, width, height, reach }) {
   ];
 }
 
-// Runs in the page, focus gone: whether the last focused control draws an edge (border or inset ring) at 3:1 on its ground (WCAG 1.4.11).
-// A segment's boundary is its radio group's.
-function restEdge() {
+// Runs in the page, focus gone: whether the last focused control draws an edge (border or inset ring) at 3:1 on its ground (WCAG 1.4.11),
+// an off switch's thumb shows at 3:1 on its track, and a form control's text reads at 4.5:1 on its own ground. A segment's boundary is its radio group's.
+function restFacts() {
   const clear = (colour) => /^rgba\(.*, 0\)$/.test(colour);
   const groundOf = (at) => (at.parentElement && clear(getComputedStyle(at).backgroundColor) ? groundOf(at.parentElement) : getComputedStyle(at).backgroundColor);
   const control = window.__wardFocused.closest('[role="radiogroup"]') ?? window.__wardFocused;
   const style = getComputedStyle(control);
   const ground = groundOf(control);
   const rgb = (colour) => colour.match(/[\d.]+/g).map(Number);
-  const over = (colour) => { const [r, g, b, a = 1] = rgb(colour); return [r, g, b].map((c, i) => a * c + (1 - a) * rgb(ground)[i]); };
-  const luminance = (colour) => over(colour).map((c) => (c / 255 <= 0.04045 ? c / 255 / 12.92 : ((c / 255 + 0.055) / 1.055) ** 2.4)).reduce((sum, c, i) => sum + c * [0.2126, 0.7152, 0.0722][i], 0);
-  const contrast = (colour) => { const [hi, lo] = [luminance(colour), luminance(ground)].sort((x, y) => y - x); return (hi + 0.05) / (lo + 0.05); };
-  const shows = (colour) => !clear(colour) && colour !== ground && contrast(colour) >= 3;
+  const over = (colour, on) => { const [r, g, b, a = 1] = rgb(colour); return [r, g, b].map((c, i) => a * c + (1 - a) * rgb(on)[i]); };
+  const luminance = (channels) => channels.map((c) => (c / 255 <= 0.04045 ? c / 255 / 12.92 : ((c / 255 + 0.055) / 1.055) ** 2.4)).reduce((sum, c, i) => sum + c * [0.2126, 0.7152, 0.0722][i], 0);
+  const contrast = (colour, on) => { const [hi, lo] = [luminance(over(colour, on)), luminance(over(on, on))].sort((x, y) => y - x); return (hi + 0.05) / (lo + 0.05); };
+  const shows = (colour, on = ground) => !clear(colour) && colour !== on && contrast(colour, on) >= 3;
   const side = (name) => Number.parseFloat(style[`border${name}Width`]) >= 1 && shows(style[`border${name}Color`]);
   const inset = style.boxShadow.match(/^(rgba?\([^)]*\)) 0px 0px 0px ([\d.]+)px inset$/);
-  return ["Top", "Right", "Bottom", "Left"].every(side) || Boolean(inset && Number.parseFloat(inset[2]) >= 1 && shows(inset[1]));
+  const edged = () => ["Top", "Right", "Bottom", "Left"].every(side) || Boolean(inset && Number.parseFloat(inset[2]) >= 1 && shows(inset[1]));
+  const knob = () => (control.matches('[role="switch"][aria-checked="false"]') ? shows(getComputedStyle(control.firstElementChild).backgroundColor, style.backgroundColor) : null);
+  const ink = () => (control.matches("input, select, textarea") ? contrast(style.color, ground) >= 4.5 : null);
+  return { edged: edged(), knob: knob(), ink: ink() };
 }
 
 const shoot = (page, clips) => Promise.all(clips.map((clip) => page.screenshot({ clip })));
@@ -110,9 +115,9 @@ async function ringAndRestEdge(page, box) {
     document.activeElement.blur();
   });
   const blurred = await shoot(page, clips);
-  const edged = await page.evaluate(restEdge);
+  const rest = await page.evaluate(restFacts);
   await page.evaluate(() => window.__wardFocused.focus());
-  return { ring: focused.every((shot, i) => !shot.equals(blurred[i])), edged };
+  return { ring: focused.every((shot, i) => !shot.equals(blurred[i])), ...rest };
 }
 
 // Room for both themed copies of the story; too low a cap silently cuts the dark copy short.
@@ -128,8 +133,8 @@ async function tabThrough(page) {
       continue;
     }
     if (got.skip) continue;
-    const { ring, edged } = await ringAndRestEdge(page, got.box);
-    seen.push({ theme: got.theme, name: got.name, focusVisible: got.focusVisible, wardRing: got.wardRing, ring, edged, tall: got.height >= 24, hit24: got.hit24, wide24: got.wide24, underlineGap: got.underlineGap, height: got.height });
+    const { ring, edged, knob, ink } = await ringAndRestEdge(page, got.box);
+    seen.push({ theme: got.theme, name: got.name, focusVisible: got.focusVisible, wardRing: got.wardRing, ring, edged, knob, ink, tall: got.height >= 24, hit24: got.hit24, wide24: got.wide24, underlineGap: got.underlineGap, height: got.height });
   }
   return seen;
 }
@@ -198,7 +203,27 @@ export function diffFacts(want, got, label) {
   return want.flatMap((target) => targetDiffs(target, got.find((t) => t.name === target.name), label));
 }
 
-// Returns every fact that differs from the golden, as "name.fact: got X, want Y".
+async function openStory(browser, base, { viewport, story }) {
+  const page = await browser.newPage({ viewport });
+  await page.goto(`${base}/iframe.html?viewMode=story&id=${story}`, { waitUntil: "load", timeout: 30000 });
+  await page.waitForFunction(() => document.getElementById("storybook-root")?.children.length > 0, null, { timeout: 8000 });
+  await page.evaluate(() => document.fonts.ready);
+  return page;
+}
+
+// Tab order and facts per theme, each diff prefixed with the page's label.
+async function tabDiffs(page, targets, label) {
+  const seen = await tabThrough(page);
+  const want = targets.map((t) => t.name);
+  return golden.themes.flatMap((theme) => {
+    const inTheme = seen.filter((t) => t.theme === theme);
+    const names = inTheme.map((t) => t.name);
+    const order = JSON.stringify(names) === JSON.stringify(want) ? [] : [`${label}${theme} tab order: got ${JSON.stringify(names)}, want ${JSON.stringify(want)}`];
+    return [...order, ...diffFacts(targets, inTheme, `${label}${theme} `)];
+  });
+}
+
+// Returns every fact that differs from the golden, as "name.fact: got X, want Y"; the phone page holds controls only shown below 768px.
 export async function sweepFocusTargets() {
   ensureBuild();
   const server = serve();
@@ -207,21 +232,12 @@ export async function sweepFocusTargets() {
   const browser = await launchChromium();
   const diffs = [];
   try {
-    const page = await browser.newPage({ viewport: golden.viewport });
-    await page.goto(`${base}/iframe.html?viewMode=story&id=${golden.story}`, { waitUntil: "load", timeout: 30000 });
-    await page.waitForFunction(() => document.getElementById("storybook-root")?.children.length > 0, null, { timeout: 8000 });
-    await page.evaluate(() => document.fonts.ready);
+    const page = await openStory(browser, base, golden);
     const moved = await page.evaluate(movedByTargets);
     if (moved.length) diffs.push(`layout: ${moved.length} element(s) move with the 24px bands, want 0 (${moved.slice(0, 3).join(", ")})`);
-    const seen = await tabThrough(page);
-    const want = golden.targets.map((t) => t.name);
-    for (const theme of golden.themes) {
-      const inTheme = seen.filter((t) => t.theme === theme);
-      const names = inTheme.map((t) => t.name);
-      if (JSON.stringify(names) !== JSON.stringify(want)) diffs.push(`${theme} tab order: got ${JSON.stringify(names)}, want ${JSON.stringify(want)}`);
-      diffs.push(...diffFacts(golden.targets, inTheme, `${theme} `));
-    }
+    diffs.push(...(await tabDiffs(page, golden.targets, "")));
     diffs.push(...diffFacts(golden.rowLinks, await rowLinks(page), "row link "));
+    diffs.push(...(await tabDiffs(await openStory(browser, base, golden.phone), golden.phone.targets, "phone ")));
   } finally {
     await browser.close();
     server.close();

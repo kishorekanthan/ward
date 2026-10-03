@@ -53,7 +53,7 @@
 }
 
 .track:not([data-on="true"]) .thumb {
-  background: var(--ward-color-line2);
+  background: var(--ward-color-edge);
 }
 
 .track[data-on="true"] .thumb {

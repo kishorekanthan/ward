@@ -249,7 +249,7 @@ else fail("console theme", consoleDiffs.join("; "));
 
 // 9. focus and targets: Tab through every small link in both themes; each paints a ring on four sides and answers across 24px; row links open from anywhere (src/goldens/focus-targets.json)
 const focusDiffs = await sweepFocusTargets();
-if (focusDiffs.length === 0) pass("focus and targets", "every small link shows its focus ring in both themes and has a 24px target; whole-row links open from anywhere on the row");
+if (focusDiffs.length === 0) pass("focus and targets", "every small link shows its focus ring in both themes and has a 24px target; edged controls, the off Switch thumb and the 375px TopBar select meet 3:1; whole-row links open from anywhere on the row");
 else fail("focus and targets", focusDiffs.join("; "));
 
 // 10. board height: the full-page board fills the viewport and its lanes scroll, not the page; the right-edge fade and lane count follow overflow (src/goldens/board-height.json)
