@@ -42,6 +42,10 @@ describe("sweepFindings", () => {
     expect(sweepFindings(ACTIVE, ranAt("2026-10-03T11:00:00Z"), NOW)).toEqual(["tag sweep last ran on schedule 7 days ago (limit 7)"]);
   });
 
+  it.each([[undefined], [null], [""], ["last tuesday"]])("names a run whose created_at is %j", (created_at) => {
+    expect(sweepFindings(ACTIVE, ranAt(created_at), NOW)).toEqual(["tag sweep's last scheduled run has no readable run time"]);
+  });
+
   it("names the absence of any scheduled run", () => {
     expect(sweepFindings(ACTIVE, NO_RUNS, NOW)).toEqual(["tag sweep has no scheduled run"]);
   });
@@ -72,6 +76,11 @@ describe("sweep-scheduled CLI", () => {
     const stale = new Date(Date.now() - 8.5 * DAY).toISOString();
     const result = run(ACTIVE, ranAt(stale));
     expect([result.status, result.stderr]).toEqual([1, "tag sweep last ran on schedule 8 days ago (limit 7)\n"]);
+  });
+
+  it.each([[undefined], ["not a date"]])("exits 1 when the last run's created_at is %j", (created_at) => {
+    const result = run(ACTIVE, ranAt(created_at));
+    expect([result.status, result.stderr]).toEqual([1, "tag sweep's last scheduled run has no readable run time\n"]);
   });
 
   it("exits 1 naming the cause when the workflow is disabled", () => {

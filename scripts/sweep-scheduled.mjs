@@ -11,7 +11,9 @@ export function sweepFindings(workflow, runs, now) {
   if (workflow.state !== "active") return [`tag sweep workflow is ${workflow.state}; enable it in the Actions tab`];
   const latest = runs.workflow_runs?.[0];
   if (!latest) return ["tag sweep has no scheduled run"];
-  const ageDays = (now - Date.parse(latest.created_at)) / DAY_MS;
+  const ranAt = Date.parse(latest.created_at);
+  if (Number.isNaN(ranAt)) return ["tag sweep's last scheduled run has no readable run time"];
+  const ageDays = (now - ranAt) / DAY_MS;
   if (ageDays > MAX_AGE_DAYS) return [`tag sweep last ran on schedule ${Math.floor(ageDays)} days ago (limit ${MAX_AGE_DAYS})`];
   return [];
 }
