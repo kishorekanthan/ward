@@ -73,7 +73,7 @@ describe("NewStreamModal", () => {
     );
     fireEvent.change(screen.getByLabelText("Stage 2 name"), { target: { value: "Map fields" } });
     expect(container.ownerDocument.querySelector("[data-colour-status]")?.textContent).toBe(
-      "Colour: none picked. You can set one later on the stream's Identity tab. Steps 4–6 are not validated yet, pending a CVD matrix and dark stepping.",
+      "Colour: none picked. You can set one later on the stream's Identity tab.",
     );
     expect(create().disabled).toBe(false);
     fireEvent.click(create());
@@ -94,7 +94,20 @@ describe("NewStreamModal", () => {
     expect(taken.getAttribute("aria-checked")).toBe("false");
   });
 
-  it("refuses an unvalidated colour step and says which steps can be used", () => {
+  it("blocks Create when the picked step is taken after it was picked", () => {
+    const props = { presentation: "web" as const, owners: ["Priya Nayar"], ladder, onCreate: vi.fn(), onClose: () => undefined };
+    const { container, rerender } = render(<NewStreamModal {...props} takenBy={{}} />);
+    fireEvent.change(screen.getByLabelText("Name"), { target: { value: "Integration" } });
+    fireEvent.change(screen.getByLabelText("Key"), { target: { value: "INT" } });
+    fireEvent.change(screen.getByLabelText("Stage 1 name"), { target: { value: "Triage" } });
+    fireEvent.change(screen.getByLabelText("Stage 2 name"), { target: { value: "Map fields" } });
+    fireEvent.click(screen.getByRole("radio", { name: "Step 2 · free" }));
+    rerender(<NewStreamModal {...props} takenBy={{ 2: "Data" }} />);
+    expect(container.ownerDocument.querySelector("[data-colour-status]")?.textContent).toBe("Colour: step 2 cannot be used.");
+    expect((screen.getByRole("button", { name: "Create stream" }) as HTMLButtonElement).disabled).toBe(true);
+  });
+
+  it("refuses an unvalidated colour step and sends a free validated one", () => {
     const onCreate = vi.fn();
     const six = [{ step: 1 }, { step: 2 }, { step: 3 }, { step: 4 }, { step: 5 }, { step: 6 }, { step: 7, reserved: true }];
     const { container } = render(
@@ -108,7 +121,7 @@ describe("NewStreamModal", () => {
     const partial = screen.getByRole("radio", { name: "Step 4 · not validated" });
     fireEvent.click(partial);
     expect(partial.getAttribute("aria-checked")).toBe("false");
-    expect(status()).toContain("Colour: none picked.");
+    expect(status()).toBe("Colour: none picked. You can set one later on the stream's Identity tab.");
     fireEvent.click(screen.getByRole("radio", { name: "Step 2 · free" }));
     expect(status()).toBe("Colour: step 2 is validated and free.");
     fireEvent.click(screen.getByRole("button", { name: "Create stream" }));

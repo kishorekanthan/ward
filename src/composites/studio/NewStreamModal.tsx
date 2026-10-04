@@ -5,7 +5,7 @@ import { Field } from "../../primitives/Field";
 import { Overlay } from "../../primitives/Overlay";
 import { Radio } from "../../primitives/Radio";
 import { isValidatedStreamStep, type StreamStep } from "../../tokens";
-import { ColourLadder, PARTIAL_STEP_REASON, type LadderStep } from "./ColourLadder";
+import { ColourLadder, type LadderStep } from "./ColourLadder";
 import { StageListEditor } from "./StageListEditor";
 import { MoveAnnouncer, MoveButton, moveAnnouncement, moveRow, moveTo, useMoveFocus, type Direction } from "./stageMoves";
 import s from "./NewStreamModal.module.css";
@@ -214,7 +214,7 @@ function hasNamedWebStages(draft: WebNewStreamDraft): boolean {
 }
 
 export function colourStatus(colourStep: number | null, takenBy: Record<number, string>): string {
-  if (colourStep === null) return `Colour: none picked. You can set one later on the stream's Identity tab. Steps 4–6 are ${PARTIAL_STEP_REASON}.`;
+  if (colourStep === null) return `Colour: none picked. You can set one later on the stream's Identity tab.`;
   if (!freeValidatedStep({ step: colourStep }, takenBy)) return `Colour: step ${colourStep} cannot be used.`;
   return `Colour: step ${colourStep} is validated and free.`;
 }
