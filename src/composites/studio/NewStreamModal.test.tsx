@@ -45,7 +45,6 @@ describe("NewStreamModal", () => {
     fireEvent.change(screen.getByLabelText("Key"), { target: { value: "INT" } });
     fireEvent.change(screen.getByLabelText("Stage 1 name"), { target: { value: "Triage" } });
     fireEvent.change(screen.getByLabelText("Stage 2 name"), { target: { value: "Map fields" } });
-    expect((screen.getByRole("button", { name: "Create stream" }) as HTMLButtonElement).disabled).toBe(true);
     fireEvent.click(screen.getByRole("radio", { name: "Step 3 · free" }));
     fireEvent.click(screen.getByRole("button", { name: "Create stream" }));
     expect(onCreate).toHaveBeenCalledTimes(1);
@@ -59,6 +58,42 @@ describe("NewStreamModal", () => {
     });
   });
 
+  it("creates a stream with no colour picked once the rest is filled", () => {
+    const onCreate = vi.fn();
+    const { container } = render(
+      <NewStreamModal presentation="web" owners={["Priya Nayar"]} ladder={ladder} takenBy={{ 1: "Data", 2: "Design", 3: "Ops" }} onCreate={onCreate} onClose={() => undefined} />,
+    );
+    const create = () => screen.getByRole("button", { name: "Create stream" }) as HTMLButtonElement;
+    fireEvent.change(screen.getByLabelText("Name"), { target: { value: "KPI Config" } });
+    fireEvent.change(screen.getByLabelText("Key"), { target: { value: "KPI" } });
+    fireEvent.change(screen.getByLabelText("Stage 1 name"), { target: { value: "Triage" } });
+    expect(create().disabled).toBe(true);
+    expect(document.getElementById(create().getAttribute("aria-describedby") as string)?.textContent).toBe(
+      "A stream can't be created without a name, a key, one named owner and at least two named stages.",
+    );
+    fireEvent.change(screen.getByLabelText("Stage 2 name"), { target: { value: "Map fields" } });
+    expect(container.ownerDocument.querySelector("[data-colour-status]")?.textContent).toBe(
+      "Colour: none picked. You can set one later on the stream's Identity tab. Steps 4–6 are not validated yet, pending a CVD matrix and dark stepping.",
+    );
+    expect(create().disabled).toBe(false);
+    fireEvent.click(create());
+    expect(onCreate).toHaveBeenCalledWith({
+      name: "KPI Config",
+      key: "KPI",
+      owner: "Priya Nayar",
+      colourStep: null,
+      writePolicyMode: "relay",
+      stages: [{ name: "Triage", kind: "entry" }, { name: "Map fields", kind: "agent" }],
+    });
+  });
+
+  it("refuses a taken colour step", () => {
+    render(<NewStreamModal presentation="web" owners={["Priya Nayar"]} ladder={ladder} takenBy={{ 1: "Data" }} onCreate={() => undefined} onClose={() => undefined} />);
+    const taken = screen.getByRole("radio", { name: "Step 1 · taken by Data" });
+    fireEvent.click(taken);
+    expect(taken.getAttribute("aria-checked")).toBe("false");
+  });
+
   it("refuses an unvalidated colour step and says which steps can be used", () => {
     const onCreate = vi.fn();
     const six = [{ step: 1 }, { step: 2 }, { step: 3 }, { step: 4 }, { step: 5 }, { step: 6 }, { step: 7, reserved: true }];
@@ -70,11 +105,10 @@ describe("NewStreamModal", () => {
     fireEvent.change(screen.getByLabelText("Stage 1 name"), { target: { value: "Triage" } });
     fireEvent.change(screen.getByLabelText("Stage 2 name"), { target: { value: "Map fields" } });
     const status = () => container.ownerDocument.querySelector("[data-colour-status]")?.textContent;
-    expect(status()).toBe("Colour: none picked. Choose a free validated step; steps 4–6 are not validated yet, pending a CVD matrix and dark stepping.");
     const partial = screen.getByRole("radio", { name: "Step 4 · not validated" });
     fireEvent.click(partial);
     expect(partial.getAttribute("aria-checked")).toBe("false");
-    expect((screen.getByRole("button", { name: "Create stream" }) as HTMLButtonElement).disabled).toBe(true);
+    expect(status()).toContain("Colour: none picked.");
     fireEvent.click(screen.getByRole("radio", { name: "Step 2 · free" }));
     expect(status()).toBe("Colour: step 2 is validated and free.");
     fireEvent.click(screen.getByRole("button", { name: "Create stream" }));
