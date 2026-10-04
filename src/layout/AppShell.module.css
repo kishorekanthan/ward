@@ -163,8 +163,22 @@
   margin-left: var(--ward-space-3);
   gap: var(--ward-space-4);
   overflow-x: auto;
+  scroll-padding-inline: var(--ward-space-6);
   scrollbar-width: none;
   font: var(--ward-type-tabLabel);
+}
+
+/* The Tabs fades: a scrolled nav shows which edge hides more links. */
+.nav[data-fade-start] {
+  mask-image: linear-gradient(to right, transparent, currentColor var(--ward-space-6));
+}
+
+.nav[data-fade-end] {
+  mask-image: linear-gradient(to left, transparent, currentColor var(--ward-space-6));
+}
+
+.nav[data-fade-start][data-fade-end] {
+  mask-image: linear-gradient(to right, transparent, currentColor var(--ward-space-6), currentColor calc(100% - var(--ward-space-6)), transparent);
 }
 
 .nav a {

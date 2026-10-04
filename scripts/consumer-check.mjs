@@ -57,6 +57,15 @@ function assertBuildShipsFonts(appRoot, fonts) {
   assert(absent.length === 0, `external build omitted fonts: ${absent.join(", ")}`);
 }
 
+// The packed CSS must mask the Primary nav's hidden edges, or a phone reader never learns more links wait off screen (#175).
+function assertNavFades(navClass, css) {
+  assert(navClass, "packed AppShell rendered no Primary nav");
+  for (const edge of ["[data-fade-start]{", "[data-fade-end]{"]) {
+    const rule = css.slice(css.indexOf(`.${navClass}${edge}`));
+    assert(css.includes(`.${navClass}${edge}`) && /^[^}]*mask-image:linear-gradient/.test(rule), `packed AppShell nav lacks its ${edge.slice(0, -1)} fade`);
+  }
+}
+
 function builtCss(appRoot) {
   const html = readFileSync(join(appRoot, "dist", "index.html"), "utf8");
   const asset = html.match(/assets\/(index-[^"]+\.css)/)?.[1];
@@ -94,7 +103,18 @@ try {
       React.createElement(ActivityConsole, { lines: [{ at: "2026-09-04T02:06:11Z", kind: "ok", text: "External event" }], connection: "live" })));
     if (!NewStreamModal || !html.includes("Ship") || !html.includes("External event") || !html.includes("data-ward-page-frame")) throw new Error("Ward did not render");
   `);
+  // The top bar reads matchMedia as it renders; a bare window stands in for the browser's under SSR.
+  writeFileSync(join(app, "nav.mjs"), `
+    import React from "react";
+    import { renderToStaticMarkup } from "react-dom/server";
+    import { AppShell } from "@kishorekanthan/ward";
+    globalThis.window = {};
+    const destinations = ["Board", "Studio", "Intake", "Tracker", "Admin"].map((label) => ({ id: label, label, href: "/" + label }));
+    const html = renderToStaticMarkup(React.createElement(AppShell, { destinations, active: "Admin" }, "Page"));
+    console.log(html.match(/<nav class="([^"]+)" aria-label="Primary"/)?.[1] ?? "");
+  `);
   run(process.execPath, [join(app, "render.mjs")], app, env);
+  assertNavFades(run(process.execPath, [join(app, "nav.mjs")], app, env).trim(), css);
 
   writeFileSync(join(app, "index.html"), "<div id=app></div><script type=module src=/main.js></script>");
   writeFileSync(join(app, "main.js"), `

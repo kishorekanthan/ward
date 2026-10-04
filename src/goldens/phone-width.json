@@ -83,6 +83,24 @@
     "panelInView": true,
     "pageScrollsSideways": false
   },
+  "topBarNav": {
+    "story": "layout-appshell--top-bar-phone-width-current-past-edge",
+    "navScrolls": true,
+    "fadeShown": true,
+    "currentLinkInView": true,
+    "currentLinkClearOfFades": true,
+    "endFadeMaskedAtStart": true,
+    "bothFadesMaskedMidScroll": true,
+    "startFadeMaskedAtEnd": true,
+    "pageScrollsSideways": false
+  },
+  "topBarNavWide": {
+    "story": "layout-appshell--top-bar-phone-width-current-past-edge",
+    "width": 1280,
+    "navScrolls": false,
+    "fadeShown": false,
+    "pageScrollsSideways": false
+  },
   "kicker": {
     "story": "layout-recordsection--kicker",
     "headLines": 1,

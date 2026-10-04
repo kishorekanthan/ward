@@ -2,6 +2,8 @@ import { useId, useRef, useState, type KeyboardEvent, type ReactNode, type RefOb
 import s from "./AppShell.module.css";
 import { Btn } from "../primitives/Btn";
 import { safeHref } from "../primitives/safeHref";
+import { useRevealActive } from "../primitives/useRevealActive";
+import { useEdgeFades } from "./useEdgeFades";
 import { useMediaQuery } from "./useMediaQuery";
 
 export type AppShellDestination = {
@@ -50,9 +52,13 @@ function StudioShell({ sidebar, header, children, rail }: StudioShellProps) {
   );
 }
 
+// A phone hides its scrollbar, so the Tabs edge fades say more links wait off screen.
 function Navigation({ destinations, active }: { destinations: AppShellDestination[]; active: string }) {
+  const navRef = useRef<HTMLElement>(null);
+  useEdgeFades(navRef, destinations.length);
+  useRevealActive(navRef, destinations.findIndex((destination) => destination.id === active), "a");
   return (
-    <nav className={s.nav} aria-label="Primary">
+    <nav ref={navRef} className={s.nav} aria-label="Primary">
       {destinations.map((destination) => (
         <a key={destination.id} href={safeHref(destination.href)} aria-current={destination.id === active ? "page" : undefined}>
           {destination.label}
