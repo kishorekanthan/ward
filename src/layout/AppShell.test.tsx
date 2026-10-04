@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { act, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { AppShell } from "./AppShell";
 import { stubMatchMedia } from "../test-setup";
 
@@ -288,5 +288,98 @@ describe("AppShell top-bar tools at phone width", () => {
       expect(screen.queryByRole("button")).toBeNull();
       unmount();
     }
+  });
+});
+
+// Five 64px links on an 80px pitch (16px gap): 384px of links. At 375px the bar leaves the nav 240px; at 1280px it takes all 384.
+const NAV = { phone: 240, wide: 384, links: 384 };
+const fiveDestinations = ["Home", "Board", "Studio", "Intake", "Admin"].map((label) => ({ id: label.toLowerCase(), label, href: `#/${label.toLowerCase()}` }));
+
+function navRect(left: number, width: number): DOMRect {
+  return { left, right: left + width, width, top: 0, bottom: 40, height: 40, x: left, y: 0, toJSON: () => ({}) } as DOMRect;
+}
+
+function isPrimaryNav(el: Element | null): el is HTMLElement {
+  return el?.getAttribute("aria-label") === "Primary";
+}
+
+function mockNavLayout(navWidth: number): void {
+  vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockImplementation(function (this: HTMLElement) {
+    return isPrimaryNav(this) ? navWidth : 0;
+  });
+  vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockImplementation(function (this: HTMLElement) {
+    return isPrimaryNav(this) ? NAV.links : 0;
+  });
+  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
+    const nav = this.parentElement;
+    if (!isPrimaryNav(nav)) return navRect(0, navWidth);
+    return navRect(Array.from(nav.children).indexOf(this) * 80 - nav.scrollLeft, 64);
+  });
+}
+
+const navShell = (active: string) => (
+  <AppShell destinations={fiveDestinations} active={active}>
+    <p>Content</p>
+  </AppShell>
+);
+
+describe("AppShell Primary nav overflow", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  const fades = (nav: HTMLElement) => [nav.hasAttribute("data-fade-start"), nav.hasAttribute("data-fade-end")];
+
+  it("fades the end at phone width, then only the start once scrolled to the last link", () => {
+    mockNavLayout(NAV.phone);
+    render(navShell("home"));
+    const nav = screen.getByRole("navigation", { name: "Primary" });
+    expect(fades(nav)).toEqual([false, true]);
+    nav.scrollLeft = 72;
+    fireEvent.scroll(nav);
+    expect(fades(nav)).toEqual([true, true]);
+    // 384px of links in a 240px window end at scrollLeft 144.
+    nav.scrollLeft = 144;
+    fireEvent.scroll(nav);
+    expect(fades(nav)).toEqual([true, false]);
+  });
+
+  it("shows no fade at 1280px, where every link fits", () => {
+    mockNavLayout(NAV.wide);
+    render(navShell("admin"));
+    const nav = screen.getByRole("navigation", { name: "Primary" });
+    expect(fades(nav)).toEqual([false, false]);
+    expect(nav.scrollLeft).toBe(0);
+  });
+
+  it("scrolls the current link past the right edge fully into view on mount", () => {
+    mockNavLayout(NAV.phone);
+    render(navShell("admin"));
+    const nav = screen.getByRole("navigation", { name: "Primary" });
+    // Admin spans 320-384 in a 240px window: 384 - 240 = 144, which leaves it at 176-240.
+    expect(nav.scrollLeft).toBe(144);
+    const admin = screen.getByRole("link", { name: "Admin" }).getBoundingClientRect();
+    expect([admin.left, admin.right]).toEqual([176, 240]);
+    expect(fades(nav)).toEqual([true, false]);
+  });
+
+  it("stops the current link clear of the end fade, the nav's 24px scroll-padding", () => {
+    mockNavLayout(NAV.phone);
+    const computed = window.getComputedStyle;
+    vi.spyOn(window, "getComputedStyle").mockImplementation((el) =>
+      isPrimaryNav(el) ? ({ scrollPaddingInlineStart: "24px" } as CSSStyleDeclaration) : computed(el),
+    );
+    render(navShell("intake"));
+    // Intake ends at 304: 304 - 240 + 24 = 88.
+    expect(document.querySelector<HTMLElement>('nav[aria-label="Primary"]')?.scrollLeft).toBe(88);
+  });
+
+  it("masks each faded edge as wide as the scroll-padding that keeps a revealed link clear of it", () => {
+    expect(rule(".nav")).toContain("scroll-padding-inline: 24px;");
+    expect(rule(".nav[data-fade-start]")).toContain("mask-image: linear-gradient(to right, transparent, currentColor 24px);");
+    expect(rule(".nav[data-fade-end]")).toContain("mask-image: linear-gradient(to left, transparent, currentColor 24px);");
+    expect(rule(".nav[data-fade-start][data-fade-end]")).toContain(
+      "mask-image: linear-gradient(to right, transparent, currentColor 24px, currentColor calc(100% - 24px), transparent);",
+    );
   });
 });

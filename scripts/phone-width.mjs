@@ -241,6 +241,41 @@ async function probeTopBar() {
   };
 }
 
+// Reads the Primary nav as mounted, then masks at the start, mid-scroll and the end, as for the Tabs strip.
+async function probeTopBarNav() {
+  const nav = document.querySelector('#storybook-root nav[aria-label="Primary"]');
+  const box = nav.getBoundingClientRect();
+  const current = nav.querySelector('[aria-current="page"]').getBoundingClientRect();
+  const fade = Number.parseFloat(getComputedStyle(nav).scrollPaddingInlineStart) || 0;
+  const currentLinkInView = current.left >= box.left - 0.5 && current.right <= box.right + 0.5 && current.right <= innerWidth;
+  const currentLinkClearOfFades =
+    fade > 0 &&
+    (!nav.hasAttribute("data-fade-start") || current.left >= box.left + fade - 0.5) &&
+    (!nav.hasAttribute("data-fade-end") || current.right <= box.right - fade + 0.5);
+  const fadeShown = nav.hasAttribute("data-fade-start") || nav.hasAttribute("data-fade-end");
+  const settle = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const loneFade = (on, off) => nav.hasAttribute(on) && !nav.hasAttribute(off) && /gradient/.test(getComputedStyle(nav).maskImage);
+  nav.scrollLeft = 0;
+  await settle();
+  const endFadeMaskedAtStart = loneFade("data-fade-end", "data-fade-start");
+  nav.scrollLeft = (nav.scrollWidth - nav.clientWidth) / 2;
+  await settle();
+  const clearStops = getComputedStyle(nav).maskImage.match(/transparent|rgba\(0, 0, 0, 0\)/g) ?? [];
+  const bothFadesMaskedMidScroll = nav.hasAttribute("data-fade-start") && nav.hasAttribute("data-fade-end") && clearStops.length === 2;
+  nav.scrollLeft = nav.scrollWidth;
+  await settle();
+  return {
+    navScrolls: nav.scrollWidth > nav.clientWidth && getComputedStyle(nav).overflowX === "auto",
+    fadeShown,
+    currentLinkInView,
+    currentLinkClearOfFades,
+    endFadeMaskedAtStart,
+    bothFadesMaskedMidScroll,
+    startFadeMaskedAtEnd: loneFade("data-fade-start", "data-fade-end"),
+    pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+  };
+}
+
 // The Empty story: the event list keeps six console lines of height, and the foot has no jump button.
 function probeConsole() {
   const list = document.querySelector("#storybook-root ol");
@@ -258,7 +293,7 @@ function probeConsole() {
 }
 
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot };
+const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot };
 
 async function measure(page, base, key) {
   const { story, label, longLabel, width = golden.viewport.width } = golden[key];

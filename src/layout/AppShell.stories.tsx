@@ -70,3 +70,9 @@ export const TopBarPhoneWidth = {
   args: { destinations, active: "board", actor: "P. Nayar", metadata: "operator", tools, children: <p>Page content.</p> },
   parameters: { viewport: { defaultViewport: "mobile1" } },
 };
+
+// Five links overflow a 375px bar; the current one, past the right edge, scrolls into view and the start fade says more wait left.
+export const TopBarPhoneWidthCurrentPastEdge = {
+  args: { destinations: destinations.slice(1), active: "admin", actor: "P. Nayar", metadata: "operator", tools, children: <p>Page content.</p> },
+  parameters: { viewport: { defaultViewport: "mobile1" } },
+};
