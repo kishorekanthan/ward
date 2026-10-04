@@ -5,7 +5,7 @@ import { Field } from "../../primitives/Field";
 import { Overlay } from "../../primitives/Overlay";
 import { Radio } from "../../primitives/Radio";
 import { isValidatedStreamStep, type StreamStep } from "../../tokens";
-import { ColourLadder, PARTIAL_STEP_REASON, type LadderStep } from "./ColourLadder";
+import { ColourLadder, type LadderStep } from "./ColourLadder";
 import { StageListEditor } from "./StageListEditor";
 import { MoveAnnouncer, MoveButton, moveAnnouncement, moveRow, moveTo, useMoveFocus, type Direction } from "./stageMoves";
 import s from "./NewStreamModal.module.css";
@@ -189,7 +189,7 @@ const WEB_POLICIES = [
   { value: "readonly", label: "Read-only stream", consequence: "Agents can observe and report; nothing leaves Trellis." },
 ];
 
-const WEB_REASON = "A stream can't be published without at least two stages and one named owner, a colour step and a key.";
+const WEB_REASON = "A stream can't be created without a name, a key, one named owner and at least two named stages.";
 
 function webDraft(name: string, key: string, owner: string, colourStep: number | null, writePolicyMode: string, stages: WebStreamStageDraft[]): WebNewStreamDraft {
   const policy = WEB_POLICIES.find((option) => option.value === writePolicyMode)?.value ?? "relay";
@@ -204,8 +204,9 @@ function hasWebIdentity(draft: WebNewStreamDraft): boolean {
   return draft.name.trim() !== "" && draft.key.trim() !== "" && draft.owner !== "";
 }
 
+// The colour is optional: a stream with none draws neutral and can take one later.
 function hasWebColour(draft: WebNewStreamDraft, takenBy: Record<number, string>): boolean {
-  return draft.colourStep !== null && freeValidatedStep({ step: draft.colourStep }, takenBy);
+  return draft.colourStep === null || freeValidatedStep({ step: draft.colourStep }, takenBy);
 }
 
 function hasNamedWebStages(draft: WebNewStreamDraft): boolean {
@@ -213,7 +214,7 @@ function hasNamedWebStages(draft: WebNewStreamDraft): boolean {
 }
 
 export function colourStatus(colourStep: number | null, takenBy: Record<number, string>): string {
-  if (colourStep === null) return `Colour: none picked. Choose a free validated step; steps 4–6 are ${PARTIAL_STEP_REASON}.`;
+  if (colourStep === null) return `Colour: none picked. You can set one later on the stream's Identity tab.`;
   if (!freeValidatedStep({ step: colourStep }, takenBy)) return `Colour: step ${colourStep} cannot be used.`;
   return `Colour: step ${colourStep} is validated and free.`;
 }
