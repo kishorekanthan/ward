@@ -252,7 +252,7 @@ async function probeTopBarNav() {
     fade > 0 &&
     (!nav.hasAttribute("data-fade-start") || current.left >= box.left + fade - 0.5) &&
     (!nav.hasAttribute("data-fade-end") || current.right <= box.right - fade + 0.5);
-  const fadeShown = nav.hasAttribute("data-fade-start") || nav.hasAttribute("data-fade-end");
+  const fadeShown = nav.hasAttribute("data-fade-start") || nav.hasAttribute("data-fade-end") || /gradient/.test(getComputedStyle(nav).maskImage);
   const settle = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
   const loneFade = (on, off) => nav.hasAttribute(on) && !nav.hasAttribute(off) && /gradient/.test(getComputedStyle(nav).maskImage);
   nav.scrollLeft = 0;
