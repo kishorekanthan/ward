@@ -9,6 +9,7 @@ import { sweepPhoneWidth } from "./phone-width.mjs";
 import { sweepFocusTargets } from "./focus-targets.mjs";
 import { sweepBoardHeight } from "./board-height.mjs";
 import { sweepHeaderGeometry } from "./header-geometry.mjs";
+import { sweepPolicyRow } from "./policy-row.mjs";
 import { workflowFindings } from "./workflows.mjs";
 import { NAME, OLD_NAME, OLD_TARBALL, oldNameFiles } from "./old-name.mjs";
 import { FAMILY_OF, breakpoints, buildCss, buildTokens, containerBreakpoints, declaredFaces, readTokens } from "./gen-css.mjs";
@@ -261,6 +262,11 @@ else fail("board height", boardDiffs.join("; "));
 const headerDiffs = await sweepHeaderGeometry();
 if (headerDiffs.length === 0) pass("header geometry", "7 RecordSection stories, both themes, root and each child at 320, 375 and 1280px match the golden within 0.5px");
 else fail("header geometry", headerDiffs.join("; "));
+
+// 12. policy row: at 1280px each web PolicyRow control ends before its chip, and every control and chip edge is within 0.5px of src/goldens/policy-row.json (#185)
+const policyDiffs = await sweepPolicyRow();
+if (policyDiffs.length === 0) pass("policy row", "5 web rows, both themes: narrow controls keep the 150px column and a wide segment, drawn or passed in, ends before the chip");
+else fail("policy row", policyDiffs.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);
 process.exitCode = failures === 0 ? 0 : 1;
