@@ -186,6 +186,8 @@ export type MarkUploadProps = {
   onUpload: (file: File) => ValidationResult | Promise<ValidationResult>;
   onUseInitials: () => void;
   presentation?: MarkUploadPresentation;
+  // Set when the viewer may not change the mark: the controls disable and name this reason.
+  disabledReason?: string;
 };
 
 const ACCEPTED = "Mark accepted.";
@@ -237,7 +239,13 @@ function UploadResult({ result, presentation }: { result: ValidationResult | nul
   return <p className={`${s.result} ${stateClassName(result, status)}`} role="status">{statusText(result, status)}</p>;
 }
 
-export function MarkUpload({ current, onUpload, onUseInitials, presentation }: MarkUploadProps) {
+type Lock = { disabled?: false } | { disabled: true; disabledReason: string };
+
+function lockOf(reason: string | undefined): Lock {
+  return reason === undefined ? {} : { disabled: true, disabledReason: reason };
+}
+
+export function MarkUpload({ current, onUpload, onUseInitials, presentation, disabledReason }: MarkUploadProps) {
   const input = useRef<HTMLInputElement>(null);
   const [result, setResult] = useState<ValidationResult | null>(null);
   const chooseFile = (file?: File) => {
@@ -256,10 +264,11 @@ export function MarkUpload({ current, onUpload, onUseInitials, presentation }: M
           type="file"
           accept="image/svg+xml"
           aria-label="Mark file"
+          disabled={disabledReason !== undefined}
           onChange={(event) => chooseFile(event.target.files?.[0])}
         />
-        <Btn onClick={() => input.current?.click()}>Upload SVG</Btn>
-        <Btn variant="ghost" onClick={onUseInitials}>
+        <Btn {...lockOf(disabledReason)} onClick={() => input.current?.click()}>Upload SVG</Btn>
+        <Btn {...lockOf(disabledReason)} variant="ghost" onClick={onUseInitials}>
           {presentation?.useInitialsLabel ?? "Use initials"}
         </Btn>
       </div>

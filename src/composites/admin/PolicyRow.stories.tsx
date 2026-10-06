@@ -1,5 +1,7 @@
 import { bothThemes } from "../../../.storybook/bothThemes";
 import type { ReactNode } from "react";
+import { Field } from "../../primitives/Field";
+import { SegmentedControl } from "../../primitives/SegmentedControl";
 import { PolicyRow, type PolicyControl, type PolicySetting } from "./PolicyRow";
 
 const setting: PolicySetting = {
@@ -64,5 +66,35 @@ export const Segmented = {
         inheritance="overridden"
       />
     </Table>
+  ),
+};
+
+const RERUN = [
+  { value: "implement", label: "implement" },
+  { value: "producing-stage", label: "producing stage" },
+];
+
+// Narrow controls keep the 150px value column; a wide segment, drawn or passed in, widens it and stays clear of the chip (#185).
+export const WebWideControls = {
+  render: () => (
+    <div>
+      <PolicyRow presentation="web" setting={{ name: "Create issues in Jira", consequence: "When a request is confirmed." }} control={{ kind: "switch", value: true }} inheritance="inherited" />
+      <PolicyRow
+        presentation="web"
+        setting={{ name: "Duplicate similarity threshold", consequence: "Above this, a request is a duplicate." }}
+        control={{ kind: "value", value: "0.75" }}
+        inheritance="inherited"
+        renderControl={(describedBy) => <Field label="Duplicate similarity threshold" labelHidden mono value="0.75" describedBy={describedBy} onChange={() => {}} />}
+      />
+      <PolicyRow presentation="web" setting={{ name: "Label prefix", consequence: "Set by the platform." }} control={{ kind: "value", value: "trellis:" }} inheritance="locked" />
+      <PolicyRow
+        presentation="web"
+        setting={{ name: "Rejected by the PR review agent", consequence: "Where the item goes back to." }}
+        control={{ kind: "segment", value: "implement", options: RERUN }}
+        inheritance="inherited"
+        renderControl={(describedBy) => <SegmentedControl label="Rejected by the PR review agent" options={RERUN} value="implement" describedBy={describedBy} onChange={() => {}} />}
+      />
+      <PolicyRow presentation="web" setting={{ name: "Rejected by a test run", consequence: "Where the item goes back to." }} control={{ kind: "segment", value: "producing-stage", options: RERUN }} inheritance="overridden" />
+    </div>
   ),
 };
