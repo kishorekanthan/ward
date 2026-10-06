@@ -145,3 +145,16 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* A disabled ladder dims as one block; the picked step keeps its outline. */
+[data-disabled="true"].ladder,
+[data-disabled="true"].swatches,
+[data-disabled="true"].tilesFrame {
+  opacity: 0.55;
+}
+
+[data-disabled="true"] .cell,
+[data-disabled="true"] .swatch,
+[data-disabled="true"] .tile {
+  cursor: default;
+}

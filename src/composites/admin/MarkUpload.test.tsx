@@ -125,6 +125,25 @@ describe("MarkUpload", () => {
     fireEvent.click(screen.getByRole("button", { name: "Use initials" }));
     expect(onUseInitials).toHaveBeenCalledTimes(1);
   });
+
+  it("disables the file input and both buttons, naming the reason, and keeps the current mark", () => {
+    const onUseInitials = vi.fn();
+    const reason = "Only a stream admin can change the mark.";
+    render(<MarkUpload current={{ svg: CLEAN, colour: "#00776B" }} onUpload={() => ({ ok: true, reasons: [] })} onUseInitials={onUseInitials} disabledReason={reason} />);
+    const buttons = [screen.getByRole("button", { name: "Upload SVG" }), screen.getByRole("button", { name: "Use initials" })] as HTMLButtonElement[];
+    expect([(screen.getByLabelText("Mark file") as HTMLInputElement).disabled, ...buttons.map((button) => button.disabled)]).toEqual([true, true, true]);
+    const described = buttons.map((button) => document.getElementById(button.getAttribute("aria-describedby") ?? "")?.textContent);
+    expect(described).toEqual([reason, reason]);
+    fireEvent.click(buttons[1]);
+    expect(onUseInitials).not.toHaveBeenCalled();
+    expect(screen.getByRole("img", { name: "Current mark" })).toBeDefined();
+  });
+
+  it("leaves the controls enabled without a reason", () => {
+    render(<MarkUpload onUpload={() => ({ ok: true, reasons: [] })} onUseInitials={() => undefined} />);
+    expect((screen.getByLabelText("Mark file") as HTMLInputElement).disabled).toBe(false);
+    expect(screen.getAllByRole("button").map((button) => (button as HTMLButtonElement).disabled)).toEqual([false, false]);
+  });
 });
 
 const REASONS = [

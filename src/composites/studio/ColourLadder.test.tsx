@@ -174,6 +174,28 @@ describe("ColourLadder tiles (Studio 9a)", () => {
   });
 });
 
+describe("ColourLadder disabled", () => {
+  it.each(["list", "swatches", "tiles"] as const)("blocks every %s step and keeps the picked one checked and undimmed", (presentation) => {
+    const onChange = vi.fn();
+    const props = { steps: SIX_AND_RESERVED, value: 1, onChange, disabled: true };
+    if (presentation === "list") render(<ColourLadder {...props} />);
+    else render(<ColourLadder {...props} presentation={presentation} />);
+    const radios = screen.getAllByRole("radio");
+    fireEvent.click(radios[1]);
+    fireEvent.keyDown(radios[2], { key: "Enter" });
+    fireEvent.keyDown(radios[2], { key: " " });
+    expect(onChange).not.toHaveBeenCalled();
+    expect(radios.map((radio) => [radio.getAttribute("aria-disabled"), radio.tabIndex])).toEqual(Array(7).fill(["true", -1]));
+    expect([radios[0].getAttribute("aria-checked"), radios[0].getAttribute("data-unavailable")]).toEqual(["true", null]);
+    expect(screen.getByRole("radiogroup").getAttribute("aria-disabled")).toBe("true");
+  });
+
+  it("leaves an enabled ladder's group without the disabled mark", () => {
+    render(<ColourLadder steps={SIX_AND_RESERVED} value={1} onChange={() => undefined} />);
+    expect(screen.getByRole("radiogroup").getAttribute("aria-disabled")).toBeNull();
+  });
+});
+
 describe("streamHex", () => {
   it("returns each step's identity hex from the tokens", () => {
     expect([1, 2, 3, 4, 5, 6].map(streamHex)).toEqual(["#00897B", "#7038C8", "#BF5310", "#1C6FB8", "#8A6A00", "#A02C6B"]);

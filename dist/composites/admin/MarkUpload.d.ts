@@ -32,6 +32,7 @@ export type MarkUploadProps = {
     onUpload: (file: File) => ValidationResult | Promise<ValidationResult>;
     onUseInitials: () => void;
     presentation?: MarkUploadPresentation;
+    disabledReason?: string;
 };
-export declare function MarkUpload({ current, onUpload, onUseInitials, presentation }: MarkUploadProps): import("react").JSX.Element;
+export declare function MarkUpload({ current, onUpload, onUseInitials, presentation, disabledReason }: MarkUploadProps): import("react").JSX.Element;
 export {};

@@ -13,6 +13,8 @@ export type ColourLadderProps = {
   value: StreamStep;
   onChange: (step: StreamStep) => void;
   takenBy?: Record<number, string>;
+  // A viewer who may not change the colour still sees which step is picked.
+  disabled?: boolean;
 };
 
 export type ColourLadderCompatibilityProps = {
@@ -23,6 +25,7 @@ export type ColourLadderCompatibilityProps = {
   takenBy?: Record<number, string>;
   // swatches: Studio 3b's 22px squares; tiles: Studio 9a's bar, hex and holder. Both keep the list's accessible label.
   presentation?: "swatches" | "tiles";
+  disabled?: boolean;
 };
 
 type RenderProps = ColourLadderProps | ColourLadderCompatibilityProps;
@@ -59,11 +62,12 @@ function onActivate(event: KeyboardEvent, select: () => void): void {
   select();
 }
 
-function cellAttributes(unavailable: boolean, checked: boolean) {
+// A disabled ladder blocks every step but dims only those nobody may take, so the picked step keeps its mark.
+function cellAttributes(unavailable: boolean, checked: boolean, blocked: boolean) {
   return {
     "aria-checked": checked,
-    "aria-disabled": unavailable || undefined,
-    tabIndex: unavailable ? -1 : 0,
+    "aria-disabled": blocked || undefined,
+    tabIndex: blocked ? -1 : 0,
     "data-checked": checked ? "true" : undefined,
     "data-unavailable": unavailable ? "true" : undefined,
   };
@@ -77,6 +81,7 @@ type CellProps = {
   taken: string | undefined;
   onChange: (step: number) => void;
   presentation: Presentation;
+  disabled: boolean;
 };
 
 const twoDigit = (step: number) => String(step).padStart(2, "0");
@@ -109,17 +114,18 @@ type CellView = {
   step: number;
 };
 
-function cellView({ step, value, taken, onChange, presentation }: CellProps): CellView {
+function cellView({ step, value, taken, onChange, presentation, disabled }: CellProps): CellView {
   const validation = ladderValidation(step);
   const holder = holderOf(validation, taken);
   const unavailable = holder !== "free";
+  const blocked = unavailable || disabled;
   const checked = value === step.step;
   const name = step.name ?? `Step ${step.step}`;
   const select = () => {
-    if (!unavailable) onChange(step.step);
+    if (!blocked) onChange(step.step);
   };
   const label = `${name} · ${presentation === "tiles" && checked ? "yours" : holder}`;
-  const shared = { role: "radio", "aria-label": label, ...cellAttributes(unavailable, checked), "data-validation": validation, style: cellStyle(step, validation), onClick: select, onKeyDown: (event: KeyboardEvent) => onActivate(event, select) };
+  const shared = { role: "radio", "aria-label": label, ...cellAttributes(unavailable, checked, blocked), "data-validation": validation, style: cellStyle(step, validation), onClick: select, onKeyDown: (event: KeyboardEvent) => onActivate(event, select) };
   return { shared, label, name, holder, validation, note: tileHolder(validation, taken, checked), step: step.step };
 }
 
@@ -177,6 +183,10 @@ function RequestTile(): ReactElement {
 
 const REQUEST: Record<Presentation, () => ReactElement | null> = { list: RequestCell, swatches: () => null, tiles: RequestTile };
 
+function disabledGroup(disabled: boolean): Record<string, true | undefined> {
+  return disabled ? { "aria-disabled": true, "data-disabled": true } : {};
+}
+
 export function ColourLadder(props: ColourLadderProps): ReactElement;
 export function ColourLadder(props: ColourLadderCompatibilityProps): ReactElement;
 export function ColourLadder(props: RenderProps): ReactElement {
@@ -190,14 +200,14 @@ export function ColourLadder(props: RenderProps): ReactElement {
   const cells = (
     <>
       {props.steps.map((step) => (
-        <Cell key={step.step} step={step} value={props.value} taken={takenBy[step.step]} onChange={onChange} presentation={presentation} />
+        <Cell key={step.step} step={step} value={props.value} taken={takenBy[step.step]} onChange={onChange} presentation={presentation} disabled={props.disabled === true} />
       ))}
       <Request />
     </>
   );
   // Tiles reflow on their own width, so the grid sits inside the group it queries.
   return (
-    <div role="radiogroup" aria-label={props.label ?? "Stream colour, validated steps only"} className={`${GROUP_CLASS[presentation]} ward-ladder`}>
+    <div role="radiogroup" aria-label={props.label ?? "Stream colour, validated steps only"} {...disabledGroup(props.disabled === true)} className={`${GROUP_CLASS[presentation]} ward-ladder`}>
       {presentation === "tiles" ? <div className={s.tiles}>{cells}</div> : cells}
     </div>
   );
