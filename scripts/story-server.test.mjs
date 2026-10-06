@@ -1,4 +1,4 @@
-import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { request } from "node:http";
 import { connect } from "node:net";
 import { tmpdir } from "node:os";
@@ -42,7 +42,10 @@ beforeAll(async () => {
   await new Promise((r) => server.listen(0, "127.0.0.1", r));
   port = server.address().port;
 });
-afterAll(() => new Promise((r) => server.close(r)));
+afterAll(async () => {
+  await new Promise((r) => server.close(r));
+  rmSync(work, { recursive: true });
+});
 
 describe("story server", () => {
   it("serves a story asset", async () => {

@@ -1,15 +1,23 @@
 // @vitest-environment node
-import { cpSync, existsSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { buildFresh, distDrift } from "./dist-fresh.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+const roots = [];
+const tempRoot = (name) => {
+  const root = mkdtempSync(join(tmpdir(), name));
+  roots.push(root);
+  return root;
+};
+
+afterEach(() => roots.splice(0).forEach((root) => rmSync(root, { recursive: true })));
 
 function tree(files) {
-  const root = mkdtempSync(join(tmpdir(), "dist-drift-"));
+  const root = tempRoot("dist-drift-");
   for (const [name, body] of Object.entries(files)) {
     mkdirSync(dirname(join(root, name)), { recursive: true });
     writeFileSync(join(root, name), body);
@@ -46,7 +54,7 @@ describe("buildFresh", () => {
     const built = buildFresh(ROOT);
     expect(built).not.toBe(join(ROOT, "dist"));
     expect(existsSync(join(built, "left-over.txt"))).toBe(false);
-    const edited = mkdtempSync(join(tmpdir(), "dist-edit-"));
+    const edited = tempRoot("dist-edit-");
     cpSync(built, edited, { recursive: true });
     writeFileSync(join(edited, "index.js"), " ", { flag: "a" });
     expect(distDrift(built, edited)).toEqual(["index.js"]);
