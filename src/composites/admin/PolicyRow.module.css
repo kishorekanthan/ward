@@ -95,7 +95,8 @@
   flex: 0 0 var(--ward-width-policyControl);
   align-items: center;
   gap: var(--ward-gap-policyState);
-  min-width: 0;
+  /* A control wider than the column, drawn or passed in, widens it rather than running under the chip (#185). */
+  min-width: min-content;
 }
 
 /* A segment keeps its options whole; it takes the width they need rather than the value column. */
