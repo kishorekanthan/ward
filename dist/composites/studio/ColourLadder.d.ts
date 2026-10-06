@@ -16,6 +16,7 @@ export type ColourLadderProps = {
     value: StreamStep;
     onChange: (step: StreamStep) => void;
     takenBy?: Record<number, string>;
+    disabled?: boolean;
 };
 export type ColourLadderCompatibilityProps = {
     label?: string;
@@ -24,6 +25,7 @@ export type ColourLadderCompatibilityProps = {
     onChange?: (step: number) => void;
     takenBy?: Record<number, string>;
     presentation?: "swatches" | "tiles";
+    disabled?: boolean;
 };
 type Validation = "validated" | "partial" | "reserved";
 export declare const PARTIAL_STEP_REASON = "not validated yet, pending a CVD matrix and dark stepping";

@@ -28,3 +28,9 @@ export const Rejected = {
 export const Accepted = {
   render: () => <MarkUpload current={{ svg: SVG, colour: "var(--ward-stream-3-id)" }} onUpload={() => ({ ok: true, reasons: [] })} onUseInitials={() => {}} />,
 };
+
+export const Disabled = {
+  render: () => (
+    <MarkUpload current={{ svg: SVG, colour: "var(--ward-stream-1-id)" }} onUpload={() => ({ ok: true, reasons: [] })} onUseInitials={() => {}} disabledReason="Only a stream admin can change the mark." />
+  ),
+};
