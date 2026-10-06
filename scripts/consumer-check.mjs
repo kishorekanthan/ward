@@ -132,5 +132,5 @@ try {
   assertBuildShipsFonts(app, fonts);
   console.log(`packed Ward consumer: install + import + render + build green, ${fonts.length} vendored fonts`);
 } finally {
-  rmSync(temporary, { recursive: true, force: true });
+  rmSync(temporary, { recursive: true });
 }
