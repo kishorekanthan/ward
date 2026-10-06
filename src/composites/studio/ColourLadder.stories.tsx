@@ -53,3 +53,7 @@ export const Tiles = {
 export const TilesNothingPicked = {
   args: { ...Tiles.args, value: null, takenBy: { 2: "UI / UX" } },
 };
+
+export const TilesDisabled = {
+  args: { ...Tiles.args, disabled: true },
+};
