@@ -1,20 +1,28 @@
 // @vitest-environment node
 import { spawnSync } from "node:child_process";
-import { chmodSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
+import { chmodSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { delimiter, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const HOOKS = join(ROOT, "githooks");
 const FIXTURES = join(HOOKS, "fixtures");
 const TRAILER = "Co-Authored-By: Claude <noreply@anthropic.com>";
 const GENERATED = "\u{1f916} Generated with [Claude Code](https://claude.com/claude-code)";
+const roots = [];
+const tempRoot = (name) => {
+  const root = realpathSync(mkdtempSync(join(tmpdir(), name)));
+  roots.push(root);
+  return root;
+};
+
+afterEach(() => roots.splice(0).forEach((root) => rmSync(root, { recursive: true })));
 
 // A repo using this checkout's githooks, with a global config of its own, not the owner's.
 function scratch(globalHooks) {
-  const root = realpathSync(mkdtempSync(join(tmpdir(), "attribution-")));
+  const root = tempRoot("attribution-");
   const config = join(root, "global.gitconfig");
   writeFileSync(config, globalHooks ? `[core]\n\thooksPath = ${globalHooks}\n` : "");
   const env = { ...process.env, GIT_CONFIG_GLOBAL: config };
@@ -39,7 +47,7 @@ function fixtures(kind) {
 
 // `gh` on PATH answering `pr view N --json ...` with only the fields asked for, as GitHub does.
 function prCheck(pr) {
-  const bin = realpathSync(mkdtempSync(join(tmpdir(), "fake-gh-")));
+  const bin = tempRoot("fake-gh-");
   writeFileSync(join(bin, "pr.json"), JSON.stringify(pr));
   const fake = [
     "#!/usr/bin/env node",
@@ -88,7 +96,7 @@ describe("commit-msg hook", () => {
 
   // A repo-level core.hooksPath shadows the owner's global hooks folder, so githooks/ runs it too.
   it("still runs the global hooks", () => {
-    const own = realpathSync(mkdtempSync(join(tmpdir(), "global-hooks-")));
+    const own = tempRoot("global-hooks-");
     const ran = join(own, "ran.txt");
     for (const hook of ["commit-msg", "pre-commit"]) {
       writeFileSync(join(own, hook), `#!/bin/sh\necho ${hook} >> ${ran}\n`);
