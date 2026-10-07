@@ -103,6 +103,7 @@ function probePageHeaderLinks() {
 }
 
 // A long unbroken title wraps inside the screen: the page keeps its width and the action stays in view, uncollapsed (#190).
+// titleWhole: no line clipped across or down; scrollHeight allows the 1px the glyphs overhang a 24px line.
 function probePageHeaderLongTitle() {
   const header = document.querySelector("#storybook-root header");
   const h1 = header.querySelector("h1");
@@ -114,7 +115,7 @@ function probePageHeaderLongTitle() {
     documentWidth: document.documentElement.scrollWidth,
     actionShown: action.textContent === "Publish" && r.left >= 0 && r.right <= innerWidth + 0.5 && action.contains(document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2)),
     label: h1.textContent,
-    titleWhole: h1.scrollWidth <= h1.clientWidth + 0.5 && !h1.hasAttribute("aria-hidden"),
+    titleWhole: h1.scrollWidth <= h1.clientWidth + 0.5 && h1.scrollHeight <= h1.clientHeight + 1 && !h1.hasAttribute("aria-hidden"),
     titleLinesAtLeast: new Set(Array.from(range.getClientRects()).map((line) => Math.round(line.top))).size,
   };
 }
