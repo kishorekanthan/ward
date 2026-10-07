@@ -19,7 +19,7 @@ describe("ComponentRow", () => {
   it("keeps the compact Ward row: counted pods, note cell and a blocked drain-first restart", () => {
     const onRestart = vi.fn();
     const { container } = inTable(<ComponentRow component={{ name: "worker", pods: 4, note: "6 stages leased", state: "drainFirst" }} onRestart={onRestart} />);
-    expect(cellTexts(container)).toEqual(["worker", "4 pods", "DRAIN FIRST", "6 stages leased", "Restart"]);
+    expect(cellTexts(container)).toEqual(["worker", "4 pods", "Drain first", "6 stages leased", "Restart"]);
     const button = screen.getByRole("button", { name: "Restart" });
     expect(button.hasAttribute("disabled")).toBe(true);
     expect(document.getElementById(button.getAttribute("aria-describedby") ?? "")?.textContent).toBe("6 stages leased");
@@ -39,11 +39,11 @@ describe("ComponentRow", () => {
     const { container } = inTable(
       <ComponentRow presentation="web" component={{ name: "worker", pods: "4 pods", note: "6 stages leased", state: "drainFirst" }} onRestart={onRestart} />,
     );
-    expect(cellTexts(container)).toEqual(["worker", "4 pods · 6 stages leased", "DRAIN FIRST", "Drain & restart"]);
+    expect(cellTexts(container)).toEqual(["worker", "4 pods · 6 stages leased", "Drain first", "Drain & restart"]);
     expect(container.querySelector(".ward-toolname")?.textContent).toBe("worker");
     const meta = container.querySelector(".ward-cellmeta.ward-truncate");
     expect(meta?.getAttribute("title")).toBe("6 stages leased");
-    expect(screen.getByText("DRAIN FIRST").className).toContain("ward-chip--attention");
+    expect(screen.getByText("Drain first").className).toContain("ward-chip--attention");
     const button = screen.getByRole("button", { name: "Drain & restart" });
     expect(button.hasAttribute("disabled")).toBe(false);
     expect(button.className).toContain("ward-btn--sm");
@@ -53,9 +53,9 @@ describe("ComponentRow", () => {
 
   it("omits the web restart button when no handler is wired", () => {
     const { container } = inTable(<ComponentRow presentation="web" component={{ name: "api", pods: "2 pods", note: "up 9d", state: "ready" }} />);
-    expect(cellTexts(container)).toEqual(["api", "2 pods · up 9d", "READY", ""]);
+    expect(cellTexts(container)).toEqual(["api", "2 pods · up 9d", "Ready", ""]);
     expect(container.querySelector("button")).toBeNull();
-    expect(screen.getByText("READY").className).toContain("ward-chip--done");
+    expect(screen.getByText("Ready").className).toContain("ward-chip--done");
   });
 
   it("labels restarts by state", () => {
@@ -83,7 +83,7 @@ function renderState(state: ComponentState, onRestart = () => {}) {
 describe("ComponentRow spec", () => {
   it("holds a drain-first component on attention, never on drift orange", () => {
     renderState("drainFirst");
-    const chip = screen.getByText("DRAIN FIRST");
+    const chip = screen.getByText("Drain first");
     expect(chip.style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-attention-bg)");
     expect(chip.style.getPropertyValue("--ward-chip-bg")).not.toBe("var(--ward-chip-drift-bg)");
   });
@@ -100,9 +100,9 @@ describe("ComponentRow spec", () => {
 
   it("reads a due restart as a failure and a ready one as done", () => {
     renderState("restartDue");
-    expect(screen.getByText("RESTART DUE").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-failed-bg)");
+    expect(screen.getByText("Restart due").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-failed-bg)");
     renderState("ready");
-    expect(screen.getByText("READY").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-done-bg)");
+    expect(screen.getByText("Ready").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-done-bg)");
   });
 
   it("restarts a ready component when asked", () => {

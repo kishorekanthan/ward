@@ -10,13 +10,13 @@ describe("HandoffRuleRow", () => {
   it("reads as when-this-then-that, in that order", () => {
     inList(<HandoffRuleRow rule={rule} />);
     const item = screen.getByRole("listitem");
-    expect(item.textContent).toBe("WHENrow count delta > 0.5%THENescalate to Priya N. · block item");
+    expect(item.textContent).toBe("Whenrow count delta > 0.5%Thenescalate to Priya N. · block item");
   });
 
   it("uses the filled system chip for WHEN and the outlined meta chip for THEN", () => {
     inList(<HandoffRuleRow rule={rule} />);
-    expect(screen.getByText("WHEN").getAttribute("data-ward-chip")).toBe("system");
-    expect(screen.getByText("THEN").getAttribute("data-ward-chip")).toBe("meta");
+    expect(screen.getByText("When").getAttribute("data-ward-chip")).toBe("system");
+    expect(screen.getByText("Then").getAttribute("data-ward-chip")).toBe("meta");
   });
 
   // Order is the meaning (first match wins), so a <ul> would drop what a screen reader conveys.
@@ -27,7 +27,7 @@ describe("HandoffRuleRow", () => {
     );
     expect(container.querySelector("ol")).not.toBeNull();
     expect(container.querySelector("ul")).toBeNull();
-    expect(screen.getAllByRole("listitem").map((li) => li.textContent?.startsWith("WHEN"))).toEqual([true, true]);
+    expect(screen.getAllByRole("listitem").map((li) => li.textContent?.startsWith("When"))).toEqual([true, true]);
     expect(screen.getAllByRole("listitem")[0].textContent).toContain("row count delta");
   });
 

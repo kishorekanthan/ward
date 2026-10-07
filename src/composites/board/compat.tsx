@@ -106,7 +106,7 @@ function legacyInitialStep(item: LegacyBoardItemView): string | undefined {
 }
 
 function legacyCardChip(item: LegacyBoardItemView, running: boolean): { role: ChipRole; label: string } {
-  return running ? { role: "running", label: "AGENT WORKING" } : (item.state ?? { role: "pending", label: item.key });
+  return running ? { role: "running", label: "Agent working" } : (item.state ?? { role: "pending", label: item.key });
 }
 
 function legacyCardMeta(item: LegacyBoardItemView, run: NonNullable<LegacyBoardItemView["run"]> | undefined): string {
@@ -233,7 +233,7 @@ function legacyColumnHeader(column: LegacyBoardColumnDef, itemCount: number, lab
   return (
     <div className="ward-boardcol-head">
       <span id={labelId} className="ward-boardcol-label" title={column.label}>{column.label}</span>
-      <span className="ward-chiprow">{column.gate === true ? <Chip role="gate" label="GATE" /> : null}<Chip role="meta" label={String(itemCount)} /></span>
+      <span className="ward-chiprow">{column.gate === true ? <Chip role="gate" label="Gate" /> : null}<Chip role="meta" label={String(itemCount)} /></span>
     </div>
   );
 }
@@ -344,7 +344,7 @@ function legacyConfigBadges(stage: LegacyConfigStage): ReactNode {
   const mounted = stage.agentsMounted ?? 0;
   return <>
     {mounted > 0 ? <Chip role="running" label={String(mounted) + " AGENTS"} /> : null}
-    {stage.terminal === true ? <Chip role="soft" label="TERMINAL" /> : null}
+    {stage.terminal === true ? <Chip role="soft" label="Terminal" /> : null}
   </>;
 }
 

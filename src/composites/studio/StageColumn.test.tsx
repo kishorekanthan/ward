@@ -41,7 +41,7 @@ describe("StageColumn", () => {
   it("keeps default visuals and the no-argument mount callback", () => {
     const onMount = vi.fn();
     const { container } = render(<StageColumn stage={terminal} onMount={onMount} />);
-    expect(container.textContent).toContain("04DoneTERMINAL");
+    expect(container.textContent).toContain("04DoneTerminal");
     expect(screen.getByText("31").nextElementSibling?.textContent).toBe("Closed this week");
     fireEvent.click(screen.getByRole("button", { name: "Mount an agent" }));
     expect(onMount).toHaveBeenCalledWith();
@@ -59,7 +59,7 @@ describe("StageColumn", () => {
     };
     const { container } = render(<StageColumn stage={stage} presentation={{ mode: "workflow" }} />);
     expect(container.querySelector("section")).toBe(screen.getByRole("region", { name: "Stage 03 Review" }));
-    expect(screen.getAllByText("HUMAN GATE")).toHaveLength(1);
+    expect(screen.getAllByText("Human gate")).toHaveLength(1);
     expect(screen.getByText("7 items · median wait 2d 4h")).toBeDefined();
     expect(screen.getByText(/^No agent can advance an item out of this stage\. Reviewers:$/)).toBeDefined();
     expect(screen.getByText("Priya Nayar").previousElementSibling?.textContent).toBe("PN");
@@ -94,7 +94,7 @@ describe("StageColumn", () => {
     render(<StageColumn stage={{ index: 5, name: "Loaded", kind: "terminal", count: 2, closedThisWeek: 41 }} onMount={vi.fn()} presentation={{ mode: "workflow" }} />);
     expect(screen.getByText("41 this week")).toBeDefined();
     expect(screen.getByText("41").nextElementSibling?.textContent).toBe("items closed this week");
-    expect(screen.getByText("TERMINAL")).toBeDefined();
+    expect(screen.getByText("Terminal")).toBeDefined();
     expect(screen.queryByRole("button", { name: "+ Mount agent" })).toBeNull();
   });
 
@@ -179,7 +179,7 @@ describe("StageColumn (spec)", () => {
     const panel = screen.getByText("Reviewers").closest('[data-panel="gate"]');
     expect(panel).not.toBeNull();
     expect(within(panel as HTMLElement).getByText("J. Rao")).not.toBeNull();
-    expect(screen.getByText("GATE")).not.toBeNull();
+    expect(screen.getByText("Gate")).not.toBeNull();
   });
 
   it("counts a terminal stage instead of drawing a gate panel", () => {

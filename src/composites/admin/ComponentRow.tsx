@@ -33,9 +33,9 @@ export type WebComponentRowProps = {
 };
 
 const STATE: Record<ComponentState, { role: ChipRole; label: string }> = {
-  ready: { role: "done", label: "READY" },
-  drainFirst: { role: "attention", label: "DRAIN FIRST" },
-  restartDue: { role: "failed", label: "RESTART DUE" },
+  ready: { role: "done", label: "Ready" },
+  drainFirst: { role: "attention", label: "Drain first" },
+  restartDue: { role: "failed", label: "Restart due" },
 };
 
 export function restartLabel(state: ComponentState): string {

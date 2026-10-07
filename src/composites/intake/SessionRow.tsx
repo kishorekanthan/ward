@@ -1,6 +1,7 @@
 import { money } from "../../fmt/money";
 import { stamp } from "../../fmt/stamp";
 import { Chip } from "../../primitives/Chip";
+import { ClampText } from "../../primitives/ClampText";
 import type { ChipRole } from "../../tokens";
 import s from "./SessionRow.module.css";
 import { safeHref } from "../../primitives/safeHref";
@@ -22,11 +23,11 @@ export type SessionRowProps =
   | { session: Session; presentation: "table"; href: string };
 
 const CHIP: Record<Session["state"], { role: ChipRole; label: string }> = {
-  open: { role: "pending", label: "OPEN" },
-  draft: { role: "running", label: "DRAFT" },
-  created: { role: "done", label: "CREATED" },
-  duplicate: { role: "meta", label: "DUPLICATE" },
-  expired: { role: "meta", label: "EXPIRED" },
+  open: { role: "pending", label: "Open" },
+  draft: { role: "running", label: "Draft" },
+  created: { role: "done", label: "Created" },
+  duplicate: { role: "meta", label: "Duplicate" },
+  expired: { role: "meta", label: "Expired" },
 };
 
 export function agoSince(iso: string): string {
@@ -48,10 +49,10 @@ function resolvedText(resolved: string[]): string {
 }
 
 // The list names why a duplicate stopped, so the table says it closed rather than only what it matched.
-const TABLE_LABEL: Partial<Record<Session["state"], string>> = { duplicate: "CLOSED · DUPLICATE" };
+const TABLE_LABEL: Partial<Record<Session["state"], string>> = { duplicate: "Closed · duplicate" };
 
 function WaitingOn({ value }: { value?: string }) {
-  return value === undefined ? null : <span className={s.tableMeta}>{`waiting on ${value}`}</span>;
+  return value === undefined ? null : <ClampText className={s.tableMeta} text={`waiting on ${value}`} />;
 }
 
 function SessionCost({ value }: { value?: number }) {
@@ -67,7 +68,7 @@ function TableSessionRow({ session, href }: { session: Session; href: string }) 
   return (
     <tr className={s.tableRow} data-state={session.state}>
       <td className={s.tableTitle}>
-        <a className={`${s.tableLink} ward-target`} href={safeHref(href)}>{session.title}</a>
+        <a className={`${s.tableLink} ward-target`} href={safeHref(href)}><ClampText text={session.title} /></a>
         <span className={s.tableMeta}>{turnsText(session)}</span>
       </td>
       <td className={s.tableResolved}>
@@ -90,9 +91,9 @@ function CardSessionRow({ session }: { session: Session }) {
   const chip = CHIP[session.state];
   return (
     <div className={s.row} data-state={session.state} tabIndex={0} role="region" aria-label={session.title}>
-      <span className={s.title}>{session.title}</span>
+      <ClampText className={s.title} text={session.title} />
       <span className={s.turns}>{`${session.turns} turns`}</span>
-      <span className={s.waiting}>{session.waitingOn ?? ""}</span>
+      <ClampText className={s.waiting} text={session.waitingOn ?? ""} />
       <span className={s.resolved}>{session.resolved.join(" · ")}</span>
       <span className={s.cost} data-testid="session-cost">
         {session.cost === undefined ? "" : money(session.cost)}

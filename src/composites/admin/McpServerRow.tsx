@@ -3,6 +3,7 @@ import { Btn } from "../../primitives/Btn";
 import { Chip } from "../../primitives/Chip";
 import type { GridColumn } from "../../primitives/Grid";
 import s from "./McpServerRow.module.css";
+import { sentence } from "../../fmt/sentence";
 
 export type McpConnection = "healthy" | "degraded" | "failed" | "unknown";
 
@@ -37,10 +38,10 @@ export type WebMcpServerRowProps = {
 };
 
 const CONNECTION: Record<McpConnection, McpConnectionChip> = {
-  healthy: { role: "done", label: "HEALTHY" },
-  degraded: { role: "attention", label: "DEGRADED" },
-  failed: { role: "failed", label: "FAILED" },
-  unknown: { role: "pending", label: "UNKNOWN" },
+  healthy: { role: "done", label: "Healthy" },
+  degraded: { role: "attention", label: "Degraded" },
+  failed: { role: "failed", label: "Failed" },
+  unknown: { role: "pending", label: "Unknown" },
 };
 
 export const MCP_SERVER_COLUMNS: GridColumn[] = [
@@ -106,7 +107,7 @@ function CompactMcpServerRow({ server }: { server: McpServer }): ReactElement {
       <Cell column="name">
         <span className={s.head}>
           <span className={s.name}>{server.name}</span>
-          <Chip role={server.cls === "write" ? "write" : "meta"} label={server.cls.toUpperCase()} />
+          <Chip role={server.cls === "write" ? "write" : "meta"} label={sentence(server.cls)} />
         </span>
         {server.pinned && <span className={s.pinned}>pinned {server.pinned}</span>}
       </Cell>
@@ -128,7 +129,7 @@ type McpClassChip = { role: "write" | "meta"; label: string };
 
 // Write class follows the server's declared write_tools, not per-tool flags.
 function webClassChip(server: WebMcpServer): McpClassChip {
-  return (server.write_tools?.length ?? 0) > 0 ? { role: "write", label: "WRITE CLASS" } : { role: "meta", label: "READ ONLY" };
+  return (server.write_tools?.length ?? 0) > 0 ? { role: "write", label: "Write class" } : { role: "meta", label: "Read only" };
 }
 
 function WebPinned({ pinned }: { pinned: string | null }): ReactElement {

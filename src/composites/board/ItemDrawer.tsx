@@ -41,7 +41,7 @@ function runningRows(item: ItemDetail, feed?: WorkCardFeed | null): [string, Rea
 
 function stepLabel(step: number | null): string {
   const valid = validatedStep(step);
-  return valid === null ? "NO COLOUR" : `STEP ${valid}`;
+  return valid === null ? "No colour" : `Step ${valid}`;
 }
 
 function detailRows(item: ItemDetail, feed?: WorkCardFeed | null): [string, ReactNode][] {
@@ -68,7 +68,7 @@ function ResolveSection({ resolve, label }: { resolve: ReactNode; label: string 
 }
 
 function DrawerHead({ item }: { item: ItemDetail }) {
-  const state = item.run ? { role: "running" as const, label: "AGENT WORKING" } : item.state;
+  const state = item.run ? { role: "running" as const, label: "Agent working" } : item.state;
   return (
     <div className={s.head}>
       <Chip role="meta" label={item.key} />

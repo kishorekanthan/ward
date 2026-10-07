@@ -51,9 +51,11 @@
   white-space: nowrap;
 }
 
+/* A long owner name in the line wraps rather than widening the header (#199). */
 .consequence {
   font: var(--ward-type-secondary);
   color: var(--ward-color-muted);
+  overflow-wrap: anywhere;
 }
 
 /* The wrap clips its overflow; a ring-sized gutter, cancelled by margin, keeps a focus ring whole. */
@@ -135,6 +137,12 @@
   .row {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  /* An unbroken title, such as an asset id, wraps at any character rather than widening the page (#190). */
+  .title {
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 
   .actionsWrap {

@@ -54,7 +54,7 @@ function CellControl({
         checked={cell.value !== "off"}
         onChange={(on) => onChange(cell.streamStep, on)}
       />
-      {cell.value === "pilot" && <Chip role="running" label="PILOT" />}
+      {cell.value === "pilot" && <Chip role="running" label="Pilot" />}
     </span>
   );
 }
@@ -97,7 +97,7 @@ function WebCellControl({ name, cell, onChange }: { name: string; cell: WebCapab
   if (cell.value !== "pilot") return control;
   return (
     <span className={`${s.webControl} ward-envrow`}>
-      <Chip role="running" label="PILOT" />
+      <Chip role="running" label="Pilot" />
       {control}
     </span>
   );

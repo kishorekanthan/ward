@@ -23,9 +23,9 @@ export function HandoffRuleRow({ rule }: { rule: HandoffRule }) {
   if (!useContext(InHandoffRules)) throw new Error("HandoffRuleRow: must be rendered inside HandoffRules");
   return (
     <li className={s.row}>
-      <Chip role="system" label="WHEN" />
+      <Chip role="system" label="When" />
       <span className={s.condition}>{rule.when}</span>
-      <Chip role="meta" label="THEN" />
+      <Chip role="meta" label="Then" />
       <span className={s.action}>{rule.then}</span>
     </li>
   );

@@ -35,7 +35,7 @@ export const WithChips = {
     title: "intake-advisor v3",
     chips: [
       { role: "stream", label: "data-eng", streamStep: 1 },
-      { role: "running", label: "DRAFT" },
+      { role: "running", label: "Draft" },
     ],
     actions,
   },
@@ -115,10 +115,10 @@ export const PhoneWidth = {
     title: "intake-advisor v3",
     chips: [
       { role: "stream", label: "data-eng", streamStep: 1 },
-      { role: "running", label: "DRAFT" },
-      { role: "gate", label: "AWAITING REVIEW" },
-      { role: "attention", label: "2 GATES OVERDUE" },
-      { role: "meta", label: "OWNER PLATFORM" },
+      { role: "running", label: "Draft" },
+      { role: "gate", label: "Awaiting review" },
+      { role: "attention", label: "2 gates overdue" },
+      { role: "meta", label: "Owner platform" },
     ],
     actions,
   },
@@ -130,7 +130,7 @@ export const PhoneWidthOneChip = {
   args: {
     crumb: [{ label: "Studio", href: "/studio" }, { label: "data-eng" }],
     title: "intake-advisor v3",
-    chips: [{ role: "running", label: "DRAFT" }],
+    chips: [{ role: "running", label: "Draft" }],
     actions,
   },
   parameters: { viewport: { defaultViewport: "mobile1" } },
@@ -177,15 +177,37 @@ export const PhoneWidthLongLoneLink = {
   parameters: { viewport: { defaultViewport: "mobile1" } },
 };
 
-// Two links still fold behind ··· at 375px.
+// Two links too wide for their own line still fold behind ··· at 375px.
 export const PhoneWidthTwoLinks = {
   args: {
     crumb: [{ label: "data-eng", href: "/streams/data-eng" }, { label: "Intake" }],
     title: "Intake",
     actions: [
-      <a key="advisor" href="#advisor">Ask the advisor first</a>,
+      <a key="advisor" href="#advisor">Ask the advisor to shape it first</a>,
       <a key="raise" href="#raise">Write the request yourself</a>,
     ],
   },
   parameters: { viewport: { defaultViewport: "mobile1" } },
 };
+
+// A signal draft's title is its asset id: unbroken, it wraps at any character rather than widening the page (#190).
+export const PhoneWidthLongTitle = {
+  args: {
+    crumb: [{ label: "Signals", href: "/signals" }, { label: "Draft" }],
+    title: "warehouse.analytics.customer_lifetime_value_daily_rollup_v2",
+    actions: [<Btn key="publish" variant="primary" onClick={() => {}}>Publish</Btn>],
+  },
+  parameters: { viewport: { defaultViewport: "mobile1" } },
+};
+
+// The case file header: a 120-character title wraps to two lines and cuts, and a 40-character owner wraps (#199).
+const longCase = {
+  crumb: [{ label: "data-eng", href: "/streams/data-eng" }, { label: "FL-229" }],
+  chips: [{ role: "gate", label: "Awaiting review" }],
+  title: "Reconcile late-arriving inbound shipments against the carrier's manifest before the nightly warehouse cut-off has closed",
+  consequence: "Owner Alexandra Whitfield-Montgomery Okafor-Li",
+  actions: [<Btn key="open" onClick={() => {}}>Open in Jira</Btn>],
+  density: "record",
+};
+
+export const RecordLongTitle = { args: longCase };

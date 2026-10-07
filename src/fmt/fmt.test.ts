@@ -8,6 +8,7 @@ import { duration } from "./duration";
 import { elapsed } from "./elapsed";
 import { money } from "./money";
 import { ratio } from "./ratio";
+import { sentence } from "./sentence";
 import { stamp } from "./stamp";
 
 const dir = join(dirname(fileURLToPath(import.meta.url)), "goldens");
@@ -21,6 +22,7 @@ const cases: Record<string, (...args: never[]) => string> = {
   count,
   ratio,
   clock,
+  sentence,
 };
 
 for (const [name, fn] of Object.entries(cases)) {

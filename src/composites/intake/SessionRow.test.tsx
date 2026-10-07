@@ -28,7 +28,7 @@ test("table presentation preserves the five-cell session-list contract", () => {
   expect(host.querySelector("a")?.getAttribute("href")).toBe("#/sessions/1");
   expect(host.textContent).toContain("4 turns · agent asked about the backfill window");
   expect(host.textContent).toContain("waiting on");
-  expect(host.textContent).toContain("DRAFT");
+  expect(host.textContent).toContain("Draft");
   expect(host.textContent).toContain("DATAENG-4388");
 });
 
@@ -71,11 +71,11 @@ describe("SessionRow card presentation", () => {
 
   it("gives each session state its own chip", () => {
     const pairs: [Session["state"], string, string][] = [
-      ["open", "OPEN", "pending"],
-      ["draft", "DRAFT", "running"],
-      ["created", "CREATED", "done"],
-      ["duplicate", "DUPLICATE", "meta"],
-      ["expired", "EXPIRED", "meta"],
+      ["open", "Open", "pending"],
+      ["draft", "Draft", "running"],
+      ["created", "Created", "done"],
+      ["duplicate", "Duplicate", "meta"],
+      ["expired", "Expired", "meta"],
     ];
     for (const [state, label, role] of pairs) {
       const { container, unmount } = renderCard(<SessionRow session={{ ...CARD, state }} />);

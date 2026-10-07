@@ -18,7 +18,7 @@ const items: BoardItem[] = [
     waitsOn: "A. Whyte",
     streamStep: 1,
     changedAt: "2026-09-06T02:14:00Z",
-    state: { role: "attention", label: "NEEDS A HUMAN" },
+    state: { role: "attention", label: "Needs a human" },
   },
   {
     key: "FL-231",
@@ -28,7 +28,7 @@ const items: BoardItem[] = [
     waitsOn: "J. Rao",
     streamStep: 1,
     changedAt: "2026-09-06T02:12:00Z",
-    state: { role: "pending", label: "QUEUED" },
+    state: { role: "pending", label: "Queued" },
   },
   {
     key: "FL-244",

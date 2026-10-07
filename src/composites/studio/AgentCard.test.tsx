@@ -17,9 +17,9 @@ const agent: Agent = {
 describe("AgentCard", () => {
   it("keeps Ward string version labels and selected-link state", () => {
     render(<AgentCard agent={agent} href="#agent" selected />);
-    expect(screen.getByText("V7 DRAFT")).toBeDefined();
-    expect(screen.getByText("V6 LIVE")).toBeDefined();
-    expect(screen.getByText("V5 PAUSED")).toBeDefined();
+    expect(screen.getByText("V7 draft")).toBeDefined();
+    expect(screen.getByText("V6 live")).toBeDefined();
+    expect(screen.getByText("V5 paused")).toBeDefined();
     expect(screen.getByRole("link", { name: "Extractor" }).getAttribute("aria-current")).toBe("true");
   });
 
@@ -43,13 +43,13 @@ const specAgent: Agent = {
 describe("AgentCard (spec)", () => {
   it("shows a draft as running and a live version as done, never as a stream colour", () => {
     render(<AgentCard agent={specAgent} href="/studio/agents/triage" />);
-    expect(screen.getByText("V7 DRAFT").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-running-bg)");
-    expect(screen.getByText("V6 LIVE").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-done-bg)");
+    expect(screen.getByText("V7 draft").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-running-bg)");
+    expect(screen.getByText("V6 live").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-done-bg)");
   });
 
   it("shows a paused version as neutral", () => {
     render(<AgentCard agent={{ ...specAgent, versions: [{ v: "V5", status: "paused" }] }} href="/x" />);
-    expect(screen.getByText("V5 PAUSED").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-meta-bg)");
+    expect(screen.getByText("V5 paused").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-meta-bg)");
   });
 
   it("names the item an active run is working on, with a counter", () => {
@@ -90,7 +90,7 @@ describe("AgentCard facts", () => {
     expect(list).not.toBeNull();
     expect(Array.from(list!.querySelectorAll("dt"), (term) => term.textContent)).toEqual(["Model", "Stages", "Last run"]);
     expect(Array.from(list!.querySelectorAll("dd"), (value) => value.textContent)).toEqual(["claude-sonnet", "Intake · Review", "done · DE-12"]);
-    const chip = within(card).getByText("V7 DRAFT");
+    const chip = within(card).getByText("V7 draft");
     expect(chip.compareDocumentPosition(list!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(within(card).getAllByRole("link")).toHaveLength(1);
   });

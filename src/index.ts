@@ -35,6 +35,8 @@ export { Checkbox } from "./primitives/Checkbox";
 export type { CheckboxProps } from "./primitives/Checkbox";
 export { Chip } from "./primitives/Chip";
 export type { ChipProps, ChipSemantic } from "./primitives/Chip";
+export { ClampText } from "./primitives/ClampText";
+export type { ClampTextProps } from "./primitives/ClampText";
 export { streamColour, streamChipProps, validatedStep } from "./primitives/streamColour";
 export type { StreamColourPart } from "./primitives/streamColour";
 export { safeHref, UNSAFE_HREF } from "./primitives/safeHref";

@@ -40,7 +40,7 @@ function Versions({ versions }: { versions: AgentVersion[] }) {
   return (
     <div className={s.chips}>
       {versions.map((v) => (
-        <Chip key={v.v} role={ROLE[v.status]} size="tag" label={v.label ?? `${v.v} ${v.status.toUpperCase()}`} />
+        <Chip key={v.v} role={ROLE[v.status]} size="tag" label={v.label ?? `${v.v} ${v.status}`} />
       ))}
     </div>
   );

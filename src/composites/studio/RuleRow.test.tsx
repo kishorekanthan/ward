@@ -39,7 +39,7 @@ describe("RuleRow", () => {
     const onChange = vi.fn();
     const { container } = render(<ol><RuleRow rule={rule} onChange={onChange} presentation={{ cellLayout: "contract", conditionText: "row count delta > 0.5%" }} /></ol>);
     expect(container.querySelectorAll("ol > li")).toHaveLength(1);
-    expect(container.querySelector("li")?.textContent).toContain("WHENrow count delta > 0.5%THEN");
+    expect(container.querySelector("li")?.textContent).toContain("Whenrow count delta > 0.5%Then");
     chooseOption(screen.getByRole("button", { name: "Then" }), "Advance");
     expect(onChange).toHaveBeenCalledWith({ when: rule.when, then: "advance" });
   });

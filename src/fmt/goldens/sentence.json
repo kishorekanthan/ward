@@ -1,0 +1,7 @@
+[
+  { "in": ["write"], "out": "Write" },
+  { "in": ["read only"], "out": "Read only" },
+  { "in": ["jira write"], "out": "Jira write" },
+  { "in": ["Healthy"], "out": "Healthy" },
+  { "in": [""], "out": "" }
+]

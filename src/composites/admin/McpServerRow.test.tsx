@@ -31,9 +31,9 @@ describe("McpServerRow compact", () => {
         server={{ name: "jira", transport: "http", credentialId: "trellis-relay", tools: ["comment", "label"], cls: "write", pinned: "v1.9.0", connection: "degraded" }}
       />,
     );
-    expect(cellTexts(container)).toEqual(["jiraWRITEpinned v1.9.0", "DEGRADED", "http", "trellis-relay", "mcp.jira.comment · mcp.jira.label"]);
-    expect(chipClass(container, "WRITE")).toContain("ward-chip--write");
-    expect(chipClass(container, "DEGRADED")).toContain("ward-chip--attention");
+    expect(cellTexts(container)).toEqual(["jiraWritepinned v1.9.0", "Degraded", "http", "trellis-relay", "mcp.jira.comment · mcp.jira.label"]);
+    expect(chipClass(container, "Write")).toContain("ward-chip--write");
+    expect(chipClass(container, "Degraded")).toContain("ward-chip--attention");
     expect(container.querySelector("button")).toBeNull();
   });
 
@@ -41,9 +41,9 @@ describe("McpServerRow compact", () => {
     const { container } = inTable(
       <McpServerRow server={{ name: "foundry", transport: "stdio", credentialId: "trellis-mcp", tools: [], cls: "read", connection: "failed" }} />,
     );
-    expect(cellTexts(container)[0]).toBe("foundryREAD");
-    expect(chipClass(container, "READ")).toContain("ward-chip--meta");
-    expect(chipClass(container, "FAILED")).toContain("ward-chip--failed");
+    expect(cellTexts(container)[0]).toBe("foundryRead");
+    expect(chipClass(container, "Read")).toContain("ward-chip--meta");
+    expect(chipClass(container, "Failed")).toContain("ward-chip--failed");
     expect(container.textContent).not.toContain("unpinned");
   });
 });
@@ -64,20 +64,20 @@ describe("McpServerRow web presentation", () => {
         }}
       />,
     );
-    expect(cellTexts(container)).toEqual(["jirahttp · trellis-relay", "2 discovered", "WRITE CLASS", "v1.9.0", "HEALTHY", ""]);
+    expect(cellTexts(container)).toEqual(["jirahttp · trellis-relay", "2 discovered", "Write class", "v1.9.0", "Healthy", ""]);
     expect(container.querySelector(".ward-toolname")?.textContent).toBe("jira");
     expect(container.querySelector(".ward-truncate")?.getAttribute("title")).toBe("comment, label");
-    expect(chipClass(container, "WRITE CLASS")).toContain("ward-chip--write");
-    expect(chipClass(container, "HEALTHY")).toContain("ward-chip--done");
+    expect(chipClass(container, "Write class")).toContain("ward-chip--write");
+    expect(chipClass(container, "Healthy")).toContain("ward-chip--done");
     expect(container.querySelector(".ward-warnink")).toBeNull();
   });
 
   it("treats a sparse record as read only, unpinned and unknown with blank transport and zero tools", () => {
     const { container } = inTable(<McpServerRow presentation="web" server={{ name: "bare", tools: [{ tool: "x", write_class: true }], write_tools: [] }} />);
-    expect(cellTexts(container)).toEqual(["bare · ", "1 discovered", "READ ONLY", "unpinned", "UNKNOWN", ""]);
+    expect(cellTexts(container)).toEqual(["bare · ", "1 discovered", "Read only", "unpinned", "Unknown", ""]);
     expect(container.querySelector(".ward-warnink")?.textContent).toBe("unpinned");
-    expect(chipClass(container, "READ ONLY")).toContain("ward-chip--meta");
-    expect(chipClass(container, "UNKNOWN")).toContain("ward-chip--pending");
+    expect(chipClass(container, "Read only")).toContain("ward-chip--meta");
+    expect(chipClass(container, "Unknown")).toContain("ward-chip--pending");
   });
 
   it("offers restart and pin with the server name when a supervisor exists and the version is unpinned", () => {
@@ -110,13 +110,13 @@ describe("McpServerRow web presentation", () => {
 
 describe("mcpConnectionChip", () => {
   it.each([
-    ["healthy", "done", "HEALTHY"],
-    ["degraded", "attention", "DEGRADED"],
-    ["failed", "failed", "FAILED"],
-    ["unknown", "pending", "UNKNOWN"],
-    [undefined, "pending", "UNKNOWN"],
-    ["rebooting", "pending", "UNKNOWN"],
-    ["constructor", "pending", "UNKNOWN"],
+    ["healthy", "done", "Healthy"],
+    ["degraded", "attention", "Degraded"],
+    ["failed", "failed", "Failed"],
+    ["unknown", "pending", "Unknown"],
+    [undefined, "pending", "Unknown"],
+    ["rebooting", "pending", "Unknown"],
+    ["constructor", "pending", "Unknown"],
   ])("maps %s to %s %s", (connection, role, label) => {
     expect(mcpConnectionChip(connection)).toEqual({ role, label });
   });
@@ -144,16 +144,16 @@ function renderConnection(connection: McpConnection) {
 describe("McpServerRow spec", () => {
   it("reads a degraded server as attention, not as a failure", () => {
     renderConnection("degraded");
-    const chip = screen.getByText("DEGRADED");
+    const chip = screen.getByText("Degraded");
     expect(chip.style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-attention-bg)");
     expect(chip.style.getPropertyValue("--ward-chip-bg")).not.toBe("var(--ward-chip-failed-bg)");
   });
 
   it("keeps a failed server on failed and an unknown one on pending", () => {
     renderConnection("failed");
-    expect(screen.getByText("FAILED").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-failed-bg)");
+    expect(screen.getByText("Failed").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-failed-bg)");
     renderConnection("unknown");
-    expect(screen.getByText("UNKNOWN").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-pending-bg)");
+    expect(screen.getByText("Unknown").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-pending-bg)");
   });
 
   it("names a tool as mcp.<server>.<tool> and grants none of them itself", () => {

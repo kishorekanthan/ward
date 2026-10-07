@@ -1,4 +1,5 @@
 import { bothThemes } from "../../../.storybook/bothThemes";
+import type { ComponentType, ReactNode } from "react";
 import { SessionRow } from "./SessionRow";
 
 export default {
@@ -24,3 +25,23 @@ export const Created = {
 };
 export const Duplicate = { args: { session: { ...base, state: "duplicate", resolved: [] } } };
 export const Expired = { args: { session: { ...base, state: "expired", waitingOn: undefined, resolved: [] } } };
+
+// A 120-character title and a 40-character owner wrap to two lines, then cut, in the card and the table (#199).
+const long = {
+  ...base,
+  title: "Reconcile late-arriving inbound shipments against the carrier's manifest before the nightly warehouse cut-off has closed",
+  waitingOn: "Alexandra Whitfield-Montgomery Okafor-Li",
+  cost: 0.34,
+};
+
+const inTable = (Story: ComponentType): ReactNode => (
+  <table style={{ width: "100%", borderCollapse: "collapse" }}>
+    <tbody>
+      <Story />
+    </tbody>
+  </table>
+);
+
+export const LongTitle = { args: { session: long } };
+
+export const LongTitleTable = { args: { session: long, presentation: "table", href: "/intake/sessions/7" }, decorators: [inTable] };

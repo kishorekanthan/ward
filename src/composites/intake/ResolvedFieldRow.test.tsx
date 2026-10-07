@@ -7,7 +7,7 @@ const field: ResolvedField = { key: "Stream", value: "Data Engineering", evidenc
 describe("ResolvedFieldRow", () => {
   it("asks for confirmation with a warn chip, not with a tick", () => {
     render(<ResolvedFieldRow field={{ ...field, state: "confirm" }} />);
-    const chip = screen.getByText("CONFIRM");
+    const chip = screen.getByText("Confirm");
     expect(chip.getAttribute("data-ward-chip")).toBe("warn");
     expect(screen.queryByLabelText("Resolved")).toBeNull();
   });
@@ -18,7 +18,7 @@ describe("ResolvedFieldRow", () => {
     expect(screen.getByLabelText("Resolved").getAttribute("data-state")).toBe("met");
     rerender(<ResolvedFieldRow field={{ ...field, state: "unresolved" }} />);
     expect(screen.getByLabelText("Unresolved").getAttribute("data-state")).toBe("unmet");
-    expect(screen.queryByText("CONFIRM")).toBeNull();
+    expect(screen.queryByText("Confirm")).toBeNull();
   });
 
   it("keeps evidence on one line, readable in full on hover", () => {
