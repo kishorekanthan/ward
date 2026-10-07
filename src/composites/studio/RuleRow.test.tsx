@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import { chooseOption, optionLabels } from "../../test-setup";
 import { RuleRow, type Rule } from "./RuleRow";
 
 const rule: Rule = { when: { field: "total", op: ">", value: "0" }, then: "escalate" };
@@ -13,8 +14,7 @@ describe("RuleRow", () => {
   it("keeps the structured rule and returns its complete next value", () => {
     const onChange = vi.fn();
     const { container } = render(table(<RuleRow rule={rule} onChange={onChange} />));
-    const select = screen.getByRole("combobox");
-    fireEvent.change(select, { target: { value: "block" } });
+    chooseOption(screen.getByRole("button", { name: "Then" }), "Block");
     expect(container.querySelectorAll("td")).toHaveLength(2);
     expect(screen.getByText("total > 0")).not.toBeNull();
     expect(onChange).toHaveBeenCalledWith({ when: rule.when, then: "block" });
@@ -22,7 +22,7 @@ describe("RuleRow", () => {
 
   it("shows read-only as words and rejects unknown actions", () => {
     const { unmount } = render(table(<RuleRow rule={rule} readOnly />));
-    expect(screen.queryByRole("combobox")).toBeNull();
+    expect(screen.queryByRole("button", { name: "Then" })).toBeNull();
     expect(screen.getByText("Escalate")).not.toBeNull();
     unmount();
     expect(() => render(table(<RuleRow rule={{ ...rule, then: "merge" as never }} />))).toThrow("not a contract action");
@@ -40,7 +40,7 @@ describe("RuleRow", () => {
     const { container } = render(<ol><RuleRow rule={rule} onChange={onChange} presentation={{ cellLayout: "contract", conditionText: "row count delta > 0.5%" }} /></ol>);
     expect(container.querySelectorAll("ol > li")).toHaveLength(1);
     expect(container.querySelector("li")?.textContent).toContain("WHENrow count delta > 0.5%THEN");
-    fireEvent.change(screen.getByRole("combobox", { name: "Then" }), { target: { value: "advance" } });
+    chooseOption(screen.getByRole("button", { name: "Then" }), "Advance");
     expect(onChange).toHaveBeenCalledWith({ when: rule.when, then: "advance" });
   });
 });
@@ -61,24 +61,19 @@ describe("RuleRow (spec)", () => {
 
   it("offers only the four contract actions", () => {
     wrap(<RuleRow rule={specRule} onChange={() => {}} />);
-    expect(screen.getAllByRole("option").map((o) => o.getAttribute("value"))).toEqual([
-      "advance",
-      "block",
-      "escalate",
-      "requestReview",
-    ]);
+    expect(optionLabels(screen.getByRole("button", { name: "Then" }))).toEqual(["Advance", "Block", "Escalate", "Request review"]);
   });
 
   it("shows a read-only rule as words, with nothing to change", () => {
     wrap(<RuleRow rule={specRule} readOnly onChange={() => {}} />);
-    expect(screen.queryByRole("combobox")).toBeNull();
+    expect(screen.queryByRole("button", { name: "Then" })).toBeNull();
     expect(screen.getByText("Block")).not.toBeNull();
   });
 
   it("reports the new action", () => {
     const onChange = vi.fn();
     wrap(<RuleRow rule={specRule} onChange={onChange} />);
-    fireEvent.change(screen.getByLabelText("Then"), { target: { value: "escalate" } });
+    chooseOption(screen.getByLabelText("Then"), "Escalate");
     expect(onChange).toHaveBeenCalledWith({ ...specRule, then: "escalate" });
   });
 });

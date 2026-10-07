@@ -131,7 +131,7 @@ type Category = "action" | "hover" | "current" | "selection" | "focus" | "brand"
 
 // Spec: blue is the primary action, links, the active tab, the selected frame, the focus ring, the running flash
 // the agent-quote rule and the still-editable queued comment; blueSoft is the selected row and the gate tint (Studio 3b rings its gate row in blue).
-// accentTint answers the pointer on a link or destination, accentPill fills the current destination (#191). Anything added must name one reason.
+// accentTint answers the pointer on a link or destination, accentPill fills the current destination (#191) and the Select option the keys point at (#192). Anything added must name one reason.
 const BLUE_USES: Record<Category, string[]> = {
   action: [
     "ward.css a blue",
@@ -151,6 +151,7 @@ const BLUE_USES: Record<Category, string[]> = {
     "primitives/Grid.module.css .sort:hover accentTint",
     "primitives/Tabs.module.css .tab:hover accentTint",
     "primitives/TopBar.module.css .dest:hover accentTint",
+    "primitives/Select.module.css .option:hover accentTint",
     "layout/AppShell.module.css .nav a:hover accentTint",
     "layout/Sidebar.module.css .navItem:hover, .new:hover, .footLink:hover accentTint",
     "composites/intake/SessionRow.module.css .link:hover, .tableLink:hover, .tableRecord:hover accentTint",
@@ -159,6 +160,7 @@ const BLUE_USES: Record<Category, string[]> = {
     "primitives/Tabs.module.css .tab[aria-current=\"page\"] accentPill",
     "primitives/Tabs.module.css .tab[aria-selected=\"true\"] accentPill",
     "primitives/TopBar.module.css .dest[aria-current=\"page\"] accentPill",
+    "primitives/Select.module.css .option[data-active=\"true\"] accentPill",
     "layout/AppShell.module.css .nav a[aria-current=\"page\"] accentPill",
     "layout/Sidebar.module.css .agent[aria-current=\"page\"], .root nav a[aria-current=\"page\"] accentPill",
     "layout/Sidebar.module.css .navItem[aria-current=\"page\"] accentPill",
@@ -168,6 +170,7 @@ const BLUE_USES: Record<Category, string[]> = {
     "primitives/Switch.module.css .track[data-on=\"true\"] blue",
     "primitives/Radio.module.css .input blue",
     "primitives/Checkbox.module.css .box blue",
+    "primitives/Select.module.css .option[aria-selected=\"true\"] .check::after blue",
     "composites/studio/ToolRow.module.css .row > input blue",
     "primitives/Grid.module.css .row[data-selected=\"true\"] blueSoft",
     "composites/board/WorkCard.module.css .card[data-selected=\"true\"] blue",

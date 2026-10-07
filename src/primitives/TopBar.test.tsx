@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+import { chooseOption, optionLabels } from "../test-setup";
 import { TopBar } from "./TopBar";
 
 const destinations = [
@@ -32,12 +33,20 @@ describe("TopBar", () => {
 
   it("offers the same destinations to the narrow select", () => {
     render(<TopBar wordmark="TRELLIS" destinations={destinations} active="board" />);
-    const options = screen.getAllByRole("option").map((o) => o.textContent);
-    expect(options).toEqual(["Board", "Studio"]);
+    const select = screen.getByRole("button", { name: "Destination" });
+    expect(select.textContent).toBe("Board");
+    expect(optionLabels(select)).toEqual(["Board", "Studio"]);
+  });
+
+  it("navigates to the destination picked in the narrow select", () => {
+    const onNavigate = vi.fn();
+    render(<TopBar wordmark="TRELLIS" destinations={destinations} active="board" onNavigate={onNavigate} />);
+    chooseOption(screen.getByRole("button", { name: "Destination" }), "Studio");
+    expect(onNavigate).toHaveBeenCalledWith("studio");
   });
 
   it("does not give the nav and its narrow-width select the same name", () => {
     render(<TopBar wordmark="TRELLIS" destinations={destinations} active="board" />);
-    expect(screen.getByRole("combobox").getAttribute("aria-label")).not.toBe("Primary");
+    expect(screen.getByRole("button", { name: "Destination" }).getAttribute("aria-label")).not.toBe("Primary");
   });
 });

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Select } from "./Select";
 import s from "./TopBar.module.css";
 import { safeHref } from "./safeHref";
 
@@ -51,18 +52,14 @@ export function TopBar({ wordmark = "Trellis", destinations, active, actor, tagl
             </li>
           ))}
         </ul>
-        <select
+        <Select
           className={s.select}
+          triggerClassName={s.selectTrigger}
           aria-label="Destination"
           value={active}
-          onChange={(e) => onNavigate?.(e.target.value)}
-        >
-          {destinations.map((d) => (
-            <option key={d.id} value={d.id}>
-              {d.label}
-            </option>
-          ))}
-        </select>
+          options={destinations.map((d) => ({ value: d.id, label: d.label }))}
+          onChange={(id) => onNavigate?.(id)}
+        />
       </nav>
       {actorText && (
         <span className={s.actor}>

@@ -43,8 +43,8 @@ function readFocused() {
     blue.remove();
     return ward;
   };
-  // A select's text is every option, so it goes by its accessible name.
-  const ownText = () => (el.matches("select") ? "" : el.textContent.trim());
+  // A select's text is every option, and a listbox trigger's is its value, so both go by their accessible name.
+  const ownText = () => (el.matches('select, [aria-haspopup="listbox"]') ? "" : el.textContent.trim());
   const label = () => ownText() || el.getAttribute("aria-label") || el.labels?.[0]?.textContent.trim();
   return {
     theme: copy.dataset.theme,
@@ -101,7 +101,7 @@ function restFacts() {
   const inset = style.boxShadow.match(/^(rgba?\([^)]*\)) 0px 0px 0px ([\d.]+)px inset$/);
   const edged = () => ["Top", "Right", "Bottom", "Left"].every(side) || Boolean(inset && Number.parseFloat(inset[2]) >= 1 && shows(inset[1]));
   const knob = () => (control.matches('[role="switch"][aria-checked="false"]') ? shows(getComputedStyle(control.firstElementChild).backgroundColor, style.backgroundColor) : null);
-  const ink = () => (control.matches("input, select, textarea") ? contrast(style.color, ground) >= 4.5 : null);
+  const ink = () => (control.matches('input, select, textarea, [aria-haspopup="listbox"]') ? contrast(style.color, ground) >= 4.5 : null);
   return { edged: edged(), knob: knob(), ink: ink() };
 }
 

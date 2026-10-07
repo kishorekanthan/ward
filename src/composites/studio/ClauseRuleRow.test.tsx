@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import { chooseOption, optionLabels } from "../../test-setup";
 import { ClauseRuleRow, ClauseRules, type ClauseRule } from "./ClauseRuleRow";
 
 const APPROVERS = [
@@ -32,12 +33,12 @@ describe("ClauseRuleRow", () => {
     const onChange = vi.fn();
     inList(<ClauseRuleRow rule={rule} onChange={onChange} />);
     const when = screen.getByLabelText("kpi-in-inventory When") as HTMLInputElement;
-    const approver = screen.getByLabelText("kpi-in-inventory Approved by") as HTMLSelectElement;
+    const approver = screen.getByRole("button", { name: "kpi-in-inventory Approved by" });
     expect(when.tagName).toBe("INPUT");
-    expect(approver.tagName).toBe("SELECT");
-    expect([...approver.options].map((o) => o.value)).toEqual(["dpm", "po"]);
+    expect(approver.getAttribute("aria-haspopup")).toBe("listbox");
+    expect(optionLabels(approver)).toEqual(["DPM", "Product owner"]);
     fireEvent.change(when, { target: { value: "adds metric" } });
-    fireEvent.change(approver, { target: { value: "po" } });
+    chooseOption(approver, "Product owner");
     expect(onChange.mock.calls).toEqual([["when", "adds metric"], ["approver", "po"]]);
     expect(screen.queryByText("Locked")).toBeNull();
   });
@@ -54,7 +55,8 @@ describe("ClauseRuleRow", () => {
     inList(<ClauseRuleRow rule={bad} onChange={vi.fn()} />);
     const approver = screen.getByLabelText("kpi-in-inventory Approved by");
     expect(approver.getAttribute("aria-invalid")).toBe("true");
-    expect(document.getElementById(approver.getAttribute("aria-describedby") ?? "")?.textContent).toBe("names no approver");
+    const notes = (approver.getAttribute("aria-describedby") ?? "").split(" ").map((id) => document.getElementById(id)?.textContent);
+    expect(notes).toEqual(["names no approver", "DPM"]);
     expect(screen.getByLabelText("kpi-in-inventory When").getAttribute("aria-invalid")).toBeNull();
     expect(screen.getAllByText("names no approver")).toHaveLength(1);
   });
