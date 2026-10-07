@@ -103,11 +103,15 @@ function columnGap(row: HTMLDivElement): number {
   return Number.parseFloat(getComputedStyle(row).columnGap) || 0;
 }
 
+// At phone width the row is a column: the actions sit under the heading and get the whole width (#190).
+function headingShare(row: HTMLDivElement, heading: HTMLDivElement): number {
+  return getComputedStyle(row).flexDirection === "column" ? 0 : heading.offsetWidth + columnGap(row);
+}
+
 function needsCollapse(row: HTMLDivElement, heading: HTMLDivElement | null, box: HTMLDivElement | null, measure: HTMLDivElement | null, actionCount: number): boolean {
   if (actionCount === 0 || missingMeasure(heading, box, measure)) return false;
   const [readyHeading, readyBox, readyMeasure] = [heading, box, measure] as [HTMLDivElement, HTMLDivElement, HTMLDivElement];
-  const gap = columnGap(row);
-  const available = Math.max(0, row.clientWidth - readyHeading.offsetWidth - gap);
+  const available = Math.max(0, row.clientWidth - headingShare(row, readyHeading));
   return readyMeasure.offsetWidth > available || readyBox.scrollWidth > readyBox.clientWidth + 1;
 }
 
@@ -136,6 +140,8 @@ function useActionOverflow(actions: ReactNode[], keepShown: boolean) {
     const fit = () => setCollapsed(needsCollapse(row, headingRef.current, actionsRef.current, measureRef.current, actions.length));
     const ro = new ResizeObserver(fit);
     ro.observe(row);
+    // A web font that loads after the first fit changes the strip's width, so that refits too.
+    if (measureRef.current) ro.observe(measureRef.current);
     fit();
     return () => ro.disconnect();
   }, [actions]);

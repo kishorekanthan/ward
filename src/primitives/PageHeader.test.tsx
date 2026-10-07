@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { Btn } from "./Btn";
 import { PageHeader } from "./PageHeader";
@@ -189,6 +189,55 @@ describe("PageHeader deciding to collapse with more items", () => {
     render(<PageHeader crumb={crumb} title="Data engineering" actions={twoActions} more={moreItems} />);
     expect(screen.queryByRole("button", { name: "Configure" })).toBeNull();
     expect(screen.getAllByRole("button", { name: "More actions" })).toHaveLength(1);
+  });
+});
+
+// Like a real ResizeObserver, resize() reports only to observers watching that element.
+function watchedLayout(headingWidth = 0): { measureWidth: { value: number }; resize: (target: Element) => void } {
+  const observers: Array<{ callback: () => void; targets: Element[] }> = [];
+  vi.stubGlobal("ResizeObserver", class {
+    targets: Element[] = [];
+    constructor(callback: () => void) { observers.push({ callback, targets: this.targets }); }
+    observe(target: Element) { this.targets.push(target); }
+    disconnect() { this.targets.length = 0; }
+    unobserve() {}
+  });
+  const measureWidth = { value: 400 };
+  vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(300);
+  vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockImplementation(function (this: HTMLElement) {
+    if (this.querySelector(":scope > div > h1")) return headingWidth;
+    return this.getAttribute("aria-hidden") === "true" ? measureWidth.value : 0;
+  });
+  const resize = (target: Element) => observers.filter((o) => o.targets.includes(target)).forEach((o) => act(o.callback));
+  return { measureWidth, resize };
+}
+
+describe("PageHeader measuring its row", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
+  // Measured in a 400px fallback font the actions fold; the web font narrows them to 250px, which fits the 300px row.
+  it("shows the actions again when the loaded font narrows them to fit", () => {
+    const { measureWidth, resize } = watchedLayout();
+    const { container } = render(<PageHeader crumb={crumb} title="Data engineering" actions={twoActions} />);
+    expect(screen.queryByRole("button", { name: "Configure" })).toBeNull();
+    measureWidth.value = 250;
+    resize(container.querySelector("[data-ward-measure]") as Element);
+    expect(screen.getByRole("button", { name: "Configure" })).toBeTruthy();
+  });
+
+  // A 200px heading beside 150px of actions overflows a 300px row; stacked at phone width, they fit under it.
+  it("counts the heading beside the actions, but not above them", () => {
+    const { measureWidth, resize } = watchedLayout(200);
+    measureWidth.value = 150;
+    const { container } = render(<PageHeader crumb={crumb} title="Data engineering" actions={twoActions} />);
+    expect(screen.queryByRole("button", { name: "Configure" })).toBeNull();
+    const row = container.querySelector("h1")?.closest("[data-density] > div:nth-child(2)") as HTMLElement;
+    row.style.flexDirection = "column";
+    resize(row);
+    expect(screen.getByRole("button", { name: "Configure" })).toBeTruthy();
   });
 });
 

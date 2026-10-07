@@ -179,15 +179,25 @@ export const PhoneWidthLongLoneLink = {
   parameters: { viewport: { defaultViewport: "mobile1" } },
 };
 
-// Two links still fold behind ··· at 375px.
+// Two links too wide for their own line still fold behind ··· at 375px.
 export const PhoneWidthTwoLinks = {
   args: {
     crumb: [{ label: "data-eng", href: "/streams/data-eng" }, { label: "Intake" }],
     title: "Intake",
     actions: [
-      <a key="advisor" className="ward-rowlink" style={linkStyle} href="#advisor">Ask the advisor first</a>,
+      <a key="advisor" className="ward-rowlink" style={linkStyle} href="#advisor">Ask the advisor to shape it first</a>,
       <a key="raise" className="ward-rowlink" style={linkStyle} href="#raise">Write the request yourself</a>,
     ],
+  },
+  parameters: { viewport: { defaultViewport: "mobile1" } },
+};
+
+// A signal draft's title is its asset id: unbroken, it wraps at any character rather than widening the page (#190).
+export const PhoneWidthLongTitle = {
+  args: {
+    crumb: [{ label: "Signals", href: "/signals" }, { label: "Draft" }],
+    title: "warehouse.analytics.customer_lifetime_value_daily_rollup_v2",
+    actions: [<Btn key="publish" variant="primary" onClick={() => {}}>Publish</Btn>],
   },
   parameters: { viewport: { defaultViewport: "mobile1" } },
 };
