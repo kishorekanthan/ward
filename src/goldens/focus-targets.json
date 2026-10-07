@@ -106,7 +106,7 @@
       "ring": true,
       "tall": true,
       "hit24": true,
-      "underlineGap": 0
+      "underlineGap": null
     },
     {
       "name": "Intake",
@@ -115,7 +115,7 @@
       "ring": true,
       "tall": true,
       "hit24": true,
-      "underlineGap": 0
+      "underlineGap": null
     },
     {
       "name": "14In flight",
@@ -256,7 +256,7 @@
       "wholeHit": true,
       "tall": true,
       "raised": 1,
-      "underlined": true,
+      "underlined": false,
       "hoverShade": true
     },
     {
@@ -266,7 +266,7 @@
       "wholeHit": true,
       "tall": true,
       "raised": 1,
-      "underlined": true,
+      "underlined": false,
       "hoverShade": true
     },
     {
@@ -276,7 +276,7 @@
       "wholeHit": true,
       "tall": true,
       "raised": 0,
-      "underlined": true,
+      "underlined": false,
       "hoverShade": true
     },
     {

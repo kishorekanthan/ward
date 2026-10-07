@@ -8,6 +8,7 @@
   },
   "mark": { "width": "15px", "height": "15px", "background": "var(--ward-color-blue)" },
   "navigation": { "gap": "var(--ward-space-4)", "marginLeft": "var(--ward-space-3)", "overflow": "auto", "color": "var(--ward-color-muted)", "font": "500 11.5px/1 \"Source Sans 3\", system-ui, sans-serif" },
-  "active": { "underline": "2px", "paddingBottom": "4px", "color": "var(--ward-color-blue)", "text": "var(--ward-color-text)" },
+  "active": { "background": "var(--ward-color-accentPill)", "radius": "6px", "text": "var(--ward-color-text)" },
+  "hover": "var(--ward-color-accentTint)",
   "pageInset": { "padding": "0 20px 22px", "inset": "20px" }
 }

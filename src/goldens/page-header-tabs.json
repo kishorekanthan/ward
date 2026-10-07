@@ -12,7 +12,7 @@
   },
   "tabs": {
     "cap": 7,
-    "levelOneUnderline": "var(--ward-color-blue)",
-    "levelTwoUnderline": "var(--ward-color-text)"
+    "current": "background: var(--ward-color-accentPill)",
+    "hover": "background: var(--ward-color-accentTint)"
   }
 }

@@ -24,25 +24,24 @@
   color: var(--ward-color-amber);
 }
 
-/* A linked cell is one link holding value and label, at least a touch target tall; the lines stay where they were. */
+/* A linked cell is one link holding value and label, at least a touch target tall; the lines stay where they were.
+   Its edged, rounded card bleeds past the cell by its own padding, and its whole ground answers the pointer. */
 .link {
   display: grid;
   gap: var(--ward-space-1);
   align-content: start;
-  min-block-size: var(--ward-height-touch);
+  min-block-size: calc(var(--ward-height-touch) + 2 * var(--ward-space-2));
+  padding: var(--ward-space-2);
+  margin: calc(-1 * var(--ward-space-2));
+  border-radius: var(--ward-radius-card);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
   color: inherit;
+  font-weight: inherit;
   text-decoration: none;
 }
 
-.linkValue {
-  text-decoration: underline;
-  text-decoration-color: var(--ward-color-line2);
-  text-decoration-thickness: var(--ward-border);
-  text-underline-offset: var(--ward-space-1);
-}
-
-.link:hover .linkValue {
-  text-decoration-color: currentColor;
+.link:hover {
+  background: var(--ward-color-surface2);
 }
 
 .link:hover .label {

@@ -23,6 +23,8 @@ export declare const v: {
         readonly blue: "var(--ward-color-blue)";
         readonly blueSoft: "var(--ward-color-blueSoft)";
         readonly runningTint: "var(--ward-color-runningTint)";
+        readonly accentTint: "var(--ward-color-accentTint)";
+        readonly accentPill: "var(--ward-color-accentPill)";
         readonly green: "var(--ward-color-green)";
         readonly orange: "var(--ward-color-orange)";
         readonly amber: "var(--ward-color-amber)";
@@ -362,6 +364,8 @@ export declare const v: {
         readonly marker14: "var(--ward-size-marker14)";
     };
     readonly radius: "var(--ward-radius)";
+    readonly radiusChip: "var(--ward-radius-chip)";
+    readonly radiusCard: "var(--ward-radius-card)";
     readonly border: "var(--ward-border)";
     readonly underline: "var(--ward-underline)";
     readonly focusOffset: "var(--ward-focus-offset)";

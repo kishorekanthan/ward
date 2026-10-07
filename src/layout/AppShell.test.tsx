@@ -15,6 +15,7 @@ const golden = JSON.parse(readFileSync(join(sourceRoot, "..", "goldens", "app-sh
   mark: Record<string, string>;
   navigation: Record<string, string>;
   active: Record<string, string>;
+  hover: string;
   pageInset: Record<string, string>;
 };
 
@@ -156,7 +157,7 @@ describe("AppShell top bar", () => {
     const active = rule('.nav a[aria-current="page"]');
     const g = (value: string) => resolved(value);
 
-    // The comps declare no bar or link height; content sets it, so the underline sits 4px under the label.
+    // The comps declare no bar or link height; content sets it. The current link is a filled pill, never an underline bar.
     expect(topbar).not.toContain("height");
     expect(link).not.toContain("height");
     expect(topbar).toContain(`padding: ${g(golden.topbar.padding)}`);
@@ -172,9 +173,10 @@ describe("AppShell top bar", () => {
     expect(navigation).toContain(`overflow-x: ${golden.navigation.overflow}`);
     expect(navigation).toContain(`font: ${g(golden.navigation.font)}`);
     expect(link).toContain(`color: ${g(golden.navigation.color)}`);
-    expect(active).toContain(`calc(-1 * ${g(golden.active.underline)})`);
-    expect(active).toContain(`padding-bottom: ${g(golden.active.paddingBottom)}`);
-    expect(active).toContain(g("var(--ward-color-blue)"));
+    expect(link).toContain(`border-radius: ${golden.active.radius}`);
+    expect(rule(".nav a:hover")).toContain(`background: ${g(golden.hover)}`);
+    expect(active).toContain(`background: ${g(golden.active.background)}`);
+    expect(active).not.toContain("box-shadow");
     expect(active).toContain(`color: ${g(golden.active.text)}`);
   });
 

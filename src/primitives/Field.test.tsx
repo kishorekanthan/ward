@@ -82,20 +82,15 @@ function hasOutline(el: Element): boolean {
   return outline !== "" && !/\b(none|transparent)\b/.test(outline);
 }
 
-// Forced colours drop box-shadow but repaint a transparent outline, so the ring must stay drawn.
-function keepsForcedColoursRing(el: Element): boolean {
-  return /\bsolid\b/.test(getComputedStyle(el).outline);
-}
-
 describe("Field focus mark", () => {
   beforeAll(loadWardSheets);
   afterEach(cleanup);
 
-  it.each([undefined, "form", "inline"] as const)("draws only its own border when focused (%s)", (variant) => {
+  // Every control shows the same keyboard ring; a bordered variant also turns its border blue.
+  it.each([undefined, "form", "inline"] as const)("draws the focus ring and a blue border when focused (%s)", (variant) => {
     const control = focusedField(variant);
     expect(control.matches(":focus-visible")).toBe(true);
-    expect(hasOutline(control)).toBe(false);
-    expect(keepsForcedColoursRing(control)).toBe(true);
+    expect(hasOutline(control)).toBe(true);
     expect(getComputedStyle(control).boxShadow).toContain("--ward-color-blue");
   });
 
