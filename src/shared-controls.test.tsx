@@ -245,6 +245,28 @@ describe("blue marks actions and current selection only", () => {
   });
 });
 
+// #191: the current destination is a filled pill; a border, inset shadow or text decoration would bring back the underline bar.
+const DESTINATION_CSS = ["primitives/TopBar.module.css", "primitives/Tabs.module.css", "layout/AppShell.module.css", "layout/Sidebar.module.css"];
+const CURRENT = /\[aria-(current="page"|selected="true")\](::?(before|after))?$/;
+
+function currentRules(): Array<[string, string]> {
+  return DESTINATION_CSS.flatMap((file) => {
+    const css = readFileSync(join(SRC, file), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+    return [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+      .filter(([, selector]) => selector.split(",").some((part) => CURRENT.test(part.trim())))
+      .map(([, selector, body]): [string, string] => [`${file} ${selector.trim().replace(/\s+/g, " ")}`, body]);
+  });
+}
+
+describe("the current destination is a filled pill", () => {
+  it("fills every current TopBar, Tabs, AppShell and Sidebar destination with accentPill and draws no underline bar", () => {
+    const rules = currentRules();
+    expect(rules).toHaveLength(6);
+    expect(rules.filter(([, body]) => !body.includes("background: var(--ward-color-accentPill)")).map(([where]) => where)).toEqual([]);
+    expect(rules.filter(([, body]) => /box-shadow|border(?!-radius)|text-decoration/.test(body)).map(([where]) => where)).toEqual([]);
+  });
+});
+
 describe("status keeps its meaning in words as well as colour", () => {
   it("refuses a chip with no words", () => {
     vi.spyOn(console, "error").mockImplementation(() => undefined);
