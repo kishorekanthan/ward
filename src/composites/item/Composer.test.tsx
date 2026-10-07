@@ -97,7 +97,19 @@ describe("Composer with text the page owns", () => {
     fireEvent.change(box, { target: { value: "Which stage is late?" } });
     expect(onChange).toHaveBeenCalledWith("Which stage is late?");
     rerender(<Composer {...owned} value="Who owns triage?" onChange={onChange} onPost={() => {}} />);
-    expect((screen.getByRole("textbox", { name: "Ask the advisor" }) as HTMLTextAreaElement).value).toBe("Who owns triage?");
+    const area = screen.getByRole("textbox", { name: "Ask the advisor" }) as HTMLTextAreaElement;
+    expect(area.value).toBe("Who owns triage?");
+    fireEvent.change(area, { target: { value: "Who owns intake?" } });
+    expect(onChange).toHaveBeenLastCalledWith("Who owns intake?");
+  });
+
+  it("keeps an empty page text as the page's, so a cleared box reports typing", () => {
+    const onChange = vi.fn();
+    render(<Composer {...owned} variant="reply" value="" onChange={onChange} onPost={() => {}} />);
+    const box = screen.getByRole("textbox", { name: "Ask the advisor" }) as HTMLInputElement;
+    fireEvent.change(box, { target: { value: "W" } });
+    expect(onChange).toHaveBeenCalledWith("W");
+    expect(box.value).toBe("");
   });
 
   it("sends the page's text from Send and from Post", () => {
