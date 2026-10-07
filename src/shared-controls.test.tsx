@@ -127,12 +127,14 @@ describe("disabled controls reach the reason they are given", () => {
   });
 });
 
-type Category = "action" | "current" | "selection" | "focus" | "brand" | "flash" | "tint" | "quote" | "editable" | "tokenKind";
+type Category = "action" | "hover" | "current" | "selection" | "focus" | "brand" | "flash" | "tint" | "quote" | "editable" | "tokenKind";
 
 // Spec: blue is the primary action, links, the active tab, the selected frame, the focus ring, the running flash
-// the agent-quote rule and the still-editable queued comment; blueSoft is the selected row and the gate tint (Studio 3b rings its gate row in blue). Anything added must name one reason.
+// the agent-quote rule and the still-editable queued comment; blueSoft is the selected row and the gate tint (Studio 3b rings its gate row in blue).
+// accentTint answers the pointer on a link or destination, accentPill fills the current destination (#191). Anything added must name one reason.
 const BLUE_USES: Record<Category, string[]> = {
   action: [
+    "ward.css a blue",
     "primitives/Btn.module.css .primary blue",
     "primitives/Btn.module.css .ghost blue",
     "composites/board/BoardFootnote.module.css .link blue",
@@ -143,16 +145,23 @@ const BLUE_USES: Record<Category, string[]> = {
     "composites/studio/NewStreamModal.module.css .addStageButton blue",
     "composites/studio/StreamRow.module.css .define blue",
   ],
+  hover: [
+    "ward.css :where(a[href]:not(.ward-rowlink)):hover accentTint",
+    "primitives/Crumb.module.css .link:hover accentTint",
+    "primitives/Grid.module.css .sort:hover accentTint",
+    "primitives/Tabs.module.css .tab:hover accentTint",
+    "primitives/TopBar.module.css .dest:hover accentTint",
+    "layout/AppShell.module.css .nav a:hover accentTint",
+    "layout/Sidebar.module.css .navItem:hover, .new:hover, .footLink:hover accentTint",
+    "composites/intake/SessionRow.module.css .link:hover, .tableLink:hover, .tableRecord:hover accentTint",
+  ],
   current: [
-    "primitives/Tabs.module.css .tab[aria-current=\"page\"] blue",
-    "primitives/Tabs.module.css .tab[aria-selected=\"true\"] blue",
-    "primitives/TopBar.module.css .dest[aria-current=\"page\"]::after blue",
-    "layout/AppShell.module.css .nav a[aria-current=\"page\"] blue",
-    "layout/Sidebar.module.css .root nav a[aria-current=\"page\"] blue",
-    "layout/Sidebar.module.css .root nav a[aria-current=\"page\"] blueSoft",
-    "layout/Sidebar.module.css .navItem[aria-current=\"page\"] blue",
-    "layout/Sidebar.module.css .agent[aria-current=\"page\"] blue",
-    "layout/Sidebar.module.css .agent[aria-current=\"page\"] blueSoft",
+    "primitives/Tabs.module.css .tab[aria-current=\"page\"] accentPill",
+    "primitives/Tabs.module.css .tab[aria-selected=\"true\"] accentPill",
+    "primitives/TopBar.module.css .dest[aria-current=\"page\"] accentPill",
+    "layout/AppShell.module.css .nav a[aria-current=\"page\"] accentPill",
+    "layout/Sidebar.module.css .agent[aria-current=\"page\"], .root nav a[aria-current=\"page\"] accentPill",
+    "layout/Sidebar.module.css .navItem[aria-current=\"page\"] accentPill",
     "composites/studio/DryRunRail.module.css .step[aria-current=\"step\"] blue",
   ],
   selection: [
@@ -164,6 +173,7 @@ const BLUE_USES: Record<Category, string[]> = {
     "composites/board/WorkCard.module.css .card[data-selected=\"true\"] blue",
     "composites/studio/AgentCard.module.css .card[data-selected=\"true\"] blueSoft",
     "composites/studio/AgentCard.module.css .card[data-selected=\"true\"] blue",
+    "composites/studio/AgentCard.module.css .card[data-selected=\"true\"]:hover accentPill",
     "primitives/Radio.module.css .set[data-variant=\"cards\"] .row:has(.input:checked) blue",
     "primitives/Radio.module.css .set[data-variant=\"cards\"] .row:has(.input:checked) blueSoft",
     "composites/studio/ColourLadder.module.css .cell[aria-checked=\"true\"] blue",
@@ -196,7 +206,7 @@ const BLUE_USES: Record<Category, string[]> = {
   tokenKind: ["primitives/Marker.tsx blue: \"var(--ward-color-blue)\", blue"],
 };
 
-const BLUE = /var\(--ward-color-(blue|blueSoft)\)|v\.color\.(blue|blueSoft)\b/g;
+const BLUE = /var\(--ward-color-(blue|blueSoft|accentTint|accentPill)\)|v\.color\.(blue|blueSoft|accentTint|accentPill)\b/g;
 
 function sourceFiles(dir: string): string[] {
   return readdirSync(dir).flatMap((name) => {
@@ -232,6 +242,28 @@ function blueUses(): string[] {
 describe("blue marks actions and current selection only", () => {
   it("applies the blue tokens exactly where a named reason allows", () => {
     expect(blueUses()).toEqual(Object.values(BLUE_USES).flat().sort());
+  });
+});
+
+// #191: the current destination is a filled pill; a border, inset shadow or text decoration would bring back the underline bar.
+const DESTINATION_CSS = ["primitives/TopBar.module.css", "primitives/Tabs.module.css", "layout/AppShell.module.css", "layout/Sidebar.module.css"];
+const CURRENT = /\[aria-(current="page"|selected="true")\](::?(before|after))?$/;
+
+function currentRules(): Array<[string, string]> {
+  return DESTINATION_CSS.flatMap((file) => {
+    const css = readFileSync(join(SRC, file), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+    return [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+      .filter(([, selector]) => selector.split(",").some((part) => CURRENT.test(part.trim())))
+      .map(([, selector, body]): [string, string] => [`${file} ${selector.trim().replace(/\s+/g, " ")}`, body]);
+  });
+}
+
+describe("the current destination is a filled pill", () => {
+  it("fills every current TopBar, Tabs, AppShell and Sidebar destination with accentPill and draws no underline bar", () => {
+    const rules = currentRules();
+    expect(rules).toHaveLength(6);
+    expect(rules.filter(([, body]) => !body.includes("background: var(--ward-color-accentPill)")).map(([where]) => where)).toEqual([]);
+    expect(rules.filter(([, body]) => /box-shadow|border(?!-radius)|text-decoration/.test(body)).map(([where]) => where)).toEqual([]);
   });
 });
 

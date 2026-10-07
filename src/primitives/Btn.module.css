@@ -6,6 +6,7 @@
   font: var(--ward-type-control);
   height: var(--ward-height-control);
   padding: 0 var(--ward-space-3);
+  border-radius: var(--ward-radius);
   white-space: nowrap;
   transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
 }

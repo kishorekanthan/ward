@@ -1,7 +1,10 @@
 /* Provenance: mirrors design/Trellis Studio.dc.html — the column-config table, flex rows 10px gap with cells 22 / flex:1 / 150 / 84 / 88. */
+/* The scrolling frame clips every edge; a ring-sized gutter, cancelled by margin, keeps a focus ring whole. */
 .frame {
   display: grid;
   overflow-x: auto;
+  padding: calc(var(--ward-border) + var(--ward-focus-offset));
+  margin: calc(-1 * (var(--ward-border) + var(--ward-focus-offset)));
 }
 
 .frame > div {

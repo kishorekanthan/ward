@@ -15,7 +15,7 @@ const wardCss = readFileSync(join(sourceRoot, "..", "ward.css"), "utf8");
 const rootVars = new Map(Array.from(wardCss.matchAll(/(--ward-[\w-]+): ([^;]+);/g), (m) => [m[1], m[2]]));
 const golden = JSON.parse(readFileSync(join(sourceRoot, "..", "goldens", "page-header-tabs.json"), "utf8")) as {
   pageHeader: Record<string, string>;
-  tabs: { cap: number; levelOneUnderline: string; levelTwoUnderline: string };
+  tabs: { cap: number; current: string; hover: string };
 };
 const observers: ResizeObserverCallback[] = [];
 
@@ -93,8 +93,10 @@ describe("Tabs", () => {
     expect(screen.getAllByRole("tab")).toHaveLength(golden.tabs.cap);
     expect(screen.getByRole("tab", { name: "Tab 4" }).getAttribute("aria-selected")).toBe("true");
     expect(screen.getByRole("tablist").getAttribute("data-level")).toBe("2");
-    expect(rule(tabsCss, '.tab[aria-selected="true"]')).toContain(golden.tabs.levelOneUnderline);
-    expect(tabsCss).toContain(golden.tabs.levelTwoUnderline);
+    // Both levels mark the current tab with one filled pill; no level draws an underline.
+    expect(rule(tabsCss, '.tab[aria-selected="true"]')).toContain(golden.tabs.current);
+    expect(rule(tabsCss, ".tab:hover")).toContain(golden.tabs.hover);
+    expect(tabsCss).not.toMatch(/border-bottom-color|\.strip\[data-level="2"\] \.tab/);
   });
 
   // Web pages render the panel themselves, so the id format is the contract they build against.

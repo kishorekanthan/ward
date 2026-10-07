@@ -10,6 +10,7 @@ import { sweepFocusTargets } from "./focus-targets.mjs";
 import { sweepBoardHeight } from "./board-height.mjs";
 import { sweepHeaderGeometry } from "./header-geometry.mjs";
 import { sweepPolicyRow } from "./policy-row.mjs";
+import { sweepAffordance } from "./affordance.mjs";
 import { workflowFindings } from "./workflows.mjs";
 import { NAME, OLD_NAME, OLD_TARBALL, oldNameFiles } from "./old-name.mjs";
 import { FAMILY_OF, breakpoints, buildCss, buildTokens, containerBreakpoints, declaredFaces, readTokens } from "./gen-css.mjs";
@@ -88,6 +89,9 @@ for (const [theme, colors, chips] of [
   pairs.push([colors.warning, colors.surface, `${theme} warning/surface`], [colors.surface, colors.destructive, `${theme} surface/destructive`]);
   // Red is set as text for blocked reasons on cards and over-cap notes on columns.
   pairs.push([colors.red, colors.surface, `${theme} red/surface`], [colors.red, colors.surface2, `${theme} red/surface2`]);
+  // A link's hover tint and a current destination's pill sit under blue, muted and body ink (#191).
+  pairs.push([colors.blue, colors.accentTint, `${theme} blue/accentTint`], [colors.muted, colors.accentTint, `${theme} muted/accentTint`]);
+  pairs.push([colors.text, colors.accentTint, `${theme} text/accentTint`], [colors.text, colors.accentPill, `${theme} text/accentPill`]);
   // Faint labels sit on every light ground and on a selected or warned row; the console has its own dim ink.
   for (const ground of ["bg", "surface", "surface2", "blueSoft", "warnSurface"]) pairs.push([colors.faint, colors[ground], `${theme} faint/${ground}`]);
   pairs.push([colors.consoleFaint, colors.console, `${theme} consoleFaint/console`]);
@@ -267,6 +271,11 @@ else fail("header geometry", headerDiffs.join("; "));
 const policyDiffs = await sweepPolicyRow();
 if (policyDiffs.length === 0) pass("policy row", "5 web rows, both themes: narrow controls keep the 150px column and a wide segment, drawn or passed in, ends before the chip");
 else fail("policy row", policyDiffs.join("; "));
+
+// 13. affordance: every story, both themes; no link underlines at rest or on hover, every control is marked, answers hover and shows a whole focus ring (#191)
+const affordance = await sweepAffordance();
+if (affordance.failures.length === 0) pass("affordance", `${affordance.stories} stories, ${affordance.controls} controls, ${affordance.hovered} hovered, ${affordance.focused} focused: no underline, no plain-text control, no missing hover ground or focus ring`);
+else fail("affordance", affordance.failures.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);
 process.exitCode = failures === 0 ? 0 : 1;

@@ -44,7 +44,9 @@
   "space": { "1": 4, "2": 8, "3": 12, "4": 16, "5": 20, "6": 24, "7": 32, "page": 24 },
   "width": { "max": 1240, "drawer": 430, "dryrun": 316, "preview": 356, "colFloor": 240 },
   "height": { "control": 30, "controlSm": 26, "card": 96, "touch": 44, "topbar": 44 },
-  "radius": 0,
+  "radius": 6,
+  "radiusChip": 4,
+  "radiusCard": 8,
   "border": 1,
   "underline": 2,
   "type": {

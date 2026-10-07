@@ -18,6 +18,8 @@
 
 .link {
   margin-left: auto;
+  padding-inline: var(--ward-space-1);
+  margin-inline-end: calc(-1 * var(--ward-space-1));
   font: var(--ward-type-control);
   color: var(--ward-color-blue);
 }

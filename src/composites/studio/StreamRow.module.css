@@ -8,10 +8,10 @@
   border-bottom: var(--ward-border) solid var(--ward-color-line);
 }
 
-/* Two classes, so a consumer's one-class link reset cannot hide the underline. */
+/* Two classes, so a consumer's one-class link style cannot underline it; the row's hover ground marks the target. */
 .row .name,
 .compactRow .compactName {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 /* One link per row: the name's anchor stretches over the row; hinted values sit above it. */

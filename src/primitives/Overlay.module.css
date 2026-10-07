@@ -31,17 +31,20 @@
 .panel.drawer {
   height: 100%;
   width: var(--ward-width-drawer);
+  border-radius: var(--ward-radius-card) 0 0 var(--ward-radius-card);
   border-left: var(--ward-border) solid var(--ward-color-line);
 }
 
 .panel.sheet {
   width: 100%;
   height: 88vh;
+  border-radius: var(--ward-radius-card) var(--ward-radius-card) 0 0;
 }
 
 .panel.modal {
   width: min(var(--ward-width-drawer), calc(100% - 2 * var(--ward-space-6)));
   max-height: calc(100% - 2 * var(--ward-space-6));
+  border-radius: var(--ward-radius-card);
 }
 
 .panel[data-wide="true"] {

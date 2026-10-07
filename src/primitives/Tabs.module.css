@@ -33,42 +33,35 @@
   display: inline-flex;
   align-items: center;
   height: var(--ward-height-control);
-  padding: 0;
+  padding: 0 var(--ward-space-2);
+  border-radius: var(--ward-radius);
   font: var(--ward-type-tabLabel);
   color: var(--ward-color-muted);
   white-space: nowrap;
-  border-bottom: var(--ward-underline) solid transparent;
-  transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
+  transition: background-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
+}
+
+/* An idle tab answers the pointer with a light tint; the current one is a filled pill, never an underline. */
+.tab:hover {
+  background: var(--ward-color-accentTint);
+  color: var(--ward-color-text);
 }
 
 .tab[aria-selected="true"] {
+  background: var(--ward-color-accentPill);
   color: var(--ward-color-text);
   font-weight: 600;
-  border-bottom-color: var(--ward-color-blue);
-}
-
-.strip[data-level="2"] .tab[aria-selected="true"] {
-  border-bottom-color: var(--ward-color-text);
 }
 
 /* TabLinks marks its current page as Tabs marks its selected tab. */
 .tab[aria-current="page"] {
+  background: var(--ward-color-accentPill);
   color: var(--ward-color-text);
   font-weight: 600;
-  border-bottom-color: var(--ward-color-blue);
 }
 
-.strip[data-level="2"] .tab[aria-current="page"] {
-  border-bottom-color: var(--ward-color-text);
-}
-
-/* A tab link reads as a tab, not as body text; hover takes the current tab's ink. */
 a.tab {
   text-decoration: none;
-}
-
-a.tab:hover {
-  color: var(--ward-color-text);
 }
 
 /* Comp tabs read "Queue · 14": the count shares the label's face and colour. */
@@ -78,7 +71,12 @@ a.tab:hover {
 }
 
 /* Intake 12b scope row: 14px above, no rule of its own; the list below draws the line. */
+/* The scrolling strip clips every edge; a ring-sized gutter, cancelled by margin, keeps each tab's ring whole. */
 .strip[data-level="2"] {
   padding: var(--ward-pad-scopeTabs);
+  padding-inline: calc(var(--ward-border) + var(--ward-focus-offset));
+  padding-block-end: calc(var(--ward-border) + var(--ward-focus-offset));
+  margin-inline: calc(-1 * (var(--ward-border) + var(--ward-focus-offset)));
+  margin-block-end: calc(-1 * (var(--ward-border) + var(--ward-focus-offset)));
   border-bottom: 0;
 }

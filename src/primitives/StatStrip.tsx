@@ -28,7 +28,7 @@ function LinkedCell({ cell, href }: { cell: StatCell; href: string }) {
       <dt className="ward-visually-hidden">{cell.label}</dt>
       <dd className={valueClass(cell)} title={cell.hint}>
         <a className={`${s.link} ward-stat-link`} href={safeHref(href)} aria-label={`${cell.label}: ${cell.value}`}>
-          <span className={s.linkValue}>{cell.value}</span>
+          <span>{cell.value}</span>
           <span className={`${s.label} ward-stat-label`}>{cell.label}</span>
         </a>
       </dd>

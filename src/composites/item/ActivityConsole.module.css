@@ -3,7 +3,7 @@
   display: grid;
   gap: var(--ward-gap-console);
   padding: var(--ward-pad-railBlock);
-  border-radius: var(--ward-radius);
+  border-radius: var(--ward-radius-card);
   background: var(--ward-color-console);
 }
 
