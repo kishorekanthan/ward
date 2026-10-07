@@ -263,9 +263,10 @@ const headerDiffs = await sweepHeaderGeometry();
 if (headerDiffs.length === 0) pass("header geometry", "7 RecordSection stories, both themes, root and each child at 320, 375 and 1280px match the golden within 0.5px");
 else fail("header geometry", headerDiffs.join("; "));
 
-// 12. policy row: at 1280px each web PolicyRow control ends before its chip, and every control and chip edge is within 0.5px of src/goldens/policy-row.json (#185)
+// 12. policy row: at 1280px each web PolicyRow control ends before its chip (#185); at 375px setting, control and chip never overlap and the setting text is never clipped (#189).
+//     Every box edge is within 0.5px of src/goldens/policy-row.json.
 const policyDiffs = await sweepPolicyRow();
-if (policyDiffs.length === 0) pass("policy row", "5 web rows, both themes: narrow controls keep the 150px column and a wide segment, drawn or passed in, ends before the chip");
+if (policyDiffs.length === 0) pass("policy row", "5 web rows, both themes: at 1280px narrow controls keep the 150px column and a wide segment ends before the chip; at 375px the setting stacks above control and chip, unclipped");
 else fail("policy row", policyDiffs.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);

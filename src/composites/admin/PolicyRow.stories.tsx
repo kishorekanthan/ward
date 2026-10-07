@@ -75,6 +75,7 @@ const RERUN = [
 ];
 
 // Narrow controls keep the 150px value column; a wide segment, drawn or passed in, widens it and stays clear of the chip (#185).
+// At phone width each row stacks: the setting on its own line, control and chip below (#189).
 export const WebWideControls = {
   render: () => (
     <div>
