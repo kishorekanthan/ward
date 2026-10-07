@@ -244,7 +244,7 @@ else fail("rendered contrast", describeFailures(rendered.failures));
 
 // 7. phone width: Tabs, PageHeader chips, wide actions, link actions and a long title, StatStrip labels, StageGrid, the top-bar tools, the top-bar Primary nav's fades and current link (and no fade at 1280px), the section kicker, a short kicker row unchanged (also at 320px), a long kicker wrapping, a long note beside it and the activity console at 375px against src/goldens/phone-width.json
 const phoneDiffs = await sweepPhoneWidth();
-if (phoneDiffs.length === 0) pass("phone width", "Tabs, PageHeader chips, wide actions, link actions and a long title, StatStrip labels, StageGrid, the top-bar tools, the top-bar Primary nav's fades and current link (and no fade at 1280px), the section kicker, a short kicker row unchanged (also at 320px), a long kicker wrapping, a long note beside it keeping 12 characters a line, the activity console and the console foot match the 375px golden");
+if (phoneDiffs.length === 0) pass("phone width", "Tabs, PageHeader chips, wide actions, link actions and a long title, StatStrip labels, StageGrid, the top-bar tools, the top-bar Primary nav's fades and current link (and no fade at 1280px), the section kicker, a short kicker row unchanged (also at 320px), a long kicker wrapping, a long note beside it keeping 12 characters a line, the activity console, the console foot and the long titles on WorkCard, SessionRow and the case header at 375 and 1280px match the golden");
 else fail("phone width", phoneDiffs.join("; "));
 
 // 8. console theme: the light theme gets a light panel, dark keeps the comp's block, against src/goldens/console-theme.json

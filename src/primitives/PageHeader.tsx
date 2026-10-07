@@ -2,6 +2,7 @@ import { isValidElement, useEffect, useId, useRef, useState, type KeyboardEvent,
 import type { LiveConnection } from "../live/types";
 import { Btn } from "./Btn";
 import { Chip, type ChipProps } from "./Chip";
+import { ClampText } from "./ClampText";
 import { ConnectionMark } from "./ConnectionMark";
 import { Crumb, type CrumbPath } from "./Crumb";
 import s from "./PageHeader.module.css";
@@ -23,10 +24,15 @@ export type PageHeaderProps = {
   density?: "page" | "record";
 };
 
-function Heading({ title, consequence, consequenceHint }: Pick<PageHeaderProps, "title" | "consequence" | "consequenceHint">) {
+// A case title is prose that can run long, so it wraps to two lines; a page title keeps its one line (#199).
+function Title({ title, density }: Pick<PageHeaderProps, "title" | "density">) {
+  return density === "record" ? <ClampText as="h1" className={s.title} text={title} /> : <h1 className={s.title}>{title}</h1>;
+}
+
+function Heading({ title, consequence, consequenceHint, density }: Pick<PageHeaderProps, "title" | "consequence" | "consequenceHint" | "density">) {
   return (
     <div className={s.heading}>
-      <h1 className={s.title}>{title}</h1>
+      <Title title={title} density={density} />
       {consequence && <p className={s.consequence} title={consequenceHint}>{consequence}</p>}
     </div>
   );
@@ -174,7 +180,7 @@ export function PageHeader({ crumb, chips, title, consequence, consequenceHint, 
       <HeaderContext crumb={crumb} chips={chips} />
       <div className={s.row} ref={rowRef}>
         <div ref={headingRef} className={s.headingWrap}>
-          <Heading title={title} consequence={consequence} consequenceHint={consequenceHint} />
+          <Heading title={title} consequence={consequence} consequenceHint={consequenceHint} density={density} />
         </div>
         <div className={s.actionsWrap}>
           <Connection connection={connection} />

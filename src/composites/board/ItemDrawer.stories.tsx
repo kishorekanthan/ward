@@ -20,7 +20,7 @@ const item: ItemDetail = {
   summary: "Shipments arriving after the agreed window are not visible to Ops.",
   workflow: "data-eng intake",
   stateLabel: "Needs a human",
-  state: { role: "attention", label: "NEEDS A HUMAN" },
+  state: { role: "attention", label: "Needs a human" },
 };
 
 const withRun: ItemDetail = {

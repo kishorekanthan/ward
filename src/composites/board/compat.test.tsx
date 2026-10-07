@@ -16,7 +16,7 @@ describe("legacy board compatibility", () => {
   it("renders running work cards with their legacy status and metadata", () => {
     render(<LegacyWorkCard item={item} fields={["key"]} onOpen={() => {}} feed={null} />);
 
-    expect(screen.getByRole("button").textContent).toContain("AGENT WORKING");
+    expect(screen.getByRole("button").textContent).toContain("Agent working");
     expect(screen.getByRole("button").textContent).toContain("WL-42");
     expect(screen.getByRole("button").textContent).toContain("1m · waits on Atlas");
   });

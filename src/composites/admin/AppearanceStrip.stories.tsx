@@ -10,7 +10,7 @@ const sample: BoardItem = {
   waitsOn: "J. Rao",
   streamStep: 1,
   changedAt: "2026-09-06T01:14:00Z",
-  state: { role: "pending", label: "QUEUED" },
+  state: { role: "pending", label: "Queued" },
 };
 
 const streams: Identity[] = [

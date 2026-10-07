@@ -48,7 +48,7 @@ describe("CapabilityRow", () => {
       />,
     );
     const cells = Array.from(container.querySelectorAll("td")).map((td) => td.textContent);
-    expect(cells).toEqual(["Agents may runMaster switch.", "Agents may run · step 1", "PILOTAgents may run · step 2", "by role", "platform admin · T-015"]);
+    expect(cells).toEqual(["Agents may runMaster switch.", "Agents may run · step 1", "PilotAgents may run · step 2", "by role", "platform admin · T-015"]);
     expect(container.querySelector("th")).toBeNull();
     expect(container.querySelector(".ward-cellmeta")?.textContent).toBe("platform admin · T-015");
   });
@@ -60,7 +60,7 @@ describe("CapabilityRow", () => {
     expect(on.hasAttribute("disabled")).toBe(true);
     expect(on.getAttribute("aria-checked")).toBe("true");
     expect(pilot.getAttribute("aria-checked")).toBe("false");
-    expect(screen.getByText("PILOT").className).toContain("ward-chip--running");
+    expect(screen.getByText("Pilot").className).toContain("ward-chip--running");
   });
 
   it("omits the ticket suffix and sends on/off words for web changes", () => {
@@ -127,7 +127,7 @@ describe("CapabilityRow spec", () => {
   it("shows a pilot as on plus the pilot chip", () => {
     renderRow();
     expect(screen.getByRole("switch", { name: "Card buttons respect role · Finance" }).getAttribute("aria-checked")).toBe("true");
-    expect(screen.getByText("PILOT").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-running-bg)");
+    expect(screen.getByText("Pilot").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-running-bg)");
   });
 
   it("reports the stream it was changed for", () => {

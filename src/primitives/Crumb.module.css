@@ -1,4 +1,4 @@
-/* Provenance: the crumb is the Admin comp .k kicker above the page title (500 9px/1 mono, .13em, uppercase). */
+/* Provenance: the crumb is the Admin comp .k kicker above the page title (500 9px/1), set in sentence case sans rather than the comp's uppercase mono (#199). */
 .nav {
   display: flex;
   align-items: baseline;

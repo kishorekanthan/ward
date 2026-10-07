@@ -25,7 +25,7 @@ describe("RoleMatrixRow compact", () => {
     const item = container.querySelector("[role='treeitem']") as HTMLElement;
     expect(item.getAttribute("aria-level")).toBe("2");
     expect(item.className).toContain("ward-treerow--unresolved");
-    expect(texts(container, ".ward-chip")).toEqual(["PLATFORM ADMIN", "FLOOR", "UNRESOLVED"]);
+    expect(texts(container, ".ward-chip")).toEqual(["Platform admin", "Floor", "Unresolved"]);
     expect(attrs(container, ".ward-chip", "data-ward-chip")).toEqual(["gate", "soft", "warn"]);
     expect(texts(container, "[data-drop], [data-mono]")).toEqual(["AD-TRELLIS-PLATFORM-ADMIN", "1,234", "SNOW-4471"]);
     expect(attrs(container, "[data-drop], [data-mono]", "data-drop")).toEqual([null, "2", "1"]);
@@ -43,7 +43,7 @@ describe("RoleMatrixRow compact", () => {
         <RoleMatrixRow index={3} depth={0} node={{ name: "v", matrixRole: "viewer" }} />
       </Tree>,
     );
-    expect(texts(container, ".ward-chip")).toEqual(["APPROVER", "STREAM ADMIN", "MEMBER", "VIEWER"]);
+    expect(texts(container, ".ward-chip")).toEqual(["Approver", "Stream admin", "Member", "Viewer"]);
     expect(attrs(container, ".ward-chip", "data-ward-chip")).toEqual(["running", "meta", "meta", "meta"]);
     expect(attrs(container, "[role='treeitem']", "aria-expanded")).toEqual(["true", null, "false", "false"]);
     expect(container.querySelectorAll(".ward-treerow--inherited")).toHaveLength(1);
@@ -59,7 +59,7 @@ describe("RoleMatrixRow web presentation", () => {
         presentation="web"
         rows={[
           { depth: 0, label: "Global scope", people: "6", expanded: true },
-          { depth: 1, label: "Platform Admin", role: { role: "gate", label: "PLATFORM ADMIN" }, group: "AD-TRELLIS-PLATFORM-ADMIN", requestedVia: "SNOW-4471" },
+          { depth: 1, label: "Platform Admin", role: { role: "gate", label: "Platform admin" }, group: "AD-TRELLIS-PLATFORM-ADMIN", requestedVia: "SNOW-4471" },
           { depth: 2, label: "Priya Nayar", leaf: true, state: "inherited" },
         ]}
       />,
@@ -81,14 +81,14 @@ describe("RoleMatrixRow web presentation", () => {
         presentation="web"
         label="People"
         rows={[
-          { depth: 1, label: "Viewer", role: { role: "meta", label: "VIEWER" }, state: "floor" },
-          { depth: 1, label: "Nested", role: { role: "warn", label: "UNRESOLVED" }, state: "unresolved", expanded: false, leaf: true },
+          { depth: 1, label: "Viewer", role: { role: "meta", label: "Viewer" }, state: "floor" },
+          { depth: 1, label: "Nested", role: { role: "warn", label: "Unresolved" }, state: "unresolved", expanded: false, leaf: true },
           { depth: 1, label: "Plain", state: "normal" },
         ]}
       />,
     );
     expect(container.querySelector("[role='tree']")?.getAttribute("aria-label")).toBe("People");
-    expect(texts(container, ".ward-envrow > .ward-chip")).toEqual(["VIEWER", "implicit floor", "UNRESOLVED"]);
+    expect(texts(container, ".ward-envrow > .ward-chip")).toEqual(["Viewer", "implicit floor", "Unresolved"]);
     expect(attrs(container, ".ward-envrow > .ward-chip", "data-ward-chip")).toEqual(["meta", "meta", "warn"]);
     expect(attrs(container, "[role='treeitem']", "aria-expanded")).toEqual(["false", null, "false"]);
     expect(texts(container, ".ward-treerow--unresolved .ward-envrow > span:first-child")).toEqual(["Nested"]);
@@ -115,11 +115,11 @@ const roleBg: Record<MatrixRole, string> = {
 describe("RoleMatrixRow spec", () => {
   it("gives every role its fixed chip and never a stream colour", () => {
     const labels: Record<MatrixRole, string> = {
-      platformAdmin: "PLATFORM ADMIN",
-      approver: "APPROVER",
-      streamAdmin: "STREAM ADMIN",
-      member: "MEMBER",
-      viewer: "VIEWER",
+      platformAdmin: "Platform admin",
+      approver: "Approver",
+      streamAdmin: "Stream admin",
+      member: "Member",
+      viewer: "Viewer",
     };
     for (const key of Object.keys(labels) as MatrixRole[]) {
       const { unmount } = renderSpecRow({ name: "M. Chen", matrixRole: key });
@@ -136,7 +136,7 @@ describe("RoleMatrixRow spec", () => {
 
   it("marks an unresolved branch with a warn chip and the warn inset row", () => {
     renderSpecRow({ name: "MEMBER?", unresolved: true });
-    expect(screen.getByText("UNRESOLVED").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-warn-bg)");
+    expect(screen.getByText("Unresolved").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-warn-bg)");
     expect(screen.getByRole("treeitem").getAttribute("data-unresolved")).toBe("true");
   });
 

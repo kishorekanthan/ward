@@ -41,10 +41,10 @@ type CompactPolicyRowProps = {
 export const POLICY_CHIP_WIDTH = 104;
 
 const INHERITANCE: Record<PolicyInheritance, { role: ChipRole; label: string }> = {
-  inherited: { role: "meta", label: "INHERITED" },
-  overridden: { role: "running", label: "OVERRIDDEN" },
-  locked: { role: "meta", label: "LOCKED" },
-  derived: { role: "soft", label: "DERIVED" },
+  inherited: { role: "meta", label: "Inherited" },
+  overridden: { role: "running", label: "Overridden" },
+  locked: { role: "meta", label: "Locked" },
+  derived: { role: "soft", label: "Derived" },
 };
 
 type ControlProps = { control: PolicyControl; name: string; locked: boolean; describedBy?: string };

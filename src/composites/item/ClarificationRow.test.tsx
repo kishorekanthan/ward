@@ -15,10 +15,10 @@ describe("ClarificationRow", () => {
     const onWithdraw = vi.fn();
     render(<ClarificationRow comment={queued} onEdit={onEdit} onWithdraw={onWithdraw} />);
 
-    expect(screen.getByText("QUEUED")).toBeDefined();
+    expect(screen.getByText("Queued")).toBeDefined();
     expect(screen.getByText("The type change is upstream and intentional.")).toBeDefined();
     expect(screen.getByText("delivers in ~40s")).toBeDefined();
-    expect(screen.getByText("QUEUED").closest("[data-delivery]")?.getAttribute("data-queued")).toBe("true");
+    expect(screen.getByText("Queued").closest("[data-delivery]")?.getAttribute("data-queued")).toBe("true");
     fireEvent.click(screen.getByRole("button", { name: "Edit" }));
     fireEvent.click(screen.getByRole("button", { name: "Withdraw" }));
     expect(onEdit).toHaveBeenCalledTimes(1);
@@ -91,14 +91,14 @@ describe("ClarificationRow", () => {
   it("makes editing the primary act while the comment is still queued", () => {
     render(<ClarificationRow comment={comment} {...noop} />);
     expect(screen.getByText("Edit").className).toMatch(/_primary_/);
-    expect(screen.getByText("QUEUED").getAttribute("data-ward-chip")).toBe("running");
+    expect(screen.getByText("Queued").getAttribute("data-ward-chip")).toBe("running");
   });
 
   it("demotes editing once delivered, and offers the original", () => {
     render(<ClarificationRow comment={{ ...comment, delivery: "delivered", originalId: "c-11" }} {...noop} />);
     expect(screen.getByText("Edit").className).toMatch(/_ghost_/);
     expect(screen.getByText("View original")).not.toBeNull();
-    expect(screen.getByText("DELIVERED").getAttribute("data-ward-chip")).toBe("done");
+    expect(screen.getByText("Delivered").getAttribute("data-ward-chip")).toBe("done");
   });
 
   // Reason copy is design/Trellis Board Item.dc.html:125, which the target renders; the source wrote its own.
@@ -112,7 +112,7 @@ describe("ClarificationRow", () => {
     );
     fireEvent.click(edit);
     expect(onEdit).not.toHaveBeenCalled();
-    expect(screen.getByText("RETRYING").getAttribute("data-ward-chip")).toBe("attention");
+    expect(screen.getByText("Retrying").getAttribute("data-ward-chip")).toBe("attention");
   });
 
   it("lets a retrying delivery be called off", () => {
@@ -124,7 +124,7 @@ describe("ClarificationRow", () => {
 
   it("marks a failed delivery as failed, not as attention", () => {
     render(<ClarificationRow comment={{ ...comment, delivery: "failed", etaOrAttempt: "gave up after 5 attempts" }} {...noop} />);
-    expect(screen.getByText("FAILED").getAttribute("data-ward-chip")).toBe("failed");
+    expect(screen.getByText("Failed").getAttribute("data-ward-chip")).toBe("failed");
     expect(screen.queryByText("Cancel delivery")).toBeNull();
   });
 

@@ -42,7 +42,7 @@ describe("PolicyRow compact", () => {
     expect(cells).toHaveLength(2);
     expect((cells[1] as HTMLElement).style.width).toBe("104px");
     expect(container.querySelector(".ward-chip")?.className).toContain("ward-chip--meta");
-    expect(container.querySelector(".ward-chip")?.textContent).toBe("LOCKED");
+    expect(container.querySelector(".ward-chip")?.textContent).toBe("Locked");
   });
 
   it("refuses a locked setting without a reason", () => {
@@ -72,7 +72,7 @@ describe("PolicyRow web presentation", () => {
     );
     const row = container.querySelector("div.ward-policyrow[data-inheritance='locked']") as HTMLElement;
     expect(container.querySelector("tr, th, td")).toBeNull();
-    expect(Array.from(row.children).map((el) => el.textContent)).toEqual(["Label prefixFixed at trellis:.", "trellis:", "LOCKED"]);
+    expect(Array.from(row.children).map((el) => el.textContent)).toEqual(["Label prefixFixed at trellis:.", "trellis:", "Locked"]);
     expect(texts(row, ":scope > .ward-envmeta")).toEqual(["trellis:"]);
     expect((row.querySelector(".ward-policy-chip") as HTMLElement).style.width).toBe("104px");
   });
@@ -88,7 +88,7 @@ describe("PolicyRow web presentation", () => {
     expect(texts(container, ".ward-policy-consequence")).toEqual(["Inherited. from platform", "Overridden.", "Derived."]);
     expect(texts(container, ".ward-envmeta")).toEqual(["—", "—", "—"]);
     const chips = Array.from(container.querySelectorAll(".ward-policy-chip > .ward-chip"));
-    expect(chips.map((chip) => chip.textContent)).toEqual(["INHERITED", "OVERRIDDEN", "DERIVED"]);
+    expect(chips.map((chip) => chip.textContent)).toEqual(["Inherited", "Overridden", "Derived"]);
     expect(chips.map((chip) => chip.getAttribute("data-ward-chip"))).toEqual(["meta", "running", "soft"]);
   });
 
@@ -180,11 +180,11 @@ describe("PolicyRow spec", () => {
 
   it("keeps LOCKED neutral, OVERRIDDEN running and DERIVED soft — a blue chip is not an action", () => {
     renderRow("locked", () => {}, "Set by platform policy PLT-118.");
-    expect(screen.getByText("LOCKED").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-meta-bg)");
+    expect(screen.getByText("Locked").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-meta-bg)");
     renderRow("overridden");
-    expect(screen.getByText("OVERRIDDEN").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-running-bg)");
+    expect(screen.getByText("Overridden").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-running-bg)");
     renderRow("derived");
-    expect(screen.getByText("DERIVED").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-soft-bg)");
+    expect(screen.getByText("Derived").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-soft-bg)");
   });
 
   it("holds the inheritance column at its drawn width", () => {

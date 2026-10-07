@@ -106,7 +106,7 @@ describe("DryRunRail", () => {
     const btn = screen.getByRole("button", { name: "Publish" }) as HTMLButtonElement;
     expect(btn.disabled).toBe(true);
     expect(document.getElementById(btn.getAttribute("aria-describedby") as string)?.textContent).toMatch(/dry run in progress/);
-    expect(screen.getByText("RUNNING").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-running-bg)");
+    expect(screen.getByText("Running").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-running-bg)");
     expect(screen.getAllByRole("timer").length).toBeGreaterThan(0);
     expect(screen.getByText("policy.check").closest("li")?.getAttribute("aria-current")).toBe("step");
   });
@@ -122,10 +122,10 @@ describe("DryRunRail", () => {
 
   it("maps each run status onto its status chip", () => {
     const { unmount } = render(<DryRunRail run={{ ...run, status: "notRun" }} checklist={complete} publishNote={NOTE} onPublish={() => {}} />);
-    expect(screen.getByText("NOT RUN").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-pending-bg)");
+    expect(screen.getByText("Not run").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-pending-bg)");
     unmount();
     render(<DryRunRail run={{ ...run, status: "failed" }} checklist={complete} publishNote={NOTE} onPublish={() => {}} />);
-    expect(screen.getByText("FAILED").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-failed-bg)");
+    expect(screen.getByText("Failed").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-failed-bg)");
   });
 
   it("keeps the rail out of the live-region budget and states cost and turns as words", () => {

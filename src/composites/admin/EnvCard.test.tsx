@@ -16,7 +16,7 @@ describe("EnvCard", () => {
       <EnvCard env={{ env: "prod", version: "v2.13.0", deployedAt: "2026-08-28T06:30:00Z", by: "J. Rao", ticket: "SNOW-4502", state: "live" }} />,
     );
     const section = container.querySelector("section");
-    expect(section?.getAttribute("aria-label")).toBe("PROD");
+    expect(section?.getAttribute("aria-label")).toBe("Prod");
     expect(texts(container, "p")).toEqual(["v2.13.0", "deployed 28 Aug 07:30", "J. Rao · SNOW-4502"]);
     expect(chipClass(container)).toContain("ward-chip--done");
     expect(container.querySelector(".ward-envcard")).toBeNull();
@@ -32,16 +32,16 @@ describe("EnvCard", () => {
       <EnvCard presentation="web" env="prod" version="v2.13.0" deployedAt="2026-08-28T06:30:00Z" by="J. Rao" ticket="SNOW-4502" state="live" />,
     );
     expect(container.querySelector("section")).toBeNull();
-    expect(texts(container, "article.ward-envcard > span")).toEqual(["prodLIVE", "v2.13.0", "28 Aug 07:30 · promoted by J. Rao · SNOW-4502"]);
+    expect(texts(container, "article.ward-envcard > span")).toEqual(["prodLive", "v2.13.0", "28 Aug 07:30 · promoted by J. Rao · SNOW-4502"]);
     expect(texts(container, ".ward-envrow > .ward-stagecol-title")).toEqual(["prod"]);
     expect(texts(container, ".ward-envmeta")).toEqual(["v2.13.0"]);
     expect(chipClass(container)).toContain("ward-chip--done");
   });
 
   it.each([
-    [{ by: "P. Nayar" }, "soaking", "SOAKING", "ward-chip--running", "04 Sep 18:40 · promoted by P. Nayar · "],
-    [{}, "current", "CURRENT", "ward-chip--done", "04 Sep 18:40 · "],
-    [{ ticket: "SNOW-4502" }, "current", "CURRENT", "ward-chip--done", "04 Sep 18:40 · SNOW-4502"],
+    [{ by: "P. Nayar" }, "soaking", "Soaking", "ward-chip--running", "04 Sep 18:40 · promoted by P. Nayar · "],
+    [{}, "current", "Current", "ward-chip--done", "04 Sep 18:40 · "],
+    [{ ticket: "SNOW-4502" }, "current", "Current", "ward-chip--done", "04 Sep 18:40 · SNOW-4502"],
   ] as const)("keeps the web meta join for %o in state %s", (extra, state, label, role, meta) => {
     const { container } = render(
       <EnvCard presentation="web" env="uat" version="v2.13.2" deployedAt="2026-09-04T17:40:00Z" state={state} {...extra} />,
@@ -64,16 +64,16 @@ const specEnv: Env = {
 describe("EnvCard spec", () => {
   it("reads a soak as running, never as a warning or a stream colour", () => {
     render(<EnvCard env={specEnv} />);
-    const chip = screen.getByText("SOAKING");
+    const chip = screen.getByText("Soaking");
     expect(chip.style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-running-bg)");
     expect(chip.style.getPropertyValue("--ward-chip-bg")).not.toBe("var(--ward-chip-attention-bg)");
   });
 
   it("keeps current and live on done", () => {
     render(<EnvCard env={{ ...specEnv, env: "prod", state: "live" }} />);
-    expect(screen.getByText("LIVE").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-done-bg)");
+    expect(screen.getByText("Live").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-done-bg)");
     render(<EnvCard env={{ ...specEnv, env: "dev", state: "current" }} />);
-    expect(screen.getByText("CURRENT").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-done-bg)");
+    expect(screen.getByText("Current").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-done-bg)");
   });
 
   it("stamps the deploy time rather than printing the instant", () => {

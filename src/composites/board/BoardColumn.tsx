@@ -25,7 +25,7 @@ function ColumnHead({ column, count, id }: { column: BoardColumnConfig; count: n
   return (
     <div className={s.head}>
       <h2 className={s.label} id={id} title={column.label}>{column.label}</h2>
-      {column.gate && <Chip role="gate" label="GATE" />}
+      {column.gate && <Chip role="gate" label="Gate" />}
       <span className={s.count}>{count}{column.cap === undefined ? null : ` / ${column.cap}`}</span>
     </div>
   );

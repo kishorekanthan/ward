@@ -31,9 +31,9 @@ describe("CredentialRow", () => {
     const { container } = inTable(
       <CredentialRow cred={{ id: "trellis-relay", purpose: "Outbox delivery", cls: "write", tier: "Manual", next: "6d", state: "rotateNow" }} />,
     );
-    expect(cellTexts(container)).toEqual(["Outbox delivery", "trellis-relay", "ROTATE NOW", "WRITE", "Manual", "6d"]);
-    expect(chipClass(container, "WRITE")).toContain("ward-chip--write");
-    expect(chipClass(container, "ROTATE NOW")).toContain("ward-chip--failed");
+    expect(cellTexts(container)).toEqual(["Outbox delivery", "trellis-relay", "Rotate now", "Write", "Manual", "6d"]);
+    expect(chipClass(container, "Write")).toContain("ward-chip--write");
+    expect(chipClass(container, "Rotate now")).toContain("ward-chip--failed");
     expect(only(container, "[data-urgent='true']").textContent).toBe("6d");
     expect(container.querySelector(".ward-redink")).toBeNull();
   });
@@ -42,8 +42,8 @@ describe("CredentialRow", () => {
     const { container } = inTable(
       <CredentialRow cred={{ id: "oidc", purpose: "Client secret", cls: "identity", tier: "Short-lived", next: "with IdP", state: "idpOwned" }} />,
     );
-    expect(chipClass(container, "IDP OWNED")).toContain("ward-chip--meta");
-    expect(chipClass(container, "IDENTITY")).toContain("ward-chip--meta");
+    expect(chipClass(container, "IdP owned")).toContain("ward-chip--meta");
+    expect(chipClass(container, "Identity")).toContain("ward-chip--meta");
     expect(container.querySelector("[data-urgent]")).toBeNull();
   });
 
@@ -54,21 +54,21 @@ describe("CredentialRow", () => {
         cred={{ id: "trellis-relay", purpose: "Outbox delivery — comments, labels", cls: "JIRA WRITE", tier: "Scriptable", next: "6d", state: "rotateNow" }}
       />,
     );
-    expect(cellTexts(container)).toEqual(["trellis-relay", "Outbox delivery — comments, labels", "JIRA WRITE", "Scriptable", "6d", "ROTATE NOW"]);
+    expect(cellTexts(container)).toEqual(["trellis-relay", "Outbox delivery — comments, labels", "JIRA WRITE", "Scriptable", "6d", "Rotate now"]);
     expect(only(container, ".ward-toolname").textContent).toBe("trellis-relay");
     expect(only(container, ".ward-resfield-value.ward-truncate").getAttribute("title")).toBe("Outbox delivery — comments, labels");
     expect(chipClass(container, "JIRA WRITE")).toContain("ward-chip--write");
-    expect(chipClass(container, "ROTATE NOW")).toContain("ward-chip--failed");
+    expect(chipClass(container, "Rotate now")).toContain("ward-chip--failed");
     const red = only(container, ".ward-cellmeta.ward-redink");
     expect(red.textContent).toBe("6d");
     expect(red.style.color).toBe("var(--ward-color-red)");
   });
 
   it.each([
-    ["healthy", "HEALTHY", "ward-chip--done"],
-    ["rotateSoon", "ROTATE SOON", "ward-chip--attention"],
-    ["idpOwned", "IDP-OWNED", "ward-chip--meta"],
-    ["configured", "CONFIGURED", "ward-chip--meta"],
+    ["healthy", "Healthy", "ward-chip--done"],
+    ["rotateSoon", "Rotate soon", "ward-chip--attention"],
+    ["idpOwned", "IdP-owned", "ward-chip--meta"],
+    ["configured", "Configured", "ward-chip--meta"],
   ] as const)("maps web state %s to %s without red ink", (state, label, role) => {
     const { container } = inTable(
       <CredentialRow presentation="web" cred={{ id: "trellis-watcher", purpose: "JQL polling", cls: "JIRA READ", tier: "Scriptable", next: "34d", state }} />,
@@ -109,12 +109,12 @@ function renderState(state: CredentialState) {
 describe("CredentialRow spec", () => {
   it("reads a rotation past its window as a failure", () => {
     renderState("rotateNow");
-    expect(bg("ROTATE NOW")).toBe("var(--ward-chip-failed-bg)");
+    expect(bg("Rotate now")).toBe("var(--ward-chip-failed-bg)");
   });
 
   it("holds a coming rotation on attention, never on drift orange", () => {
     renderState("rotateSoon");
-    expect(bg("ROTATE SOON")).toBe("var(--ward-chip-attention-bg)");
+    expect(bg("Rotate soon")).toBe("var(--ward-chip-attention-bg)");
     const chips = document.querySelectorAll("[data-ward-chip]");
     for (const chip of chips) {
       expect((chip as HTMLElement).style.getPropertyValue("--ward-chip-bg")).not.toBe("var(--ward-chip-drift-bg)");
@@ -123,9 +123,9 @@ describe("CredentialRow spec", () => {
 
   it("keeps a healthy credential done and an IdP-owned one meta", () => {
     renderState("healthy");
-    expect(bg("HEALTHY")).toBe("var(--ward-chip-done-bg)");
+    expect(bg("Healthy")).toBe("var(--ward-chip-done-bg)");
     renderState("idpOwned");
-    expect(bg("IDP OWNED")).toBe("var(--ward-chip-meta-bg)");
+    expect(bg("IdP owned")).toBe("var(--ward-chip-meta-bg)");
   });
 
   it("reinforces the date in red only when the rotation is due", () => {

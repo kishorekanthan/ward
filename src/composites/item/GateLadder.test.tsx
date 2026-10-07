@@ -11,7 +11,7 @@ const rungs: Rung[] = [
 describe("GateLadder", () => {
   it("marks a wait as attention and names who it waits on", () => {
     render(<GateLadder rungs={rungs} />);
-    const chip = screen.getByText("WAITING");
+    const chip = screen.getByText("Waiting");
     expect(chip.getAttribute("data-ward-chip")).toBe("attention");
     expect(screen.getByText("J. Rao")).not.toBeNull();
   });
@@ -22,8 +22,8 @@ describe("GateLadder", () => {
 
   it("keeps passed and pending on their own chips", () => {
     render(<GateLadder rungs={rungs} />);
-    expect(screen.getByText("PASSED").getAttribute("data-ward-chip")).toBe("done");
-    expect(screen.getByText("PENDING").getAttribute("data-ward-chip")).toBe("pending");
+    expect(screen.getByText("Passed").getAttribute("data-ward-chip")).toBe("done");
+    expect(screen.getByText("Pending").getAttribute("data-ward-chip")).toBe("pending");
   });
 
   it("is an ordered list of rungs", () => {

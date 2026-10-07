@@ -1,5 +1,5 @@
 {
-  "$source": "Transcribed by hand from ward/screens/Trellis Studio.dc.html block 3c 'Stream detail' (.k, .tag, stage columns, agent cards, gate panel, terminal card) and block 3a 'Streams' (stream rows), and block 3b 'New stream' (modal head, sections, stage rows, policy cards), and block 4a 'Board configuration' (config rows, card anatomy cells, live preview rail).",
+  "$source": "Transcribed by hand from ward/screens/Trellis Studio.dc.html block 3c 'Stream detail' (.k, .tag, stage columns, agent cards, gate panel, terminal card) and block 3a 'Streams' (stream rows), and block 3b 'New stream' (modal head, sections, stage rows, policy cards), and block 4a 'Board configuration' (config rows, card anatomy cells, live preview rail). head label and labelTracking, and tag font and tracking, are the #199 sentence-case sans labels, not the comp's uppercase mono.",
   "column": {
     "padding": "14px 12px",
     "gap": "11px",
@@ -9,14 +9,14 @@
   "head": {
     "gap": "5px",
     "tagGap": "6px",
-    "label": "500 9px/1 'IBM Plex Mono'",
-    "labelTracking": "0.13em",
+    "label": "500 9px/1 'Source Sans 3'",
+    "labelTracking": "normal",
     "name": "500 13px/1 Archivo",
     "count": "400 10.5px/1 'Source Sans 3'"
   },
   "tag": {
-    "font": "500 9.5px/1 'IBM Plex Mono'",
-    "tracking": "0.07em",
+    "font": "500 9.5px/1 'Source Sans 3'",
+    "tracking": "normal",
     "padding": "4px 6px",
     "quietBg": "#EDF0F4",
     "quietFg": "#5A6474"
