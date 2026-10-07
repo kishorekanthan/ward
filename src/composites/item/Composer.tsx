@@ -12,12 +12,21 @@ export type ComposerProps = {
   requeueAfter?: { checked: boolean; agent: string; consequence?: string; onChange?: (checked: boolean) => void };
   onPost: (asUser: string, body: string) => void;
   onDraft?: (body: string) => void;
+  // With value the page owns the text, so it can fill the box from a suggestion.
+  value?: string;
+  onChange?: (body: string) => void;
   // reply: Intake 12c's one-line reply row with a text Send; the label stays attached but hidden.
   variant?: "reply";
 };
 
-function ReplyRow({ placeholder, asUser, onPost }: ComposerProps) {
-  const [body, setBody] = useState("");
+function useBody({ value, onChange }: ComposerProps): [string, (body: string) => void] {
+  const [own, setOwn] = useState("");
+  return value === undefined ? [own, setOwn] : [value, onChange ?? (() => undefined)];
+}
+
+function ReplyRow(props: ComposerProps) {
+  const { placeholder, asUser, onPost } = props;
+  const [body, setBody] = useBody(props);
   const sendsAs = useId();
   return (
     <div className={s.reply} data-ward-composer="reply">
@@ -36,8 +45,9 @@ export function Composer(props: ComposerProps) {
   return props.variant === "reply" ? <ReplyRow {...props} /> : <PostBox {...props} />;
 }
 
-function PostBox({ placeholder, asUser, attachTo, requeueAfter, onPost, onDraft }: ComposerProps) {
-  const [body, setBody] = useState("");
+function PostBox(props: ComposerProps) {
+  const { placeholder, asUser, attachTo, requeueAfter, onPost, onDraft } = props;
+  const [body, setBody] = useBody(props);
   return (
     <div className={s.root}>
       <Field kind="textarea" label={placeholder} value={body} onChange={setBody} />
