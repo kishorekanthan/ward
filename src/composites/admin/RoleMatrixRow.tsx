@@ -9,11 +9,11 @@ import s from "./RoleMatrixRow.module.css";
 export type MatrixRole = "platformAdmin" | "approver" | "streamAdmin" | "member" | "viewer";
 
 const ROLE: Record<MatrixRole, { role: ChipRole; label: string }> = {
-  platformAdmin: { role: "gate", label: "PLATFORM ADMIN" },
-  approver: { role: "running", label: "APPROVER" },
-  streamAdmin: { role: "meta", label: "STREAM ADMIN" },
-  member: { role: "meta", label: "MEMBER" },
-  viewer: { role: "meta", label: "VIEWER" },
+  platformAdmin: { role: "gate", label: "Platform admin" },
+  approver: { role: "running", label: "Approver" },
+  streamAdmin: { role: "meta", label: "Stream admin" },
+  member: { role: "meta", label: "Member" },
+  viewer: { role: "meta", label: "Viewer" },
 };
 
 export type MatrixNode = {
@@ -99,8 +99,8 @@ function RoleChips({ role, node }: { role?: { role: ChipRole; label: string }; n
   return (
     <>
       {role && <Chip role={role.role} label={role.label} />}
-      {node.floor && <Chip role="soft" label="FLOOR" />}
-      {node.unresolved && <Chip role="warn" label="UNRESOLVED" />}
+      {node.floor && <Chip role="soft" label="Floor" />}
+      {node.unresolved && <Chip role="warn" label="Unresolved" />}
     </>
   );
 }

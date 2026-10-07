@@ -25,7 +25,7 @@ describe("RunbookSteps web presentation", () => {
     expect(texts(container, ".ward-runbook-num")).toEqual(["01", "02", "03", "04"]);
     const inks = Array.from(container.querySelectorAll<HTMLElement>(".ward-runbook-num")).map((el) => el.style.color);
     expect(inks).toEqual(Array(4).fill("var(--ward-color-muted)"));
-    expect(texts(container, ".ward-envrow > .ward-chip")).toEqual(["DONE", "RUNNING", "PENDING", "RUNNING"]);
+    expect(texts(container, ".ward-envrow > .ward-chip")).toEqual(["Done", "Running", "Pending", "Running"]);
     const roles = Array.from(container.querySelectorAll(".ward-chip")).map((el) => el.className.match(/ward-chip--(\w+)/)?.[1]);
     expect(roles).toEqual(["done", "running", "pending", "running"]);
     expect(texts(container, ".ward-runbook-detail")).toEqual(["scheduled job · Jira REST", "ExternalSecrets", "env is read at boot", "no start recorded"]);
@@ -53,7 +53,7 @@ describe("RunbookSteps compact", () => {
     const { container } = render(<RunbookSteps steps={STEPS} actions={<button>Rotate</button>} />);
     expect(Array.from(container.querySelectorAll("li")).map((li) => li.getAttribute("aria-current"))).toEqual([null, "step", null, "step"]);
     expect(timers(container)).toEqual([false, true, false, false]);
-    expect(texts(container, ".ward-chip")).toEqual(["DONE", "RUNNING", "PENDING", "RUNNING"]);
+    expect(texts(container, ".ward-chip")).toEqual(["Done", "Running", "Pending", "Running"]);
     expect(container.querySelector(".ward-runbook-num, .ward-clarity-actions, li > [style]")).toBeNull();
     expect(Array.from(container.querySelectorAll("button")).map((b) => b.parentElement?.tagName)).toEqual(["DIV"]);
   });

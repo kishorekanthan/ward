@@ -3,6 +3,7 @@ import { Chip } from "../../primitives/Chip";
 import type { GridColumn } from "../../primitives/Grid";
 import type { ChipRole } from "../../tokens";
 import s from "./CredentialRow.module.css";
+import { sentence } from "../../fmt/sentence";
 
 export type CredentialClass = "read" | "write" | "model" | "data" | "identity";
 export type CredentialState = "healthy" | "rotateSoon" | "rotateNow" | "idpOwned";
@@ -33,18 +34,18 @@ export type WebCredentialRowProps = {
 };
 
 const STATE: Record<CredentialState, { role: ChipRole; label: string }> = {
-  healthy: { role: "done", label: "HEALTHY" },
-  rotateSoon: { role: "attention", label: "ROTATE SOON" },
-  rotateNow: { role: "failed", label: "ROTATE NOW" },
-  idpOwned: { role: "meta", label: "IDP OWNED" },
+  healthy: { role: "done", label: "Healthy" },
+  rotateSoon: { role: "attention", label: "Rotate soon" },
+  rotateNow: { role: "failed", label: "Rotate now" },
+  idpOwned: { role: "meta", label: "IdP owned" },
 };
 
 const WEB_STATE: Record<WebCredentialState, { role: ChipRole; label: string }> = {
-  healthy: { role: "done", label: "HEALTHY" },
-  rotateSoon: { role: "attention", label: "ROTATE SOON" },
-  rotateNow: { role: "failed", label: "ROTATE NOW" },
-  idpOwned: { role: "meta", label: "IDP-OWNED" },
-  configured: { role: "meta", label: "CONFIGURED" },
+  healthy: { role: "done", label: "Healthy" },
+  rotateSoon: { role: "attention", label: "Rotate soon" },
+  rotateNow: { role: "failed", label: "Rotate now" },
+  idpOwned: { role: "meta", label: "IdP-owned" },
+  configured: { role: "meta", label: "Configured" },
 };
 
 export const CREDENTIAL_COLUMNS: GridColumn[] = [
@@ -101,7 +102,7 @@ function CompactCredentialRow({ cred }: { cred: Credential }): ReactElement {
         <Chip role={state.role} label={state.label} />
       </Cell>
       <Cell column="cls">
-        <Chip role={cred.cls === "write" ? "write" : "meta"} label={cred.cls.toUpperCase()} />
+        <Chip role={cred.cls === "write" ? "write" : "meta"} label={sentence(cred.cls)} />
       </Cell>
       <Cell column="tier">{cred.tier}</Cell>
       <Cell column="next">

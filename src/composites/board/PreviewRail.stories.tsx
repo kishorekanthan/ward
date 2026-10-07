@@ -12,7 +12,7 @@ const sample: BoardItem[] = [
     waitsOn: "A. Whyte",
     streamStep: 1,
     changedAt: "2026-09-06T02:14:00Z",
-    state: { role: "attention", label: "NEEDS A HUMAN" },
+    state: { role: "attention", label: "Needs a human" },
     lastAgentAction: "asked for the carrier reference",
     cost: 0.46,
     jiraKey: "FL-229",
@@ -25,7 +25,7 @@ const sample: BoardItem[] = [
     waitsOn: "J. Rao",
     streamStep: 1,
     changedAt: "2026-09-06T02:12:00Z",
-    state: { role: "pending", label: "QUEUED" },
+    state: { role: "pending", label: "Queued" },
     cost: 0.12,
   },
 ];

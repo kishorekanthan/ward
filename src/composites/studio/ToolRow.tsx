@@ -1,6 +1,7 @@
 import { useId, type ReactElement } from "react";
 import { Chip } from "../../primitives/Chip";
 import s from "./ToolRow.module.css";
+import { sentence } from "../../fmt/sentence";
 
 export type Tool = {
   name: string;
@@ -50,7 +51,7 @@ function ToolInput({ id, reasonId, tool, state, onChange }: { id: string; reason
 }
 
 function Classification({ classification }: Pick<Tool, "classification">): ReactElement {
-  return <Chip role={classification === "write" ? "write" : "meta"} label={classification.toUpperCase()} />;
+  return <Chip role={classification === "write" ? "write" : "meta"} label={sentence(classification)} />;
 }
 
 // A locked row shows why in the scope slot, as the comp does; the id keeps the checkbox described.
@@ -80,7 +81,7 @@ export function ToolRow({ tool, onChange, presentation }: ToolRowProps): ReactEl
       </label>
       <Detail tool={tool} state={state} reasonId={reasonId} />
       <Classification classification={tool.classification} />
-      {state.locked ? <Chip role="meta" label="LOCKED" /> : null}
+      {state.locked ? <Chip role="meta" label="Locked" /> : null}
     </Row>
   );
 }

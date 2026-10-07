@@ -38,7 +38,7 @@ describe("BoardColumn", () => {
 
   it("marks a human gate with a chip, never with the stream colour", () => {
     render(<BoardColumn column={{ ...column, gate: true, cap: undefined }} items={items} sort="oldest" onOpen={() => {}} />);
-    expect(screen.getByText("GATE")).not.toBeNull();
+    expect(screen.getByText("Gate")).not.toBeNull();
   });
 
   it("puts the oldest item first and reverses on the other sort", () => {

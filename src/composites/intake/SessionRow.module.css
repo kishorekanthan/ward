@@ -8,13 +8,11 @@
   overflow-x: auto;
 }
 
+/* ClampText wraps the title and the owner to two lines, then cuts with an ellipsis (#199). */
 .title {
   flex: 1;
   font: var(--ward-type-title);
   color: var(--ward-color-text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .turns,
@@ -25,6 +23,7 @@
   color: var(--ward-color-muted);
   white-space: nowrap;
 }
+
 
 .cost,
 .link {
@@ -122,4 +121,15 @@ tr.tableRow > td.tableActivity {
   font: var(--ward-type-monoText);
   color: var(--ward-color-blue);
   text-decoration: none;
+}
+
+/* At phone width the title takes its own line, so the facts beside it cannot squeeze it to nothing (#199). */
+@media (max-width: 767.98px) {
+  .row {
+    flex-wrap: wrap;
+  }
+
+  .title {
+    flex-basis: 100%;
+  }
 }

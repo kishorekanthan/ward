@@ -1,5 +1,6 @@
 import { useEffect, useRef, type CSSProperties, type RefObject } from "react";
 import { Chip } from "../../primitives/Chip";
+import { ClampText } from "../../primitives/ClampText";
 import { LiveIndicator } from "../../live/LiveIndicator";
 import { useBorderFlash } from "../../live/useBorderFlash";
 import { duration } from "../../fmt/duration";
@@ -68,7 +69,7 @@ function MetaLine({ item, connection }: { item: BoardItem; connection: LiveConne
   if (item.run) {
     return (
       <p className={s.meta}>
-        <span className={s.who}>waits on {item.run.agent}</span>
+        <ClampText className={s.who} text={`waits on ${item.run.agent}`} />
         {sep}
         <LiveIndicator startedAt={item.run.startedAt} connection={connection} turn={item.run.turn} lastEvent={item.run.lastStep} />
       </p>
@@ -76,7 +77,7 @@ function MetaLine({ item, connection }: { item: BoardItem; connection: LiveConne
   }
   return (
     <p className={s.meta}>
-      <span className={s.who}>waits on {item.waitsOn}</span>
+      <ClampText className={s.who} text={`waits on ${item.waitsOn}`} />
       {sep}
       <span className={s.mono}>{duration(item.timeInStage)} in stage</span>
     </p>
@@ -84,10 +85,10 @@ function MetaLine({ item, connection }: { item: BoardItem; connection: LiveConne
 }
 
 function Head({ item }: { item: BoardItem }) {
-  const state = item.run ? { role: "running" as const, label: "AGENT WORKING" } : item.state;
+  const state = item.run ? { role: "running" as const, label: "Agent working" } : item.state;
   return (
     <div className={s.head}>
-      {item.flagged && <Chip role="drift" label="DRIFT FLAG" />}
+      {item.flagged && <Chip role="drift" label="Drift flag" />}
       {state && <Chip role={state.role} label={state.label} />}
     </div>
   );
@@ -163,7 +164,7 @@ export function WorkCard(props: WorkCardProps) {
         </span>
       </button>
       <Head item={item} />
-      <p className={s.title}>{item.title}</p>
+      <ClampText as="p" className={s.title} text={item.title} />
       <MetaLine item={item} connection={connection} />
       <BlockedLine reason={item.blockedReason} />
       <Fields item={item} fields={fields} />

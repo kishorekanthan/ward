@@ -66,7 +66,7 @@ export function RequeueSheet({ run, effects, refusals, cost, onRequeue, onClose,
         <Field kind="textarea" label="Note for the agent" value={note} onChange={setNote} />
         {refused && (
           <div className={s.refusals}>
-            <Chip role="meta" label="REFUSED" />
+            <Chip role="meta" label="Refused" />
             <ul className={s.reasons}>
               {refusals.map((r, i) => (
                 <li className={s.reason} key={r.reason} id={i === 0 ? reasonId : undefined}>

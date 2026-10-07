@@ -1,0 +1,12 @@
+/* Provenance: not established — no comp clamps text; two lines then an ellipsis is the #199 rule for long titles and names. */
+/* The attribute doubles the specificity, so a host's single-class rule cannot undo the clamp whatever the bundle order. */
+.clamp[data-ward-clamp] {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  min-width: 0;
+}

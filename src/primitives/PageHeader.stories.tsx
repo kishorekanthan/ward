@@ -35,7 +35,7 @@ export const WithChips = {
     title: "intake-advisor v3",
     chips: [
       { role: "stream", label: "data-eng", streamStep: 1 },
-      { role: "running", label: "DRAFT" },
+      { role: "running", label: "Draft" },
     ],
     actions,
   },
@@ -115,10 +115,10 @@ export const PhoneWidth = {
     title: "intake-advisor v3",
     chips: [
       { role: "stream", label: "data-eng", streamStep: 1 },
-      { role: "running", label: "DRAFT" },
-      { role: "gate", label: "AWAITING REVIEW" },
-      { role: "attention", label: "2 GATES OVERDUE" },
-      { role: "meta", label: "OWNER PLATFORM" },
+      { role: "running", label: "Draft" },
+      { role: "gate", label: "Awaiting review" },
+      { role: "attention", label: "2 gates overdue" },
+      { role: "meta", label: "Owner platform" },
     ],
     actions,
   },
@@ -130,7 +130,7 @@ export const PhoneWidthOneChip = {
   args: {
     crumb: [{ label: "Studio", href: "/studio" }, { label: "data-eng" }],
     title: "intake-advisor v3",
-    chips: [{ role: "running", label: "DRAFT" }],
+    chips: [{ role: "running", label: "Draft" }],
     actions,
   },
   parameters: { viewport: { defaultViewport: "mobile1" } },
@@ -199,3 +199,15 @@ export const PhoneWidthLongTitle = {
   },
   parameters: { viewport: { defaultViewport: "mobile1" } },
 };
+
+// The case file header: a 120-character title wraps to two lines and cuts, and a 40-character owner wraps (#199).
+const longCase = {
+  crumb: [{ label: "data-eng", href: "/streams/data-eng" }, { label: "FL-229" }],
+  chips: [{ role: "gate", label: "Awaiting review" }],
+  title: "Reconcile late-arriving inbound shipments against the carrier's manifest before the nightly warehouse cut-off has closed",
+  consequence: "Owner Alexandra Whitfield-Montgomery Okafor-Li",
+  actions: [<Btn key="open" onClick={() => {}}>Open in Jira</Btn>],
+  density: "record",
+};
+
+export const RecordLongTitle = { args: longCase };

@@ -23,7 +23,7 @@ const identity: BandCell[] = [
   {
     title: "Access review export",
     body: 'Quarterly "who could do what, and who approved it" as a signed artefact. Compliance will ask; nothing produces it.',
-    tag: <Chip role="warn" label="GAP" />,
+    tag: <Chip role="warn" label="Gap" />,
   },
 ];
 
