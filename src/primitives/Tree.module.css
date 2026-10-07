@@ -29,6 +29,11 @@
   font: inherit;
 }
 
+/* The row is the target: its ground answers the pointer, as a row link's does. */
+.row:not([data-unresolved="true"]):hover {
+  background: var(--ward-color-surface2);
+}
+
 .row[data-depth="1"] {
   padding-left: var(--ward-space-7);
 }
