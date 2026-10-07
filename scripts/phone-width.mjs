@@ -63,6 +63,7 @@ function probePageHeader() {
     titleBelowChips: chipBoxes.every(({ r }) => title.top >= r.bottom - 0.5),
     everyChipWhole: chipBoxes.every(whole),
     chipFontSize: chipBoxes.length ? getComputedStyle(chipBoxes[0].c).fontSize : "",
+    actionsShown: header.querySelectorAll("[data-ward-actions] [data-action]").length,
     pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
   };
 }
@@ -98,6 +99,24 @@ function probePageHeaderLinks() {
     linkInView: links.every((a) => a.getBoundingClientRect().right <= innerWidth + 0.5 && linesVisible(a)),
     linkLines: Math.max(...links.map(textLines)),
     pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+  };
+}
+
+// A long unbroken title wraps inside the screen: the page keeps its width and the action stays in view, uncollapsed (#190).
+// titleWhole: no line clipped across or down; scrollHeight allows the 1px the glyphs overhang a 24px line.
+function probePageHeaderLongTitle() {
+  const header = document.querySelector("#storybook-root header");
+  const h1 = header.querySelector("h1");
+  const action = header.querySelector("[data-ward-actions] button");
+  const r = action.getBoundingClientRect();
+  const range = document.createRange();
+  range.selectNodeContents(h1);
+  return {
+    documentWidth: document.documentElement.scrollWidth,
+    actionShown: action.textContent === "Publish" && r.left >= 0 && r.right <= innerWidth + 0.5 && action.contains(document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2)),
+    label: h1.textContent,
+    titleWhole: h1.scrollWidth <= h1.clientWidth + 0.5 && h1.scrollHeight <= h1.clientHeight + 1 && !h1.hasAttribute("aria-hidden"),
+    titleLinesAtLeast: new Set(Array.from(range.getClientRects()).map((line) => Math.round(line.top))).size,
   };
 }
 
@@ -293,7 +312,7 @@ function probeConsole() {
 }
 
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot };
+const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot };
 
 async function measure(page, base, key) {
   const { story, label, longLabel, width = golden.viewport.width } = golden[key];
