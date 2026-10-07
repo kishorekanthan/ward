@@ -13,6 +13,8 @@ export type ComposerProps = {
     };
     onPost: (asUser: string, body: string) => void;
     onDraft?: (body: string) => void;
+    value?: string;
+    onChange?: (body: string) => void;
     variant?: "reply";
 };
 export declare function Composer(props: ComposerProps): import("react").JSX.Element;
