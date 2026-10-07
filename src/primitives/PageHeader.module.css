@@ -56,11 +56,15 @@
   color: var(--ward-color-muted);
 }
 
+/* The wrap clips its overflow; a ring-sized gutter, cancelled by margin, keeps a focus ring whole. */
 .actionsWrap {
   margin-left: auto;
   min-width: 0;
   overflow: hidden;
   flex: 0 1 auto;
+  padding: calc(var(--ward-border) + var(--ward-focus-offset));
+  margin-block: calc(-1 * (var(--ward-border) + var(--ward-focus-offset)));
+  margin-inline-end: calc(-1 * (var(--ward-border) + var(--ward-focus-offset)));
 }
 
 .actions {
@@ -134,8 +138,8 @@
   }
 
   .actionsWrap {
-    margin-left: 0;
-    width: 100%;
+    margin-inline: calc(-1 * (var(--ward-border) + var(--ward-focus-offset)));
+    width: calc(100% + 2 * (calc(var(--ward-border) + var(--ward-focus-offset))));
   }
 
   .actions {

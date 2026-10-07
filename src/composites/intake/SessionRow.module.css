@@ -43,6 +43,19 @@
   color: var(--ward-color-blue);
 }
 
+/* Links never underline; a tinted ground answers the pointer. */
+.link,
+.tableLink,
+.tableRecord {
+  border-radius: var(--ward-radius-chip);
+}
+
+.link:hover,
+.tableLink:hover,
+.tableRecord:hover {
+  background: var(--ward-color-accentTint);
+}
+
 /* Intake 12b `.tr`: 11px rows, 8px column gap, a 14px gutter after the session column. */
 tr.tableRow > td {
   padding: var(--ward-pad-sessionCell);
@@ -70,10 +83,6 @@ tr.tableRow > td.tableTitle {
   color: var(--ward-color-text);
   font: var(--ward-type-sessionTitle);
   text-decoration: none;
-}
-
-.tableLink:hover {
-  text-decoration: underline;
 }
 
 .tableRow[data-state="expired"] .tableLink {

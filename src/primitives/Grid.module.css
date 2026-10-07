@@ -44,10 +44,17 @@
   text-align: right;
 }
 
+/* A sortable head takes the body ink over the muted head ink, and a tint on hover, so it reads as a control. */
 .sort {
+  padding: 0 var(--ward-space-1);
+  margin-inline: calc(-1 * var(--ward-space-1));
+  border-radius: var(--ward-radius-chip);
   font: inherit;
-  color: inherit;
-  padding: 0;
+  color: var(--ward-color-text);
+}
+
+.sort:hover {
+  background: var(--ward-color-accentTint);
 }
 
 .row[data-selected="true"] {

@@ -35,16 +35,24 @@
   border-bottom: var(--ward-border) solid var(--ward-color-line);
 }
 
+/* A destination is a pill: a light tint on hover, a filled tint when current, never an underline bar. */
 .navItem {
+  padding: var(--ward-space-1) var(--ward-space-2);
+  border-radius: var(--ward-radius);
   font: var(--ward-type-tabLabel);
   color: var(--ward-color-muted);
   text-decoration: none;
 }
 
+.navItem:hover,
+.new:hover,
+.footLink:hover {
+  background: var(--ward-color-accentTint);
+}
+
 .navItem[aria-current="page"] {
+  background: var(--ward-color-accentPill);
   color: var(--ward-color-text);
-  box-shadow: inset 0 calc(-1 * var(--ward-underline)) 0 var(--ward-color-blue);
-  padding-bottom: var(--ward-space-1);
 }
 
 .group {
@@ -62,6 +70,9 @@
 }
 
 .new {
+  padding-inline: var(--ward-space-1);
+  margin-inline-end: calc(-1 * var(--ward-space-1));
+  border-radius: var(--ward-radius-chip);
   font: var(--ward-type-navAction);
   color: var(--ward-color-blue);
   text-decoration: none;
@@ -80,9 +91,15 @@
   text-decoration: none;
 }
 
-.agent[aria-current="page"] {
-  background: var(--ward-color-blueSoft);
-  box-shadow: inset var(--ward-underline) 0 0 var(--ward-color-blue);
+/* A row link takes the row hover ground; the current row is the filled tint, with no edge bar. */
+.agent:hover,
+.root nav a:hover {
+  background: var(--ward-color-surface2);
+}
+
+.agent[aria-current="page"],
+.root nav a[aria-current="page"] {
+  background: var(--ward-color-accentPill);
 }
 
 .agentTop {
@@ -144,6 +161,10 @@
 }
 
 .footLink {
+  align-self: flex-start;
+  padding-inline: var(--ward-space-1);
+  margin-inline-start: calc(-1 * var(--ward-space-1));
+  border-radius: var(--ward-radius-chip);
   font: var(--ward-type-ruleCond);
   color: var(--ward-color-muted);
   text-decoration: none;
@@ -188,11 +209,6 @@
 .note {
   font: var(--ward-type-rowNote);
   color: var(--ward-color-muted);
-}
-
-.root nav a[aria-current="page"] {
-  background: var(--ward-color-blueSoft);
-  box-shadow: inset var(--ward-underline) 0 0 var(--ward-color-blue);
 }
 
 .root nav a[aria-current="page"] .label {

@@ -135,6 +135,14 @@
   overflow: hidden;
 }
 
+/* Clipping strips keep a ring-sized gutter, cancelled by margin, so a focused control's ring stays whole. */
+.nav,
+.identity,
+.tools {
+  padding: calc(var(--ward-border) + var(--ward-focus-offset));
+  margin-block: calc(-1 * (var(--ward-border) + var(--ward-focus-offset)));
+}
+
 .metadata {
   display: inline-flex;
   align-items: center;
@@ -181,19 +189,25 @@
   mask-image: linear-gradient(to right, transparent, currentColor var(--ward-space-6), currentColor calc(100% - var(--ward-space-6)), transparent);
 }
 
+/* A destination is a pill: a light tint on hover, a filled tint when current, never an underline bar. */
 .nav a {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
+  padding: var(--ward-space-1) var(--ward-space-2);
+  border-radius: var(--ward-radius);
   color: var(--ward-color-muted);
   text-decoration: none;
   white-space: nowrap;
 }
 
+.nav a:hover {
+  background: var(--ward-color-accentTint);
+}
+
 .nav a[aria-current="page"] {
+  background: var(--ward-color-accentPill);
   color: var(--ward-color-text);
-  box-shadow: inset 0 calc(-1 * var(--ward-underline)) 0 var(--ward-color-blue);
-  padding-bottom: var(--ward-space-1);
 }
 
 /* Consumer controls (sign-out, dev identity) stay visible at every width, unlike the identity chips. */

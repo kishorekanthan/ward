@@ -26,15 +26,15 @@
   text-overflow: ellipsis;
 }
 
-/* A step you can go back to reads as a link, not as muted text. */
+/* A step you can go back to reads as a link by colour, never an underline; hover tints its ground. */
 .link {
   color: var(--ward-color-blue);
-  text-decoration: underline;
-  text-underline-offset: 0.3em;
+  text-decoration: none;
+  border-radius: var(--ward-radius-chip);
 }
 
 .link:hover {
-  color: var(--ward-color-text);
+  background: var(--ward-color-accentTint);
 }
 
 .sep {

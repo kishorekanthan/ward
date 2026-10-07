@@ -1,6 +1,8 @@
 /* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+/* The group keeps its outer edge; each segment also draws its own over it, so every option reads as a control. */
 .root {
   display: inline-flex;
+  border-radius: var(--ward-radius);
   box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-edge);
 }
 
@@ -10,11 +12,26 @@
   font: var(--ward-type-control);
   color: var(--ward-color-text);
   white-space: nowrap;
+  box-shadow:
+    inset 0 var(--ward-border) 0 0 var(--ward-color-edge),
+    inset 0 calc(-1 * var(--ward-border)) 0 0 var(--ward-color-edge),
+    inset calc(-1 * var(--ward-border)) 0 0 0 var(--ward-color-edge);
   transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
 }
 
-.segment + .segment {
-  box-shadow: inset var(--ward-border) 0 0 0 var(--ward-color-edge);
+.segment:first-child {
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-edge);
+  border-start-start-radius: var(--ward-radius);
+  border-end-start-radius: var(--ward-radius);
+}
+
+.segment:last-child {
+  border-start-end-radius: var(--ward-radius);
+  border-end-end-radius: var(--ward-radius);
+}
+
+.segment:not([aria-checked="true"]):hover:not(:disabled) {
+  background: var(--ward-color-surface2);
 }
 
 .segment[aria-checked="true"] {

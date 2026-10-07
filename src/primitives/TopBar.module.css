@@ -41,36 +41,28 @@
   display: none;
   height: var(--ward-height-controlSm);
   font: var(--ward-type-control);
-  background: var(--ward-color-surface);
+  background-color: var(--ward-color-surface);
   box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-edge);
 }
 
+/* A destination is a pill: a light tint on hover, a filled tint when current, never an underline bar. */
 .dest {
-  position: relative;
+  padding-inline: var(--ward-space-2);
+  border-radius: var(--ward-radius);
   font: var(--ward-type-control);
   color: var(--ward-color-muted);
   text-decoration: none;
   white-space: nowrap;
-  transition: opacity var(--ward-motion-fast);
+  transition: background-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
 }
 
-/* The underline sits under the text, not under the 24px target band. */
-.dest::after {
-  content: "";
-  position: absolute;
-  inset-inline: 0;
-  bottom: calc(var(--ward-target-pad) - var(--ward-underline));
-  height: var(--ward-underline);
-  background: transparent;
-  transition: background-color var(--ward-motion-fast);
+.dest:hover {
+  background: var(--ward-color-accentTint);
 }
 
 .dest[aria-current="page"] {
+  background: var(--ward-color-accentPill);
   color: var(--ward-color-text);
-}
-
-.dest[aria-current="page"]::after {
-  background: var(--ward-color-blue);
 }
 
 .actor {

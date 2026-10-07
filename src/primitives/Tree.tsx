@@ -92,6 +92,7 @@ export function TreeRow(props: TreeRowProps) {
         data-depth={props.depth}
         data-unresolved={flag(props.unresolved)}
         data-inherited={flag(props.inherited)}
+        data-ward-rowlink
       >
         <button
           type="button"

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactElement, type RefObject } from "react";
+import s from "./stageMoves.module.css";
 
 export type Direction = "up" | "down";
 
@@ -59,7 +60,7 @@ export function MoveAnnouncer({ text }: { text: string }): ReactElement {
 
 export function MoveButton({ id, name, direction, onMove }: { id: string; name: string; direction: Direction; onMove: () => void }): ReactElement {
   return (
-    <button type="button" className="ward-btn ward-btn--sm ward-btn--ghost" data-move={`${id}-${direction}`} aria-label={`Move ${name} ${direction}`} onClick={onMove}>
+    <button type="button" className={`${s.move} ward-btn ward-btn--sm ward-btn--ghost`} data-move={`${id}-${direction}`} aria-label={`Move ${name} ${direction}`} onClick={onMove}>
       <span aria-hidden="true">{direction === "up" ? "↑" : "↓"}</span>
     </button>
   );

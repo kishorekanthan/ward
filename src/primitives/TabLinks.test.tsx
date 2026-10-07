@@ -86,12 +86,12 @@ describe("TabLinks", () => {
 
   it("draws the current link like the selected tab, at both levels", () => {
     expect(ruleFor('.tab[aria-current="page"]')).toBe(ruleFor('.tab[aria-selected="true"]'));
-    expect(ruleFor('.tab[aria-current="page"]')).toContain("border-bottom-color: var(--ward-color-blue)");
-    expect(ruleFor('.strip[data-level="2"] .tab[aria-current="page"]')).toContain("border-bottom-color: var(--ward-color-text)");
+    expect(ruleFor('.tab[aria-current="page"]')).toContain("background: var(--ward-color-accentPill)");
+    expect(ruleFor('.strip[data-level="2"] .tab[aria-current="page"]')).toBe("");
   });
 
-  it("drops the body-link underline and darkens on hover", () => {
+  it("drops the body-link underline and tints on hover", () => {
     expect(ruleFor("a.tab")).toContain("text-decoration: none");
-    expect(ruleFor("a.tab:hover")).toContain("color: var(--ward-color-text)");
+    expect(ruleFor(".tab:hover")).toContain("background: var(--ward-color-accentTint)");
   });
 });
