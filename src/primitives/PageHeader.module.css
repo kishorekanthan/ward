@@ -137,6 +137,12 @@
     align-items: flex-start;
   }
 
+  /* An unbroken title, such as an asset id, wraps at any character rather than widening the page (#190). */
+  .title {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
   .actionsWrap {
     margin-inline: calc(-1 * (var(--ward-border) + var(--ward-focus-offset)));
     width: calc(100% + 2 * (calc(var(--ward-border) + var(--ward-focus-offset))));
