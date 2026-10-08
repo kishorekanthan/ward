@@ -1,3 +1,5 @@
+import { fireEvent, screen } from "@testing-library/react";
+
 if (typeof window !== "undefined" && typeof window.matchMedia !== "function") {
   window.matchMedia = ((query: string) => ({
     matches: false,
@@ -44,4 +46,18 @@ export function stubMatchMedia(initialMatches: boolean) {
       listeners.forEach((listener) => listener(event));
     },
   };
+}
+
+// Ward's Select is a button that opens a listbox: open it and click the option, as a person would.
+export function chooseOption(trigger: HTMLElement, label: string) {
+  fireEvent.click(trigger);
+  fireEvent.click(screen.getByRole("option", { name: label }));
+}
+
+// The labels a Select offers, read by opening its menu and closing it again.
+export function optionLabels(trigger: HTMLElement): string[] {
+  fireEvent.click(trigger);
+  const labels = screen.getAllByRole("option").map((option) => option.textContent ?? "");
+  fireEvent.click(trigger);
+  return labels;
 }

@@ -1,5 +1,6 @@
 import { useId } from "react";
 import { joinIds } from "../a11y/joinIds";
+import { Select } from "./Select";
 import s from "./Field.module.css";
 
 // form: Studio 3b labelled inputs; inline: a borderless row name; tag/tagGate: a select drawn as a stage tag; reply: Intake 12c's reply line.
@@ -46,6 +47,8 @@ const SECRET_INPUT = {
   "data-lpignore": "true",
 } as const;
 
+const labelIdFor = (id: string) => `${id}-label`;
+
 function InputControl({ props, controlProps, cls }: FieldControlProps) {
   const secret = props.secret ? SECRET_INPUT : {};
   return <input className={cls} {...secret} {...controlProps} />;
@@ -53,13 +56,18 @@ function InputControl({ props, controlProps, cls }: FieldControlProps) {
 
 function SelectControl({ props, controlProps, cls }: FieldControlProps) {
   return (
-    <select className={cls} {...controlProps}>
-      {(props.options ?? []).map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </select>
+    <Select
+      id={controlProps.id}
+      triggerClassName={cls}
+      aria-labelledby={labelIdFor(controlProps.id)}
+      aria-invalid={controlProps["aria-invalid"]}
+      aria-describedby={controlProps["aria-describedby"]}
+      value={props.value}
+      options={props.options ?? []}
+      disabled={props.disabled}
+      placeholder={props.placeholder}
+      onChange={props.onChange}
+    />
   );
 }
 
@@ -104,7 +112,7 @@ export function Field(props: FieldProps) {
   const cls = fieldClasses(props);
   return (
     <div className={`${s.field} ward-field`} data-ward-field="" data-variant={props.variant}>
-      <label className={labelClasses(props.labelHidden)} htmlFor={id}>
+      <label id={labelIdFor(id)} className={labelClasses(props.labelHidden)} htmlFor={id}>
         {props.label}
       </label>
       {FieldControl(props, controlProps, cls)}

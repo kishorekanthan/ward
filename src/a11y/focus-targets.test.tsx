@@ -22,6 +22,7 @@ describe("small links take the 24px target", () => {
       ["Skip to content", true],
       ["Board", true],
       ["Intake", true],
+      ["Board", false],
       ["14In flight", false],
       ["0Failed runs 24h", false],
       ["2Items waiting at a gate", false],

@@ -1,7 +1,7 @@
-import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { BoardScroller, type BoardLane } from "../index";
-import { stubMatchMedia } from "../test-setup";
+import { chooseOption, optionLabels, stubMatchMedia } from "../test-setup";
 
 const original = window.matchMedia;
 
@@ -44,7 +44,7 @@ describe("BoardScroller lanes", () => {
     stubMatchMedia(false);
     render(<BoardScroller lanes={lanes()} />);
     expect(visibleLanes()).toEqual(["Building lane", "Gate lane", "Other lane"]);
-    expect(screen.queryByRole("combobox")).toBeNull();
+    expect(screen.queryByRole("button", { name: "Column" })).toBeNull();
   });
 
   it("tells the board how many lanes share its width above the phone edge, and only there", () => {
@@ -66,18 +66,18 @@ describe("BoardScroller lanes", () => {
   it("shows one lane on phone and switches it from a labelled selector with counts", () => {
     stubMatchMedia(true);
     render(<BoardScroller lanes={lanes()} />);
-    const select = screen.getByRole("combobox", { name: "Column" }) as HTMLSelectElement;
-    expect(within(select).getAllByRole("option").map((option) => option.textContent)).toEqual(["Building · 2", "Waiting on us · 1", "Other stages · 0"]);
+    const select = screen.getByRole("button", { name: "Column" });
+    expect(optionLabels(select)).toEqual(["Building · 2", "Waiting on us · 1", "Other stages · 0"]);
     expect(visibleLanes()).toEqual(["Building lane"]);
-    fireEvent.change(select, { target: { value: "gate" } });
-    expect(select.value).toBe("gate");
+    chooseOption(select, "Waiting on us · 1");
+    expect(select.textContent).toBe("Waiting on us · 1");
     expect(visibleLanes()).toEqual(["Gate lane"]);
   });
 
   it("returns to all lanes when the viewport widens and falls back when the chosen lane disappears", () => {
     const media = stubMatchMedia(true);
     const view = render(<BoardScroller lanes={lanes()} />);
-    fireEvent.change(screen.getByRole("combobox", { name: "Column" }), { target: { value: "other" } });
+    chooseOption(screen.getByRole("button", { name: "Column" }), "Other stages · 0");
     view.rerender(<BoardScroller lanes={lanes(["build", "gate"])} />);
     expect(visibleLanes()).toEqual(["Building lane"]);
     act(() => media.setMatches(false));

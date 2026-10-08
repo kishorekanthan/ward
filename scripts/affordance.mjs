@@ -44,7 +44,8 @@ export function filled(box) {
 
 const framed = (box) => Boolean(box) && (edged(box) || filled(box));
 const marked = (f) => framed(f.box) || framed(f.frame) || f.color === f.accent || f.color !== f.parentColor;
-const disclosure = (f) => f.tag === "select" || f.tag === "summary";
+// A listbox trigger (Ward Select) owes the same frame and chevron as the native select it replaces.
+const disclosure = (f) => f.tag === "select" || f.tag === "summary" || f.popup === true;
 
 const CONTROL_RULES = [
   [(f) => !marked(f), () => "reads as plain text: no border, no background, no accent and its parent's colour"],
@@ -151,6 +152,7 @@ function restFacts() {
     const frame = W.frameOf(el);
     return {
       tag: el.tagName.toLowerCase(),
+      popup: el.getAttribute("aria-haspopup") === "listbox",
       name: W.name(el),
       theme: W.theme(el),
       box: W.box(el),
