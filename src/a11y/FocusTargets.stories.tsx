@@ -14,6 +14,7 @@ import { Btn } from "../primitives/Btn";
 import { Switch } from "../primitives/Switch";
 import { Field } from "../primitives/Field";
 import { SegmentedControl } from "../primitives/SegmentedControl";
+import { Menu, MenuButton } from "../primitives/Menu";
 
 // Every small link and small control Ward draws, in tab order; scripts/focus-targets.mjs tabs through them against src/goldens/focus-targets.json.
 const session: Session = {
@@ -106,4 +107,23 @@ export const Links = {
 // Below 768px TopBar swaps its links for a destination select, so the probe also tabs this story at phone width.
 export const Phone = {
   render: () => <TopBar destinations={destinations} active="board" />,
+};
+
+// Menu items are not tab stops: the probe opens each copy's menu with Enter and walks the items with ArrowDown, skipping Billing.
+export const MenuItems = {
+  render: () => (
+    <div style={{ minHeight: "calc(var(--ward-space-7) * 7)" }}>
+      <MenuButton label="Account">
+        <Menu
+          entries={[
+            { heading: "Account", items: [{ label: "Settings" }, { label: "Profile" }] },
+            { label: "Billing", disabled: true },
+            "separator",
+            { label: "Help", href: "/help" },
+          ]}
+          footer="Signed in as Sam Lee"
+        />
+      </MenuButton>
+    </div>
+  ),
 };

@@ -342,5 +342,53 @@
         "hit24": true
       }
     ]
+  },
+  "menu": {
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "story": "a11y-focustargets--menu-items",
+    "targets": [
+      {
+        "name": "Account",
+        "focusVisible": true,
+        "wardRing": true,
+        "ring": true,
+        "edged": true,
+        "tall": true,
+        "hit24": true
+      },
+      {
+        "name": "Settings",
+        "focusVisible": true,
+        "wardRing": true,
+        "ring": true,
+        "tall": true,
+        "hit24": true,
+        "wide24": true,
+        "height": 28
+      },
+      {
+        "name": "Profile",
+        "focusVisible": true,
+        "wardRing": true,
+        "ring": true,
+        "tall": true,
+        "hit24": true,
+        "wide24": true,
+        "height": 28
+      },
+      {
+        "name": "Help",
+        "focusVisible": true,
+        "wardRing": true,
+        "ring": true,
+        "tall": true,
+        "hit24": true,
+        "wide24": true,
+        "height": 28
+      }
+    ]
   }
 }

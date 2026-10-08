@@ -11,6 +11,8 @@ import {
   Field,
   GateLadder,
   Loading,
+  Menu,
+  MenuButton,
   PageFrame,
   SectionBand,
   SegmentedControl,
@@ -62,6 +64,19 @@ describe("public Ward exports", () => {
     render(<SegmentedControl options={[{ value: "a", label: "A" }, { value: "b", label: "B" }]} value="a" onChange={onChange} />);
     fireEvent.click(screen.getByRole("radio", { name: "B" }));
     expect(onChange).toHaveBeenCalledWith("b");
+  });
+
+  it("publishes the menu button and its menu from the root", () => {
+    const onSelect = vi.fn();
+    render(
+      <MenuButton label="New request">
+        <Menu entries={[{ label: "Story", onSelect }]} />
+      </MenuButton>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "New request" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Story" }));
+    expect(onSelect).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole("menu")).toBeNull();
   });
 
   it("keeps the root export contract for layouts and every domain family", () => {

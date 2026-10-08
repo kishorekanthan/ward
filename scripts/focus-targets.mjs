@@ -123,18 +123,40 @@ async function ringAndRestEdge(page, box) {
 // Room for both themed copies of the story; too low a cap silently cuts the dark copy short.
 const MAX_TABS = 80;
 
+// The focused control's facts; null once focus has left every copy, or { skip } for a focused non-control.
+async function focusedFacts(page) {
+  const got = await page.evaluate(readFocused);
+  if (!got || got.skip) return got;
+  const { ring, edged, knob, ink } = await ringAndRestEdge(page, got.box);
+  return { theme: got.theme, name: got.name, focusVisible: got.focusVisible, wardRing: got.wardRing, ring, edged, knob, ink, tall: got.height >= 24, hit24: got.hit24, wide24: got.wide24, underlineGap: got.underlineGap, height: got.height };
+}
+
 async function tabThrough(page) {
   const seen = [];
   for (let step = 0; step < MAX_TABS; step++) {
     await page.keyboard.press("Tab");
-    const got = await page.evaluate(readFocused);
+    const got = await focusedFacts(page);
     if (got === null) {
       if (seen.length) break;
       continue;
     }
-    if (got.skip) continue;
-    const { ring, edged, knob, ink } = await ringAndRestEdge(page, got.box);
-    seen.push({ theme: got.theme, name: got.name, focusVisible: got.focusVisible, wardRing: got.wardRing, ring, edged, knob, ink, tall: got.height >= 24, hit24: got.hit24, wide24: got.wide24, underlineGap: got.underlineGap, height: got.height });
+    if (!got.skip) seen.push(got);
+  }
+  return seen;
+}
+
+// Menu items are not tab stops: Tab reaches each copy's button, Enter opens its menu and ArrowDown walks the enabled items.
+async function menuWalk(page, items) {
+  const seen = [];
+  for (let copy = 0; copy < golden.themes.length; copy++) {
+    await page.keyboard.press("Tab");
+    seen.push(await focusedFacts(page));
+    await page.keyboard.press("Enter");
+    for (let step = 0; step < items; step++) {
+      seen.push(await focusedFacts(page));
+      await page.keyboard.press("ArrowDown");
+    }
+    await page.keyboard.press("Escape");
   }
   return seen;
 }
@@ -212,8 +234,8 @@ async function openStory(browser, base, { viewport, story }) {
 }
 
 // Tab order and facts per theme, each diff prefixed with the page's label.
-async function tabDiffs(page, targets, label) {
-  const seen = await tabThrough(page);
+async function tabDiffs(page, targets, label, walk = tabThrough) {
+  const seen = await walk(page);
   const want = targets.map((t) => t.name);
   return golden.themes.flatMap((theme) => {
     const inTheme = seen.filter((t) => t.theme === theme);
@@ -223,7 +245,7 @@ async function tabDiffs(page, targets, label) {
   });
 }
 
-// Returns every fact that differs from the golden, as "name.fact: got X, want Y"; the phone page holds controls only shown below 768px.
+// Returns every fact that differs from the golden, as "name.fact: got X, want Y"; the phone page holds controls only shown below 768px, the menu page a menu's items.
 export async function sweepFocusTargets() {
   ensureBuild();
   const server = serve();
@@ -238,6 +260,8 @@ export async function sweepFocusTargets() {
     diffs.push(...(await tabDiffs(page, golden.targets, "")));
     diffs.push(...diffFacts(golden.rowLinks, await rowLinks(page), "row link "));
     diffs.push(...(await tabDiffs(await openStory(browser, base, golden.phone), golden.phone.targets, "phone ")));
+    const { menu } = golden;
+    diffs.push(...(await tabDiffs(await openStory(browser, base, menu), menu.targets, "menu ", (at) => menuWalk(at, menu.targets.length - 1))));
   } finally {
     await browser.close();
     server.close();
