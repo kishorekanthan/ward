@@ -93,6 +93,158 @@ describe("AppShell studio grid", () => {
   });
 });
 
+describe("AppShell studio frame", () => {
+  it("is exactly the viewport tall on wide screens, with each column scrolling inside itself", () => {
+    expect(rule(".app")).toContain("height: 100dvh;");
+    expect(rule(".app")).toContain("grid-template-rows: minmax(0, 1fr);");
+    expect(rule(".app")).not.toContain("min-height");
+    for (const column of [".side", ".page", ".rail"]) expect(rule(column)).toContain("overflow-y: auto;");
+    for (const column of [".side", ".main", ".page", ".rail"]) expect(rule(column)).toContain("min-height: 0;");
+  });
+
+  it("lets the document scroll again as one column below 792px", () => {
+    const narrow = css.slice(css.indexOf("@media (max-width: 791.98px)"));
+    expect(narrow).toMatch(/\.app,\s*\.app\[data-rail="false"\] \{[^}]*grid-template-columns: minmax\(0, 1fr\);[^}]*height: auto;[^}]*min-height: 100dvh;/);
+    expect(narrow).toMatch(/\.side,\s*\.rail,\s*\.page \{\s*overflow-y: visible;/);
+  });
+});
+
+const navLinks = (
+  <nav aria-label="Sections">
+    <a href="#/board">Board</a>
+    <a href="#/studio">Studio</a>
+    <span>Agents</span>
+  </nav>
+);
+
+const drawerShell = (props: { sidebarLabel?: string } = {}) => (
+  <AppShell sidebar={navLinks} header={<div>Claims</div>} {...props}>
+    <p>page</p>
+  </AppShell>
+);
+
+function openDrawer(): { toggle: HTMLElement; dialog: HTMLElement } {
+  const toggle = screen.getByRole("button", { name: "Menu" });
+  fireEvent.click(toggle);
+  return { toggle, dialog: screen.getByRole("dialog", { name: "Menu" }) };
+}
+
+describe("AppShell sidebar drawer below 792px", () => {
+  const original = window.matchMedia;
+  afterEach(() => {
+    window.matchMedia = original;
+  });
+
+  it("puts a collapsed Menu toggle at the start of the header row and keeps the sidebar out of the page", () => {
+    stubMatchMedia(true);
+    render(drawerShell());
+    const toggle = screen.getByRole("button", { name: "Menu" });
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
+    expect(toggle.getAttribute("aria-controls")).not.toBeNull();
+    expect(screen.getByRole("main").firstElementChild?.textContent).toBe("MenuClaims");
+    expect(screen.queryByRole("navigation", { name: "Sections" })).toBeNull();
+  });
+
+  it("names the toggle and the drawer from sidebarLabel", () => {
+    stubMatchMedia(true);
+    render(drawerShell({ sidebarLabel: "Sections" }));
+    fireEvent.click(screen.getByRole("button", { name: "Sections" }));
+    expect(screen.getByRole("dialog", { name: "Sections" })).not.toBeNull();
+  });
+
+  it("opens the sidebar in the modal dialog the toggle controls and moves focus into it", () => {
+    stubMatchMedia(true);
+    render(drawerShell());
+    const { toggle, dialog } = openDrawer();
+    expect(toggle.getAttribute("aria-expanded")).toBe("true");
+    expect(dialog.id).toBe(toggle.getAttribute("aria-controls"));
+    expect(dialog.getAttribute("aria-modal")).toBe("true");
+    expect(dialog.contains(screen.getByRole("navigation", { name: "Sections" }))).toBe(true);
+    expect(dialog.contains(document.activeElement)).toBe(true);
+  });
+
+  it("traps Tab: from the last link focus wraps to the close button", () => {
+    stubMatchMedia(true);
+    render(drawerShell());
+    const { dialog } = openDrawer();
+    screen.getByRole("link", { name: "Studio" }).focus();
+    fireEvent.keyDown(dialog, { key: "Tab" });
+    expect(document.activeElement).toBe(screen.getByRole("button", { name: "Close" }));
+  });
+
+  it("closes on Escape and returns focus to the toggle", () => {
+    stubMatchMedia(true);
+    render(drawerShell());
+    const { toggle } = openDrawer();
+    fireEvent.keyDown(document.activeElement as HTMLElement, { key: "Escape" });
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
+    expect(document.activeElement).toBe(toggle);
+  });
+
+  it("closes from its close button and returns focus to the toggle", () => {
+    stubMatchMedia(true);
+    render(drawerShell());
+    const { toggle } = openDrawer();
+    fireEvent.click(screen.getByRole("button", { name: "Close" }));
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(document.activeElement).toBe(toggle);
+  });
+
+  it("closes on a press on the backdrop but not on the panel", () => {
+    stubMatchMedia(true);
+    render(drawerShell());
+    const { toggle, dialog } = openDrawer();
+    fireEvent.click(dialog);
+    expect(screen.queryByRole("dialog")).not.toBeNull();
+    fireEvent.click(dialog.parentElement as HTMLElement);
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(document.activeElement).toBe(toggle);
+  });
+
+  it("closes when a link inside is followed, but not on a press on plain text", () => {
+    stubMatchMedia(true);
+    render(drawerShell());
+    openDrawer();
+    fireEvent.click(screen.getByText("Agents"));
+    expect(screen.queryByRole("dialog")).not.toBeNull();
+    fireEvent.click(screen.getByRole("link", { name: "Board" }));
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
+  it("closes the drawer and puts the sidebar back in its column when the window widens", () => {
+    const media = stubMatchMedia(true);
+    render(drawerShell());
+    openDrawer();
+    act(() => media.setMatches(false));
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(screen.queryByRole("button", { name: "Menu" })).toBeNull();
+    expect(screen.getByRole("navigation", { name: "Sections" }).closest("main")).toBeNull();
+    act(() => media.setMatches(true));
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
+  it("draws no toggle at 792px and wider, where the sidebar keeps its column", () => {
+    stubMatchMedia(false);
+    render(drawerShell());
+    expect(screen.queryByRole("button", { name: "Menu" })).toBeNull();
+    expect(screen.getByRole("navigation", { name: "Sections" })).not.toBeNull();
+    expect(screen.getByRole("main").firstElementChild?.textContent).toBe("Claims");
+  });
+
+  it("folds below 792px, the rail-stack breakpoint, not at another width", () => {
+    stubMatchMedia(false);
+    const stubbed = window.matchMedia;
+    const queries: string[] = [];
+    window.matchMedia = ((query: string) => {
+      queries.push(query);
+      return stubbed(query);
+    }) as typeof window.matchMedia;
+    render(drawerShell());
+    expect(queries).toContain("(max-width: 791.98px)");
+  });
+});
+
 describe("AppShell top bar", () => {
   it("renders the reference identity and navigation hierarchy", () => {
     render(

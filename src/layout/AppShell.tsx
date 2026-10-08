@@ -1,6 +1,7 @@
-import { useId, useRef, useState, type KeyboardEvent, type ReactNode, type RefObject } from "react";
+import { useId, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode, type RefObject } from "react";
 import s from "./AppShell.module.css";
 import { Btn } from "../primitives/Btn";
+import { Overlay } from "../primitives/Overlay";
 import { safeHref } from "../primitives/safeHref";
 import { useRevealActive } from "../primitives/useRevealActive";
 import { useEdgeFades } from "./useEdgeFades";
@@ -20,6 +21,8 @@ export type StudioShellProps = {
   children: ReactNode;
   /** The 316px right column; omitted or null draws no third track. */
   rail?: ReactNode;
+  /** Below 792px the sidebar folds into a drawer: this labels its toggle and titles it. */
+  sidebarLabel?: string;
 };
 
 export type TopBarShellProps = {
@@ -38,16 +41,60 @@ export type TopBarShellProps = {
 
 export type AppShellProps = StudioShellProps | TopBarShellProps;
 
-function StudioShell({ sidebar, header, children, rail }: StudioShellProps) {
-  const hasRail = rail !== undefined && rail !== null;
+type SidebarDrawer = { narrow: boolean; open: boolean; drawerId: string; slotRef: RefObject<HTMLSpanElement | null>; toggle: () => void; close: () => void };
+
+// Same width as the rail-stack reflow: below it three columns cannot coexist, so the sidebar leaves the grid.
+function useSidebarDrawer(): SidebarDrawer {
+  const narrow = useMediaQuery("(max-width: 791.98px)");
+  const drawerId = useId();
+  const slotRef = useRef<HTMLSpanElement>(null);
+  const [open, setOpen] = useState(false);
+  if (open && !narrow) setOpen(false);
+  return { narrow, open, drawerId, slotRef, toggle: () => setOpen(!open), close: () => setOpen(false) };
+}
+
+function StudioHeader({ header, label, drawer }: { header: ReactNode; label: string; drawer: SidebarDrawer }) {
+  if (!drawer.narrow) return header;
   return (
-    <div className={s.app} data-rail={hasRail ? "true" : "false"}>
-      <div className={s.side}>{sidebar}</div>
+    <div className={s.headerRow}>
+      <span ref={drawer.slotRef} className={s.sidebarToggle}>
+        <Btn variant="ghost" size="sm" onClick={drawer.toggle} expanded={drawer.open} controls={drawer.drawerId}>
+          {label}
+        </Btn>
+      </span>
+      <div className={s.headerSlot}>{header}</div>
+    </div>
+  );
+}
+
+// Following a link in the drawer is a navigation, so the drawer gets out of the way.
+function SidebarDrawerPanel({ sidebar, label, drawer }: { sidebar: ReactNode; label: string; drawer: SidebarDrawer }) {
+  if (!drawer.open) return null;
+  const closeOnLink = (event: MouseEvent) => {
+    if ((event.target as Element).closest("a[href]")) drawer.close();
+  };
+  return (
+    <Overlay kind="start" id={drawer.drawerId} title={label} flush onClose={drawer.close} returnFocusTo={drawer.slotRef.current?.querySelector("button")}>
+      <div className={s.drawerSide} onClick={closeOnLink}>
+        {sidebar}
+      </div>
+    </Overlay>
+  );
+}
+
+function StudioShell({ sidebar, header, children, rail, sidebarLabel }: StudioShellProps) {
+  const hasRail = rail !== undefined && rail !== null;
+  const drawer = useSidebarDrawer();
+  const label = sidebarLabel ?? "Menu";
+  return (
+    <div className={s.app} data-rail={String(hasRail)}>
+      {!drawer.narrow && <div className={s.side}>{sidebar}</div>}
       <main className={s.main}>
-        {header}
+        <StudioHeader header={header} label={label} drawer={drawer} />
         <div className={s.page}>{children}</div>
       </main>
       {hasRail && <div className={s.rail}>{rail}</div>}
+      <SidebarDrawerPanel sidebar={sidebar} label={label} drawer={drawer} />
     </div>
   );
 }

@@ -35,6 +35,14 @@
   border-left: var(--ward-border) solid var(--ward-color-line);
 }
 
+/* A start drawer holds the shell sidebar, so it takes the sidebar's width and never the whole screen. */
+.panel.start {
+  height: 100%;
+  width: min(var(--ward-width-sidebar), 100%);
+  border-radius: 0 var(--ward-radius-card) var(--ward-radius-card) 0;
+  border-right: var(--ward-border) solid var(--ward-color-line);
+}
+
 .panel.sheet {
   width: 100%;
   height: 88vh;

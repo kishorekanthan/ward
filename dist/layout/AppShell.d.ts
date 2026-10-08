@@ -12,6 +12,8 @@ export type StudioShellProps = {
     children: ReactNode;
     /** The 316px right column; omitted or null draws no third track. */
     rail?: ReactNode;
+    /** Below 792px the sidebar folds into a drawer: this labels its toggle and titles it. */
+    sidebarLabel?: string;
 };
 export type TopBarShellProps = {
     destinations?: AppShellDestination[];
