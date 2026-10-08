@@ -14,7 +14,7 @@
 }
 
 .column[data-gate="true"] {
-  background: var(--ward-color-blueSoft);
+  background: var(--ward-color-selected);
 }
 
 .column[data-overcap="true"] {
@@ -50,7 +50,7 @@
 .column[data-overcap="true"] .count {
   font: var(--ward-type-overCapCount);
   font-variant-numeric: var(--ward-type-overCapCount-numeric);
-  color: var(--ward-color-red);
+  color: var(--ward-color-danger);
 }
 
 .list {

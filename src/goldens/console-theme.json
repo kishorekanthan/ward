@@ -1,23 +1,23 @@
 {
   "story": "item-activityconsole--live",
   "light": {
-    "ground": "rgb(237, 240, 244)",
+    "ground": "rgb(241, 241, 239)",
     "padding": "14px 16px",
     "radius": "8px",
-    "tool": "rgb(10, 85, 199)",
-    "warn": "rgb(138, 90, 0)",
-    "ok": "rgb(12, 122, 77)",
-    "dim": "rgb(90, 100, 116)",
-    "foot": "rgb(97, 108, 126)"
+    "tool": "rgb(31, 95, 158)",
+    "warn": "rgb(122, 93, 20)",
+    "ok": "rgb(47, 107, 71)",
+    "dim": "rgb(99, 97, 92)",
+    "foot": "rgb(99, 96, 90)"
   },
   "dark": {
-    "ground": "rgb(11, 22, 49)",
+    "ground": "rgb(18, 18, 18)",
     "padding": "14px 16px",
     "radius": "8px",
-    "tool": "rgb(127, 178, 255)",
-    "warn": "rgb(231, 197, 127)",
-    "ok": "rgb(127, 211, 160)",
-    "dim": "rgb(143, 163, 200)",
-    "foot": "rgb(139, 151, 171)"
+    "tool": "rgb(147, 186, 224)",
+    "warn": "rgb(230, 213, 169)",
+    "ok": "rgb(173, 219, 191)",
+    "dim": "rgb(165, 162, 156)",
+    "foot": "rgb(160, 157, 151)"
   }
 }

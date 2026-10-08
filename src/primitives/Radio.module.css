@@ -24,7 +24,7 @@
 }
 
 .input {
-  accent-color: var(--ward-color-blue);
+  accent-color: var(--ward-color-ink2);
   flex: none;
 }
 
@@ -58,8 +58,8 @@
 }
 
 .set[data-variant="cards"] .row:has(.input:checked) {
-  background: var(--ward-color-blueSoft);
-  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-blue);
+  background: var(--ward-color-selected);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-ink2);
 }
 
 .set[data-variant="cards"] .control {

@@ -13,8 +13,8 @@
 
 .primary {
   padding: var(--ward-pad-controlPrimary);
-  background: var(--ward-color-blue);
-  color: var(--ward-color-surface);
+  background: var(--ward-color-sageTint);
+  color: var(--ward-color-sageInk);
 }
 
 .primary:hover:not(:disabled) {
@@ -24,7 +24,7 @@
 /* Its own token, not warning amber: an action that cannot be undone is never styled as a caution. */
 .destructive {
   padding: var(--ward-pad-controlPrimary);
-  background-color: var(--ward-color-destructive);
+  background-color: var(--ward-color-danger);
   color: var(--ward-color-surface);
 }
 
@@ -38,7 +38,7 @@
 }
 
 .ghost {
-  color: var(--ward-btn-ghost-ink, var(--ward-color-blue));
+  color: var(--ward-btn-ghost-ink, var(--ward-color-link));
   padding: 0 var(--ward-space-1);
 }
 

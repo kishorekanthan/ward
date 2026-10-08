@@ -14,8 +14,8 @@
 }
 
 .path[data-role="write"] {
-  background: var(--ward-color-warnSurface);
-  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-warnLine);
+  background: var(--ward-color-waitingTint);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-waitingLine);
 }
 
 .head {

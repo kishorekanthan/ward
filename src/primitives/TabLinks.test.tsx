@@ -86,7 +86,7 @@ describe("TabLinks", () => {
 
   it("draws the current link like the selected tab, at both levels", () => {
     expect(ruleFor('.tab[aria-current="page"]')).toBe(ruleFor('.tab[aria-selected="true"]'));
-    expect(ruleFor('.tab[aria-current="page"]')).toContain("background: var(--ward-color-accentPill)");
+    expect(ruleFor('.tab[aria-current="page"]')).toContain("background: var(--ward-color-sageTint)");
     expect(ruleFor('.strip[data-level="2"] .tab[aria-current="page"]')).toBe("");
   });
 

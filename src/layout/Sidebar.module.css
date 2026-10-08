@@ -18,7 +18,7 @@
   flex: none;
   width: var(--ward-height-brandMark);
   height: var(--ward-height-brandMark);
-  background: var(--ward-color-blue);
+  background: var(--ward-color-text);
 }
 
 .word {
@@ -51,8 +51,8 @@
 }
 
 .navItem[aria-current="page"] {
-  background: var(--ward-color-accentPill);
-  color: var(--ward-color-text);
+  background: var(--ward-color-sageTint);
+  color: var(--ward-color-sageInk);
 }
 
 .group {
@@ -74,7 +74,7 @@
   margin-inline-end: calc(-1 * var(--ward-space-1));
   border-radius: var(--ward-radius-chip);
   font: var(--ward-type-navAction);
-  color: var(--ward-color-blue);
+  color: var(--ward-color-link);
   text-decoration: none;
 }
 
@@ -99,7 +99,7 @@
 
 .agent[aria-current="page"],
 .root nav a[aria-current="page"] {
-  background: var(--ward-color-accentPill);
+  background: var(--ward-color-sageTint);
 }
 
 .agentTop {

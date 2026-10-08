@@ -12,7 +12,7 @@
   },
   "tabs": {
     "cap": 7,
-    "current": "background: var(--ward-color-accentPill)",
+    "current": "background: var(--ward-color-sageTint)",
     "hover": "background: var(--ward-color-accentTint)"
   }
 }

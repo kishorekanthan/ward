@@ -12,8 +12,8 @@
 
 /* The scrolling strip clips its top edge; a gutter the size of the focus ring, cancelled by margin, keeps the ring whole. */
 .strip[data-level="1"] {
-  padding-block-start: calc(var(--ward-border) + var(--ward-focus-offset));
-  margin-block-start: calc(-1 * (var(--ward-border) + var(--ward-focus-offset)));
+  padding-block-start: calc(var(--ward-focus-ring) + var(--ward-focus-offset));
+  margin-block-start: calc(-1 * (var(--ward-focus-ring) + var(--ward-focus-offset)));
 }
 
 /* A strip wider than its column scrolls; the fade says which edge hides more tabs. */
@@ -48,15 +48,15 @@
 }
 
 .tab[aria-selected="true"] {
-  background: var(--ward-color-accentPill);
-  color: var(--ward-color-text);
+  background: var(--ward-color-sageTint);
+  color: var(--ward-color-sageInk);
   font-weight: 600;
 }
 
 /* TabLinks marks its current page as Tabs marks its selected tab. */
 .tab[aria-current="page"] {
-  background: var(--ward-color-accentPill);
-  color: var(--ward-color-text);
+  background: var(--ward-color-sageTint);
+  color: var(--ward-color-sageInk);
   font-weight: 600;
 }
 
@@ -74,9 +74,9 @@ a.tab {
 /* The scrolling strip clips every edge; a ring-sized gutter, cancelled by margin, keeps each tab's ring whole. */
 .strip[data-level="2"] {
   padding: var(--ward-pad-scopeTabs);
-  padding-inline: calc(var(--ward-border) + var(--ward-focus-offset));
-  padding-block-end: calc(var(--ward-border) + var(--ward-focus-offset));
-  margin-inline: calc(-1 * (var(--ward-border) + var(--ward-focus-offset)));
-  margin-block-end: calc(-1 * (var(--ward-border) + var(--ward-focus-offset)));
+  padding-inline: calc(var(--ward-focus-ring) + var(--ward-focus-offset));
+  padding-block-end: calc(var(--ward-focus-ring) + var(--ward-focus-offset));
+  margin-inline: calc(-1 * (var(--ward-focus-ring) + var(--ward-focus-offset)));
+  margin-block-end: calc(-1 * (var(--ward-focus-ring) + var(--ward-focus-offset)));
   border-bottom: 0;
 }

@@ -16,16 +16,15 @@ describe("Ward foundation goldens", () => {
     }
   });
 
-  // The comp's faint greys fail 4.5:1 on surface; these darkened pairs are the reviewed replacements,
-  // and consoleFaint is the separate ink the dark console panel needs; the light panel reuses faint (Ward #67).
-  it("keeps the contrast-corrected faint inks rather than the comp's lighter greys", () => {
-    expect([actual.color.faint, actual.dark.faint]).toEqual(["#616C7E", "#8491A3"]);
-    expect([actual.color.consoleFaint, actual.dark.consoleFaint]).toEqual(["#616C7E", "#8B97AB"]);
-    expect(actual.dark.faint).not.toBe(actual.dark.consoleFaint);
+  // TRELLIS-422 faint inks, darkened (light) or lightened (dark) to pass 4.5:1 on every neutral ground.
+  // The dark console is darker than the page, so both panels reuse faint.
+  it("keeps the contrast-corrected faint inks on the page and in both console panels", () => {
+    expect([actual.color.faint, actual.dark.faint]).toEqual(["#63605A", "#A09D97"]);
+    expect([actual.color.consoleFaint, actual.dark.consoleFaint]).toEqual(["#63605A", "#A09D97"]);
   });
 
-  it("keeps the comp's dark console block in dark and a light panel in light", () => {
-    expect([actual.dark.console, actual.color.console]).toEqual(["#0B1631", "#EDF0F4"]);
+  it("keeps a near-black console block in dark and a light panel in light", () => {
+    expect([actual.dark.console, actual.color.console]).toEqual(["#121212", "#F1F1EF"]);
   });
 
   it("generates colHead and chip at 11px in the sans face, the smallest readable size for small type", () => {

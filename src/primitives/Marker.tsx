@@ -4,25 +4,30 @@ import s from "./Marker.module.css";
 
 export type MarkerKind = TokenMarkerKind | "ok" | "finding" | "action" | "hollow" | "attention" | "tick" | "box";
 
+// Hue kinds keep their names for consumers and draw the role each hue stood for.
 const KIND_VAR: Record<MarkerKind, string> = {
   stream: "var(--stream)",
-  green: "var(--ward-color-green)",
-  blue: "var(--ward-color-blue)",
-  orange: "var(--ward-color-orange)",
-  red: "var(--ward-color-red)",
-  amber: "var(--ward-color-amber)",
+  green: "var(--ward-color-done)",
+  blue: "var(--ward-color-running)",
+  orange: "var(--ward-color-waiting)",
+  red: "var(--ward-color-danger)",
+  amber: "var(--ward-color-waiting)",
   neutral: "var(--ward-color-faint)",
-  // Fill hues, not ink hues: greenFill is 4.32:1 on white, so a Marker using it stays decorative.
-  greenFill: "var(--ward-color-greenFill)",
-  orangeFill: "var(--ward-color-orangeFill)",
-  ok: "var(--ward-color-green)",
-  finding: "var(--ward-color-orange)",
+  greenFill: "var(--ward-color-done)",
+  orangeFill: "var(--ward-color-waiting)",
+  owed: "var(--ward-color-peach)",
+  running: "var(--ward-color-running)",
+  ok: "var(--ward-color-done)",
+  finding: "var(--ward-color-waiting)",
   action: "var(--ward-color-text)",
   hollow: "var(--ward-color-faint)",
-  attention: "var(--ward-color-warning)",
-  tick: "var(--ward-color-green)",
+  attention: "var(--ward-color-waiting)",
+  tick: "var(--ward-color-done)",
   box: "var(--ward-color-line2)",
 };
+
+// Only running work moves (TRELLIS-422); the animation and its reduced-motion stop live in ward.css.
+const MOTION: Partial<Record<MarkerKind, string>> = { running: " ward-running" };
 
 export type MarkerProps = {
   size: MarkerSize;
@@ -34,7 +39,7 @@ export function Marker({ size, kind, label }: MarkerProps) {
   const style = { "--marker": KIND_VAR[kind], width: size, height: size } as CSSProperties;
   return (
     <span
-      className={`${s.marker} ward-marker ward-marker--${kind}`}
+      className={`${s.marker} ward-marker ward-marker--${kind}${MOTION[kind] ?? ""}`}
       style={style}
       data-testid="marker"
       role={label ? "img" : undefined}

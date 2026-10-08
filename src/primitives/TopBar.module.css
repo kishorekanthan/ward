@@ -16,7 +16,7 @@
 .skip:focus-visible {
   position: static;
   font: var(--ward-type-control);
-  color: var(--ward-color-blue);
+  color: var(--ward-color-link);
 }
 
 .mark {
@@ -64,8 +64,8 @@
 }
 
 .dest[aria-current="page"] {
-  background: var(--ward-color-accentPill);
-  color: var(--ward-color-text);
+  background: var(--ward-color-sageTint);
+  color: var(--ward-color-sageInk);
 }
 
 .actor {

@@ -99,7 +99,7 @@ function install() {
   };
   const accent = (el) => {
     const probe = document.createElement("span");
-    probe.style.color = "var(--ward-color-blue)";
+    probe.style.color = "var(--ward-color-link)";
     el.parentElement.append(probe);
     const colour = getComputedStyle(probe).color;
     probe.remove();

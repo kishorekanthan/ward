@@ -23,7 +23,7 @@ describe("useBorderFlash", () => {
     render(<Card colour="orange" />);
     act(() => screen.getByText("trigger").click());
     expect(card().classList.contains("ward-border-flash")).toBe(true);
-    expect(card().style.getPropertyValue("--ward-flash-colour")).toBe("var(--ward-color-orange)");
+    expect(card().style.getPropertyValue("--ward-flash-colour")).toBe("var(--ward-color-waiting)");
     act(() => card().dispatchEvent(new Event("animationend")));
     expect(card().classList.contains("ward-border-flash")).toBe(false);
   });

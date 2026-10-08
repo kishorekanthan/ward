@@ -108,7 +108,7 @@
 }
 
 .option[data-active="true"] {
-  background-color: var(--ward-color-accentPill);
+  background-color: var(--ward-color-accentTint);
 }
 
 .option[aria-selected="true"] .check::after {
@@ -117,8 +117,8 @@
   width: var(--ward-space-1);
   height: var(--ward-space-2);
   margin-inline: auto;
-  border-right: calc(var(--ward-border) * 2) solid var(--ward-color-blue);
-  border-bottom: calc(var(--ward-border) * 2) solid var(--ward-color-blue);
+  border-right: calc(var(--ward-border) * 2) solid var(--ward-color-ink2);
+  border-bottom: calc(var(--ward-border) * 2) solid var(--ward-color-ink2);
   transform: rotate(45deg);
 }
 

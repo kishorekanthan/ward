@@ -8,7 +8,7 @@
 }
 
 .row[data-inheritance="overridden"] {
-  background: var(--ward-color-blueSoft);
+  background: var(--ward-color-selected);
 }
 
 .headCell,

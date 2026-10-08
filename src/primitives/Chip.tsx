@@ -18,6 +18,7 @@ const LOOKUP: Record<ChipRole, { bg: string; fg: string; line: string }> = {
   meta: v.chip.meta,
   soft: v.chip.soft,
   quiet: v.chip.quiet,
+  owed: v.chip.owed,
 };
 
 export type ChipProps = {

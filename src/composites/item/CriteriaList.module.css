@@ -43,12 +43,12 @@
 }
 
 .item[data-met="false"] .evidence {
-  color: var(--ward-color-warnInk);
+  color: var(--ward-color-waiting);
 }
 
 .consequence {
   font: var(--ward-type-ruleNote);
-  color: var(--ward-color-warnInk);
+  color: var(--ward-color-waiting);
 }
 
 .note {

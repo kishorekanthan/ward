@@ -58,7 +58,7 @@
 }
 
 .row[data-selected="true"] {
-  background: var(--ward-color-blueSoft);
+  background: var(--ward-color-selected);
 }
 
 .row[data-locked="true"] {

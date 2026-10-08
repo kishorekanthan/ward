@@ -118,7 +118,7 @@ function CompactCredentialRow({ cred }: { cred: Credential }): ReactElement {
 function WebNext({ cred }: { cred: WebCredential }): ReactElement {
   if (cred.state !== "rotateNow") return <span className={`${s.webMeta} ward-cellmeta`}>{cred.next}</span>;
   return (
-    <span className={`${s.webMeta} ${s.webUrgent} ward-cellmeta ward-redink`} style={{ color: "var(--ward-color-red)" }}>
+    <span className={`${s.webMeta} ${s.webUrgent} ward-cellmeta ward-redink`} style={{ color: "var(--ward-color-danger)" }}>
       {cred.next}
     </span>
   );

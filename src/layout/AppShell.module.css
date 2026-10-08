@@ -110,7 +110,7 @@
   flex: none;
   width: var(--ward-height-brandMark);
   height: var(--ward-height-brandMark);
-  background: var(--ward-color-blue);
+  background: var(--ward-color-text);
 }
 
 .brand {
@@ -139,8 +139,8 @@
 .nav,
 .identity,
 .tools {
-  padding: calc(var(--ward-border) + var(--ward-focus-offset));
-  margin-block: calc(-1 * (var(--ward-border) + var(--ward-focus-offset)));
+  padding: calc(var(--ward-focus-ring) + var(--ward-focus-offset));
+  margin-block: calc(-1 * (var(--ward-focus-ring) + var(--ward-focus-offset)));
 }
 
 .metadata {
@@ -206,8 +206,8 @@
 }
 
 .nav a[aria-current="page"] {
-  background: var(--ward-color-accentPill);
-  color: var(--ward-color-text);
+  background: var(--ward-color-sageTint);
+  color: var(--ward-color-sageInk);
 }
 
 /* Consumer controls (sign-out, dev identity) stay visible at every width, unlike the identity chips. */

@@ -68,8 +68,8 @@ const specSteps: RunbookStep[] = [
 const css = readFileSync("src/composites/admin/RunbookSteps.module.css", "utf8");
 
 describe("RunbookSteps spec", () => {
-  it("numbers the steps in muted ink and never in the action blue", () => {
-    expect(css.includes("--ward-color-blue")).toBe(false);
+  it("numbers the steps in muted ink and never in the link or main-action colour", () => {
+    expect(/--ward-color-(link|sage)/.test(css)).toBe(false);
     expect(/\.numeral\s*\{[^}]*--ward-color-muted/.test(css)).toBe(true);
   });
 

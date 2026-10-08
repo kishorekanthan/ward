@@ -8,6 +8,6 @@
 }
 
 .cell[data-norerun="true"] {
-  color: var(--ward-color-warnInk);
+  color: var(--ward-color-waiting);
 }
 

@@ -21,14 +21,14 @@
   /* Clip sideways only, inside room for the focus ring; hidden would cut the ring and the 24px target. */
   overflow-x: clip;
   overflow-y: visible;
-  padding-inline: calc(var(--ward-border) + var(--ward-focus-offset));
-  margin-inline: calc(-1 * (var(--ward-border) + var(--ward-focus-offset)));
+  padding-inline: calc(var(--ward-focus-ring) + var(--ward-focus-offset));
+  margin-inline: calc(-1 * (var(--ward-focus-ring) + var(--ward-focus-offset)));
   text-overflow: ellipsis;
 }
 
 /* A step you can go back to reads as a link by colour, never an underline; hover tints its ground. */
 .link {
-  color: var(--ward-color-blue);
+  color: var(--ward-color-link);
   text-decoration: none;
   border-radius: var(--ward-radius-chip);
 }

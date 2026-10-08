@@ -28,7 +28,7 @@
 }
 
 .segment[data-draft="true"] {
-  stroke: var(--ward-color-blue);
+  stroke: var(--ward-color-ink2);
   stroke-width: var(--ward-border);
   vector-effect: non-scaling-stroke;
 }
