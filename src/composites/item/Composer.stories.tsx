@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { bothThemes } from "../../../.storybook/bothThemes";
+import { Btn } from "../../primitives/Btn";
 import { Composer } from "./Composer";
 
 export default {
@@ -26,3 +28,21 @@ export const Full = {
     requeueAfter: { checked: false, agent: "triage v2", onChange: () => {} },
   },
 };
+
+const EXAMPLES = ["Which window is late?", "Who owns the triage step?"];
+
+function FilledByExample() {
+  const [text, setText] = useState("");
+  return (
+    <div>
+      {EXAMPLES.map((example) => (
+        <Btn key={example} variant="ghost" size="sm" onClick={() => setText(example)}>
+          {example}
+        </Btn>
+      ))}
+      <Composer {...base} variant="reply" value={text} onChange={setText} />
+    </div>
+  );
+}
+
+export const FilledFromExample = { render: () => <FilledByExample /> };

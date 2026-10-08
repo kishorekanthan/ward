@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
+import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { Composer } from "./Composer";
 
@@ -82,5 +83,59 @@ describe("Composer reply row", () => {
     expect(document.getElementById(send.getAttribute("aria-describedby") ?? "")?.textContent).toBe("Sends as M. Chen.");
     fireEvent.click(send);
     expect(onPost).toHaveBeenCalledWith("M. Chen", "Six hours covers it.");
+  });
+});
+
+describe("Composer with text the page owns", () => {
+  const owned = { placeholder: "Ask the advisor", asUser: "M. Chen" };
+
+  it("shows the page's text in both variants and reports typing", () => {
+    const onChange = vi.fn();
+    const { rerender } = render(<Composer {...owned} variant="reply" value="Which window is late?" onChange={onChange} onPost={() => {}} />);
+    const box = screen.getByRole("textbox", { name: "Ask the advisor" }) as HTMLInputElement;
+    expect(box.value).toBe("Which window is late?");
+    fireEvent.change(box, { target: { value: "Which stage is late?" } });
+    expect(onChange).toHaveBeenCalledWith("Which stage is late?");
+    rerender(<Composer {...owned} value="Who owns triage?" onChange={onChange} onPost={() => {}} />);
+    const area = screen.getByRole("textbox", { name: "Ask the advisor" }) as HTMLTextAreaElement;
+    expect(area.value).toBe("Who owns triage?");
+    fireEvent.change(area, { target: { value: "Who owns intake?" } });
+    expect(onChange).toHaveBeenLastCalledWith("Who owns intake?");
+  });
+
+  it("keeps an empty page text as the page's, so a cleared box reports typing", () => {
+    const onChange = vi.fn();
+    render(<Composer {...owned} variant="reply" value="" onChange={onChange} onPost={() => {}} />);
+    const box = screen.getByRole("textbox", { name: "Ask the advisor" }) as HTMLInputElement;
+    fireEvent.change(box, { target: { value: "W" } });
+    expect(onChange).toHaveBeenCalledWith("W");
+    expect(box.value).toBe("");
+  });
+
+  it("sends the page's text from Send and from Post", () => {
+    const onPost = vi.fn();
+    const { rerender } = render(<Composer {...owned} variant="reply" value="Which window is late?" onPost={onPost} />);
+    fireEvent.click(screen.getByRole("button", { name: "Send" }));
+    rerender(<Composer {...owned} value="Who owns triage?" onPost={onPost} />);
+    fireEvent.click(screen.getByRole("button", { name: "Post as M. Chen" }));
+    expect(onPost.mock.calls).toEqual([["M. Chen", "Which window is late?"], ["M. Chen", "Who owns triage?"]]);
+  });
+
+  it("shows new text when the page fills the box from a suggestion", () => {
+    function Page() {
+      const [text, setText] = useState("");
+      return (
+        <>
+          <button type="button" onClick={() => setText("Who owns triage?")}>Example</button>
+          <Composer {...owned} variant="reply" value={text} onChange={setText} onPost={() => {}} />
+        </>
+      );
+    }
+    render(<Page />);
+    const box = screen.getByRole("textbox", { name: "Ask the advisor" }) as HTMLInputElement;
+    fireEvent.change(box, { target: { value: "draft" } });
+    expect(box.value).toBe("draft");
+    fireEvent.click(screen.getByRole("button", { name: "Example" }));
+    expect(box.value).toBe("Who owns triage?");
   });
 });
