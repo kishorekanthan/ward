@@ -69,9 +69,9 @@
   "statStrip": {
     "story": "primitives-statstrip--phone-width",
     "label": "Items waiting at a review gate",
-    "labelLines": 2,
+    "labelLines": 1,
     "labelClipped": false,
-    "longLabel": "Failed agent runs across every stream, last 24 hours",
+    "longLabel": "Failed agent runs across every stream and every stage, in the last 24 hours",
     "longLabelLines": 2,
     "longLabelClipped": true,
     "pageScrollsSideways": false
@@ -162,6 +162,106 @@
     "buttons": "Read new events | Jump to latest",
     "everyButtonWhole": true,
     "idleCopyWhole": true,
+    "pageScrollsSideways": false
+  },
+  "workCardLongTitle": {
+    "story": "board-workcard--long-title",
+    "label": "Reconcile late-arriving inbound shipments against the carrier's manifest before the nightly warehouse cut-off has closed",
+    "longLabel": "Alexandra Whitfield-Montgomery Okafor-Li",
+    "titleLines": 2,
+    "titleCut": true,
+    "titleTooltip": true,
+    "titleInView": true,
+    "ownerLinesAtMost2": true,
+    "ownerInView": true,
+    "pageScrollsSideways": false
+  },
+  "workCardLongTitleWide": {
+    "story": "board-workcard--long-title",
+    "width": 1280,
+    "label": "Reconcile late-arriving inbound shipments against the carrier's manifest before the nightly warehouse cut-off has closed",
+    "longLabel": "Alexandra Whitfield-Montgomery Okafor-Li",
+    "titleLines": 2,
+    "titleCut": true,
+    "titleTooltip": true,
+    "titleInView": true,
+    "ownerLinesAtMost2": true,
+    "ownerInView": true,
+    "pageScrollsSideways": false
+  },
+  "sessionLongTitle": {
+    "story": "intake-sessionrow--long-title",
+    "label": "Reconcile late-arriving inbound shipments against the carrier's manifest before the nightly warehouse cut-off has closed",
+    "longLabel": "Alexandra Whitfield-Montgomery Okafor-Li",
+    "titleLines": 2,
+    "titleCut": true,
+    "titleTooltip": true,
+    "titleInView": true,
+    "ownerLinesAtMost2": true,
+    "ownerInView": true,
+    "pageScrollsSideways": false
+  },
+  "sessionLongTitleWide": {
+    "story": "intake-sessionrow--long-title",
+    "width": 1280,
+    "label": "Reconcile late-arriving inbound shipments against the carrier's manifest before the nightly warehouse cut-off has closed",
+    "longLabel": "Alexandra Whitfield-Montgomery Okafor-Li",
+    "titleLines": 2,
+    "titleCut": false,
+    "titleTooltip": true,
+    "titleInView": true,
+    "ownerLinesAtMost2": true,
+    "ownerInView": true,
+    "pageScrollsSideways": false
+  },
+  "sessionTableLongTitle": {
+    "story": "intake-sessionrow--long-title-table",
+    "label": "Reconcile late-arriving inbound shipments against the carrier's manifest before the nightly warehouse cut-off has closed",
+    "longLabel": "Alexandra Whitfield-Montgomery Okafor-Li",
+    "titleLines": 2,
+    "titleCut": true,
+    "titleTooltip": true,
+    "titleInView": true,
+    "ownerLinesAtMost2": true,
+    "ownerInView": true,
+    "pageScrollsSideways": false
+  },
+  "sessionTableLongTitleWide": {
+    "story": "intake-sessionrow--long-title-table",
+    "width": 1280,
+    "label": "Reconcile late-arriving inbound shipments against the carrier's manifest before the nightly warehouse cut-off has closed",
+    "longLabel": "Alexandra Whitfield-Montgomery Okafor-Li",
+    "titleLines": 1,
+    "titleCut": false,
+    "titleTooltip": true,
+    "titleInView": true,
+    "ownerLinesAtMost2": true,
+    "ownerInView": true,
+    "pageScrollsSideways": false
+  },
+  "caseHeaderLongTitle": {
+    "story": "primitives-pageheader--record-long-title",
+    "label": "Reconcile late-arriving inbound shipments against the carrier's manifest before the nightly warehouse cut-off has closed",
+    "longLabel": "Alexandra Whitfield-Montgomery Okafor-Li",
+    "titleLines": 2,
+    "titleCut": true,
+    "titleTooltip": true,
+    "titleInView": true,
+    "ownerLinesAtMost2": true,
+    "ownerInView": true,
+    "pageScrollsSideways": false
+  },
+  "caseHeaderLongTitleWide": {
+    "story": "primitives-pageheader--record-long-title",
+    "width": 1280,
+    "label": "Reconcile late-arriving inbound shipments against the carrier's manifest before the nightly warehouse cut-off has closed",
+    "longLabel": "Alexandra Whitfield-Montgomery Okafor-Li",
+    "titleLines": 1,
+    "titleCut": false,
+    "titleTooltip": true,
+    "titleInView": true,
+    "ownerLinesAtMost2": true,
+    "ownerInView": true,
     "pageScrollsSideways": false
   }
 }

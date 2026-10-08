@@ -59,6 +59,7 @@
 /* Loop policy 11d: 13px 15px rows, a 150px value column and a centred 104px chip column. */
 .webRow {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   gap: var(--ward-gap-policyRow);
   padding: var(--ward-pad-policyRow);
@@ -68,9 +69,10 @@
   border-bottom: 0;
 }
 
+/* A fixed basis, not auto, so a narrow row wraps the control and chip below the setting rather than squeezing it to nothing (#189). */
 .webSetting {
   display: flex;
-  flex: 1 1 auto;
+  flex: 1 1 12rem;
   flex-direction: column;
   gap: var(--ward-space-1);
   min-width: 0;
@@ -112,6 +114,8 @@
 .webChip {
   display: flex;
   flex: 0 0 auto;
+  /* On a wrapped line the chip keeps to the row's right edge, as it does beside the setting (#189). */
+  margin-left: auto;
 }
 
 .webChip > * {

@@ -47,9 +47,9 @@ describe("Field secret", () => {
   it("has no effect on a textarea or a select", () => {
     render(<Field kind="textarea" label="Notes" value="" onChange={() => {}} secret />);
     render(<Field kind="select" label="Store" value="a" options={[{ value: "a", label: "A" }]} onChange={() => {}} secret />);
-    for (const label of ["Notes", "Store"]) {
-      const control = screen.getByLabelText(label);
-      expect(control.hasAttribute("type")).toBe(false);
+    for (const [label, type] of [["Notes", null], ["Store", "button"]]) {
+      const control = screen.getByLabelText(label as string);
+      expect(control.getAttribute("type")).toBe(type);
       expect(control.hasAttribute("autocomplete")).toBe(false);
       expect(control.hasAttribute("data-1p-ignore")).toBe(false);
       expect(control.hasAttribute("data-lpignore")).toBe(false);

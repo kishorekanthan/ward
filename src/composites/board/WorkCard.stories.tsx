@@ -29,7 +29,7 @@ const item: BoardItem = {
   waitsOn: "A. Whyte",
   streamStep: 1,
   changedAt: "2026-09-06T02:14:00Z",
-  state: { role: "attention", label: "NEEDS A HUMAN" },
+  state: { role: "attention", label: "Needs a human" },
   lastAgentAction: "asked for the carrier reference",
   cost: 0.46,
   jiraKey: "FL-229",
@@ -102,3 +102,22 @@ export const EventFlash = {
 };
 
 export const NoValidatedColour = { args: { ...base, item: { ...item, streamStep: null } } };
+
+// Board column width: a 120-character title and a 40-character owner each wrap to two lines, then cut (#199).
+const inColumn = (Story: ComponentType): ReactNode => (
+  <div style={{ maxWidth: "var(--ward-width-colFloor)" }}>
+    <Story />
+  </div>
+);
+
+export const LongTitle = {
+  args: {
+    ...base,
+    item: {
+      ...item,
+      title: "Reconcile late-arriving inbound shipments against the carrier's manifest before the nightly warehouse cut-off has closed",
+      waitsOn: "Alexandra Whitfield-Montgomery Okafor-Li",
+    },
+  },
+  decorators: [inColumn],
+};

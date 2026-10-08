@@ -37,12 +37,15 @@
   font: var(--ward-type-control);
 }
 
-.select {
+/* The narrow-width destination Select; the nav class outranks Select's own rules. */
+.nav .select {
   display: none;
+}
+
+.nav .selectTrigger {
   height: var(--ward-height-controlSm);
+  padding-block: 0;
   font: var(--ward-type-control);
-  background-color: var(--ward-color-surface);
-  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-edge);
 }
 
 /* A destination is a pill: a light tint on hover, a filled tint when current, never an underline bar. */
@@ -97,7 +100,7 @@
     display: none;
   }
 
-  .select {
+  .nav .select {
     display: block;
   }
 }

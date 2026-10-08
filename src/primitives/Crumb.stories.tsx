@@ -22,7 +22,7 @@ export const WithChips = {
     path,
     chips: [
       { role: "stream", label: "data-eng", streamStep: 1 },
-      { role: "done", label: "V3 LIVE" },
+      { role: "done", label: "v3 live" },
     ],
   },
 };

@@ -23,9 +23,9 @@ type RunbookStepsBaseProps = {
 export type WebRunbookStepsProps = RunbookStepsBaseProps & { presentation: "web" };
 
 const STATE: Record<RunbookStepState, { role: ChipRole; label: string }> = {
-  done: { role: "done", label: "DONE" },
-  running: { role: "running", label: "RUNNING" },
-  pending: { role: "pending", label: "PENDING" },
+  done: { role: "done", label: "Done" },
+  running: { role: "running", label: "Running" },
+  pending: { role: "pending", label: "Pending" },
 };
 
 function numeral(index: number) {

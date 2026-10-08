@@ -1,0 +1,129 @@
+/* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+.root {
+  position: relative;
+}
+
+/* The trigger keeps the #191 select affordance: control edge, 6px radius, the same CSS chevron, the global focus ring. */
+.trigger {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--ward-pad-input);
+  padding-inline-end: calc(var(--ward-space-3) * 2 + var(--ward-space-1));
+  font: var(--ward-type-inputText);
+  color: var(--ward-color-text);
+  text-align: start;
+  cursor: pointer;
+  border-radius: var(--ward-radius);
+  background-color: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-edge);
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: right calc(var(--ward-space-3) + var(--ward-space-1)) top 50%, right var(--ward-space-3) top 50%;
+  background-size: var(--ward-space-1) var(--ward-space-1);
+  background-repeat: no-repeat;
+}
+
+.trigger:disabled {
+  background-color: var(--ward-color-surface2);
+  color: var(--ward-color-faint);
+  cursor: default;
+}
+
+.value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* An empty value still holds one line, so the trigger keeps its height. */
+.value:empty::before {
+  content: "\200b";
+}
+
+.value[data-placeholder] {
+  color: var(--ward-color-muted);
+}
+
+.menu {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + var(--ward-space-1));
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-space-1);
+  min-width: 100%;
+  width: 100%;
+  max-width: var(--ward-width-drawer);
+  padding: var(--ward-space-1);
+  font: var(--ward-type-inputText);
+  color: var(--ward-color-text);
+  text-transform: none;
+  letter-spacing: normal;
+  background-color: var(--ward-color-surface);
+  border: var(--ward-border) solid var(--ward-color-line2);
+  border-radius: var(--ward-radius-card);
+  box-shadow: 0 var(--ward-space-1) var(--ward-space-3) var(--ward-color-scrim);
+}
+
+.find {
+  width: 100%;
+  padding: var(--ward-pad-input);
+  font: var(--ward-type-inputText);
+  color: var(--ward-color-text);
+  background-color: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-edge);
+  border-radius: var(--ward-radius);
+}
+
+.find::placeholder {
+  color: var(--ward-color-muted);
+}
+
+.list {
+  max-height: calc(var(--ward-space-7) * 9);
+  overflow-y: auto;
+}
+
+/* The active option carries the keyboard highlight, so the list itself draws no second ring. */
+.list:focus-visible {
+  outline: none;
+}
+
+.option {
+  display: grid;
+  grid-template-columns: var(--ward-space-3) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--ward-space-2);
+  padding: var(--ward-space-1) var(--ward-space-2);
+  border-radius: var(--ward-radius-chip);
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+.option:hover {
+  background-color: var(--ward-color-accentTint);
+}
+
+.option[data-active="true"] {
+  background-color: var(--ward-color-accentPill);
+}
+
+.option[aria-selected="true"] .check::after {
+  content: "";
+  display: block;
+  width: var(--ward-space-1);
+  height: var(--ward-space-2);
+  margin-inline: auto;
+  border-right: calc(var(--ward-border) * 2) solid var(--ward-color-blue);
+  border-bottom: calc(var(--ward-border) * 2) solid var(--ward-color-blue);
+  transform: rotate(45deg);
+}
+
+.empty {
+  padding: var(--ward-space-1) var(--ward-space-2);
+  font: var(--ward-type-meta);
+  color: var(--ward-color-muted);
+}

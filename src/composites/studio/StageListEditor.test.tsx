@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
+import { chooseOption, optionLabels } from "../../test-setup";
 import { StageListEditor, type StageListRow } from "./StageListEditor";
 
 const STAGES: StageListRow[] = [
@@ -62,20 +63,20 @@ describe("StageListEditor", () => {
     const rows: StageListRow[] = [{ name: "triage", kind: "entry" }, { name: "implement", kind: "agent" }];
     const { container } = render(<StageListEditor stages={rows} onChange={onChange} catalogue={["triage", "implement", "qa"]} />);
     expect(container.querySelector("input")).toBeNull();
-    const second = screen.getByLabelText("Stage 2 name") as HTMLSelectElement;
-    expect(second.tagName).toBe("SELECT");
-    expect([...second.options].map((o) => o.value)).toEqual(["triage", "implement", "qa"]);
+    const second = screen.getByRole("button", { name: "Stage 2 name" });
+    expect(second.getAttribute("aria-haspopup")).toBe("listbox");
+    expect(optionLabels(second)).toEqual(["triage", "implement", "qa"]);
     expect(second.getAttribute("aria-invalid")).toBeNull();
-    fireEvent.change(second, { target: { value: "qa" } });
+    chooseOption(second, "qa");
     expect(onChange).toHaveBeenLastCalledWith([{ name: "triage", kind: "entry" }, { name: "qa", kind: "agent" }]);
   });
 
   it("keeps a name outside the catalogue visible, marked and invalid", () => {
     const rows: StageListRow[] = [{ name: "apply_config", kind: "agent" }];
     render(<StageListEditor stages={rows} onChange={vi.fn()} catalogue={["triage", "implement"]} />);
-    const field = screen.getByLabelText("Stage 1 name") as HTMLSelectElement;
-    expect([...field.options].map((o) => o.label)).toEqual(["apply_config · not in catalogue", "triage", "implement"]);
-    expect(field.value).toBe("apply_config");
+    const field = screen.getByRole("button", { name: "Stage 1 name" });
+    expect(optionLabels(field)).toEqual(["apply_config · not in catalogue", "triage", "implement"]);
+    expect(field.textContent).toBe("apply_config · not in catalogue");
     expect(field.getAttribute("aria-invalid")).toBe("true");
     expect(screen.getByText("apply_config is not in catalogue")).toBeTruthy();
   });

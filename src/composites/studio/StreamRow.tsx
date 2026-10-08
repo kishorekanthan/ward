@@ -168,7 +168,7 @@ export function StreamRow(props: StreamRowProps) {
           {stream.name}
         </a>
         <Chip {...streamChipProps(stream.key, stream.streamStep)} />
-        {stream.draft && <Chip role="running" label="DRAFT" />}
+        {stream.draft && <Chip role="running" label="Draft" />}
       </td>
       <td className={s.cell}>
         <span className={s.chain}>

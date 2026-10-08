@@ -19,7 +19,7 @@ async function probeBoard() {
   const facts = {
     pageHeightIsViewport: document.scrollingElement.scrollHeight === innerHeight,
     longLaneScrolls: tallest.scrollHeight > tallest.clientHeight && getComputedStyle(tallest).overflowY === "auto",
-    columnSelectShown: document.querySelector("#storybook-root select") !== null,
+    columnSelectShown: document.querySelector("#storybook-root [data-ward-select]") !== null,
     laneCount: count && !count.hidden ? count.textContent : null,
     fadeEndAtStart: fadeMasked(),
     pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,

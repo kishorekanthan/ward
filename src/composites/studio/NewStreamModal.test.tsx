@@ -207,7 +207,7 @@ describe("NewStreamModal (spec)", () => {
     setup();
     const row = screen.getByText("Review").closest("li") as HTMLElement;
     expect(row.getAttribute("data-gate")).toBe("true");
-    expect(within(row).getByText("GATE")).not.toBeNull();
+    expect(within(row).getByText("Gate")).not.toBeNull();
   });
 
   it("reorders stages and creates the stream in the order shown", () => {

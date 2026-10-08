@@ -50,9 +50,9 @@ function actionField(rule: Rule, onChange: RuleRowProps["onChange"], readOnly: b
 function FourCellRow({ rule, onChange, readOnly, presentation }: RuleRowProps) {
   return (
     <tr className={s.row}>
-      <td className={s.cell}><Chip role="system" label="WHEN" /></td>
+      <td className={s.cell}><Chip role="system" label="When" /></td>
       <td className={s.cell}><span className={s.condition} title={conditionText(rule, presentation)}>{conditionText(rule, presentation)}</span></td>
-      <td className={s.cell}><Chip role="system" label="THEN" /></td>
+      <td className={s.cell}><Chip role="system" label="Then" /></td>
       <td className={s.cell}>{actionField(rule, onChange, readOnly)}</td>
     </tr>
   );
@@ -62,7 +62,7 @@ function TwoCellRow({ rule, onChange, readOnly, presentation }: RuleRowProps) {
   return (
     <tr className={s.row}>
       <td className={s.cell}>
-        <Chip role="system" label="WHEN" />
+        <Chip role="system" label="When" />
         <span className={s.condition}>{conditionText(rule, presentation)}</span>
       </td>
       <td className={s.cell}>{actionField(rule, onChange, readOnly)}</td>
@@ -73,9 +73,9 @@ function TwoCellRow({ rule, onChange, readOnly, presentation }: RuleRowProps) {
 function ContractRow({ rule, onChange, readOnly, presentation }: RuleRowProps) {
   return (
     <li className={s.contract}>
-      <Chip role="system" label="WHEN" />
+      <Chip role="system" label="When" />
       <span className={s.contractCondition}>{conditionText(rule, presentation)}</span>
-      <Chip role="meta" label="THEN" />
+      <Chip role="meta" label="Then" />
       <span className={s.contractAction}>{actionField(rule, onChange, readOnly, true)}</span>
     </li>
   );

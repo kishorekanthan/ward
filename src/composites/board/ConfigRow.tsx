@@ -65,7 +65,7 @@ function StageIdentity({ stage }: { stage: ConfigStage }) {
     <span className={s.cName}>
       <span className={s.nameLine}>
         <span className={s.name}>{stage.name}</span>
-        {stage.gate && <Chip role="gate" label="HUMAN GATE" size="tag" />}
+        {stage.gate && <Chip role="gate" label="Human gate" size="tag" />}
       </span>
       {subLine(stage) && <span className={s.sub}>{subLine(stage)}</span>}
     </span>

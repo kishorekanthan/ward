@@ -20,19 +20,22 @@ export type WebEnvCardProps = Env & {
   presentation: "web";
 };
 
+// Sentence case, except UAT, which is an acronym (#199).
+const ENV_LABEL: Record<EnvName, string> = { dev: "Dev", uat: "UAT", prod: "Prod" };
+
 const STATE: Record<EnvState, { role: ChipRole; label: string }> = {
-  current: { role: "done", label: "CURRENT" },
-  soaking: { role: "running", label: "SOAKING" },
-  live: { role: "done", label: "LIVE" },
+  current: { role: "done", label: "Current" },
+  soaking: { role: "running", label: "Soaking" },
+  live: { role: "done", label: "Live" },
 };
 
 function CompactEnvCard({ env }: { env: Env }): ReactElement {
   const state = STATE[env.state];
   const by = [env.by, env.ticket].filter(Boolean).join(" · ");
   return (
-    <section className={s.card} aria-label={env.env.toUpperCase()}>
+    <section className={s.card} aria-label={ENV_LABEL[env.env]}>
       <div className={s.head}>
-        <span className={s.env}>{env.env.toUpperCase()}</span>
+        <span className={s.env}>{ENV_LABEL[env.env]}</span>
         <Chip role={state.role} label={state.label} />
       </div>
       <p className={s.version}>{env.version}</p>

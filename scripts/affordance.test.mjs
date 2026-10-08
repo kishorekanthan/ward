@@ -59,6 +59,12 @@ describe("judgeControl", () => {
     expect(judgeControl(control({ tag: "select", color: BLUE }))).toEqual(["no control border or fill", "no chevron"]);
     expect(judgeControl(control({ tag: "select", box: { ...bare, bg: BLUE }, chevron: true }))).toEqual([]);
   });
+
+  it("holds a listbox trigger button to the select's frame and chevron, and a plain button to neither", () => {
+    expect(judgeControl(control({ tag: "button", popup: true, color: BLUE }))).toEqual(["no control border or fill", "no chevron"]);
+    expect(judgeControl(control({ tag: "button", popup: true, box: { ...bare, bg: BLUE }, chevron: true }))).toEqual([]);
+    expect(judgeControl(control({ tag: "button", popup: false, color: BLUE }))).toEqual([]);
+  });
 });
 
 describe("judgeHover", () => {

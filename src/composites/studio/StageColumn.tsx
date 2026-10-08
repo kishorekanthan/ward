@@ -51,7 +51,7 @@ export type StageColumnWorkflowProps = {
 
 type RenderProps = StageColumnProps | StageColumnWorkflowProps;
 
-const KIND_LABEL: Record<StageKind, string> = { entry: "ENTRY", agent: "AGENT", gate: "GATE", terminal: "TERMINAL" };
+const KIND_LABEL: Record<StageKind, string> = { entry: "Entry", agent: "Agent", gate: "Gate", terminal: "Terminal" };
 
 // An absent week count is unknown, never a quiet week.
 function weekCount(closed: number | undefined, format: (n: number) => string = String): string {
@@ -134,8 +134,8 @@ function StandardColumn({ stage, agents = [], onMount, feed }: StageColumnProps)
 }
 
 const WORKFLOW_TAG: Partial<Record<StageKind, ChipProps>> = {
-  gate: { role: "gate", label: "HUMAN GATE" },
-  terminal: { role: "quiet", label: "TERMINAL" },
+  gate: { role: "gate", label: "Human gate" },
+  terminal: { role: "quiet", label: "Terminal" },
 };
 
 function ReviewerList({ reviewers }: { reviewers: StageColumnReviewer[] }) {

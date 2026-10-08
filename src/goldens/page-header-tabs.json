@@ -5,9 +5,9 @@
     "rowAlign": "flex-start",
     "titleFont": "600 24px/1 Archivo, system-ui, sans-serif",
     "titleTracking": "-0.022em",
-    "crumbFont": "500 9px/1 \"IBM Plex Mono\", ui-monospace, Menlo, monospace",
-    "crumbTracking": "0.13em",
-    "crumbTransform": "uppercase",
+    "crumbFont": "500 9px/1 \"Source Sans 3\", system-ui, sans-serif",
+    "crumbTracking": "normal",
+    "crumbTransform": "none",
     "actionGap": "8px"
   },
   "tabs": {

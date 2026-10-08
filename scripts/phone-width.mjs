@@ -311,8 +311,29 @@ function probeConsole() {
   };
 }
 
+// A 120-character title and a 40-character owner each wrap to two lines at most, cut with the full text kept, and never widen the page (#199).
+function probeLongText([title, owner]) {
+  const root = document.querySelector("#storybook-root");
+  const find = (text) => Array.from(root.querySelectorAll("*")).find((el) => el.textContent.endsWith(text) && !Array.from(el.children).some((c) => c.textContent.endsWith(text)));
+  const lines = (el) => Math.round(el.getBoundingClientRect().height / Number.parseFloat(getComputedStyle(el).lineHeight));
+  const inView = (el) => el.getBoundingClientRect().right <= innerWidth + 0.5;
+  const head = Array.from(root.querySelectorAll("[data-ward-clamp]")).find((el) => el.textContent === title);
+  const who = find(owner);
+  return {
+    label: head.textContent,
+    longLabel: who.textContent.endsWith(owner) ? owner : who.textContent,
+    titleLines: lines(head),
+    titleCut: head.scrollHeight > head.clientHeight + 1,
+    titleTooltip: head.getAttribute("title") === title,
+    titleInView: inView(head),
+    ownerLinesAtMost2: lines(who) <= 2,
+    ownerInView: inView(who),
+    pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+  };
+}
+
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot };
+const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot, workCardLongTitle: probeLongText, workCardLongTitleWide: probeLongText, sessionLongTitle: probeLongText, sessionLongTitleWide: probeLongText, sessionTableLongTitle: probeLongText, sessionTableLongTitleWide: probeLongText, caseHeaderLongTitle: probeLongText, caseHeaderLongTitleWide: probeLongText };
 
 async function measure(page, base, key) {
   const { story, label, longLabel, width = golden.viewport.width } = golden[key];

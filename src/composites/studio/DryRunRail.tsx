@@ -26,8 +26,8 @@ export type DryRunRailProps = WardProps | FoundryProps;
 type AnyStep = DryRunStep | FoundryDryRun["steps"][number];
 
 const STATUS: Record<DryRun["status"], { role: "done" | "failed" | "running" | "pending"; label: string }> = {
-  passed: { role: "done", label: "PASSED" }, failed: { role: "failed", label: "FAILED" },
-  running: { role: "running", label: "RUNNING" }, notRun: { role: "pending", label: "NOT RUN" },
+  passed: { role: "done", label: "Passed" }, failed: { role: "failed", label: "Failed" },
+  running: { role: "running", label: "Running" }, notRun: { role: "pending", label: "Not run" },
 };
 const FOUNDRY_BLOCKER: Partial<Record<DryRun["status"], string>> = { running: "dry run in progress", notRun: "dry run has not run yet", failed: "dry run failed" };
 const STEP_MARKER: Record<"ok" | "finding" | "action", MarkerKind> = { ok: "greenFill", finding: "orangeFill", action: "blue" };

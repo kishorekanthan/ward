@@ -75,14 +75,14 @@ describe("WorkCard", () => {
 
   it("replaces the state chip with AGENT WORKING while an agent holds the item", () => {
     render(<WorkCard item={{ ...item, run: { agent: "triage v2", startedAt: "2026-09-06T02:14:00Z" } }} onOpen={() => {}} />);
-    expect(screen.getByText("AGENT WORKING")).not.toBeNull();
+    expect(screen.getByText("Agent working")).not.toBeNull();
     expect(screen.queryByText("ON HOLD")).toBeNull();
   });
 
   it("shows drift and hold as two chips, drift first", () => {
     const { container } = render(<WorkCard item={{ ...item, flagged: true }} onOpen={() => {}} />);
     const labels = Array.from(cardIn(container).querySelectorAll("[data-ward-chip]")).map((c) => c.textContent);
-    expect(labels).toEqual(["DRIFT FLAG", "ON HOLD"]);
+    expect(labels).toEqual(["Drift flag", "ON HOLD"]);
   });
 
   it("flashes once per event for its own item, and never for another", () => {
