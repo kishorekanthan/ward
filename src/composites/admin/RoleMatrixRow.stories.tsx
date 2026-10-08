@@ -44,6 +44,20 @@ export const Unresolved = {
   ),
 };
 
+export const WebUnresolved = {
+  render: () => (
+    <RoleMatrixRow
+      presentation="web"
+      label="People and access"
+      rows={[
+        { depth: 0, label: "Legacy data", group: "AAD-TRELLIS-DE-LEGACY", people: "6", state: "unresolved", expanded: true },
+        { depth: 1, label: "Member?", role: { role: "warn", label: "Unresolved" }, group: "AAD-TRELLIS-DE-LEGACY", people: "6", state: "unresolved", leaf: true },
+        { depth: 1, label: "Viewer", role: { role: "meta", label: "Viewer" }, group: "AAD-TRELLIS-ALL", people: "182", leaf: true },
+      ]}
+    />
+  ),
+};
+
 export const Floor = {
   render: () => (
     <div className={s.frame} tabIndex={0} role="region" aria-label="People and access">

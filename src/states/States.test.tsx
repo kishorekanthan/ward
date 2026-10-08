@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { edge, injectModuleCss, leftBorders, ruleBody } from "../test-css";
 import { DeniedState, EmptyState, FilteredEmpty, LoadFailed, StaleStrip, WriteUnavailableStrip } from "./States";
+import s from "./states.module.css";
 
 describe("empty-state card class", () => {
   it("marks only EmptyState with .ward-emptystate, so a page can count its empty cards", () => {
@@ -43,5 +45,20 @@ describe("state tones", () => {
   it("wraps the action so it sits on its own line below the sentence", () => {
     render(<EmptyState sentence="No items yet." action={{ label: "Load an item", onClick: () => {} }} />);
     expect(screen.getByRole("button", { name: "Load an item" }).parentElement?.tagName).toBe("SPAN");
+  });
+});
+
+describe("failed state block", () => {
+  it("shows the failure with the danger tint inside the block's own hairline, never a left stripe", () => {
+    expect(ruleBody("src/states/states.module.css", '.block[data-tone="failed"]')).toBe("background: var(--ward-color-dangerTint)");
+  });
+
+  it("renders the failed block with the neutral hairline and the danger tint, whatever rule draws them", () => {
+    const removeCss = injectModuleCss("src/states/states.module.css", s);
+    render(<LoadFailed sentence="Board did not load." at="2026-10-08T09:00:00Z" onRetry={() => {}} />);
+    const failed = edge(screen.getByText("Board did not load.").parentElement!);
+    removeCss();
+    expect(failed).toEqual({ shadow: "inset 0 0 0 var(--ward-border) var(--ward-color-line)", ground: "var(--ward-color-dangertint)" });
+    expect(leftBorders("src/states/states.module.css")).toEqual([]);
   });
 });
