@@ -1,8 +1,10 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { Tree } from "../../primitives/Tree";
-import { ruleBody } from "../../test-css";
+import { edge, injectModuleCss, leftBorders, ruleBody } from "../../test-css";
+import treeCss from "../../primitives/Tree.module.css";
 import { ROLE_MATRIX_COLUMNS, RoleMatrixRow, type MatrixNode, type MatrixRole } from "./RoleMatrixRow";
+import s from "./RoleMatrixRow.module.css";
 
 function texts(container: HTMLElement, selector: string): Array<string | null> {
   return Array.from(container.querySelectorAll(selector)).map((el) => el.textContent);
@@ -161,5 +163,24 @@ describe("unresolved role row", () => {
     expect(ruleBody("src/composites/admin/RoleMatrixRow.module.css", '.webFrame [role="treeitem"][data-unresolved="true"]')).toBe(
       "background: var(--ward-color-waitingTint)",
     );
+  });
+
+  it("tints an unresolved scope and role row, and the role keeps only the grey depth guide, whatever rule draws them", () => {
+    const css = "src/composites/admin/RoleMatrixRow.module.css";
+    const removeCss = [injectModuleCss("src/primitives/Tree.module.css", treeCss), injectModuleCss(css, s)];
+    render(
+      <RoleMatrixRow
+        presentation="web"
+        rows={[
+          { depth: 0, label: "Legacy scope", state: "unresolved", leaf: true },
+          { depth: 1, label: "Legacy role", state: "unresolved", leaf: true },
+        ]}
+      />,
+    );
+    const [scope, role] = screen.getAllByRole("treeitem").map(edge);
+    removeCss.forEach((remove) => remove());
+    expect(scope).toEqual({ shadow: "", ground: "var(--ward-color-waitingtint)" });
+    expect(role).toEqual({ shadow: "inset var(--ward-underline) 0 0 0 var(--ward-color-line)", ground: "var(--ward-color-waitingtint)" });
+    expect(leftBorders(css)).toEqual([]);
   });
 });

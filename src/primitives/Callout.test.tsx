@@ -1,7 +1,9 @@
+import { readFileSync } from "node:fs";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { ruleBody } from "../test-css";
+import { edge, injectModuleCss, leftBorders, ruleBody } from "../test-css";
 import { Callout } from "./Callout";
+import s from "./Callout.module.css";
 
 describe("Callout", () => {
   it("refuses a callout with no ticket behind it", () => {
@@ -33,5 +35,16 @@ describe("Callout surface", () => {
     expect(ruleBody(calloutCss, '.root[data-variant="warn"]')).toBe(
       "background: var(--ward-color-waitingTint);\nbox-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-waitingLine)",
     );
+  });
+
+  it("keeps every stripe and the ticket off the rendered callout, whatever rule draws them", () => {
+    const removeCss = injectModuleCss(calloutCss, s);
+    render(<><Callout variant="info" ticket="FL-118">Info.</Callout><Callout variant="warn" ticket="FL-229">Warn.</Callout></>);
+    const [info, warn] = screen.getAllByRole("note").map(edge);
+    removeCss();
+    expect(info).toEqual({ shadow: "inset 0 0 0 var(--ward-border) var(--ward-color-line2)", ground: "var(--ward-color-surface2)" });
+    expect(warn).toEqual({ shadow: "inset 0 0 0 var(--ward-border) var(--ward-color-waitingline)", ground: "var(--ward-color-waitingtint)" });
+    expect(leftBorders(calloutCss)).toEqual([]);
+    expect(readFileSync(calloutCss, "utf8")).not.toMatch(/content\s*:/);
   });
 });
