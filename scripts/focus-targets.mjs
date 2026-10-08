@@ -46,12 +46,19 @@ function readFocused() {
   // A select's text is every option, and a listbox trigger's is its value, so both go by their accessible name.
   const ownText = () => (el.matches('select, [aria-haspopup="listbox"]') ? "" : el.textContent.trim());
   const label = () => ownText() || el.getAttribute("aria-label") || el.labels?.[0]?.textContent.trim();
+  const menuGap = () => {
+    const menu = el.closest('[role="menu"]');
+    if (!menu) return undefined;
+    const button = document.getElementById(menu.getAttribute("aria-labelledby"));
+    return menu.parentElement.getBoundingClientRect().top - button.getBoundingClientRect().bottom;
+  };
   return {
     theme: copy.dataset.theme,
     name: label(),
     focusVisible: el.matches(":focus-visible"),
     wardRing: isWardRing(),
     height: r.height,
+    menuGap: menuGap(),
     hit24: [mid - 11.5, mid + 11.5].every((y) => hits(y)),
     wide24: [x - 11.5, x + 11.5].every((at) => hits(mid, at)),
     underlineGap: underlineGap(r),
@@ -128,7 +135,7 @@ async function focusedFacts(page) {
   const got = await page.evaluate(readFocused);
   if (!got || got.skip) return got;
   const { ring, edged, knob, ink } = await ringAndRestEdge(page, got.box);
-  return { theme: got.theme, name: got.name, focusVisible: got.focusVisible, wardRing: got.wardRing, ring, edged, knob, ink, tall: got.height >= 24, hit24: got.hit24, wide24: got.wide24, underlineGap: got.underlineGap, height: got.height };
+  return { theme: got.theme, name: got.name, focusVisible: got.focusVisible, wardRing: got.wardRing, ring, edged, knob, ink, tall: got.height >= 24, hit24: got.hit24, wide24: got.wide24, underlineGap: got.underlineGap, height: got.height, menuGap: got.menuGap };
 }
 
 async function tabThrough(page) {

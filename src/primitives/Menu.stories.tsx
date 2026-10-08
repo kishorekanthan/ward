@@ -26,7 +26,7 @@ const help: MenuEntry[] = [
 // Room below the button keeps an open menu inside its own themed copy.
 function Roomy({ children, end = false }: { children: ReactNode; end?: boolean }) {
   return (
-    <div style={{ display: "flex", justifyContent: end ? "flex-end" : "flex-start", minHeight: "calc(var(--ward-space-7) * 8)", maxWidth: "var(--ward-width-form)" }}>
+    <div style={{ display: "flex", justifyContent: end ? "flex-end" : "flex-start", minHeight: "calc(var(--ward-space-7) * 10)", maxWidth: "var(--ward-width-form)" }}>
       {children}
     </div>
   );

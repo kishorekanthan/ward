@@ -2,6 +2,7 @@
 .root {
   position: relative;
   display: inline-block;
+  align-self: flex-start;
 }
 
 /* The trigger is a secondary control with Select's chevron; focus uses the global ring. */

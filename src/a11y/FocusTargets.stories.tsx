@@ -112,7 +112,7 @@ export const Phone = {
 // Menu items are not tab stops: the probe opens each copy's menu with Enter and walks the items with ArrowDown, skipping Billing.
 export const MenuItems = {
   render: () => (
-    <div style={{ minHeight: "calc(var(--ward-space-7) * 7)" }}>
+    <div style={{ display: "flex", minHeight: "calc(var(--ward-space-7) * 7)" }}>
       <MenuButton label="Account">
         <Menu
           entries={[
