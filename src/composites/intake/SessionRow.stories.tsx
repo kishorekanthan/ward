@@ -45,3 +45,9 @@ const inTable = (Story: ComponentType): ReactNode => (
 export const LongTitle = { args: { session: long } };
 
 export const LongTitleTable = { args: { session: long, presentation: "table", href: "/intake/sessions/7" }, decorators: [inTable] };
+
+// The expired title stays a link in the title colour; only the state cell says it expired (#201).
+export const ExpiredTable = {
+  args: { session: { ...base, state: "expired", waitingOn: undefined, resolved: [] }, presentation: "table", href: "/intake/sessions/7" },
+  decorators: [inTable],
+};
