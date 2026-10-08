@@ -347,4 +347,27 @@ describe("Overlay", () => {
     expect(wide.className).toContain("ward-overlay-panel--wide");
     expect(rule(overlayCss, '.panel[data-wide="true"]')).toContain("var(--ward-width-overlayWide)");
   });
+
+  it("opens a start drawer at the inline-start edge, sidebar wide, with the caller's id on the dialog", () => {
+    render(
+      <Overlay kind="start" id="nav-drawer" title="Menu" onClose={() => {}}>
+        <p>body</p>
+      </Overlay>,
+    );
+    const dlg = screen.getByRole("dialog", { name: "Menu" });
+    expect(dlg.id).toBe("nav-drawer");
+    expect(dlg.parentElement?.getAttribute("data-ward-overlay-kind")).toBe("start");
+    expect(rule(overlayCss, ".panel.start")).toContain("width: min(var(--ward-width-sidebar), 100%)");
+    expect(rule(overlayCss, ".panel.start")).toContain("border-right:");
+  });
+
+  it("hands a titled flush body the full panel width", () => {
+    render(
+      <Overlay kind="start" title="Menu" flush onClose={() => {}}>
+        <p>body</p>
+      </Overlay>,
+    );
+    const body = screen.getByRole("dialog").querySelector(".ward-drawer-body");
+    expect(body?.hasAttribute("data-flush")).toBe(true);
+  });
 });

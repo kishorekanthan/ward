@@ -1,0 +1,47 @@
+{
+  "$source": "Recorded by hand from the acceptance criteria of #209 (TRELLIS-425): 1280 by 720 never scrolls the document; 640px (200% zoom of a 1280px window) and 375px never scroll sideways and fold the sidebar into a drawer.",
+  "wide": {
+    "story": "layout-appshell--studio-full-page",
+    "viewport": { "width": 1280, "height": 720 },
+    "documentScrollsDown": false,
+    "documentScrollsSideways": false,
+    "sidebarInFlow": true,
+    "sidebarScrollsInside": true,
+    "pageScrollsInside": true,
+    "toggleLabel": null
+  },
+  "zoom200": {
+    "story": "layout-appshell--studio-full-page",
+    "viewport": { "width": 640, "height": 360 },
+    "documentScrollsSideways": false,
+    "sidebarInFlow": false,
+    "toggleLabel": "Sections",
+    "drawerOpens": true,
+    "drawerNamed": "Sections",
+    "drawerControlled": true,
+    "focusInDrawer": true,
+    "drawerWithinViewport": true,
+    "openScrollsSideways": false,
+    "linksInColumn": true,
+    "tabStaysInDrawer": true,
+    "escapeCloses": true,
+    "focusBackOnToggle": true
+  },
+  "phone": {
+    "story": "layout-appshell--studio-full-page",
+    "viewport": { "width": 375, "height": 667 },
+    "documentScrollsSideways": false,
+    "sidebarInFlow": false,
+    "toggleLabel": "Sections",
+    "drawerOpens": true,
+    "drawerNamed": "Sections",
+    "drawerControlled": true,
+    "focusInDrawer": true,
+    "drawerWithinViewport": true,
+    "openScrollsSideways": false,
+    "linksInColumn": true,
+    "tabStaysInDrawer": true,
+    "escapeCloses": true,
+    "focusBackOnToggle": true
+  }
+}

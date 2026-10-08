@@ -4,13 +4,16 @@ import { useFocusTrap } from "../a11y/useFocusTrap";
 import { useMediaQuery } from "../layout/useMediaQuery";
 import s from "./Overlay.module.css";
 
-export type OverlayKind = "drawer" | "sheet" | "modal";
+// "start" is a navigation drawer on the inline-start edge, as wide as the shell sidebar.
+export type OverlayKind = "drawer" | "sheet" | "modal" | "start";
 
 // Portal target for callers that do not render the Overlay themselves; null means document.body.
 export const OverlayContainerContext = createContext<HTMLElement | null>(null);
 
 export type OverlayProps = {
   kind: OverlayKind;
+  /** The dialog's id, so a toggle can name it in aria-controls. */
+  id?: string;
   labelledBy?: string;
   label?: string;
   title?: string;
@@ -136,7 +139,7 @@ function OverlayBody({ props, titleId }: { props: OverlayProps; titleId: string 
   return (
     <>
       <header className={`${s.header} ward-drawer-head`}><h2 className={`${s.title} ward-drawer-title ward-truncate`} id={titleId}>{props.title}</h2></header>
-      <div className={`${s.body} ward-drawer-body`}>{props.children}</div>
+      <div className={`${s.body} ward-drawer-body`} data-flush={props.flush || undefined}>{props.children}</div>
     </>
   );
 }
@@ -192,6 +195,7 @@ export function Overlay(props: OverlayProps) {
     >
       <div
         ref={panelRef}
+        id={props.id}
         role="dialog"
         aria-modal="true"
         aria-labelledby={name.labelledBy}
