@@ -54,7 +54,7 @@ describe("one running duration, stopped under reduced motion", () => {
 
   it("declares one running duration token and nothing else named for running motion", () => {
     expect(Object.keys(tokens.motion).filter((k) => /running/i.test(k) && !k.endsWith("Ms"))).toEqual(["running"]);
-    expect([...css.matchAll(/--ward-motion-running: ([^;]+);/g)].map((m) => m[1])).toEqual(["1.6s", "0s"]);
+    expect([...css.matchAll(/--ward-motion-running\w*: ([^;]+);/g)].map((m) => m[1])).toEqual(["1.6s", "0s"]);
   });
 
   it("drives every looping animation in Ward from that one token", () => {
