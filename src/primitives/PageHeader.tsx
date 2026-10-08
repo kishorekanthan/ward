@@ -2,6 +2,7 @@ import { isValidElement, useEffect, useId, useRef, useState, type KeyboardEvent,
 import type { LiveConnection } from "../live/types";
 import { Btn } from "./Btn";
 import { Chip, type ChipProps } from "./Chip";
+import { ClampText } from "./ClampText";
 import { ConnectionMark } from "./ConnectionMark";
 import { Crumb, type CrumbPath } from "./Crumb";
 import s from "./PageHeader.module.css";
@@ -23,10 +24,15 @@ export type PageHeaderProps = {
   density?: "page" | "record";
 };
 
-function Heading({ title, consequence, consequenceHint }: Pick<PageHeaderProps, "title" | "consequence" | "consequenceHint">) {
+// A case title is prose that can run long, so it wraps to two lines; a page title keeps its one line (#199).
+function Title({ title, density }: Pick<PageHeaderProps, "title" | "density">) {
+  return density === "record" ? <ClampText as="h1" className={s.title} text={title} /> : <h1 className={s.title}>{title}</h1>;
+}
+
+function Heading({ title, consequence, consequenceHint, density }: Pick<PageHeaderProps, "title" | "consequence" | "consequenceHint" | "density">) {
   return (
     <div className={s.heading}>
-      <h1 className={s.title}>{title}</h1>
+      <Title title={title} density={density} />
       {consequence && <p className={s.consequence} title={consequenceHint}>{consequence}</p>}
     </div>
   );
@@ -103,11 +109,15 @@ function columnGap(row: HTMLDivElement): number {
   return Number.parseFloat(getComputedStyle(row).columnGap) || 0;
 }
 
+// At phone width the row is a column: the actions sit under the heading and get the whole width (#190).
+function headingShare(row: HTMLDivElement, heading: HTMLDivElement): number {
+  return getComputedStyle(row).flexDirection === "column" ? 0 : heading.offsetWidth + columnGap(row);
+}
+
 function needsCollapse(row: HTMLDivElement, heading: HTMLDivElement | null, box: HTMLDivElement | null, measure: HTMLDivElement | null, actionCount: number): boolean {
   if (actionCount === 0 || missingMeasure(heading, box, measure)) return false;
   const [readyHeading, readyBox, readyMeasure] = [heading, box, measure] as [HTMLDivElement, HTMLDivElement, HTMLDivElement];
-  const gap = columnGap(row);
-  const available = Math.max(0, row.clientWidth - readyHeading.offsetWidth - gap);
+  const available = Math.max(0, row.clientWidth - headingShare(row, readyHeading));
   return readyMeasure.offsetWidth > available || readyBox.scrollWidth > readyBox.clientWidth + 1;
 }
 
@@ -136,6 +146,8 @@ function useActionOverflow(actions: ReactNode[], keepShown: boolean) {
     const fit = () => setCollapsed(needsCollapse(row, headingRef.current, actionsRef.current, measureRef.current, actions.length));
     const ro = new ResizeObserver(fit);
     ro.observe(row);
+    // A web font that loads after the first fit changes the strip's width, so that refits too.
+    if (measureRef.current) ro.observe(measureRef.current);
     fit();
     return () => ro.disconnect();
   }, [actions]);
@@ -168,7 +180,7 @@ export function PageHeader({ crumb, chips, title, consequence, consequenceHint, 
       <HeaderContext crumb={crumb} chips={chips} />
       <div className={s.row} ref={rowRef}>
         <div ref={headingRef} className={s.headingWrap}>
-          <Heading title={title} consequence={consequence} consequenceHint={consequenceHint} />
+          <Heading title={title} consequence={consequence} consequenceHint={consequenceHint} density={density} />
         </div>
         <div className={s.actionsWrap}>
           <Connection connection={connection} />

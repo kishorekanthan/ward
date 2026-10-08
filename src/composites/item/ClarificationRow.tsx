@@ -27,10 +27,10 @@ export type ClarificationRowProps = {
 };
 
 const CHIP: Record<Delivery, { role: ChipRole; label: string }> = {
-  queued: { role: "running", label: "QUEUED" },
-  delivered: { role: "done", label: "DELIVERED" },
-  retrying: { role: "attention", label: "RETRYING" },
-  failed: { role: "failed", label: "FAILED" },
+  queued: { role: "running", label: "Queued" },
+  delivered: { role: "done", label: "Delivered" },
+  retrying: { role: "attention", label: "Retrying" },
+  failed: { role: "failed", label: "Failed" },
 };
 
 function notes(tracker: string): Record<Delivery, string> {

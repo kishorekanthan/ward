@@ -101,7 +101,7 @@ function StageRows({ stages, onMove }: { stages: StageDraft[]; onMove: (from: nu
           <li className={s.stage} key={stage.id} data-gate={stage.gate ? true : undefined}>
             <span className={s.stageIndex}>{String(i + 1).padStart(2, "0")}</span>
             <span className={s.stageName}>{stage.name}</span>
-            {stage.gate && <Chip role="gate" label="GATE" />}
+            {stage.gate && <Chip role="gate" label="Gate" />}
             {i > 0 && <MoveButton id={stage.id} name={stage.name} direction="up" onMove={() => move(i, "up")} />}
             {i < stages.length - 1 && <MoveButton id={stage.id} name={stage.name} direction="down" onMove={() => move(i, "down")} />}
           </li>

@@ -45,12 +45,10 @@
   flex-wrap: wrap;
 }
 
+/* ClampText wraps the title and the owner to two lines, then cuts with an ellipsis (#199). */
 .title {
-  overflow: hidden;
   font: var(--ward-type-workTitle);
   color: var(--ward-color-text);
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 
 .meta,
@@ -69,9 +67,6 @@
 
 .who {
   min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 
 .sep {
@@ -93,8 +88,9 @@
   gap: var(--ward-space-1) var(--ward-space-3);
 }
 
+/* The last step is a sentence, not an id, so it reads in the sans face (#199). */
 .last {
-  font: var(--ward-type-monoId);
+  font: var(--ward-type-cardNote);
   color: var(--ward-color-muted);
   white-space: nowrap;
   overflow: hidden;

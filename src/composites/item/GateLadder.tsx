@@ -9,9 +9,9 @@ export type Rung = {
 };
 
 const CHIP: Record<Rung["state"], { role: ChipRole; label: string }> = {
-  passed: { role: "done", label: "PASSED" },
-  waiting: { role: "attention", label: "WAITING" },
-  pending: { role: "pending", label: "PENDING" },
+  passed: { role: "done", label: "Passed" },
+  waiting: { role: "attention", label: "Waiting" },
+  pending: { role: "pending", label: "Pending" },
 };
 
 function RungItem({ rung }: { rung: Rung }) {

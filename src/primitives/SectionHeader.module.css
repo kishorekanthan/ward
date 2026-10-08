@@ -16,7 +16,7 @@
   white-space: nowrap;
 }
 
-/* A section kicker is a sentence, so it takes the title style; uppercase mono is for identifiers.
+/* A section kicker is a sentence, so it takes the title style rather than the small label type.
    The head wraps to leave the note its own width; the note's 28% floor below bounds it (#107, #122). */
 .root[data-kind="key"] .head {
   font: var(--ward-type-title);

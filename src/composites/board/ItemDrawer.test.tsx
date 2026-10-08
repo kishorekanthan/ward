@@ -114,11 +114,11 @@ describe("ItemDrawer resolve slot", () => {
   it("labels the stream of an item with no validated colour step with a meta NO COLOUR chip", () => {
     const chipOf = (streamStep: 2 | 4 | null) => {
       const { unmount } = render(drawer({ item: { ...item, streamStep } }));
-      const chip = Array.from(document.querySelectorAll("[data-ward-chip]")).find((el) => /STEP|NO COLOUR/.test(el.textContent ?? ""));
+      const chip = Array.from(document.querySelectorAll("[data-ward-chip]")).find((el) => /Step|No colour/.test(el.textContent ?? ""));
       const found = [chip?.getAttribute("data-ward-chip"), chip?.textContent];
       unmount();
       return found;
     };
-    expect([chipOf(2), chipOf(4), chipOf(null)]).toEqual([["stream", "STEP 2"], ["meta", "NO COLOUR"], ["meta", "NO COLOUR"]]);
+    expect([chipOf(2), chipOf(4), chipOf(null)]).toEqual([["stream", "Step 2"], ["meta", "No colour"], ["meta", "No colour"]]);
   });
 });
