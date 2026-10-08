@@ -1,8 +1,10 @@
 import { ReactNode } from 'react';
-export type OverlayKind = "drawer" | "sheet" | "modal";
+export type OverlayKind = "drawer" | "sheet" | "modal" | "start";
 export declare const OverlayContainerContext: import('react').Context<HTMLElement | null>;
 export type OverlayProps = {
     kind: OverlayKind;
+    /** The dialog's id, so a toggle can name it in aria-controls. */
+    id?: string;
     labelledBy?: string;
     label?: string;
     title?: string;

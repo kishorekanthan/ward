@@ -1,9 +1,11 @@
-/* Provenance: mirrors design/Trellis Studio.dc.html — `.app` grid 236px 1fr 316px, min-height 760px; the top bar mirrors `.bar`/`.on` in all six comps (padding 12px 20px, gap 10px, no declared height). */
+/* Provenance: mirrors design/Trellis Studio.dc.html — `.app` grid 236px 1fr 316px (its min-height 760px gives way to an exact viewport frame, #209); the top bar mirrors `.bar`/`.on` in all six comps (padding 12px 20px, gap 10px, no declared height). */
 /* No font-family on the grid: every Ward text element names its own type token, and an inherited family would mask a missing one. */
 .app {
   display: grid;
   grid-template-columns: var(--ward-width-sidebar) 1fr var(--ward-width-rail);
-  min-height: max(var(--ward-height-app), 100dvh);
+  /* Exactly the viewport tall: each column scrolls inside itself, so the document never scrolls (#209). */
+  grid-template-rows: minmax(0, 1fr);
+  height: 100dvh;
   padding-inline: calc((100% - var(--ward-width-maxWide)) / 2);
   background: var(--ward-color-bg);
   color: var(--ward-color-text);
@@ -18,6 +20,8 @@
 .side {
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
   background: var(--ward-color-surface);
   border-right: var(--ward-border) solid var(--ward-color-line);
 }
@@ -27,64 +31,77 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  min-height: 0;
   overflow-wrap: anywhere;
 }
 
 .rail {
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
   background: var(--ward-color-surface);
   border-left: var(--ward-border) solid var(--ward-color-line);
 }
 
+/* The page body scrolls under the header, so the header stays in view. */
 .page {
   --ward-page-inset: var(--ward-space-5);
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   padding: var(--ward-pad-page);
 }
 
-/* Derived reflow (no comp declares @media): below railStack the rail stacks under the centre,
-   below singleColumn everything does. A stack, not a drawer, because AppShell owns no state. */
-@media (max-width: 791.98px) {
-  .app {
-    grid-template-columns: var(--ward-width-sidebar) 1fr;
-  }
-
-  .side {
-    grid-row: 1 / -1;
-  }
-
-  .main {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  .rail {
-    grid-column: 2;
-    grid-row: 2;
-    border-left: none;
-    border-top: var(--ward-border) solid var(--ward-color-line);
-  }
+/* Narrow: the toggle opens the sidebar drawer from the start of the header row. */
+.headerRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+  padding-inline-start: var(--ward-space-5);
 }
 
-@media (max-width: 475.98px) {
-  .app {
-    grid-template-columns: 1fr;
+.sidebarToggle {
+  flex: none;
+  padding-block: var(--ward-space-2);
+}
+
+.headerSlot {
+  flex: 1;
+  min-width: 0;
+}
+
+.drawerSide {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Below railStack three columns cannot coexist: one column, the rail under the page, the sidebar in a drawer.
+   The document scrolls again, since nested scrollers at phone width or high zoom leave too little to read. */
+@media (max-width: 791.98px) {
+  .app,
+  .app[data-rail="false"] {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    height: auto;
+    min-height: 100dvh;
   }
 
+  .side,
+  .rail,
+  .page {
+    overflow-y: visible;
+  }
+
+  /* Only drawn before script runs; the drawer then takes the sidebar out of the grid. */
   .side {
-    grid-row: auto;
     border-right: none;
     border-bottom: var(--ward-border) solid var(--ward-color-line);
   }
 
-  .main {
-    grid-column: 1;
-    grid-row: auto;
-  }
-
   .rail {
-    grid-column: 1;
-    grid-row: auto;
+    border-left: none;
+    border-top: var(--ward-border) solid var(--ward-color-line);
   }
 }
 

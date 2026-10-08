@@ -233,4 +233,14 @@
     flex-direction: row;
     overflow-x: auto;
   }
+
+  /* In a dialog, such as AppShell's sidebar drawer, the drawer already saves the width, so the list stays a column (#209). */
+  [role="dialog"] .root {
+    border-bottom: 0;
+  }
+
+  [role="dialog"] .root nav {
+    flex-direction: column;
+    overflow-x: visible;
+  }
 }

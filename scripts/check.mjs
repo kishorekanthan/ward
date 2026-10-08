@@ -8,6 +8,7 @@ import { sweepConsoleTheme } from "./console-theme.mjs";
 import { sweepPhoneWidth } from "./phone-width.mjs";
 import { sweepFocusTargets } from "./focus-targets.mjs";
 import { sweepBoardHeight } from "./board-height.mjs";
+import { sweepStudioFrame } from "./studio-frame.mjs";
 import { sweepHeaderGeometry } from "./header-geometry.mjs";
 import { sweepPolicyRow } from "./policy-row.mjs";
 import { sweepAffordance } from "./affordance.mjs";
@@ -271,6 +272,11 @@ else fail("policy row", policyDiffs.join("; "));
 const affordance = await sweepAffordance();
 if (affordance.failures.length === 0) pass("affordance", `${affordance.stories} stories, ${affordance.controls} controls, ${affordance.hovered} hovered, ${affordance.focused} focused: no underline, no plain-text control, no missing hover ground or focus ring`);
 else fail("affordance", affordance.failures.join("; "));
+
+// 14. studio frame: the sidebar shell is the viewport tall at 1280x720; at 640 and 375px it folds the sidebar into a drawer with no sideways scroll (src/goldens/studio-frame.json, #209)
+const studioDiffs = await sweepStudioFrame();
+if (studioDiffs.length === 0) pass("studio frame", "at 1280x720 the document never scrolls and the sidebar and page scroll inside; at 640x360 and 375x667 nothing scrolls sideways and the drawer opens labelled, traps Tab and closes on Escape back to its toggle");
+else fail("studio frame", studioDiffs.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);
 process.exitCode = failures === 0 ? 0 : 1;

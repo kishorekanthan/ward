@@ -28,7 +28,9 @@ export function App() {
 
 The root JavaScript entry bundles Ward’s CSS side effect for ordinary client builds. The explicit `@kishorekanthan/ward/styles.css` entry is stable and recommended in application entry points, SSR manifests, and CSS pipelines.
 
-Components provide usable labels and layout defaults; props such as `brand`, `destinations`, `actor`, `metadata`, `width`, `railLabel`, and `inset` override them without app-specific dependencies. Theme a subtree with `data-theme="dark"` or override any `--ward-*` variable after the stylesheet import.
+Components provide usable labels and layout defaults; props such as `brand`, `destinations`, `actor`, `metadata`, `width`, `railLabel`, `sidebarLabel`, and `inset` override them without app-specific dependencies. Theme a subtree with `data-theme="dark"` or override any `--ward-*` variable after the stylesheet import.
+
+`AppShell` with a `sidebar` is exactly the viewport tall from 792 px wide: the sidebar, the page body and the rail each scroll inside it, and the document does not. Below 792 px the shell is one column and the sidebar moves into a modal drawer. A toggle at the start of the header row opens it; `sidebarLabel` (default "Menu") names the toggle and the drawer. Escape, the close button, the backdrop or a followed link closes the drawer, and focus returns to the toggle.
 
 ## Typography
 
