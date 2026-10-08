@@ -84,10 +84,6 @@ tr.tableRow > td.tableTitle {
   text-decoration: none;
 }
 
-.tableRow[data-state="expired"] .tableLink {
-  color: var(--ward-color-muted);
-}
-
 .tableMeta {
   display: block;
   margin-top: var(--ward-space-1);

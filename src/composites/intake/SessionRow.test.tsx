@@ -3,6 +3,9 @@ import { describe, expect, it, test, vi } from "vitest";
 import { render as renderCard, within } from "@testing-library/react";
 import { createRoot } from "react-dom/client";
 import { act, type ReactNode } from "react";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { agoSince, SessionRow, type Session } from "./SessionRow";
 
 const SESSION: Session = {
@@ -30,6 +33,14 @@ test("table presentation preserves the five-cell session-list contract", () => {
   expect(host.textContent).toContain("waiting on");
   expect(host.textContent).toContain("Draft");
   expect(host.textContent).toContain("DATAENG-4388");
+});
+
+// A muted title in a muted cell reads as plain text, so no row state may mute the link (#201).
+test("table presentation keeps every title link out of the muted cell colour", () => {
+  const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "SessionRow.module.css"), "utf8");
+  const linkRules = css.split("}").filter((rule) => rule.includes(".tableLink"));
+  expect(linkRules.length).toBeGreaterThan(0);
+  for (const rule of linkRules) expect(rule).not.toContain("--ward-color-muted");
 });
 
 test("table presentation keeps an absent cost cell empty", () => {
