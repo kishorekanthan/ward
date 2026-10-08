@@ -8,6 +8,7 @@ import { StreamRow, type Stream } from "./composites/studio/StreamRow";
 import { AppShell } from "./layout/AppShell";
 import { Sidebar } from "./layout/Sidebar";
 import { Crumb } from "./primitives/Crumb";
+import { Menu, MenuButton } from "./primitives/Menu";
 import { StatStrip } from "./primitives/StatStrip";
 import { TopBar } from "./primitives/TopBar";
 
@@ -62,6 +63,7 @@ const cases: [string, ReactElement, number][] = [
   ["SessionRow table", row(<SessionRow session={session} presentation="table" href={BAD} />), 2],
   ["SessionRow card", <SessionRow session={session} />, 1],
   ["BoardFootnote", <BoardFootnote configureHref={BAD} />, 1],
+  ["Menu link item", <MenuButton label="Help" defaultOpen><Menu entries={[{ label: "Guides", href: BAD }]} /></MenuButton>, 1],
 ];
 
 describe("link components refuse unsafe href schemes", () => {

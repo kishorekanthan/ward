@@ -1,6 +1,8 @@
 import { useEffect, useId, useRef, useState, type KeyboardEvent, type RefObject } from "react";
 import { flushSync } from "react-dom";
 import { joinIds } from "../a11y/joinIds";
+import { useOutsideClose } from "../a11y/useOutsideClose";
+import { printable, useTypeahead } from "../a11y/useTypeahead";
 import s from "./Select.module.css";
 
 export type SelectOption = { value: string; label: string };
@@ -24,7 +26,6 @@ export type SelectProps = {
 
 // A list longer than this gets a Find box; a shorter one is quicker to scan or type-ahead.
 const FIND_AFTER = 7;
-const TYPEAHEAD_RESET_MS = 500;
 
 type Entry = { option: SelectOption; index: number };
 
@@ -83,19 +84,6 @@ function useMenu(props: SelectProps, trigger: RefObject<HTMLButtonElement | null
   };
 }
 
-function useOutsideClose(open: boolean, root: RefObject<HTMLDivElement | null>, close: () => void) {
-  const latest = useRef(close);
-  latest.current = close;
-  useEffect(() => {
-    if (!open) return;
-    const onDown = (event: MouseEvent) => {
-      if (!root.current?.contains(event.target as Node)) latest.current();
-    };
-    document.addEventListener("mousedown", onDown);
-    return () => document.removeEventListener("mousedown", onDown);
-  }, [open, root]);
-}
-
 // The menu takes focus only when a person opens it, never on a first render held open.
 function useFocusOnOpen(open: boolean, target: RefObject<HTMLElement | null>) {
   const wanted = useRef(false);
@@ -108,23 +96,13 @@ function useFocusOnOpen(open: boolean, target: RefObject<HTMLElement | null>) {
   };
 }
 
-function useTypeahead(menu: Menu) {
-  const buffer = useRef("");
-  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  useEffect(() => () => clearTimeout(timer.current), []);
+function useJump(menu: Menu) {
+  const typed = useTypeahead();
   return (key: string) => {
-    clearTimeout(timer.current);
-    buffer.current += key.toLowerCase();
-    timer.current = setTimeout(() => {
-      buffer.current = "";
-    }, TYPEAHEAD_RESET_MS);
-    const at = menu.entries.findIndex((entry) => entry.option.label.toLowerCase().startsWith(buffer.current));
+    const buffer = typed(key);
+    const at = menu.entries.findIndex((entry) => entry.option.label.toLowerCase().startsWith(buffer));
     if (at >= 0) menu.to(at);
   };
-}
-
-function printable(event: KeyboardEvent): boolean {
-  return event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey;
 }
 
 function moveKeys(menu: Menu): Record<string, () => void> {
@@ -218,9 +196,9 @@ function FindBox({ menu, ids, focusRef }: Omit<MenuViewProps, "props">) {
 }
 
 function MenuView({ props, menu, ids, focusRef }: MenuViewProps) {
-  const typeahead = useTypeahead(menu);
+  const jump = useJump(menu);
   const onType = (event: KeyboardEvent) => {
-    if (printable(event)) typeahead(event.key);
+    if (printable(event)) jump(event.key);
   };
   return (
     <div className={s.menu}>
