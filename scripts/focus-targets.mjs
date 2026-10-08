@@ -34,13 +34,13 @@ function readFocused() {
     text.selectNodeContents(el);
     return Math.round((box.bottom - Number.parseFloat(line.bottom) - Number.parseFloat(line.height) - text.getBoundingClientRect().bottom) * 10) / 10;
   };
-  // The browser's own focus ring also paints, so the ring must be Ward's: solid, in the theme's blue.
+  // The browser's own focus ring also paints, so the ring must be Ward's: solid, in the theme's focus colour.
   const isWardRing = () => {
-    const blue = document.createElement("span");
-    blue.style.color = "var(--ward-color-blue)";
-    copy.append(blue);
-    const ward = style.outlineStyle === "solid" && style.outlineColor === getComputedStyle(blue).color;
-    blue.remove();
+    const focus = document.createElement("span");
+    focus.style.color = "var(--ward-color-focus)";
+    copy.append(focus);
+    const ward = style.outlineStyle === "solid" && style.outlineColor === getComputedStyle(focus).color;
+    focus.remove();
     return ward;
   };
   // A select's text is every option, and a listbox trigger's is its value, so both go by their accessible name.

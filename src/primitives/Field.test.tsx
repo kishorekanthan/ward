@@ -86,12 +86,12 @@ describe("Field focus mark", () => {
   beforeAll(loadWardSheets);
   afterEach(cleanup);
 
-  // Every control shows the same keyboard ring; a bordered variant also turns its border blue.
-  it.each([undefined, "form", "inline"] as const)("draws the focus ring and a blue border when focused (%s)", (variant) => {
+  // Every control shows the same keyboard ring; a bordered variant also turns its border the focus colour.
+  it.each([undefined, "form", "inline"] as const)("draws the focus ring and a focus-coloured border when focused (%s)", (variant) => {
     const control = focusedField(variant);
     expect(control.matches(":focus-visible")).toBe(true);
     expect(hasOutline(control)).toBe(true);
-    expect(getComputedStyle(control).boxShadow).toContain("--ward-color-blue");
+    expect(getComputedStyle(control).boxShadow).toContain("--ward-color-focus");
   });
 
   it.each(["reply", "tag", "tagGate"] as const)("keeps the focus ring on a variant with no focus border (%s)", (variant) => {
@@ -100,6 +100,6 @@ describe("Field focus mark", () => {
 
   it("leaves the global focus ring for buttons and links unscoped", () => {
     const global = readFileSync(join(here, "..", "ward.css"), "utf8").match(/(^|\})\s*:focus-visible\s*\{([^}]*)\}/);
-    expect(global?.[2]).toMatch(/outline:\s*var\(--ward-border\) solid var\(--ward-color-blue\)/);
+    expect(global?.[2]).toMatch(/outline:\s*var\(--ward-focus-ring\) solid var\(--ward-color-focus\)/);
   });
 });

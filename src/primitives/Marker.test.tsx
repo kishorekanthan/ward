@@ -21,15 +21,23 @@ describe("Marker", () => {
     expect(screen.getByTestId("marker").style.getPropertyValue("--marker")).toBe("var(--stream)");
   });
 
-  it("paints the fill kinds from the fill hues, not the ink hues", () => {
+  it("draws each hue kind from the role it stands for", () => {
+    const kinds = ["green", "blue", "orange", "red", "amber", "greenFill", "orangeFill", "owed", "running"] as const;
+    render(<>{kinds.map((kind) => <Marker key={kind} size={8} kind={kind} />)}</>);
+    const roles = screen.getAllByTestId("marker").map((el) => el.style.getPropertyValue("--marker"));
+    expect(roles).toEqual(["done", "running", "waiting", "danger", "waiting", "done", "waiting", "peach", "running"].map((r) => `var(--ward-color-${r})`));
+  });
+
+  // TRELLIS-422: only running work animates, so only the running kind carries the ward-running class.
+  it("animates the running kind and no other", () => {
     render(
       <>
-        <Marker size={8} kind="greenFill" />
-        <Marker size={8} kind="orangeFill" />
+        <Marker size={8} kind="running" />
+        <Marker size={8} kind="blue" />
+        <Marker size={8} kind="owed" />
       </>,
     );
-    const fills = screen.getAllByTestId("marker").map((el) => el.style.getPropertyValue("--marker"));
-    expect(fills).toEqual(["var(--ward-color-greenFill)", "var(--ward-color-orangeFill)"]);
+    expect(screen.getAllByTestId("marker").map((el) => el.classList.contains("ward-running"))).toEqual([true, false, false]);
   });
 
   it("is presentational unless a label is given", () => {

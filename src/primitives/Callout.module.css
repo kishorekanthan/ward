@@ -9,8 +9,8 @@
 }
 
 .root[data-variant="warn"] {
-  background: var(--ward-color-warnSurface);
-  box-shadow: inset var(--ward-underline) 0 0 0 var(--ward-color-warnLine);
+  background: var(--ward-color-waitingTint);
+  box-shadow: inset var(--ward-underline) 0 0 0 var(--ward-color-waitingLine);
 }
 
 .ticket {
@@ -19,7 +19,7 @@
 }
 
 .root[data-variant="warn"] .ticket {
-  color: var(--ward-color-warnInk);
+  color: var(--ward-color-waiting);
 }
 
 .body {

@@ -171,7 +171,7 @@
 }
 
 .define {
-  color: var(--ward-color-blue);
+  color: var(--ward-color-link);
   font: var(--ward-type-inputStrong);
   font-weight: 600;
   text-decoration: none;

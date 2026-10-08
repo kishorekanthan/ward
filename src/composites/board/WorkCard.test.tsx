@@ -92,13 +92,13 @@ describe("WorkCard", () => {
     const card = container.firstElementChild as HTMLElement;
     expect(card.classList.contains("ward-border-flash")).toBe(false);
     feed.emit(event("run.step"));
-    expect(card.style.getPropertyValue("--ward-flash-colour")).toBe("var(--ward-color-blue)");
+    expect(card.style.getPropertyValue("--ward-flash-colour")).toBe("var(--ward-color-running)");
     feed.emit(event("run.finding"));
-    expect(card.style.getPropertyValue("--ward-flash-colour")).toBe("var(--ward-color-orange)");
+    expect(card.style.getPropertyValue("--ward-flash-colour")).toBe("var(--ward-color-waiting)");
     feed.emit(event("run.finished"));
-    expect(card.style.getPropertyValue("--ward-flash-colour")).toBe("var(--ward-color-green)");
+    expect(card.style.getPropertyValue("--ward-flash-colour")).toBe("var(--ward-color-done)");
     feed.emit(event("run.step", "FL-999"));
-    expect(card.style.getPropertyValue("--ward-flash-colour")).toBe("var(--ward-color-green)");
+    expect(card.style.getPropertyValue("--ward-flash-colour")).toBe("var(--ward-color-done)");
   });
 
   it("ignores an event id it has already flashed, so a replayed feed does not reflash", () => {
@@ -108,7 +108,7 @@ describe("WorkCard", () => {
     const card = container.firstElementChild as HTMLElement;
     const replayed = event("run.step");
     feed.emit(replayed);
-    expect(card.style.getPropertyValue("--ward-flash-colour")).toBe("var(--ward-color-blue)");
+    expect(card.style.getPropertyValue("--ward-flash-colour")).toBe("var(--ward-color-running)");
     card.style.removeProperty("--ward-flash-colour");
     feed.emit(replayed);
     expect(card.style.getPropertyValue("--ward-flash-colour")).toBe("");

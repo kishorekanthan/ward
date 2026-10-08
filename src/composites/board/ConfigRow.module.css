@@ -3,8 +3,8 @@
 .frame {
   display: grid;
   overflow-x: auto;
-  padding: calc(var(--ward-border) + var(--ward-focus-offset));
-  margin: calc(-1 * (var(--ward-border) + var(--ward-focus-offset)));
+  padding: calc(var(--ward-focus-ring) + var(--ward-focus-offset));
+  margin: calc(-1 * (var(--ward-focus-ring) + var(--ward-focus-offset)));
 }
 
 .frame > div {
@@ -73,7 +73,7 @@
 
 /* Studio 4a: the human-gate row is tinted, the terminal row's name and label are muted. */
 .line[data-kind="gate"] {
-  background: var(--ward-color-blueSoft);
+  background: var(--ward-color-selected);
 }
 
 .line[data-kind="terminal"] .name,

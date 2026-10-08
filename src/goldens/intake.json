@@ -10,16 +10,16 @@
   },
   "bubble": {
     "padding": "11px 13px",
-    "ink": "#2B3648",
+    "ink": "#37352F",
     "agentWidth": "56ch",
-    "agentRing": "inset 0 0 0 1px #E2E6EC",
+    "agentRing": "inset 0 0 0 1px #EDEDEB",
     "requesterWidth": "52ch",
-    "requesterGround": "#F0F5FF"
+    "requesterGround": "#F3F3F1"
   },
   "reply": {
     "padding": "11px 13px",
     "gap": "8px",
-    "ring": "inset 0 0 0 1px #C9D2DE"
+    "ring": "inset 0 0 0 1px #DAD8D3"
   },
   "policy": {
     "padding": "13px 15px",

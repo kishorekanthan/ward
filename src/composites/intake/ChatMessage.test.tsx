@@ -31,7 +31,7 @@ describe("ChatMessage", () => {
 
   it("pins the requester and agent surface treatments in the shared stylesheet", () => {
     expect(css).toContain('.turn[data-turn="requester"]');
-    expect(css).toContain("background: var(--ward-color-blueSoft)");
+    expect(css).toContain("background: var(--ward-color-selected)");
     expect(css).toContain('.turn[data-turn="agent"]');
     expect(css).toContain("box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line)");
   });

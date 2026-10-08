@@ -50,10 +50,35 @@ export function derivedDarkPairs(dark) {
   return [...text, ...onSurface3, [dark.line3, dark.surface, "dark line3/surface", 3]];
 }
 
+const THEMES = (tokens) => [["light", tokens.color], ["dark", tokens.dark]];
+const NEUTRAL = ["bg", "surface", "surface2", "surface3", "selected", "accentTint"];
+const TINTS = ["sageTint", "peachTint", "runningTint", "waitingTint", "doneTint", "dangerTint"];
+const TEXT = ["text", "ink2", "muted", "faint"];
+// A role ink is set on any neutral ground and on its own tint, never on another role's tint.
+const ROLE_INKS = { sageInk: "sageTint", peachInk: "peachTint", running: "runningTint", waiting: "waitingTint", done: "doneTint", danger: "dangerTint", link: "accentTint" };
+const GRAPHICS = ["focus", "chartBar", "chartLine", "chartIdeal", "sage", "peach"];
+
+const onGrounds = (theme, c, ink, grounds, need) => grounds.map((ground) => [c[ink], c[ground], `${theme} ${ink}/${ground}`, need]);
+
+// TRELLIS-422 criterion 1: every text token on every surface and tint, both themes, at 4.5:1.
+export function textPairs(tokens) {
+  return THEMES(tokens).flatMap(([theme, c]) => TEXT.flatMap((ink) => onGrounds(theme, c, ink, [...NEUTRAL, ...TINTS], 4.5)));
+}
+
+export function roleInkPairs(tokens) {
+  return THEMES(tokens).flatMap(([theme, c]) =>
+    Object.entries(ROLE_INKS).flatMap(([ink, tint]) => onGrounds(theme, c, ink, [...new Set([...NEUTRAL, tint])], 4.5)),
+  );
+}
+
+// The focus ring, chart marks and the sage and peach marks are graphics: WCAG 1.4.11 asks 3:1 on every neutral ground.
+export function graphicPairs(tokens) {
+  return THEMES(tokens).flatMap(([theme, c]) => GRAPHICS.flatMap((mark) => onGrounds(theme, c, mark, NEUTRAL, 3)));
+}
+
 // An edged control's boundary identifies it, so WCAG 1.4.11 holds color.edge to 3:1 on every ground, both themes (Ward #146).
 export function edgePairs(tokens) {
-  const themes = [["light", tokens.color], ["dark", tokens.dark]];
-  return themes.flatMap(([theme, c]) => ["bg", "surface", "surface2", "surface3"].map((ground) => [c.edge, c[ground], `${theme} edge/${ground}`, 3]));
+  return THEMES(tokens).flatMap(([theme, c]) => onGrounds(theme, c, "edge", NEUTRAL, 3));
 }
 
 export function belowFloor(pairs) {

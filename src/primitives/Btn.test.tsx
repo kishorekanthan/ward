@@ -106,7 +106,7 @@ describe("Btn", () => {
     render(<Btn variant="destructive">Override and advance</Btn>);
     const fill = getComputedStyle(screen.getByRole("button", { name: "Override and advance" })).backgroundColor;
     removeCss();
-    expect([resolved(fill, "light"), resolved(fill, "dark")]).toEqual(["#B4232A", "#FF8A93"]);
-    expect([resolved("var(--ward-color-warning)", "light"), resolved("var(--ward-color-warning)", "dark")]).toEqual(["#8A5A00", "#E0B84D"]);
+    expect([resolved(fill, "light"), resolved(fill, "dark")]).toEqual(["#8A3040", "#DC99A5"]);
+    expect([resolved("var(--ward-color-waiting)", "light"), resolved("var(--ward-color-waiting)", "dark")]).toEqual(["#7A5D14", "#E6D5A9"]);
   });
 });

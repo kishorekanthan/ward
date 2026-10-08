@@ -91,7 +91,7 @@
   font: var(--ward-type-body);
   color: var(--ward-color-ink2);
   padding-left: var(--ward-space-3);
-  box-shadow: inset var(--ward-underline) 0 0 0 var(--ward-color-blue);
+  box-shadow: inset var(--ward-underline) 0 0 0 var(--ward-color-edge);
 }
 
 .actions {

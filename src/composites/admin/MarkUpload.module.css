@@ -51,7 +51,7 @@
 }
 
 .reasons[data-rejected="true"] .reason {
-  color: var(--ward-color-warnInk);
+  color: var(--ward-color-waiting);
 }
 
 .accepted {

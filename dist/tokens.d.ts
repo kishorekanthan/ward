@@ -1,11 +1,11 @@
 export declare const WARD_VERSION = "0.2.0";
-export type ChipRole = 'gate' | 'system' | 'write' | 'drift' | 'done' | 'attention' | 'failed' | 'pending' | 'running' | 'warn' | 'meta' | 'soft' | 'quiet';
+export type ChipRole = 'gate' | 'system' | 'write' | 'drift' | 'done' | 'attention' | 'failed' | 'pending' | 'running' | 'warn' | 'meta' | 'soft' | 'quiet' | 'owed';
 export type StreamStep = 1 | 2 | 3 | 4 | 5 | 6;
-export declare const CHIP_ROLES: readonly ["gate", "system", "write", "drift", "done", "attention", "failed", "pending", "running", "warn", "meta", "soft", "quiet", "stream"];
+export declare const CHIP_ROLES: readonly ["gate", "system", "write", "drift", "done", "attention", "failed", "pending", "running", "warn", "meta", "soft", "quiet", "owed", "stream"];
 export declare const STREAM_STEPS: readonly [1, 2, 3, 4, 5, 6];
 export declare const validatedStreamSteps: readonly [1, 2, 3];
 export type ValidatedStreamStep = (typeof validatedStreamSteps)[number];
-export type MarkerKind = 'stream' | 'green' | 'blue' | 'orange' | 'red' | 'amber' | 'neutral' | 'greenFill' | 'orangeFill';
+export type MarkerKind = 'stream' | 'green' | 'blue' | 'orange' | 'red' | 'amber' | 'neutral' | 'greenFill' | 'orangeFill' | 'owed' | 'running';
 export type MarkerSize = 6 | 8 | 9 | 14;
 export declare const LIVE_EVENT_TYPES: readonly ["run.started", "run.step", "run.finding", "run.finished", "item.moved", "item.updated", "snapshot", "heartbeat"];
 export type LiveEventType = (typeof LIVE_EVENT_TYPES)[number];
@@ -20,30 +20,15 @@ export declare const v: {
         readonly text: "var(--ward-color-text)";
         readonly muted: "var(--ward-color-muted)";
         readonly faint: "var(--ward-color-faint)";
-        readonly blue: "var(--ward-color-blue)";
-        readonly blueSoft: "var(--ward-color-blueSoft)";
         readonly runningTint: "var(--ward-color-runningTint)";
         readonly accentTint: "var(--ward-color-accentTint)";
-        readonly accentPill: "var(--ward-color-accentPill)";
-        readonly green: "var(--ward-color-green)";
-        readonly orange: "var(--ward-color-orange)";
-        readonly amber: "var(--ward-color-amber)";
-        readonly red: "var(--ward-color-red)";
-        readonly warning: "var(--ward-color-warning)";
-        readonly destructive: "var(--ward-color-destructive)";
-        readonly warnInk: "var(--ward-color-warnInk)";
-        readonly warnSurface: "var(--ward-color-warnSurface)";
-        readonly warnLine: "var(--ward-color-warnLine)";
         readonly console: "var(--ward-color-console)";
         readonly consoleInk: "var(--ward-color-consoleInk)";
         readonly consoleWarn: "var(--ward-color-consoleWarn)";
         readonly consoleOk: "var(--ward-color-consoleOk)";
         readonly consoleFaint: "var(--ward-color-consoleFaint)";
-        readonly deep: "var(--ward-color-deep)";
         readonly overcapTint: "var(--ward-color-overcapTint)";
         readonly scrim: "var(--ward-color-scrim)";
-        readonly greenFill: "var(--ward-color-greenFill)";
-        readonly orangeFill: "var(--ward-color-orangeFill)";
         readonly consoleInfo: "var(--ward-color-consoleInfo)";
         readonly consoleDim: "var(--ward-color-consoleDim)";
         readonly line3: "var(--ward-color-line3)";
@@ -55,6 +40,41 @@ export declare const v: {
         readonly series4: "var(--ward-color-series4)";
         readonly series5: "var(--ward-color-series5)";
         readonly series6: "var(--ward-color-series6)";
+        readonly selected: "var(--ward-color-selected)";
+        readonly link: "var(--ward-color-link)";
+        readonly focus: "var(--ward-color-focus)";
+        readonly sage: "var(--ward-color-sage)";
+        readonly sageTint: "var(--ward-color-sageTint)";
+        readonly sageInk: "var(--ward-color-sageInk)";
+        readonly peach: "var(--ward-color-peach)";
+        readonly peachTint: "var(--ward-color-peachTint)";
+        readonly peachInk: "var(--ward-color-peachInk)";
+        readonly running: "var(--ward-color-running)";
+        readonly waiting: "var(--ward-color-waiting)";
+        readonly waitingTint: "var(--ward-color-waitingTint)";
+        readonly waitingLine: "var(--ward-color-waitingLine)";
+        readonly done: "var(--ward-color-done)";
+        readonly doneTint: "var(--ward-color-doneTint)";
+        readonly danger: "var(--ward-color-danger)";
+        readonly dangerTint: "var(--ward-color-dangerTint)";
+        readonly chartBar: "var(--ward-color-chartBar)";
+        readonly chartLine: "var(--ward-color-chartLine)";
+        readonly chartIdeal: "var(--ward-color-chartIdeal)";
+        readonly blue: "var(--ward-color-blue)";
+        readonly blueSoft: "var(--ward-color-blueSoft)";
+        readonly accentPill: "var(--ward-color-accentPill)";
+        readonly green: "var(--ward-color-green)";
+        readonly greenFill: "var(--ward-color-greenFill)";
+        readonly orange: "var(--ward-color-orange)";
+        readonly orangeFill: "var(--ward-color-orangeFill)";
+        readonly amber: "var(--ward-color-amber)";
+        readonly warning: "var(--ward-color-warning)";
+        readonly warnInk: "var(--ward-color-warnInk)";
+        readonly warnSurface: "var(--ward-color-warnSurface)";
+        readonly warnLine: "var(--ward-color-warnLine)";
+        readonly red: "var(--ward-color-red)";
+        readonly destructive: "var(--ward-color-destructive)";
+        readonly deep: "var(--ward-color-deep)";
     };
     readonly chip: {
         readonly gate: {
@@ -121,6 +141,11 @@ export declare const v: {
             readonly bg: "var(--ward-chip-quiet-bg)";
             readonly fg: "var(--ward-chip-quiet-fg)";
             readonly line: "var(--ward-chip-quiet-line)";
+        };
+        readonly owed: {
+            readonly bg: "var(--ward-chip-owed-bg)";
+            readonly fg: "var(--ward-chip-owed-fg)";
+            readonly line: "var(--ward-chip-owed-line)";
         };
     };
     readonly space: {
@@ -369,6 +394,7 @@ export declare const v: {
     readonly border: "var(--ward-border)";
     readonly underline: "var(--ward-underline)";
     readonly focusOffset: "var(--ward-focus-offset)";
+    readonly focusRing: "var(--ward-focus-ring)";
     readonly shadow: {
         readonly overlay: "var(--ward-shadow-overlay)";
     };
@@ -483,6 +509,7 @@ export declare const v: {
         readonly reveal: "var(--ward-motion-reveal)";
         readonly tick: "var(--ward-motion-tick)";
         readonly patience: "var(--ward-motion-patience)";
+        readonly running: "var(--ward-motion-running)";
     };
     readonly live: {
         readonly heartbeat: "var(--ward-live-heartbeat)";
@@ -497,6 +524,7 @@ export declare const ms: {
     readonly reveal: 320;
     readonly tick: 1000;
     readonly patience: 800;
+    readonly running: 1600;
     readonly heartbeat: 15000;
     readonly poll: 15000;
     readonly reconnectMax: 30000;

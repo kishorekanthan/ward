@@ -1,13 +1,13 @@
 /* Generated from tokens.json by scripts/gen-css.mjs — edit tokens.json, never this file. */
 
 export const WARD_VERSION = "0.2.0";
-export type ChipRole = 'gate' | 'system' | 'write' | 'drift' | 'done' | 'attention' | 'failed' | 'pending' | 'running' | 'warn' | 'meta' | 'soft' | 'quiet';
+export type ChipRole = 'gate' | 'system' | 'write' | 'drift' | 'done' | 'attention' | 'failed' | 'pending' | 'running' | 'warn' | 'meta' | 'soft' | 'quiet' | 'owed';
 export type StreamStep = 1 | 2 | 3 | 4 | 5 | 6;
-export const CHIP_ROLES = ["gate","system","write","drift","done","attention","failed","pending","running","warn","meta","soft","quiet","stream"] as const;
+export const CHIP_ROLES = ["gate","system","write","drift","done","attention","failed","pending","running","warn","meta","soft","quiet","owed","stream"] as const;
 export const STREAM_STEPS = [1,2,3,4,5,6] as const;
 export const validatedStreamSteps = [1,2,3] as const;
 export type ValidatedStreamStep = (typeof validatedStreamSteps)[number];
-export type MarkerKind = 'stream' | 'green' | 'blue' | 'orange' | 'red' | 'amber' | 'neutral' | 'greenFill' | 'orangeFill';
+export type MarkerKind = 'stream' | 'green' | 'blue' | 'orange' | 'red' | 'amber' | 'neutral' | 'greenFill' | 'orangeFill' | 'owed' | 'running';
 export type MarkerSize = 6 | 8 | 9 | 14;
 export const LIVE_EVENT_TYPES = ["run.started","run.step","run.finding","run.finished","item.moved","item.updated","snapshot","heartbeat"] as const;
 export type LiveEventType = (typeof LIVE_EVENT_TYPES)[number];
@@ -23,30 +23,15 @@ export const v = {
     text: 'var(--ward-color-text)',
     muted: 'var(--ward-color-muted)',
     faint: 'var(--ward-color-faint)',
-    blue: 'var(--ward-color-blue)',
-    blueSoft: 'var(--ward-color-blueSoft)',
     runningTint: 'var(--ward-color-runningTint)',
     accentTint: 'var(--ward-color-accentTint)',
-    accentPill: 'var(--ward-color-accentPill)',
-    green: 'var(--ward-color-green)',
-    orange: 'var(--ward-color-orange)',
-    amber: 'var(--ward-color-amber)',
-    red: 'var(--ward-color-red)',
-    warning: 'var(--ward-color-warning)',
-    destructive: 'var(--ward-color-destructive)',
-    warnInk: 'var(--ward-color-warnInk)',
-    warnSurface: 'var(--ward-color-warnSurface)',
-    warnLine: 'var(--ward-color-warnLine)',
     console: 'var(--ward-color-console)',
     consoleInk: 'var(--ward-color-consoleInk)',
     consoleWarn: 'var(--ward-color-consoleWarn)',
     consoleOk: 'var(--ward-color-consoleOk)',
     consoleFaint: 'var(--ward-color-consoleFaint)',
-    deep: 'var(--ward-color-deep)',
     overcapTint: 'var(--ward-color-overcapTint)',
     scrim: 'var(--ward-color-scrim)',
-    greenFill: 'var(--ward-color-greenFill)',
-    orangeFill: 'var(--ward-color-orangeFill)',
     consoleInfo: 'var(--ward-color-consoleInfo)',
     consoleDim: 'var(--ward-color-consoleDim)',
     line3: 'var(--ward-color-line3)',
@@ -58,6 +43,41 @@ export const v = {
     series4: 'var(--ward-color-series4)',
     series5: 'var(--ward-color-series5)',
     series6: 'var(--ward-color-series6)',
+    selected: 'var(--ward-color-selected)',
+    link: 'var(--ward-color-link)',
+    focus: 'var(--ward-color-focus)',
+    sage: 'var(--ward-color-sage)',
+    sageTint: 'var(--ward-color-sageTint)',
+    sageInk: 'var(--ward-color-sageInk)',
+    peach: 'var(--ward-color-peach)',
+    peachTint: 'var(--ward-color-peachTint)',
+    peachInk: 'var(--ward-color-peachInk)',
+    running: 'var(--ward-color-running)',
+    waiting: 'var(--ward-color-waiting)',
+    waitingTint: 'var(--ward-color-waitingTint)',
+    waitingLine: 'var(--ward-color-waitingLine)',
+    done: 'var(--ward-color-done)',
+    doneTint: 'var(--ward-color-doneTint)',
+    danger: 'var(--ward-color-danger)',
+    dangerTint: 'var(--ward-color-dangerTint)',
+    chartBar: 'var(--ward-color-chartBar)',
+    chartLine: 'var(--ward-color-chartLine)',
+    chartIdeal: 'var(--ward-color-chartIdeal)',
+    blue: 'var(--ward-color-blue)',
+    blueSoft: 'var(--ward-color-blueSoft)',
+    accentPill: 'var(--ward-color-accentPill)',
+    green: 'var(--ward-color-green)',
+    greenFill: 'var(--ward-color-greenFill)',
+    orange: 'var(--ward-color-orange)',
+    orangeFill: 'var(--ward-color-orangeFill)',
+    amber: 'var(--ward-color-amber)',
+    warning: 'var(--ward-color-warning)',
+    warnInk: 'var(--ward-color-warnInk)',
+    warnSurface: 'var(--ward-color-warnSurface)',
+    warnLine: 'var(--ward-color-warnLine)',
+    red: 'var(--ward-color-red)',
+    destructive: 'var(--ward-color-destructive)',
+    deep: 'var(--ward-color-deep)',
   },
   chip: {
     gate: {
@@ -124,6 +144,11 @@ export const v = {
       bg: 'var(--ward-chip-quiet-bg)',
       fg: 'var(--ward-chip-quiet-fg)',
       line: 'var(--ward-chip-quiet-line)',
+    },
+    owed: {
+      bg: 'var(--ward-chip-owed-bg)',
+      fg: 'var(--ward-chip-owed-fg)',
+      line: 'var(--ward-chip-owed-line)',
     },
   },
   space: {
@@ -372,6 +397,7 @@ export const v = {
   border: 'var(--ward-border)',
   underline: 'var(--ward-underline)',
   focusOffset: 'var(--ward-focus-offset)',
+  focusRing: 'var(--ward-focus-ring)',
   shadow: { overlay: 'var(--ward-shadow-overlay)' },
   type: {
     h1: 'var(--ward-type-h1)',
@@ -484,6 +510,7 @@ export const v = {
     reveal: 'var(--ward-motion-reveal)',
     tick: 'var(--ward-motion-tick)',
     patience: 'var(--ward-motion-patience)',
+    running: 'var(--ward-motion-running)',
   },
   live: {
     heartbeat: 'var(--ward-live-heartbeat)',
@@ -499,6 +526,7 @@ export const ms = {
   reveal: 320,
   tick: 1000,
   patience: 800,
+  running: 1600,
   heartbeat: 15000,
   poll: 15000,
   reconnectMax: 30000,

@@ -50,8 +50,8 @@ describe("Crumb", () => {
     expect(screen.getByRole("link", { name: "Streams" })).toBeTruthy();
   });
 
-  it("draws a step you can go back to as a blue link with no underline and a tinted hover", () => {
-    expect(ruleBlock(".link")).toMatch(/color:\s*var\(--ward-color-blue\);/);
+  it("draws a step you can go back to as a link with no underline and a tinted hover", () => {
+    expect(ruleBlock(".link")).toMatch(/color:\s*var\(--ward-color-link\);/);
     expect(ruleBlock(".link")).toMatch(/text-decoration:\s*none;/);
     expect(ruleBlock(".link:hover")).toMatch(/background:\s*var\(--ward-color-accentTint\);/);
   });

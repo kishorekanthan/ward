@@ -28,7 +28,7 @@
 }
 
 .track[data-on="true"] {
-  background: var(--ward-color-blue);
+  background: var(--ward-color-ink2);
   box-shadow: none;
 }
 

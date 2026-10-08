@@ -51,6 +51,13 @@ function fontFaces() {
   ).join("\n\n");
 }
 
+// An alias names a role key in the same theme and is emitted as that role's value, so old names keep resolving one release.
+export function palette(tokens, theme) {
+  const colors = tokens[theme];
+  const aliases = Object.entries(tokens.alias).map(([name, role]) => [name, colors[role]]);
+  return { ...colors, ...Object.fromEntries(aliases) };
+}
+
 function colorVars(colors) {
   return Object.entries(colors).map(([k, val]) => `--ward-color-${k}: ${val};`);
 }
@@ -95,6 +102,7 @@ function layoutVars(tokens) {
     `--ward-border: ${px(tokens.border)};`,
     `--ward-underline: ${px(tokens.underline)};`,
     `--ward-focus-offset: ${px(tokens.focusOffset)};`,
+    `--ward-focus-ring: ${px(tokens.focusRing)};`,
     `--ward-shadow-overlay: ${tokens.shadow.overlay};`,
   ];
 }
@@ -130,7 +138,7 @@ export function buildCss(tokens) {
       fontFaces(),
       "",
       rule(":root", [
-        ...colorVars(tokens.color),
+        ...colorVars(palette(tokens, "color")),
         ...chipVars(tokens.chip),
         ...streamVars(tokens, false),
         ...layoutVars(tokens),
@@ -139,14 +147,14 @@ export function buildCss(tokens) {
       ]),
       "",
       rule('[data-theme="dark"]', [
-        ...colorVars(tokens.dark),
+        ...colorVars(palette(tokens, "dark")),
         ...chipVars(tokens.chipDark),
         ...streamVars(tokens, true),
       ]),
       "",
       // :root cannot be re-asserted inside a dark subtree, so light needs its own pin for side-by-side themes.
       rule('[data-theme="light"]', [
-        ...colorVars(tokens.color),
+        ...colorVars(palette(tokens, "color")),
         ...chipVars(tokens.chip),
         ...streamVars(tokens, false),
       ]),
@@ -158,7 +166,7 @@ export function buildCss(tokens) {
       rule("button, input, select, textarea", ["font: inherit;", "color: inherit;", "border: none;"]),
       rule("button", ["background: none;", "cursor: pointer;", "text-align: left;"]),
       // Affordance rule (#191): a link never underlines; colour and weight mark it, and a hover ground answers the pointer.
-      rule("a", ["color: var(--ward-color-blue);", "font-weight: 500;", "text-decoration: none;", "border-radius: var(--ward-radius-chip);"]),
+      rule("a", ["color: var(--ward-color-link);", "font-weight: 500;", "text-decoration: none;", "border-radius: var(--ward-radius-chip);"]),
       // Zero specificity, so any component's own hover wins; a whole-row link takes its row's ground instead.
       rule(":where(a[href]:not(.ward-rowlink)):hover", ["background-color: var(--ward-color-accentTint);"]),
       // A select is a control: its edge comes from the component, its chevron is drawn here, never an icon or asset.
@@ -198,7 +206,7 @@ export function buildCss(tokens) {
       rule("img, svg", ["display: block;"]),
       "",
       rule(":focus-visible", [
-        "outline: var(--ward-border) solid var(--ward-color-blue);",
+        "outline: var(--ward-focus-ring) solid var(--ward-color-focus);",
         "outline-offset: var(--ward-focus-offset);",
       ]),
       "",
@@ -219,10 +227,18 @@ export function buildCss(tokens) {
         "white-space: nowrap;",
       ]),
       "",
-      rule("@keyframes ward-flash", ["from { border-color: var(--ward-flash-colour, var(--ward-color-blue)); }"]),
+      rule("@keyframes ward-flash", ["from { border-color: var(--ward-flash-colour, var(--ward-color-running)); }"]),
       rule(".ward-border-flash", ["animation: ward-flash var(--ward-motion-flash) 1;"]),
       "",
-      rule("@media (prefers-reduced-motion: reduce)", ["*, *::before, *::after { animation: none !important; transition: none !important; }"]),
+      // Only running work moves; one duration drives it, and reduced motion zeroes that duration as well as stopping it.
+      rule("@keyframes ward-running", ["50% { opacity: 0.55; }"]),
+      rule(".ward-running", ["animation: ward-running var(--ward-motion-running) ease-in-out infinite;"]),
+      "",
+      rule("@media (prefers-reduced-motion: reduce)", [
+        ":root { --ward-motion-running: 0s; }",
+        ".ward-running { animation: none; }",
+        "*, *::before, *::after { animation: none !important; transition: none !important; }",
+      ]),
       "",
     ])
   );
@@ -232,7 +248,7 @@ function quote(s) {
   return `'${s}'`;
 }
 
-const MOTION_KEYS = ["fast", "flash", "reveal", "tick", "patience"];
+const MOTION_KEYS = ["fast", "flash", "reveal", "tick", "patience", "running"];
 
 export function buildTokens(tokens) {
   const validated = tokens.stream.steps.filter((step) => step.darkChip && step.darkChipText);
@@ -253,7 +269,7 @@ export function buildTokens(tokens) {
     "",
     "export const v = {",
   ];
-  lines.push("  color: {", ...Object.keys(tokens.color).map((k) => `    ${k}: 'var(--ward-color-${k})',`), "  },");
+  lines.push("  color: {", ...Object.keys(palette(tokens, "color")).map((k) => `    ${k}: 'var(--ward-color-${k})',`), "  },");
   lines.push("  chip: {");
   for (const role of Object.keys(tokens.chip)) {
     lines.push(`    ${role}: {`);
@@ -280,6 +296,7 @@ export function buildTokens(tokens) {
     "  border: 'var(--ward-border)',",
     "  underline: 'var(--ward-underline)',",
     "  focusOffset: 'var(--ward-focus-offset)',",
+    "  focusRing: 'var(--ward-focus-ring)',",
     "  shadow: { overlay: 'var(--ward-shadow-overlay)' },",
   );
   lines.push("  type: {");

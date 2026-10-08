@@ -21,7 +21,7 @@
 }
 
 .cell[data-accent="amber"] .value {
-  color: var(--ward-color-amber);
+  color: var(--ward-color-waiting);
 }
 
 /* A linked cell is one link holding value and label, at least a touch target tall; the lines stay where they were.

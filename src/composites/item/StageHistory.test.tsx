@@ -22,11 +22,11 @@ describe("StageHistory", () => {
     expect(items[2].getAttribute("data-state")).toBe("hold");
   });
 
-  it("marks a hold in the warning colour, never in drift orange", () => {
+  it("marks a hold in the waiting colour, never in the owed peach", () => {
     render(<StageHistory entries={entries} />);
     const node = screen.getAllByTestId("marker")[2];
-    expect(node.style.getPropertyValue("--marker")).toBe("var(--ward-color-warning)");
-    expect(node.style.getPropertyValue("--marker")).not.toBe("var(--ward-color-orange)");
+    expect(node.style.getPropertyValue("--marker")).toBe("var(--ward-color-waiting)");
+    expect(node.style.getPropertyValue("--marker")).not.toBe("var(--ward-color-peach)");
   });
 
   it("shows a cost only where one was spent", () => {

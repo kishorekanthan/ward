@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
-import { belowFloor, contrast, derivedDarkPairs, edgePairs, describeFailures, sweepRenderedContrast } from "./contrast.mjs";
+import { belowFloor, contrast, derivedDarkPairs, edgePairs, graphicPairs, roleInkPairs, textPairs, describeFailures, sweepRenderedContrast } from "./contrast.mjs";
 import { buildFresh, distDrift } from "./dist-fresh.mjs";
 import { sweepConsoleTheme } from "./console-theme.mjs";
 import { sweepPhoneWidth } from "./phone-width.mjs";
@@ -13,7 +13,7 @@ import { sweepPolicyRow } from "./policy-row.mjs";
 import { sweepAffordance } from "./affordance.mjs";
 import { workflowFindings } from "./workflows.mjs";
 import { NAME, OLD_NAME, OLD_TARBALL, oldNameFiles } from "./old-name.mjs";
-import { FAMILY_OF, breakpoints, buildCss, buildTokens, containerBreakpoints, declaredFaces, readTokens } from "./gen-css.mjs";
+import { FAMILY_OF, breakpoints, buildCss, buildTokens, containerBreakpoints, declaredFaces, palette, readTokens } from "./gen-css.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const src = join(root, "src");
@@ -77,39 +77,33 @@ try {
 
 // 2. contrast, computed from tokens.json so a broken token fails here
 const NEED = 4.5;
-const pairs = [];
+const pairs = [...textPairs(tokens), ...roleInkPairs(tokens)];
 for (const [theme, colors, chips] of [
-  ["light", tokens.color, tokens.chip],
-  ["dark", tokens.dark, tokens.chipDark],
+  ["light", palette(tokens, "color"), tokens.chip],
+  ["dark", palette(tokens, "dark"), tokens.chipDark],
 ]) {
-  pairs.push([colors.text, colors.bg, `${theme} text/bg`], [colors.text, colors.surface, `${theme} text/surface`]);
-  pairs.push([colors.muted, colors.bg, `${theme} muted/bg`], [colors.muted, colors.surface, `${theme} muted/surface`]);
-  pairs.push([colors.blue, colors.surface, `${theme} blue/surface`], [colors.warnInk, colors.warnSurface, `${theme} warnInk/warnSurface`]);
-  // Warning ink sits on surface; a destructive Btn sets surface ink on a destructive fill.
-  pairs.push([colors.warning, colors.surface, `${theme} warning/surface`], [colors.surface, colors.destructive, `${theme} surface/destructive`]);
-  // Red is set as text for blocked reasons on cards and over-cap notes on columns.
-  pairs.push([colors.red, colors.surface, `${theme} red/surface`], [colors.red, colors.surface2, `${theme} red/surface2`]);
-  // A link's hover tint and a current destination's pill sit under blue, muted and body ink (#191).
-  pairs.push([colors.blue, colors.accentTint, `${theme} blue/accentTint`], [colors.muted, colors.accentTint, `${theme} muted/accentTint`]);
-  pairs.push([colors.text, colors.accentTint, `${theme} text/accentTint`], [colors.text, colors.accentPill, `${theme} text/accentPill`]);
-  // Faint labels sit on every light ground and on a selected or warned row; the console has its own dim ink.
-  for (const ground of ["bg", "surface", "surface2", "blueSoft", "warnSurface"]) pairs.push([colors.faint, colors[ground], `${theme} faint/${ground}`]);
-  pairs.push([colors.consoleFaint, colors.console, `${theme} consoleFaint/console`]);
-  for (const line of ["consoleInfo", "consoleOk", "consoleWarn", "consoleDim"]) {
-    pairs.push([colors[line], colors.console, `${theme} ${line}/console`]);
+  // A destructive Btn sets surface ink on a danger fill; the console has its own inks on its own ground.
+  pairs.push([colors.surface, colors.danger, `${theme} surface/danger`, NEED]);
+  for (const line of ["consoleInk", "consoleInfo", "consoleOk", "consoleWarn", "consoleDim", "consoleFaint"]) {
+    pairs.push([colors[line], colors.console, `${theme} ${line}/console`, NEED]);
   }
   for (const [role, p] of Object.entries(chips)) {
     const bg = p.bg === "transparent" ? colors.surface : p.bg;
-    pairs.push([p.fg, bg, `${theme} chip ${role}`]);
+    pairs.push([p.fg, bg, `${theme} chip ${role}`, NEED]);
   }
 }
 for (const s of tokens.stream.steps) {
-  pairs.push([s.chipText, s.chip, `light stream-${s.step} chip`]);
-  if (s.darkChip) pairs.push([s.darkChipText, s.darkChip, `dark stream-${s.step} chip`]);
+  pairs.push([s.chipText, s.chip, `light stream-${s.step} chip`, NEED]);
+  if (s.darkChip) pairs.push([s.darkChipText, s.darkChip, `dark stream-${s.step} chip`, NEED]);
 }
-const low = pairs.filter(([fg, bg]) => !fg.startsWith("rgba") && contrast(fg, bg) < NEED);
+const low = belowFloor(pairs);
 if (low.length === 0) pass("token contrast", `${pairs.length} pairs >= ${NEED}:1, both themes, computed from tokens.json`);
-else fail("token contrast", low.map((p) => `${p[2]} ${p[0]} on ${p[1]} = ${contrast(p[0], p[1]).toFixed(2)}`).join("; "));
+else fail("token contrast", low.join("; "));
+
+// 2'. the focus ring, chart marks and sage and peach marks are graphics: 3:1 on every neutral ground (TRELLIS-422)
+const graphicLow = belowFloor(graphicPairs(tokens));
+if (graphicLow.length === 0) pass("graphic contrast", `${graphicPairs(tokens).length} pairs >= 3:1, both themes`);
+else fail("graphic contrast", graphicLow.join("; "));
 
 // 2a. the derived dark ramp is held to AA before dark ships
 const derivedLow = belowFloor(derivedDarkPairs(tokens.dark));
@@ -118,7 +112,7 @@ else fail("derived dark contrast", derivedLow.join("; "));
 
 // 2a'. an edged control's boundary is 3:1 on its ground (WCAG 1.4.11)
 const edgeLow = belowFloor(edgePairs(tokens));
-if (edgeLow.length === 0) pass("edge contrast", `${edgePairs(tokens).length} pairs: edge on bg, surface, surface2, surface3 at 3:1, both themes`);
+if (edgeLow.length === 0) pass("edge contrast", `${edgePairs(tokens).length} pairs: edge on every neutral ground at 3:1, both themes`);
 else fail("edge contrast", edgeLow.join("; "));
 
 // 2b. chart series are graphics, so they need the 3:1 non-text floor on both grounds in each theme

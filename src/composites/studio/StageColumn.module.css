@@ -11,7 +11,7 @@
 }
 
 .column[data-kind="gate"] {
-  background: var(--ward-color-blueSoft);
+  background: var(--ward-color-selected);
 }
 
 .head {

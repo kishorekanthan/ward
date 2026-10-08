@@ -171,11 +171,11 @@ describe("PolicyRow spec", () => {
     expect(screen.getByText("Set by platform policy PLT-118.")).not.toBeNull();
   });
 
-  it("bands a locked row on surface2 and an overridden row on blueSoft", () => {
+  it("bands a locked row on surface2 and an overridden row on the selected tint", () => {
     const { container } = renderRow("locked", () => {}, "Set by platform policy PLT-118.");
     expect(container.querySelector("tr")?.getAttribute("data-inheritance")).toBe("locked");
     expect(/\[data-inheritance="locked"\]\s*\{[^}]*--ward-color-surface2/.test(css)).toBe(true);
-    expect(/\[data-inheritance="overridden"\]\s*\{[^}]*--ward-color-blueSoft/.test(css)).toBe(true);
+    expect(/\[data-inheritance="overridden"\]\s*\{[^}]*--ward-color-selected/.test(css)).toBe(true);
   });
 
   it("keeps LOCKED neutral, OVERRIDDEN running and DERIVED soft — a blue chip is not an action", () => {

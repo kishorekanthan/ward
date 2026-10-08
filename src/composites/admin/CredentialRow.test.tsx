@@ -61,7 +61,7 @@ describe("CredentialRow", () => {
     expect(chipClass(container, "Rotate now")).toContain("ward-chip--failed");
     const red = only(container, ".ward-cellmeta.ward-redink");
     expect(red.textContent).toBe("6d");
-    expect(red.style.color).toBe("var(--ward-color-red)");
+    expect(red.style.color).toBe("var(--ward-color-danger)");
   });
 
   it.each([

@@ -19,6 +19,7 @@ export const Running = { args: { role: "running", label: "Agent working" } };
 export const Warn = { args: { role: "warn", label: "Over cap" } };
 export const Meta = { args: { role: "meta", label: "Locked" } };
 export const Soft = { args: { role: "soft", label: "Terminal" } };
+export const Owed = { args: { role: "owed", label: "Owed by you" } };
 
 export const StreamDataEng = { args: { role: "stream", label: "data-eng", streamStep: 1 } };
 export const StreamFrontEnd = { args: { role: "stream", label: "front-end", streamStep: 2 } };

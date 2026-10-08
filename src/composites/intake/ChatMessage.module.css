@@ -15,7 +15,7 @@
 
 .turn[data-turn="requester"] {
   justify-self: end;
-  background: var(--ward-color-blueSoft);
+  background: var(--ward-color-selected);
 }
 
 .turn[data-turn="agent"] {
@@ -67,6 +67,6 @@
 
 .thread[data-density="intake"] .turn[data-turn="requester"] .body {
   max-width: 52ch;
-  background: var(--ward-color-blueSoft);
+  background: var(--ward-color-selected);
   box-shadow: none;
 }

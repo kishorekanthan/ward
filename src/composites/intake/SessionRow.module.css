@@ -39,7 +39,7 @@
 }
 
 .link {
-  color: var(--ward-color-blue);
+  color: var(--ward-color-link);
 }
 
 /* Links never underline; a tinted ground answers the pointer. */
@@ -115,7 +115,7 @@ tr.tableRow > td.tableActivity {
 
 .tableRecord {
   font: var(--ward-type-monoText);
-  color: var(--ward-color-blue);
+  color: var(--ward-color-link);
   text-decoration: none;
 }
 

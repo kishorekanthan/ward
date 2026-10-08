@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, type RefObject } from "react";
 import { ms } from "../tokens";
 
 export type FlashColour = "blue" | "orange" | "green";
+// The flash names stay for consumers; each draws the role its hue stood for.
+const FLASH_ROLE: Record<FlashColour, string> = { blue: "running", orange: "waiting", green: "done" };
 type FixedFlash = () => void;
 type VariableFlash = (colour: FlashColour) => void;
 
@@ -24,8 +26,8 @@ export function useBorderFlash(ref: RefObject<HTMLElement | null>, colour?: Flas
     if (element === null) return;
     if (chosen === undefined) return;
     if (reducedMotion()) return;
-    element.style.setProperty("--ward-flash-colour", `var(--ward-color-${chosen})`);
-    element.style.setProperty("--flash", `var(--ward-color-${chosen})`);
+    element.style.setProperty("--ward-flash-colour", `var(--ward-color-${FLASH_ROLE[chosen]})`);
+    element.style.setProperty("--flash", `var(--ward-color-${FLASH_ROLE[chosen]})`);
     element.classList.add("ward-border-flash");
     element.setAttribute("data-flash", "true");
     element.addEventListener("animationend", () => clearFlash(element), { once: true });

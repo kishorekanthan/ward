@@ -39,7 +39,7 @@
 }
 
 .control[aria-invalid="true"] {
-  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-red);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-danger);
 }
 
 .mono {
@@ -56,11 +56,11 @@
 
 .invalid {
   font: var(--ward-type-meta);
-  color: var(--ward-color-red);
+  color: var(--ward-color-danger);
 }
 
 .control:focus {
-  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-blue);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-focus);
 }
 
 /* A select trigger leaves room on its right for the chevron Select draws; doubled class outranks each variant's padding. */
@@ -102,7 +102,7 @@
 }
 
 .field[data-variant="inline"] .control:focus {
-  box-shadow: inset 0 calc(-1 * var(--ward-border)) 0 var(--ward-color-blue);
+  box-shadow: inset 0 calc(-1 * var(--ward-border)) 0 var(--ward-color-focus);
 }
 
 .field[data-variant="reply"] .control {

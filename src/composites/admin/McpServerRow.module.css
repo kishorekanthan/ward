@@ -102,6 +102,6 @@
 
 .webWarn {
   font: var(--ward-type-meta);
-  color: var(--ward-color-warnInk);
+  color: var(--ward-color-waiting);
   white-space: nowrap;
 }

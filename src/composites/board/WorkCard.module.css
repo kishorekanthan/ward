@@ -19,11 +19,11 @@
 }
 
 .card[data-selected="true"] {
-  box-shadow: inset 0 0 0 var(--ward-underline) var(--ward-color-blue);
+  box-shadow: inset 0 0 0 var(--ward-underline) var(--ward-color-ink2);
 }
 
 .card[data-flagged="true"] {
-  box-shadow: inset 0 0 0 var(--ward-underline) var(--ward-color-orangeFill);
+  box-shadow: inset 0 0 0 var(--ward-underline) var(--ward-color-waiting);
 }
 
 .hit {
@@ -36,7 +36,7 @@
 
 /* The card clips its overflow, so the hit's ring is drawn inside the card's edge. */
 .hit:focus-visible {
-  outline-offset: calc(-1 * (var(--ward-border) + var(--ward-focus-offset)));
+  outline-offset: calc(-1 * (var(--ward-focus-ring) + var(--ward-focus-offset)));
 }
 
 .head {
@@ -98,11 +98,11 @@
 }
 
 .last[data-stale="true"] {
-  color: var(--ward-color-warnInk);
+  color: var(--ward-color-waiting);
 }
 
 .reason {
   font: var(--ward-type-meta);
-  color: var(--ward-color-red);
+  color: var(--ward-color-danger);
   overflow-wrap: anywhere;
 }

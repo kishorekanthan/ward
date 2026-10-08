@@ -57,9 +57,9 @@
   min-width: 0;
   margin-left: auto;
   overflow-x: auto;
-  padding: calc(var(--ward-border) + var(--ward-focus-offset));
-  margin-block: calc(-1 * (var(--ward-border) + var(--ward-focus-offset)));
-  margin-inline-end: calc(-1 * (var(--ward-border) + var(--ward-focus-offset)));
+  padding: calc(var(--ward-focus-ring) + var(--ward-focus-offset));
+  margin-block: calc(-1 * (var(--ward-focus-ring) + var(--ward-focus-offset)));
+  margin-inline-end: calc(-1 * (var(--ward-focus-ring) + var(--ward-focus-offset)));
 }
 
 .swatch {

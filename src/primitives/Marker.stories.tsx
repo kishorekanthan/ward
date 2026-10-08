@@ -14,6 +14,8 @@ export const Orange = { args: { size: 8, kind: "orange" } };
 export const Red = { args: { size: 8, kind: "red" } };
 export const Amber = { args: { size: 8, kind: "amber" } };
 export const Neutral = { args: { size: 8, kind: "neutral" } };
+export const Owed = { args: { size: 8, kind: "owed", label: "Owed by you" } };
+export const Running = { args: { size: 8, kind: "running", label: "Running" } };
 
 export const Labelled = {
   args: { size: 14, kind: "green", label: "Met" },

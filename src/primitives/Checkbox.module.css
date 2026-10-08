@@ -12,7 +12,7 @@
 }
 
 .box {
-  accent-color: var(--ward-color-blue);
+  accent-color: var(--ward-color-ink2);
   width: var(--ward-space-3);
   height: var(--ward-space-3);
   flex: none;

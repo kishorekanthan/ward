@@ -99,7 +99,7 @@
 }
 
 .step[aria-current="step"] {
-  box-shadow: inset var(--ward-underline) 0 0 0 var(--ward-color-blue);
+  box-shadow: inset var(--ward-underline) 0 0 0 var(--ward-color-ink2);
   padding-left: var(--ward-space-2);
 }
 
@@ -137,7 +137,7 @@
 
 .reason {
   font: var(--ward-type-secondary);
-  color: var(--ward-color-warnInk);
+  color: var(--ward-color-waiting);
 }
 
 .note {

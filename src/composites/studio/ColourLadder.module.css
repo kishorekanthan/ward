@@ -14,7 +14,7 @@
 }
 
 .cell[aria-checked="true"] {
-  box-shadow: inset 0 0 0 var(--ward-underline) var(--ward-color-blue);
+  box-shadow: inset 0 0 0 var(--ward-underline) var(--ward-color-ink2);
 }
 
 /* Opacity is deliberate: the cell is a colour swatch, and the label still says why it is unavailable. */
@@ -96,7 +96,7 @@
 }
 
 .tile[aria-checked="true"] {
-  box-shadow: inset 0 0 0 var(--ward-underline) var(--ward-color-blue);
+  box-shadow: inset 0 0 0 var(--ward-underline) var(--ward-color-ink2);
 }
 
 /* Opacity is deliberate, as in the list: the note still says who holds the step. */
