@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { ruleBody } from "../test-css";
 import { DeniedState, EmptyState, FilteredEmpty, LoadFailed, StaleStrip, WriteUnavailableStrip } from "./States";
 
 describe("empty-state card class", () => {
@@ -43,5 +44,11 @@ describe("state tones", () => {
   it("wraps the action so it sits on its own line below the sentence", () => {
     render(<EmptyState sentence="No items yet." action={{ label: "Load an item", onClick: () => {} }} />);
     expect(screen.getByRole("button", { name: "Load an item" }).parentElement?.tagName).toBe("SPAN");
+  });
+});
+
+describe("failed state block", () => {
+  it("shows the failure with the danger tint inside the block's own hairline, never a left stripe", () => {
+    expect(ruleBody("src/states/states.module.css", '.block[data-tone="failed"]')).toBe("background: var(--ward-color-dangerTint)");
   });
 });

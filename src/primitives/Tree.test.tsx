@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { ruleBody } from "../test-css";
 import { Tree, TreeRow } from "./Tree";
 
 function Sample({ expanded }: { expanded: boolean }) {
@@ -26,5 +27,11 @@ describe("Tree", () => {
     render(<Sample expanded={false} />);
     expect(screen.queryByRole("group")).toBeNull();
     expect(screen.queryByText("Stream admin")).toBeNull();
+  });
+});
+
+describe("unresolved tree row", () => {
+  it("shows the waiting tint alone, never a left stripe", () => {
+    expect(ruleBody("src/primitives/Tree.module.css", '.row[data-unresolved="true"]')).toBe("background: var(--ward-color-waitingTint)");
   });
 });

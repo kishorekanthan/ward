@@ -8,3 +8,11 @@ export function injectModuleCss(path: string, classes: Record<string, string>): 
   document.head.append(style);
   return () => style.remove();
 }
+
+// The declarations of the one rule whose selector is exactly `selector`, one per line, for a CSS golden.
+export function ruleBody(path: string, selector: string): string {
+  const blocks = readFileSync(path, "utf8").split("}").map((b) => b.split("{"));
+  const match = blocks.filter(([sel]) => sel.replace(/\/\*[\s\S]*?\*\//g, "").trim() === selector);
+  if (match.length !== 1) throw new Error(`ruleBody: ${match.length} rules match ${selector} in ${path}`);
+  return match[0][1].split(";").map((d) => d.trim()).filter(Boolean).join(";\n");
+}

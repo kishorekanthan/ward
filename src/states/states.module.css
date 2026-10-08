@@ -9,7 +9,7 @@
 }
 
 .block[data-tone="failed"] {
-  box-shadow: inset var(--ward-underline) 0 0 0 var(--ward-color-danger);
+  background: var(--ward-color-dangerTint);
 }
 
 .sentence {

@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { Tree } from "../../primitives/Tree";
+import { ruleBody } from "../../test-css";
 import { ROLE_MATRIX_COLUMNS, RoleMatrixRow, type MatrixNode, type MatrixRole } from "./RoleMatrixRow";
 
 function texts(container: HTMLElement, selector: string): Array<string | null> {
@@ -152,5 +153,13 @@ describe("RoleMatrixRow spec", () => {
   it("carries the drawn column widths and drops right to left", () => {
     expect(ROLE_MATRIX_COLUMNS.map((c) => c.width)).toEqual([228, 92, 168]);
     expect(ROLE_MATRIX_COLUMNS.map((c) => c.dropPriority)).toEqual([undefined, 2, 1]);
+  });
+});
+
+describe("unresolved role row", () => {
+  it("shows the waiting tint, never a waiting stripe over the depth guide", () => {
+    expect(ruleBody("src/composites/admin/RoleMatrixRow.module.css", '.webFrame [role="treeitem"][data-unresolved="true"]')).toBe(
+      "background: var(--ward-color-waitingTint)",
+    );
   });
 });
