@@ -41,6 +41,10 @@ const THEMES: Theme[] = ["light", "dark"];
 const item = (key: string): BoardItem => ({ key, title: `Item ${key}`, stage: "review", timeInStage: 60_000, waitsOn: "J. Rao", streamStep: 1, changedAt: "2026-09-06T02:14:00Z" });
 
 describe("soft surfaces against the chosen look (#217)", () => {
+  it("restores the light card shadow inside a dark theme", () => {
+    expect(varsOf(block('[data-theme="light"]')).get("--ward-shadow-card")).toBe(golden.card.light.shadow);
+  });
+
   it.each(THEMES)("floats the board card on its shadow with no border, and rings it on hover (%s)", (theme) => {
     const want = golden.card[theme];
     expect(value(CARD, ".card", "border-radius", theme)).toBe(golden.card.radius);
