@@ -2958,7 +2958,7 @@ function T0({ configureHref: e }) {
     e === void 0 ? null : /* @__PURE__ */ n("a", { className: `${qa.link} ward-target`, href: W(e), children: "Configure board" })
   ] });
 }
-const Rm = "_head_1lguu_3", Tm = "_identity_1lguu_12", xm = "_titleRow_1lguu_18", Lm = "_title_1lguu_18", Am = "_key_1lguu_35", Em = "_rollup_1lguu_45", Im = "_tools_1lguu_53", Mm = "_swatch_1lguu_65", jm = "_mark_1lguu_72", ye = {
+const Rm = "_head_1tfi5_3", Tm = "_identity_1tfi5_12", xm = "_titleRow_1tfi5_18", Lm = "_title_1tfi5_18", Am = "_key_1tfi5_35", Em = "_rollup_1tfi5_45", Im = "_tools_1tfi5_53", Mm = "_swatch_1tfi5_101", jm = "_mark_1tfi5_108", ye = {
   head: Rm,
   identity: Tm,
   titleRow: xm,

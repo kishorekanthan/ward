@@ -8,6 +8,7 @@ import { sweepConsoleTheme } from "./console-theme.mjs";
 import { sweepPhoneWidth } from "./phone-width.mjs";
 import { sweepFocusTargets } from "./focus-targets.mjs";
 import { sweepBoardHeight } from "./board-height.mjs";
+import { sweepBoardToolbar } from "./board-toolbar.mjs";
 import { sweepStudioFrame } from "./studio-frame.mjs";
 import { sweepHeaderGeometry } from "./header-geometry.mjs";
 import { sweepPolicyRow } from "./policy-row.mjs";
@@ -277,6 +278,10 @@ else fail("affordance", affordance.failures.join("; "));
 const studioDiffs = await sweepStudioFrame();
 if (studioDiffs.length === 0) pass("studio frame", "at 1280x720 the document never scrolls and the sidebar and page scroll inside; at 640x360 and 375x667 nothing scrolls sideways and the drawer opens labelled, traps Tab and closes on Escape back to its toggle");
 else fail("studio frame", studioDiffs.join("; "));
+
+const toolbarDiffs = await sweepBoardToolbar();
+if (toolbarDiffs.length === 0) pass("board toolbar", "crowded consumer controls in both themes at 1280 and 375px: equal heights, aligned centers, complete labels and no sideways scroll");
+else fail("board toolbar", toolbarDiffs.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);
 process.exitCode = failures === 0 ? 0 : 1;
