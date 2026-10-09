@@ -340,7 +340,8 @@ function probeThemeSamples() {
     const bounds = panel.getBoundingClientRect();
     return box.left >= bounds.left && box.right <= Math.min(bounds.right, innerWidth) + 0.5;
   });
-  return { panels: panels.length, controlsInView: panels.every(within), pageScrollsSideways: document.documentElement.scrollWidth > innerWidth };
+  const text = document.querySelector("#storybook-root").innerText;
+  return { panels: panels.length, controlsInView: panels.every(within), plainScreenText: !/—|\b[A-Z][A-Z0-9]+-\d+\b|developer|TODO/.test(text), pageScrollsSideways: document.documentElement.scrollWidth > innerWidth };
 }
 
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.

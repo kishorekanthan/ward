@@ -54,7 +54,7 @@ function Presets() {
 }
 
 const item: BoardItem = {
-  key: "FL-229",
+  key: "Shipment review",
   title: "Late-arriving shipments view",
   stage: "triage",
   timeInStage: 93_600_000,
@@ -71,8 +71,8 @@ const columns: GridColumn[] = [
   { key: "owner", header: "Owner", width: 120 },
 ];
 const rows: Row[] = [
-  { id: "FL-229", title: "Late-arriving shipments view", owner: "J. Rao" },
-  { id: "FL-231", title: "Carrier reference missing on inbound loads", owner: "A. Whyte" },
+  { id: "Shipment review", title: "Late-arriving shipments view", owner: "J. Rao" },
+  { id: "Carrier check", title: "Carrier reference missing on inbound loads", owner: "A. Whyte" },
 ];
 
 function DensityPanel({ name, label }: { name: string; label: string }): ReactNode {
@@ -81,7 +81,7 @@ function DensityPanel({ name, label }: { name: string; label: string }): ReactNo
       <p style={{ font: v.type.title }}>{label}</p>
       <div role="list" style={{ display: "grid", gap: v.gap.boardColumn }}>
         <WorkCard item={item} onOpen={() => {}} />
-        <WorkCard item={{ ...item, key: "FL-231", title: "Carrier reference missing on inbound loads" }} onOpen={() => {}} />
+        <WorkCard item={{ ...item, key: "Carrier check", title: "Carrier reference missing on inbound loads" }} onOpen={() => {}} />
       </div>
       <Grid label={`${label} items`} columns={columns} rows={rows} rowId={(row) => row.id} renderCell={(row, key) => row[key as keyof Row]} empty="No items yet." />
     </section>
