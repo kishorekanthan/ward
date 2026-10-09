@@ -1,5 +1,7 @@
 import { bothThemes } from "../../../.storybook/bothThemes";
 import { BoardHeader } from "./BoardHeader";
+import { Btn } from "../../primitives/Btn";
+import { Field } from "../../primitives/Field";
 
 const owners = [
   { value: "all", label: "Everyone" },
@@ -27,7 +29,36 @@ export default {
 
 export const Live = { args: base };
 
-export const Reconnecting = { args: { ...base, connection: "reconnecting" } };
+export const CrowdedToolbar = {
+  args: {
+    ...base,
+    owners: [{ value: "all", label: "All owners" }, ...owners.slice(1)],
+    actions: <>
+      <Field label="Filter items" labelHidden variant="form" placeholder="Filter by key or title" value="" onChange={() => {}} />
+      <Field kind="select" label="Stream" value="data" options={[
+        { value: "data", label: "Data Engineering" },
+        { value: "integration", label: "Integration" },
+      ]} onChange={() => {}} />
+      <Btn variant="primary">Raise a request</Btn>
+    </>,
+  },
+};
+
+export const CrowdedToolbarLongNames = {
+  args: {
+    ...CrowdedToolbar.args,
+    actions: <>
+      <Field label="Filter items" labelHidden variant="form" placeholder="Filter by key or title" value="" onChange={() => {}} />
+      <Field kind="select" label="Stream" value="recovery" options={[
+        { value: "recovery", label: "Customer Onboarding, Identity Verification and Account Recovery" },
+        { value: "integration", label: "Integration" },
+      ]} onChange={() => {}} />
+      <Btn variant="primary">Raise a request for this stream</Btn>
+    </>,
+  },
+};
+
+export const Reconnecting ={ args: { ...base, connection: "reconnecting" } };
 
 export const Stale = {
   args: { ...base, connection: "stale", lastEventAt: "2026-09-06T02:14:00Z" },

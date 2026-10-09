@@ -1,6 +1,8 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import { BoardHeader } from "./BoardHeader";
+import { Btn } from "../../primitives/Btn";
+import { Field } from "../../primitives/Field";
 
 const stream = { name: "Order Recovery", key: "order-repair", streamStep: 3 } as const;
 
@@ -41,7 +43,7 @@ describe("BoardHeader", () => {
     expect(screen.getByRole("button", { name: "Configure board" })).not.toBeNull();
   });
 
-  it("makes the control row a reachable, named scroll region", () => {
+  it("makes the control row a reachable, named region", () => {
     const { container } = render(<BoardHeader {...full} />);
     const top = screen.getByRole("region", { name: "Board header controls" });
     expect(top.getAttribute("tabindex")).toBe("0");
@@ -50,6 +52,25 @@ describe("BoardHeader", () => {
 });
 
 describe("BoardHeader rollups and actions", () => {
+  it("preserves supplied filters' names and both action callbacks", () => {
+    const configure = vi.fn();
+    const request = vi.fn();
+    const filter = vi.fn();
+    render(<BoardHeader {...full} onConfigure={configure} actions={<>
+      <Field label="Filter items" labelHidden variant="form" placeholder="Filter by key or title" value="" onChange={filter} />
+      <Field kind="select" label="Stream" value="data" options={[{ value: "data", label: "Data Engineering" }]} />
+      <Btn onClick={request}>Raise a request</Btn>
+    </>} />);
+    expect(screen.getByRole("button", { name: "Owner" })).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Stream" })).not.toBeNull();
+    fireEvent.change(screen.getByRole("textbox", { name: "Filter items" }), { target: { value: "FL-42" } });
+    expect(filter).toHaveBeenCalledWith("FL-42");
+    fireEvent.click(screen.getByRole("button", { name: "Configure board" }));
+    fireEvent.click(screen.getByRole("button", { name: "Raise a request" }));
+    expect(configure).toHaveBeenCalledOnce();
+    expect(request).toHaveBeenCalledOnce();
+  });
+
   it("omits rollups the caller does not know instead of printing zeros", () => {
     const { container } = render(
       <BoardHeader stream={stream} rollups={{ inFlight: 3, loadedThisWeek: 1 }} connection="live" lastEventAt={null} />,
