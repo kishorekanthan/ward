@@ -33,6 +33,7 @@
   min-height: 0;
   margin: var(--ward-gap-sideInset) 0 var(--ward-gap-sideInset) var(--ward-gap-sideInset);
   overflow-y: auto;
+  scroll-padding-block: calc(var(--ward-focus-ring) + var(--ward-focus-offset));
   border-radius: var(--ward-radius-card);
   background: var(--ward-color-surface);
   box-shadow: 0 0 0 var(--ward-border) var(--ward-color-line);
@@ -51,10 +52,12 @@
   padding-inline: 0;
 }
 
+/* The panel scrolls, so full-width rows need a ring-wide gutter to show their whole focus ring. */
 .sideBody {
   display: flex;
   flex: 1;
   flex-direction: column;
+  padding: calc(var(--ward-focus-ring) + var(--ward-focus-offset));
 }
 
 .sideBody[hidden] {

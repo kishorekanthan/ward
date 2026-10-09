@@ -737,10 +737,15 @@ describe("floating sidebar surface", () => {
       "min-height: 0",
       "margin: 10px 0 10px 10px",
       "overflow-y: auto",
+      "scroll-padding-block: calc(2px + 1px)",
       "border-radius: 8px",
       "background: #FFFFFF",
       "box-shadow: 0 0 0 1px #EDEDEB",
     ]);
+  });
+
+  it("holds the sidebar a focus ring's reach in from the scrolling panel's edges", () => {
+    expect(rule(".sideBody")).toContain("padding: calc(2px + 1px);");
   });
 
   it("draws the nav icons as 18px outlines at a 1.7 stroke in the text's own colour", () => {
