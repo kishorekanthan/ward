@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
-import { belowFloor, contrast, derivedDarkPairs, edgePairs, graphicPairs, roleInkPairs, textPairs, describeFailures, sweepRenderedContrast } from "./contrast.mjs";
+import { accentPairs, belowFloor, contrast, derivedDarkPairs, edgePairs, graphicPairs, roleInkPairs, textPairs, describeFailures, sweepRenderedContrast } from "./contrast.mjs";
 import { buildFresh, distDrift } from "./dist-fresh.mjs";
 import { sweepConsoleTheme } from "./console-theme.mjs";
 import { sweepPhoneWidth } from "./phone-width.mjs";
@@ -106,6 +106,11 @@ else fail("token contrast", low.join("; "));
 const graphicLow = belowFloor(graphicPairs(tokens));
 if (graphicLow.length === 0) pass("graphic contrast", `${graphicPairs(tokens).length} pairs >= 3:1, both themes`);
 else fail("graphic contrast", graphicLow.join("; "));
+
+// 2''. every accent preset holds the sage role's pairs in both themes: ink and text on its tint 4.5:1, its mark 3:1 (#221)
+const accentLow = belowFloor(accentPairs(tokens));
+if (accentLow.length === 0) pass("accent contrast", `${accentPairs(tokens).length} pairs, ${Object.keys(tokens.accent).length} presets, both themes`);
+else fail("accent contrast", accentLow.join("; "));
 
 // 2a. the derived dark ramp is held to AA before dark ships
 const derivedLow = belowFloor(derivedDarkPairs(tokens.dark));

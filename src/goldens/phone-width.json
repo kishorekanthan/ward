@@ -263,5 +263,19 @@
     "ownerLinesAtMost2": true,
     "ownerInView": true,
     "pageScrollsSideways": false
+  },
+  "themePresets": {
+    "story": "tokens-theme--accent-presets",
+    "panels": 10,
+    "controlsInView": true,
+    "plainScreenText": true,
+    "pageScrollsSideways": false
+  },
+  "themeDensities": {
+    "story": "tokens-theme--densities",
+    "panels": 4,
+    "controlsInView": true,
+    "plainScreenText": true,
+    "pageScrollsSideways": false
   }
 }

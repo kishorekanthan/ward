@@ -62,6 +62,37 @@ function colorVars(colors) {
   return Object.entries(colors).map(([k, val]) => `--ward-color-${k}: ${val};`);
 }
 
+// A preset restates the sage role and every alias of it, so accentPill follows; no other colour moves with the accent.
+function accentVars(tokens, values) {
+  const aliases = Object.entries(tokens.alias).filter(([, role]) => role in values).map(([name, role]) => [name, values[role]]);
+  return colorVars({ ...values, ...Object.fromEntries(aliases) });
+}
+
+// Green is the base palette and has no block. Dark wins where it shares the accent's element or pins a subtree under it.
+export function accentRules(tokens) {
+  return Object.entries(tokens.accent)
+    .filter(([, preset]) => preset.color)
+    .flatMap(([name, preset]) => {
+      const on = `[data-accent="${name}"]`;
+      return [
+        rule(`[data-theme="dark"]${on}, ${on} [data-theme="dark"]`, accentVars(tokens, preset.dark)),
+        rule(`${on}, ${on} [data-theme="light"]`, accentVars(tokens, preset.color)),
+      ];
+    });
+}
+
+// Comfortable is the :root lengths; a denser setting restates only the pads and gaps it shortens.
+export function densityRules(tokens) {
+  return Object.entries(tokens.density)
+    .filter(([, d]) => d.pad)
+    .map(([name, d]) =>
+      rule(
+        `[data-density="${name}"]`,
+        ["pad", "gap"].flatMap((group) => Object.entries(d[group]).map(([k, val]) => `--ward-${group}-${k}: ${px(val)};`)),
+      ),
+    );
+}
+
 function chipVars(chip) {
   return Object.entries(chip).flatMap(([role, pair]) =>
     ["bg", "fg", "line"].map((part) => `--ward-chip-${role}-${part}: ${pair[part]};`),
@@ -166,6 +197,10 @@ export function buildCss(tokens) {
         ...streamVars(tokens, false),
         ...shadowVars(tokens.shadow, tokens.shadowDark),
       ]),
+      "",
+      ...accentRules(tokens),
+      "",
+      ...densityRules(tokens),
       "",
       rule("*, *::before, *::after", ["box-sizing: border-box;"]),
       rule("*", ["margin: 0;", "padding: 0;"]),
@@ -274,6 +309,10 @@ export function buildTokens(tokens) {
     `export type MarkerSize = ${tokens.marker.sizes.join(" | ")};`,
     `export const LIVE_EVENT_TYPES = ${JSON.stringify(tokens.live.events)} as const;`,
     "export type LiveEventType = (typeof LIVE_EVENT_TYPES)[number];",
+    `export const ACCENT_PRESETS = ${JSON.stringify(Object.entries(tokens.accent).map(([name, p]) => ({ name, label: p.label })))} as const;`,
+    "export type AccentPreset = (typeof ACCENT_PRESETS)[number][\"name\"];",
+    `export const DENSITIES = ${JSON.stringify(Object.entries(tokens.density).map(([name, d]) => ({ name, label: d.label })))} as const;`,
+    "export type Density = (typeof DENSITIES)[number][\"name\"];",
     "",
     "export const v = {",
   ];

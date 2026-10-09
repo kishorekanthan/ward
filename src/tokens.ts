@@ -11,6 +11,10 @@ export type MarkerKind = 'stream' | 'green' | 'blue' | 'orange' | 'red' | 'amber
 export type MarkerSize = 6 | 8 | 9 | 14;
 export const LIVE_EVENT_TYPES = ["run.started","run.step","run.finding","run.finished","item.moved","item.updated","snapshot","heartbeat"] as const;
 export type LiveEventType = (typeof LIVE_EVENT_TYPES)[number];
+export const ACCENT_PRESETS = [{"name":"green","label":"Trellis green"},{"name":"blue","label":"Blue"},{"name":"violet","label":"Violet"},{"name":"orange","label":"Orange"},{"name":"rose","label":"Rose"}] as const;
+export type AccentPreset = (typeof ACCENT_PRESETS)[number]["name"];
+export const DENSITIES = [{"name":"comfortable","label":"Comfortable"},{"name":"compact","label":"Compact"}] as const;
+export type Density = (typeof DENSITIES)[number]["name"];
 
 export const v = {
   color: {
@@ -196,6 +200,7 @@ export const v = {
     boardColumn: 'var(--ward-pad-boardColumn)',
     workCard: 'var(--ward-pad-workCard)',
     card: 'var(--ward-pad-card)',
+    gridCell: 'var(--ward-pad-gridCell)',
     ladderTile: 'var(--ward-pad-ladderTile)',
     trace: 'var(--ward-pad-trace)',
     metricCell: 'var(--ward-pad-metricCell)',

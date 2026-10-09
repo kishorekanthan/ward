@@ -12,7 +12,7 @@
 .th,
 .td {
   box-sizing: border-box;
-  padding: var(--ward-space-2) var(--ward-space-3);
+  padding: var(--ward-pad-gridCell);
   text-align: left;
   border-bottom: var(--ward-border) solid var(--ward-color-line);
   overflow: hidden;

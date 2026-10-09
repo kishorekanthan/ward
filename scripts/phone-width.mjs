@@ -332,8 +332,20 @@ function probeLongText([title, owner]) {
   };
 }
 
+// Theme comparisons must keep every control inside its panel and the phone viewport.
+function probeThemeSamples() {
+  const panels = Array.from(document.querySelectorAll("#storybook-root section"));
+  const within = (panel) => Array.from(panel.querySelectorAll("button")).every((button) => {
+    const box = button.getBoundingClientRect();
+    const bounds = panel.getBoundingClientRect();
+    return box.left >= bounds.left && box.right <= Math.min(bounds.right, innerWidth) + 0.5;
+  });
+  const text = document.querySelector("#storybook-root").innerText;
+  return { panels: panels.length, controlsInView: panels.every(within), plainScreenText: !/—|\b[A-Z][A-Z0-9]+-\d+\b|developer|TODO/.test(text), pageScrollsSideways: document.documentElement.scrollWidth > innerWidth };
+}
+
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot, workCardLongTitle: probeLongText, workCardLongTitleWide: probeLongText, sessionLongTitle: probeLongText, sessionLongTitleWide: probeLongText, sessionTableLongTitle: probeLongText, sessionTableLongTitleWide: probeLongText, caseHeaderLongTitle: probeLongText, caseHeaderLongTitleWide: probeLongText };
+const PROBES = { themePresets: probeThemeSamples, themeDensities: probeThemeSamples, tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot, workCardLongTitle: probeLongText, workCardLongTitleWide: probeLongText, sessionLongTitle: probeLongText, sessionLongTitleWide: probeLongText, sessionTableLongTitle: probeLongText, sessionTableLongTitleWide: probeLongText, caseHeaderLongTitle: probeLongText, caseHeaderLongTitleWide: probeLongText };
 
 async function measure(page, base, key) {
   const { story, label, longLabel, width = golden.viewport.width } = golden[key];
@@ -345,7 +357,7 @@ async function measure(page, base, key) {
 }
 
 // Returns every fact that differs from the golden, as "key.fact: got X, want Y".
-export async function sweepPhoneWidth() {
+export async function sweepPhoneWidth(keys = Object.keys(PROBES)) {
   ensureBuild();
   const server = serve();
   await new Promise((r) => server.listen(0, "127.0.0.1", r));
@@ -354,7 +366,7 @@ export async function sweepPhoneWidth() {
   const diffs = [];
   try {
     const page = await browser.newPage({ viewport: golden.viewport });
-    for (const key of Object.keys(PROBES)) {
+    for (const key of keys) {
       const got = await measure(page, base, key);
       for (const [fact, want] of Object.entries(golden[key])) {
         const met = fact.endsWith("AtLeast") ? got[fact] >= want : got[fact] === want;
@@ -369,7 +381,7 @@ export async function sweepPhoneWidth() {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const diffs = await sweepPhoneWidth();
+  const diffs = await sweepPhoneWidth(process.argv.length > 2 ? process.argv.slice(2) : undefined);
   console.log(diffs.length ? diffs.join("\n") : "phone width: matches golden");
   process.exitCode = diffs.length ? 1 : 0;
 }

@@ -95,4 +95,10 @@ describe("public Ward exports", () => {
     ] as const;
     expect(expected.every((name) => typeof Ward[name] === "function")).toBe(true);
   });
+
+  it("publishes the theme provider and the accent and density choices a consumer's menu lists", () => {
+    expect(typeof Ward.ThemeProvider).toBe("function");
+    expect(Ward.ACCENT_PRESETS.map(({ name, label }) => `${name}: ${label}`)).toEqual(["green: Trellis green", "blue: Blue", "violet: Violet", "orange: Orange", "rose: Rose"]);
+    expect(Ward.DENSITIES.map(({ name, label }) => `${name}: ${label}`)).toEqual(["comfortable: Comfortable", "compact: Compact"]);
+  });
 });

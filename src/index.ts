@@ -11,6 +11,9 @@ export { clock } from "./fmt/clock";
 export { Visible, VisibilityProvider, useVisible } from "./visibility/Visible";
 export type { VisibilityProviderProps, VisibleProps } from "./visibility/Visible";
 
+export { ThemeProvider } from "./theme/ThemeProvider";
+export type { ThemeProviderProps, ThemeSetting } from "./theme/ThemeProvider";
+
 export { useFocusTrap } from "./a11y/useFocusTrap";
 export { useReturnFocus } from "./a11y/useReturnFocus";
 export { useRovingTabindex } from "./a11y/useRovingTabindex";

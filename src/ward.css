@@ -238,6 +238,7 @@
   --ward-pad-boardColumn: 13px 12px;
   --ward-pad-workCard: 11px;
   --ward-pad-card: 10px 12px;
+  --ward-pad-gridCell: 8px 12px;
   --ward-pad-ladderTile: 11px;
   --ward-pad-trace: 7px 0;
   --ward-pad-metricCell: 12px 14px;
@@ -811,6 +812,65 @@
   --ward-stream-6-chip: #A02C6B;
   --ward-stream-6-chipText: #FFFFFF;
   --ward-shadow-card: 0 1px 2px rgba(25,25,24,0.05), 0 3px 10px rgba(25,25,24,0.05);
+}
+
+[data-theme="dark"][data-accent="blue"], [data-accent="blue"] [data-theme="dark"] {
+  --ward-color-sage: #6189B8;
+  --ward-color-sageTint: #212F40;
+  --ward-color-sageInk: #A8C5E6;
+  --ward-color-accentPill: #212F40;
+}
+[data-accent="blue"], [data-accent="blue"] [data-theme="light"] {
+  --ward-color-sage: #5784B7;
+  --ward-color-sageTint: #D3E1F0;
+  --ward-color-sageInk: #244366;
+  --ward-color-accentPill: #D3E1F0;
+}
+[data-theme="dark"][data-accent="violet"], [data-accent="violet"] [data-theme="dark"] {
+  --ward-color-sage: #9778BF;
+  --ward-color-sageTint: #312541;
+  --ward-color-sageInk: #CEB8EA;
+  --ward-color-accentPill: #312541;
+}
+[data-accent="violet"], [data-accent="violet"] [data-theme="light"] {
+  --ward-color-sage: #9074B4;
+  --ward-color-sageTint: #E5DCF2;
+  --ward-color-sageInk: #482E6B;
+  --ward-color-accentPill: #E5DCF2;
+}
+[data-theme="dark"][data-accent="orange"], [data-accent="orange"] [data-theme="dark"] {
+  --ward-color-sage: #C88541;
+  --ward-color-sageTint: #3B2B1C;
+  --ward-color-sageInk: #E9C296;
+  --ward-color-accentPill: #3B2B1C;
+}
+[data-accent="orange"], [data-accent="orange"] [data-theme="light"] {
+  --ward-color-sage: #BC7024;
+  --ward-color-sageTint: #F8E0C3;
+  --ward-color-sageInk: #773F0D;
+  --ward-color-accentPill: #F8E0C3;
+}
+[data-theme="dark"][data-accent="rose"], [data-accent="rose"] [data-theme="dark"] {
+  --ward-color-sage: #BF697D;
+  --ward-color-sageTint: #3F2229;
+  --ward-color-sageInk: #EAB8C4;
+  --ward-color-accentPill: #3F2229;
+}
+[data-accent="rose"], [data-accent="rose"] [data-theme="light"] {
+  --ward-color-sage: #BA5E74;
+  --ward-color-sageTint: #F4D7DE;
+  --ward-color-sageInk: #6F2A3A;
+  --ward-color-accentPill: #F4D7DE;
+}
+
+[data-density="compact"] {
+  --ward-pad-card: 6px 8px;
+  --ward-pad-workCard: 7px;
+  --ward-pad-row: 7px 0;
+  --ward-pad-gridCell: 4px 8px;
+  --ward-gap-row: 4px;
+  --ward-gap-boardColumn: 6px;
+  --ward-gap-lane: 8px;
 }
 
 *, *::before, *::after {
