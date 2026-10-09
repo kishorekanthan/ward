@@ -126,7 +126,7 @@ const floatingArgs = {
   sidebar: <Sidebar brand="Trellis" nav={studioNav} agentsHeading="Streams" agents={studioAgents} />,
   iconRail,
   header,
-  children: body,
+  children: <p>Choose a stream to see its work.</p>,
 };
 
 // The viewer's choice lives in storage, so each story sets it before the shell reads it on mount.

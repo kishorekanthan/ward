@@ -43,7 +43,10 @@ export function useSidebarCollapse(enabled: boolean): { collapsed: boolean; togg
   useEffect(() => {
     if (!enabled) return;
     const onKeyDown = (event: KeyboardEvent) => {
-      if (isShortcut(event)) toggle();
+      if (!isShortcut(event)) return;
+      const panel = event.target instanceof Element ? event.target.closest("[data-ward-shell-side]") : null;
+      panel?.querySelector("button")?.focus();
+      toggle();
     };
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);

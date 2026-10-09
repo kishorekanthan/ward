@@ -610,6 +610,21 @@ describe("AppShell collapsible sidebar", () => {
     expect(isCollapsed()).toBe(false);
   });
 
+  it("keeps focus on the panel button when the shortcut hides the focused navigation", () => {
+    render(foldShell());
+    const board = screen.getByRole("link", { name: "Board" });
+    board.focus();
+    pressBracket(board);
+    expect(document.activeElement).toBe(foldButton());
+    expect(foldButton().getAttribute("aria-expanded")).toBe("false");
+
+    const collapsedHome = screen.getByRole("link", { name: "Home" });
+    collapsedHome.focus();
+    pressBracket(collapsedHome);
+    expect(document.activeElement).toBe(foldButton());
+    expect(foldButton().getAttribute("aria-expanded")).toBe("true");
+  });
+
   it("ignores [ while typing in a field and when a modifier key is held", () => {
     render(foldShell());
     const fields = [screen.getByLabelText("Title"), screen.getByLabelText("Notes"), screen.getByLabelText("Stage"), screen.getByRole("textbox", { name: "Comment" })];
