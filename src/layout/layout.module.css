@@ -49,6 +49,8 @@
   position: sticky;
   top: 0;
   align-self: start;
+  /* A sticky rail sits on a fractional offset; its own layer keeps every load snapping its rows to the same pixels. */
+  will-change: transform;
 }
 
 /* Mirrors Trellis Board Item 8b: the grid carries border-top; the rail's own rule stands in for the record's border-right. */
