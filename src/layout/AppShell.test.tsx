@@ -613,10 +613,11 @@ describe("AppShell collapsible sidebar", () => {
   it("ignores [ while typing in a field and when a modifier key is held", () => {
     render(foldShell());
     const fields = [screen.getByLabelText("Title"), screen.getByLabelText("Notes"), screen.getByLabelText("Stage"), screen.getByRole("textbox", { name: "Comment" })];
-    for (const field of fields) pressBracket(field);
-    for (const modifier of ["ctrlKey", "metaKey", "altKey", "shiftKey"]) pressBracket(document.body, { [modifier]: true });
-    expect(foldButton().getAttribute("aria-expanded")).toBe("true");
-    expect(isCollapsed()).toBe(false);
+    const presses = [...fields.map((field) => () => pressBracket(field)), ...["ctrlKey", "metaKey", "altKey", "shiftKey"].map((modifier) => () => pressBracket(document.body, { [modifier]: true }))];
+    for (const press of presses) {
+      press();
+      expect([foldButton().getAttribute("aria-expanded"), isCollapsed()]).toEqual(["true", false]);
+    }
   });
 
   it("keeps the choice in one Ward key, so a remount opens it the same way", () => {
@@ -665,9 +666,11 @@ describe("AppShell collapsible sidebar", () => {
   it("leaves the narrow drawer as it was: no panel button, no [ and the whole sidebar in the drawer", () => {
     window.localStorage.setItem("ward:sidebar-collapsed", "true");
     stubMatchMedia(true);
-    render(foldShell());
-    expect(screen.queryByRole("button", { name: /sidebar$/ })).toBeNull();
+    const { container } = render(foldShell());
+    const shellState = () => container.firstElementChild?.getAttribute("data-collapsed");
+    expect([screen.queryByRole("button", { name: /sidebar$/ }), shellState()]).toEqual([null, "false"]);
     pressBracket();
+    expect(shellState()).toBe("false");
     fireEvent.click(screen.getByRole("button", { name: "Menu" }));
     expect(within(screen.getByRole("dialog", { name: "Menu" })).getByRole("navigation", { name: "Sections" })).not.toBeNull();
     expect(screen.queryByRole("link", { name: "Admin" })).toBeNull();
@@ -708,7 +711,10 @@ describe("AppShell collapsed sidebar accessibility", () => {
     const rail = screen.getByRole("navigation", { name: "Menu" });
     const labels = ["Home", "Board", "Studio", "Admin", "Tracker", "Data Engineering", "Integration"];
     expect(within(rail).getAllByRole("link")).toHaveLength(labels.length);
-    for (const label of labels) expect(within(rail).getByRole("link", { name: label }).getAttribute("title")).toBe(label);
+    for (const label of labels) {
+      const link = within(rail).getByRole("link", { name: label });
+      expect([link.getAttribute("title"), link.querySelector(".ward-visually-hidden")?.textContent]).toEqual([label, label]);
+    }
   });
 
   it("has no axe violations collapsed or expanded", async () => {
