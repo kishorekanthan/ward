@@ -99,12 +99,17 @@ function layoutVars(tokens) {
     `--ward-radius: ${px(tokens.radius)};`,
     `--ward-radius-chip: ${px(tokens.radiusChip)};`,
     `--ward-radius-card: ${px(tokens.radiusCard)};`,
+    `--ward-radius-panel: ${px(tokens.radiusPanel)};`,
     `--ward-border: ${px(tokens.border)};`,
     `--ward-underline: ${px(tokens.underline)};`,
     `--ward-focus-offset: ${px(tokens.focusOffset)};`,
     `--ward-focus-ring: ${px(tokens.focusRing)};`,
-    `--ward-shadow-overlay: ${tokens.shadow.overlay};`,
   ];
+}
+
+// A shadow named in shadowDark is themed: dark sets its twin and the light pin restores the light value.
+function shadowVars(shadow, only = shadow) {
+  return Object.keys(only).map((k) => `--ward-shadow-${k}: ${shadow[k]};`);
 }
 
 function typeVars(tokens) {
@@ -142,6 +147,7 @@ export function buildCss(tokens) {
         ...chipVars(tokens.chip),
         ...streamVars(tokens, false),
         ...layoutVars(tokens),
+        ...shadowVars(tokens.shadow),
         ...typeVars(tokens),
         ...motionVars(tokens),
       ]),
@@ -150,6 +156,7 @@ export function buildCss(tokens) {
         ...colorVars(palette(tokens, "dark")),
         ...chipVars(tokens.chipDark),
         ...streamVars(tokens, true),
+        ...shadowVars(tokens.shadowDark),
       ]),
       "",
       // :root cannot be re-asserted inside a dark subtree, so light needs its own pin for side-by-side themes.
@@ -157,6 +164,7 @@ export function buildCss(tokens) {
         ...colorVars(palette(tokens, "color")),
         ...chipVars(tokens.chip),
         ...streamVars(tokens, false),
+        ...shadowVars(tokens.shadow, tokens.shadowDark),
       ]),
       "",
       rule("*, *::before, *::after", ["box-sizing: border-box;"]),
@@ -293,11 +301,12 @@ export function buildTokens(tokens) {
     "  radius: 'var(--ward-radius)',",
     "  radiusChip: 'var(--ward-radius-chip)',",
     "  radiusCard: 'var(--ward-radius-card)',",
+    "  radiusPanel: 'var(--ward-radius-panel)',",
     "  border: 'var(--ward-border)',",
     "  underline: 'var(--ward-underline)',",
     "  focusOffset: 'var(--ward-focus-offset)',",
     "  focusRing: 'var(--ward-focus-ring)',",
-    "  shadow: { overlay: 'var(--ward-shadow-overlay)' },",
+    `  shadow: { ${Object.keys(tokens.shadow).map((k) => `${k}: 'var(--ward-shadow-${k})'`).join(", ")} },`,
   );
   lines.push("  type: {");
   for (const name of Object.keys(tokens.type)) {

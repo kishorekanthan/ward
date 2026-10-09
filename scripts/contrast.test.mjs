@@ -42,12 +42,15 @@ describe("edge contrast", () => {
       "light edge/surface3 #C9C6C0 on #FCFCFB = 1.66 (needs 3:1)",
       "light edge/selected #C9C6C0 on #F3F3F1 = 1.53 (needs 3:1)",
       "light edge/accentTint #C9C6C0 on #EBEBE9 = 1.43 (needs 3:1)",
+      "light edge/laneTint #C9C6C0 on #EEF1EC = 1.50 (needs 3:1)",
+      "light edge/gateLaneTint #C9C6C0 on #FBF3DF = 1.54 (needs 3:1)",
+      "light edge/hover #C9C6C0 on #F6F6F3 = 1.57 (needs 3:1)",
     ]);
   });
 
   it("fails dark line2 as the dark edge on every neutral ground", () => {
     const low = belowFloor(edgePairs({ ...tokens, dark: { ...tokens.dark, edge: "#434039" } }));
-    expect(low.map((l) => l.split(" ")[1])).toEqual(["edge/bg", "edge/surface", "edge/surface2", "edge/surface3", "edge/selected", "edge/accentTint"]);
+    expect(low.map((l) => l.split(" ")[1])).toEqual(["edge/bg", "edge/surface", "edge/surface2", "edge/surface3", "edge/selected", "edge/accentTint", "edge/laneTint", "edge/gateLaneTint", "edge/hover"]);
   });
 
   it("fails a dark surface3 lifted until the edge on it drops below 3:1", () => {
@@ -56,11 +59,11 @@ describe("edge contrast", () => {
   });
 });
 
-const grounds = ["bg", "surface", "surface2", "surface3", "selected", "accentTint", "sageTint", "peachTint", "runningTint", "waitingTint", "doneTint", "dangerTint"];
+const grounds = ["bg", "surface", "surface2", "surface3", "selected", "accentTint", "laneTint", "gateLaneTint", "hover", "sageTint", "peachTint", "runningTint", "waitingTint", "doneTint", "dangerTint"];
 
 describe("text contrast on every surface (TRELLIS-422)", () => {
-  it("holds text, ink2, muted and faint to 4.5:1 on all twelve grounds, both themes", () => {
-    expect(textPairs(tokens)).toHaveLength(96);
+  it("holds text, ink2, muted and faint to 4.5:1 on all fifteen grounds, both themes", () => {
+    expect(textPairs(tokens)).toHaveLength(120);
     expect(belowFloor(textPairs(tokens))).toEqual([]);
   });
 
@@ -94,33 +97,41 @@ describe("text contrast on every surface (TRELLIS-422)", () => {
       "dark faint/sageTint #A09D97 on #264532 = 3.92 (needs 4.5:1)",
     ]);
   });
+
+  // A dark lane lifted to #4A4A40 still holds text but drops muted and faint, the lane's counts and notes.
+  it("fails muted and faint on a dark lane tint lifted too far", () => {
+    expect(belowFloor(textPairs({ ...tokens, dark: { ...tokens.dark, laneTint: "#4A4A40" } }))).toEqual([
+      "dark muted/laneTint #A5A29C on #4A4A40 = 3.52 (needs 4.5:1)",
+      "dark faint/laneTint #A09D97 on #4A4A40 = 3.31 (needs 4.5:1)",
+    ]);
+  });
 });
 
 describe("role ink contrast (TRELLIS-422)", () => {
   it("holds every role ink to 4.5:1 on each neutral ground and its own tint, both themes", () => {
-    expect(roleInkPairs(tokens)).toHaveLength(96);
+    expect(roleInkPairs(tokens)).toHaveLength(138);
     expect(belowFloor(roleInkPairs(tokens))).toEqual([]);
   });
 
   // #B5610B is the prototype's peach text, 4.49:1 on white.
   it("fails the prototype peach text on white and every ground under it", () => {
     const low = belowFloor(roleInkPairs({ ...tokens, color: { ...tokens.color, peachInk: "#B5610B" } }));
-    expect(low).toHaveLength(7);
+    expect(low).toHaveLength(10);
     expect(low[1]).toBe("light peachInk/surface #B5610B on #FFFFFF = 4.49 (needs 4.5:1)");
-    expect(low[6]).toBe("light peachInk/peachTint #B5610B on #FBE3D2 = 3.64 (needs 4.5:1)");
+    expect(low[9]).toBe("light peachInk/peachTint #B5610B on #FBE3D2 = 3.64 (needs 4.5:1)");
   });
 });
 
 describe("graphic contrast (TRELLIS-422)", () => {
   it("holds the focus ring, chart marks, sage and peach to 3:1 on every neutral ground, both themes", () => {
-    expect(graphicPairs(tokens)).toHaveLength(72);
+    expect(graphicPairs(tokens)).toHaveLength(108);
     expect(belowFloor(graphicPairs(tokens))).toEqual([]);
   });
 
   // #A7C7EC is the prototype's chart bar and focus outline blue, 1.75:1 on white.
   it("fails the prototype chart bar and focus blue", () => {
     const low = belowFloor(graphicPairs({ ...tokens, color: { ...tokens.color, chartBar: "#A7C7EC", focus: "#A7C7EC" } }));
-    expect(low.map((l) => l.split(" ")[1])).toEqual([...["focus", "chartBar"].flatMap((m) => grounds.slice(0, 6).map((g) => `${m}/${g}`))]);
+    expect(low.map((l) => l.split(" ")[1])).toEqual([...["focus", "chartBar"].flatMap((m) => grounds.slice(0, 9).map((g) => `${m}/${g}`))]);
     expect(low[1]).toBe("light focus/surface #A7C7EC on #FFFFFF = 1.75 (needs 3:1)");
   });
 

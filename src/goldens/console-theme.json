@@ -3,7 +3,7 @@
   "light": {
     "ground": "rgb(241, 241, 239)",
     "padding": "14px 16px",
-    "radius": "8px",
+    "radius": "11px",
     "tool": "rgb(31, 95, 158)",
     "warn": "rgb(122, 93, 20)",
     "ok": "rgb(47, 107, 71)",
@@ -13,7 +13,7 @@
   "dark": {
     "ground": "rgb(18, 18, 18)",
     "padding": "14px 16px",
-    "radius": "8px",
+    "radius": "11px",
     "tool": "rgb(147, 186, 224)",
     "warn": "rgb(230, 213, 169)",
     "ok": "rgb(173, 219, 191)",

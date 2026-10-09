@@ -22,14 +22,14 @@
     "quietFg": "#63615C"
   },
   "card": {
-    "padding": "11px",
+    "padding": "10px 12px",
     "gap": "7px",
     "mark": "6px",
     "name": "600 12px/1.25 Figtree",
     "note": "400 12px/1.4 Figtree",
     "tagGap": "5px",
     "selectedGround": "#F3F3F1",
-    "selectedRing": "inset 0 0 0 1px #37352F"
+    "selectedRing": "inset 0 0 0 1px #37352F, 0 1px 2px rgba(25,25,24,0.05), 0 3px 10px rgba(25,25,24,0.05)"
   },
   "cardFacts": {
     "columns": "max-content minmax(0, 1fr)",
