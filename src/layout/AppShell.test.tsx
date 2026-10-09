@@ -753,7 +753,7 @@ describe("floating sidebar surface", () => {
       "margin: 10px 0 10px 10px",
       "overflow-y: auto",
       "scroll-padding-block: calc(2px + 1px)",
-      "border-radius: 8px",
+      "border-radius: 11px",
       "background: #FFFFFF",
       "box-shadow: 0 0 0 1px #EDEDEB",
     ]);
