@@ -9,6 +9,31 @@ export type MarkerKind = 'stream' | 'green' | 'blue' | 'orange' | 'red' | 'amber
 export type MarkerSize = 6 | 8 | 9 | 14;
 export declare const LIVE_EVENT_TYPES: readonly ["run.started", "run.step", "run.finding", "run.finished", "item.moved", "item.updated", "snapshot", "heartbeat"];
 export type LiveEventType = (typeof LIVE_EVENT_TYPES)[number];
+export declare const ACCENT_PRESETS: readonly [{
+    readonly name: "green";
+    readonly label: "Trellis green";
+}, {
+    readonly name: "blue";
+    readonly label: "Blue";
+}, {
+    readonly name: "violet";
+    readonly label: "Violet";
+}, {
+    readonly name: "orange";
+    readonly label: "Orange";
+}, {
+    readonly name: "rose";
+    readonly label: "Rose";
+}];
+export type AccentPreset = (typeof ACCENT_PRESETS)[number]["name"];
+export declare const DENSITIES: readonly [{
+    readonly name: "comfortable";
+    readonly label: "Comfortable";
+}, {
+    readonly name: "compact";
+    readonly label: "Compact";
+}];
+export type Density = (typeof DENSITIES)[number]["name"];
 export declare const v: {
     readonly color: {
         readonly bg: "var(--ward-color-bg)";
@@ -193,6 +218,7 @@ export declare const v: {
         readonly boardColumn: "var(--ward-pad-boardColumn)";
         readonly workCard: "var(--ward-pad-workCard)";
         readonly card: "var(--ward-pad-card)";
+        readonly gridCell: "var(--ward-pad-gridCell)";
         readonly ladderTile: "var(--ward-pad-ladderTile)";
         readonly trace: "var(--ward-pad-trace)";
         readonly metricCell: "var(--ward-pad-metricCell)";

@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { belowFloor, contrastProblems, derivedDarkPairs, edgePairs, graphicPairs, roleInkPairs, textPairs } from "./contrast.mjs";
+import { accentPairs, belowFloor, contrastProblems, derivedDarkPairs, edgePairs, graphicPairs, roleInkPairs, textPairs } from "./contrast.mjs";
 
 const tokens = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "tokens.json"), "utf8"));
 
@@ -155,5 +155,54 @@ describe("check:contrast exit", () => {
   it("counts broken stories and rendered failures alongside derived pairs", () => {
     expect(contrastProblems([], clean)).toBe(0);
     expect(contrastProblems(["d"], { broken: ["b1", "b2"], failures: [{}] })).toBe(4);
+  });
+});
+
+// One preset's values for one theme replaced, the way a bad edit to tokens.json would.
+const withPreset = (name, theme, patch) => ({ ...tokens, accent: { ...tokens.accent, [name]: { ...tokens.accent[name], [theme]: { ...tokens.accent[name][theme], ...patch } } } });
+
+describe("accent presets hold the sage role's pairs (#221)", () => {
+  it("measures all five presets in both themes, 23 pairs each, and every pair passes", () => {
+    const pairs = accentPairs(tokens);
+    expect([...new Set(pairs.map(([, , label]) => label.split(" ").slice(0, 2).join(" ")))]).toEqual([
+      "light green", "dark green", "light blue", "dark blue", "light violet", "dark violet", "light orange", "dark orange", "light rose", "dark rose",
+    ]);
+    expect(pairs).toHaveLength(230);
+    expect(belowFloor(pairs)).toEqual([]);
+  });
+
+  it("measures green on the base sage role, so the default is the shipped palette", () => {
+    const green = accentPairs(tokens).filter(([, , label]) => label.startsWith("light green "));
+    expect(green.slice(9, 11)).toEqual([
+      ["#24553A", "#C9E2D2", "light green sageInk/sageTint", 4.5],
+      ["#191918", "#C9E2D2", "light green text/sageTint", 4.5],
+    ]);
+  });
+
+  // The light blue mark as its ink: fine as a graphic at 3.26:1, too faint for text.
+  it("fails a light blue ink on every neutral ground and its own tint", () => {
+    const low = belowFloor(accentPairs(withPreset("blue", "color", { sageInk: "#5784B7" })));
+    expect(low.map((l) => l.split(" ")[2])).toEqual(["sageInk/bg", "sageInk/surface", "sageInk/surface2", "sageInk/surface3", "sageInk/selected", "sageInk/accentTint", "sageInk/laneTint", "sageInk/gateLaneTint", "sageInk/hover", "sageInk/sageTint"]);
+    expect(low[9]).toBe("light blue sageInk/sageTint #5784B7 on #D3E1F0 = 2.93 (needs 4.5:1)");
+  });
+
+  it("fails a dark rose mark set to its light ink, below 3:1 on every dark ground", () => {
+    const low = belowFloor(accentPairs(withPreset("rose", "dark", { sage: "#6F2A3A" })));
+    expect(low).toHaveLength(9);
+    expect(low[5]).toBe("dark rose sage/accentTint #6F2A3A on #303030 = 1.30 (needs 3:1)");
+  });
+
+  it("fails a light violet tint too deep for muted and faint text", () => {
+    expect(belowFloor(accentPairs(withPreset("violet", "color", { sageTint: "#C9BCE0" })))).toEqual([
+      "light violet muted/sageTint #63615C on #C9BCE0 = 3.46 (needs 4.5:1)",
+      "light violet faint/sageTint #63605A on #C9BCE0 = 3.51 (needs 4.5:1)",
+    ]);
+  });
+
+  it("fails a dark orange tint too light for muted and faint text", () => {
+    expect(belowFloor(accentPairs(withPreset("orange", "dark", { sageTint: "#5A4430" })))).toEqual([
+      "dark orange muted/sageTint #A5A29C on #5A4430 = 3.58 (needs 4.5:1)",
+      "dark orange faint/sageTint #A09D97 on #5A4430 = 3.37 (needs 4.5:1)",
+    ]);
   });
 });

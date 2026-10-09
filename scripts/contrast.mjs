@@ -82,6 +82,22 @@ export function edgePairs(tokens) {
   return THEMES(tokens).flatMap(([theme, c]) => onGrounds(theme, c, "edge", NEUTRAL, 3));
 }
 
+// A preset replaces only the sage role, so each is measured on that role's pairs: its ink and the text on its tint at 4.5:1, its mark at 3:1.
+function sagePairs(label, c) {
+  return [
+    ...onGrounds(label, c, "sageInk", [...NEUTRAL, "sageTint"], 4.5),
+    ...TEXT.flatMap((ink) => onGrounds(label, c, ink, ["sageTint"], 4.5)),
+    ...onGrounds(label, c, "sage", NEUTRAL, 3),
+  ];
+}
+
+// Every accent preset, green included, in both themes (#221); green has no values of its own and measures the base palette.
+export function accentPairs(tokens) {
+  return Object.entries(tokens.accent).flatMap(([name, preset]) =>
+    [["light", "color"], ["dark", "dark"]].flatMap(([theme, key]) => sagePairs(`${theme} ${name}`, { ...tokens[key], ...preset[key] })),
+  );
+}
+
 export function belowFloor(pairs) {
   return pairs.filter(([fg, bg, , need]) => contrast(fg, bg) < need).map(([fg, bg, label, need]) => `${label} ${fg} on ${bg} = ${contrast(fg, bg).toFixed(2)} (needs ${need}:1)`);
 }
