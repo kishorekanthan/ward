@@ -2,10 +2,16 @@ import { readFileSync } from "node:fs";
 import type { ReactNode } from "react";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { act, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { AppShell } from "./AppShell";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { axe } from "jest-axe";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { AppShell, type AppShellRailItem } from "./AppShell";
+import s from "./AppShell.module.css";
+import sidebarStyles from "./Sidebar.module.css";
+import { AdminIcon, BoardIcon, HomeIcon, StudioIcon } from "./NavIcons";
+import { Sidebar } from "./Sidebar";
 import { stubMatchMedia } from "../test-setup";
+import { edge, injectModuleCss, leftBorders, ruleBody } from "../test-css";
 
 const sourceRoot = dirname(fileURLToPath(import.meta.url));
 const css = readFileSync(join(sourceRoot, "AppShell.module.css"), "utf8");
@@ -535,5 +541,246 @@ describe("AppShell Primary nav overflow", () => {
     expect(rule(".nav[data-fade-start][data-fade-end]")).toContain(
       "mask-image: linear-gradient(to right, transparent, currentColor 24px, currentColor calc(100% - 24px), transparent);",
     );
+  });
+});
+
+const railItems: AppShellRailItem[] = [
+  { id: "home", label: "Home", href: "#/", icon: <HomeIcon /> },
+  { id: "board", label: "Board", href: "#/board", icon: <BoardIcon />, current: true },
+  { id: "studio", label: "Studio", href: "#/studio", icon: <StudioIcon /> },
+  { id: "admin", label: "Admin", href: "#/admin", icon: <AdminIcon /> },
+  { id: "tracker", label: "Tracker", href: "#/tracker" },
+  { id: "data", label: "Data Engineering", href: "#/streams/data", streamStep: 1 },
+  { id: "integration", label: "Integration", href: "#/streams/integration", streamStep: 3 },
+];
+
+const foldShell = (withRail = true) => (
+  <AppShell sidebar={navLinks} header={<div>Claims</div>} iconRail={withRail ? railItems : undefined}>
+    <label>
+      Title <input />
+    </label>
+    <textarea aria-label="Notes" />
+    <select aria-label="Stage">
+      <option>Intake</option>
+    </select>
+    <div contentEditable aria-label="Comment" role="textbox" />
+  </AppShell>
+);
+
+const foldButton = () => screen.getByRole("button", { name: /sidebar$/ });
+const pressBracket = (target: Element = document.body, modifiers: Record<string, boolean> = {}) => fireEvent.keyDown(target, { key: "[", ...modifiers });
+const isCollapsed = () => screen.queryByRole("navigation", { name: "Sections" }) === null;
+
+describe("AppShell collapsible sidebar", () => {
+  const original = window.matchMedia;
+  beforeEach(() => {
+    window.localStorage.clear();
+    stubMatchMedia(false);
+  });
+  afterEach(() => {
+    window.matchMedia = original;
+    vi.restoreAllMocks();
+  });
+
+  it("opens expanded and collapses to the icon rail from the panel button, and back", () => {
+    const { container } = render(foldShell());
+    const button = foldButton();
+    expect([button.textContent, button.getAttribute("aria-expanded")]).toEqual(["Collapse sidebar", "true"]);
+    expect(screen.getByRole("navigation", { name: "Sections" })).not.toBeNull();
+
+    fireEvent.click(button);
+    expect([button.textContent, button.getAttribute("aria-expanded")]).toEqual(["Expand sidebar", "false"]);
+    expect(isCollapsed()).toBe(true);
+    expect(within(screen.getByRole("navigation", { name: "Menu" })).getAllByRole("link")).toHaveLength(7);
+    expect(container.firstElementChild?.getAttribute("data-collapsed")).toBe("true");
+
+    fireEvent.click(button);
+    expect([button.textContent, button.getAttribute("aria-expanded")]).toEqual(["Collapse sidebar", "true"]);
+    expect(screen.getByRole("navigation", { name: "Sections" })).not.toBeNull();
+    expect(screen.queryByRole("navigation", { name: "Menu" })).toBeNull();
+  });
+
+  it("toggles on [ and the button's state and label follow", () => {
+    render(foldShell());
+    pressBracket();
+    expect([foldButton().textContent, foldButton().getAttribute("aria-expanded")]).toEqual(["Expand sidebar", "false"]);
+    expect(isCollapsed()).toBe(true);
+    pressBracket(screen.getByRole("link", { name: "Home" }));
+    expect([foldButton().textContent, foldButton().getAttribute("aria-expanded")]).toEqual(["Collapse sidebar", "true"]);
+    expect(isCollapsed()).toBe(false);
+  });
+
+  it("ignores [ while typing in a field and when a modifier key is held", () => {
+    render(foldShell());
+    const fields = [screen.getByLabelText("Title"), screen.getByLabelText("Notes"), screen.getByLabelText("Stage"), screen.getByRole("textbox", { name: "Comment" })];
+    for (const field of fields) pressBracket(field);
+    for (const modifier of ["ctrlKey", "metaKey", "altKey", "shiftKey"]) pressBracket(document.body, { [modifier]: true });
+    expect(foldButton().getAttribute("aria-expanded")).toBe("true");
+    expect(isCollapsed()).toBe(false);
+  });
+
+  it("keeps the choice in one Ward key, so a remount opens it the same way", () => {
+    const first = render(foldShell());
+    fireEvent.click(foldButton());
+    expect(window.localStorage.getItem("ward:sidebar-collapsed")).toBe("true");
+    first.unmount();
+
+    const second = render(foldShell());
+    expect(foldButton().getAttribute("aria-expanded")).toBe("false");
+    expect(isCollapsed()).toBe(true);
+    pressBracket();
+    expect(window.localStorage.getItem("ward:sidebar-collapsed")).toBe("false");
+    second.unmount();
+
+    render(foldShell());
+    expect(foldButton().getAttribute("aria-expanded")).toBe("true");
+    expect(window.localStorage.length).toBe(1);
+  });
+
+  it("opens expanded and still toggles when storage throws on every read and write", () => {
+    const refuse = () => {
+      throw new DOMException("denied", "SecurityError");
+    };
+    const getItem = vi.spyOn(Storage.prototype, "getItem").mockImplementation(refuse);
+    const setItem = vi.spyOn(Storage.prototype, "setItem").mockImplementation(refuse);
+    render(foldShell());
+    expect(foldButton().getAttribute("aria-expanded")).toBe("true");
+    fireEvent.click(foldButton());
+    expect(foldButton().getAttribute("aria-expanded")).toBe("false");
+    pressBracket();
+    expect(foldButton().getAttribute("aria-expanded")).toBe("true");
+    expect(getItem).toHaveBeenCalled();
+    expect(setItem).toHaveBeenCalledTimes(2);
+  });
+
+  it("draws no panel button and ignores [ without an icon rail, as before", () => {
+    window.localStorage.setItem("ward:sidebar-collapsed", "true");
+    const { container } = render(foldShell(false));
+    expect(screen.queryByRole("button", { name: /sidebar$/ })).toBeNull();
+    pressBracket();
+    expect(isCollapsed()).toBe(false);
+    expect(container.firstElementChild?.getAttribute("data-collapsed")).toBe("false");
+  });
+
+  it("leaves the narrow drawer as it was: no panel button, no [ and the whole sidebar in the drawer", () => {
+    window.localStorage.setItem("ward:sidebar-collapsed", "true");
+    stubMatchMedia(true);
+    render(foldShell());
+    expect(screen.queryByRole("button", { name: /sidebar$/ })).toBeNull();
+    pressBracket();
+    fireEvent.click(screen.getByRole("button", { name: "Menu" }));
+    expect(within(screen.getByRole("dialog", { name: "Menu" })).getByRole("navigation", { name: "Sections" })).not.toBeNull();
+    expect(screen.queryByRole("link", { name: "Admin" })).toBeNull();
+  });
+
+  it("marks each collapsed item with its icon, its stream's colour square or its first letter", () => {
+    window.localStorage.setItem("ward:sidebar-collapsed", "true");
+    render(foldShell());
+    const rail = screen.getByRole("navigation", { name: "Menu" });
+    const marks = within(rail).getAllByRole("link").map((link) => {
+      const mark = link.firstElementChild as HTMLElement;
+      return [mark.getAttribute("aria-hidden"), mark.querySelector("svg") !== null, mark.style.getPropertyValue("--dot"), mark.textContent];
+    });
+    expect(marks).toEqual([
+      ["true", true, "", ""],
+      ["true", true, "", ""],
+      ["true", true, "", ""],
+      ["true", true, "", ""],
+      ["true", false, "", "T"],
+      ["true", false, "var(--ward-stream-1-id)", ""],
+      ["true", false, "var(--ward-stream-3-id)", ""],
+    ]);
+    expect(within(rail).getByRole("link", { name: "Board" }).getAttribute("aria-current")).toBe("page");
+  });
+});
+
+describe("AppShell collapsed sidebar accessibility", () => {
+  beforeEach(() => {
+    window.localStorage.setItem("ward:sidebar-collapsed", "true");
+    stubMatchMedia(false);
+  });
+  afterEach(() => {
+    window.localStorage.clear();
+  });
+
+  it("gives every collapsed item an accessible name and a tooltip with that name", () => {
+    render(foldShell());
+    const rail = screen.getByRole("navigation", { name: "Menu" });
+    const labels = ["Home", "Board", "Studio", "Admin", "Tracker", "Data Engineering", "Integration"];
+    expect(within(rail).getAllByRole("link")).toHaveLength(labels.length);
+    for (const label of labels) expect(within(rail).getByRole("link", { name: label }).getAttribute("title")).toBe(label);
+  });
+
+  it("has no axe violations collapsed or expanded", async () => {
+    const { container } = render(foldShell());
+    expect((await axe(container)).violations).toEqual([]);
+    fireEvent.click(foldButton());
+    expect((await axe(container)).violations).toEqual([]);
+  });
+});
+
+const shellCss = "src/layout/AppShell.module.css";
+const sidebarCss = "src/layout/Sidebar.module.css";
+
+describe("floating sidebar surface", () => {
+  it("floats 10px in from the window edge with a ring on four sides, never a one-side rule", () => {
+    const declarations = rule(".side").split("{")[1].split(";").map((d) => d.trim()).filter(Boolean);
+    expect(declarations).toEqual([
+      "display: flex",
+      "flex-direction: column",
+      "min-height: 0",
+      "margin: 10px 0 10px 10px",
+      "overflow-y: auto",
+      "border-radius: 8px",
+      "background: #FFFFFF",
+      "box-shadow: 0 0 0 1px #EDEDEB",
+    ]);
+  });
+
+  it("draws the nav icons as 18px outlines at a 1.7 stroke in the text's own colour", () => {
+    expect(ruleBody("src/layout/NavIcons.module.css", ".icon")).toBe(
+      "flex: none;\nwidth: var(--ward-height-navIcon);\nheight: var(--ward-height-navIcon);\nfill: none;\nstroke: currentColor;\nstroke-width: 1.7",
+    );
+    expect(resolved("var(--ward-height-navIcon)")).toBe("18px");
+  });
+
+  it("collapses the sidebar track to 60px, with and without the right rail", () => {
+    expect(rule('.app[data-collapsed="true"]')).toContain("grid-template-columns: 60px 1fr 316px;");
+    expect(rule('.app[data-collapsed="true"][data-rail="false"]')).toContain("grid-template-columns: 60px 1fr;");
+  });
+
+  it("marks the current item with the accent tint and ink alone, no edge or stripe", () => {
+    expect(ruleBody(shellCss, ".railItem:hover")).toBe("background: var(--ward-color-accentTint);\ncolor: var(--ward-color-text)");
+    expect(ruleBody(shellCss, '.railItem[aria-current="page"]')).toBe("background: var(--ward-color-sageTint);\ncolor: var(--ward-color-sageInk)");
+    expect(ruleBody(sidebarCss, '.navItem[aria-current="page"]')).toBe("background: var(--ward-color-sageTint);\ncolor: var(--ward-color-sageInk)");
+    expect(ruleBody(sidebarCss, '.agent[aria-current="page"],\n.root nav a[aria-current="page"]')).toBe("background: var(--ward-color-sageTint)");
+    expect(ruleBody(sidebarCss, '.root nav a[aria-current="page"] .label')).toBe("font: var(--ward-type-agentActive);\ncolor: var(--ward-color-sageInk)");
+    expect(leftBorders(sidebarCss)).toEqual([]);
+    expect(leftBorders(shellCss)).toEqual(["border-left: var(--ward-border) solid var(--ward-color-line)", "border-left: none"]);
+  });
+
+  it("renders the current rail item and the panel with no stripe, whatever rule draws them", () => {
+    window.localStorage.setItem("ward:sidebar-collapsed", "true");
+    stubMatchMedia(false);
+    const removeCss = injectModuleCss(shellCss, s);
+    const { container } = render(foldShell());
+    const current = edge(screen.getByRole("link", { name: "Board" }));
+    const other = edge(screen.getByRole("link", { name: "Home" }));
+    const panel = edge(container.querySelector("[data-ward-shell-side]") as Element);
+    removeCss();
+    window.localStorage.clear();
+    expect(current).toEqual({ shadow: "", ground: "var(--ward-color-sagetint)" });
+    expect(other).toEqual({ shadow: "", ground: "" });
+    expect(panel).toEqual({ shadow: "0 0 0 var(--ward-border) var(--ward-color-line)", ground: "var(--ward-color-surface)" });
+  });
+
+  it("lets a destination list fill the floating panel with no right rule of its own", () => {
+    stubMatchMedia(false);
+    const removeCss = injectModuleCss(sidebarCss, sidebarStyles);
+    const { container } = render(<AppShell sidebar={<Sidebar label="Streams" destinations={[{ id: "a", label: "A", href: "#/a" }]} active="a" />}>page</AppShell>);
+    const list = getComputedStyle(container.querySelector("[data-ward-sidebar]") as Element);
+    const style = { width: list.width, right: list.borderRightWidth || list.getPropertyValue("border-right") };
+    removeCss();
+    expect(style).toEqual({ width: "auto", right: "0px" });
   });
 });

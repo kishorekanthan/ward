@@ -304,6 +304,7 @@ export declare const v: {
         readonly configSub: "var(--ward-gap-configSub)";
         readonly skeleton: "var(--ward-gap-skeleton)";
         readonly effects: "var(--ward-gap-effects)";
+        readonly sideInset: "var(--ward-gap-sideInset)";
     };
     readonly width: {
         readonly max: "var(--ward-width-max)";
@@ -357,6 +358,7 @@ export declare const v: {
         readonly streamEdge: "var(--ward-width-streamEdge)";
         readonly streamKey: "var(--ward-width-streamKey)";
         readonly colourPick: "var(--ward-width-colourPick)";
+        readonly iconRail: "var(--ward-width-iconRail)";
     };
     readonly height: {
         readonly control: "var(--ward-height-control)";
@@ -381,6 +383,7 @@ export declare const v: {
         readonly radio: "var(--ward-height-radio)";
         readonly skeletonBar: "var(--ward-height-skeletonBar)";
         readonly target: "var(--ward-height-target)";
+        readonly navIcon: "var(--ward-height-navIcon)";
     };
     readonly size: {
         readonly marker6: "var(--ward-size-marker6)";

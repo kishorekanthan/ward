@@ -128,6 +128,7 @@
 
 .agent[aria-current="page"] .agentName {
   font: var(--ward-type-agentActive);
+  color: var(--ward-color-sageInk);
 }
 
 .agent[data-paused="true"] .agentName {
@@ -213,6 +214,13 @@
 
 .root nav a[aria-current="page"] .label {
   font: var(--ward-type-agentActive);
+  color: var(--ward-color-sageInk);
+}
+
+/* In AppShell's floating panel the panel is the column: the list fills it and draws no rule of its own. */
+[data-ward-shell-side] .root {
+  width: auto;
+  border-right: 0;
 }
 
 .footer {

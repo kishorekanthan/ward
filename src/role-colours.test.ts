@@ -23,6 +23,10 @@ const ROLE_USES: Record<Reason, string[]> = {
     "layout/Sidebar.module.css .navItem[aria-current=\"page\"] sageTint",
     "layout/Sidebar.module.css .navItem[aria-current=\"page\"] sageInk",
     "layout/Sidebar.module.css .agent[aria-current=\"page\"], .root nav a[aria-current=\"page\"] sageTint",
+    "layout/Sidebar.module.css .agent[aria-current=\"page\"] .agentName sageInk",
+    "layout/Sidebar.module.css .root nav a[aria-current=\"page\"] .label sageInk",
+    "layout/AppShell.module.css .railItem[aria-current=\"page\"] sageTint",
+    "layout/AppShell.module.css .railItem[aria-current=\"page\"] sageInk",
   ],
   owed: ["primitives/Marker.tsx owed: \"var(--ward-color-peach)\", peach"],
 };

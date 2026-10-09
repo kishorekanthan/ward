@@ -307,6 +307,7 @@ export const v = {
     configSub: 'var(--ward-gap-configSub)',
     skeleton: 'var(--ward-gap-skeleton)',
     effects: 'var(--ward-gap-effects)',
+    sideInset: 'var(--ward-gap-sideInset)',
   },
   width: {
     max: 'var(--ward-width-max)',
@@ -360,6 +361,7 @@ export const v = {
     streamEdge: 'var(--ward-width-streamEdge)',
     streamKey: 'var(--ward-width-streamKey)',
     colourPick: 'var(--ward-width-colourPick)',
+    iconRail: 'var(--ward-width-iconRail)',
   },
   height: {
     control: 'var(--ward-height-control)',
@@ -384,6 +386,7 @@ export const v = {
     radio: 'var(--ward-height-radio)',
     skeletonBar: 'var(--ward-height-skeletonBar)',
     target: 'var(--ward-height-target)',
+    navIcon: 'var(--ward-height-navIcon)',
   },
   size: {
     marker6: 'var(--ward-size-marker6)',
