@@ -1,29 +1,31 @@
-/* Provenance: design/Trellis Studio.dc.html block 4b card — padding 11px, gap 8px, 1px line inset, min-height 96px, no stream stripe; drift 2px #BF5310, selected 2px blue (Board Item 8a). */
+/* Provenance: design/Trellis Studio.dc.html block 4b card — gap 8px, min-height 96px, no stream stripe; drift 2px #BF5310, selected 2px blue (Board Item 8a).
+   Soft surface (#217, ward-look .dD card): padding 10px 12px, radius 11px, card shadow and no border. */
 .card {
   position: relative;
   display: grid;
   align-content: start;
   gap: var(--ward-gap-row);
   min-height: var(--ward-height-card);
-  padding: var(--ward-pad-workCard);
+  padding: var(--ward-pad-card);
   overflow: hidden;
   border-radius: var(--ward-radius-card);
   background: var(--ward-color-surface);
-  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
-  transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
+  box-shadow: var(--ward-shadow-card);
+  transition: box-shadow var(--ward-motion-fast), opacity var(--ward-motion-fast);
 }
 
-/* The whole card is the target, so its whole ground answers the pointer. */
+/* The whole card is the target: a hairline ring on all four sides and the hover ground answer the pointer. */
 .card:hover {
-  background: var(--ward-color-surface2);
+  background: var(--ward-color-hover);
+  box-shadow: 0 0 0 var(--ward-border) var(--ward-color-line2), var(--ward-shadow-card);
 }
 
 .card[data-selected="true"] {
-  box-shadow: inset 0 0 0 var(--ward-underline) var(--ward-color-ink2);
+  box-shadow: inset 0 0 0 var(--ward-underline) var(--ward-color-ink2), var(--ward-shadow-card);
 }
 
 .card[data-flagged="true"] {
-  box-shadow: inset 0 0 0 var(--ward-underline) var(--ward-color-waiting);
+  box-shadow: inset 0 0 0 var(--ward-underline) var(--ward-color-waiting), var(--ward-shadow-card);
 }
 
 .hit {

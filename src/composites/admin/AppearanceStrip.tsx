@@ -98,7 +98,11 @@ function RailSection({ label, children }: { label: string; children: ReactNode }
 
 function BoardCardPreview({ sample, sampleEmpty, draft, onOpen }: Omit<AppearanceStripProps, "draft"> & { draft: AppearanceIdentity }): ReactElement {
   if (sample === undefined) return <p className={s.note}>{sampleEmpty ?? SAMPLE_EMPTY}</p>;
-  return <WorkCard item={{ ...sample, streamStep: validatedStep(draft.streamStep) }} onOpen={keyOnly(onOpen)} feed={null} />;
+  return (
+    <div className={s.well}>
+      <WorkCard item={{ ...sample, streamStep: validatedStep(draft.streamStep) }} onOpen={keyOnly(onOpen)} feed={null} />
+    </div>
+  );
 }
 
 function IndexRowPreview({ draft }: { draft: AppearanceIdentity }): ReactElement {
@@ -143,7 +147,11 @@ function CompactAppearance({ draft, sample, streams, onOpen }: AppearanceStripPr
         <span className={s.name}>{draft.name}</span>
         <Chip {...streamChipProps(draft.key, draft.streamStep)} />
       </div>
-      {sample === undefined ? null : <WorkCard item={{ ...sample, streamStep: draft.streamStep }} onOpen={keyOnly(onOpen)} />}
+      {sample === undefined ? null : (
+        <div className={s.well}>
+          <WorkCard item={{ ...sample, streamStep: draft.streamStep }} onOpen={keyOnly(onOpen)} />
+        </div>
+      )}
       <CompactChart draft={draft} streams={streams} />
     </section>
   );

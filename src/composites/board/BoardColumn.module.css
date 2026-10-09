@@ -1,20 +1,17 @@
-/* Provenance: design/Trellis Studio.dc.html block 4b — column padding 13px 12px, gap 10px, 1px right rule, no ground; gate column #F0F5FF. */
-/* The last column's rule is drawn by the scroller edge, so it drops its own. */
+/* Provenance: design/Trellis Studio.dc.html block 4b — column padding 13px 12px, gap 10px.
+   Soft surface (#217, ward-look .dD lane): a tinted panel, radius 14px, no column rule; a gate lane takes the waiting tint. */
 .column {
   display: grid;
   align-content: start;
   gap: var(--ward-gap-boardColumn);
   min-width: var(--ward-width-stageColumn);
   padding: var(--ward-pad-boardColumn);
-  border-right: var(--ward-border) solid var(--ward-color-line);
-}
-
-.column:last-child {
-  border-right: none;
+  border-radius: var(--ward-radius-panel);
+  background: var(--ward-color-laneTint);
 }
 
 .column[data-gate="true"] {
-  background: var(--ward-color-selected);
+  background: var(--ward-color-gateLaneTint);
 }
 
 .column[data-overcap="true"] {

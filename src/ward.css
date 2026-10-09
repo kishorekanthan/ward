@@ -114,6 +114,9 @@
   --ward-color-chartBar: #508ACB;
   --ward-color-chartLine: #4689D7;
   --ward-color-chartIdeal: #8A867E;
+  --ward-color-laneTint: #EEF1EC;
+  --ward-color-gateLaneTint: #FBF3DF;
+  --ward-color-hover: #F6F6F3;
   --ward-color-blue: #2D5A86;
   --ward-color-blueSoft: #F3F3F1;
   --ward-color-accentPill: #C9E2D2;
@@ -234,6 +237,7 @@
   --ward-pad-boardHead: 16px 20px 12px;
   --ward-pad-boardColumn: 13px 12px;
   --ward-pad-workCard: 11px;
+  --ward-pad-card: 10px 12px;
   --ward-pad-ladderTile: 11px;
   --ward-pad-trace: 7px 0;
   --ward-pad-metricCell: 12px 14px;
@@ -316,6 +320,7 @@
   --ward-gap-sidebarAgent: 5px;
   --ward-gap-sidebarDot: 7px;
   --ward-gap-boardColumn: 10px;
+  --ward-gap-lane: 12px;
   --ward-gap-drawerBlock: 9px;
   --ward-gap-resolveList: 12px;
   --ward-gap-entryBody: 4px;
@@ -426,12 +431,14 @@
   --ward-size-marker14: 14px;
   --ward-radius: 6px;
   --ward-radius-chip: 4px;
-  --ward-radius-card: 8px;
+  --ward-radius-card: 11px;
+  --ward-radius-panel: 14px;
   --ward-border: 1px;
   --ward-underline: 2px;
   --ward-focus-offset: 1px;
   --ward-focus-ring: 2px;
   --ward-shadow-overlay: 0 24px 64px rgba(25,25,24,0.30);
+  --ward-shadow-card: 0 1px 2px rgba(25,25,24,0.05), 0 3px 10px rgba(25,25,24,0.05);
   --ward-type-h1: 600 18px/1.2 Figtree, system-ui, sans-serif;
   --ward-type-h1-tracking: -0.2px;
   --ward-type-title: 500 15px/1.3 Figtree, system-ui, sans-serif;
@@ -597,6 +604,9 @@
   --ward-color-chartBar: #74A2D6;
   --ward-color-chartLine: #A7C7EC;
   --ward-color-chartIdeal: #7A7973;
+  --ward-color-laneTint: #20251F;
+  --ward-color-gateLaneTint: #2C271A;
+  --ward-color-hover: #191917;
   --ward-color-blue: #9CBDDE;
   --ward-color-blueSoft: #262626;
   --ward-color-accentPill: #213B2B;
@@ -666,6 +676,7 @@
   --ward-stream-4-id: #1C6FB8;
   --ward-stream-5-id: #8A6A00;
   --ward-stream-6-id: #A02C6B;
+  --ward-shadow-card: 0 1px 2px rgba(0,0,0,0.45);
 }
 
 [data-theme="light"] {
@@ -718,6 +729,9 @@
   --ward-color-chartBar: #508ACB;
   --ward-color-chartLine: #4689D7;
   --ward-color-chartIdeal: #8A867E;
+  --ward-color-laneTint: #EEF1EC;
+  --ward-color-gateLaneTint: #FBF3DF;
+  --ward-color-hover: #F6F6F3;
   --ward-color-blue: #2D5A86;
   --ward-color-blueSoft: #F3F3F1;
   --ward-color-accentPill: #C9E2D2;
@@ -793,6 +807,7 @@
   --ward-stream-6-id: #A02C6B;
   --ward-stream-6-chip: #A02C6B;
   --ward-stream-6-chipText: #FFFFFF;
+  --ward-shadow-card: 0 1px 2px rgba(25,25,24,0.05), 0 3px 10px rgba(25,25,24,0.05);
 }
 
 *, *::before, *::after {

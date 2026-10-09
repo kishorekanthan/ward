@@ -25,7 +25,7 @@
 }
 
 /* A linked cell is one link holding value and label, at least a touch target tall; the lines stay where they were.
-   Its edged, rounded card bleeds past the cell by its own padding, and its whole ground answers the pointer. */
+   Its soft, rounded card (#217) bleeds past the cell by its own padding; a hairline ring and the hover ground answer the pointer. */
 .link {
   display: grid;
   gap: var(--ward-space-1);
@@ -34,14 +34,16 @@
   padding: var(--ward-space-2);
   margin: calc(-1 * var(--ward-space-2));
   border-radius: var(--ward-radius-card);
-  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+  background: var(--ward-color-surface);
+  box-shadow: var(--ward-shadow-card);
   color: inherit;
   font-weight: inherit;
   text-decoration: none;
 }
 
 .link:hover {
-  background: var(--ward-color-surface2);
+  background: var(--ward-color-hover);
+  box-shadow: 0 0 0 var(--ward-border) var(--ward-color-line2), var(--ward-shadow-card);
 }
 
 .link:hover .label {
