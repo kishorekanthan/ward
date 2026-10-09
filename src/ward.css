@@ -352,6 +352,7 @@
   --ward-gap-configSub: 4px;
   --ward-gap-skeleton: 5px;
   --ward-gap-effects: 9px;
+  --ward-gap-sideInset: 10px;
   --ward-width-max: 1240px;
   --ward-width-drawer: 430px;
   --ward-width-dryrun: 316px;
@@ -403,6 +404,7 @@
   --ward-width-streamEdge: 20px;
   --ward-width-streamKey: 110px;
   --ward-width-colourPick: 150px;
+  --ward-width-iconRail: 60px;
   --ward-height-control: 30px;
   --ward-height-controlSm: 26px;
   --ward-height-card: 96px;
@@ -425,6 +427,7 @@
   --ward-height-radio: 13px;
   --ward-height-skeletonBar: 12px;
   --ward-height-target: 24px;
+  --ward-height-navIcon: 18px;
   --ward-size-marker6: 6px;
   --ward-size-marker8: 8px;
   --ward-size-marker9: 9px;

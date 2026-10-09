@@ -1,17 +1,25 @@
-import { useId, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode, type RefObject } from "react";
+import { useId, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode, type RefObject } from "react";
 import s from "./AppShell.module.css";
+import { stream, type StreamStep } from "../tokens";
 import { Btn } from "../primitives/Btn";
 import { Overlay } from "../primitives/Overlay";
 import { safeHref } from "../primitives/safeHref";
 import { useRevealActive } from "../primitives/useRevealActive";
 import { useEdgeFades } from "./useEdgeFades";
 import { useMediaQuery } from "./useMediaQuery";
+import { PanelIcon } from "./NavIcons";
+import { useSidebarCollapse } from "./useSidebarCollapse";
 
 export type AppShellDestination = {
   id: string;
   label: string;
   href: string;
+  /** Marks the item in the collapsed sidebar, such as HomeIcon; the top bar ignores it. */
+  icon?: ReactNode;
 };
+
+/** One item of the collapsed sidebar: its icon, else its stream's colour square, else its first letter. */
+export type AppShellRailItem = AppShellDestination & { streamStep?: StreamStep; current?: boolean };
 
 export type StudioShellProps = {
   /** The 236px left column; the consumer supplies its landmark. */
@@ -21,8 +29,10 @@ export type StudioShellProps = {
   children: ReactNode;
   /** The 316px right column; omitted or null draws no third track. */
   rail?: ReactNode;
-  /** Below 792px the sidebar folds into a drawer: this labels its toggle and titles it. */
+  /** Below 792px the sidebar folds into a drawer: this labels its toggle and titles it, and names the collapsed rail. */
   sidebarLabel?: string;
+  /** Given, a panel button at the top of the sidebar collapses it to a 60px rail of these items; each viewer's choice is kept. */
+  iconRail?: AppShellRailItem[];
 };
 
 export type TopBarShellProps = {
@@ -82,13 +92,68 @@ function SidebarDrawerPanel({ sidebar, label, drawer }: { sidebar: ReactNode; la
   );
 }
 
-function StudioShell({ sidebar, header, children, rail, sidebarLabel }: StudioShellProps) {
+type SidebarFold = { enabled: boolean; collapsed: boolean; toggle: () => void };
+
+// The collapse is for the wide layout only: below 792px the drawer shows the whole sidebar.
+function useSidebarFold(iconRail: AppShellRailItem[] | undefined, narrow: boolean): SidebarFold {
+  const enabled = iconRail !== undefined && !narrow;
+  const { collapsed, toggle } = useSidebarCollapse(enabled);
+  return { enabled, collapsed: enabled && collapsed, toggle };
+}
+
+function FoldToggle({ fold }: { fold: SidebarFold }) {
+  if (!fold.enabled) return null;
+  return (
+    <div className={s.sideTop}>
+      <Btn variant="ghost" size="sm" onClick={fold.toggle} expanded={!fold.collapsed}>
+        <PanelIcon />
+        <span className="ward-visually-hidden">{fold.collapsed ? "Expand sidebar" : "Collapse sidebar"}</span>
+      </Btn>
+    </div>
+  );
+}
+
+function RailMark({ item }: { item: AppShellRailItem }) {
+  if (item.icon !== undefined) return <span className={s.railIcon} aria-hidden="true">{item.icon}</span>;
+  if (item.streamStep !== undefined) return <span className={s.railDot} aria-hidden="true" style={{ "--dot": stream(item.streamStep).id } as CSSProperties} />;
+  return <span className={s.railLetter} aria-hidden="true">{item.label.charAt(0)}</span>;
+}
+
+// Ward has no tooltip primitive, so the title is the tooltip and the hidden label the accessible name.
+function IconRail({ items, label }: { items: AppShellRailItem[]; label: string }) {
+  return (
+    <nav className={s.iconRail} aria-label={label}>
+      {items.map((item) => (
+        <a key={item.id} className={s.railItem} href={safeHref(item.href)} title={item.label} aria-current={item.current === true ? "page" : undefined}>
+          <RailMark item={item} />
+          <span className="ward-visually-hidden">{item.label}</span>
+        </a>
+      ))}
+    </nav>
+  );
+}
+
+// The sidebar stays mounted while collapsed, so its own state (open groups, a search) survives the round trip.
+function SidePanel({ sidebar, label, iconRail, fold }: { sidebar: ReactNode; label: string; iconRail?: AppShellRailItem[]; fold: SidebarFold }) {
+  return (
+    <div className={s.side} data-ward-shell-side="">
+      <FoldToggle fold={fold} />
+      <div className={s.sideBody} hidden={fold.collapsed}>
+        {sidebar}
+      </div>
+      {fold.collapsed && <IconRail items={iconRail ?? []} label={label} />}
+    </div>
+  );
+}
+
+function StudioShell({ sidebar, header, children, rail, sidebarLabel, iconRail }: StudioShellProps) {
   const hasRail = rail !== undefined && rail !== null;
   const drawer = useSidebarDrawer();
+  const fold = useSidebarFold(iconRail, drawer.narrow);
   const label = sidebarLabel ?? "Menu";
   return (
-    <div className={s.app} data-rail={String(hasRail)}>
-      {!drawer.narrow && <div className={s.side}>{sidebar}</div>}
+    <div className={s.app} data-rail={String(hasRail)} data-collapsed={String(fold.collapsed)}>
+      {!drawer.narrow && <SidePanel sidebar={sidebar} label={label} iconRail={iconRail} fold={fold} />}
       <main className={s.main}>
         <StudioHeader header={header} label={label} drawer={drawer} />
         <div className={s.page}>{children}</div>

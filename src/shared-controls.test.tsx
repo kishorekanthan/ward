@@ -143,7 +143,7 @@ function currentRules(): Array<[string, string]> {
 describe("the current destination is a filled pill", () => {
   it("fills every current TopBar, Tabs, AppShell and Sidebar destination with the sage tint and draws no underline bar", () => {
     const rules = currentRules();
-    expect(rules).toHaveLength(6);
+    expect(rules).toHaveLength(7);
     expect(rules.filter(([, body]) => !body.includes("background: var(--ward-color-sageTint)")).map(([where]) => where)).toEqual([]);
     expect(rules.filter(([, body]) => /box-shadow|border(?!-radius)|text-decoration/.test(body)).map(([where]) => where)).toEqual([]);
   });

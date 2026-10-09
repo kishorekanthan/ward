@@ -1,7 +1,10 @@
+import type { ComponentType, ReactNode } from "react";
 import { bothThemes } from "../../.storybook/bothThemes";
 import { fullPage } from "../../.storybook/fullPage";
-import { AppShell } from "./AppShell";
-import { Sidebar } from "./Sidebar";
+import { AppShell, type AppShellRailItem } from "./AppShell";
+import { BoardIcon, HomeIcon, StudioIcon } from "./NavIcons";
+import { Sidebar, type SidebarAgent } from "./Sidebar";
+import { SIDEBAR_COLLAPSED_KEY } from "./useSidebarCollapse";
 import { Btn } from "../primitives/Btn";
 import { SegmentedControl } from "../primitives/SegmentedControl";
 
@@ -97,4 +100,62 @@ export const StudioFullPage = {
     rail,
     children: Array.from({ length: 60 }, (_, i) => <p key={i}>Paragraph {i + 1} of the centre column, long enough that the page body has to scroll.</p>),
   },
+};
+
+// Three destinations: the Studio sidebar's pill row fits three across the floating panel.
+const studioNav = [
+  { label: "Home", href: "#/" },
+  { label: "Board", href: "#/board", current: true },
+  { label: "Studio", href: "#/studio" },
+];
+
+const studioAgents: SidebarAgent[] = [
+  { label: "Data Engineering", href: "#/streams/data", meta: "18 in flight", streamStep: 1 },
+  { label: "Integration", href: "#/streams/integration", meta: "6 in flight", streamStep: 3 },
+  { label: "UI and UX", href: "#/streams/ui", meta: "4 in flight", streamStep: 2 },
+];
+
+const iconRail: AppShellRailItem[] = [
+  { id: "home", label: "Home", href: "#/", icon: <HomeIcon /> },
+  { id: "board", label: "Board", href: "#/board", icon: <BoardIcon />, current: true },
+  { id: "studio", label: "Studio", href: "#/studio", icon: <StudioIcon /> },
+  ...studioAgents.map((agent) => ({ id: agent.href, label: agent.label, href: agent.href, streamStep: agent.streamStep })),
+];
+
+const floatingArgs = {
+  sidebar: <Sidebar brand="Trellis" nav={studioNav} agentsHeading="Streams" agents={studioAgents} />,
+  iconRail,
+  header,
+  children: <p>Choose a stream to see its work.</p>,
+};
+
+// The viewer's choice lives in storage, so each story sets it before the shell reads it on mount.
+function storedFold(collapsed: boolean) {
+  return function StoredFold(Story: ComponentType): ReactNode {
+    try {
+      window.localStorage.setItem(SIDEBAR_COLLAPSED_KEY, String(collapsed));
+    } catch {
+      // A story without storage opens expanded.
+    }
+    return <Story />;
+  };
+}
+
+// The floating panel with its labels; the panel button at the top, or `[`, collapses it.
+export const SidebarExpanded = {
+  decorators: [bothThemes, storedFold(false)],
+  args: floatingArgs,
+};
+
+// The 60px icon rail: each item keeps its name as a tooltip, and streams show their colour square.
+export const SidebarCollapsed = {
+  decorators: [bothThemes, storedFold(true)],
+  args: floatingArgs,
+};
+
+// Below 792px the collapse does not apply: the Menu toggle opens the whole sidebar in a drawer.
+export const SidebarNarrow = {
+  decorators: [bothThemes, storedFold(true)],
+  args: floatingArgs,
+  parameters: { viewport: { defaultViewport: "mobile1" } },
 };

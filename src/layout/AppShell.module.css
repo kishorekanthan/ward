@@ -16,14 +16,97 @@
   grid-template-columns: var(--ward-width-sidebar) 1fr;
 }
 
-/* Real borders, as the comp declares; border-box keeps them inside the 236/316 tracks. */
+/* Collapsed, the sidebar track narrows to the 60px icon rail; the page takes the width it gives up. */
+.app[data-collapsed="true"] {
+  grid-template-columns: var(--ward-width-iconRail) 1fr var(--ward-width-rail);
+}
+
+.app[data-collapsed="true"][data-rail="false"] {
+  grid-template-columns: var(--ward-width-iconRail) 1fr;
+}
+
+/* A floating panel inset from the window edge (the .dD look): a hairline ring on all four sides, never a one-side rule. */
+/* radiusCard and the line ring stand in for the panel radius and card shadow, which Ward does not have yet. */
 .side {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  margin: var(--ward-gap-sideInset) 0 var(--ward-gap-sideInset) var(--ward-gap-sideInset);
   overflow-y: auto;
+  scroll-padding-block: calc(var(--ward-focus-ring) + var(--ward-focus-offset));
+  border-radius: var(--ward-radius-card);
   background: var(--ward-color-surface);
-  border-right: var(--ward-border) solid var(--ward-color-line);
+  box-shadow: 0 0 0 var(--ward-border) var(--ward-color-line);
+}
+
+.sideTop {
+  --ward-btn-ghost-ink: var(--ward-color-muted);
+
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--ward-space-2) var(--ward-space-2) 0;
+}
+
+.app[data-collapsed="true"] .sideTop {
+  justify-content: center;
+  padding-inline: 0;
+}
+
+/* The panel scrolls, so full-width rows need a ring-wide gutter to show their whole focus ring. */
+.sideBody {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: calc(var(--ward-focus-ring) + var(--ward-focus-offset));
+}
+
+.sideBody[hidden] {
+  display: none;
+}
+
+.iconRail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ward-space-1);
+  padding: var(--ward-space-2) var(--ward-space-1);
+}
+
+/* The current item is the filled tint in the accent ink, with no edge bar. */
+.railItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ward-height-control);
+  height: var(--ward-height-control);
+  border-radius: var(--ward-radius);
+  color: var(--ward-color-muted);
+  text-decoration: none;
+}
+
+.railItem:hover {
+  background: var(--ward-color-accentTint);
+  color: var(--ward-color-text);
+}
+
+.railItem[aria-current="page"] {
+  background: var(--ward-color-sageTint);
+  color: var(--ward-color-sageInk);
+}
+
+.railIcon {
+  display: flex;
+}
+
+/* The hue is the stream's identity, as the Sidebar's agent dot. */
+.railDot {
+  width: var(--ward-height-agentDot);
+  height: var(--ward-height-agentDot);
+  background: var(--dot);
+}
+
+.railLetter {
+  font: var(--ward-type-control);
 }
 
 /* min-width: 0 is the comp's own; it stops a long unbroken string widening the 1fr track. */
@@ -95,7 +178,9 @@
 
   /* Only drawn before script runs; the drawer then takes the sidebar out of the grid. */
   .side {
-    border-right: none;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
     border-bottom: var(--ward-border) solid var(--ward-color-line);
   }
 

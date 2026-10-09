@@ -1,0 +1,9 @@
+/* Provenance: mirrors trellis arch-review/ward-look-2026-10-09.html — `.nav svg` (18px square, 1.7 stroke in the ink colour, no fill). */
+.icon {
+  flex: none;
+  width: var(--ward-height-navIcon);
+  height: var(--ward-height-navIcon);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+}
