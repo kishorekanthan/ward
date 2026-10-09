@@ -29,7 +29,7 @@ function Sample({ title }: { title: string }) {
     <>
       <p style={{ font: v.type.title }}>{title}</p>
       <Tabs tabs={tabs} active="board" onChange={() => {}} label={`${title} tabs`} />
-      <div style={{ display: "flex", gap: v.space.s2, alignItems: "center" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: v.space.s2, alignItems: "center" }}>
         <Btn variant="primary">Save changes</Btn>
         <Chip role="owed" label="Owed to you" />
         <Chip role="done" label="Done" />
@@ -41,7 +41,7 @@ function Sample({ title }: { title: string }) {
 
 function Presets() {
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: v.space.s3 }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: v.space.s3 }}>
       {ACCENT_PRESETS.flatMap(({ name, label }) =>
         (["light", "dark"] as const).map((theme) => (
           <section key={`${name}-${theme}`} data-theme={theme} data-accent={name} style={panel}>
@@ -90,7 +90,7 @@ function DensityPanel({ name, label }: { name: string; label: string }): ReactNo
 
 function DensityPair() {
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: v.space.s5 }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))", gap: v.space.s5 }}>
       {DENSITIES.map(({ name, label }) => (
         <DensityPanel key={name} name={name} label={label} />
       ))}
