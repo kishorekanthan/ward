@@ -35,8 +35,12 @@
   border-bottom: 0;
 }
 
+/* The previewed card sits on a lane's tint, as on the board, since its shadow alone does not lift it off the rail. */
 .card {
   display: grid;
+  padding: var(--ward-pad-boardColumn);
+  border-radius: var(--ward-radius-panel);
+  background: var(--ward-color-laneTint);
 }
 
 .strip {

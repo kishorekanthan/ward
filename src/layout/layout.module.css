@@ -162,23 +162,23 @@
   margin-left: auto;
 }
 
-/* Lanes share the width down to the narrowest drawn column (3c), then scroll; 4b draws them sharing it. */
+/* Lanes share the width less their gaps down to the narrowest drawn column (3c), then scroll; 4b draws them sharing it. */
 .scroller {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(clamp(var(--ward-width-stageColumn), 100% / var(--ward-board-lanes, 1), var(--ward-width-colFloor)), 1fr);
-  gap: 0;
+  grid-auto-columns: minmax(clamp(var(--ward-width-stageColumn), (100% - (var(--ward-board-lanes, 1) - 1) * var(--ward-gap-lane)) / var(--ward-board-lanes, 1), var(--ward-width-colFloor)), 1fr);
+  gap: var(--ward-gap-lane);
   flex: 1;
   min-width: 0;
   overflow-x: auto;
   overscroll-behavior-inline: contain;
 }
 
-/* Only the board page runs its columns full-bleed under a rule; an embedded preview keeps its own box. */
-/* There the lanes fill the height left under the header and each scrolls on its own, so the page does not. */
+/* Board lanes fill the height under the header and scroll on their own; they keep a gutter so every corner shows. */
+/* An opaque mask at rest keeps the lanes on the layer the fade uses, so their corners never re-raster. */
 .frame[data-inset="board"] .scroller {
-  margin-inline: calc(-1 * var(--ward-page-inset));
-  border-top: var(--ward-border) solid var(--ward-color-line);
+  padding-block-end: var(--ward-page-inset);
+  mask-image: linear-gradient(currentColor, currentColor);
 }
 
 .frame[data-inset="board"] .scroller > * {

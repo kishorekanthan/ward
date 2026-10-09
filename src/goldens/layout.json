@@ -12,7 +12,7 @@
   "board": {
     "colFloor": "240px",
     "laneFloor": "176px",
-    "tracks": "minmax(clamp(var(--ward-width-stageColumn), 100% / var(--ward-board-lanes, 1), var(--ward-width-colFloor)), 1fr)",
+    "tracks": "minmax(clamp(var(--ward-width-stageColumn), (100% - (var(--ward-board-lanes, 1) - 1) * var(--ward-gap-lane)) / var(--ward-board-lanes, 1), var(--ward-width-colFloor)), 1fr)",
     "overflowX": "auto",
     "columnMinWidth": "var(--ward-width-stageColumn)"
   }

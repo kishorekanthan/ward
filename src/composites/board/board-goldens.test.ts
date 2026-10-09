@@ -27,27 +27,24 @@ describe("board geometry against Studio 4b", () => {
     expect(value("BoardHeader.module.css", "\\.rollup", "font")).toMatch(new RegExp(`^${head.rollup},`));
   });
 
-  it("rules the column grid off the head with no gutter between columns", () => {
-    expect(value("../../layout/layout.module.css", '\\.frame\\[data-inset="board"\\] \\.scroller', "border-top")).toBe(golden.grid.borderTop);
+  it("spaces the lanes by the lane gap, with no rule between the head and the lanes", () => {
+    expect(value("../../layout/layout.module.css", '\\.frame\\[data-inset="board"\\] \\.scroller', "border-top")).toBe("");
     expect(value("../../layout/layout.module.css", "\\.scroller", "gap")).toBe(golden.grid.gap);
   });
 
-  it("pads, rules and sets type in each column as the comp does", () => {
+  it("pads and sets type in each column as the comp does", () => {
     const { column } = golden;
     expect(value("BoardColumn.module.css", "\\.column", "padding")).toBe(column.padding);
     expect(value("BoardColumn.module.css", "\\.column", "gap")).toBe(column.gap);
-    expect(value("BoardColumn.module.css", "\\.column", "border-right")).toBe(column.rule);
-    expect(value("BoardColumn.module.css", "\\.column:last-child", "border-right")).toBe("none");
     expect(value("BoardColumn.module.css", "\\.label", "font")).toMatch(new RegExp(`^${column.label},`));
     expect(value("BoardColumn.module.css", "\\.count", "font")).toMatch(new RegExp(`^${column.count},`));
   });
 
-  it("frames each card and its over-cap note with the comp rhythm", () => {
+  it("pads each card and its over-cap note with the comp rhythm", () => {
     const { card } = golden;
     expect(value("WorkCard.module.css", "\\.card", "padding")).toBe(card.padding);
     expect(value("WorkCard.module.css", "\\.card", "gap")).toBe(card.gap);
     expect(value("WorkCard.module.css", "\\.card", "min-height")).toBe(card.minHeight);
-    expect(value("WorkCard.module.css", "\\.card", "box-shadow")).toBe(card.frame);
     expect(value("WorkCard.module.css", "\\.title", "font")).toMatch(new RegExp(`^${card.title},`));
     expect(value("OverCapNote.module.css", "\\.note", "font")).toMatch(new RegExp(`^${golden.overCapNote.font},`));
   });

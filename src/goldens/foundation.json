@@ -53,7 +53,8 @@
   "height": { "control": 30, "controlSm": 26, "card": 96, "touch": 44, "topbar": 44 },
   "radius": 6,
   "radiusChip": 4,
-  "radiusCard": 8,
+  "radiusCard": 11,
+  "radiusPanel": 14,
   "border": 1,
   "underline": 2,
   "type": {

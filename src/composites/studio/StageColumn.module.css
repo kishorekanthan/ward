@@ -1,17 +1,17 @@
-/* Provenance: standard mode not established. Workflow mode MEASURED from design/Trellis Studio.dc.html block 3c. */
+/* Provenance: standard mode not established; it takes the #217 tinted lane. Workflow mode MEASURED from design/Trellis Studio.dc.html block 3c. */
 .column {
   display: grid;
   gap: var(--ward-space-3);
   align-content: start;
   min-width: var(--ward-width-colFloor);
   padding: var(--ward-space-3);
-  background: var(--ward-color-surface);
-  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
-  transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
+  border-radius: var(--ward-radius-panel);
+  background: var(--ward-color-laneTint);
+  transition: opacity var(--ward-motion-fast);
 }
 
 .column[data-kind="gate"] {
-  background: var(--ward-color-selected);
+  background: var(--ward-color-gateLaneTint);
 }
 
 .head {

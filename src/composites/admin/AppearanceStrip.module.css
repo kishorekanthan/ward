@@ -7,6 +7,14 @@
   box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
 }
 
+/* A sample card sits on a lane's tint, as on the board, since its shadow alone does not lift it off this surface. */
+.well {
+  display: grid;
+  padding: var(--ward-pad-boardColumn);
+  border-radius: var(--ward-radius-panel);
+  background: var(--ward-color-laneTint);
+}
+
 .head {
   display: flex;
   align-items: center;

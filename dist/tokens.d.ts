@@ -60,6 +60,9 @@ export declare const v: {
         readonly chartBar: "var(--ward-color-chartBar)";
         readonly chartLine: "var(--ward-color-chartLine)";
         readonly chartIdeal: "var(--ward-color-chartIdeal)";
+        readonly laneTint: "var(--ward-color-laneTint)";
+        readonly gateLaneTint: "var(--ward-color-gateLaneTint)";
+        readonly hover: "var(--ward-color-hover)";
         readonly blue: "var(--ward-color-blue)";
         readonly blueSoft: "var(--ward-color-blueSoft)";
         readonly accentPill: "var(--ward-color-accentPill)";
@@ -189,6 +192,7 @@ export declare const v: {
         readonly boardHead: "var(--ward-pad-boardHead)";
         readonly boardColumn: "var(--ward-pad-boardColumn)";
         readonly workCard: "var(--ward-pad-workCard)";
+        readonly card: "var(--ward-pad-card)";
         readonly ladderTile: "var(--ward-pad-ladderTile)";
         readonly trace: "var(--ward-pad-trace)";
         readonly metricCell: "var(--ward-pad-metricCell)";
@@ -273,6 +277,7 @@ export declare const v: {
         readonly sidebarAgent: "var(--ward-gap-sidebarAgent)";
         readonly sidebarDot: "var(--ward-gap-sidebarDot)";
         readonly boardColumn: "var(--ward-gap-boardColumn)";
+        readonly lane: "var(--ward-gap-lane)";
         readonly drawerBlock: "var(--ward-gap-drawerBlock)";
         readonly resolveList: "var(--ward-gap-resolveList)";
         readonly entryBody: "var(--ward-gap-entryBody)";
@@ -394,12 +399,14 @@ export declare const v: {
     readonly radius: "var(--ward-radius)";
     readonly radiusChip: "var(--ward-radius-chip)";
     readonly radiusCard: "var(--ward-radius-card)";
+    readonly radiusPanel: "var(--ward-radius-panel)";
     readonly border: "var(--ward-border)";
     readonly underline: "var(--ward-underline)";
     readonly focusOffset: "var(--ward-focus-offset)";
     readonly focusRing: "var(--ward-focus-ring)";
     readonly shadow: {
         readonly overlay: "var(--ward-shadow-overlay)";
+        readonly card: "var(--ward-shadow-card)";
     };
     readonly type: {
         readonly h1: "var(--ward-type-h1)";

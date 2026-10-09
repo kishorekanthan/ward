@@ -1,0 +1,30 @@
+{
+  "$source": "Written by hand from the .dD rules and the --d-* palette in trellis arch-review/ward-look-2026-10-09.html (#217); the ring takes Ward's line2.",
+  "card": {
+    "radius": "11px",
+    "padding": "10px 12px",
+    "light": {
+      "ground": "#FFFFFF",
+      "shadow": "0 1px 2px rgba(25,25,24,0.05), 0 3px 10px rgba(25,25,24,0.05)",
+      "hoverGround": "#F6F6F3",
+      "hoverShadow": "0 0 0 1px #DAD8D3, 0 1px 2px rgba(25,25,24,0.05), 0 3px 10px rgba(25,25,24,0.05)"
+    },
+    "dark": {
+      "ground": "#1F1F1F",
+      "shadow": "0 1px 2px rgba(0,0,0,0.45)",
+      "hoverGround": "#191917",
+      "hoverShadow": "0 0 0 1px #434039, 0 1px 2px rgba(0,0,0,0.45)"
+    }
+  },
+  "lane": {
+    "radius": "14px",
+    "gap": "12px",
+    "light": { "ground": "#EEF1EC", "gate": "#FBF3DF" },
+    "dark": { "ground": "#20251F", "gate": "#2C271A" }
+  },
+  "table": {
+    "light": { "rowRule": "1px solid #EDEDEB" },
+    "dark": { "rowRule": "1px solid #2F2F2F" }
+  },
+  "panel": { "radius": "14px" }
+}

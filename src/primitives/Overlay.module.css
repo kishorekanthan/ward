@@ -31,7 +31,7 @@
 .panel.drawer {
   height: 100%;
   width: var(--ward-width-drawer);
-  border-radius: var(--ward-radius-card) 0 0 var(--ward-radius-card);
+  border-radius: var(--ward-radius-panel) 0 0 var(--ward-radius-panel);
   border-left: var(--ward-border) solid var(--ward-color-line);
 }
 
@@ -39,20 +39,20 @@
 .panel.start {
   height: 100%;
   width: min(var(--ward-width-sidebar), 100%);
-  border-radius: 0 var(--ward-radius-card) var(--ward-radius-card) 0;
+  border-radius: 0 var(--ward-radius-panel) var(--ward-radius-panel) 0;
   border-right: var(--ward-border) solid var(--ward-color-line);
 }
 
 .panel.sheet {
   width: 100%;
   height: 88vh;
-  border-radius: var(--ward-radius-card) var(--ward-radius-card) 0 0;
+  border-radius: var(--ward-radius-panel) var(--ward-radius-panel) 0 0;
 }
 
 .panel.modal {
   width: min(var(--ward-width-drawer), calc(100% - 2 * var(--ward-space-6)));
   max-height: calc(100% - 2 * var(--ward-space-6));
-  border-radius: var(--ward-radius-card);
+  border-radius: var(--ward-radius-panel);
 }
 
 .panel[data-wide="true"] {

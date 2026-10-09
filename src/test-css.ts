@@ -27,3 +27,23 @@ export function edge(el: Element): { shadow: string; ground: string } {
   const style = getComputedStyle(el);
   return { shadow: style.boxShadow, ground: style.getPropertyValue("background") };
 }
+
+// Every border in a stylesheet but its radius and collapse, so a rule or stripe added by any rule in it shows up.
+export function borders(path: string): string[] {
+  return readFileSync(path, "utf8").replace(/\/\*[\s\S]*?\*\//g, "").match(/border(?!-radius|-collapse)[\w-]*\s*:[^;]*/g) ?? [];
+}
+
+const isZero = (length: string) => /^0(px)?$/.test(length);
+const isLength = (part: string) => /^-?[\d.]+(px)?$|^calc\(|^var\(--ward-(border|underline|space|focus)/.test(part);
+
+// A hard shadow offset off its box (no blur) paints one or two sides only: an edge stripe, inset or not.
+function paintsOneSide(shadow: string): boolean {
+  const [x, y, blur] = [...shadow.split(/\s+(?![^(]*\))/).filter(isLength), "0", "0", "0"];
+  return isZero(blur) && !(isZero(x) && isZero(y));
+}
+
+// The one-side edges among every box-shadow in a block of CSS.
+export function oneSideEdges(css: string): string[] {
+  const shadows = (css.match(/box-shadow\s*:[^;]*/g) ?? []).flatMap((d) => d.replace(/^box-shadow\s*:/, "").split(/,(?![^(]*\))/));
+  return shadows.map((s) => s.trim()).filter(paintsOneSide);
+}
