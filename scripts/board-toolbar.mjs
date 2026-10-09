@@ -74,7 +74,7 @@ function alignmentDiffs(copy) {
 }
 
 function containmentDiffs(copy, width) {
-  const outside = copy.groups.some((box) => box.left < copy.toolbar.left - 0.5 || box.right > copy.toolbar.right + 0.5);
+  const outside = [...copy.groups, ...copy.controls].some((box) => box.left < copy.toolbar.left - 0.5 || box.right > copy.toolbar.right + 0.5);
   return outside || copy.toolbar.left < 0 || copy.toolbar.right > width + 0.5 ? ["toolbar content escapes its container"] : [];
 }
 
@@ -99,6 +99,19 @@ async function namedControls(page) {
   return diffs;
 }
 
+// Extreme names may ellipsize, but controls must stay inside the toolbar and the page.
+function longNameDiffs(got) {
+  const diffs = got.scrollWidth > got.width ? ["document scrolls sideways"] : [];
+  for (const copy of got.copies) diffs.push(...containmentDiffs(copy, got.width).map((message) => `${copy.theme}: ${message}`));
+  return diffs.map((message) => `long names@375: ${message}`);
+}
+
+async function openStory(page, port, story) {
+  await page.goto(`http://127.0.0.1:${port}/iframe.html?viewMode=story&id=board-boardheader--${story}`);
+  await page.locator('[aria-label="Board header controls"]').first().waitFor();
+  await page.evaluate(() => document.fonts.ready);
+}
+
 export async function sweepBoardToolbar() {
   ensureBuild();
   const server = serve();
@@ -110,11 +123,11 @@ export async function sweepBoardToolbar() {
     const diffs = [];
     for (const width of [1280, 375]) {
       await page.setViewportSize({ width, height: 900 });
-      await page.goto(`http://127.0.0.1:${server.address().port}/iframe.html?viewMode=story&id=board-boardheader--crowded-toolbar`);
-      await page.locator('[aria-label="Board header controls"]').first().waitFor();
-      await page.evaluate(() => document.fonts.ready);
+      await openStory(page, server.address().port, "crowded-toolbar");
       diffs.push(...toolbarDiffs(await page.evaluate(probe), width), ...await namedControls(page));
     }
+    await openStory(page, server.address().port, "crowded-toolbar-long-names");
+    diffs.push(...longNameDiffs(await page.evaluate(probe)));
     return diffs;
   } finally {
     await browser?.close();

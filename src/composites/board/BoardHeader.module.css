@@ -76,6 +76,11 @@
   flex: none;
 }
 
+/* Lets a long select value ellipsize inside the Field instead of widening the page. */
+.tools > :global(.ward-field) > * {
+  min-width: 0;
+}
+
 .tools > :global(.ward-field) :global(.ward-field-input),
 .tools > :global(.ward-btn) {
   height: var(--ward-height-control);
@@ -84,6 +89,7 @@
 
 .tools > :global(.ward-field) :global(.ward-field-input) {
   width: auto;
+  max-width: 100%;
   padding-block: 0;
 }
 

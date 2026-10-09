@@ -44,7 +44,21 @@ export const CrowdedToolbar = {
   },
 };
 
-export const Reconnecting = { args: { ...base, connection: "reconnecting" } };
+export const CrowdedToolbarLongNames = {
+  args: {
+    ...CrowdedToolbar.args,
+    actions: <>
+      <Field label="Filter items" labelHidden variant="form" placeholder="Filter by key or title" value="" onChange={() => {}} />
+      <Field kind="select" label="Stream" value="recovery" options={[
+        { value: "recovery", label: "Customer Onboarding, Identity Verification and Account Recovery" },
+        { value: "integration", label: "Integration" },
+      ]} onChange={() => {}} />
+      <Btn variant="primary">Raise a request for this stream</Btn>
+    </>,
+  },
+};
+
+export const Reconnecting ={ args: { ...base, connection: "reconnecting" } };
 
 export const Stale = {
   args: { ...base, connection: "stale", lastEventAt: "2026-09-06T02:14:00Z" },
