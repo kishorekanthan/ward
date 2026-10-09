@@ -1,4 +1,4 @@
-/* Provenance: Admin comp page head — .row padding 18px 20px 14px, align-items flex-start; .ttl 600 24px/1 Archivo, -.022em. */
+/* Provenance: Admin comp page head — .row padding 18px 20px 14px, align-items flex-start; .ttl 600 24px/1, -.022em; the title now takes the #215 page-title step, 700 26px Figtree at -0.01em. */
 .root {
   position: relative;
   display: flex;

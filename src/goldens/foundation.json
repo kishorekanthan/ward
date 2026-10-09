@@ -1,7 +1,7 @@
 {
   "font": {
-    "named": "Archivo, system-ui, sans-serif",
-    "prose": "'Source Sans 3', system-ui, sans-serif",
+    "named": "Figtree, system-ui, sans-serif",
+    "prose": "Figtree, system-ui, sans-serif",
     "mono": "'IBM Plex Mono', ui-monospace, Menlo, monospace"
   },
   "color": {
@@ -57,12 +57,12 @@
   "border": 1,
   "underline": 2,
   "type": {
-    "h1": { "family": "named", "weight": 600, "size": 19, "leading": 1.2, "tracking": "-0.2px" },
-    "body": { "family": "prose", "weight": 400, "size": 13, "leading": 1.55 },
-    "control": { "family": "prose", "weight": 600, "size": 11.5, "leading": 1 },
-    "monoId": { "family": "mono", "weight": 400, "size": 10.5, "leading": 1.45 },
-    "chip": { "family": "prose", "weight": 500, "size": 11, "leading": 1, "tracking": "normal", "transform": "none" },
-    "colHead": { "family": "prose", "weight": 600, "size": 11, "leading": 1, "tracking": "normal", "transform": "none" }
+    "h1": { "family": "named", "weight": 600, "size": 18, "leading": 1.2, "tracking": "-0.2px" },
+    "body": { "family": "prose", "weight": 400, "size": 15, "leading": 1.55 },
+    "control": { "family": "prose", "weight": 600, "size": 12, "leading": 1 },
+    "monoId": { "family": "mono", "weight": 400, "size": 12, "leading": 1.45 },
+    "chip": { "family": "prose", "weight": 500, "size": 12, "leading": 1, "tracking": "normal", "transform": "none" },
+    "colHead": { "family": "prose", "weight": 600, "size": 12, "leading": 1, "tracking": "normal", "transform": "none" }
   },
   "motion": { "fast": "0.12s", "flash": "300ms", "reveal": "320ms" }
 }

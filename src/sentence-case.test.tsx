@@ -23,7 +23,7 @@ describe("sentence case labels (#199)", () => {
 
   it("sets the label roles in the sans face with normal tracking and no transform", () => {
     for (const role of LABEL_ROLES) {
-      expect(rootVars.get(`--ward-type-${role}`), role).toContain("'Source Sans 3', system-ui, sans-serif");
+      expect(rootVars.get(`--ward-type-${role}`), role).toContain("Figtree, system-ui, sans-serif");
       expect(rootVars.get(`--ward-type-${role}-tracking`), role).toBe("normal");
       expect(rootVars.get(`--ward-type-${role}-transform`), role).toBe("none");
     }

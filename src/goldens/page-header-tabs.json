@@ -3,9 +3,9 @@
     "padding": "18px 20px 14px",
     "bleed": "calc(-1 * var(--ward-page-inset))",
     "rowAlign": "flex-start",
-    "titleFont": "600 24px/1 Archivo, system-ui, sans-serif",
-    "titleTracking": "-0.022em",
-    "crumbFont": "500 9px/1 \"Source Sans 3\", system-ui, sans-serif",
+    "titleFont": "700 26px/1.2 Figtree, system-ui, sans-serif",
+    "titleTracking": "-0.01em",
+    "crumbFont": "500 12px/1 Figtree, system-ui, sans-serif",
     "crumbTracking": "normal",
     "crumbTransform": "none",
     "actionGap": "8px"
