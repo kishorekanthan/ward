@@ -6,7 +6,7 @@
   "thread": {
     "gap": "13px",
     "turnGap": "6px",
-    "who": "400 11.5px/1.55 'Source Sans 3'"
+    "who": "400 12px/1.55 Figtree"
   },
   "bubble": {
     "padding": "11px 13px",
@@ -24,8 +24,8 @@
   "policy": {
     "padding": "13px 15px",
     "gap": "10px",
-    "name": "500 13px/1.55 'Source Sans 3'",
-    "note": "400 11.5px/1.55 'Source Sans 3'",
+    "name": "500 13px/1.55 Figtree",
+    "note": "400 12px/1.55 Figtree",
     "valueColumn": "150px"
   }
 }

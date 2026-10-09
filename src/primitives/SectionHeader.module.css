@@ -17,7 +17,7 @@
 }
 
 /* A section kicker is a sentence, so it takes the title style rather than the small label type.
-   The head wraps to leave the note its own width; the note's 28% floor below bounds it (#107, #122). */
+   The head wraps to leave the note its own width; the note's floor below bounds it (#107, #122). */
 .root[data-kind="key"] .head {
   font: var(--ward-type-title);
   letter-spacing: normal;
@@ -26,9 +26,9 @@
   white-space: normal;
 }
 
-/* Floor 28%, clamped to the note's own width and never shrunk; above ~29% the 320px Kicker row wraps. */
+/* The floor grows faster than the band: 12 note characters a line at 375px, yet the 320px Kicker head stays one line (#107, #215). */
 .root[data-kind="key"] .note {
-  flex: 1 0 28%;
+  flex: 1 0 calc(42% - var(--ward-space-7));
   max-width: max-content;
 }
 

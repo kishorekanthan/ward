@@ -20,7 +20,7 @@
     "chipLines": 2,
     "titleBelowChips": true,
     "everyChipWhole": true,
-    "chipFontSize": "11px",
+    "chipFontSize": "12px",
     "actionsShown": 2,
     "pageScrollsSideways": false
   },
@@ -69,7 +69,7 @@
   "statStrip": {
     "story": "primitives-statstrip--phone-width",
     "label": "Items waiting at a review gate",
-    "labelLines": 1,
+    "labelLines": 2,
     "labelClipped": false,
     "longLabel": "Failed agent runs across every stream and every stage, in the last 24 hours",
     "longLabelLines": 2,
@@ -117,7 +117,7 @@
     "noteLines": 2,
     "seenText": "Ways out of this hold",
     "fontSize": "15px",
-    "family": "Archivo",
+    "family": "Figtree",
     "letterSpacing": "normal",
     "pageScrollsSideways": false
   },

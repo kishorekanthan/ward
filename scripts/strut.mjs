@@ -28,7 +28,7 @@ function probe() {
   for (const el of host.querySelectorAll("*")) {
     const cs = getComputedStyle(el);
     // Only elements that named no type token: the serif fallback is the tell.
-    if (/Source Sans|Archivo|monospace|ui-monospace|Menlo/i.test(cs.fontFamily)) continue;
+    if (/Figtree|monospace|ui-monospace|Menlo/i.test(cs.fontFamily)) continue;
     const kids = Array.from(el.children);
     if (!kids.length) continue;
     // A wrapper holding its own text is meant to have a line box.

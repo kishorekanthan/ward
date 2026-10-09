@@ -5,27 +5,27 @@
     {"row":"Create issues in Jira","control":{"x":928,"w":151},"chip":{"x":1089,"w":104}},
     {"row":"Duplicate similarity threshold","control":{"x":928,"w":151},"chip":{"x":1089,"w":104}},
     {"row":"Label prefix","control":{"x":929,"w":150},"chip":{"x":1089,"w":104}},
-    {"row":"Rejected by the PR review agent","control":{"x":897.63,"w":181.38},"chip":{"x":1089,"w":104}},
-    {"row":"Rejected by a test run","control":{"x":897.63,"w":181.38},"chip":{"x":1089,"w":104}},
+    {"row":"Rejected by the PR review agent","control":{"x":883.56,"w":195.44},"chip":{"x":1089,"w":104}},
+    {"row":"Rejected by a test run","control":{"x":883.56,"w":195.44},"chip":{"x":1089,"w":104}},
     {"row":"Create issues in Jira","control":{"x":928,"w":151},"chip":{"x":1089,"w":104}},
     {"row":"Duplicate similarity threshold","control":{"x":928,"w":151},"chip":{"x":1089,"w":104}},
     {"row":"Label prefix","control":{"x":929,"w":150},"chip":{"x":1089,"w":104}},
-    {"row":"Rejected by the PR review agent","control":{"x":897.63,"w":181.38},"chip":{"x":1089,"w":104}},
-    {"row":"Rejected by a test run","control":{"x":897.63,"w":181.38},"chip":{"x":1089,"w":104}}
+    {"row":"Rejected by the PR review agent","control":{"x":883.56,"w":195.44},"chip":{"x":1089,"w":104}},
+    {"row":"Rejected by a test run","control":{"x":883.56,"w":195.44},"chip":{"x":1089,"w":104}}
   ],
   "phone": {
     "viewport": {"width":375,"height":667},
     "rows": [
-      {"row":"Create issues in Jira","setting":{"x":15,"y":13,"w":273,"h":41.95},"control":{"x":14,"y":64.95,"w":151,"h":17.81},"chip":{"x":184,"y":64.95,"w":104,"h":17.5},"overflow":0},
-      {"row":"Duplicate similarity threshold","setting":{"x":15,"y":13,"w":273,"h":41.95},"control":{"x":14,"y":63.95,"w":151,"h":30.22},"chip":{"x":184,"y":64.95,"w":104,"h":17.5},"overflow":0},
-      {"row":"Label prefix","setting":{"x":15,"y":13,"w":273,"h":41.95},"control":{"x":15,"y":64.95,"w":150,"h":20.14},"chip":{"x":184,"y":64.95,"w":104,"h":17.5},"overflow":0},
-      {"row":"Rejected by the PR review agent","setting":{"x":15,"y":13,"w":273,"h":41.95},"control":{"x":15,"y":64.95,"w":181.38,"h":26},"chip":{"x":184,"y":100.95,"w":104,"h":17.5},"overflow":0},
-      {"row":"Rejected by a test run","setting":{"x":15,"y":13,"w":273,"h":41.95},"control":{"x":15,"y":64.95,"w":181.38,"h":26},"chip":{"x":184,"y":100.95,"w":104,"h":17.5},"overflow":0},
-      {"row":"Create issues in Jira","setting":{"x":15,"y":13,"w":273,"h":41.95},"control":{"x":14,"y":64.95,"w":151,"h":17.81},"chip":{"x":184,"y":64.95,"w":104,"h":17.5},"overflow":0},
-      {"row":"Duplicate similarity threshold","setting":{"x":15,"y":13,"w":273,"h":41.95},"control":{"x":14,"y":63.95,"w":151,"h":30.22},"chip":{"x":184,"y":64.95,"w":104,"h":17.5},"overflow":0},
-      {"row":"Label prefix","setting":{"x":15,"y":13,"w":273,"h":41.95},"control":{"x":15,"y":64.95,"w":150,"h":20.14},"chip":{"x":184,"y":64.95,"w":104,"h":17.5},"overflow":0},
-      {"row":"Rejected by the PR review agent","setting":{"x":15,"y":13,"w":273,"h":41.95},"control":{"x":15,"y":64.95,"w":181.38,"h":26},"chip":{"x":184,"y":100.95,"w":104,"h":17.5},"overflow":0},
-      {"row":"Rejected by a test run","setting":{"x":15,"y":13,"w":273,"h":41.95},"control":{"x":15,"y":64.95,"w":181.38,"h":26},"chip":{"x":184,"y":100.95,"w":104,"h":17.5},"overflow":0}
+      {"row":"Create issues in Jira","setting":{"x":15,"y":13,"w":273,"h":42.73},"control":{"x":14,"y":65.73,"w":151,"h":18.59},"chip":{"x":184,"y":65.73,"w":104,"h":20},"overflow":0},
+      {"row":"Duplicate similarity threshold","setting":{"x":15,"y":13,"w":273,"h":42.73},"control":{"x":14,"y":64.73,"w":151,"h":32.39},"chip":{"x":184,"y":65.73,"w":104,"h":20},"overflow":0},
+      {"row":"Label prefix","setting":{"x":15,"y":13,"w":273,"h":42.73},"control":{"x":15,"y":65.73,"w":150,"h":23.25},"chip":{"x":184,"y":65.73,"w":104,"h":20},"overflow":0},
+      {"row":"Rejected by the PR review agent","setting":{"x":15,"y":13,"w":273,"h":42.73},"control":{"x":15,"y":65.73,"w":195.44,"h":26},"chip":{"x":184,"y":101.73,"w":104,"h":20},"overflow":0},
+      {"row":"Rejected by a test run","setting":{"x":15,"y":13,"w":273,"h":42.73},"control":{"x":15,"y":65.73,"w":195.44,"h":26},"chip":{"x":184,"y":101.73,"w":104,"h":20},"overflow":0},
+      {"row":"Create issues in Jira","setting":{"x":15,"y":13,"w":273,"h":42.73},"control":{"x":14,"y":65.73,"w":151,"h":18.59},"chip":{"x":184,"y":65.73,"w":104,"h":20},"overflow":0},
+      {"row":"Duplicate similarity threshold","setting":{"x":15,"y":13,"w":273,"h":42.73},"control":{"x":14,"y":64.73,"w":151,"h":32.39},"chip":{"x":184,"y":65.73,"w":104,"h":20},"overflow":0},
+      {"row":"Label prefix","setting":{"x":15,"y":13,"w":273,"h":42.73},"control":{"x":15,"y":65.73,"w":150,"h":23.25},"chip":{"x":184,"y":65.73,"w":104,"h":20},"overflow":0},
+      {"row":"Rejected by the PR review agent","setting":{"x":15,"y":13,"w":273,"h":42.73},"control":{"x":15,"y":65.73,"w":195.44,"h":26},"chip":{"x":184,"y":101.73,"w":104,"h":20},"overflow":0},
+      {"row":"Rejected by a test run","setting":{"x":15,"y":13,"w":273,"h":42.73},"control":{"x":15,"y":65.73,"w":195.44,"h":26},"chip":{"x":184,"y":101.73,"w":104,"h":20},"overflow":0}
     ]
   }
 }

@@ -9,20 +9,20 @@ export function readTokens() {
 }
 
 // One face per (family, weight) a type token asks for; check.mjs gates the correspondence because CSS substitutes silently.
+// Files are the Fontsource 5.3.0 latin subsets (@fontsource/figtree, @fontsource/ibm-plex-mono), OFL, licences beside them.
 const FONTS = [
-  { family: "Archivo", weight: 500, file: "archivo-500.woff2", local: ["Archivo Medium", "Archivo-Medium"] },
-  { family: "Archivo", weight: 600, file: "archivo-600.woff2", local: ["Archivo SemiBold", "Archivo-SemiBold"] },
-  { family: "Source Sans 3", weight: 400, file: "source-sans-3-400.woff2", local: ["Source Sans 3", "SourceSans3-Regular"] },
-  { family: "Source Sans 3", weight: 500, file: "source-sans-3-500.woff2", local: ["Source Sans 3 Medium", "SourceSans3-Medium"] },
-  { family: "Source Sans 3", weight: 600, file: "source-sans-3-600.woff2", local: ["Source Sans 3 SemiBold", "SourceSans3-Semibold"] },
-  { family: "Source Sans 3", weight: 700, file: "source-sans-3-700.woff2", local: ["Source Sans 3 Bold", "SourceSans3-Bold"] },
+  { family: "Figtree", weight: 400, file: "figtree-400.woff2", local: ["Figtree", "Figtree-Regular"] },
+  { family: "Figtree", weight: 500, file: "figtree-500.woff2", local: ["Figtree Medium", "Figtree-Medium"] },
+  { family: "Figtree", weight: 600, file: "figtree-600.woff2", local: ["Figtree SemiBold", "Figtree-SemiBold"] },
+  { family: "Figtree", weight: 700, file: "figtree-700.woff2", local: ["Figtree Bold", "Figtree-Bold"] },
   { family: "IBM Plex Mono", weight: 400, file: "ibm-plex-mono-400.woff2", local: ["IBM Plex Mono", "IBMPlexMono"] },
   { family: "IBM Plex Mono", weight: 500, file: "ibm-plex-mono-500.woff2", local: ["IBM Plex Mono Medium", "IBMPlexMono-Medium"] },
   { family: "IBM Plex Mono", weight: 600, file: "ibm-plex-mono-600.woff2", local: ["IBM Plex Mono SemiBold", "IBMPlexMono-SemiBold"] },
   { family: "IBM Plex Mono", weight: 700, file: "ibm-plex-mono-700.woff2", local: ["IBM Plex Mono Bold", "IBMPlexMono-Bold"] },
 ];
 
-export const FAMILY_OF = { named: "Archivo", prose: "Source Sans 3", mono: "IBM Plex Mono" };
+// named and prose are both Figtree now; the two keys stay so consumers reading tokens.json do not break.
+export const FAMILY_OF = { named: "Figtree", prose: "Figtree", mono: "IBM Plex Mono" };
 
 // @media cannot read a custom property, so the scale is exported for check.mjs to hold every literal to it.
 const scaleOf = (group) => Object.entries(group).map(([name, min]) => ({ name, min, below: min - 0.02 }));

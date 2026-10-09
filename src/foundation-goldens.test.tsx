@@ -27,10 +27,10 @@ describe("Ward foundation goldens", () => {
     expect([actual.dark.console, actual.color.console]).toEqual(["#121212", "#F1F1EF"]);
   });
 
-  it("generates colHead and chip at 11px in the sans face, the smallest readable size for small type", () => {
+  it("generates colHead and chip at 12px in Figtree, the type scale's floor (#215)", () => {
     const wardCss = readFileSync(join(root, "src", "ward.css"), "utf8");
-    expect(wardCss).toContain("--ward-type-colHead: 600 11px/1 'Source Sans 3', system-ui, sans-serif;");
-    expect(wardCss).toContain("--ward-type-chip: 500 11px/1 'Source Sans 3', system-ui, sans-serif;");
+    expect(wardCss).toContain("--ward-type-colHead: 600 12px/1 Figtree, system-ui, sans-serif;");
+    expect(wardCss).toContain("--ward-type-chip: 500 12px/1 Figtree, system-ui, sans-serif;");
   });
 
   it("renders the default layout spine and explicit rail override", () => {
