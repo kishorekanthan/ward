@@ -52,14 +52,44 @@
 
 .tools {
   display: flex;
-  align-items: flex-end;
+  flex-wrap: wrap;
+  align-items: center;
   gap: var(--ward-gap-row);
   min-width: 0;
+  max-width: 100%;
   margin-left: auto;
-  overflow-x: auto;
   padding: calc(var(--ward-focus-ring) + var(--ward-focus-offset));
   margin-block: calc(-1 * (var(--ward-focus-ring) + var(--ward-focus-offset)));
   margin-inline-end: calc(-1 * (var(--ward-focus-ring) + var(--ward-focus-offset)));
+}
+
+/* Inline labels keep supplied Fields level with actions without changing other Field layouts. */
+.tools > :global(.ward-field) {
+  flex: none;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--ward-gap-row);
+  max-width: 100%;
+}
+
+.tools > :global(.ward-field) :global(.ward-field-label) {
+  flex: none;
+}
+
+.tools > :global(.ward-field) :global(.ward-field-input),
+.tools > :global(.ward-btn) {
+  height: var(--ward-height-control);
+  font: var(--ward-type-control);
+}
+
+.tools > :global(.ward-field) :global(.ward-field-input) {
+  width: auto;
+  padding-block: 0;
+}
+
+.tools > :global(.ward-btn),
+.tools > :global(.ward-connection) {
+  flex: none;
 }
 
 .swatch {
