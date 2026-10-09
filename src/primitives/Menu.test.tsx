@@ -4,6 +4,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { contrast } from "../../scripts/contrast.mjs";
+import { stubLayout, unstubLayout } from "../test-layout";
 import { Menu, MenuButton, type MenuEntry, type MenuItem } from "./Menu";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -48,7 +49,10 @@ function openWith(key: string) {
   press(key);
 }
 
-afterEach(() => vi.useRealTimers());
+afterEach(() => {
+  vi.useRealTimers();
+  unstubLayout();
+});
 
 describe("Menu button roles and names", () => {
   it("marks the button as a closed menu button that controls nothing yet", () => {
@@ -109,19 +113,21 @@ describe("Menu button roles and names", () => {
     expect(screen.getByRole("menuitem", { name: "Report a problem" }).tagName).toBe("BUTTON");
   });
 
-  it("aligns the panel to the button's end edge only when asked", () => {
-    const { rerender } = render(
-      <MenuButton label="Account" defaultOpen>
-        <Menu entries={[{ label: "Settings" }]} />
-      </MenuButton>,
+  it("lines the panel up with the button's start edge, or its end edge when asked", () => {
+    const layout = stubLayout({ width: 1024, height: 768 }, { width: 160, height: 120 });
+    const account = (align?: "end") => (
+      <MenuButton label="Account">
+        <Menu entries={[{ label: "Settings" }]} align={align} />
+      </MenuButton>
     );
-    expect(screen.getByRole("menu").parentElement?.getAttribute("data-align")).toBe("start");
-    rerender(
-      <MenuButton label="Account" defaultOpen>
-        <Menu entries={[{ label: "Settings" }]} align="end" />
-      </MenuButton>,
-    );
-    expect(screen.getByRole("menu").parentElement?.getAttribute("data-align")).toBe("end");
+    const { rerender } = render(account());
+    const opener = screen.getByRole("button", { name: "Account" });
+    layout.place(opener, { left: 600, top: 100, width: 100, height: 32 });
+    fireEvent.click(opener);
+    const panel = () => screen.getByRole("menu").parentElement as HTMLElement;
+    expect([panel().style.top, panel().style.left]).toEqual(["136px", "600px"]);
+    rerender(account("end"));
+    expect([panel().style.top, panel().style.left]).toEqual(["136px", "540px"]);
   });
 
   it("does not take focus when it is rendered open", () => {

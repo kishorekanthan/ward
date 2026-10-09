@@ -95,3 +95,14 @@ export const LinkItems = {
     </Roomy>
   ),
 };
+
+// A box that clips its overflow, as a top bar or a table cell does; the open menu still shows whole.
+export const InsideClippingBox = {
+  render: () => (
+    <div style={{ overflow: "hidden", padding: "var(--ward-space-1)", maxWidth: "var(--ward-width-form)" }}>
+      <MenuButton label="Account">
+        <Menu entries={account} />
+      </MenuButton>
+    </div>
+  ),
+};
