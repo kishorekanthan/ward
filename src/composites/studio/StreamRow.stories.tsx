@@ -123,3 +123,14 @@ export const SummaryChainHighlight = {
     </Table>
   ),
 };
+
+const longChain = ["Intake", "Triage", "Design review", "Build", "Test", "Security review", "Release", "Watch"].map((name) => ({ name, gate: name.endsWith("review") }));
+
+// Eight stages wrap inside the workflow cell; every wrapped line starts with a stage, never an arrow.
+export const SummaryLongChain = {
+  render: () => (
+    <Table>
+      <StreamRow stream={{ ...summary, name: "Platform Releases", key: "PR", streamStep: 4, stages: longChain }} href="/studio/pr" presentation={{ columns: 5 }} />
+    </Table>
+  ),
+};

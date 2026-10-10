@@ -29,13 +29,14 @@
   cursor: default;
 }
 
-/* In place, below the button and on its start edge; no flip when it meets the viewport edge. */
+/* anchorMenu.ts places it in the top layer below the button, on its aligned edge, flipping at the viewport edge. */
 .panel {
-  position: absolute;
+  position: fixed;
   z-index: 40;
-  top: calc(100% + var(--ward-space-1));
-  inset-inline-start: 0;
-  min-width: max(100%, calc(var(--ward-space-7) * 5));
+  inset: auto;
+  margin: 0;
+  overflow-y: auto;
+  min-width: max(var(--ward-anchor-width), calc(var(--ward-space-7) * 5));
   max-width: var(--ward-width-drawer);
   width: max-content;
   padding: var(--ward-space-1);
@@ -46,11 +47,6 @@
   border: var(--ward-border) solid var(--ward-color-line2);
   border-radius: var(--ward-radius-card);
   box-shadow: 0 var(--ward-space-1) var(--ward-space-3) var(--ward-color-scrim);
-}
-
-.panel[data-align="end"] {
-  inset-inline-start: auto;
-  inset-inline-end: 0;
 }
 
 .menu {

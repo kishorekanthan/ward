@@ -60,26 +60,27 @@ function fieldValue(item: BoardItem, field: BoardField): string {
   return FIELD_VALUE[field](item);
 }
 
+// One flowing line that wraps between words: the separator keeps to the word before it, so no line starts with it.
 function MetaLine({ item, connection }: { item: BoardItem; connection: LiveConnection }) {
   const sep = (
     <span className={s.sep} aria-hidden="true">
-      ·
+      {"\u00a0· "}
     </span>
   );
   if (item.run) {
     return (
-      <p className={s.meta}>
-        <ClampText className={s.who} text={`waits on ${item.run.agent}`} />
+      <p className={s.meta} data-ward-card-meta="">
+        waits on {item.run.agent}
         {sep}
         <LiveIndicator startedAt={item.run.startedAt} connection={connection} turn={item.run.turn} lastEvent={item.run.lastStep} />
       </p>
     );
   }
   return (
-    <p className={s.meta}>
-      <ClampText className={s.who} text={`waits on ${item.waitsOn}`} />
+    <p className={s.meta} data-ward-card-meta="">
+      waits on {item.waitsOn}
       {sep}
-      <span className={s.mono}>{duration(item.timeInStage)} in stage</span>
+      <span className={s.since}>{duration(item.timeInStage)} in stage</span>
     </p>
   );
 }

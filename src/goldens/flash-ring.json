@@ -1,0 +1,11 @@
+{
+  "story": "board-workcard--event-flash",
+  "cases": {
+    "light waiting": { "theme": "light", "role": "waiting", "animations": 1, "ring": "rgb(122, 93, 20)", "ringStyle": "solid", "ringWidth": "2px", "shadowAtStart": "rgba(25, 25, 24, 0.05) 0px 1px 2px 0px, rgba(25, 25, 24, 0.05) 0px 3px 10px 0px", "shadowAtEnd": "rgba(25, 25, 24, 0.05) 0px 1px 2px 0px, rgba(25, 25, 24, 0.05) 0px 3px 10px 0px", "fadesOut": true, "sizeKept": true, "ringPainted": true },
+    "dark waiting": { "theme": "dark", "role": "waiting", "animations": 1, "ring": "rgb(230, 213, 169)", "ringStyle": "solid", "ringWidth": "2px", "shadowAtStart": "rgba(0, 0, 0, 0.45) 0px 1px 2px 0px", "shadowAtEnd": "rgba(0, 0, 0, 0.45) 0px 1px 2px 0px", "fadesOut": true, "sizeKept": true, "ringPainted": true },
+    "light fallback": { "theme": "light", "role": null, "animations": 1, "ring": "rgb(31, 95, 158)", "sizeKept": true, "ringPainted": true },
+    "dark fallback": { "theme": "dark", "role": null, "animations": 1, "ring": "rgb(147, 186, 224)", "sizeKept": true, "ringPainted": true },
+    "light reduced motion": { "theme": "light", "role": "waiting", "reducedMotion": true, "animations": 0, "ring": "rgba(0, 0, 0, 0)", "sizeKept": true, "ringPainted": false },
+    "dark reduced motion": { "theme": "dark", "role": "waiting", "reducedMotion": true, "animations": 0, "ring": "rgba(0, 0, 0, 0)", "sizeKept": true, "ringPainted": false }
+  }
+}

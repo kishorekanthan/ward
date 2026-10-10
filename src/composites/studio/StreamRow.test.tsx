@@ -241,6 +241,12 @@ describe("StreamRow compact chain highlight", () => {
     expect(chain(3, [{ name: "Design review", gate: true }, { name: "Build" }, { name: "Sign-off", gate: true }]).map((chip) => chip[1])).toEqual(["stream", "soft", "soft"]);
   });
 
+  it("wraps the chain in units that each start with a stage and end with the arrow to the next one", () => {
+    const { container } = render(table(<StreamRow stream={{ name: "UX", key: "UX", streamStep: 3, owner: "A. Whyte", stages: [{ name: "Design review", gate: true }, { name: "Build" }, { name: "Sign-off", gate: true }] }} href="#ux" presentation={{ columns: 5 }} />));
+    const units = Array.from(container.querySelectorAll(".ward-chiprow > *"), (unit) => unit.textContent);
+    expect(units).toEqual(["◆Design review (human gate)→", "Build→", "◆Sign-off (human gate)"]);
+  });
+
   it("keeps the navy gate chip for a stream with no validated step", () => {
     const navy = ["Review", "gate", "var(--ward-chip-gate-bg)", "var(--ward-chip-gate-fg)"];
     expect(chain(null, [{ name: "Intake" }, { name: "Review", gate: true }])[1]).toEqual(navy);

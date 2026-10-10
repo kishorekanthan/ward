@@ -9,10 +9,12 @@ import { sweepPhoneWidth } from "./phone-width.mjs";
 import { sweepFocusTargets } from "./focus-targets.mjs";
 import { sweepBoardHeight } from "./board-height.mjs";
 import { sweepBoardToolbar } from "./board-toolbar.mjs";
+import { sweepMenuEscape } from "./menu-escape.mjs";
 import { sweepStudioFrame } from "./studio-frame.mjs";
 import { sweepHeaderGeometry } from "./header-geometry.mjs";
 import { sweepPolicyRow } from "./policy-row.mjs";
 import { sweepAffordance } from "./affordance.mjs";
+import { sweepFlashRing } from "./flash-ring.mjs";
 import { workflowFindings } from "./workflows.mjs";
 import { NAME, OLD_NAME, OLD_TARBALL, oldNameFiles } from "./old-name.mjs";
 import { FAMILY_OF, breakpoints, buildCss, buildTokens, containerBreakpoints, declaredFaces, palette, readTokens } from "./gen-css.mjs";
@@ -245,7 +247,7 @@ else fail("rendered contrast", describeFailures(rendered.failures));
 
 // 7. phone width: Tabs, PageHeader chips, wide actions, link actions and a long title, StatStrip labels, StageGrid, the top-bar tools, the top-bar Primary nav's fades and current link (and no fade at 1280px), the section kicker, a short kicker row unchanged (also at 320px), a long kicker wrapping, a long note beside it and the activity console at 375px against src/goldens/phone-width.json
 const phoneDiffs = await sweepPhoneWidth();
-if (phoneDiffs.length === 0) pass("phone width", "Tabs, PageHeader chips, wide actions, link actions and a long title, StatStrip labels, StageGrid, the top-bar tools, the top-bar Primary nav's fades and current link (and no fade at 1280px), the section kicker, a short kicker row unchanged (also at 320px), a long kicker wrapping, a long note beside it keeping 12 characters a line, the activity console, the console foot and the long titles on WorkCard, SessionRow and the case header at 375 and 1280px match the golden");
+if (phoneDiffs.length === 0) pass("phone width", "Tabs, PageHeader chips, wide actions, link actions and a long title, StatStrip labels, StageGrid, the top-bar tools, the top-bar Primary nav's fades and current link (and no fade at 1280px), the section kicker, a short kicker row unchanged (also at 320px), a long kicker wrapping, a long note beside it keeping 12 characters a line, the activity console, the console foot, the long titles on WorkCard, SessionRow and the case header and a wrapped StreamRow stage chain at 375 and 1280px match the golden");
 else fail("phone width", phoneDiffs.join("; "));
 
 // 8. console theme: the light theme gets a light panel, dark keeps the comp's block, against src/goldens/console-theme.json
@@ -258,9 +260,9 @@ const focusDiffs = await sweepFocusTargets();
 if (focusDiffs.length === 0) pass("focus and targets", "every small link shows its focus ring in both themes and has a 24px target; edged controls, the off Switch thumb and the 375px TopBar select meet 3:1; whole-row links open from anywhere on the row");
 else fail("focus and targets", focusDiffs.join("; "));
 
-// 10. board height: the full-page board fills the viewport and its lanes scroll, not the page; the right-edge fade and lane count follow overflow (src/goldens/board-height.json)
+// 10. board height: the full-page board fills the viewport and its lanes scroll, not the page; each edge fades only while lanes sit beyond it, no lane count shows, and every card meta is whole (src/goldens/board-height.json)
 const boardDiffs = await sweepBoardHeight();
-if (boardDiffs.length === 0) pass("board height", "at 1024x768 and 375x667 the page never scrolls, the long lane does, and the fade and lane count show only on overflow");
+if (boardDiffs.length === 0) pass("board height", "at 1024x768, 1280x800 and 375x667, light and dark, the page never scrolls, the long lane does, each edge fades only while lanes sit beyond it, no lane count shows and no card meta is clipped or cut mid-word");
 else fail("board height", boardDiffs.join("; "));
 
 // 11. header geometry: every RecordSection header rect at 320, 375 and 1280px within 0.5px of src/goldens/header-geometry.json (#143)
@@ -287,6 +289,17 @@ else fail("studio frame", studioDiffs.join("; "));
 const toolbarDiffs = await sweepBoardToolbar();
 if (toolbarDiffs.length === 0) pass("board toolbar", "crowded consumer controls in both themes at 1280 and 375px: equal heights, aligned centers, complete labels and no sideways scroll");
 else fail("board toolbar", toolbarDiffs.join("; "));
+
+// 16. menu escape: open Select and Menu popups sit in the top layer against their trigger, leave the toolbar's controls in place and
+//     keep keys, focus return and their own scroll, on the board toolbar, a board page, a dialog and a clipping box (src/goldens/menu-escape.json, #225)
+const menuDiffs = await sweepMenuEscape();
+if (menuDiffs.length === 0) pass("menu escape", "toolbar and board page at 1280 and 375px in both themes, a dialog and a clipping box: menus open whole above every box, controls stay put, the toolbar never scrolls sideways, Escape and Enter return focus to the trigger, and a squeezed menu keeps its scroll");
+else fail("menu escape", menuDiffs.join("; "));
+
+// 17. flash ring: a flashed WorkCard paints a ring in the flash colour at its first frame, keeps its box and shadow, and runs nothing under reduced motion (src/goldens/flash-ring.json, #231)
+const flashDiffs = await sweepFlashRing();
+if (flashDiffs.length === 0) pass("flash ring", "light and dark: the first frame rings the card in the flash colour (or running), its box and shadow hold, the ring fades out, and reduced motion runs no flash");
+else fail("flash ring", flashDiffs.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);
 process.exitCode = failures === 0 ? 0 : 1;

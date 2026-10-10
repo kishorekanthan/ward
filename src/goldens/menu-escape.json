@@ -1,0 +1,14 @@
+{
+  "toolbar:light@1280": {"dx":0,"dy":4,"w":130.72,"h":82},
+  "toolbar:dark@1280": {"dx":0,"dy":4,"w":130.72,"h":82},
+  "board page:light@1280": {"dx":0,"dy":4,"w":130.72,"h":82},
+  "board page:dark@1280": {"dx":0,"dy":4,"w":130.72,"h":82},
+  "dialog:light@1280": {"dx":0,"dy":4,"w":390,"h":202},
+  "dialog:dark@1280": {"dx":0,"dy":4,"w":390,"h":202},
+  "clipping box:light@1280": {"dx":0,"dy":4,"w":160,"h":216.59},
+  "toolbar:light@375": {"dx":-0.01,"dy":4,"w":130.72,"h":82},
+  "toolbar:dark@375": {"dx":-0.01,"dy":4,"w":130.72,"h":82},
+  "board page:light@375": {"dx":-0.01,"dy":4,"w":130.72,"h":82},
+  "board page:dark@375": {"dx":-0.01,"dy":4,"w":130.72,"h":82},
+  "clipping box:light@375": {"dx":0,"dy":4,"w":160,"h":216.59}
+}

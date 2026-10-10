@@ -2,7 +2,11 @@ import { readFileSync } from "node:fs";
 
 // jsdom never sees CSS modules; inject one under the hashed names vitest gives its classes, so getComputedStyle reads it.
 export function injectModuleCss(path: string, classes: Record<string, string>): () => void {
-  const css = readFileSync(path, "utf8").replace(/\.([A-Za-z][\w-]*)/g, (whole, name: string) => (typeof classes[name] === "string" ? `.${classes[name]}` : whole));
+  // As the bundler does, :global(.x) becomes the bare .x; it is set aside first, since vitest hashes any class name asked for.
+  const globals: string[] = [];
+  const marked = readFileSync(path, "utf8").replace(/:global\(([^)]*)\)/g, (_, sel: string) => `@global${globals.push(sel) - 1}@`);
+  const scoped = marked.replace(/\.([A-Za-z][\w-]*)/g, (whole, name: string) => (typeof classes[name] === "string" ? `.${classes[name]}` : whole));
+  const css = scoped.replace(/@global(\d+)@/g, (_, i: string) => globals[Number(i)]);
   const style = document.createElement("style");
   style.textContent = css;
   document.head.append(style);

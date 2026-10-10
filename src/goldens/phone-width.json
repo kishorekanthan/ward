@@ -172,7 +172,8 @@
     "titleCut": true,
     "titleTooltip": true,
     "titleInView": true,
-    "ownerLinesAtMost2": true,
+    "ownerLines": 3,
+    "ownerWordsSplit": 0,
     "ownerInView": true,
     "pageScrollsSideways": false
   },
@@ -185,7 +186,8 @@
     "titleCut": true,
     "titleTooltip": true,
     "titleInView": true,
-    "ownerLinesAtMost2": true,
+    "ownerLines": 3,
+    "ownerWordsSplit": 0,
     "ownerInView": true,
     "pageScrollsSideways": false
   },
@@ -276,6 +278,21 @@
     "panels": 4,
     "controlsInView": true,
     "plainScreenText": true,
+    "pageScrollsSideways": false
+  },
+  "streamChain": {
+    "story": "studio-streamrow--summary-long-chain",
+    "chainLines": "6 6",
+    "lineStartsWithArrow": 0,
+    "arrows": 14,
+    "pageScrollsSideways": false
+  },
+  "streamChainWide": {
+    "story": "studio-streamrow--summary-long-chain",
+    "width": 1280,
+    "chainLines": "1 1",
+    "lineStartsWithArrow": 0,
+    "arrows": 14,
     "pageScrollsSideways": false
   }
 }

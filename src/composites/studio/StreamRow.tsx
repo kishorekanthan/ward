@@ -97,13 +97,15 @@ function compactLook(index: number, firstGate: number, step: StreamStep | null):
   return valid === null ? { role: "gate" } : { role: "stream", streamStep: valid };
 }
 
+// Each arrow trails its stage, so a chain that wraps starts every line with a stage, never an arrow.
 function stageChain({ stages, streamStep }: StreamRowSummary): ReactElement {
   const firstGate = stages.findIndex((stage) => stage.gate === true);
+  const last = stages.length - 1;
   return <span className={`${s.chain} ward-chiprow`}>
     {stages.map((stage, index) => (
       <span key={`${stage.name}${index}`} className={s.link}>
-        {index === 0 ? null : <span className={s.arrow} aria-hidden="true">→</span>}
         <StageChip name={stage.name} gate={stage.gate === true} look={compactLook(index, firstGate, streamStep)} size="tag" />
+        {index === last ? null : <span className={s.arrow} aria-hidden="true">→</span>}
       </span>
     ))}
   </span>;

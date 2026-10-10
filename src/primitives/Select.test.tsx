@@ -1,6 +1,7 @@
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { useState } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { stubLayout, unstubLayout } from "../test-layout";
 import { Select, type SelectOption } from "./Select";
 
 const owners: SelectOption[] = [
@@ -255,5 +256,33 @@ describe("Select Find", () => {
     expect(onChange).not.toHaveBeenCalled();
     expect(screen.queryByRole("listbox")).toBeNull();
     expect(document.activeElement).toBe(trigger());
+  });
+});
+
+describe("Select placement", () => {
+  afterEach(unstubLayout);
+
+  it("opens above a trigger near the bottom of the viewport, as wide as the trigger", () => {
+    const layout = stubLayout({ width: 1024, height: 768 }, { width: 160, height: 120 });
+    render(<Live />);
+    layout.place(trigger(), { left: 100, top: 700, width: 160, height: 32 });
+    fireEvent.click(trigger());
+    const menu = listbox().parentElement as HTMLElement;
+    expect([menu.style.top, menu.style.left, menu.style.maxHeight, menu.style.getPropertyValue("--ward-anchor-width")]).toEqual(["576px", "100px", "692px", "160px"]);
+  });
+
+  it("follows the trigger when any box scrolls or the window resizes", () => {
+    const layout = stubLayout({ width: 1024, height: 768 }, { width: 160, height: 120 });
+    render(<Live />);
+    layout.place(trigger(), { left: 100, top: 100, width: 160, height: 32 });
+    fireEvent.click(trigger());
+    const menu = listbox().parentElement as HTMLElement;
+    expect(menu.style.top).toBe("136px");
+    layout.place(trigger(), { left: 100, top: 40, width: 160, height: 32 });
+    fireEvent.scroll(document.body);
+    expect(menu.style.top).toBe("76px");
+    layout.place(trigger(), { left: 20, top: 200, width: 160, height: 32 });
+    fireEvent(window, new Event("resize"));
+    expect([menu.style.top, menu.style.left]).toEqual(["236px", "20px"]);
   });
 });

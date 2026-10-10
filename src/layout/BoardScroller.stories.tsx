@@ -1,6 +1,8 @@
 import { bothThemes } from "../../.storybook/bothThemes";
 import { fullPage } from "../../.storybook/fullPage";
 import { BoardColumn } from "../composites/board/BoardColumn";
+import { BoardHeader, type BoardHeaderProps } from "../composites/board/BoardHeader";
+import { CrowdedToolbar } from "../composites/board/BoardHeader.stories";
 import type { BoardItem } from "../composites/board/types";
 import { PageHeader } from "../primitives/PageHeader";
 import { AppShell } from "./AppShell";
@@ -39,12 +41,14 @@ export const Lanes = { decorators: [bothThemes], render: () => <BoardScroller la
 
 const STAGES = ["Intake", "Triage", "Build", "Review", "Release", "Verify", "Rollout", "Watch", "Done"];
 
+// Every third card has waited days on no one, and the card after it waits on a long name that must wrap between words.
+const OWNERS = ["A. Whyte", "no owner", "Alexandra Featherstonehaugh"];
 const card = (stage: string, n: number): BoardItem => ({
   key: `FL-${200 + n}`,
   title: `Reconcile shipment feed batch ${n + 1}`,
   stage,
-  timeInStage: (n + 1) * 3_600_000,
-  waitsOn: "A. Whyte",
+  timeInStage: n % 3 === 1 ? 857_000_000 : (n + 1) * 3_600_000,
+  waitsOn: OWNERS[n % 3],
   streamStep: 1,
   changedAt: "2026-09-06T02:14:00Z",
 });
@@ -76,9 +80,23 @@ export const BoardPageFiveLanes = {
   render: () => <BoardPage count={5} />,
 };
 
-// Nine lanes overflow a 1024px page: a right-edge fade and the lane count say more lanes sit off the edge.
+// Nine lanes overflow a 1024px page: a fade marks each edge that has lanes beyond it.
 export const BoardPageNineLanes = {
   decorators: [fullPage],
   parameters: { layout: "fullscreen" },
   render: () => <BoardPage count={9} />,
+};
+
+// The crowded toolbar as a board page holds it, above lanes that scroll on their own; its menus open over the lanes.
+export const BoardPageCrowdedHeader = {
+  decorators: [fullPage],
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <AppShell destinations={[{ id: "board", label: "Board", href: "#board" }]} active="board">
+      <PageFrame inset="board">
+        <BoardHeader {...(CrowdedToolbar.args as unknown as BoardHeaderProps)} />
+        <BoardScroller lanes={boardLanes(3)} />
+      </PageFrame>
+    </AppShell>
+  ),
 };
