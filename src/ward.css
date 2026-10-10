@@ -270,6 +270,7 @@
   --ward-pad-stageColumn: 14px 12px;
   --ward-pad-stageFoot: 13px 20px;
   --ward-pad-streamCell: 15px 4px;
+  --ward-pad-matrixRow: 10px;
   --ward-pad-streamHead: 9px 4px;
   --ward-pad-streamFoot: 14px 20px;
   --ward-pad-modalHead: 15px 18px;
@@ -404,6 +405,7 @@
   --ward-width-streamIndent: 16px;
   --ward-width-streamEdge: 20px;
   --ward-width-streamKey: 110px;
+  --ward-width-streamChainMin: 240px;
   --ward-width-colourPick: 150px;
   --ward-width-iconRail: 60px;
   --ward-height-control: 30px;
@@ -543,9 +545,11 @@
   --ward-type-skeletonLabel: 500 12px/1.2 Figtree, system-ui, sans-serif;
   --ward-type-previewNote: 400 12px/1.45 Figtree, system-ui, sans-serif;
   --ward-type-effectText: 400 12px/1.35 Figtree, system-ui, sans-serif;
-  --ward-type-scopeName: 600 13px/1 Figtree, system-ui, sans-serif;
+  --ward-type-scopeName: 600 15px/1 Figtree, system-ui, sans-serif;
   --ward-type-scopeName-tracking: -0.014em;
-  --ward-type-personName: 400 12px/1 Figtree, system-ui, sans-serif;
+  --ward-type-personName: 400 14px/1.3 Figtree, system-ui, sans-serif;
+  --ward-type-rowText: 400 14px/1.45 Figtree, system-ui, sans-serif;
+  --ward-type-rowTextStrong: 500 14px/1.3 Figtree, system-ui, sans-serif;
   --ward-motion-fast: 0.12s;
   --ward-motion-flash: 300ms;
   --ward-motion-reveal: 320ms;

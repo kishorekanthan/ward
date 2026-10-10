@@ -137,7 +137,7 @@
 .ownerLine {
   padding-left: var(--ward-width-streamIndent);
   color: var(--ward-color-muted);
-  font: var(--ward-type-stateLabel);
+  font: var(--ward-type-rowText);
 }
 
 .chain {
@@ -145,6 +145,11 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--ward-gap-streamChain);
+}
+
+/* A floor on the chain's width keeps a narrow cell from stacking one stage per line; the frame scrolls instead. */
+.compactCell .chain {
+  min-inline-size: var(--ward-width-streamChainMin);
 }
 
 .link {
@@ -164,15 +169,19 @@
   gap: var(--ward-gap-row);
 }
 
-.arrow,
-.muted {
+.arrow {
   color: var(--ward-color-muted);
   font: var(--ward-type-inputText);
 }
 
+.muted {
+  color: var(--ward-color-muted);
+  font: var(--ward-type-rowText);
+}
+
 .define {
   color: var(--ward-color-link);
-  font: var(--ward-type-inputStrong);
+  font: var(--ward-type-rowTextStrong);
   font-weight: 600;
   text-decoration: none;
 }
@@ -184,11 +193,11 @@
 }
 
 .policyId {
-  font: var(--ward-type-inputStrong);
+  font: var(--ward-type-rowTextStrong);
   color: var(--ward-color-text);
 }
 
 .sub {
   color: var(--ward-color-muted);
-  font: var(--ward-type-cellSub);
+  font: var(--ward-type-rowText);
 }

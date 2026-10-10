@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
+import { readFileSync } from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 import { Tree } from "../../primitives/Tree";
 import { edge, injectModuleCss, leftBorders, ruleBody } from "../../test-css";
@@ -182,5 +183,31 @@ describe("unresolved role row", () => {
     expect(scope).toEqual({ shadow: "", ground: "var(--ward-color-waitingtint)" });
     expect(role).toEqual({ shadow: "inset var(--ward-underline) 0 0 0 var(--ward-color-line)", ground: "var(--ward-color-waitingtint)" });
     expect(leftBorders(css)).toEqual([]);
+  });
+});
+
+describe("RoleMatrixRow web readability", () => {
+  const ward = readFileSync("src/ward.css", "utf8");
+  // jsdom leaves var() unresolved in shorthands, so read each token's size from the generated stylesheet.
+  const px = (value: string) => ward.match(new RegExp(`${value.slice(4, -1)}: [^;]*?(\\d+px)`))?.[1];
+
+  it("sets scope, role, person and People text at 14px or more and pads every row", () => {
+    const removeCss = [injectModuleCss("src/primitives/Tree.module.css", treeCss), injectModuleCss("src/composites/admin/RoleMatrixRow.module.css", s)];
+    const { container } = render(
+      <RoleMatrixRow
+        presentation="web"
+        rows={[
+          { depth: 0, label: "Data engineering", people: "24", expanded: true },
+          { depth: 1, label: "Approver", people: "5", expanded: true },
+          { depth: 2, label: "Priya Raman", people: "1", leaf: true },
+        ]}
+      />,
+    );
+    const rows = screen.getAllByRole("treeitem").map((row) => getComputedStyle(row));
+    const people = Array.from(container.querySelectorAll(".ward-rolepeople"), (el) => px(getComputedStyle(el).font));
+    removeCss.forEach((remove) => remove());
+    expect(rows.map((row) => px(row.font))).toEqual(["15px", "14px", "14px"]);
+    expect(people).toEqual(["14px", "14px", "14px"]);
+    expect(rows.map((row) => px(row.paddingBlock))).toEqual(["10px", "10px", "10px"]);
   });
 });

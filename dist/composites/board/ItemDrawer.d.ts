@@ -24,5 +24,7 @@ export type ItemDrawerProps = {
     resolveLabel?: string;
     actionsNote?: string;
     facts?: DrawerFact[];
+    /** Shows the item key as a chip; off by default, as a generated id is noise to most readers. */
+    showKey?: boolean;
 };
-export declare function ItemDrawer({ item, actions, onClose, returnFocusTo, feed, resolve, resolveLabel, actionsNote, facts }: ItemDrawerProps): import("react").JSX.Element;
+export declare function ItemDrawer({ item, actions, onClose, returnFocusTo, feed, resolve, resolveLabel, actionsNote, facts, showKey }: ItemDrawerProps): import("react").JSX.Element;

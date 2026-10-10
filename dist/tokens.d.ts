@@ -250,6 +250,7 @@ export declare const v: {
         readonly stageColumn: "var(--ward-pad-stageColumn)";
         readonly stageFoot: "var(--ward-pad-stageFoot)";
         readonly streamCell: "var(--ward-pad-streamCell)";
+        readonly matrixRow: "var(--ward-pad-matrixRow)";
         readonly streamHead: "var(--ward-pad-streamHead)";
         readonly streamFoot: "var(--ward-pad-streamFoot)";
         readonly modalHead: "var(--ward-pad-modalHead)";
@@ -388,6 +389,7 @@ export declare const v: {
         readonly streamIndent: "var(--ward-width-streamIndent)";
         readonly streamEdge: "var(--ward-width-streamEdge)";
         readonly streamKey: "var(--ward-width-streamKey)";
+        readonly streamChainMin: "var(--ward-width-streamChainMin)";
         readonly colourPick: "var(--ward-width-colourPick)";
         readonly iconRail: "var(--ward-width-iconRail)";
     };
@@ -538,6 +540,8 @@ export declare const v: {
         readonly scopeName: "var(--ward-type-scopeName)";
         readonly scopeNameTracking: "var(--ward-type-scopeName-tracking)";
         readonly personName: "var(--ward-type-personName)";
+        readonly rowText: "var(--ward-type-rowText)";
+        readonly rowTextStrong: "var(--ward-type-rowTextStrong)";
     };
     readonly motion: {
         readonly fast: "var(--ward-motion-fast)";

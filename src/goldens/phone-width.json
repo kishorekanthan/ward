@@ -282,17 +282,63 @@
   },
   "streamChain": {
     "story": "studio-streamrow--summary-long-chain",
-    "chainLines": "6 6",
+    "chainLines": "4 4",
     "lineStartsWithArrow": 0,
     "arrows": 14,
-    "pageScrollsSideways": false
+    "pageScrollsSideways": false,
+    "loneStageLines": 0,
+    "ownerPx": "14px",
+    "subPx": "14px"
   },
   "streamChainWide": {
     "story": "studio-streamrow--summary-long-chain",
     "width": 1280,
-    "chainLines": "1 1",
+    "chainLines": "2 2",
     "lineStartsWithArrow": 0,
     "arrows": 14,
+    "pageScrollsSideways": false,
+    "loneStageLines": 0,
+    "ownerPx": "14px",
+    "subPx": "14px"
+  },
+  "streamChainFour": {
+    "story": "studio-streamrow--summary",
+    "width": 1280,
+    "chainLines": "1 1",
+    "loneStageLines": 0,
+    "lineStartsWithArrow": 0,
+    "arrows": 6,
+    "ownerPx": "14px",
+    "subPx": "14px",
+    "notePx": "14px",
+    "pageScrollsSideways": false
+  },
+  "streamSummary": {
+    "story": "studio-streamrow--summary",
+    "chainLines": "2 2",
+    "loneStageLines": 0,
+    "lineStartsWithArrow": 0,
+    "arrows": 6,
+    "ownerPx": "14px",
+    "subPx": "14px",
+    "notePx": "14px",
+    "pageScrollsSideways": false
+  },
+  "roleMatrixRows": {
+    "story": "admin-rolematrixrow--web-scope-role-person",
+    "rows": 8,
+    "labelPx": "15px / 14px / 14px",
+    "peoplePx": "14px",
+    "rowHeightAtLeast": 36,
+    "pageScrollsSideways": false
+  },
+  "roleMatrixRowsWide": {
+    "story": "admin-rolematrixrow--web-scope-role-person",
+    "width": 1280,
+    "rows": 8,
+    "labelPx": "15px / 14px / 14px",
+    "peoplePx": "14px",
+    "rowHeightAtLeast": 36,
     "pageScrollsSideways": false
   }
 }

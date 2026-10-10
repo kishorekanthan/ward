@@ -87,6 +87,11 @@
   min-width: 0;
 }
 
+/* Each matrix row gets air above and below its text, so a list of roles reads as separate rows. */
+.webFrame [role="treeitem"] {
+  padding-block: var(--ward-pad-matrixRow);
+}
+
 .webFrame [role="treeitem"][data-depth="0"] {
   background: var(--ward-color-surface2);
   font: var(--ward-type-scopeName);
@@ -95,7 +100,7 @@
 
 .webFrame [role="treeitem"][data-depth="1"] {
   padding-left: var(--ward-width-roleIndent);
-  font: var(--ward-type-rowName);
+  font: var(--ward-type-rowTextStrong);
   box-shadow: inset var(--ward-underline) 0 0 0 var(--ward-color-line);
 }
 
@@ -140,7 +145,7 @@
 
 .webPeople {
   width: var(--ward-width-rolePeople);
-  font: var(--ward-type-body);
+  font: var(--ward-type-rowText);
   color: var(--ward-color-text);
 }
 

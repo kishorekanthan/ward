@@ -190,3 +190,28 @@ describe("ItemDrawer app facts", () => {
     errors.mockRestore();
   });
 });
+
+describe("ItemDrawer key chip", () => {
+  // Every chip in the dialog, as [role, text]; the stream chip is dropped by naming the stream.
+  const chips = (extra: Partial<Parameters<typeof ItemDrawer>[0]>) => {
+    const { unmount } = render(drawer({ item: { ...item, streamName: "Data engineering", state: { role: "gate", label: "Held" } }, ...extra }));
+    const found = Array.from(screen.getByRole("dialog").querySelectorAll("[data-ward-chip]"), (chip) => [chip.getAttribute("data-ward-chip"), chip.textContent]);
+    const text = screen.getByRole("dialog").textContent ?? "";
+    unmount();
+    return { found, keyShown: text.includes("FL-229") };
+  };
+
+  it("shows no item key by default, and keeps the state chip", () => {
+    expect(chips({})).toEqual({ found: [["gate", "Held"]], keyShown: false });
+  });
+
+  it("shows the key as a meta chip before the state chip when the app asks", () => {
+    expect(chips({ showKey: true })).toEqual({ found: [["meta", "FL-229"], ["gate", "Held"]], keyShown: true });
+  });
+
+  it("renders no empty head when there is neither a key nor a state", () => {
+    const { container } = render(drawer({ item: { ...item, streamName: "Data engineering" } }));
+    expect(document.querySelectorAll("[role='dialog'] [data-ward-chip]")).toHaveLength(0);
+    expect(container.ownerDocument.querySelector("[role='dialog'] h2")?.parentElement?.previousElementSibling).toBeNull();
+  });
+});

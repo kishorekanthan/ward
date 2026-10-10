@@ -354,6 +354,27 @@ function probeStreamChain() {
     chainLines: lineStarts.map((lines) => lines.length).join(" "),
     lineStartsWithArrow: lineStarts.flat().filter((unit) => leftmost(unit).textContent === "→").length,
     arrows: chains.reduce((n, chain) => n + Array.from(chain.querySelectorAll("[aria-hidden='true']")).filter((el) => el.textContent === "→").length, 0),
+    // A line holding one stage, other than a chain's last, means the chain stacked instead of wrapping as a group (#235).
+    loneStageLines: lineStarts.reduce((n, lines, c) => n + lines.slice(0, -1).filter((unit, i) => {
+      const units = Array.from(chains[c].children);
+      return units.indexOf(lines[i + 1]) - units.indexOf(unit) === 1;
+    }).length, 0),
+    ownerPx: getComputedStyle(document.querySelector("#storybook-root .ward-rowlink").parentElement.nextElementSibling).fontSize,
+    subPx: getComputedStyle(document.querySelector("#storybook-root .ward-stat-value").nextElementSibling).fontSize,
+    notePx: Array.from(new Set(Array.from(document.querySelectorAll("#storybook-root span"), (el) => (["No stages yet", "not set"].includes(el.textContent) ? getComputedStyle(el).fontSize : "")).filter(Boolean))).join(" "),
+    pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+  };
+}
+
+// Web role matrix rows: each depth's label size, the People size and the shortest row, in both theme copies (#235).
+function probeRoleMatrixRows() {
+  const rows = Array.from(document.querySelectorAll("#storybook-root [data-ward-rolematrix] [role='treeitem']"));
+  const px = (els) => Array.from(new Set(els.map((el) => getComputedStyle(el).fontSize))).join(" ");
+  return {
+    rows: rows.length,
+    labelPx: [0, 1, 2].map((depth) => px(rows.filter((row) => row.dataset.depth === String(depth)).map((row) => row.querySelector(".ward-envrow > span")))).join(" / "),
+    peoplePx: px(rows.map((row) => row.querySelector(".ward-rolepeople"))),
+    rowHeightAtLeast: Math.min(...rows.map((row) => Math.round(row.getBoundingClientRect().height))),
     pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
   };
 }
@@ -371,7 +392,7 @@ function probeThemeSamples() {
 }
 
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { themePresets: probeThemeSamples, themeDensities: probeThemeSamples, tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot, workCardLongTitle: probeLongText, workCardLongTitleWide: probeLongText, sessionLongTitle: probeLongText, sessionLongTitleWide: probeLongText, sessionTableLongTitle: probeLongText, sessionTableLongTitleWide: probeLongText, caseHeaderLongTitle: probeLongText, caseHeaderLongTitleWide: probeLongText, streamChain: probeStreamChain, streamChainWide: probeStreamChain };
+const PROBES = { themePresets: probeThemeSamples, themeDensities: probeThemeSamples, tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot, workCardLongTitle: probeLongText, workCardLongTitleWide: probeLongText, sessionLongTitle: probeLongText, sessionLongTitleWide: probeLongText, sessionTableLongTitle: probeLongText, sessionTableLongTitleWide: probeLongText, caseHeaderLongTitle: probeLongText, caseHeaderLongTitleWide: probeLongText, streamChain: probeStreamChain, streamChainWide: probeStreamChain, streamChainFour: probeStreamChain, streamSummary: probeStreamChain, roleMatrixRows: probeRoleMatrixRows, roleMatrixRowsWide: probeRoleMatrixRows };
 
 async function measure(page, base, key) {
   const { story, label, longLabel, width = golden.viewport.width } = golden[key];
