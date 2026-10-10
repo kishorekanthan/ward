@@ -1,6 +1,8 @@
 import { overlayThemes } from "../../../.storybook/overlayThemes";
+import type { ReactNode } from "react";
 import { Btn } from "../../primitives/Btn";
-import { ItemDrawer, type ItemDetail } from "./ItemDrawer";
+import { Chip } from "../../primitives/Chip";
+import { ItemDrawer, type DrawerFact, type ItemDetail } from "./ItemDrawer";
 import type { WorkCardFeed } from "./WorkCard";
 import type { LiveConnection } from "../../live/types";
 
@@ -63,3 +65,27 @@ export const Flagged = {
 };
 
 export const NoActions = { args: { ...base, item, actions: [] } };
+
+// The app supplies this row; Ward knows nothing about test runs.
+function testedFact(chip: ReactNode, when: string): DrawerFact {
+  return {
+    label: "Tested",
+    value: (
+      <span style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--ward-gap-row)" }}>
+        {chip}
+        <span>{when}</span>
+        <Btn variant="ghost" size="sm" onClick={() => {}}>
+          Open run
+        </Btn>
+      </span>
+    ),
+  };
+}
+
+export const TestedPassed = {
+  args: { ...base, item, facts: [testedFact(<Chip role="done" label="Passed" />, "2 hours ago")] },
+};
+
+export const TestedFailed = {
+  args: { ...base, item, facts: [testedFact(<Chip role="failed" label="Failed" />, "At Storybook build, 2 hours ago")] },
+};
