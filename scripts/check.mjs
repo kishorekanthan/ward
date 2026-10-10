@@ -245,7 +245,7 @@ else fail("rendered contrast", describeFailures(rendered.failures));
 
 // 7. phone width: Tabs, PageHeader chips, wide actions, link actions and a long title, StatStrip labels, StageGrid, the top-bar tools, the top-bar Primary nav's fades and current link (and no fade at 1280px), the section kicker, a short kicker row unchanged (also at 320px), a long kicker wrapping, a long note beside it and the activity console at 375px against src/goldens/phone-width.json
 const phoneDiffs = await sweepPhoneWidth();
-if (phoneDiffs.length === 0) pass("phone width", "Tabs, PageHeader chips, wide actions, link actions and a long title, StatStrip labels, StageGrid, the top-bar tools, the top-bar Primary nav's fades and current link (and no fade at 1280px), the section kicker, a short kicker row unchanged (also at 320px), a long kicker wrapping, a long note beside it keeping 12 characters a line, the activity console, the console foot and the long titles on WorkCard, SessionRow and the case header at 375 and 1280px match the golden");
+if (phoneDiffs.length === 0) pass("phone width", "Tabs, PageHeader chips, wide actions, link actions and a long title, StatStrip labels, StageGrid, the top-bar tools, the top-bar Primary nav's fades and current link (and no fade at 1280px), the section kicker, a short kicker row unchanged (also at 320px), a long kicker wrapping, a long note beside it keeping 12 characters a line, the activity console, the console foot, the long titles on WorkCard, SessionRow and the case header and a wrapped StreamRow stage chain at 375 and 1280px match the golden");
 else fail("phone width", phoneDiffs.join("; "));
 
 // 8. console theme: the light theme gets a light panel, dark keeps the comp's block, against src/goldens/console-theme.json
@@ -258,9 +258,9 @@ const focusDiffs = await sweepFocusTargets();
 if (focusDiffs.length === 0) pass("focus and targets", "every small link shows its focus ring in both themes and has a 24px target; edged controls, the off Switch thumb and the 375px TopBar select meet 3:1; whole-row links open from anywhere on the row");
 else fail("focus and targets", focusDiffs.join("; "));
 
-// 10. board height: the full-page board fills the viewport and its lanes scroll, not the page; the right-edge fade and lane count follow overflow (src/goldens/board-height.json)
+// 10. board height: the full-page board fills the viewport and its lanes scroll, not the page; each edge fades only while lanes sit beyond it, no lane count shows, and every card meta is whole (src/goldens/board-height.json)
 const boardDiffs = await sweepBoardHeight();
-if (boardDiffs.length === 0) pass("board height", "at 1024x768 and 375x667 the page never scrolls, the long lane does, and the fade and lane count show only on overflow");
+if (boardDiffs.length === 0) pass("board height", "at 1024x768, 1280x800 and 375x667, light and dark, the page never scrolls, the long lane does, each edge fades only while lanes sit beyond it, no lane count shows and no card meta is clipped or cut mid-word");
 else fail("board height", boardDiffs.join("; "));
 
 // 11. header geometry: every RecordSection header rect at 320, 375 and 1280px within 0.5px of src/goldens/header-geometry.json (#143)

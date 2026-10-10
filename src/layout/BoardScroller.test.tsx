@@ -24,7 +24,8 @@ function mockBoardWidth(scroll: number): void {
 }
 
 const five = ["build", "gate", "other", "build", "gate"].map((id, i) => ({ ...lanes([id])[0], id: `${id}${i}` }));
-const laneCount = () => document.querySelector<HTMLElement>("[data-ward-board-lane-count]");
+// The removed label read "5 lanes"; no text of that shape may come back.
+const laneCountText = () => screen.queryByText(/\d+ lanes?$/);
 
 function lanes(ids: string[] = ["build", "gate", "other"]): BoardLane[] {
   const all: Record<string, BoardLane> = {
@@ -104,19 +105,36 @@ describe("BoardScroller overflow", () => {
     expect(screen.getByRole("region").hasAttribute("data-fade-end")).toBe(false);
   });
 
-  it("shows the lane count only while lanes overflow, including at the scrolled end", () => {
+  it("fades the left edge only once the lanes are scrolled from the start", () => {
     stubMatchMedia(false);
     mockBoardWidth(1200);
     render(<BoardScroller lanes={five} />);
-    expect(laneCount()?.hidden).toBe(false);
-    expect(laneCount()?.textContent).toBe("5 lanes");
+    const region = screen.getByRole("region");
+    expect(region.hasAttribute("data-fade-start")).toBe(false);
+    region.scrollLeft = 100;
+    fireEvent.scroll(region);
+    expect([region.hasAttribute("data-fade-start"), region.hasAttribute("data-fade-end")]).toEqual([true, true]);
+    region.scrollLeft = 0;
+    fireEvent.scroll(region);
+    expect(region.hasAttribute("data-fade-start")).toBe(false);
+  });
+
+  it("names no lane count while lanes overflow, at the scrolled end, or when they fit", () => {
+    stubMatchMedia(false);
+    mockBoardWidth(1200);
+    const view = render(<BoardScroller lanes={five} />);
+    expect(laneCountText()).toBeNull();
     const region = screen.getByRole("region");
     region.scrollLeft = 200;
     fireEvent.scroll(region);
-    expect(laneCount()?.hidden).toBe(false);
+    expect(laneCountText()).toBeNull();
+    view.unmount();
+    mockBoardWidth(BOARD);
+    render(<BoardScroller lanes={five} />);
+    expect(laneCountText()).toBeNull();
   });
 
-  it("shows the lane count and fade once a resize makes lanes overflow", () => {
+  it("shows the fade once a resize makes lanes overflow", () => {
     const fires: (() => void)[] = [];
     vi.stubGlobal("ResizeObserver", class {
       constructor(cb: () => void) { fires.push(cb); }
@@ -126,28 +144,9 @@ describe("BoardScroller overflow", () => {
     stubMatchMedia(false);
     mockBoardWidth(BOARD);
     render(<BoardScroller lanes={five} />);
-    expect(laneCount()?.hidden).toBe(true);
+    expect(screen.getByRole("region").hasAttribute("data-fade-end")).toBe(false);
     mockBoardWidth(1200);
     act(() => fires.forEach((fire) => fire()));
-    expect(laneCount()?.hidden).toBe(false);
     expect(screen.getByRole("region").hasAttribute("data-fade-end")).toBe(true);
-  });
-
-  it("hides the lane count when every lane fits", () => {
-    stubMatchMedia(false);
-    mockBoardWidth(BOARD);
-    render(<BoardScroller lanes={five} />);
-    expect(laneCount()?.hidden).toBe(true);
-  });
-
-  it("has no lane count for loose children or the phone's single lane", () => {
-    mockBoardWidth(1200);
-    stubMatchMedia(false);
-    const view = render(<BoardScroller><section>Loose</section></BoardScroller>);
-    expect(laneCount()).toBeNull();
-    view.unmount();
-    stubMatchMedia(true);
-    render(<BoardScroller lanes={five} />);
-    expect(laneCount()).toBeNull();
   });
 });

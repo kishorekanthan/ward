@@ -47,47 +47,51 @@
   flex-wrap: wrap;
 }
 
-/* ClampText wraps the title and the owner to two lines, then cuts with an ellipsis (#199). */
+/* ClampText wraps the title to two lines, then cuts with an ellipsis (#199). */
 .title {
   font: var(--ward-type-workTitle);
   color: var(--ward-color-text);
 }
 
-.meta,
-.fields {
-  display: flex;
-  align-items: baseline;
-  gap: var(--ward-space-2);
+/* The meta never clips: it wraps between words, and only a word wider than the card breaks inside itself. */
+.meta {
+  min-width: 0;
   font: var(--ward-type-meta);
   color: var(--ward-color-muted);
-  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
-.meta {
-  font: var(--ward-type-rowNote);
+/* The time drops to the next line whole, and wraps inside itself only when a line cannot hold it. */
+.meta :global(.ward-liveind),
+.since {
+  display: inline-block;
+  white-space: normal;
 }
 
-.who {
-  min-width: 0;
+.since {
+  font: var(--ward-type-monoId);
+  font-variant-numeric: var(--ward-type-monoId-numeric);
 }
 
 .sep {
   color: var(--ward-color-faint);
 }
 
-.mono,
+.fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ward-space-1) var(--ward-space-3);
+  font: var(--ward-type-meta);
+  color: var(--ward-color-muted);
+  min-width: 0;
+}
+
 .field {
   font: var(--ward-type-monoId);
   font-variant-numeric: var(--ward-type-monoId-numeric);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.fields {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--ward-space-1) var(--ward-space-3);
 }
 
 /* The last step is a sentence, not an id, so it reads in the sans face (#199). */

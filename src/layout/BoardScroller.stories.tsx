@@ -39,12 +39,13 @@ export const Lanes = { decorators: [bothThemes], render: () => <BoardScroller la
 
 const STAGES = ["Intake", "Triage", "Build", "Review", "Release", "Verify", "Rollout", "Watch", "Done"];
 
+// Every third card has waited days on no one: the longest meta a card shows, which must wrap whole.
 const card = (stage: string, n: number): BoardItem => ({
   key: `FL-${200 + n}`,
   title: `Reconcile shipment feed batch ${n + 1}`,
   stage,
-  timeInStage: (n + 1) * 3_600_000,
-  waitsOn: "A. Whyte",
+  timeInStage: n % 3 === 1 ? 857_000_000 : (n + 1) * 3_600_000,
+  waitsOn: n % 3 === 1 ? "no owner" : "A. Whyte",
   streamStep: 1,
   changedAt: "2026-09-06T02:14:00Z",
 });
@@ -76,7 +77,7 @@ export const BoardPageFiveLanes = {
   render: () => <BoardPage count={5} />,
 };
 
-// Nine lanes overflow a 1024px page: a right-edge fade and the lane count say more lanes sit off the edge.
+// Nine lanes overflow a 1024px page: a fade marks each edge that has lanes beyond it.
 export const BoardPageNineLanes = {
   decorators: [fullPage],
   parameters: { layout: "fullscreen" },
