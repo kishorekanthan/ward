@@ -179,6 +179,7 @@
 /* Board lanes fill the height under the header and scroll on their own; they keep a gutter so every corner shows. */
 /* An opaque mask at rest keeps the lanes on the layer the fade uses, so their corners never re-raster. */
 .frame[data-inset="board"] .scroller {
+  --ward-board-fade: calc(var(--ward-space-7) * 2);
   padding-block-end: var(--ward-page-inset);
   mask-image: linear-gradient(currentColor, currentColor);
 }
@@ -187,8 +188,17 @@
   overflow-y: auto;
 }
 
+/* The fade spans more than the lane gap, so it reaches into the next lane's cards and reads as more to see. */
 .frame[data-inset="board"] .scroller[data-fade-end] {
-  mask-image: linear-gradient(to left, transparent, currentColor var(--ward-space-6));
+  mask-image: linear-gradient(to left, transparent, currentColor var(--ward-board-fade));
+}
+
+.frame[data-inset="board"] .scroller[data-fade-start] {
+  mask-image: linear-gradient(to right, transparent, currentColor var(--ward-board-fade));
+}
+
+.frame[data-inset="board"] .scroller[data-fade-start][data-fade-end] {
+  mask-image: linear-gradient(to right, transparent, currentColor var(--ward-board-fade), currentColor calc(100% - var(--ward-board-fade)), transparent);
 }
 
 .board {
@@ -197,15 +207,6 @@
   flex-direction: column;
   min-width: 0;
   min-height: 0;
-}
-
-.laneCount {
-  align-self: flex-end;
-  margin: 0 0 var(--ward-space-2);
-  font: var(--ward-type-micro);
-  letter-spacing: var(--ward-type-micro-tracking);
-  text-transform: var(--ward-type-micro-transform);
-  color: var(--ward-color-muted);
 }
 
 /* The lane picker keeps the page inset; only the lane itself runs full-bleed. */

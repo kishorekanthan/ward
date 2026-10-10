@@ -13,6 +13,7 @@ import {
 import { flushSync } from "react-dom";
 import { useOutsideClose } from "../a11y/useOutsideClose";
 import { printable, useTypeahead } from "../a11y/useTypeahead";
+import { useAnchoredMenu } from "./anchorMenu";
 import { safeHref } from "./safeHref";
 import s from "./Menu.module.css";
 
@@ -48,7 +49,7 @@ type Popup = {
   close: (refocus: boolean) => void;
 };
 
-type Shared = { popup: Popup; menuId: string; buttonId: string };
+type Shared = { popup: Popup; menuId: string; buttonId: string; button: RefObject<HTMLButtonElement | null> };
 
 const MenuContext = createContext<Shared | null>(null);
 
@@ -114,7 +115,7 @@ export function MenuButton(props: MenuButtonProps) {
       >
         {props.label}
       </button>
-      {popup.open && <MenuContext.Provider value={{ ...shared, popup }}>{props.children}</MenuContext.Provider>}
+      {popup.open && <MenuContext.Provider value={{ ...shared, popup, button }}>{props.children}</MenuContext.Provider>}
     </div>
   );
 }
@@ -292,13 +293,15 @@ function useShared(): Shared {
 }
 
 export function Menu({ entries, footer, align = "start" }: MenuProps) {
-  const { popup, menuId, buttonId } = useShared();
+  const { popup, menuId, buttonId, button } = useShared();
+  const panel = useRef<HTMLDivElement>(null);
+  useAnchoredMenu(button, panel, align);
   const blocks = blocksOf(entries);
   const nav = useNav(blocks.flatMap(rowsOf).map((row) => row.item));
   const keys = useMenuKeys(nav, popup);
   useOpenFocus(nav, popup);
   return (
-    <div className={s.panel} data-align={align}>
+    <div ref={panel} className={s.panel}>
       <div role="menu" id={menuId} aria-labelledby={buttonId} className={s.menu} {...keys}>
         {blocks.map((block, i) => (
           <BlockView key={i} block={block} nav={nav} popup={popup} />

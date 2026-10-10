@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { bothThemes } from "../../../.storybook/bothThemes";
 import { BoardHeader } from "./BoardHeader";
 import { Btn } from "../../primitives/Btn";
@@ -21,6 +22,18 @@ const base = {
   onConfigure: () => {},
 };
 
+const streams = [
+  { value: "data", label: "Data Engineering" },
+  { value: "integration", label: "Integration" },
+  { value: "payments", label: "Payments" },
+];
+
+// Holds its choice, so a pick from the open menu shows on the trigger.
+function StreamField() {
+  const [value, setValue] = useState("data");
+  return <Field kind="select" label="Stream" value={value} options={streams} onChange={setValue} />;
+}
+
 export default {
   title: "Board/BoardHeader",
   component: BoardHeader,
@@ -35,10 +48,7 @@ export const CrowdedToolbar = {
     owners: [{ value: "all", label: "All owners" }, ...owners.slice(1)],
     actions: <>
       <Field label="Filter items" labelHidden variant="form" placeholder="Filter by key or title" value="" onChange={() => {}} />
-      <Field kind="select" label="Stream" value="data" options={[
-        { value: "data", label: "Data Engineering" },
-        { value: "integration", label: "Integration" },
-      ]} onChange={() => {}} />
+      <StreamField />
       <Btn variant="primary">Raise a request</Btn>
     </>,
   },
