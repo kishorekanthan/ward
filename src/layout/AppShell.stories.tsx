@@ -6,6 +6,8 @@ import { BoardIcon, HomeIcon, StudioIcon } from "./NavIcons";
 import { Sidebar, type SidebarAgent } from "./Sidebar";
 import { SIDEBAR_COLLAPSED_KEY } from "./useSidebarCollapse";
 import { Btn } from "../primitives/Btn";
+import { Field } from "../primitives/Field";
+import { Overlay } from "../primitives/Overlay";
 import { SegmentedControl } from "../primitives/SegmentedControl";
 
 /* Slot filler only — the real Sidebar, TopBar and RightRail are separate
@@ -158,4 +160,19 @@ export const SidebarNarrow = {
   decorators: [bothThemes, storedFold(true)],
   args: floatingArgs,
   parameters: { viewport: { defaultViewport: "mobile1" } },
+};
+
+const stages = ["Intake", "Triage", "Design", "Build", "Review", "Release", "Verify", "Done"].map((label) => ({ value: label.toLowerCase(), label }));
+
+// A dialog clips its overflow, yet its open Stage menu shows whole and above it. One copy, since a second dialog would make the first inert.
+export const DialogWithSelect = {
+  decorators: [fullPage],
+  render: () => (
+    <AppShell header={header}>
+      {body}
+      <Overlay kind="modal" title="Move to another stage" onClose={() => {}} returnFocusTo={null}>
+        <Field kind="select" label="Stage" value="triage" options={stages} onChange={() => {}} />
+      </Overlay>
+    </AppShell>
+  ),
 };

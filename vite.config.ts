@@ -10,7 +10,7 @@ export default defineConfig({
   // Relative font URLs in dist/index.css, so a consumer's bundler copies the files rather than fetching a host path.
   base: "./",
   // Stories import from .storybook, which would lift the declaration root above src and bury index.d.ts.
-  plugins: [react(), dts({ include: ["src"], exclude: ["src/**/*.stories.tsx", "src/**/*.test.*", "src/test-setup.ts", "src/test-css.ts"] })],
+  plugins: [react(), dts({ include: ["src"], exclude: ["src/**/*.stories.tsx", "src/**/*.test.*", "src/test-setup.ts", "src/test-css.ts", "src/test-layout.ts"] })],
   build: {
     lib: {
       entry,

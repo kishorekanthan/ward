@@ -3,6 +3,7 @@ import { flushSync } from "react-dom";
 import { joinIds } from "../a11y/joinIds";
 import { useOutsideClose } from "../a11y/useOutsideClose";
 import { printable, useTypeahead } from "../a11y/useTypeahead";
+import { useAnchoredMenu } from "./anchorMenu";
 import s from "./Select.module.css";
 
 export type SelectOption = { value: string; label: string };
@@ -168,14 +169,14 @@ function OptionRow({ entry, at, menu, ids, value }: { entry: Entry; at: number; 
   );
 }
 
-type MenuViewProps = { props: SelectProps; menu: Menu; ids: Ids; focusRef: RefObject<HTMLElement | null> };
+type MenuViewProps = { props: SelectProps; menu: Menu; ids: Ids; focusRef: RefObject<HTMLElement | null>; trigger: RefObject<HTMLButtonElement | null> };
 
 function activeId(menu: Menu, ids: Ids): string | undefined {
   const entry = menu.entries[menu.active];
   return entry ? ids.option(entry.index) : undefined;
 }
 
-function FindBox({ menu, ids, focusRef }: Omit<MenuViewProps, "props">) {
+function FindBox({ menu, ids, focusRef }: Omit<MenuViewProps, "props" | "trigger">) {
   return (
     <input
       ref={focusRef as RefObject<HTMLInputElement | null>}
@@ -195,13 +196,15 @@ function FindBox({ menu, ids, focusRef }: Omit<MenuViewProps, "props">) {
   );
 }
 
-function MenuView({ props, menu, ids, focusRef }: MenuViewProps) {
+function MenuView({ props, menu, ids, focusRef, trigger }: MenuViewProps) {
   const jump = useJump(menu);
+  const box = useRef<HTMLDivElement>(null);
+  useAnchoredMenu(trigger, box);
   const onType = (event: KeyboardEvent) => {
     if (printable(event)) jump(event.key);
   };
   return (
-    <div className={s.menu}>
+    <div ref={box} className={s.menu}>
       {menu.findable && <FindBox menu={menu} ids={ids} focusRef={focusRef} />}
       <ul
         ref={menu.findable ? undefined : (focusRef as RefObject<HTMLUListElement | null>)}
@@ -277,7 +280,7 @@ export function Select(props: SelectProps) {
     <div ref={root} className={classes(s.root, props.className)} data-ward-select="">
       <Trigger props={props} menu={menu} ids={ids} trigger={trigger} wantFocus={wantFocus} />
       {props.name && <input type="hidden" name={props.name} value={props.value} />}
-      {menu.open && <MenuView props={props} menu={menu} ids={ids} focusRef={focusRef} />}
+      {menu.open && <MenuView props={props} menu={menu} ids={ids} focusRef={focusRef} trigger={trigger} />}
     </div>
   );
 }
