@@ -313,6 +313,23 @@ function probeConsole() {
 
 // A 120-character title and a 40-character owner each wrap to two lines at most, cut with the full text kept, and never widen the page (#199).
 // A card's owner sits in its meta, which wraps whole however many lines it takes (#227).
+// A long current crumb step stays on one line inside the header, cut with an ellipsis and titled in full.
+function probeLongCrumb([label]) {
+  const header = document.querySelector("#storybook-root header");
+  const list = header.querySelector("nav ol");
+  const step = header.querySelector('[aria-current="page"]');
+  const item = step.closest("li");
+  return {
+    label: step.textContent,
+    crumbOneLine: new Set(Array.from(list.children).map((li) => Math.round(li.getBoundingClientRect().top))).size === 1,
+    stepCut: step.getBoundingClientRect().width > item.clientWidth + 0.5 && getComputedStyle(item).textOverflow === "ellipsis",
+    stepTooltip: step.title === label,
+    ancestorsWhole: Array.from(list.children).filter((li) => li !== item).every((li) => li.lastElementChild.getBoundingClientRect().width <= li.clientWidth + 0.5),
+    crumbInHeader: list.getBoundingClientRect().right <= header.getBoundingClientRect().right + 0.5,
+    pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+  };
+}
+
 function probeLongText([title, owner]) {
   const root = document.querySelector("#storybook-root");
   const find = (text) => Array.from(root.querySelectorAll("*")).find((el) => el.textContent.includes(text) && !Array.from(el.children).some((c) => c.textContent.includes(text)));
@@ -392,7 +409,7 @@ function probeThemeSamples() {
 }
 
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { themePresets: probeThemeSamples, themeDensities: probeThemeSamples, tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot, workCardLongTitle: probeLongText, workCardLongTitleWide: probeLongText, sessionLongTitle: probeLongText, sessionLongTitleWide: probeLongText, sessionTableLongTitle: probeLongText, sessionTableLongTitleWide: probeLongText, caseHeaderLongTitle: probeLongText, caseHeaderLongTitleWide: probeLongText, streamChain: probeStreamChain, streamChainWide: probeStreamChain, streamChainFour: probeStreamChain, streamSummary: probeStreamChain, roleMatrixRows: probeRoleMatrixRows, roleMatrixRowsWide: probeRoleMatrixRows };
+const PROBES = { themePresets: probeThemeSamples, themeDensities: probeThemeSamples, tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot, workCardLongTitle: probeLongText, workCardLongTitleWide: probeLongText, sessionLongTitle: probeLongText, sessionLongTitleWide: probeLongText, sessionTableLongTitle: probeLongText, sessionTableLongTitleWide: probeLongText, caseHeaderLongTitle: probeLongText, caseHeaderLongTitleWide: probeLongText, caseHeaderLongCrumb: probeLongCrumb, caseHeaderLongCrumbWide: probeLongCrumb, streamChain: probeStreamChain, streamChainWide: probeStreamChain, streamChainFour: probeStreamChain, streamSummary: probeStreamChain, roleMatrixRows: probeRoleMatrixRows, roleMatrixRowsWide: probeRoleMatrixRows };
 
 async function measure(page, base, key) {
   const { story, label, longLabel, width = golden.viewport.width } = golden[key];
