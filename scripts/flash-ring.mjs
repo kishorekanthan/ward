@@ -16,6 +16,8 @@ function startFlash({ theme, role }) {
   const atRest = box();
   if (role) card.style.setProperty("--ward-flash-colour", `var(--ward-color-${role})`);
   card.classList.add("ward-border-flash");
+  // The card transitions its shadow, so a flash rule that changed it would still read as the old shadow; land it first.
+  card.getAnimations().filter((a) => a instanceof CSSTransition).forEach((a) => a.finish());
   const flash = card.getAnimations().filter((a) => a.animationName === "ward-flash");
   const style = getComputedStyle(card);
   const at = (time) => {
