@@ -56,6 +56,9 @@ export default {
 
 export const WaitingOnAHuman = { args: { ...base, item } };
 
+// An app whose readers quote item keys opts in to the key chip.
+export const WithKey = { args: { ...base, item, showKey: true } };
+
 export const AgentWorking = { args: { ...base, item: withRun } };
 
 export const Stale = { args: { ...base, item: withRun, feed: stubFeed("stale") } };

@@ -58,6 +58,22 @@ export const WebUnresolved = {
   ),
 };
 
+// Scope, role and person rows together: the sweep reads each depth's text size and every row's height at 375 and 1280.
+export const WebScopeRolePerson = {
+  render: () => (
+    <RoleMatrixRow
+      presentation="web"
+      label="People and access"
+      rows={[
+        { depth: 0, label: "Data engineering", group: "AAD-TRELLIS-DE", people: "24", expanded: true },
+        { depth: 1, label: "Approver", role: { role: "gate", label: "Approver" }, group: "AAD-TRELLIS-DE-GATE", people: "5", requestedVia: "SR-8902", expanded: true },
+        { depth: 2, label: "Priya Raman", group: "AAD-TRELLIS-DE-GATE", people: "1", leaf: true },
+        { depth: 1, label: "Viewer", role: { role: "meta", label: "Viewer" }, group: "AAD-TRELLIS-ALL", people: "182", state: "floor", leaf: true },
+      ]}
+    />
+  ),
+};
+
 export const Floor = {
   render: () => (
     <div className={s.frame} tabIndex={0} role="region" aria-label="People and access">

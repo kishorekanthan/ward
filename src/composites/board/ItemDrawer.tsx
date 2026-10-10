@@ -30,6 +30,8 @@ export type ItemDrawerProps = {
   resolveLabel?: string;
   actionsNote?: string;
   facts?: DrawerFact[];
+  /** Shows the item key as a chip; off by default, as a generated id is noise to most readers. */
+  showKey?: boolean;
 };
 
 // A blocked cause is not an owner, so it gets its own row instead of standing in for Waits on.
@@ -79,11 +81,16 @@ function ResolveSection({ resolve, label }: { resolve: ReactNode; label: string 
   );
 }
 
-function DrawerHead({ item }: { item: ItemDetail }) {
-  const state = item.run ? { role: "running" as const, label: "Agent working" } : item.state;
+function drawerState(item: ItemDetail) {
+  return item.run ? { role: "running" as const, label: "Agent working" } : item.state;
+}
+
+function DrawerHead({ item, showKey }: { item: ItemDetail; showKey: boolean }) {
+  const state = drawerState(item);
+  if (!showKey && !state) return null;
   return (
     <div className={s.head}>
-      <Chip role="meta" label={item.key} />
+      {showKey && <Chip role="meta" label={item.key} />}
       {state && <Chip role={state.role} label={state.label} />}
     </div>
   );
@@ -100,13 +107,13 @@ function AgentQuote({ item }: { item: ItemDetail }) {
   );
 }
 
-export function ItemDrawer({ item, actions, onClose, returnFocusTo, feed, resolve, resolveLabel, actionsNote, facts }: ItemDrawerProps) {
+export function ItemDrawer({ item, actions, onClose, returnFocusTo, feed, resolve, resolveLabel, actionsNote, facts, showKey = false }: ItemDrawerProps) {
   const titleId = useId();
   const rows = detailRows(item, feed, facts);
   return (
     <Overlay kind="drawer" labelledBy={titleId} onClose={onClose} returnFocusTo={returnFocusTo} flush>
       <div className={s.body}>
-        <DrawerHead item={item} />
+        <DrawerHead item={item} showKey={showKey} />
         <div className={s.summary}>
           <h2 className={s.title} id={titleId}>
             {item.title}
