@@ -1,7 +1,12 @@
 import { act, render, screen } from "@testing-library/react";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it, vi } from "vitest";
 import { stubMatchMedia } from "../../test-setup";
+import { injectModuleCss } from "../../test-css";
+import live from "../../live/LiveIndicator.module.css";
 import { WorkCard } from "./WorkCard";
+import card from "./WorkCard.module.css";
 import type { BoardItem } from "./types";
 import type { LiveEvent } from "../../live/types";
 
@@ -46,6 +51,33 @@ describe("WorkCard", () => {
     const { container } = render(<WorkCard item={item} fields={[]} onOpen={() => {}} />);
     expect(cardIn(container).textContent).toContain("waits on J. Rao");
     expect(cardIn(container).textContent).toContain("3d 4h in stage");
+  });
+
+  it("keeps the whole meta in one line of text that wraps, with the separator tied to the word before it", () => {
+    const { container, rerender } = render(<WorkCard item={{ ...item, waitsOn: "no owner", timeInStage: 857_000_000 }} onOpen={() => {}} />);
+    const meta = () => cardIn(container).querySelector("[data-ward-card-meta]") as HTMLElement;
+    expect(meta().textContent).toBe("waits on no owner\u00a0· 9d 22h in stage");
+    const running = { ...item, run: { agent: "intake-advisor", startedAt: "2026-09-06T02:14:00Z", turn: [3, 8] as [number, number] } };
+    rerender(<WorkCard item={running} feed={{ ...feedStub(), connection: "stale" }} onOpen={() => {}} />);
+    expect(meta().textContent?.startsWith("waits on intake-advisor\u00a0· ")).toBe(true);
+    expect(meta().querySelector("[data-ward-clamp]")).toBeNull();
+  });
+
+  it("never clips, clamps or ellipsises any part of the meta, the live indicator included", () => {
+    const here = dirname(fileURLToPath(import.meta.url));
+    const removeLive = injectModuleCss(join(here, "..", "..", "live", "LiveIndicator.module.css"), live);
+    const removeCard = injectModuleCss(join(here, "WorkCard.module.css"), card);
+    const running = { ...item, run: { agent: "intake-advisor", startedAt: "2026-09-06T02:14:00Z", turn: [3, 8] as [number, number] } };
+    const { container } = render(<><WorkCard item={item} onOpen={() => {}} /><WorkCard item={running} onOpen={() => {}} /></>);
+    const looks = Array.from(container.querySelectorAll("[data-ward-card-meta], [data-ward-card-meta] *"), (el) => {
+      const style = getComputedStyle(el);
+      return [style.whiteSpace, style.textOverflow, style.overflow, style.display, style.getPropertyValue("-webkit-line-clamp")].join(" ");
+    });
+    removeCard();
+    removeLive();
+    expect(looks.filter((look) => /nowrap|ellipsis|hidden|-webkit-box|flex|\d/.test(look))).toEqual([]);
+    // Idle: the line, separator and time; running: the line, separator and the indicator with its two parts.
+    expect(looks.length).toBe(8);
   });
 
   it("renders one field span per configured field, wrapping two per row via CSS", () => {

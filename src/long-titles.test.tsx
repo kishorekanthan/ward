@@ -35,16 +35,17 @@ const item: BoardItem = {
 
 const session: Session = { title: TITLE, turns: 6, waitingOn: OWNER, resolved: ["Stream"], lastActivity: "2026-09-06T02:14:00Z", state: "open" };
 
-describe("long titles and owners wrap to two lines and keep their full text (#199)", () => {
+describe("long titles and owners keep their full text: titles wrap to two lines (#199), card meta wraps whole (#227)", () => {
   it("uses a 120-character title and a 40-character owner", () => {
     expect([TITLE.length, OWNER.length]).toEqual([120, 40]);
   });
 
-  it("clamps the WorkCard title and owner, and names the card's button with the whole title", () => {
+  it("clamps the WorkCard title, keeps the owner whole in a meta line that is never clamped, and names the card's button with the whole title", () => {
     const { container } = render(<WorkCard item={item} onOpen={() => {}} />);
     const title = clamped(container, TITLE);
     expect([title.tagName, title.classList.contains(w.title), title.getAttribute("title")]).toEqual(["P", true, TITLE]);
-    expect(clamped(container, `waits on ${OWNER}`).classList.contains(w.who)).toBe(true);
+    const meta = container.querySelector("[data-ward-card-meta]") as HTMLElement;
+    expect([meta.textContent, meta.querySelector("[data-ward-clamp]")]).toEqual([`waits on ${OWNER}\u00a0· 1d 2h in stage`, null]);
     expect(screen.getByRole("button", { name: `FL-229 ${TITLE}` })).not.toBeNull();
   });
 

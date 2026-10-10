@@ -312,22 +312,48 @@ function probeConsole() {
 }
 
 // A 120-character title and a 40-character owner each wrap to two lines at most, cut with the full text kept, and never widen the page (#199).
+// A card's owner sits in its meta, which wraps whole however many lines it takes (#227).
 function probeLongText([title, owner]) {
   const root = document.querySelector("#storybook-root");
-  const find = (text) => Array.from(root.querySelectorAll("*")).find((el) => el.textContent.endsWith(text) && !Array.from(el.children).some((c) => c.textContent.endsWith(text)));
+  const find = (text) => Array.from(root.querySelectorAll("*")).find((el) => el.textContent.includes(text) && !Array.from(el.children).some((c) => c.textContent.includes(text)));
   const lines = (el) => Math.round(el.getBoundingClientRect().height / Number.parseFloat(getComputedStyle(el).lineHeight));
   const inView = (el) => el.getBoundingClientRect().right <= innerWidth + 0.5;
   const head = Array.from(root.querySelectorAll("[data-ward-clamp]")).find((el) => el.textContent === title);
   const who = find(owner);
+  // Words of the owner that span two lines (a hyphen is a break, as in print), when one text node holds it whole; else null.
+  const text = Array.from(who.childNodes).find((node) => node.nodeType === Node.TEXT_NODE && node.data.includes(owner));
+  const wordSplit = (word) => {
+    const range = document.createRange();
+    const at = text.data.indexOf(word, text.data.indexOf(owner));
+    range.setStart(text, at);
+    range.setEnd(text, at + word.length);
+    return new Set(Array.from(range.getClientRects()).filter((b) => b.width > 0).map((b) => Math.round(b.top))).size > 1;
+  };
   return {
     label: head.textContent,
-    longLabel: who.textContent.endsWith(owner) ? owner : who.textContent,
+    longLabel: who.textContent.includes(owner) ? owner : who.textContent,
     titleLines: lines(head),
     titleCut: head.scrollHeight > head.clientHeight + 1,
     titleTooltip: head.getAttribute("title") === title,
     titleInView: inView(head),
     ownerLinesAtMost2: lines(who) <= 2,
+    ownerLines: lines(who),
+    ownerWordsSplit: text ? owner.split(/[ -]/).filter(wordSplit).length : null,
     ownerInView: inView(who),
+    pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+  };
+}
+
+// A wrapped StreamRow stage chain starts every line with a stage, never an arrow, in both theme copies (#227).
+function probeStreamChain() {
+  const chains = Array.from(document.querySelectorAll("#storybook-root .ward-chiprow"));
+  const starts = (units) => units.filter((unit, i) => i === 0 || unit.getBoundingClientRect().left <= units[i - 1].getBoundingClientRect().left);
+  const leftmost = (unit) => Array.from(unit.children).reduce((a, b) => (b.getBoundingClientRect().left < a.getBoundingClientRect().left ? b : a));
+  const lineStarts = chains.map((chain) => starts(Array.from(chain.children)));
+  return {
+    chainLines: lineStarts.map((lines) => lines.length).join(" "),
+    lineStartsWithArrow: lineStarts.flat().filter((unit) => leftmost(unit).textContent === "→").length,
+    arrows: chains.reduce((n, chain) => n + Array.from(chain.querySelectorAll("[aria-hidden='true']")).filter((el) => el.textContent === "→").length, 0),
     pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
   };
 }
@@ -345,7 +371,7 @@ function probeThemeSamples() {
 }
 
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { themePresets: probeThemeSamples, themeDensities: probeThemeSamples, tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot, workCardLongTitle: probeLongText, workCardLongTitleWide: probeLongText, sessionLongTitle: probeLongText, sessionLongTitleWide: probeLongText, sessionTableLongTitle: probeLongText, sessionTableLongTitleWide: probeLongText, caseHeaderLongTitle: probeLongText, caseHeaderLongTitleWide: probeLongText };
+const PROBES = { themePresets: probeThemeSamples, themeDensities: probeThemeSamples, tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot, workCardLongTitle: probeLongText, workCardLongTitleWide: probeLongText, sessionLongTitle: probeLongText, sessionLongTitleWide: probeLongText, sessionTableLongTitle: probeLongText, sessionTableLongTitleWide: probeLongText, caseHeaderLongTitle: probeLongText, caseHeaderLongTitleWide: probeLongText, streamChain: probeStreamChain, streamChainWide: probeStreamChain };
 
 async function measure(page, base, key) {
   const { story, label, longLabel, width = golden.viewport.width } = golden[key];

@@ -15,15 +15,11 @@ export function markEdges(scroller: HTMLElement): Edges {
   return edges;
 }
 
-// onOverflow hears whether anything is hidden at either edge, each time the edges are marked.
-export function useEdgeFades(scrollerRef: RefObject<HTMLElement | null>, count: number, onOverflow?: (overflows: boolean) => void): void {
+export function useEdgeFades(scrollerRef: RefObject<HTMLElement | null>, count: number): void {
   useEffect(() => {
     const scroller = scrollerRef.current;
     if (!scroller) return;
-    const mark = () => {
-      const edges = markEdges(scroller);
-      onOverflow?.(edges.start || edges.end);
-    };
+    const mark = () => markEdges(scroller);
     scroller.addEventListener("scroll", mark, { passive: true });
     const ro = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(mark);
     // The children too: a web font swapping in changes scrollWidth without resizing the scroller.
@@ -33,5 +29,5 @@ export function useEdgeFades(scrollerRef: RefObject<HTMLElement | null>, count: 
       scroller.removeEventListener("scroll", mark);
       ro?.disconnect();
     };
-  }, [scrollerRef, count, onOverflow]);
+  }, [scrollerRef, count]);
 }
