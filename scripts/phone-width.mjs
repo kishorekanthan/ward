@@ -361,6 +361,7 @@ function probeStreamChain() {
     }).length, 0),
     ownerPx: getComputedStyle(document.querySelector("#storybook-root .ward-rowlink").parentElement.nextElementSibling).fontSize,
     subPx: getComputedStyle(document.querySelector("#storybook-root .ward-stat-value").nextElementSibling).fontSize,
+    notePx: Array.from(new Set(Array.from(document.querySelectorAll("#storybook-root span"), (el) => (["No stages yet", "not set"].includes(el.textContent) ? getComputedStyle(el).fontSize : "")).filter(Boolean))).join(" "),
     pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
   };
 }
@@ -391,7 +392,7 @@ function probeThemeSamples() {
 }
 
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { themePresets: probeThemeSamples, themeDensities: probeThemeSamples, tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot, workCardLongTitle: probeLongText, workCardLongTitleWide: probeLongText, sessionLongTitle: probeLongText, sessionLongTitleWide: probeLongText, sessionTableLongTitle: probeLongText, sessionTableLongTitleWide: probeLongText, caseHeaderLongTitle: probeLongText, caseHeaderLongTitleWide: probeLongText, streamChain: probeStreamChain, streamChainWide: probeStreamChain, streamChainFour: probeStreamChain, roleMatrixRows: probeRoleMatrixRows, roleMatrixRowsWide: probeRoleMatrixRows };
+const PROBES = { themePresets: probeThemeSamples, themeDensities: probeThemeSamples, tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot, workCardLongTitle: probeLongText, workCardLongTitleWide: probeLongText, sessionLongTitle: probeLongText, sessionLongTitleWide: probeLongText, sessionTableLongTitle: probeLongText, sessionTableLongTitleWide: probeLongText, caseHeaderLongTitle: probeLongText, caseHeaderLongTitleWide: probeLongText, streamChain: probeStreamChain, streamChainWide: probeStreamChain, streamChainFour: probeStreamChain, streamSummary: probeStreamChain, roleMatrixRows: probeRoleMatrixRows, roleMatrixRowsWide: probeRoleMatrixRows };
 
 async function measure(page, base, key) {
   const { story, label, longLabel, width = golden.viewport.width } = golden[key];

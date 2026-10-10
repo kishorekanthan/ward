@@ -310,6 +310,18 @@
     "arrows": 6,
     "ownerPx": "14px",
     "subPx": "14px",
+    "notePx": "14px",
+    "pageScrollsSideways": false
+  },
+  "streamSummary": {
+    "story": "studio-streamrow--summary",
+    "chainLines": "2 2",
+    "loneStageLines": 0,
+    "lineStartsWithArrow": 0,
+    "arrows": 6,
+    "ownerPx": "14px",
+    "subPx": "14px",
+    "notePx": "14px",
     "pageScrollsSideways": false
   },
   "roleMatrixRows": {

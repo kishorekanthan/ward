@@ -48,3 +48,11 @@ describe("one UI family and a type scale (#215)", () => {
     expect(tiny).toEqual([]);
   });
 });
+
+describe("row text tokens leave the shared 12px roles alone (#235)", () => {
+  it("keeps rowName, secondary, meta, stateLabel and cellSub as they were, beside 14px row text", () => {
+    const declared = (name: string) => wardCss.match(new RegExp(`--ward-type-${name}: ([^,]+),`))?.[1];
+    const names = ["rowName", "secondary", "meta", "stateLabel", "cellSub", "rowText", "rowTextStrong"];
+    expect(names.map(declared)).toEqual(["500 12px/1 Figtree", "400 12px/1.5 Figtree", "400 12px/1.4 Figtree", "400 12px/1 Figtree", "400 12px/1.3 Figtree", "400 14px/1.45 Figtree", "500 14px/1.3 Figtree"]);
+  });
+});
