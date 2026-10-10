@@ -52,6 +52,17 @@ describe("Tabs", () => {
     expect(screen.getAllByRole("menuitem").map((item) => item.textContent)).toEqual(["Tab 2", "Tab 3", "Tab 4", "Tab 5", "Tab 6", "Tab 7 · 3"]);
   });
 
+  it("keeps a waiting tab out of the tab order and out of the reader's tree", () => {
+    mockFit(300);
+    const { container } = render(<Tabs label="Stream" tabs={eight} active="t0" onChange={() => {}} />);
+    const waiting = Array.from(container.querySelectorAll<HTMLElement>("[data-overflow]"));
+    expect(waiting).toHaveLength(6);
+    waiting.forEach((tab) => {
+      expect(tab.getAttribute("tabindex")).toBe("-1");
+      expect(tab.getAttribute("aria-hidden")).toBe("true");
+    });
+  });
+
   it("keeps the selected tab in the strip, in place of the last tab that fits", () => {
     mockFit(300);
     render(<Tabs label="Stream" tabs={eight} active="t6" onChange={() => {}} />);
