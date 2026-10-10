@@ -1,8 +1,10 @@
 import { useRef } from "react";
 import { useEdgeFades } from "../layout/useEdgeFades";
-import { MAX_TABS, tabClass } from "./Tabs";
+import { tabClass } from "./Tabs";
 import { useRevealActive } from "./useRevealActive";
 import s from "./Tabs.module.css";
+
+const MAX_TABS = 7;
 
 export type TabLink = { id: string; label: string; href: string; count?: number };
 

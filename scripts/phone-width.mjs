@@ -12,42 +12,30 @@ export const golden = JSON.parse(readFileSync(join(root, "src", "goldens", "phon
 // Runs in the page: the first themed copy only, so each fact is read once.
 async function probeTabs() {
   const strip = document.querySelector('#storybook-root [role="tablist"]');
-  const tabs = Array.from(strip.querySelectorAll('[role="tab"]'));
-  const active = tabs.find((t) => t.getAttribute("aria-selected") === "true");
+  const shown = Array.from(strip.querySelectorAll('[role="tab"]')).filter((t) => t.getAttribute("aria-hidden") !== "true");
+  const more = shown.find((t) => t.getAttribute("aria-haspopup") === "menu");
+  const active = shown.find((t) => t.getAttribute("aria-selected") === "true");
   const box = strip.getBoundingClientRect();
-  const inView = (el) => {
+  const inStrip = (el) => {
     const r = el.getBoundingClientRect();
     return r.left >= box.left - 0.5 && r.right <= box.right + 0.5 && r.right <= innerWidth;
   };
-  // A fade is as wide as the strip's scroll-padding; a tab under a live fade is half-hidden.
-  const fade = Number.parseFloat(getComputedStyle(strip).scrollPaddingInlineStart) || 0;
-  const r = active.getBoundingClientRect();
-  const clearOfFades =
-    fade > 0 &&
-    (!strip.hasAttribute("data-fade-start") || r.left >= box.left + fade - 0.5) &&
-    (!strip.hasAttribute("data-fade-end") || r.right <= box.right - fade + 0.5);
-  // Mid-scroll both fades are live: the mask has a clear stop at each edge.
-  const clearStops = getComputedStyle(strip).maskImage.match(/transparent|rgba\(0, 0, 0, 0\)/g) ?? [];
-  const masked = strip.hasAttribute("data-fade-start") && strip.hasAttribute("data-fade-end") && clearStops.length === 2;
-  const activeInView = inView(active);
-  // Each lone fade has its own mask rule, so read the mask at both ends of the scroll.
-  const settle = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-  const loneFade = (on, off) => strip.hasAttribute(on) && !strip.hasAttribute(off) && /gradient/.test(getComputedStyle(strip).maskImage);
-  strip.scrollLeft = 0;
-  await settle();
-  const endFadeMaskedAtStart = loneFade("data-fade-end", "data-fade-start");
-  strip.scrollLeft = strip.scrollWidth;
-  await settle();
-  const startFadeMaskedAtEnd = loneFade("data-fade-start", "data-fade-end");
+  const rows = new Set(shown.map((t) => Math.round(t.getBoundingClientRect().top)));
+  const waiting = strip.querySelectorAll("[data-overflow]").length;
+  const pageScrollsSideways = document.documentElement.scrollWidth > innerWidth;
+  more?.click();
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const menu = document.querySelector('[role="menu"]');
+  const m = menu?.getBoundingClientRect();
   return {
-    endFadeMaskedAtStart,
-    startFadeMaskedAtEnd,
-    stripScrolls: strip.scrollWidth > strip.clientWidth && getComputedStyle(strip).overflowX === "auto",
-    activeTabInView: activeInView,
-    activeTabClearOfFades: clearOfFades,
-    fadesMasked: masked,
-    lastTabReachedByScroll: inView(tabs[tabs.length - 1]),
-    pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+    stripScrolls: strip.scrollWidth > strip.clientWidth + 0.5,
+    oneRow: rows.size === 1,
+    moreShown: Boolean(more),
+    activeTabInView: Boolean(active) && inStrip(active),
+    shownTabsInStrip: shown.every(inStrip),
+    menuHoldsTheRest: waiting > 0 && menu?.querySelectorAll('[role="menuitem"]').length === waiting,
+    menuInView: Boolean(m) && m.left >= 0 && m.right <= innerWidth && m.bottom <= innerHeight,
+    pageScrollsSideways,
   };
 }
 

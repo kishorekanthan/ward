@@ -1,7 +1,8 @@
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { useState } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { Tabs } from "./Tabs";
 
@@ -13,26 +14,21 @@ function ruleBlock(selector: string): string {
 
 const seven = Array.from({ length: 7 }, (_, i) => ({ id: `t${i}`, label: `Tab ${i}` }));
 
-// A 300px strip holding seven 90px tabs on a 100px pitch: 700px of content.
-const STRIP = { client: 300, scroll: 700 };
+const eight = [...seven, { id: "t7", label: "Tab 7", count: 3 }];
 
-function rectAt(left: number, width: number): DOMRect {
-  return { left, right: left + width, width, top: 0, bottom: 40, height: 40, x: left, y: 0, toJSON: () => ({}) } as DOMRect;
-}
-
-function mockStripLayout(): void {
+// Every tab is 90px wide and More is 60px, with no gap; the strip is `room` wide.
+function mockFit(room: number): void {
   vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockImplementation(function (this: HTMLElement) {
-    return this.getAttribute("role") === "tablist" ? STRIP.client : 0;
-  });
-  vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockImplementation(function (this: HTMLElement) {
-    return this.getAttribute("role") === "tablist" ? STRIP.scroll : 0;
+    return this.getAttribute("role") === "tablist" ? room : 0;
   });
   vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
-    if (this.getAttribute("role") !== "tab") return rectAt(0, STRIP.client);
-    const strip = this.parentElement as HTMLElement;
-    return rectAt(Number(this.id.replace("tab-t", "")) * 100 - strip.scrollLeft, 90);
+    const width = this.hasAttribute("data-more-probe") ? 60 : 90;
+    return { left: 0, right: width, width, top: 0, bottom: 40, height: 40, x: 0, y: 0, toJSON: () => ({}) } as DOMRect;
   });
 }
+
+// Tabs waiting in More are aria-hidden, so the role query lists only what the strip shows.
+const shownLabels = () => screen.getAllByRole("tab").map((tab) => tab.textContent);
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -40,15 +36,61 @@ afterEach(() => {
 });
 
 describe("Tabs", () => {
-  it("refuses a set above the cap rather than wrapping or scrolling", () => {
-    expect(() => render(<Tabs label="Admin" tabs={[...seven, { id: "t7", label: "Tab 7" }]} active="t0" onChange={() => {}} />)).toThrow(
-      /exceeds the cap of 7/,
-    );
+  it("shows all eight tabs in one strip, and no More, when they fit", () => {
+    mockFit(1000);
+    render(<Tabs label="Stream" tabs={eight} active="t0" onChange={() => {}} />);
+    expect(screen.getAllByRole("tablist")).toHaveLength(1);
+    expect(shownLabels()).toEqual(["Tab 0", "Tab 1", "Tab 2", "Tab 3", "Tab 4", "Tab 5", "Tab 6", "Tab 7 · 3"]);
   });
 
-  it("accepts the fixed seven-tab Admin set", () => {
-    render(<Tabs label="Admin" tabs={seven} active="t0" onChange={() => {}} />);
-    expect(screen.getAllByRole("tab")).toHaveLength(7);
+  it("moves the tabs that do not fit into More, in order", () => {
+    mockFit(300);
+    render(<Tabs label="Stream" tabs={eight} active="t0" onChange={() => {}} />);
+    // 90 for Tab 0 and 60 for More leave 150: Tab 1 fits, Tab 2 would need 330.
+    expect(shownLabels()).toEqual(["Tab 0", "Tab 1", "More"]);
+    fireEvent.click(screen.getByRole("tab", { name: "More" }));
+    expect(screen.getAllByRole("menuitem").map((item) => item.textContent)).toEqual(["Tab 2", "Tab 3", "Tab 4", "Tab 5", "Tab 6", "Tab 7 · 3"]);
+  });
+
+  it("keeps the selected tab in the strip, in place of the last tab that fits", () => {
+    mockFit(300);
+    render(<Tabs label="Stream" tabs={eight} active="t6" onChange={() => {}} />);
+    expect(shownLabels()).toEqual(["Tab 0", "Tab 6", "More"]);
+    expect(screen.getByRole("tab", { name: "Tab 6" }).getAttribute("aria-selected")).toBe("true");
+  });
+
+  it("walks the arrows across the shown tabs into More, and Escape closes More onto its button", () => {
+    mockFit(300);
+    render(<Tabs label="Stream" tabs={eight} active="t0" onChange={() => {}} />);
+    const strip = screen.getByRole("tablist");
+    screen.getByRole("tab", { name: "Tab 0" }).focus();
+    fireEvent.keyDown(strip, { key: "ArrowRight" });
+    fireEvent.keyDown(strip, { key: "ArrowRight" });
+    const more = screen.getByRole("tab", { name: "More" });
+    expect(document.activeElement).toBe(more);
+    expect(more.getAttribute("tabindex")).toBe("0");
+    fireEvent.keyDown(more, { key: "ArrowDown" });
+    expect(document.activeElement?.textContent).toBe("Tab 2");
+    fireEvent.keyDown(document.activeElement as HTMLElement, { key: "Escape" });
+    expect(screen.queryByRole("menu")).toBeNull();
+    expect(document.activeElement).toBe(more);
+  });
+
+  it("selects a tab picked in More and puts focus on it, back in the strip", async () => {
+    mockFit(300);
+    const picked = vi.fn();
+    function Host() {
+      const [active, setActive] = useState("t0");
+      return <Tabs label="Stream" tabs={eight} active={active} onChange={(id) => (picked(id), setActive(id))} />;
+    }
+    render(<Host />);
+    fireEvent.click(screen.getByRole("tab", { name: "More" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Tab 4" }));
+    expect(picked).toHaveBeenCalledWith("t4");
+    expect(shownLabels()).toEqual(["Tab 0", "Tab 4", "More"]);
+    await waitFor(() => expect(document.activeElement).toBe(screen.getByRole("tab", { name: "Tab 4" })));
+    fireEvent.keyDown(screen.getByRole("tablist"), { key: "ArrowRight" });
+    expect(document.activeElement).toBe(screen.getByRole("tab", { name: "More" }));
   });
 
   it("marks exactly one tab selected", () => {
@@ -82,84 +124,6 @@ describe("Tabs", () => {
     expect(ruleBlock(".tab")).not.toMatch(/font-weight/);
   });
 
-  it("scrolls the strip, not the page, so a selected tab past the right edge is in view on mount", () => {
-    mockStripLayout();
-    render(<Tabs label="Admin" tabs={seven} active="t6" onChange={() => {}} />);
-    // Tab 6 spans 600-690 in a 300px window: its right edge needs 690 - 300 = 390.
-    expect(screen.getByRole("tablist").scrollLeft).toBe(390);
-  });
-
-  it("brings back a selected tab that sits left of the scrolled window", () => {
-    mockStripLayout();
-    const { rerender } = render(<Tabs label="Admin" tabs={seven} active="t6" onChange={() => {}} />);
-    rerender(<Tabs label="Admin" tabs={seven} active="t1" onChange={() => {}} />);
-    expect(screen.getByRole("tablist").scrollLeft).toBe(100);
-  });
-
-  it("leaves the strip where it is when the selected tab is already in view", () => {
-    mockStripLayout();
-    render(<Tabs label="Admin" tabs={seven} active="t1" onChange={() => {}} />);
-    expect(screen.getByRole("tablist").scrollLeft).toBe(0);
-  });
-
-  it("fades only the edges that hide tabs, following the scroll", () => {
-    mockStripLayout();
-    render(<Tabs label="Admin" tabs={seven} active="t0" onChange={() => {}} />);
-    const strip = screen.getByRole("tablist");
-    const fades = () => [strip.hasAttribute("data-fade-start"), strip.hasAttribute("data-fade-end")];
-    expect(fades()).toEqual([false, true]);
-    strip.scrollLeft = 200;
-    fireEvent.scroll(strip);
-    expect(fades()).toEqual([true, true]);
-    strip.scrollLeft = 400;
-    fireEvent.scroll(strip);
-    expect(fades()).toEqual([true, false]);
-  });
-
-  it("stops a revealed tab clear of the edge fade, the strip's 24px scroll-padding", () => {
-    mockStripLayout();
-    const computed = window.getComputedStyle;
-    vi.spyOn(window, "getComputedStyle").mockImplementation((el) =>
-      el.getAttribute("role") === "tablist" ? ({ scrollPaddingInlineStart: "24px" } as CSSStyleDeclaration) : computed(el),
-    );
-    const { rerender } = render(<Tabs label="Admin" tabs={seven} active="t2" onChange={() => {}} />);
-    const strip = screen.getByRole("tablist");
-    // Tab 2 ends at 290, inside the 300px window but under the right fade: 290 - 300 + 24 = 14.
-    expect(strip.scrollLeft).toBe(14);
-    rerender(<Tabs label="Admin" tabs={seven} active="t6" onChange={() => {}} />);
-    expect(strip.scrollLeft).toBe(414);
-    // Tab 6 ends at 690: 690 - 300 + 24 = 414. Tab 1 then starts at -314: 414 - 314 - 24 = 76.
-    rerender(<Tabs label="Admin" tabs={seven} active="t1" onChange={() => {}} />);
-    expect(strip.scrollLeft).toBe(76);
-  });
-
-  it("drops the end fade when a tab shrinks and the strip no longer overflows, as when a web font swaps in", () => {
-    const observers: { targets: Set<Element>; fire: () => void }[] = [];
-    vi.stubGlobal(
-      "ResizeObserver",
-      class {
-        targets = new Set<Element>();
-        constructor(cb: () => void) {
-          observers.push({ targets: this.targets, fire: cb });
-        }
-        observe(el: Element) {
-          this.targets.add(el);
-        }
-        disconnect() {
-          this.targets.clear();
-        }
-      },
-    );
-    mockStripLayout();
-    render(<Tabs label="Admin" tabs={seven} active="t0" onChange={() => {}} />);
-    const strip = screen.getByRole("tablist");
-    expect(strip.hasAttribute("data-fade-end")).toBe(true);
-    vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockReturnValue(STRIP.client);
-    const tab = screen.getAllByRole("tab")[3];
-    for (const o of observers) if (o.targets.has(tab)) o.fire();
-    expect(strip.hasAttribute("data-fade-end")).toBe(false);
-  });
-
   it("reaches the last of seven tabs by keyboard, from the first and from its neighbour", () => {
     render(<Tabs label="Admin" tabs={seven} active="t0" onChange={() => {}} />);
     const tabs = screen.getAllByRole("tab");
@@ -177,8 +141,8 @@ describe("Tabs", () => {
     expect(screen.getAllByRole("tab").map((t) => t.getAttribute("tabindex"))).toEqual(["-1", "-1", "-1", "-1", "-1", "-1", "0"]);
   });
 
-  it("scrolls an overflowing strip instead of wrapping its tabs", () => {
-    expect(ruleBlock(".strip")).toMatch(/overflow-x:\s*auto;/);
+  it("never scrolls or wraps the strip: what does not fit waits in More", () => {
+    expect(ruleBlock(".strip.fits")).toMatch(/overflow:\s*visible;/);
     expect(ruleBlock(".strip")).toMatch(/flex-wrap:\s*nowrap;/);
   });
 });
