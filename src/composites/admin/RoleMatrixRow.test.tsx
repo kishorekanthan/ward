@@ -211,3 +211,20 @@ describe("RoleMatrixRow web readability", () => {
     expect(rows.map((row) => px(row.paddingBlock))).toEqual(["10px", "10px", "10px"]);
   });
 });
+
+describe("RoleMatrixRow web at phone width", () => {
+  const path = "src/composites/admin/RoleMatrixRow.module.css";
+  const narrow = readFileSync(path, "utf8").split("@container (max-width: 471.98px) {").at(-1)?.split("\n}\n")[0] ?? "";
+
+  it("stacks each row's columns on their own line under the label, indented past the disclosure mark", () => {
+    expect(narrow).toContain(".webFrame [role=\"treeitem\"] > button {\n    flex-wrap: wrap;");
+    expect(narrow).toContain(".webFrame [role=\"treeitem\"] > button > span:nth-child(3) {");
+    expect(ruleBody(path, '.webFrame [role="treeitem"] > button > span:nth-child(3)')).toBe("flex: 1 0 100%;\npadding-left: calc(1ch + var(--ward-space-2))");
+  });
+
+  it("gives the label the whole first line and stacks the head the same way", () => {
+    expect(ruleBody(path, '.webHeadLabel,\n  .webFrame [role="treeitem"] > button > span:nth-child(2)')).toBe("flex: 1 1 0");
+    expect(narrow).toContain(".webHeadLabel {\n    flex-basis: 100%;");
+    expect(narrow).toContain(".webHead,\n");
+  });
+});

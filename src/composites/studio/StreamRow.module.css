@@ -125,6 +125,13 @@
   box-shadow: inset 0 0 0 1px var(--ward-color-muted);
 }
 
+/* A frame may set overflow-wrap: anywhere; a stream's name and owner still break only between words. */
+.compactName,
+.ownerLine {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
 .compactName {
   color: var(--ward-color-text);
   font: var(--ward-type-streamName);

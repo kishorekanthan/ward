@@ -1,7 +1,9 @@
 // @vitest-environment jsdom
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { injectModuleCss } from "../../test-css";
 import { StreamRow, type Stream } from "./StreamRow";
+import s from "./StreamRow.module.css";
 
 const stream: Stream = {
   name: "Data Engineering",
@@ -255,5 +257,21 @@ describe("StreamRow compact chain highlight", () => {
 
   it("highlights nothing in a chain with no gate", () => {
     expect(chain(3, [{ name: "Intake" }, { name: "Build" }]).map((chip) => chip[1])).toEqual(["soft", "soft"]);
+  });
+});
+
+describe("StreamRow compact identity at phone width", () => {
+  it("breaks the name and owner only between words, even in a frame that breaks anywhere", () => {
+    const removeCss = injectModuleCss("src/composites/studio/StreamRow.module.css", s);
+    render(
+      <div style={{ overflowWrap: "anywhere" }}>
+        {table(<StreamRow stream={{ ...stream, name: "Ledger Operations", owner: "Ines Okafor" }} href="#lo" presentation={{ columns: 5 }} />)}
+      </div>,
+    );
+    const name = getComputedStyle(screen.getByRole("link", { name: "Ledger Operations" }));
+    const owner = getComputedStyle(screen.getByText("Ines Okafor · 1,200 members"));
+    removeCss();
+    expect([name.overflowWrap, name.wordBreak]).toEqual(["normal", "normal"]);
+    expect([owner.overflowWrap, owner.wordBreak]).toEqual(["normal", "normal"]);
   });
 });

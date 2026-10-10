@@ -387,11 +387,18 @@ function probeStreamChain() {
 function probeRoleMatrixRows() {
   const rows = Array.from(document.querySelectorAll("#storybook-root [data-ward-rolematrix] [role='treeitem']"));
   const px = (els) => Array.from(new Set(els.map((el) => getComputedStyle(el).fontSize))).join(" ");
+  // A cut label, a label box crossing a shown column, and a column line drawn under the label (#240).
+  const label = (row) => row.querySelector(".ward-envrow").parentElement;
+  const cells = (row) => Array.from(row.querySelectorAll(".ward-rolecols > span")).filter((el) => el.getBoundingClientRect().width > 0);
+  const cross = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
   return {
     rows: rows.length,
     labelPx: [0, 1, 2].map((depth) => px(rows.filter((row) => row.dataset.depth === String(depth)).map((row) => row.querySelector(".ward-envrow > span")))).join(" / "),
     peoplePx: px(rows.map((row) => row.querySelector(".ward-rolepeople"))),
     rowHeightAtLeast: Math.min(...rows.map((row) => Math.round(row.getBoundingClientRect().height))),
+    labelsCut: rows.filter((row) => label(row).scrollWidth > label(row).clientWidth).length,
+    labelsOverColumns: rows.filter((row) => cells(row).some((cell) => cross(label(row).getBoundingClientRect(), cell.getBoundingClientRect()))).length,
+    columnsUnderLabel: rows.filter((row) => cells(row).every((cell) => cell.getBoundingClientRect().top >= label(row).getBoundingClientRect().bottom)).length,
     pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
   };
 }
