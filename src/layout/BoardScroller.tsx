@@ -16,12 +16,12 @@ export type BoardScrollerProps = {
 // Same phone edge as the 767.98px rules in layout.module.css.
 const BOARD_PHONE_QUERY = "(max-width: 767.98px)";
 
-type ScrollerProps = { label: string; children: ReactNode; laneCount?: number; onOverflow?: (overflows: boolean) => void };
+type ScrollerProps = { label: string; children: ReactNode; laneCount?: number };
 
 // A lane count lets the lanes share the board width before it scrolls.
-function Scroller({ label, children, laneCount, onOverflow }: ScrollerProps) {
+function Scroller({ label, children, laneCount }: ScrollerProps) {
   const ref = useRef<HTMLDivElement>(null);
-  useEdgeFades(ref, laneCount ?? Children.count(children), onOverflow);
+  useEdgeFades(ref, laneCount ?? Children.count(children));
   const style = laneCount === undefined ? undefined : ({ "--ward-board-lanes": laneCount } as CSSProperties);
   return (
     <div ref={ref} className={s.scroller} role="region" aria-label={label} tabIndex={0} data-ward-board-scroller="" style={style}>
@@ -42,15 +42,11 @@ function PhoneLanes({ lanes, label, laneLabel }: { lanes: BoardLane[]; label: st
   );
 }
 
-// The count says how many lanes there are only while some sit beyond an edge.
+// Lanes beyond an edge show as a fade on that edge, not as a count; each lane keeps its own heading.
 function WideLanes({ lanes, label }: { lanes: BoardLane[]; label: string }) {
-  const [overflows, setOverflows] = useState(false);
   return (
     <div className={s.board} data-ward-board="">
-      <p className={s.laneCount} data-ward-board-lane-count="" hidden={!overflows}>
-        {lanes.length} lanes
-      </p>
-      <Scroller label={label} laneCount={lanes.length} onOverflow={setOverflows}>
+      <Scroller label={label} laneCount={lanes.length}>
         {lanes.map((lane) => <Fragment key={lane.id}>{lane.content}</Fragment>)}
       </Scroller>
     </div>
