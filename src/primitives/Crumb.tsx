@@ -8,7 +8,7 @@ export type CrumbProps = { path: CrumbPath[]; chips?: ChipProps[] };
 
 export function Crumb({ path, chips }: CrumbProps) {
   return (
-    <div>
+    <div className={s.root}>
       <nav aria-label="Breadcrumb" className={s.nav}>
         <ol className={s.list}>
           {path.map((c, i) => (
@@ -20,14 +20,14 @@ export function Crumb({ path, chips }: CrumbProps) {
               ) : null}
               {i < path.length - 1 ? (
                 c.href ? (
-                  <a className={`${s.link} ward-target`} href={safeHref(c.href)}>
+                  <a className={`${s.link} ward-target`} href={safeHref(c.href)} title={c.label}>
                     {c.label}
                   </a>
                 ) : (
-                  c.label
+                  <span title={c.label}>{c.label}</span>
                 )
               ) : (
-                <span className={s.current} aria-current="page">
+                <span className={s.current} aria-current="page" title={c.label}>
                   {c.label}
                 </span>
               )}

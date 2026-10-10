@@ -1,4 +1,9 @@
 /* Provenance: the crumb is the Admin comp .k kicker above the page title (500 9px/1), set in sentence case sans rather than the comp's uppercase mono (#199). */
+/* The crumb shrinks in its row, so a long step cuts with an ellipsis and the header stays one line. */
+.root {
+  min-width: 0;
+}
+
 .nav {
   display: flex;
   align-items: baseline;
@@ -7,6 +12,7 @@
 
 .list {
   display: flex;
+  min-width: 0;
   gap: var(--ward-space-2);
   align-items: baseline;
   white-space: nowrap;
@@ -24,6 +30,11 @@
   padding-inline: calc(var(--ward-focus-ring) + var(--ward-focus-offset));
   margin-inline: calc(-1 * (var(--ward-focus-ring) + var(--ward-focus-offset)));
   text-overflow: ellipsis;
+}
+
+/* Steps you can go back to stay whole; only the current step cuts. */
+.item:not(:last-child) {
+  flex-shrink: 0;
 }
 
 /* A step you can go back to reads as a link by colour, never an underline; hover tints its ground. */

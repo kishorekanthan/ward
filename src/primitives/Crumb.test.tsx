@@ -8,7 +8,8 @@ import { Crumb } from "./Crumb";
 const crumbCss = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "Crumb.module.css"), "utf8");
 
 function ruleBlock(selector: string): string {
-  return crumbCss.match(new RegExp(`(?:^|\\n)\\${selector}\\s*\\{([^}]*)\\}`))?.[1] ?? "";
+  const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return crumbCss.match(new RegExp(`(?:^|\\n)${escaped}\\s*\\{([^}]*)\\}`))?.[1] ?? "";
 }
 
 const path = [
@@ -48,6 +49,23 @@ describe("Crumb", () => {
     expect(chevrons).toEqual(["›", "›"]);
     expect(screen.getByRole("link", { name: "Studio" })).toBeTruthy();
     expect(screen.getByRole("link", { name: "Streams" })).toBeTruthy();
+  });
+
+  it("shows every step's full label on hover, linked or not", () => {
+    const { container } = render(<Crumb path={[{ label: "Studio" }, ...path.slice(1)]} />);
+    const titled = [...container.querySelectorAll("li [title]")].map((el) => [el.getAttribute("title"), el.textContent]);
+    expect(titled).toEqual([
+      ["Studio", "Studio"],
+      ["Streams", "Streams"],
+      ["Data engineering", "Data engineering"],
+    ]);
+  });
+
+  it("lets the step list shrink in its row, so a long step cuts rather than widening the header", () => {
+    expect(ruleBlock(".root")).toMatch(/min-width:\s*0;/);
+    expect(ruleBlock(".list")).toMatch(/min-width:\s*0;/);
+    expect(ruleBlock(".item")).toMatch(/text-overflow:\s*ellipsis;/);
+    expect(ruleBlock(".item:not(:last-child)")).toMatch(/flex-shrink:\s*0;/);
   });
 
   it("draws a step you can go back to as a link with no underline and a tinted hover", () => {
