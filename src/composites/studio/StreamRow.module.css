@@ -126,15 +126,11 @@
 }
 
 /* A frame may set overflow-wrap: anywhere; a stream's name and owner still break only between words. */
-.compactName,
-.ownerLine {
-  overflow-wrap: normal;
-  word-break: normal;
-}
-
 .compactName {
   color: var(--ward-color-text);
   font: var(--ward-type-streamName);
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 .compactName[data-draft="true"] {
@@ -145,6 +141,8 @@
   padding-left: var(--ward-width-streamIndent);
   color: var(--ward-color-muted);
   font: var(--ward-type-rowText);
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 .chain {

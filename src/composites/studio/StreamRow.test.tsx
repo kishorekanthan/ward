@@ -265,7 +265,7 @@ describe("StreamRow compact identity at phone width", () => {
     const removeCss = injectModuleCss("src/composites/studio/StreamRow.module.css", s);
     render(
       <div style={{ overflowWrap: "anywhere" }}>
-        {table(<StreamRow stream={{ ...stream, name: "Ledger Operations", owner: "Ines Okafor" }} href="#lo" presentation={{ columns: 5 }} />)}
+        {table(<StreamRow stream={{ name: "Ledger Operations", key: "LO", streamStep: 2, owner: "Ines Okafor", members: 1200, stages: [] }} href="#lo" presentation={{ columns: 5 }} />)}
       </div>,
     );
     const name = getComputedStyle(screen.getByRole("link", { name: "Ledger Operations" }));
