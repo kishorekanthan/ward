@@ -270,8 +270,11 @@ export function buildCss(tokens) {
         "white-space: nowrap;",
       ]),
       "",
-      rule("@keyframes ward-flash", ["from { border-color: var(--ward-flash-colour, var(--ward-color-running)); }"]),
+      // A soft card has no border to colour (#231): an outline rings it without moving layout or touching its shadow.
+      // Only `from` is set, so the ring fades to the resting outline: transparent, or the focus ring when focused.
+      rule("@keyframes ward-flash", ["from { outline-color: var(--ward-flash-colour, var(--ward-color-running)); }"]),
       rule(".ward-border-flash", ["animation: ward-flash var(--ward-motion-flash) 1;"]),
+      rule(".ward-border-flash:not(:focus-visible)", ["outline: var(--ward-underline) solid transparent;"]),
       "",
       // Only running work moves; one duration drives it, and reduced motion zeroes that duration as well as stopping it.
       rule("@keyframes ward-running", ["50% { opacity: 0.55; }"]),

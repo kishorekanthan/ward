@@ -976,10 +976,13 @@ img, svg {
 }
 
 @keyframes ward-flash {
-  from { border-color: var(--ward-flash-colour, var(--ward-color-running)); }
+  from { outline-color: var(--ward-flash-colour, var(--ward-color-running)); }
 }
 .ward-border-flash {
   animation: ward-flash var(--ward-motion-flash) 1;
+}
+.ward-border-flash:not(:focus-visible) {
+  outline: var(--ward-underline) solid transparent;
 }
 
 @keyframes ward-running {
