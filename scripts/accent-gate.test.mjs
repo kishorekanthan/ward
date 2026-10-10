@@ -25,6 +25,16 @@ describe("check.mjs gates accent contrast (#232, TRELLIS-473)", () => {
     expect(checkCode).toMatch(/process\.exitCode = failures === 0 \? 0 : 1;/);
   });
 
+  it("lets nothing skip the accent step, rebind it, or clear its failure", () => {
+    const step = checkCode.indexOf("belowFloor(accentPairs(tokens))");
+    expect([...checkCode.slice(0, step)].reduce((depth, c) => depth + (c === "{") - (c === "}"), 0)).toBe(0);
+    expect(checkCode.match(/\bprocess\.exit\w*/g)).toEqual(["process.exitCode"]);
+    expect(checkCode.match(/\bfailures\s*(\+\+|--|[-+*]?=(?!=))/g)).toEqual(["failures =", "failures +="]);
+    expect(checkCode).toMatch(/import \{ accentPairs, belowFloor, [^}]*\} from "\.\/contrast\.mjs";/);
+    expect(checkCode.match(/\b(accentPairs|belowFloor)\b(?!\()/g)).toEqual(["accentPairs", "belowFloor"]);
+    expect(checkCode).not.toMatch(/\bObject\.(assign|define\w+|setPrototypeOf)\(\s*tokens\b/);
+  });
+
   it("measures every preset Ward ships in both themes", () => {
     const measured = new Set(accentPairs(tokens).map(([, , label]) => label.split(" ").slice(0, 2).join(" ")));
     expect([...measured].sort()).toEqual(ACCENT_PRESETS.flatMap(({ name }) => [`dark ${name}`, `light ${name}`]).sort());
