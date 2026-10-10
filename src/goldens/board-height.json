@@ -90,7 +90,7 @@
     "metas": 30,
     "metaClipped": 0,
     "metaWordsSplit": 0,
-    "metaWrapped": 0,
+    "metaWrapped": 10,
     "fadeEdge": "none",
     "fadeEdgeAtEnd": "none"
   },
@@ -138,7 +138,7 @@
     "metas": 30,
     "metaClipped": 0,
     "metaWordsSplit": 0,
-    "metaWrapped": 0,
+    "metaWrapped": 10,
     "fadeEdge": "none",
     "fadeEdgeAtEnd": "none"
   }

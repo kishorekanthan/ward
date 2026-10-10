@@ -39,13 +39,14 @@ export const Lanes = { decorators: [bothThemes], render: () => <BoardScroller la
 
 const STAGES = ["Intake", "Triage", "Build", "Review", "Release", "Verify", "Rollout", "Watch", "Done"];
 
-// Every third card has waited days on no one: the longest meta a card shows, which must wrap whole.
+// Every third card has waited days on no one, and the card after it waits on a long name that must wrap between words.
+const OWNERS = ["A. Whyte", "no owner", "Alexandra Featherstonehaugh"];
 const card = (stage: string, n: number): BoardItem => ({
   key: `FL-${200 + n}`,
   title: `Reconcile shipment feed batch ${n + 1}`,
   stage,
   timeInStage: n % 3 === 1 ? 857_000_000 : (n + 1) * 3_600_000,
-  waitsOn: n % 3 === 1 ? "no owner" : "A. Whyte",
+  waitsOn: OWNERS[n % 3],
   streamStep: 1,
   changedAt: "2026-09-06T02:14:00Z",
 });
