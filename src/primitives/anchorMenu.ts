@@ -42,11 +42,20 @@ function measure(menu: HTMLElement, anchor: HTMLElement) {
   return { edges, box, view: { width: root.clientWidth, height: root.clientHeight } };
 }
 
+// Measuring lifts max-height, which snaps every scrolled box in the menu to its top; this puts each one back.
+function keepScroll(menu: HTMLElement): () => void {
+  const scrolled = [menu, ...menu.querySelectorAll<HTMLElement>("*")].filter((el) => el.scrollTop > 0);
+  const tops = scrolled.map((el) => el.scrollTop);
+  return () => scrolled.forEach((el, i) => (el.scrollTop = tops[i]));
+}
+
 // A transformed ancestor without top-layer support offsets fixed boxes, so the box is shifted by where it landed.
 function position(menu: HTMLElement, anchor: HTMLElement, align: MenuAlign) {
+  const restore = keepScroll(menu);
   const got = measure(menu, anchor);
   const spot = placeMenu(got.edges, got.box, got.view, align);
   Object.assign(menu.style, { left: px(spot.left - got.box.left), top: px(spot.top - got.box.top), maxHeight: px(spot.maxHeight) });
+  restore();
 }
 
 // The top layer lifts the menu out of every clipping box and above any open dialog; without it the menu stays fixed in place.
@@ -67,10 +76,14 @@ export function useAnchoredMenu(anchor: RefObject<HTMLElement | null>, menu: Ref
     if (!box || !at) return;
     const lower = raise(box);
     const place = () => position(box, at, align);
-    window.addEventListener("scroll", place, true);
+    // Scrolling inside the menu leaves it where it is.
+    const onScroll = (event: Event) => {
+      if (!box.contains(event.target as Node)) place();
+    };
+    window.addEventListener("scroll", onScroll, true);
     window.addEventListener("resize", place);
     return () => {
-      window.removeEventListener("scroll", place, true);
+      window.removeEventListener("scroll", onScroll, true);
       window.removeEventListener("resize", place);
       lower();
     };

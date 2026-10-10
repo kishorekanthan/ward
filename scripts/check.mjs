@@ -290,9 +290,9 @@ if (toolbarDiffs.length === 0) pass("board toolbar", "crowded consumer controls 
 else fail("board toolbar", toolbarDiffs.join("; "));
 
 // 16. menu escape: open Select and Menu popups sit in the top layer against their trigger, leave the toolbar's controls in place and
-//     keep keys and focus return, on the board toolbar, a board page, a dialog and a clipping box (src/goldens/menu-escape.json, #225)
+//     keep keys, focus return and their own scroll, on the board toolbar, a board page, a dialog and a clipping box (src/goldens/menu-escape.json, #225)
 const menuDiffs = await sweepMenuEscape();
-if (menuDiffs.length === 0) pass("menu escape", "toolbar and board page at 1280 and 375px in both themes, a dialog and a clipping box: menus open whole above every box, controls stay put, the toolbar never scrolls sideways, and Escape and Enter return focus to the trigger");
+if (menuDiffs.length === 0) pass("menu escape", "toolbar and board page at 1280 and 375px in both themes, a dialog and a clipping box: menus open whole above every box, controls stay put, the toolbar never scrolls sideways, Escape and Enter return focus to the trigger, and a squeezed menu keeps its scroll");
 else fail("menu escape", menuDiffs.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);

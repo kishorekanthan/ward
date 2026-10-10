@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
-import { escapeDiffs } from "./menu-escape.mjs";
+import { escapeDiffs, scrollDiffs } from "./menu-escape.mjs";
 
 const box = (x, y, w, h) => ({ x, y, w, h });
 const controls = [box(500, 111, 94, 28), box(602, 111, 113, 28)];
@@ -54,5 +54,16 @@ describe("escapeDiffs", () => {
       "toolbar:light@1280: ArrowDown did not open the menu",
       "toolbar:light@1280: ArrowDown then Enter did not pick Integration",
     ]);
+  });
+
+  it("passes a squeezed menu that keeps its scroll, and names one that snaps back or hides the focused item", () => {
+    expect(scrollDiffs({ squeezed: true, scrolled: 104, placed: 0, lastShown: true, listHeld: true })).toEqual([]);
+    expect(scrollDiffs({ squeezed: true, scrolled: 0, placed: 2, lastShown: false, listHeld: false })).toEqual([
+      "short viewport@375: scrolling the menu snapped it back to the top",
+      "short viewport@375: scrolling inside the menu placed it again",
+      "short viewport@375: End left the focused item below the fold",
+      "short viewport@375: hovering a row snapped the scrolled list back",
+    ]);
+    expect(scrollDiffs({ squeezed: false, scrolled: 104, placed: 0, lastShown: true, listHeld: true })).toEqual(["short viewport@375: the menu had room, so its scroll was not tested"]);
   });
 });

@@ -106,6 +106,50 @@ async function measureAll(page, base) {
   return out;
 }
 
+const settle = () => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done)));
+
+// A menu the viewport squeezes scrolls inside itself; a scroll or a key below the fold must not snap it back to the top.
+async function measureScroll(page, base) {
+  await page.setViewportSize({ width: 375, height: 220 });
+  await page.goto(`${base}/iframe.html?viewMode=story&id=primitives-menu--groups-and-footer`, { waitUntil: "load", timeout: 30000 });
+  const panel = page.locator("[role=menu]").first().locator("..");
+  await panel.waitFor({ timeout: 8000 });
+  const squeezed = await panel.evaluate((el) => el.scrollHeight > el.clientHeight);
+  await panel.evaluate((el) => {
+    window.placed = 0;
+    new MutationObserver(() => window.placed++).observe(el, { attributeFilter: ["style"] });
+    el.scrollTop = el.scrollHeight;
+  });
+  await page.evaluate(settle);
+  const scrolled = await panel.evaluate((el) => el.scrollTop);
+  const placed = await page.evaluate(() => window.placed);
+  await panel.locator("[role=menuitem]").first().focus();
+  await page.keyboard.press("End");
+  await page.evaluate(settle);
+  const lastShown = await panel.evaluate((el) => document.activeElement.getBoundingClientRect().bottom <= el.getBoundingClientRect().bottom + 0.5);
+  return { squeezed, scrolled, placed, lastShown, listHeld: await hoverScrolledList(page, base) };
+}
+
+// Hovering the top whole row re-renders the Select, which places the menu again; the list scrolled to its end must stay there.
+async function hoverScrolledList(page, base) {
+  await page.setViewportSize({ width: 375, height: 260 });
+  await page.goto(`${base}/iframe.html?viewMode=story&id=primitives-select--long-list-with-find`, { waitUntil: "load", timeout: 30000 });
+  const list = page.locator("[role=listbox]").first();
+  await list.waitFor({ timeout: 8000 });
+  const end = await list.evaluate((el) => {
+    el.scrollTop = el.scrollHeight;
+    return el.scrollTop;
+  });
+  await page.evaluate(settle);
+  await list.evaluate((el) => {
+    const top = el.getBoundingClientRect().top;
+    const row = Array.from(el.querySelectorAll("[role=option]")).find((option) => option.getBoundingClientRect().top >= top);
+    row.dispatchEvent(new MouseEvent("mousemove", { bubbles: true }));
+  });
+  await page.evaluate(settle);
+  return end > 0 && (await list.evaluate((el) => el.scrollTop)) === end;
+}
+
 const T = TOLERANCE;
 const moved = (a, b) => ["x", "y", "w", "h"].some((k) => Math.abs(a[k] - b[k]) > T);
 const inView = (r, view) => r.x >= -T && r.y >= -T && r.x + r.w <= view.w + T && r.y + r.h <= view.h + T;
@@ -128,6 +172,14 @@ const KEY_RULES = [
   [(k) => !k.reopened, "ArrowDown did not open the menu"],
   [(k) => !k.picked.closed || !k.picked.focused, "Enter did not close the menu back to its trigger"],
   [(k) => k.picked.value !== "Integration", "ArrowDown then Enter did not pick Integration"],
+];
+
+const SCROLL_RULES = [
+  [(f) => !f.squeezed, "the menu had room, so its scroll was not tested"],
+  [(f) => f.scrolled === 0, "scrolling the menu snapped it back to the top"],
+  [(f) => f.placed > 0, "scrolling inside the menu placed it again"],
+  [(f) => !f.lastShown, "End left the focused item below the fold"],
+  [(f) => !f.listHeld, "hovering a row snapped the scrolled list back"],
 ];
 
 const broken = (rules, facts, where) => rules.filter(([bad]) => bad(facts)).map(([, message]) => `${where}: ${message}`);
@@ -153,6 +205,8 @@ function goldenDiffs(where, got, want) {
   return Object.keys(want).filter((k) => Math.abs(box[k] - want[k]) > TOLERANCE).map((k) => `${where} menu.${k}: got ${box[k]}, want ${want[k]}`);
 }
 
+export const scrollDiffs = (facts) => broken(SCROLL_RULES, facts, "short viewport@375");
+
 export function escapeDiffs(got, golden) {
   return Object.entries(got).flatMap(([where, run]) => [...goldenDiffs(where, run, golden[where]), ...placeDiffs(where, run), ...keyDiffs(where, run.keys)]);
 }
@@ -163,7 +217,9 @@ async function measureStories() {
   await new Promise((r) => server.listen(0, "127.0.0.1", r));
   const browser = await launchChromium();
   try {
-    return await measureAll(await browser.newPage(), `http://127.0.0.1:${server.address().port}`);
+    const page = await browser.newPage();
+    const base = `http://127.0.0.1:${server.address().port}`;
+    return { runs: await measureAll(page, base), scroll: await measureScroll(page, base) };
   } finally {
     await browser.close();
     server.close();
@@ -171,12 +227,13 @@ async function measureStories() {
 }
 
 export async function sweepMenuEscape() {
-  return escapeDiffs(await measureStories(), JSON.parse(readFileSync(goldenPath, "utf8")));
+  const { runs, scroll } = await measureStories();
+  return [...escapeDiffs(runs, JSON.parse(readFileSync(goldenPath, "utf8"))), ...scrollDiffs(scroll)];
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   if (process.argv.includes("--record")) {
-    const runs = await measureStories();
+    const { runs } = await measureStories();
     const golden = Object.fromEntries(Object.entries(runs).map(([where, run]) => [where, run.open.menu ? menuBox(run.open) : null]));
     writeFileSync(goldenPath, JSON.stringify(golden, null, 2).replace(/\{[^{}]*\}/g, (box) => JSON.stringify(JSON.parse(box))) + "\n");
     console.log(`menu escape: recorded ${goldenPath}`);
