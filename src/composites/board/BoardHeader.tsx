@@ -102,7 +102,7 @@ export function BoardHeader({
           {rollupLine(rollups)}
         </p>
       </div>
-      <div className={s.tools} tabIndex={0} role="region" aria-label="Board header controls">
+      <div className={s.tools} role="region" aria-label="Board header controls">
         <OwnerField owners={owners} owner={owner} onOwnerChange={onOwnerChange} />
         {onConfigure === undefined ? null : <Btn onClick={onConfigure}>Configure board</Btn>}
         {actions}
