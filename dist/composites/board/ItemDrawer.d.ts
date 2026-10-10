@@ -9,6 +9,11 @@ export type ItemDetail = BoardItem & {
     agentMeta?: string;
     streamName?: string;
 };
+/** A fact row the app adds to the drawer's facts list; Ward renders it like a built-in row. */
+export type DrawerFact = {
+    label: string;
+    value: ReactNode;
+};
 export type ItemDrawerProps = {
     item: ItemDetail;
     actions: ReactNode[];
@@ -18,5 +23,6 @@ export type ItemDrawerProps = {
     resolve?: ReactNode;
     resolveLabel?: string;
     actionsNote?: string;
+    facts?: DrawerFact[];
 };
-export declare function ItemDrawer({ item, actions, onClose, returnFocusTo, feed, resolve, resolveLabel, actionsNote }: ItemDrawerProps): import("react").JSX.Element;
+export declare function ItemDrawer({ item, actions, onClose, returnFocusTo, feed, resolve, resolveLabel, actionsNote, facts }: ItemDrawerProps): import("react").JSX.Element;

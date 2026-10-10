@@ -17,6 +17,9 @@ export type ItemDetail = BoardItem & {
   streamName?: string;
 };
 
+/** A fact row the app adds to the drawer's facts list; Ward renders it like a built-in row. */
+export type DrawerFact = { label: string; value: ReactNode };
+
 export type ItemDrawerProps = {
   item: ItemDetail;
   actions: ReactNode[];
@@ -26,6 +29,7 @@ export type ItemDrawerProps = {
   resolve?: ReactNode;
   resolveLabel?: string;
   actionsNote?: string;
+  facts?: DrawerFact[];
 };
 
 // A blocked cause is not an owner, so it gets its own row instead of standing in for Waits on.
@@ -44,14 +48,22 @@ function stepLabel(step: number | null): string {
   return valid === null ? "No colour" : `Step ${valid}`;
 }
 
-function detailRows(item: ItemDetail, feed?: WorkCardFeed | null): [string, ReactNode][] {
-  const rows: [string, ReactNode][] = [
+// Built-in rows key on their label; an app fact keys on its position, as two facts may share a label.
+type Row = [label: string, value: ReactNode, key?: string];
+
+function factRows(facts?: DrawerFact[]): Row[] {
+  return (facts ?? []).map((fact, index) => [fact.label, fact.value, `fact-${index}`]);
+}
+
+function detailRows(item: ItemDetail, feed?: WorkCardFeed | null, facts?: DrawerFact[]): Row[] {
+  const rows: Row[] = [
     ["Stream", item.streamName ?? <Chip key="s" {...streamChipProps(stepLabel(item.streamStep), item.streamStep)} />],
     ["Workflow", item.workflow],
     ["State", item.stateLabel],
     ["Time in stage", duration(item.timeInStage)],
     ["Waits on", item.run ? item.run.agent : item.waitsOn],
     ...blockedRows(item),
+    ...factRows(facts),
     ...runningRows(item, feed),
   ];
   return rows;
@@ -88,9 +100,9 @@ function AgentQuote({ item }: { item: ItemDetail }) {
   );
 }
 
-export function ItemDrawer({ item, actions, onClose, returnFocusTo, feed, resolve, resolveLabel, actionsNote }: ItemDrawerProps) {
+export function ItemDrawer({ item, actions, onClose, returnFocusTo, feed, resolve, resolveLabel, actionsNote, facts }: ItemDrawerProps) {
   const titleId = useId();
-  const rows = detailRows(item, feed);
+  const rows = detailRows(item, feed, facts);
   return (
     <Overlay kind="drawer" labelledBy={titleId} onClose={onClose} returnFocusTo={returnFocusTo} flush>
       <div className={s.body}>
@@ -102,8 +114,8 @@ export function ItemDrawer({ item, actions, onClose, returnFocusTo, feed, resolv
           {item.summary && <p className={s.note}>{item.summary}</p>}
         </div>
         <dl className={s.kv}>
-          {rows.map(([label, value]) => (
-            <div className={s.row} key={label}>
+          {rows.map(([label, value, key]) => (
+            <div className={s.row} key={key ?? label}>
               <dt className={s.label}>{label}</dt>
               <dd className={s.value}>{value}</dd>
             </div>

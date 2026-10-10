@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { Btn } from "../../primitives/Btn";
+import type { DrawerFact } from "../../index";
 import { ItemDrawer, type ItemDetail } from "./ItemDrawer";
 
 const item: ItemDetail = {
@@ -120,5 +121,72 @@ describe("ItemDrawer resolve slot", () => {
       return found;
     };
     expect([chipOf(2), chipOf(4), chipOf(null)]).toEqual([["stream", "Step 2"], ["meta", "No colour"], ["meta", "No colour"]]);
+  });
+});
+
+describe("ItemDrawer app facts", () => {
+  const terms = () => screen.getAllByRole("term").map((term) => term.textContent);
+  const builtIn = ["Stream", "Workflow", "State", "Time in stage", "Waits on"];
+  const tested: DrawerFact = { label: "Tested", value: <span>Passed 2 hours ago</span> };
+
+  it("puts an app fact after the built-in and Blocked rows and before Running", () => {
+    const busy: ItemDetail = { ...item, blockedReason: "Carrier feed is down", run: { agent: "triage v2", startedAt: "2026-09-06T02:14:00Z" } };
+    render(drawer({ item: busy, facts: [tested] }));
+    expect(terms()).toEqual(["Stream", "Workflow", "State", "Time in stage", "Waits on", "Blocked", "Tested", "Running"]);
+  });
+
+  it("renders the fact's label and value node in a row built like the built-in rows", () => {
+    render(drawer({ facts: [tested] }));
+    const [, , , , waitsOn, label] = screen.getAllByRole("term");
+    const value = label.nextElementSibling as HTMLElement;
+    expect([label.tagName, label.textContent, value.tagName, value.innerHTML]).toEqual(["DT", "Tested", "DD", "<span>Passed 2 hours ago</span>"]);
+    expect([label.className, value.className, label.parentElement?.className]).toEqual([waitsOn.className, waitsOn.nextElementSibling?.className, waitsOn.parentElement?.className]);
+  });
+
+  it("adds no row and no markup when the app supplies no facts", () => {
+    for (const facts of [undefined, []]) {
+      const { unmount } = render(drawer({ facts }));
+      expect(terms()).toEqual(builtIn);
+      expect(document.querySelector("dl")?.children.length).toBe(5);
+      unmount();
+    }
+  });
+
+  it("keeps a button or link in a fact's value interactive", () => {
+    const onOpen = vi.fn();
+    const value = (
+      <>
+        Failed at Storybook build <Btn variant="ghost" size="sm" onClick={onOpen}>Open run</Btn> <a href="/runs/latest">See all runs</a>
+      </>
+    );
+    render(drawer({ facts: [{ label: "Tested", value }] }));
+    const button = screen.getByRole("button", { name: "Open run" });
+    button.focus();
+    expect(document.activeElement).toBe(button);
+    fireEvent.click(button);
+    expect(onOpen).toHaveBeenCalledTimes(1);
+    const link = screen.getByRole("link", { name: "See all runs" });
+    link.focus();
+    expect([document.activeElement, link.getAttribute("href")]).toEqual([link, "/runs/latest"]);
+  });
+
+  it("keeps the Running row mounted when a fact or Blocked appears before it", () => {
+    const running: ItemDetail = { ...item, run: { agent: "triage v2", startedAt: "2026-09-06T02:14:00Z" } };
+    const { rerender } = render(drawer({ item: running }));
+    const runningValue = () => screen.getAllByRole("definition").at(-1);
+    const before = runningValue();
+    rerender(drawer({ item: { ...running, blockedReason: "Carrier feed is down" }, facts: [tested] }));
+    expect(terms().at(-1)).toBe("Running");
+    expect(runningValue()).toBe(before);
+  });
+
+  it("shows two facts that share a label, in order, without a key clash", () => {
+    const errors = vi.spyOn(console, "error").mockImplementation(() => {});
+    const { rerender } = render(drawer({ facts: [{ label: "Tested", value: "Unit suite passed" }, { label: "Tested", value: "Storybook passed" }] }));
+    rerender(drawer({ facts: [{ label: "Tested", value: "Unit suite failed" }, { label: "Tested", value: "Storybook passed" }, { label: "Tested", value: "Lint passed" }] }));
+    const values = screen.getAllByRole("definition").slice(5).map((value) => value.textContent);
+    expect(values).toEqual(["Unit suite failed", "Storybook passed", "Lint passed"]);
+    expect(errors).not.toHaveBeenCalled();
+    errors.mockRestore();
   });
 });
