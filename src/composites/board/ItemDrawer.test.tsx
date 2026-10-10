@@ -170,6 +170,16 @@ describe("ItemDrawer app facts", () => {
     expect([document.activeElement, link.getAttribute("href")]).toEqual([link, "/runs/latest"]);
   });
 
+  it("keeps the Running row mounted when a fact or Blocked appears before it", () => {
+    const running: ItemDetail = { ...item, run: { agent: "triage v2", startedAt: "2026-09-06T02:14:00Z" } };
+    const { rerender } = render(drawer({ item: running }));
+    const runningValue = () => screen.getAllByRole("definition").at(-1);
+    const before = runningValue();
+    rerender(drawer({ item: { ...running, blockedReason: "Carrier feed is down" }, facts: [tested] }));
+    expect(terms().at(-1)).toBe("Running");
+    expect(runningValue()).toBe(before);
+  });
+
   it("shows two facts that share a label, in order, without a key clash", () => {
     const errors = vi.spyOn(console, "error").mockImplementation(() => {});
     const { rerender } = render(drawer({ facts: [{ label: "Tested", value: "Unit suite passed" }, { label: "Tested", value: "Storybook passed" }] }));
