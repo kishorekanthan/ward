@@ -32,6 +32,11 @@
   text-overflow: ellipsis;
 }
 
+/* Steps you can go back to stay whole; only the current step cuts. */
+.item:not(:last-child) {
+  flex-shrink: 0;
+}
+
 /* A step you can go back to reads as a link by colour, never an underline; hover tints its ground. */
 .link {
   color: var(--ward-color-link);

@@ -268,20 +268,22 @@
   },
   "caseHeaderLongCrumb": {
     "story": "primitives-pageheader--record-long-crumb",
-    "label": "Reconcile late-arriving inbound shipments against the carrier's manifest before the nightly warehouse cut-off has closed",
+    "label": "Reconcile late-arriving inbound shipments against the carrier's manifest before the nightly warehouse cut-off has closed, and flag every pallet whose scan time falls after the cut-off for the controller.",
     "crumbOneLine": true,
     "stepCut": true,
     "stepTooltip": true,
+    "ancestorsWhole": true,
     "crumbInHeader": true,
     "pageScrollsSideways": false
   },
   "caseHeaderLongCrumbWide": {
     "story": "primitives-pageheader--record-long-crumb",
     "width": 1280,
-    "label": "Reconcile late-arriving inbound shipments against the carrier's manifest before the nightly warehouse cut-off has closed",
+    "label": "Reconcile late-arriving inbound shipments against the carrier's manifest before the nightly warehouse cut-off has closed, and flag every pallet whose scan time falls after the cut-off for the controller.",
     "crumbOneLine": true,
-    "stepCut": false,
+    "stepCut": true,
     "stepTooltip": true,
+    "ancestorsWhole": true,
     "crumbInHeader": true,
     "pageScrollsSideways": false
   },

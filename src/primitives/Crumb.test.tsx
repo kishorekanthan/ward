@@ -8,7 +8,8 @@ import { Crumb } from "./Crumb";
 const crumbCss = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "Crumb.module.css"), "utf8");
 
 function ruleBlock(selector: string): string {
-  return crumbCss.match(new RegExp(`(?:^|\\n)\\${selector}\\s*\\{([^}]*)\\}`))?.[1] ?? "";
+  const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return crumbCss.match(new RegExp(`(?:^|\\n)${escaped}\\s*\\{([^}]*)\\}`))?.[1] ?? "";
 }
 
 const path = [
@@ -64,6 +65,7 @@ describe("Crumb", () => {
     expect(ruleBlock(".root")).toMatch(/min-width:\s*0;/);
     expect(ruleBlock(".list")).toMatch(/min-width:\s*0;/);
     expect(ruleBlock(".item")).toMatch(/text-overflow:\s*ellipsis;/);
+    expect(ruleBlock(".item:not(:last-child)")).toMatch(/flex-shrink:\s*0;/);
   });
 
   it("draws a step you can go back to as a link with no underline and a tinted hover", () => {

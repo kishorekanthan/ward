@@ -324,6 +324,7 @@ function probeLongCrumb([label]) {
     crumbOneLine: new Set(Array.from(list.children).map((li) => Math.round(li.getBoundingClientRect().top))).size === 1,
     stepCut: step.getBoundingClientRect().width > item.clientWidth + 0.5 && getComputedStyle(item).textOverflow === "ellipsis",
     stepTooltip: step.title === label,
+    ancestorsWhole: Array.from(list.children).filter((li) => li !== item).every((li) => li.lastElementChild.getBoundingClientRect().width <= li.clientWidth + 0.5),
     crumbInHeader: list.getBoundingClientRect().right <= header.getBoundingClientRect().right + 0.5,
     pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
   };
