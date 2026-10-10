@@ -14,6 +14,7 @@ import { sweepStudioFrame } from "./studio-frame.mjs";
 import { sweepHeaderGeometry } from "./header-geometry.mjs";
 import { sweepPolicyRow } from "./policy-row.mjs";
 import { sweepAffordance } from "./affordance.mjs";
+import { sweepFlashRing } from "./flash-ring.mjs";
 import { workflowFindings } from "./workflows.mjs";
 import { NAME, OLD_NAME, OLD_TARBALL, oldNameFiles } from "./old-name.mjs";
 import { FAMILY_OF, breakpoints, buildCss, buildTokens, containerBreakpoints, declaredFaces, palette, readTokens } from "./gen-css.mjs";
@@ -294,6 +295,11 @@ else fail("board toolbar", toolbarDiffs.join("; "));
 const menuDiffs = await sweepMenuEscape();
 if (menuDiffs.length === 0) pass("menu escape", "toolbar and board page at 1280 and 375px in both themes, a dialog and a clipping box: menus open whole above every box, controls stay put, the toolbar never scrolls sideways, Escape and Enter return focus to the trigger, and a squeezed menu keeps its scroll");
 else fail("menu escape", menuDiffs.join("; "));
+
+// 17. flash ring: a flashed WorkCard paints a ring in the flash colour at its first frame, keeps its box and shadow, and runs nothing under reduced motion (src/goldens/flash-ring.json, #231)
+const flashDiffs = await sweepFlashRing();
+if (flashDiffs.length === 0) pass("flash ring", "light and dark: the first frame rings the card in the flash colour (or running), its box and shadow hold, the ring fades out, and reduced motion runs no flash");
+else fail("flash ring", flashDiffs.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);
 process.exitCode = failures === 0 ? 0 : 1;
