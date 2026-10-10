@@ -1,6 +1,8 @@
 import { bothThemes } from "../../.storybook/bothThemes";
 import { fullPage } from "../../.storybook/fullPage";
 import { BoardColumn } from "../composites/board/BoardColumn";
+import { BoardHeader, type BoardHeaderProps } from "../composites/board/BoardHeader";
+import { CrowdedToolbar } from "../composites/board/BoardHeader.stories";
 import type { BoardItem } from "../composites/board/types";
 import { PageHeader } from "../primitives/PageHeader";
 import { AppShell } from "./AppShell";
@@ -83,4 +85,18 @@ export const BoardPageNineLanes = {
   decorators: [fullPage],
   parameters: { layout: "fullscreen" },
   render: () => <BoardPage count={9} />,
+};
+
+// The crowded toolbar as a board page holds it, above lanes that scroll on their own; its menus open over the lanes.
+export const BoardPageCrowdedHeader = {
+  decorators: [fullPage],
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <AppShell destinations={[{ id: "board", label: "Board", href: "#board" }]} active="board">
+      <PageFrame inset="board">
+        <BoardHeader {...(CrowdedToolbar.args as unknown as BoardHeaderProps)} />
+        <BoardScroller lanes={boardLanes(3)} />
+      </PageFrame>
+    </AppShell>
+  ),
 };
