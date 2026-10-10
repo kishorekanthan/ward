@@ -211,3 +211,8 @@ const longCase = {
 };
 
 export const RecordLongTitle = { args: longCase };
+
+// A request title as the current crumb step cuts on one line and keeps the header its width.
+export const RecordLongCrumb = {
+  args: { ...longCase, crumb: [{ label: "Board", href: "/board" }, { label: "data-eng", href: "/streams/data-eng" }, { label: longCase.title }] },
+};

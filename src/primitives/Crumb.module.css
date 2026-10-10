@@ -1,4 +1,9 @@
 /* Provenance: the crumb is the Admin comp .k kicker above the page title (500 9px/1), set in sentence case sans rather than the comp's uppercase mono (#199). */
+/* The crumb shrinks in its row, so a long step cuts with an ellipsis and the header stays one line. */
+.root {
+  min-width: 0;
+}
+
 .nav {
   display: flex;
   align-items: baseline;
@@ -7,6 +12,7 @@
 
 .list {
   display: flex;
+  min-width: 0;
   gap: var(--ward-space-2);
   align-items: baseline;
   white-space: nowrap;

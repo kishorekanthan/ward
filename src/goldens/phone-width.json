@@ -266,6 +266,25 @@
     "ownerInView": true,
     "pageScrollsSideways": false
   },
+  "caseHeaderLongCrumb": {
+    "story": "primitives-pageheader--record-long-crumb",
+    "label": "Reconcile late-arriving inbound shipments against the carrier's manifest before the nightly warehouse cut-off has closed",
+    "crumbOneLine": true,
+    "stepCut": true,
+    "stepTooltip": true,
+    "crumbInHeader": true,
+    "pageScrollsSideways": false
+  },
+  "caseHeaderLongCrumbWide": {
+    "story": "primitives-pageheader--record-long-crumb",
+    "width": 1280,
+    "label": "Reconcile late-arriving inbound shipments against the carrier's manifest before the nightly warehouse cut-off has closed",
+    "crumbOneLine": true,
+    "stepCut": false,
+    "stepTooltip": true,
+    "crumbInHeader": true,
+    "pageScrollsSideways": false
+  },
   "themePresets": {
     "story": "tokens-theme--accent-presets",
     "panels": 10,
