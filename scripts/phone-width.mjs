@@ -11,6 +11,9 @@ export const golden = JSON.parse(readFileSync(join(root, "src", "goldens", "phon
 
 // Runs in the page: the first themed copy only, so each fact is read once.
 async function probeTabs() {
+  // Web fonts change tab widths when they land, and the strip re-measures; read only the settled strip.
+  await document.fonts.ready;
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
   const strip = document.querySelector('#storybook-root [role="tablist"]');
   const shown = Array.from(strip.querySelectorAll('[role="tab"]')).filter((t) => t.getAttribute("aria-hidden") !== "true");
   const more = shown.find((t) => t.getAttribute("aria-haspopup") === "menu");
@@ -33,7 +36,7 @@ async function probeTabs() {
     moreShown: Boolean(more),
     activeTabInView: Boolean(active) && inStrip(active),
     shownTabsInStrip: shown.every(inStrip),
-    menuHoldsTheRest: `dbg waiting=${waiting} items=${menu?.querySelectorAll('[role="menuitem"]').length} menu=${Boolean(menu)} shown=${shown.length} more=${Boolean(more)} sw=${strip.scrollWidth} cw=${strip.clientWidth}`,
+    menuHoldsTheRest: waiting > 0 && menu?.querySelectorAll('[role="menuitem"]').length === waiting,
     menuInView: Boolean(m) && m.left >= 0 && m.right <= innerWidth && m.bottom <= innerHeight,
     pageScrollsSideways,
   };
