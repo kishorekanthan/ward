@@ -108,6 +108,13 @@ describe("Composer chat field", () => {
     expect(send.querySelector("svg")?.getAttribute("focusable")).toBe("false");
   });
 
+  it("draws the send button as the sage main action with its name visually hidden", () => {
+    render(<Composer {...chat} onPost={() => {}} />);
+    const send = screen.getByRole("button", { name: "Send" });
+    expect(send.classList.contains("ward-btn--primary")).toBe(true);
+    expect(send.querySelector(".ward-visually-hidden")?.textContent).toBe("Send");
+  });
+
   it("sends on Enter and keeps a new line on Shift+Enter and while composing", () => {
     const onPost = vi.fn();
     render(<Composer {...chat} onPost={onPost} />);
