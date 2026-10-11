@@ -3,7 +3,7 @@ import { LiveConnection } from '../live/types';
 import { ChipProps } from './Chip';
 import { CrumbPath } from './Crumb';
 export type PageHeaderProps = {
-    crumb: CrumbPath[];
+    crumb?: CrumbPath[];
     chips?: ChipProps[];
     title: string;
     consequence?: string;

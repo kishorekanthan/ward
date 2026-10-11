@@ -8,7 +8,7 @@ import { Crumb, type CrumbPath } from "./Crumb";
 import s from "./PageHeader.module.css";
 
 export type PageHeaderProps = {
-  crumb: CrumbPath[];
+  crumb?: CrumbPath[];
   chips?: ChipProps[];
   title: string;
   consequence?: string;
@@ -29,11 +29,32 @@ function Title({ title, density }: Pick<PageHeaderProps, "title" | "density">) {
   return density === "record" ? <ClampText as="h1" className={s.title} text={title} /> : <h1 className={s.title}>{title}</h1>;
 }
 
-function Heading({ title, consequence, consequenceHint, density }: Pick<PageHeaderProps, "title" | "consequence" | "consequenceHint" | "density">) {
+function ChipRow({ chips }: { chips: ChipProps[] }) {
+  return chips.length > 0 ? <div className={s.chips}>{chips.map((chip) => <Chip key={chip.label} {...chip} />)}</div> : null;
+}
+
+function Consequence({ consequence, consequenceHint }: Pick<PageHeaderProps, "consequence" | "consequenceHint">) {
+  return consequence ? <p className={s.consequence} title={consequenceHint}>{consequence}</p> : null;
+}
+
+// Chips are facts about the page, so they sit on the meta line under the title, never in the crumb (#260).
+function Meta({ chips = [], consequence, consequenceHint }: Pick<PageHeaderProps, "chips" | "consequence" | "consequenceHint">) {
+  if (chips.length === 0 && !consequence) return null;
+  return (
+    <div className={s.meta}>
+      <ChipRow chips={chips} />
+      <Consequence consequence={consequence} consequenceHint={consequenceHint} />
+    </div>
+  );
+}
+
+type HeadingProps = Pick<PageHeaderProps, "title" | "chips" | "consequence" | "consequenceHint" | "density">;
+
+function Heading({ title, chips, consequence, consequenceHint, density }: HeadingProps) {
   return (
     <div className={s.heading}>
       <Title title={title} density={density} />
-      {consequence && <p className={s.consequence} title={consequenceHint}>{consequence}</p>}
+      <Meta chips={chips} consequence={consequence} consequenceHint={consequenceHint} />
     </div>
   );
 }
@@ -91,11 +112,19 @@ function useDisclosure(togglable: boolean, actionsRef: RefObject<HTMLDivElement 
   return { disclosure: { open, panelId, toggle }, close };
 }
 
-function HeaderContext({ crumb, chips }: Pick<PageHeaderProps, "crumb" | "chips">) {
+const sameWords = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
+
+// A crumb leaf that repeats the title says the page's name twice, so it goes (#260).
+function headerCrumb(crumb: CrumbPath[] = [], title: string): CrumbPath[] {
+  const leaf = crumb.at(-1);
+  return leaf !== undefined && sameWords(leaf.label, title) ? crumb.slice(0, -1) : crumb;
+}
+
+function HeaderContext({ crumb }: { crumb: CrumbPath[] }) {
+  if (crumb.length === 0) return null;
   return (
     <div className={s.context}>
       <Crumb path={crumb} />
-      {chips?.length ? <div className={s.chips}>{chips.map((chip) => <Chip key={chip.label} {...chip} />)}</div> : null}
     </div>
   );
 }
@@ -177,10 +206,10 @@ export function PageHeader({ crumb, chips, title, consequence, consequenceHint, 
   const panel = panelItems(more, actions, collapsed, onOverflow);
   return (
     <header className={s.root} data-density={density}>
-      <HeaderContext crumb={crumb} chips={chips} />
+      <HeaderContext crumb={headerCrumb(crumb, title)} />
       <div className={s.row} ref={rowRef}>
         <div ref={headingRef} className={s.headingWrap}>
-          <Heading title={title} consequence={consequence} consequenceHint={consequenceHint} density={density} />
+          <Heading title={title} chips={chips} consequence={consequence} consequenceHint={consequenceHint} density={density} />
         </div>
         <div className={s.actionsWrap}>
           <Connection connection={connection} />
