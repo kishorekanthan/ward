@@ -1,5 +1,5 @@
 import { bothThemes } from "../../.storybook/bothThemes";
-import { StatStrip } from "./StatStrip";
+import { StatStrip, StatTiles } from "./StatStrip";
 
 export default {
   title: "Primitives/StatStrip",
@@ -91,4 +91,24 @@ export const PhoneWidth = {
     ],
   },
   parameters: { viewport: { defaultViewport: "mobile1" } },
+};
+
+const figure = (value: string, label: string, href?: string) => ({ value, label, href });
+
+// Five figures fill one row in five equal tiles.
+export const TilesFive = {
+  render: () => (
+    <StatTiles
+      cells={[figure("14", "In flight", "#/board"), figure("3", "Failed runs 24h"), figure("1", "Failing connections"), figure("$41.20", "Agent spend 7d"), figure("9", "Done this week")]}
+    />
+  ),
+};
+
+// Seven figures: six to the first row, the seventh below at the same width.
+export const TilesSeven = {
+  render: () => (
+    <StatTiles
+      cells={[figure("14", "In flight"), figure("3", "Failed runs 24h"), figure("1", "Failing connections"), figure("$41.20", "Agent spend 7d"), figure("9", "Done this week"), figure("2d 4h", "Typical cycle time"), figure("6d", "Slowest cycle time", "#/board")]}
+    />
+  ),
 };
