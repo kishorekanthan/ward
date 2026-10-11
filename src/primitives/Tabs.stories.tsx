@@ -23,6 +23,17 @@ const admin = [
   { id: "runbooks", label: "Runbooks" },
 ];
 
+const stream = [
+  { id: "overview", label: "Overview" },
+  { id: "workflow", label: "Workflow" },
+  { id: "agents", label: "Agents" },
+  { id: "skills", label: "Skills" },
+  { id: "rules", label: "Rules" },
+  { id: "connections", label: "Connections" },
+  { id: "settings", label: "Settings" },
+  { id: "history", label: "Run history", count: 12 },
+];
+
 export default {
   title: "Primitives/Tabs",
   component: Tabs,
@@ -41,12 +52,12 @@ export const SecondLevel = {
   args: { tabs: board, active: "agents", level: 2, label: "Agent sections", onChange: () => {} },
 };
 
-export const AtCap = {
+export const SevenTabs = {
   args: { tabs: admin, active: "roles", label: "Admin sections", onChange: () => {} },
 };
 
-// Seven tabs at phone width scroll inside the strip; the selected sixth tab starts in view, clear of the fades.
+// Eight tabs at phone width: those that do not fit wait in More, and the selected sixth tab stays in the strip.
 export const PhoneWidth = {
-  args: { tabs: admin, active: "appearance", label: "Admin sections", onChange: () => {} },
+  args: { tabs: stream, active: "connections", label: "Stream sections", onChange: () => {} },
   parameters: { viewport: { defaultViewport: "mobile1" } },
 };

@@ -5,13 +5,13 @@
   },
   "tabs": {
     "story": "primitives-tabs--phone-width",
-    "stripScrolls": true,
+    "stripScrolls": false,
+    "oneRow": true,
+    "moreShown": true,
     "activeTabInView": true,
-    "activeTabClearOfFades": true,
-    "fadesMasked": true,
-    "endFadeMaskedAtStart": true,
-    "startFadeMaskedAtEnd": true,
-    "lastTabReachedByScroll": true,
+    "shownTabsInStrip": true,
+    "menuHoldsTheRest": true,
+    "menuInView": true,
     "pageScrollsSideways": false
   },
   "pageHeader": {

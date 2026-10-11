@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { TabLinks } from "./TabLinks";
 
@@ -17,6 +17,8 @@ const studio = [
   { id: "gates", label: "Gates", href: "#/studio/gates" },
   { id: "audit", label: "Audit", href: "#/studio/audit" },
 ];
+
+const seven = Array.from({ length: 7 }, (_, i) => ({ id: `l${i}`, label: `Link ${i}`, href: `#/${i}` }));
 
 // A 300px strip holding seven 90px links on a 100px pitch: 700px of content.
 function mockStripLayout(): void {
@@ -77,11 +79,42 @@ describe("TabLinks", () => {
 
   it("scrolls a current link off the right edge into view on mount", () => {
     mockStripLayout();
-    const seven = Array.from({ length: 7 }, (_, i) => ({ id: `l${i}`, label: `Link ${i}`, href: `#/${i}` }));
     render(<TabLinks links={seven} active="l5" label="Sections" />);
     const nav = screen.getByRole("navigation");
     expect(nav.scrollLeft).toBe(290);
     expect(nav.hasAttribute("data-fade-start")).toBe(true);
+  });
+
+  it("brings back a current link that sits left of the scrolled window, and leaves one in view alone", () => {
+    mockStripLayout();
+    const { rerender } = render(<TabLinks links={seven} active="l6" label="Sections" />);
+    rerender(<TabLinks links={seven} active="l1" label="Sections" />);
+    expect(screen.getByRole("navigation").scrollLeft).toBe(100);
+    rerender(<TabLinks links={seven} active="l2" label="Sections" />);
+    expect(screen.getByRole("navigation").scrollLeft).toBe(100);
+  });
+
+  it("fades only the edges that hide links, following the scroll", () => {
+    mockStripLayout();
+    render(<TabLinks links={seven} active="l0" label="Sections" />);
+    const nav = screen.getByRole("navigation");
+    const fades = () => [nav.hasAttribute("data-fade-start"), nav.hasAttribute("data-fade-end")];
+    expect(fades()).toEqual([false, true]);
+    nav.scrollLeft = 200;
+    fireEvent.scroll(nav);
+    expect(fades()).toEqual([true, true]);
+    nav.scrollLeft = 400;
+    fireEvent.scroll(nav);
+    expect(fades()).toEqual([true, false]);
+  });
+
+  it("stops a revealed link clear of the edge fade, the strip's 24px scroll-padding", () => {
+    mockStripLayout();
+    const computed = window.getComputedStyle;
+    vi.spyOn(window, "getComputedStyle").mockImplementation((el) => (el.tagName === "NAV" ? ({ scrollPaddingInlineStart: "24px" } as CSSStyleDeclaration) : computed(el)));
+    render(<TabLinks links={seven} active="l2" label="Sections" />);
+    // Link 2 ends at 290, inside the 300px window but under the right fade: 290 - 300 + 24 = 14.
+    expect(screen.getByRole("navigation").scrollLeft).toBe(14);
   });
 
   it("draws the current link like the selected tab, at both levels", () => {

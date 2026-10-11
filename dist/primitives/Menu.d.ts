@@ -17,6 +17,15 @@ export type MenuProps = {
     footer?: string;
     align?: "start" | "end";
 };
+/** Lets a host strip take the trigger into its own roving focus, as Tabs does with More. */
+export type MenuTrigger = {
+    role?: "tab";
+    "aria-selected"?: boolean;
+    tabIndex?: number;
+    onFocus?: () => void;
+    ref?: (el: HTMLButtonElement | null) => void;
+    className?: string;
+};
 export type MenuButtonProps = {
     label: ReactNode;
     /** The Menu this button opens. */
@@ -25,6 +34,7 @@ export type MenuButtonProps = {
     disabled?: boolean;
     defaultOpen?: boolean;
     className?: string;
+    trigger?: MenuTrigger;
 };
 export declare function MenuButton(props: MenuButtonProps): import("react").JSX.Element;
 export declare function Menu({ entries, footer, align }: MenuProps): import("react").JSX.Element;

@@ -118,7 +118,9 @@ describe("Tabs", () => {
     expect(panel.id).toBe(tab.getAttribute("aria-controls"));
   });
 
-  it("rejects an eighth tab instead of wrapping another screen section into the row", () => {
-    expect(() => render(<Tabs tabs={[...sevenTabs, { id: "tab-8", label: "Tab 8" }]} active="tab-1" onChange={() => {}} />)).toThrow(`Tabs: 8 tabs exceeds the cap of ${golden.tabs.cap} — the set is fixed`);
+  it("keeps an eighth tab in the same strip instead of wrapping another screen section into the row", () => {
+    render(<Tabs tabs={[...sevenTabs, { id: "tab-8", label: "Tab 8" }]} active="tab-1" onChange={() => {}} />);
+    expect(screen.getAllByRole("tablist")).toHaveLength(1);
+    expect(screen.getAllByRole("tab")).toHaveLength(8);
   });
 });

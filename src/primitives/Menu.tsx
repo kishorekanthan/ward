@@ -29,6 +29,16 @@ export type MenuProps = {
   align?: "start" | "end";
 };
 
+/** Lets a host strip take the trigger into its own roving focus, as Tabs does with More. */
+export type MenuTrigger = {
+  role?: "tab";
+  "aria-selected"?: boolean;
+  tabIndex?: number;
+  onFocus?: () => void;
+  ref?: (el: HTMLButtonElement | null) => void;
+  className?: string;
+};
+
 export type MenuButtonProps = {
   label: ReactNode;
   /** The Menu this button opens. */
@@ -37,6 +47,7 @@ export type MenuButtonProps = {
   disabled?: boolean;
   defaultOpen?: boolean;
   className?: string;
+  trigger?: MenuTrigger;
 };
 
 type Start = "first" | "last";
@@ -92,6 +103,15 @@ function classes(...names: Array<string | undefined>): string {
   return names.filter(Boolean).join(" ");
 }
 
+function triggerProps(button: RefObject<HTMLButtonElement | null>, trigger: MenuTrigger = {}) {
+  const { ref, className, ...rest } = trigger;
+  const attach = (el: HTMLButtonElement | null) => {
+    button.current = el;
+    ref?.(el);
+  };
+  return { ...rest, ref: attach, className: classes(s.trigger, className) };
+}
+
 export function MenuButton(props: MenuButtonProps) {
   const base = useId();
   const shared = { menuId: `${base}-menu`, buttonId: `${base}-button` };
@@ -102,10 +122,9 @@ export function MenuButton(props: MenuButtonProps) {
   return (
     <div ref={root} className={classes(s.root, props.className)} data-ward-menu="">
       <button
-        ref={button}
+        {...triggerProps(button, props.trigger)}
         id={shared.buttonId}
         type="button"
-        className={s.trigger}
         aria-haspopup="menu"
         aria-expanded={popup.open}
         aria-controls={popup.open ? shared.menuId : undefined}
