@@ -272,6 +272,14 @@ describe("PageHeader says its name once", () => {
     expect(steps()).toEqual(["Board", "DE-008"]);
   });
 
+  it("keeps a leaf that is only part of the title, or the title only part of the leaf", () => {
+    const { unmount } = render(<PageHeader crumb={[{ label: "Find" }]} title="Find item" />);
+    expect(steps()).toEqual(["Find"]);
+    unmount();
+    render(<PageHeader crumb={[{ label: "Find item" }]} title="Find" />);
+    expect(steps()).toEqual(["Find item"]);
+  });
+
   it("drops only the leaf, not an earlier step with the title's words", () => {
     render(<PageHeader crumb={[{ label: "Tracker", href: "/tracker" }, { label: "Backlog" }]} title="Tracker" />);
     expect(steps()).toEqual(["Tracker", "Backlog"]);
