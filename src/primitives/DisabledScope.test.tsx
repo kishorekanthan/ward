@@ -34,8 +34,7 @@ function Controls(props: { onClick: () => void; onChange: () => void }) {
   );
 }
 
-const controls = () => [
-  screen.getByRole("button", { name: "Save" }),
+const fields = () => [
   screen.getByLabelText("Name"),
   screen.getByLabelText("Notes"),
   screen.getByRole("button", { name: /Kind/ }),
@@ -43,6 +42,7 @@ const controls = () => [
   screen.getByRole("switch"),
   screen.getByRole("checkbox"),
 ] as HTMLButtonElement[];
+const controls = () => [screen.getByRole("button", { name: "Save" }) as HTMLButtonElement, ...fields()];
 
 describe("DisabledScope", () => {
   it("disables every Ward control inside it and gives each the scope's reason", () => {
@@ -106,5 +106,55 @@ describe("DisabledScope", () => {
     fireEvent.click(screen.getByRole("switch"));
     expect(onClick).toHaveBeenCalledOnce();
     expect(onChange).toHaveBeenCalledOnce();
+  });
+});
+
+describe("DisabledScope with hidden actions", () => {
+  it("renders no Btn, whatever its variant or own disabled state", () => {
+    render(
+      <DisabledScope reason={REASON} actions="hide">
+        <Btn variant="primary" label="Save" onClick={() => {}} />
+        <Btn variant="destructive" label="Delete" onClick={() => {}} />
+        <Btn label="Publish" disabled disabledReason="A dry run has to pass first." />
+      </DisabledScope>,
+    );
+    expect(screen.queryAllByRole("button")).toHaveLength(0);
+    expect(screen.queryByText("A dry run has to pass first.")).toBeNull();
+  });
+
+  it("keeps every field, select, switch and checkbox, disabled with the scope's reason", () => {
+    const onChange = vi.fn();
+    render(<DisabledScope reason={REASON} actions="hide"><Controls onClick={() => {}} onChange={onChange} /></DisabledScope>);
+    expect(screen.queryByRole("button", { name: "Save" })).toBeNull();
+    const kept = fields();
+    for (const control of kept) {
+      expect(control.disabled).toBe(true);
+      expect(description(control)).toContain(REASON);
+      fireEvent.click(control);
+    }
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("drops a ConfigRow's reorder handle and keeps its fields disabled", () => {
+    const onChange = vi.fn();
+    render(<DisabledScope reason={REASON} actions="hide"><ConfigRow stage={stage} config={{ label: "Implementing", cap: 6, shown: true }} onChange={onChange} onReorder={() => {}} /></DisabledScope>);
+    expect(screen.queryByRole("button", { name: "Reorder Implement" })).toBeNull();
+    expect((screen.getByLabelText("Column label") as HTMLInputElement).disabled).toBe(true);
+    expect((screen.getByRole("switch") as HTMLButtonElement).disabled).toBe(true);
+    fireEvent.click(screen.getByText("on"));
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("still disables plain app controls through the fieldset", () => {
+    render(<DisabledScope reason={REASON} actions="hide"><button type="button">Run</button><input aria-label="Query" /></DisabledScope>);
+    expect(screen.getByRole("button", { name: "Run" }).matches(":disabled")).toBe(true);
+    expect(screen.getByLabelText("Query").matches(":disabled")).toBe(true);
+  });
+
+  it("disables as before when the mode is named disable", () => {
+    render(<DisabledScope reason={REASON} actions="disable"><Btn label="Save" onClick={() => {}} /></DisabledScope>);
+    const button = screen.getByRole("button", { name: "Save" }) as HTMLButtonElement;
+    expect(button.disabled).toBe(true);
+    expect(description(button)).toBe(REASON);
   });
 });
