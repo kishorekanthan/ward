@@ -2544,7 +2544,7 @@ function au({ spent: e, ceiling: a, breakdown: n }) {
     ] }, l.label)) })
   ] });
 }
-const tu = "_frame_1ty4m_2", nu = "_table_1ty4m_6", ru = "_th_1ty4m_12", lu = "_td_1ty4m_13", ou = "_sort_1ty4m_48", iu = "_row_1ty4m_60", su = "_empty_1ty4m_68", Be = {
+const tu = "_frame_lmfp9_2", nu = "_table_lmfp9_6", ru = "_th_lmfp9_12", lu = "_td_lmfp9_13", ou = "_sort_lmfp9_48", iu = "_row_lmfp9_60", su = "_empty_lmfp9_68", Be = {
   frame: tu,
   table: nu,
   th: ru,

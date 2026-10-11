@@ -22,7 +22,7 @@ export type GridProps<Row> = {
   sort?: { key: string; direction: "asc" | "desc" };
   onSort?: (key: string) => void;
   empty: ReactNode;
-  // stack: under 600px of its own width each row becomes a card of header and value lines; a cell holds one value.
+  // stack: under the narrow container step (472px) of its own width each row becomes a card of header and value lines; a cell holds one value.
   narrow?: "stack";
 };
 

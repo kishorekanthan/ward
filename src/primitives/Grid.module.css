@@ -88,7 +88,7 @@
 }
 
 /* Stack: last, so a stacked card shows the columns the drop rules above would hide. */
-@container (max-width: 599.98px) {
+@container (max-width: 471.98px) {
   [data-narrow="stack"] > .table,
   [data-narrow="stack"] tbody,
   [data-narrow="stack"] .row {
