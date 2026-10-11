@@ -14,6 +14,8 @@ export type CheckboxProps = {
   // cell: Studio 4a's bordered card-anatomy cell, with the field's sample value trailing in mono.
   variant?: "cell";
   sample?: string;
+  // For a grid cell whose column header already names the box: the label stays its accessible name.
+  labelHidden?: boolean;
 };
 
 function checkboxState(props: CheckboxProps, scope: ScopeReason | null): { checked: boolean; disabled: boolean } {
@@ -54,7 +56,7 @@ export function Checkbox(props: CheckboxProps) {
           aria-describedby={describedByScope(joinIds(noteId, props.describedBy), scope)}
           title={scope?.reason}
         />
-        <label htmlFor={id} className={s.label}>
+        <label htmlFor={id} className={props.labelHidden ? s.labelHidden : s.label}>
           {props.label}
           <LockedNote locked={props.locked} />
         </label>

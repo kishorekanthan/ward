@@ -54,3 +54,8 @@ export const Cell = {
     </div>
   ),
 };
+
+// In a grid cell the column header names the box, so the label is read but not shown.
+export const LabelHidden = {
+  args: { label: "Approver sees it", labelHidden: true, checked: true, onChange: () => {} },
+};

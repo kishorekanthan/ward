@@ -24,4 +24,19 @@ describe("Grid frame", () => {
     expect(screen.queryByRole("table")).toBeNull();
     expect(container.textContent).toBe("No agents yet.");
   });
+
+  it("labels every body cell with its column header when it stacks on a narrow screen", () => {
+    render(
+      <Grid<Row> label="Agents" columns={columns} rows={[{ id: "a", name: "Reviewer" }]} rowId={(r) => r.id} renderCell={(r) => r.name} empty="None" narrow="stack" />,
+    );
+    const cells = Array.from(screen.getByRole("table").querySelectorAll("tbody td"));
+    expect(cells.map((cell) => cell.getAttribute("data-label"))).toEqual(["Name", "Note"]);
+    expect(screen.getByRole("table").parentElement?.getAttribute("data-narrow")).toBe("stack");
+  });
+
+  it("leaves cells unlabelled when the grid does not stack", () => {
+    render(<Grid<Row> label="Agents" columns={columns} rows={[{ id: "a", name: "Reviewer" }]} rowId={(r) => r.id} renderCell={(r) => r.name} empty="None" />);
+    expect(screen.getByRole("table").querySelectorAll("[data-label]")).toHaveLength(0);
+    expect(screen.getByRole("table").parentElement?.hasAttribute("data-narrow")).toBe(false);
+  });
 });

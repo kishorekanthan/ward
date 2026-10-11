@@ -367,5 +367,30 @@
     "labelsOverColumns": 0,
     "columnsUnderLabel": 0,
     "pageScrollsSideways": false
+  },
+  "gridStacked": {
+    "story": "primitives-grid--stacked",
+    "rows": 3,
+    "cardsStacked": 3,
+    "headShown": false,
+    "labelledCells": 18,
+    "shownCells": 18,
+    "mostValueLines": 1,
+    "checkboxLabelsShown": 0,
+    "wordsSplit": 0,
+    "pageScrollsSideways": false
+  },
+  "gridStackedWide": {
+    "story": "primitives-grid--stacked",
+    "width": 1280,
+    "rows": 3,
+    "cardsStacked": 0,
+    "headShown": true,
+    "labelledCells": 0,
+    "shownCells": 18,
+    "mostValueLines": 1,
+    "checkboxLabelsShown": 0,
+    "wordsSplit": 0,
+    "pageScrollsSideways": false
   }
 }
