@@ -73,6 +73,8 @@ export type {
 export { Sidebar } from "./layout/Sidebar";
 export { Mark } from "./primitives/Mark";
 export type { MarkProps, MarkState } from "./primitives/Mark";
+export { StreamAvatar, streamInitials } from "./primitives/StreamAvatar";
+export type { StreamAvatarProps } from "./primitives/StreamAvatar";
 export { PageHeader } from "./primitives/PageHeader";
 export type { PageHeaderProps } from "./primitives/PageHeader";
 export { Overlay } from "./primitives/Overlay";

@@ -13,8 +13,8 @@ export type AppShellRailItem = AppShellDestination & {
     current?: boolean;
 };
 export type StudioShellProps = {
-    /** The 236px left column; the consumer supplies its landmark. */
-    sidebar: ReactNode;
+    /** The 236px left column; the consumer supplies its landmark. A function is told whether the column shows folded. */
+    sidebar: ReactNode | ((folded: boolean) => ReactNode);
     /** Sits at the top of the centre column, outside the page inset. */
     header?: ReactNode;
     children: ReactNode;
@@ -24,6 +24,8 @@ export type StudioShellProps = {
     sidebarLabel?: string;
     /** Given, a panel button at the top of the sidebar collapses it to a 60px rail of these items; each viewer's choice is kept. */
     iconRail?: AppShellRailItem[];
+    /** Given, the consumer owns the fold: true narrows the track to the icon rail on a wide screen, and Ward draws no panel button or rail. */
+    collapsed?: boolean;
 };
 export type TopBarShellProps = {
     destinations?: AppShellDestination[];
