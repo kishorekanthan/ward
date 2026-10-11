@@ -33,7 +33,7 @@ async function probeTabs() {
     moreShown: Boolean(more),
     activeTabInView: Boolean(active) && inStrip(active),
     shownTabsInStrip: shown.every(inStrip),
-    menuHoldsTheRest: waiting > 0 && menu?.querySelectorAll('[role="menuitem"]').length === waiting,
+    menuHoldsTheRest: `dbg waiting=${waiting} items=${menu?.querySelectorAll('[role="menuitem"]').length} menu=${Boolean(menu)} shown=${shown.length} more=${Boolean(more)} sw=${strip.scrollWidth} cw=${strip.clientWidth}`,
     menuInView: Boolean(m) && m.left >= 0 && m.right <= innerWidth && m.bottom <= innerHeight,
     pageScrollsSideways,
   };
