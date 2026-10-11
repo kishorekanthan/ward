@@ -74,8 +74,34 @@ describe("Overlay", () => {
     expect(dlg.getAttribute("aria-labelledby")).toBe("dlg-title");
   });
 
-  it("moves focus to the close control on open", () => {
+  it("moves focus to the dialog on open, with no ring after a pointer press", () => {
+    fireEvent.pointerDown(document.body);
     render(<Harness kind="drawer" />);
+    const dialog = screen.getByRole("dialog");
+    expect([document.activeElement, dialog.tabIndex, dialog.hasAttribute("data-focus-ring")]).toEqual([dialog, -1, false]);
+  });
+
+  it("keeps a quiet dialog quiet when a later key press re-renders it", () => {
+    fireEvent.pointerDown(document.body);
+    const view = render(<Harness kind="drawer" />);
+    fireEvent.keyDown(screen.getByRole("dialog"), { key: "a" });
+    view.rerender(<Harness kind="drawer" />);
+    expect(screen.getByRole("dialog").hasAttribute("data-focus-ring")).toBe(false);
+  });
+
+  it("keeps the ring on a dialog opened from the keyboard", () => {
+    fireEvent.keyDown(document.body, { key: "Enter" });
+    render(<Harness kind="drawer" />);
+    expect(screen.getByRole("dialog").hasAttribute("data-focus-ring")).toBe(true);
+  });
+
+  it("wraps Tab and Shift+Tab from the dialog itself to its first and last control", () => {
+    render(<Harness kind="drawer" />);
+    const dialog = screen.getByRole("dialog");
+    fireEvent.keyDown(dialog, { key: "Tab", shiftKey: true });
+    expect(document.activeElement).toBe(screen.getByText("save"));
+    dialog.focus();
+    fireEvent.keyDown(dialog, { key: "Tab" });
     expect(document.activeElement?.getAttribute("aria-label")).toBe("Close");
   });
 
@@ -131,7 +157,7 @@ describe("Overlay", () => {
     expect(roots).toHaveLength(2);
     expect(Array.from(roots, (root) => root.hasAttribute("inert"))).toEqual([false, false]);
     expect(container.hasAttribute("inert")).toBe(true);
-    expect(document.activeElement).toBe(within(nested).getByRole("button", { name: "Close" }));
+    expect(document.activeElement).toBe(nested);
 
     fireEvent.click(within(drawer).getByRole("button", { name: "Close" }));
     expect(screen.getAllByRole("dialog")).toHaveLength(2);
@@ -194,7 +220,7 @@ describe("Overlay", () => {
     stubMatchMedia(false);
     render(<Harness kind="modal" />);
 
-    expect(document.activeElement?.getAttribute("aria-label")).toBe("Close");
+    expect(document.activeElement).toBe(screen.getByRole("dialog"));
   });
 
   it("keeps the dialog reachable while resizing across 768px", () => {
@@ -207,13 +233,13 @@ describe("Overlay", () => {
     expect(screen.getByRole("dialog")).toBeDefined();
     expect(overlay.getAttribute("data-ward-overlay-kind")).toBe("modal");
     expect(app.hasAttribute("inert")).toBe(true);
-    expect(document.activeElement?.getAttribute("aria-label")).toBe("Close");
+    expect(document.activeElement).toBe(screen.getByRole("dialog"));
 
     act(() => media.setMatches(false));
     expect(screen.getByRole("dialog")).toBeDefined();
     expect(overlay.getAttribute("data-ward-overlay-kind")).toBe("sheet");
     expect(app.hasAttribute("inert")).toBe(true);
-    expect(document.activeElement?.getAttribute("aria-label")).toBe("Close");
+    expect(document.activeElement).toBe(screen.getByRole("dialog"));
   });
 
   it("renders a centered modal at 768px and above", () => {

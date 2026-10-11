@@ -69,6 +69,14 @@ export const Flagged = {
 
 export const NoActions = { args: { ...base, item, actions: [] } };
 
+// Four short actions at 375px still sit two to a row, though three would fit on one line.
+const fourActions = ["Jira", "Nudge", "Runs", "Requeue"].map((label, i) => (
+  <Btn key={label} variant={i === 0 ? "primary" : "secondary"} onClick={() => {}}>
+    {label}
+  </Btn>
+));
+export const PhoneWidthActions = { args: { ...base, item, actions: fourActions } };
+
 // The app supplies this row; Ward knows nothing about test runs.
 function testedFact(chip: ReactNode, when: string): DrawerFact {
   return {

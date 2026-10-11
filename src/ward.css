@@ -82,7 +82,7 @@
   --ward-color-consoleOk: #2F6B47;
   --ward-color-consoleFaint: #63605A;
   --ward-color-overcapTint: rgba(138,48,64,0.08);
-  --ward-color-scrim: rgba(25,25,24,0.30);
+  --ward-color-scrim: rgba(25,25,24,0.40);
   --ward-color-consoleInfo: #1F5F9E;
   --ward-color-consoleDim: #63615C;
   --ward-color-line3: #C9C6C0;
@@ -708,7 +708,7 @@
   --ward-color-consoleOk: #2F6B47;
   --ward-color-consoleFaint: #63605A;
   --ward-color-overcapTint: rgba(138,48,64,0.08);
-  --ward-color-scrim: rgba(25,25,24,0.30);
+  --ward-color-scrim: rgba(25,25,24,0.40);
   --ward-color-consoleInfo: #1F5F9E;
   --ward-color-consoleDim: #63615C;
   --ward-color-line3: #C9C6C0;

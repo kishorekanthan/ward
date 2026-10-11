@@ -1,6 +1,7 @@
-import { createContext, useCallback, useContext, useEffect, useId, useRef, type ReactNode, type RefObject } from "react";
+import { createContext, useCallback, useContext, useEffect, useId, useRef, useState, type ReactNode, type RefObject } from "react";
 import { createPortal } from "react-dom";
 import { useFocusTrap } from "../a11y/useFocusTrap";
+import { lastInputWasKey } from "../a11y/inputModality";
 import { useMediaQuery } from "../layout/useMediaQuery";
 import s from "./Overlay.module.css";
 
@@ -168,13 +169,14 @@ export function Overlay(props: OverlayProps) {
   const actualKind = renderedKind(props.kind, wideEnough);
   const name = dialogName(props, titleId);
   const trap = useFocusTrap(panelRef);
+  const [ring] = useState(lastInputWasKey);
   const topmost = useOverlayStack(rootRef, target, props.returnFocusTo);
   const requestClose = useCallback(() => {
     if (topmost()) props.onClose();
   }, [props.onClose, topmost]);
 
   useEffect(() => {
-    if (topmost()) panelRef.current?.querySelector<HTMLElement>("button")?.focus();
+    if (topmost()) panelRef.current?.focus();
   }, [topmost]);
 
   useEffect(() => {
@@ -200,6 +202,8 @@ export function Overlay(props: OverlayProps) {
         aria-modal="true"
         aria-labelledby={name.labelledBy}
         aria-label={name.label}
+        tabIndex={-1}
+        data-focus-ring={ring || undefined}
         className={panelClass(actualKind, props.wide)}
         data-wide={props.wide || undefined}
         onClick={(e) => e.stopPropagation()}
