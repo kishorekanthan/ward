@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { edge, injectModuleCss, leftBorders, ruleBody } from "../test-css";
+import { borders, edge, injectModuleCss, leftBorders } from "../test-css";
 import { DeniedState, EmptyState, FilteredEmpty, LoadFailed, StaleStrip, WriteUnavailableStrip } from "./States";
 import s from "./states.module.css";
 
@@ -48,17 +48,24 @@ describe("state tones", () => {
   });
 });
 
-describe("failed state block", () => {
-  it("shows the failure with the danger tint inside the block's own hairline, never a left stripe", () => {
-    expect(ruleBody("src/states/states.module.css", '.block[data-tone="failed"]')).toBe("background: var(--ward-color-dangerTint)");
-  });
-
-  it("renders the failed block with the neutral hairline and the danger tint, whatever rule draws them", () => {
+describe("state blocks take their holder's ground (#248)", () => {
+  it("draws no frame or fill on any state block, whatever rule draws them", () => {
     const removeCss = injectModuleCss("src/states/states.module.css", s);
-    render(<LoadFailed sentence="Board did not load." at="2026-10-08T09:00:00Z" onRetry={() => {}} />);
-    const failed = edge(screen.getByText("Board did not load.").parentElement!);
+    render(
+      <>
+        <EmptyState sentence="Nothing here yet." />
+        <FilteredEmpty sentence="No match." total={4} />
+        <DeniedState sentence="You cannot see this." />
+        <LoadFailed sentence="Board did not load." at="2026-10-08T09:00:00Z" onRetry={() => {}} />
+      </>,
+    );
+    const blocks = ["Nothing here yet.", "No match.", "You cannot see this.", "Board did not load."].map((text) => screen.getByText(text).parentElement!);
+    const frames = blocks.map((block) => ({ ...edge(block), border: getComputedStyle(block).getPropertyValue("border-style") }));
+    const inks = ["Board did not load.", "Nothing here yet."].map((text) => getComputedStyle(screen.getByText(text)).getPropertyValue("color"));
     removeCss();
-    expect(failed).toEqual({ shadow: "inset 0 0 0 var(--ward-border) var(--ward-color-line)", ground: "var(--ward-color-dangertint)" });
+    expect(frames).toEqual(Array(4).fill({ shadow: "", ground: "", border: "none" }));
+    expect(inks).toEqual(["var(--ward-color-danger)", "var(--ward-color-text)"]);
+    expect(borders("src/states/states.module.css")).toEqual([]);
     expect(leftBorders("src/states/states.module.css")).toEqual([]);
   });
 });
