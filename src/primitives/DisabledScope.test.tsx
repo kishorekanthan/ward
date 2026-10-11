@@ -139,6 +139,9 @@ describe("DisabledScope with hidden actions", () => {
     const onChange = vi.fn();
     render(<DisabledScope reason={REASON} actions="hide"><ConfigRow stage={stage} config={{ label: "Implementing", cap: 6, shown: true }} onChange={onChange} onReorder={() => {}} /></DisabledScope>);
     expect(screen.queryByRole("button", { name: "Reorder Implement" })).toBeNull();
+    const line = screen.getByLabelText("Column label").closest("span")!.parentElement!;
+    expect(line.children).toHaveLength(5);
+    expect(line.firstElementChild!.childElementCount).toBe(0);
     expect((screen.getByLabelText("Column label") as HTMLInputElement).disabled).toBe(true);
     expect((screen.getByRole("switch") as HTMLButtonElement).disabled).toBe(true);
     fireEvent.click(screen.getByText("on"));
