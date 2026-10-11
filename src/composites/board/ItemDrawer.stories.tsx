@@ -69,8 +69,8 @@ export const Flagged = {
 
 export const NoActions = { args: { ...base, item, actions: [] } };
 
-// Four actions at 375px sit two to a row on a full-width sheet.
-const fourActions = ["Open case file", "Open in Jira", "Nudge the owner", "Run history"].map((label, i) => (
+// Four short actions at 375px still sit two to a row, though three would fit on one line.
+const fourActions = ["Jira", "Nudge", "Runs", "Requeue"].map((label, i) => (
   <Btn key={label} variant={i === 0 ? "primary" : "secondary"} onClick={() => {}}>
     {label}
   </Btn>

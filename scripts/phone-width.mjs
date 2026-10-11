@@ -307,13 +307,14 @@ function probeDrawerActions() {
   const dialog = document.querySelector('[role="dialog"]');
   const panel = dialog.getBoundingClientRect();
   const scrim = dialog.parentElement.getBoundingClientRect();
-  const lead = Array.from(dialog.querySelectorAll("button")).find((b) => b.textContent === "Open case file");
+  const lead = Array.from(dialog.querySelectorAll("button")).find((b) => b.textContent === "Jira");
   const buttons = Array.from(lead.parentElement.children);
   const tops = buttons.map((b) => Math.round(b.getBoundingClientRect().top));
   return {
     sheetFillsScrim: Math.round(panel.left) === Math.round(scrim.left) && Math.round(panel.width) === Math.round(scrim.width),
     actionRows: new Set(tops).size,
     firstRowActions: tops.filter((t) => t === tops[0]).length,
+    actionsEqualWidth: new Set(buttons.map((b) => Math.round(b.getBoundingClientRect().width))).size === 1,
     actionsWhole: buttons.every((b) => b.scrollWidth <= b.clientWidth + 0.5),
     pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
   };

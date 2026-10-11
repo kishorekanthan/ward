@@ -162,6 +162,7 @@
     "sheetFillsScrim": true,
     "actionRows": 2,
     "firstRowActions": 2,
+    "actionsEqualWidth": true,
     "actionsWhole": true,
     "pageScrollsSideways": false
   },
