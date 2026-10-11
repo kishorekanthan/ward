@@ -1,6 +1,7 @@
 import { Chip } from "../../primitives/Chip";
 import { Field } from "../../primitives/Field";
 import { Switch } from "../../primitives/Switch";
+import { useDisabledScope } from "../../primitives/DisabledScope";
 import s from "./ConfigRow.module.css";
 
 export type ConfigStage = {
@@ -80,14 +81,19 @@ function parsedCap(cap: string): number | undefined {
   return cap === "" ? undefined : Number(cap);
 }
 
+// Inside a disabled scope the handle is disabled, names the reason and ignores arrow keys.
 function Handle({ name, onReorder }: { name: string; onReorder?: (direction: -1 | 1) => void }) {
+  const scope = useDisabledScope();
   return (
     <span className={s.cHandle}>
       <button
         type="button"
         className={s.handle}
         aria-label={`Reorder ${name}`}
-        onKeyDown={(event) => reorderKey(event, onReorder)}
+        disabled={scope !== null}
+        title={scope?.reason}
+        aria-describedby={scope?.reasonId}
+        onKeyDown={(event) => !scope && reorderKey(event, onReorder)}
       >
         ⠿
       </button>
@@ -114,8 +120,9 @@ function CapCell({ stage, config, onChange }: CellProps) {
 
 // The state word is the switch's visible label, so it toggles the row; the switch keeps its own name.
 function ShownCell({ stage, config, onChange }: CellProps) {
+  const scoped = useDisabledScope() !== null;
   const view = stageView(stage, config.shown);
-  const fixed = stage.gate || stage.terminal;
+  const fixed = stage.gate || stage.terminal || scoped;
   const toggle = (next: boolean) => onChange({ ...config, shown: next });
   return (
     <span className={s.cShown}>

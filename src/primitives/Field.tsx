@@ -1,5 +1,6 @@
 import { useId } from "react";
 import { joinIds } from "../a11y/joinIds";
+import { describedByScope, useDisabledScope, type ScopeReason } from "./DisabledScope";
 import { Select } from "./Select";
 import s from "./Field.module.css";
 
@@ -31,6 +32,7 @@ type ControlProps = {
   value: string;
   disabled?: boolean;
   placeholder?: string;
+  title?: string;
   "aria-invalid"?: "true";
   "aria-describedby"?: string;
   onChange: (event: { target: { value: string } }) => void;
@@ -64,7 +66,7 @@ function SelectControl({ props, controlProps, cls }: FieldControlProps) {
       aria-describedby={controlProps["aria-describedby"]}
       value={props.value}
       options={props.options ?? []}
-      disabled={props.disabled}
+      disabled={controlProps.disabled}
       placeholder={props.placeholder}
       onChange={props.onChange}
     />
@@ -82,15 +84,16 @@ function FieldControl(props: FieldProps, controlProps: ControlProps, cls: string
   return <Control props={props} controlProps={controlProps} cls={cls} />;
 }
 
-function controlPropsFor(props: FieldProps, id: string, msgId: string): ControlProps {
+function controlPropsFor(props: FieldProps, id: string, msgId: string, scope: ScopeReason | null): ControlProps {
   const invalid = props.invalid ? "true" : undefined;
   return {
     id,
     value: props.value,
-    disabled: props.disabled,
+    disabled: Boolean(props.disabled || scope),
     placeholder: props.placeholder,
+    title: scope?.reason,
     "aria-invalid": invalid,
-    "aria-describedby": joinIds(invalid ? msgId : undefined, props.describedBy),
+    "aria-describedby": describedByScope(joinIds(invalid ? msgId : undefined, props.describedBy), scope),
     onChange: (event) => props.onChange?.(event.target.value),
   };
 }
@@ -108,7 +111,7 @@ function labelClasses(labelHidden?: boolean): string {
 export function Field(props: FieldProps) {
   const id = useId();
   const msgId = `${id}-msg`;
-  const controlProps = controlPropsFor(props, id, msgId);
+  const controlProps = controlPropsFor(props, id, msgId, useDisabledScope());
   const cls = fieldClasses(props);
   return (
     <div className={`${s.field} ward-field`} data-ward-field="" data-variant={props.variant}>

@@ -4,6 +4,7 @@ import { joinIds } from "../a11y/joinIds";
 import { useOutsideClose } from "../a11y/useOutsideClose";
 import { printable, useTypeahead } from "../a11y/useTypeahead";
 import { useAnchoredMenu } from "./anchorMenu";
+import { describedByScope, useDisabledScope } from "./DisabledScope";
 import s from "./Select.module.css";
 
 export type SelectOption = { value: string; label: string };
@@ -243,6 +244,7 @@ function shownLabel(props: SelectProps): string | undefined {
 
 function Trigger({ props, menu, ids, trigger, wantFocus }: { props: SelectProps; menu: Menu; ids: Ids; trigger: RefObject<HTMLButtonElement | null>; wantFocus: () => void }) {
   const placeholder = !props.options.some((option) => option.value === props.value);
+  const scopeReason = useDisabledScope()?.reason;
   return (
     <button
       ref={trigger}
@@ -257,6 +259,7 @@ function Trigger({ props, menu, ids, trigger, wantFocus }: { props: SelectProps;
       aria-describedby={joinIds(props["aria-describedby"], ids.value)}
       aria-invalid={props["aria-invalid"]}
       disabled={props.disabled}
+      title={scopeReason}
       {...triggerHandlers(menu, wantFocus)}
     >
       <span id={ids.value} className={s.value} data-placeholder={placeholder || undefined}>
@@ -266,7 +269,9 @@ function Trigger({ props, menu, ids, trigger, wantFocus }: { props: SelectProps;
   );
 }
 
-export function Select(props: SelectProps) {
+export function Select(given: SelectProps) {
+  const scope = useDisabledScope();
+  const props = scope ? { ...given, disabled: true, "aria-describedby": describedByScope(given["aria-describedby"], scope) } : given;
   const base = useId();
   const ids: Ids = { list: `${base}-list`, value: `${base}-value`, option: (index) => `${base}-option-${index}` };
   const root = useRef<HTMLDivElement>(null);

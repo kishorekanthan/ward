@@ -1,4 +1,5 @@
 import { useId } from "react";
+import { describedByScope, useDisabledScope } from "./DisabledScope";
 import s from "./Switch.module.css";
 
 export type SwitchProps = {
@@ -11,6 +12,11 @@ export type SwitchProps = {
   labelHidden?: boolean;
 };
 
+// A locked switch shows on; a disabled, locked or scoped one ignores clicks.
+function switchState(checked: boolean, disabled?: boolean, locked?: boolean, scoped?: boolean): { on: boolean; off: boolean } {
+  return { on: locked ? true : checked, off: Boolean(disabled || locked || scoped) };
+}
+
 function labelClass(labelHidden?: boolean): string {
   return labelHidden ? `${s.label} ${s.labelHidden}` : s.label;
 }
@@ -18,8 +24,8 @@ function labelClass(labelHidden?: boolean): string {
 export function Switch({ label, checked, onChange, disabled, locked, describedBy, labelHidden }: SwitchProps) {
   const id = useId();
   const switchId = `${id}switch`;
-  const on = locked ? true : checked;
-  const off = disabled || locked;
+  const scope = useDisabledScope();
+  const { on, off } = switchState(checked, disabled, locked, scope !== null);
   return (
     <span className={`${s.root} ward-switchrow`}>
       <button
@@ -29,7 +35,8 @@ export function Switch({ label, checked, onChange, disabled, locked, describedBy
         aria-checked={on}
         aria-label={label}
         aria-labelledby={id}
-        aria-describedby={describedBy}
+        aria-describedby={describedByScope(describedBy, scope)}
+        title={scope?.reason}
         className={`${s.track} ward-switch`}
         data-on={on}
         data-locked={locked ? true : undefined}

@@ -1,0 +1,4 @@
+/* Provenance: not established — no comp block; the scope draws no box, so its children lay out as if it were absent. */
+.scope {
+  display: contents;
+}
