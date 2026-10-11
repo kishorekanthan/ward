@@ -438,4 +438,14 @@ describe("Described items", () => {
     expect(ratios.every((ratio) => ratio >= 4.5)).toBe(true);
     expect(declared(".description", "color")).toBe("var(--ward-color-muted)");
   });
+
+  it("stacks the description under the label in the meta type, with a gap and block padding", () => {
+    const row = menuCss.match(/\.item:has\(\.description\) \{([^}]*)\}/)?.[1] ?? "";
+    const set = (property: string) => row.match(new RegExp(`(?:^|\\s)${property}: ([^;]+);`))?.[1];
+    expect(set("flex-direction")).toBe("column");
+    expect(set("align-items")).toBe("flex-start");
+    expect(set("gap")).toBe("var(--ward-space-1)");
+    expect(set("padding-block")).toBe("var(--ward-space-1)");
+    expect(declared(".description", "font")).toBe("var(--ward-type-meta)");
+  });
 });
