@@ -27,7 +27,6 @@ export function useBorderFlash(ref: RefObject<HTMLElement | null>, colour?: Flas
     if (chosen === undefined) return;
     if (reducedMotion()) return;
     element.style.setProperty("--ward-flash-colour", `var(--ward-color-${FLASH_ROLE[chosen]})`);
-    element.style.setProperty("--flash", `var(--ward-color-${FLASH_ROLE[chosen]})`);
     element.classList.add("ward-border-flash");
     element.setAttribute("data-flash", "true");
     element.addEventListener("animationend", () => clearFlash(element), { once: true });

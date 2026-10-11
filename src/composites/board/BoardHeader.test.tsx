@@ -43,11 +43,19 @@ describe("BoardHeader", () => {
     expect(screen.getByRole("button", { name: "Configure board" })).not.toBeNull();
   });
 
-  it("makes the control row a reachable, named region", () => {
-    const { container } = render(<BoardHeader {...full} />);
+  it("keeps Owner and Configure focusable in order without a wrapper tab stop", () => {
+    render(<BoardHeader {...full} />);
     const top = screen.getByRole("region", { name: "Board header controls" });
-    expect(top.getAttribute("tabindex")).toBe("0");
-    expect(container.firstElementChild?.lastElementChild).toBe(top);
+    const owner = screen.getByRole("button", { name: "Owner" });
+    const configure = screen.getByRole("button", { name: "Configure board" });
+    const controls = Array.from(top.querySelectorAll<HTMLElement>("button, input, select, textarea, a[href], [tabindex]"));
+    expect(top.hasAttribute("tabindex")).toBe(false);
+    expect(top.tabIndex).toBe(-1);
+    expect(controls.filter((control) => control.tabIndex >= 0)).toEqual([owner, configure]);
+    owner.focus();
+    expect(document.activeElement).toBe(owner);
+    configure.focus();
+    expect(document.activeElement).toBe(configure);
   });
 });
 
