@@ -4,7 +4,6 @@
   align-items: baseline;
   gap: var(--ward-gap-section);
   padding: var(--ward-pad-section);
-  background: var(--ward-color-surface);
   border-bottom: var(--ward-border) solid var(--ward-color-line);
 }
 
