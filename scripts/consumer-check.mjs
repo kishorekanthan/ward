@@ -58,12 +58,14 @@ function assertBuildShipsFonts(appRoot, fonts) {
 }
 
 // The packed CSS must mask the Primary nav's hidden edges, or a phone reader never learns more links wait off screen (#175).
-function assertNavFades(navClass, css) {
-  assert(navClass, "packed AppShell rendered no Primary nav");
-  for (const edge of ["[data-fade-start]{", "[data-fade-end]{"]) {
-    const rule = css.slice(css.indexOf(`.${navClass}${edge}`));
-    assert(css.includes(`.${navClass}${edge}`) && /^[^}]*mask-image:linear-gradient/.test(rule), `packed AppShell nav lacks its ${edge.slice(0, -1)} fade`);
-  }
+// The fade lives on the nav's shared OverflowRow class (#259), so any one of its classes may carry it.
+function fades(cls, css) {
+  return ["[data-fade-start]{", "[data-fade-end]{"].every((edge) => css.includes(`.${cls}${edge}`) && /^[^}]*mask-image:linear-gradient/.test(css.slice(css.indexOf(`.${cls}${edge}`))));
+}
+
+function assertNavFades(navClasses, css) {
+  assert(navClasses, "packed AppShell rendered no Primary nav");
+  assert(navClasses.split(/\s+/).some((cls) => fades(cls, css)), "packed AppShell nav lacks its edge fades");
 }
 
 function builtCss(appRoot) {
