@@ -40,7 +40,7 @@ export { safeHref, UNSAFE_HREF } from './primitives/safeHref';
 export { Crumb } from './primitives/Crumb';
 export type { CrumbPath, CrumbProps } from './primitives/Crumb';
 export { DisabledScope, useDisabledScope } from './primitives/DisabledScope';
-export type { DisabledScopeProps, ScopeReason } from './primitives/DisabledScope';
+export type { DisabledScopeProps, ScopeActions, ScopeReason } from './primitives/DisabledScope';
 export { Field } from './primitives/Field';
 export type { FieldOption, FieldProps } from './primitives/Field';
 export { Select } from './primitives/Select';
