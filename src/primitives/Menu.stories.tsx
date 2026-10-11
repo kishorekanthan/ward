@@ -23,6 +23,12 @@ const help: MenuEntry[] = [
   { label: "Release notes", href: "/help/releases" },
 ];
 
+const describedTypes: MenuEntry[] = [
+  { label: "Bring in new data", description: "We connect a new source and load it on a schedule.", onSelect: chosen },
+  { label: "Change data we already load", description: "We add, fix or remove fields in a feed you have.", onSelect: chosen },
+  { label: "Ask a question", onSelect: chosen },
+];
+
 // Room below the button keeps an open menu inside its own themed copy.
 function Roomy({ children, end = false }: { children: ReactNode; end?: boolean }) {
   return (
@@ -61,6 +67,16 @@ export const GroupsAndFooter = {
     <Roomy>
       <MenuButton label="Sam Lee" defaultOpen>
         <Menu entries={account} footer="Signed in as Sam Lee" />
+      </MenuButton>
+    </Roomy>
+  ),
+};
+
+export const DescribedItems = {
+  render: () => (
+    <Roomy>
+      <MenuButton label="New request" defaultOpen>
+        <Menu entries={describedTypes} />
       </MenuButton>
     </Roomy>
   ),

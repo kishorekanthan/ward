@@ -18,7 +18,7 @@ import { safeHref } from "./safeHref";
 import s from "./Menu.module.css";
 
 /** A button item calls onSelect; an item with href is a link, and onSelect still runs before it opens. */
-export type MenuItem = { label: string; onSelect?: () => void; href?: string; disabled?: boolean };
+export type MenuItem = { label: string; description?: string; onSelect?: () => void; href?: string; disabled?: boolean };
 export type MenuGroup = { heading: string; items: MenuItem[] };
 export type MenuEntry = MenuItem | MenuGroup | "separator";
 
@@ -269,8 +269,24 @@ function itemHandlers({ row, nav, popup }: ItemProps) {
   };
 }
 
+// A described row keeps the label as its name and reads the line below as its description.
+function itemText(item: MenuItem, id: string) {
+  if (!item.description) return { aria: {}, content: item.label };
+  const aria = { "aria-labelledby": id + "-label", "aria-describedby": id + "-description" };
+  const content = (
+    <>
+      <span id={id + "-label"}>{item.label}</span>
+      <span id={id + "-description"} className={s.description}>
+        {item.description}
+      </span>
+    </>
+  );
+  return { aria, content };
+}
+
 function ItemRow(props: ItemProps) {
   const { item, at } = props.row;
+  const text = itemText(item, useId());
   const common = {
     ref: (el: HTMLElement | null) => {
       props.nav.refs.current[at] = el;
@@ -279,10 +295,11 @@ function ItemRow(props: ItemProps) {
     tabIndex: -1,
     className: s.item,
     "aria-disabled": item.disabled ? ("true" as const) : undefined,
+    ...text.aria,
     ...itemHandlers(props),
   };
-  if (item.href && !item.disabled) return <a href={safeHref(item.href)} {...common}>{item.label}</a>;
-  return <button type="button" {...common}>{item.label}</button>;
+  if (item.href && !item.disabled) return <a href={safeHref(item.href)} {...common}>{text.content}</a>;
+  return <button type="button" {...common}>{text.content}</button>;
 }
 
 function GroupBlock({ heading, rows, nav, popup }: { heading: string; rows: Row[]; nav: Nav; popup: Popup }) {
