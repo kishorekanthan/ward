@@ -26,7 +26,7 @@ function probe(theme) {
     const strips = copy.querySelectorAll(`[data-level=${name}]`);
     const current = getComputedStyle(strips[0].querySelector("[aria-selected=true]"));
     const idle = getComputedStyle(strips[0].querySelector("[aria-selected=false]"));
-    return { strips: strips.length, fill: named(current.backgroundColor), ink: named(current.color), underline: underline(current.boxShadow), idleFill: named(idle.backgroundColor) };
+    return { strips: strips.length, fill: named(current.backgroundColor), ink: named(current.color), weight: current.fontWeight, underline: underline(current.boxShadow), idleFill: named(idle.backgroundColor) };
   };
   return { page: level("page"), section: level("section") };
 }

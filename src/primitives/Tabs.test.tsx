@@ -141,6 +141,19 @@ describe("Tabs", () => {
       expect(spy).not.toHaveBeenCalled();
     });
 
+    it("lets a page strip follow a section strip in the document", () => {
+      const spy = error();
+      render(<>{strip("section", "Stream")}{strip("page", "Studio")}</>);
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it("names the fix when a strip becomes a second page strip", () => {
+      const spy = error();
+      const { rerender } = render(<>{strip("page", "Studio")}{strip("section", "Stream")}</>);
+      rerender(<>{strip("page", "Studio")}{strip("page", "Stream")}</>);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+
     it("counts page strips per themed root, as each theme copy is its own page", () => {
       const spy = error();
       render(<><div data-theme="light">{strip("page", "Light")}</div><div data-theme="dark">{strip("page", "Dark")}</div></>);

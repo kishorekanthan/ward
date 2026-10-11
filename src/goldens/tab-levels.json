@@ -1,11 +1,11 @@
 {
   "$about": "Each theme copy of primitives-tabs--page-and-section: the current tab of each level, as the tokens it resolves to (#250). null means none drawn.",
   "light": {
-    "page": { "strips": 1, "fill": "sageTint", "ink": "sageInk", "underline": null, "idleFill": null },
-    "section": { "strips": 1, "fill": null, "ink": "text", "underline": "sageInk", "idleFill": null }
+    "page": { "strips": 1, "fill": "sageTint", "ink": "sageInk", "weight": "600", "underline": null, "idleFill": null },
+    "section": { "strips": 1, "fill": null, "ink": "text", "weight": "600", "underline": "sageInk", "idleFill": null }
   },
   "dark": {
-    "page": { "strips": 1, "fill": "sageTint", "ink": "sageInk", "underline": null, "idleFill": null },
-    "section": { "strips": 1, "fill": null, "ink": "text", "underline": "sageInk", "idleFill": null }
+    "page": { "strips": 1, "fill": "sageTint", "ink": "sageInk", "weight": "600", "underline": null, "idleFill": null },
+    "section": { "strips": 1, "fill": null, "ink": "text", "weight": "600", "underline": "sageInk", "idleFill": null }
   }
 }
