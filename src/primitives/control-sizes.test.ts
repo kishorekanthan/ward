@@ -7,6 +7,7 @@ import { ruleBody } from "../test-css";
 const here = dirname(fileURLToPath(import.meta.url));
 const btn = join(here, "Btn.module.css");
 const select = join(here, "Select.module.css");
+const field = join(here, "Field.module.css");
 
 function declarations(path: string, selector: string): Record<string, string> {
   return Object.fromEntries(ruleBody(path, selector).split(";\n").map((line) => line.split(/:\s*/, 2) as [string, string]));
@@ -38,6 +39,12 @@ describe("button and dropdown sizes", () => {
 
   it("an unsized Select trigger keeps the input padding", () => {
     expect(declarations(select, ".trigger").padding).toBe("var(--ward-pad-input)");
+  });
+
+  it("a toolbar Field input takes the md button box", () => {
+    const input = declarations(field, '.field[data-variant="toolbar"] input.control');
+    expect(input.height).toBe(SIZES.md.height);
+    expect(input["padding-inline"]).toBe(SIZES.md.inline);
   });
 
   it("button and dropdown text share one size", () => {
