@@ -1,6 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { StatStrip, StatTiles } from "./StatStrip";
+
+const stripCss = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "StatStrip.module.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
 
 const cells = [
   { value: "14", label: "In flight" },
@@ -106,5 +111,10 @@ describe("StatTiles", () => {
   it("links a figure with an href and names the link by label and value", () => {
     render(<StatTiles cells={[{ value: "4", label: "Gates waiting", href: "#/board" }]} />);
     expect(screen.getByRole("link", { name: "Gates waiting: 4" }).getAttribute("href")).toBe("#/board");
+  });
+
+  it("keeps two tiles a row on a phone, and the column count from the figures above it", () => {
+    expect(stripCss).toMatch(/@media \(max-width: 767\.98px\) \{\s*\.tiles \{\s*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\);/);
+    expect(stripCss).toMatch(/\.tiles \{[^}]*grid-template-columns: repeat\(var\(--ward-stat-tiles-columns\), minmax\(0, 1fr\)\);/);
   });
 });
