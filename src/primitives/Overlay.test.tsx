@@ -81,6 +81,14 @@ describe("Overlay", () => {
     expect([document.activeElement, dialog.tabIndex, dialog.hasAttribute("data-focus-ring")]).toEqual([dialog, -1, false]);
   });
 
+  it("keeps a quiet dialog quiet when a later key press re-renders it", () => {
+    fireEvent.pointerDown(document.body);
+    const view = render(<Harness kind="drawer" />);
+    fireEvent.keyDown(screen.getByRole("dialog"), { key: "a" });
+    view.rerender(<Harness kind="drawer" />);
+    expect(screen.getByRole("dialog").hasAttribute("data-focus-ring")).toBe(false);
+  });
+
   it("keeps the ring on a dialog opened from the keyboard", () => {
     fireEvent.keyDown(document.body, { key: "Enter" });
     render(<Harness kind="drawer" />);
