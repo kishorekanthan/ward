@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { borders, edge, injectModuleCss, leftBorders } from "../test-css";
@@ -66,6 +67,7 @@ describe("state blocks take their holder's ground (#248)", () => {
     expect(frames).toEqual(Array(4).fill({ shadow: "", ground: "", border: "none" }));
     expect(inks).toEqual(["var(--ward-color-danger)", "var(--ward-color-text)"]);
     expect(borders("src/states/states.module.css")).toEqual([]);
+    expect(readFileSync("src/states/states.module.css", "utf8")).not.toMatch(/outline/);
     expect(leftBorders("src/states/states.module.css")).toEqual([]);
   });
 });
