@@ -18,4 +18,4 @@ export type SelectProps = {
     className?: string;
     triggerClassName?: string;
 };
-export declare function Select(props: SelectProps): import("react").JSX.Element;
+export declare function Select(given: SelectProps): import("react").JSX.Element;
