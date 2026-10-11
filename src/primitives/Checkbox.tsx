@@ -1,5 +1,6 @@
 import { useId } from "react";
 import { joinIds } from "../a11y/joinIds";
+import { describedByScope, useDisabledScope, type ScopeReason } from "./DisabledScope";
 import s from "./Checkbox.module.css";
 
 export type CheckboxProps = {
@@ -15,9 +16,9 @@ export type CheckboxProps = {
   sample?: string;
 };
 
-function checkboxState(props: CheckboxProps): { checked: boolean; disabled: boolean } {
+function checkboxState(props: CheckboxProps, scope: ScopeReason | null): { checked: boolean; disabled: boolean } {
   if (props.locked) return { checked: true, disabled: true };
-  return { checked: props.checked, disabled: props.disabled ?? false };
+  return { checked: props.checked, disabled: Boolean(props.disabled || scope) };
 }
 
 function Consequence({ id, text }: { id?: string; text?: string }) {
@@ -38,7 +39,8 @@ function Sample({ text }: { text?: string }) {
 export function Checkbox(props: CheckboxProps) {
   const id = useId();
   const noteId = props.consequence ? `${id}-note` : undefined;
-  const state = checkboxState(props);
+  const scope = useDisabledScope();
+  const state = checkboxState(props, scope);
   return (
     <div className={`${s.root} ward-checkrow`} data-ward-checkbox="" data-locked={props.locked || undefined} data-variant={props.variant}>
       <span className={s.row}>
@@ -49,7 +51,8 @@ export function Checkbox(props: CheckboxProps) {
           checked={state.checked}
           disabled={state.disabled}
           onChange={(event) => !state.disabled && props.onChange?.(event.target.checked)}
-          aria-describedby={joinIds(noteId, props.describedBy)}
+          aria-describedby={describedByScope(joinIds(noteId, props.describedBy), scope)}
+          title={scope?.reason}
         />
         <label htmlFor={id} className={s.label}>
           {props.label}

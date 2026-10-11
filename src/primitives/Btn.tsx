@@ -1,4 +1,5 @@
 import { useId, type ReactNode } from "react";
+import { useDisabledScope, type ScopeReason } from "./DisabledScope";
 import s from "./Btn.module.css";
 
 export type BtnVariant = "primary" | "destructive" | "secondary" | "ghost" | "overflow";
@@ -38,12 +39,14 @@ function overflowProps(variant: BtnVariant, controls?: string): OverflowAria {
   return controls ? { "aria-label": "More actions" } : { "aria-label": "More actions", "aria-haspopup": "menu" };
 }
 
-function validate(props: BtnProps): void {
-  if (props.disabled && !props.describedBy && !props.disabledReason)
+function validate(props: BtnProps, scope: ScopeReason | null): void {
+  if (props.disabled && !scope && !props.describedBy && !props.disabledReason)
     throw new Error("Btn: a disabled button must name its reason via describedBy or disabledReason");
 }
 
-function shownReason(props: BtnProps): string | undefined {
+// Inside a disabled scope, the scope's reason replaces the button's own.
+function shownReason(props: BtnProps, scope: ScopeReason | null): string | undefined {
+  if (scope) return scope.reason;
   return props.disabled ? props.disabledReason : undefined;
 }
 
@@ -68,11 +71,12 @@ function buttonContent(props: BtnProps): ReactNode {
 }
 
 export function Btn(props: BtnProps) {
-  validate(props);
+  const scope = useDisabledScope();
+  validate(props, scope);
   const variant = props.variant ?? "secondary";
   const size = props.size ?? "md";
-  const disabled = props.disabled ?? false;
-  const reason = shownReason(props);
+  const disabled = Boolean(props.disabled || scope);
+  const reason = shownReason(props, scope);
   const reasonId = useId();
   return (
     <>
