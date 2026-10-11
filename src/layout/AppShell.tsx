@@ -5,7 +5,7 @@ import { Btn } from "../primitives/Btn";
 import { Overlay } from "../primitives/Overlay";
 import { safeHref } from "../primitives/safeHref";
 import { useRevealActive } from "../primitives/useRevealActive";
-import { useEdgeFades } from "./useEdgeFades";
+import { OverflowRow } from "./OverflowRow";
 import { useMediaQuery } from "./useMediaQuery";
 import { PanelIcon } from "./NavIcons";
 import { useSidebarCollapse } from "./useSidebarCollapse";
@@ -167,16 +167,15 @@ function StudioShell({ sidebar, header, children, rail, sidebarLabel, iconRail }
 // A phone hides its scrollbar, so the Tabs edge fades say more links wait off screen.
 function Navigation({ destinations, active }: { destinations: AppShellDestination[]; active: string }) {
   const navRef = useRef<HTMLElement>(null);
-  useEdgeFades(navRef, destinations.length);
   useRevealActive(navRef, destinations.findIndex((destination) => destination.id === active), "a");
   return (
-    <nav ref={navRef} className={s.nav} aria-label="Primary">
+    <OverflowRow as="nav" rowRef={navRef} className={s.nav} label="Primary" count={destinations.length} focusable={false}>
       {destinations.map((destination) => (
         <a key={destination.id} href={safeHref(destination.href)} aria-current={destination.id === active ? "page" : undefined}>
           {destination.label}
         </a>
       ))}
-    </nav>
+    </OverflowRow>
   );
 }
 

@@ -74,3 +74,10 @@ describe("Crumb", () => {
     expect(ruleBlock(".link:hover")).toMatch(/background:\s*var\(--ward-color-accentTint\);/);
   });
 });
+
+describe("Crumb chips on a narrow column", () => {
+  it("wrap under the steps in place of running past the column edge", () => {
+    expect(ruleBlock(".nav")).toMatch(/flex-wrap:\s*wrap;/);
+    expect(ruleBlock(".chips")).toMatch(/flex-wrap:\s*wrap;/);
+  });
+});

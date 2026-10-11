@@ -54,14 +54,14 @@ function yr(e) {
   return gr.format(new Date(e));
 }
 const Xt = Te(/* @__PURE__ */ new Set());
-function mS({ hidden: e, children: a }) {
+function _S({ hidden: e, children: a }) {
   const n = Vt(() => new Set(e), [e]);
   return /* @__PURE__ */ t(Xt.Provider, { value: n, children: a });
 }
 function Nr(e) {
   return !Re(Xt).has(e);
 }
-function hS({ id: e, children: a, fallback: n = null }) {
+function vS({ id: e, children: a, fallback: n = null }) {
   return /* @__PURE__ */ t(T, { children: Nr(e) ? a : n });
 }
 const kr = "(prefers-color-scheme: dark)";
@@ -80,7 +80,7 @@ function $r(e) {
     return l(), r.addEventListener("change", l), () => r.removeEventListener("change", l);
   }, [e]), a;
 }
-function Fa(e, a) {
+function Ha(e, a) {
   S(() => {
     const n = document.documentElement;
     return n.setAttribute(e, a), () => n.removeAttribute(e);
@@ -89,9 +89,9 @@ function Fa(e, a) {
 function Cr(e, a) {
   return e !== "system" ? e : a ? "dark" : "light";
 }
-function wS({ theme: e, accent: a = "green", density: n = "comfortable", children: r }) {
+function bS({ theme: e, accent: a = "green", density: n = "comfortable", children: r }) {
   const l = $r(e === "system");
-  return Fa("data-theme", Cr(e, l)), Fa("data-accent", a), Fa("data-density", n), /* @__PURE__ */ t(T, { children: r });
+  return Ha("data-theme", Cr(e, l)), Ha("data-accent", a), Ha("data-density", n), /* @__PURE__ */ t(T, { children: r });
 }
 const Sr = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 function Rr(e, a, n, r) {
@@ -116,7 +116,7 @@ function xr(e) {
     [e]
   ) };
 }
-function fS(e, a = !0) {
+function pS(e, a = !0) {
   S(() => {
     if (!a) return;
     const n = document.activeElement;
@@ -164,13 +164,13 @@ function xa({ orientation: e = "both" } = {}) {
   );
   return { containerProps: { onKeyDown: c }, itemProps: d, setActive: i };
 }
-const _S = (e, a, n) => {
+const gS = (e, a, n) => {
   const r = new EventSource(e), l = (i) => n.onEvent(i.data, i.lastEventId, i.type);
   r.onmessage = l;
   for (const i of ["run.started", "run.step", "run.finding", "run.finished", "item.moved", "item.updated", "snapshot", "heartbeat"])
     r.addEventListener(i, l);
   return r.onopen = () => n.onOpen(), r.onerror = () => n.onError(), { close: () => r.close() };
-}, vS = "0.2.0", bS = ["gate", "system", "write", "drift", "done", "attention", "failed", "pending", "running", "warn", "meta", "soft", "quiet", "owed", "stream"], Er = [1, 2, 3, 4, 5, 6], Qt = [1, 2, 3], Ir = ["run.started", "run.step", "run.finding", "run.finished", "item.moved", "item.updated", "snapshot", "heartbeat"], pS = [{ name: "green", label: "Trellis green" }, { name: "blue", label: "Blue" }, { name: "violet", label: "Violet" }, { name: "orange", label: "Orange" }, { name: "rose", label: "Rose" }], gS = [{ name: "comfortable", label: "Comfortable" }, { name: "compact", label: "Compact" }], W = {
+}, yS = "0.2.0", NS = ["gate", "system", "write", "drift", "done", "attention", "failed", "pending", "running", "warn", "meta", "soft", "quiet", "owed", "stream"], Er = [1, 2, 3, 4, 5, 6], Qt = [1, 2, 3], Ir = ["run.started", "run.step", "run.finding", "run.finished", "item.moved", "item.updated", "snapshot", "heartbeat"], kS = [{ name: "green", label: "Trellis green" }, { name: "blue", label: "Blue" }, { name: "violet", label: "Violet" }, { name: "orange", label: "Orange" }, { name: "rose", label: "Rose" }], $S = [{ name: "comfortable", label: "Comfortable" }, { name: "compact", label: "Compact" }], z = {
   color: {
     bg: "var(--ward-color-bg)",
     surface: "var(--ward-color-surface)",
@@ -717,11 +717,11 @@ function La(e) {
 function Aa(e) {
   return Qt.includes(e);
 }
-function yS(e) {
+function CS(e) {
   if (!La(e)) throw new Error("unvalidated stream step");
   return { "--stream": `var(--ward-stream-${e}-chip)`, "--streamText": `var(--ward-stream-${e}-chipText)`, "--streamId": `var(--ward-stream-${e}-id)` };
 }
-function NS(e) {
+function SS(e) {
   if (!La(e)) throw new Error("unvalidated stream step");
   return `var(--ward-stream-${e}-chip)`;
 }
@@ -741,25 +741,25 @@ function Pr(e) {
     return null;
   }
 }
-function Dr(e, a) {
+function jr(e, a) {
   return a !== "" ? a : typeof e.id == "string" ? e.id : "";
 }
-function Or(e) {
+function Dr(e) {
   return typeof e.at == "string" ? e.at : (/* @__PURE__ */ new Date()).toISOString();
 }
-function Hr(e, a, n) {
+function Or(e, a, n) {
   const r = Pr(e);
   if (r === null) return null;
   const l = pt(n) ?? pt(r.type);
-  return l === null ? null : { ...r, type: l, id: Dr(r, a), at: Or(r) };
+  return l === null ? null : { ...r, type: l, id: jr(r, a), at: Dr(r) };
 }
-function Fr(e, a) {
+function Hr(e, a) {
   return e >= we.staleAfter ? "stale" : e >= we.heartbeat && a === "live" ? "reconnecting" : null;
 }
-function jr(e, a, n) {
+function Fr(e, a, n) {
   return e >= we.heartbeat && !a && n !== null;
 }
-function kS(e, a) {
+function RS(e, a) {
   const [n, r] = p("reconnecting"), [l, i] = p(null), s = f(/* @__PURE__ */ new Map()), c = f(0), d = f(""), u = f(0), m = f(null), w = f(0), v = f(0), y = f(!1), L = f("reconnecting"), B = X((R) => {
     L.current = R, r(R);
   }, []), le = X(() => {
@@ -770,8 +770,8 @@ function kS(e, a) {
   }, []), ae = X(() => {
     m.current = a(e, { lastEventId: d.current }, {
       onEvent: (R, G, ge) => {
-        const He = Hr(R, G, ge);
-        He !== null && (He.id && (d.current = He.id), le(), y.current = !1, B("live"), i(He.at), Le(He));
+        const Oe = Or(R, G, ge);
+        Oe !== null && (Oe.id && (d.current = Oe.id), le(), y.current = !1, B("live"), i(Oe.at), Le(Oe));
       },
       onOpen: () => {
         u.current = 0, y.current = !1, le(), B("live");
@@ -789,10 +789,10 @@ function kS(e, a) {
     s.current.delete(G);
   }), []);
   return S(() => (ae(), v.current = window.setInterval(() => {
-    const R = Date.now() - c.current, G = Fr(R, L.current);
+    const R = Date.now() - c.current, G = Hr(R, L.current);
     G && B(G);
     const ge = m.current;
-    jr(R, y.current, ge) && Ue(ge);
+    Fr(R, y.current, ge) && Ue(ge);
   }, we.tick), () => {
     var R;
     window.clearInterval(v.current), window.clearTimeout(w.current), y.current = !1, (R = m.current) == null || R.close(), m.current = null;
@@ -813,7 +813,7 @@ function nt(e, a) {
   }, [a, n]), Math.max(0, r - n);
 }
 const qr = { blue: "running", orange: "waiting", green: "done" };
-function zr() {
+function Wr() {
   return typeof window.matchMedia == "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 function gt(e) {
@@ -822,12 +822,12 @@ function gt(e) {
 function _a(e, a) {
   const n = f(0), r = X((l) => {
     const i = l ?? a, s = e.current;
-    s !== null && i !== void 0 && (zr() || (s.style.setProperty("--ward-flash-colour", `var(--ward-color-${qr[i]})`), s.classList.add("ward-border-flash"), s.setAttribute("data-flash", "true"), s.addEventListener("animationend", () => gt(s), { once: !0 }), window.clearTimeout(n.current), n.current = window.setTimeout(() => gt(s), we.flash)));
+    s !== null && i !== void 0 && (Wr() || (s.style.setProperty("--ward-flash-colour", `var(--ward-color-${qr[i]})`), s.classList.add("ward-border-flash"), s.setAttribute("data-flash", "true"), s.addEventListener("animationend", () => gt(s), { once: !0 }), window.clearTimeout(n.current), n.current = window.setTimeout(() => gt(s), we.flash)));
   }, [a, e]);
   return S(() => () => window.clearTimeout(n.current), []), a === void 0 ? (l) => r(l) : () => r(a);
 }
-const Wr = "_root_1otpc_2", Kr = {
-  root: Wr
+const zr = "_root_1otpc_2", Kr = {
+  root: zr
 };
 function Gr(e, a, n, r, l) {
   const i = [at(a)];
@@ -843,7 +843,7 @@ function xe({ startedAt: e, lastEvent: a, connection: n, turn: r }) {
     ] })
   ] });
 }
-const Ur = "_app_1m4se_1", Vr = "_side_1m4se_30", Yr = "_sideTop_1m4se_42", Jr = "_sideBody_1m4se_56", Xr = "_iconRail_1m4se_67", Qr = "_railItem_1m4se_76", Zr = "_railIcon_1m4se_97", el = "_railDot_1m4se_102", al = "_railLetter_1m4se_108", tl = "_main_1m4se_113", nl = "_rail_1m4se_76", rl = "_page_1m4se_131", ll = "_headerRow_1m4se_140", ol = "_sidebarToggle_1m4se_147", il = "_headerSlot_1m4se_152", sl = "_drawerSide_1m4se_157", cl = "_root_1m4se_193", dl = "_topbar_1m4se_200", ul = "_mark_1m4se_211", ml = "_brand_1m4se_218", hl = "_tagline_1m4se_224", wl = "_identity_1m4se_230", fl = "_tools_1m4se_231", _l = "_nav_1m4se_241", vl = "_metadata_1m4se_248", bl = "_actor_1m4se_263", pl = "_detail_1m4se_264", gl = "_content_1m4se_324", yl = "_toolsPanel_1m4se_340", Nl = "_skip_1m4se_366", $ = {
+const Ur = "_app_mrptw_1", Vr = "_side_mrptw_30", Yr = "_sideTop_mrptw_42", Jr = "_sideBody_mrptw_56", Xr = "_iconRail_mrptw_67", Qr = "_railItem_mrptw_76", Zr = "_railIcon_mrptw_97", el = "_railDot_mrptw_102", al = "_railLetter_mrptw_108", tl = "_main_mrptw_113", nl = "_rail_mrptw_76", rl = "_page_mrptw_131", ll = "_headerRow_mrptw_140", ol = "_sidebarToggle_mrptw_147", il = "_headerSlot_mrptw_152", sl = "_drawerSide_mrptw_157", cl = "_root_mrptw_193", dl = "_topbar_mrptw_200", ul = "_mark_mrptw_211", ml = "_brand_mrptw_218", hl = "_tagline_mrptw_224", wl = "_identity_mrptw_230", fl = "_tools_mrptw_231", _l = "_nav_mrptw_241", vl = "_metadata_mrptw_248", bl = "_actor_mrptw_263", pl = "_detail_mrptw_264", gl = "_content_mrptw_309", yl = "_toolsPanel_mrptw_325", Nl = "_skip_mrptw_351", $ = {
   app: Ur,
   side: Vr,
   sideTop: Yr,
@@ -882,14 +882,14 @@ function sa(...e) {
 const kl = "_scope_1an6i_2", $l = {
   scope: kl
 }, Zt = Te(null);
-function $S({ reason: e, children: a }) {
+function TS({ reason: e, children: a }) {
   const n = N();
   return /* @__PURE__ */ o("fieldset", { disabled: !0, className: `${$l.scope} ward-disabled-scope`, children: [
     /* @__PURE__ */ t("span", { id: n, className: "ward-visually-hidden", children: e }),
     /* @__PURE__ */ t(Zt.Provider, { value: { reason: e, reasonId: n }, children: a })
   ] });
 }
-function De() {
+function je() {
   return Re(Zt);
 }
 function Ea(e, a) {
@@ -919,20 +919,20 @@ function Bl(e, a) {
 function Pl(e, a) {
   return a ? a.reason : e.disabled ? e.disabledReason : void 0;
 }
-function Dl(...e) {
+function jl(...e) {
   return e.filter(Boolean).join(" ") || void 0;
 }
-function Ol(e, a, n) {
-  return Dl(e.describedBy, a && n);
+function Dl(e, a, n) {
+  return jl(e.describedBy, a && n);
 }
-function Hl({ id: e, reason: a }) {
+function Ol({ id: e, reason: a }) {
   return a ? /* @__PURE__ */ t("span", { id: e, className: "ward-visually-hidden", children: a }) : null;
 }
-function Fl(e) {
+function Hl(e) {
   return e.children ?? e.label;
 }
 function b(e) {
-  const a = De();
+  const a = je();
   Bl(e, a);
   const n = e.variant ?? "secondary", r = e.size ?? "md", l = !!(e.disabled || a), i = Pl(e, a), s = N();
   return /* @__PURE__ */ o(T, { children: [
@@ -945,15 +945,15 @@ function b(e) {
         "data-ward-size": r,
         disabled: l,
         title: i,
-        "aria-describedby": Ol(e, i, s),
+        "aria-describedby": Dl(e, i, s),
         onClick: e.onClick,
         "aria-expanded": e.expanded,
         "aria-controls": e.controls,
         ...Ml(n, e.controls),
-        children: Fl(e)
+        children: Hl(e)
       }
     ),
-    /* @__PURE__ */ t(Hl, { id: s, reason: i })
+    /* @__PURE__ */ t(Ol, { id: s, reason: i })
   ] });
 }
 function Ia(e) {
@@ -969,11 +969,11 @@ function Ia(e) {
     return r.addEventListener("change", l), n(r.matches), () => r.removeEventListener("change", l);
   }, [e]), a;
 }
-const jl = "_scrim_18idy_2", ql = "_drawer_18idy_10", zl = "_sheet_18idy_14", Wl = "_modal_18idy_18", Kl = "_panel_18idy_23", Gl = "_start_18idy_39", Ul = "_header_18idy_62", Vl = "_title_18idy_70", Yl = "_body_18idy_74", Jl = "_close_18idy_101", Ce = {
-  scrim: jl,
+const Fl = "_scrim_18idy_2", ql = "_drawer_18idy_10", Wl = "_sheet_18idy_14", zl = "_modal_18idy_18", Kl = "_panel_18idy_23", Gl = "_start_18idy_39", Ul = "_header_18idy_62", Vl = "_title_18idy_70", Yl = "_body_18idy_74", Jl = "_close_18idy_101", Ce = {
+  scrim: Fl,
   drawer: ql,
-  sheet: zl,
-  modal: Wl,
+  sheet: Wl,
+  modal: zl,
   panel: Kl,
   start: Gl,
   header: Ul,
@@ -1105,7 +1105,7 @@ function _o(e) {
   for (; n < a.length && a.charCodeAt(n) <= 32; ) n += 1;
   return (l = (r = ho.exec(a.slice(n))) == null ? void 0 : r[1]) == null ? void 0 : l.toLowerCase();
 }
-function j(e) {
+function F(e) {
   const a = _o(e);
   return a === void 0 || wo.has(a) ? e : fo;
 }
@@ -1117,7 +1117,7 @@ function en(e) {
   const a = vo(e);
   return e.toggleAttribute("data-fade-start", a.start), e.toggleAttribute("data-fade-end", a.end), a;
 }
-function Ma(e, a) {
+function bo(e, a) {
   S(() => {
     const n = e.current;
     if (!n) return;
@@ -1130,7 +1130,7 @@ function Ma(e, a) {
     };
   }, [e, a]);
 }
-function bo(e, a) {
+function po(e, a) {
   const n = Number.parseFloat(getComputedStyle(e).scrollPaddingInlineStart) || 0, r = a.getBoundingClientRect().left - e.getBoundingClientRect().left, l = r + a.getBoundingClientRect().width;
   return r < n ? e.scrollLeft + r - n : l > e.clientWidth - n ? e.scrollLeft + l - e.clientWidth + n : null;
 }
@@ -1138,90 +1138,100 @@ function an(e, a, n) {
   aa(() => {
     const r = e.current, l = r == null ? void 0 : r.querySelectorAll(n)[a];
     if (!r || !l) return;
-    const i = bo(r, l);
+    const i = po(r, l);
     i !== null && (r.scrollLeft = Math.max(0, i)), en(r);
   }, [e, a, n]);
 }
-const po = "_icon_1ylqy_2", go = {
-  icon: po
+const go = "_row_160e9_2", yo = {
+  row: go
+};
+function No(e, a) {
+  return e ? { role: a === "nav" ? void 0 : "region", tabIndex: 0 } : {};
+}
+function Ma({ label: e, children: a, count: n, as: r = "div", focusable: l = !0, rowRef: i, className: s, ...c }) {
+  const d = f(null), u = i ?? d;
+  return bo(u, n), /* @__PURE__ */ t(r, { ref: u, className: [yo.row, s].filter(Boolean).join(" "), "aria-label": e, "data-ward-overflow-row": "", ...No(l, r), ...c, children: a });
+}
+const ko = "_icon_1ylqy_2", $o = {
+  icon: ko
 };
 function ca({ children: e }) {
-  return /* @__PURE__ */ t("svg", { className: go.icon, viewBox: "0 0 24 24", "aria-hidden": "true", focusable: "false", children: e });
+  return /* @__PURE__ */ t("svg", { className: $o.icon, viewBox: "0 0 24 24", "aria-hidden": "true", focusable: "false", children: e });
 }
-function CS() {
+function xS() {
   return /* @__PURE__ */ t(ca, { children: /* @__PURE__ */ t("path", { d: "M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" }) });
 }
-function SS() {
+function LS() {
   return /* @__PURE__ */ o(ca, { children: [
     /* @__PURE__ */ t("rect", { x: "3", y: "4", width: "5", height: "16", rx: "1" }),
     /* @__PURE__ */ t("rect", { x: "10", y: "4", width: "5", height: "11", rx: "1" }),
     /* @__PURE__ */ t("rect", { x: "17", y: "4", width: "4", height: "7", rx: "1" })
   ] });
 }
-function RS() {
+function AS() {
   return /* @__PURE__ */ o(ca, { children: [
     /* @__PURE__ */ t("circle", { cx: "12", cy: "12", r: "3" }),
     /* @__PURE__ */ t("path", { d: "M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2" })
   ] });
 }
-function TS() {
+function ES() {
   return /* @__PURE__ */ t(ca, { children: /* @__PURE__ */ t("path", { d: "M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z" }) });
 }
-function yo() {
+function Co() {
   return /* @__PURE__ */ o(ca, { children: [
     /* @__PURE__ */ t("rect", { x: "3", y: "4", width: "18", height: "16", rx: "2" }),
     /* @__PURE__ */ t("path", { d: "M9 4v16" })
   ] });
 }
-const tn = "ward:sidebar-collapsed", No = 'input, textarea, select, [contenteditable]:not([contenteditable="false"])';
-function ko() {
+const tn = "ward:sidebar-collapsed", So = 'input, textarea, select, [contenteditable]:not([contenteditable="false"])';
+function Ro() {
   try {
     return window.localStorage.getItem(tn) === "true";
   } catch {
     return !1;
   }
 }
-function $o(e) {
+function To(e) {
   try {
     window.localStorage.setItem(tn, String(e));
   } catch {
   }
 }
-function Co(e) {
+function xo(e) {
   return e.ctrlKey || e.metaKey || e.altKey || e.shiftKey;
 }
-function So(e) {
-  return e instanceof Element && e.closest(No) !== null;
+function Lo(e) {
+  return e instanceof Element && e.closest(So) !== null;
 }
-function Ro(e) {
-  return e.key === "[" && !Co(e) && !So(e.target);
+function Ao(e) {
+  return e.key === "[" && !xo(e) && !Lo(e.target);
 }
-function To(e) {
-  const [a, n] = p(ko), r = () => {
-    $o(!a), n(!a);
+function Eo(e) {
+  const [a, n] = p(Ro), r = () => {
+    To(!a), n(!a);
   };
   return S(() => {
     if (!e) return;
     const l = (i) => {
       var c;
-      if (!Ro(i)) return;
+      if (!Ao(i)) return;
       const s = i.target instanceof Element ? i.target.closest("[data-ward-shell-side]") : null;
       (c = s == null ? void 0 : s.querySelector("button")) == null || c.focus(), r();
     };
     return document.addEventListener("keydown", l), () => document.removeEventListener("keydown", l);
   }, [e, a]), { collapsed: a, toggle: r };
 }
-function xo() {
+function Io() {
   const e = Ia("(max-width: 791.98px)"), a = N(), n = f(null), [r, l] = p(!1);
   return r && !e && l(!1), { narrow: e, open: r, drawerId: a, slotRef: n, toggle: () => l(!r), close: () => l(!1) };
 }
-function Lo({ header: e, label: a, drawer: n }) {
+function Mo({ header: e, label: a, drawer: n }) {
   return n.narrow ? /* @__PURE__ */ o("div", { className: $.headerRow, children: [
     /* @__PURE__ */ t("span", { ref: n.slotRef, className: $.sidebarToggle, children: /* @__PURE__ */ t(b, { variant: "ghost", size: "sm", onClick: n.toggle, expanded: n.open, controls: n.drawerId, children: a }) }),
     /* @__PURE__ */ t("div", { className: $.headerSlot, children: e })
   ] }) : e;
 }
-function Ao({ sidebar: e, label: a, drawer: n }) {
+function Bo({ sidebar: e, label: a, drawer: n }) {
   var l;
   if (!n.open) return null;
   const r = (i) => {
@@ -1229,131 +1239,131 @@ function Ao({ sidebar: e, label: a, drawer: n }) {
   };
   return /* @__PURE__ */ t(na, { kind: "start", id: n.drawerId, title: a, flush: !0, onClose: n.close, returnFocusTo: (l = n.slotRef.current) == null ? void 0 : l.querySelector("button"), children: /* @__PURE__ */ t("div", { className: $.drawerSide, onClick: r, children: e }) });
 }
-function Eo(e, a) {
-  const n = e !== void 0 && !a, { collapsed: r, toggle: l } = To(n);
+function Po(e, a) {
+  const n = e !== void 0 && !a, { collapsed: r, toggle: l } = Eo(n);
   return { enabled: n, collapsed: n && r, toggle: l };
 }
-function Io({ fold: e }) {
+function jo({ fold: e }) {
   return e.enabled ? /* @__PURE__ */ t("div", { className: $.sideTop, children: /* @__PURE__ */ o(b, { variant: "ghost", size: "sm", onClick: e.toggle, expanded: !e.collapsed, children: [
-    /* @__PURE__ */ t(yo, {}),
+    /* @__PURE__ */ t(Co, {}),
     /* @__PURE__ */ t("span", { className: "ward-visually-hidden", children: e.collapsed ? "Expand sidebar" : "Collapse sidebar" })
   ] }) }) : null;
 }
-function Mo({ item: e }) {
+function Do({ item: e }) {
   return e.icon !== void 0 ? /* @__PURE__ */ t("span", { className: $.railIcon, "aria-hidden": "true", children: e.icon }) : e.streamStep !== void 0 ? /* @__PURE__ */ t("span", { className: $.railDot, "aria-hidden": "true", style: { "--dot": tt(e.streamStep).id } }) : /* @__PURE__ */ t("span", { className: $.railLetter, "aria-hidden": "true", children: e.label.charAt(0) });
 }
-function Bo({ items: e, label: a }) {
-  return /* @__PURE__ */ t("nav", { className: $.iconRail, "aria-label": a, children: e.map((n) => /* @__PURE__ */ o("a", { className: $.railItem, href: j(n.href), title: n.label, "aria-current": n.current === !0 ? "page" : void 0, children: [
-    /* @__PURE__ */ t(Mo, { item: n }),
+function Oo({ items: e, label: a }) {
+  return /* @__PURE__ */ t("nav", { className: $.iconRail, "aria-label": a, children: e.map((n) => /* @__PURE__ */ o("a", { className: $.railItem, href: F(n.href), title: n.label, "aria-current": n.current === !0 ? "page" : void 0, children: [
+    /* @__PURE__ */ t(Do, { item: n }),
     /* @__PURE__ */ t("span", { className: "ward-visually-hidden", children: n.label })
   ] }, n.id)) });
 }
-function Po({ sidebar: e, label: a, iconRail: n, fold: r }) {
+function Ho({ sidebar: e, label: a, iconRail: n, fold: r }) {
   return /* @__PURE__ */ o("div", { className: $.side, "data-ward-shell-side": "", children: [
-    /* @__PURE__ */ t(Io, { fold: r }),
+    /* @__PURE__ */ t(jo, { fold: r }),
     /* @__PURE__ */ t("div", { className: $.sideBody, hidden: r.collapsed, children: e }),
-    r.collapsed && /* @__PURE__ */ t(Bo, { items: n ?? [], label: a })
+    r.collapsed && /* @__PURE__ */ t(Oo, { items: n ?? [], label: a })
   ] });
 }
-function Do({ sidebar: e, header: a, children: n, rail: r, sidebarLabel: l, iconRail: i }) {
-  const s = r != null, c = xo(), d = Eo(i, c.narrow), u = l ?? "Menu";
+function Fo({ sidebar: e, header: a, children: n, rail: r, sidebarLabel: l, iconRail: i }) {
+  const s = r != null, c = Io(), d = Po(i, c.narrow), u = l ?? "Menu";
   return /* @__PURE__ */ o("div", { className: $.app, "data-rail": String(s), "data-collapsed": String(d.collapsed), children: [
-    !c.narrow && /* @__PURE__ */ t(Po, { sidebar: e, label: u, iconRail: i, fold: d }),
+    !c.narrow && /* @__PURE__ */ t(Ho, { sidebar: e, label: u, iconRail: i, fold: d }),
     /* @__PURE__ */ o("main", { className: $.main, children: [
-      /* @__PURE__ */ t(Lo, { header: a, label: u, drawer: c }),
+      /* @__PURE__ */ t(Mo, { header: a, label: u, drawer: c }),
       /* @__PURE__ */ t("div", { className: $.page, children: n })
     ] }),
     s && /* @__PURE__ */ t("div", { className: $.rail, children: r }),
-    /* @__PURE__ */ t(Ao, { sidebar: e, label: u, drawer: c })
+    /* @__PURE__ */ t(Bo, { sidebar: e, label: u, drawer: c })
   ] });
 }
-function Oo({ destinations: e, active: a }) {
+function qo({ destinations: e, active: a }) {
   const n = f(null);
-  return Ma(n, e.length), an(n, e.findIndex((r) => r.id === a), "a"), /* @__PURE__ */ t("nav", { ref: n, className: $.nav, "aria-label": "Primary", children: e.map((r) => /* @__PURE__ */ t("a", { href: j(r.href), "aria-current": r.id === a ? "page" : void 0, children: r.label }, r.id)) });
+  return an(n, e.findIndex((r) => r.id === a), "a"), /* @__PURE__ */ t(Ma, { as: "nav", rowRef: n, className: $.nav, label: "Primary", count: e.length, focusable: !1, children: e.map((r) => /* @__PURE__ */ t("a", { href: F(r.href), "aria-current": r.id === a ? "page" : void 0, children: r.label }, r.id)) });
 }
 function Va({ value: e, className: a }) {
   return e === void 0 ? null : /* @__PURE__ */ t("span", { className: a, children: e });
 }
-function Ho({ actor: e, metadata: a }) {
+function Wo({ actor: e, metadata: a }) {
   return e === void 0 && a === void 0 ? null : /* @__PURE__ */ o("span", { className: $.metadata, children: [
     /* @__PURE__ */ t(Va, { value: e, className: $.actor }),
     e !== void 0 && a !== void 0 ? /* @__PURE__ */ t("span", { "aria-hidden": "true", children: " · " }) : null,
     /* @__PURE__ */ t(Va, { value: a, className: $.detail })
   ] });
 }
-function Fo() {
+function zo() {
   const e = Ia("(max-width: 767.98px)"), a = N(), n = f(null), [r, l] = p(!1);
   return { narrow: e, open: r, panelId: a, slotRef: n, toggle: () => l(!r), close: () => {
     var s, c;
     l(!1), (c = (s = n.current) == null ? void 0 : s.querySelector("button")) == null || c.focus();
   } };
 }
-function jo({ tools: e, toolsLabel: a, menu: n }) {
+function Ko({ tools: e, toolsLabel: a, menu: n }) {
   return e === void 0 ? null : n.narrow ? /* @__PURE__ */ t("span", { ref: n.slotRef, className: $.tools, children: /* @__PURE__ */ t(b, { variant: "ghost", size: "sm", onClick: n.toggle, expanded: n.open, controls: n.panelId, children: a ?? "Settings" }) }) : /* @__PURE__ */ t("span", { className: $.tools, children: e });
 }
-function qo({ tools: e, menu: a }) {
+function Go({ tools: e, menu: a }) {
   if (e === void 0 || !a.narrow) return null;
   const n = (r) => {
     r.key === "Escape" && a.close();
   };
   return /* @__PURE__ */ t("div", { id: a.panelId, className: $.toolsPanel, hidden: !a.open, onKeyDown: n, children: e });
 }
-function zo(e) {
+function Uo(e) {
   return /* @__PURE__ */ o("header", { className: $.topbar, children: [
     /* @__PURE__ */ t("span", { className: $.mark, "data-ward-shell-mark": "", "aria-hidden": "true" }),
     /* @__PURE__ */ t("span", { className: $.brand, children: e.brand ?? "Trellis" }),
     /* @__PURE__ */ t(Va, { value: e.tagline, className: $.tagline }),
-    /* @__PURE__ */ t(Oo, { destinations: e.destinations ?? [], active: e.active ?? "" }),
-    /* @__PURE__ */ t("span", { className: $.identity, children: /* @__PURE__ */ t(Ho, { actor: e.actor, metadata: e.metadata }) }),
-    /* @__PURE__ */ t(jo, { tools: e.tools, toolsLabel: e.toolsLabel, menu: e.menu })
+    /* @__PURE__ */ t(qo, { destinations: e.destinations ?? [], active: e.active ?? "" }),
+    /* @__PURE__ */ t("span", { className: $.identity, children: /* @__PURE__ */ t(Wo, { actor: e.actor, metadata: e.metadata }) }),
+    /* @__PURE__ */ t(Ko, { tools: e.tools, toolsLabel: e.toolsLabel, menu: e.menu })
   ] });
 }
-function Wo(e) {
-  const a = N(), n = Fo();
+function Vo(e) {
+  const a = N(), n = zo();
   return /* @__PURE__ */ o("div", { className: `${$.root} ward-root`, "data-ward-shell": "", children: [
     /* @__PURE__ */ t("a", { className: $.skip, href: `#${a}`, children: "Skip to content" }),
-    /* @__PURE__ */ t(zo, { ...e, menu: n }),
-    /* @__PURE__ */ t(qo, { tools: e.tools, menu: n }),
+    /* @__PURE__ */ t(Uo, { ...e, menu: n }),
+    /* @__PURE__ */ t(Go, { tools: e.tools, menu: n }),
     /* @__PURE__ */ t("div", { id: a, className: $.content, children: e.children })
   ] });
 }
-function Ko(e) {
+function Yo(e) {
   return "sidebar" in e && e.sidebar !== void 0;
 }
-function xS(e) {
-  return Ko(e) ? /* @__PURE__ */ t(Do, { ...e }) : /* @__PURE__ */ t(Wo, { ...e });
+function IS(e) {
+  return Yo(e) ? /* @__PURE__ */ t(Fo, { ...e }) : /* @__PURE__ */ t(Vo, { ...e });
 }
-const Go = "_root_197jc_2", Uo = "_row_197jc_8", Vo = "_box_197jc_14", Yo = "_label_197jc_21", Jo = "_lockedNote_197jc_26", Xo = "_consequence_197jc_34", Qo = "_sample_197jc_69", je = {
-  root: Go,
-  row: Uo,
-  box: Vo,
-  label: Yo,
-  lockedNote: Jo,
-  consequence: Xo,
-  sample: Qo
+const Jo = "_root_197jc_2", Xo = "_row_197jc_8", Qo = "_box_197jc_14", Zo = "_label_197jc_21", ei = "_lockedNote_197jc_26", ai = "_consequence_197jc_34", ti = "_sample_197jc_69", Fe = {
+  root: Jo,
+  row: Xo,
+  box: Qo,
+  label: Zo,
+  lockedNote: ei,
+  consequence: ai,
+  sample: ti
 };
-function Zo(e, a) {
+function ni(e, a) {
   return e.locked ? { checked: !0, disabled: !0 } : { checked: e.checked, disabled: !!(e.disabled || a) };
 }
-function ei({ id: e, text: a }) {
-  return a ? /* @__PURE__ */ t("p", { id: e, className: `${je.consequence} ward-check-consequence`, children: a }) : null;
+function ri({ id: e, text: a }) {
+  return a ? /* @__PURE__ */ t("p", { id: e, className: `${Fe.consequence} ward-check-consequence`, children: a }) : null;
 }
-function ai({ locked: e }) {
-  return e ? /* @__PURE__ */ t("span", { className: `${je.lockedNote} ward-check-note`, children: "always shown" }) : null;
+function li({ locked: e }) {
+  return e ? /* @__PURE__ */ t("span", { className: `${Fe.lockedNote} ward-check-note`, children: "always shown" }) : null;
 }
-function ti({ text: e }) {
-  return e ? /* @__PURE__ */ t("span", { className: je.sample, "aria-hidden": "true", children: e }) : null;
+function oi({ text: e }) {
+  return e ? /* @__PURE__ */ t("span", { className: Fe.sample, "aria-hidden": "true", children: e }) : null;
 }
 function nn(e) {
-  const a = N(), n = e.consequence ? `${a}-note` : void 0, r = De(), l = Zo(e, r);
-  return /* @__PURE__ */ o("div", { className: `${je.root} ward-checkrow`, "data-ward-checkbox": "", "data-locked": e.locked || void 0, "data-variant": e.variant, children: [
-    /* @__PURE__ */ o("span", { className: je.row, children: [
+  const a = N(), n = e.consequence ? `${a}-note` : void 0, r = je(), l = ni(e, r);
+  return /* @__PURE__ */ o("div", { className: `${Fe.root} ward-checkrow`, "data-ward-checkbox": "", "data-locked": e.locked || void 0, "data-variant": e.variant, children: [
+    /* @__PURE__ */ o("span", { className: Fe.row, children: [
       /* @__PURE__ */ t(
         "input",
         {
           id: a,
           type: "checkbox",
-          className: `${je.box} ward-field-option`,
+          className: `${Fe.box} ward-field-option`,
           checked: l.checked,
           disabled: l.disabled,
           onChange: (i) => {
@@ -1364,40 +1374,40 @@ function nn(e) {
           title: r == null ? void 0 : r.reason
         }
       ),
-      /* @__PURE__ */ o("label", { htmlFor: a, className: je.label, children: [
+      /* @__PURE__ */ o("label", { htmlFor: a, className: Fe.label, children: [
         e.label,
-        /* @__PURE__ */ t(ai, { locked: e.locked })
+        /* @__PURE__ */ t(li, { locked: e.locked })
       ] }),
-      /* @__PURE__ */ t(ti, { text: e.sample })
+      /* @__PURE__ */ t(oi, { text: e.sample })
     ] }),
-    /* @__PURE__ */ t(ei, { id: n, text: e.consequence })
+    /* @__PURE__ */ t(ri, { id: n, text: e.consequence })
   ] });
 }
-const ni = "_chip_pq6tb_2", ri = {
-  chip: ni
-}, li = {
-  gate: W.chip.gate,
-  system: W.chip.system,
-  write: W.chip.write,
-  drift: W.chip.drift,
-  done: W.chip.done,
-  attention: W.chip.attention,
-  failed: W.chip.failed,
-  pending: W.chip.pending,
-  running: W.chip.running,
-  warn: W.chip.warn,
-  meta: W.chip.meta,
-  soft: W.chip.soft,
-  quiet: W.chip.quiet,
-  owed: W.chip.owed
+const ii = "_chip_pq6tb_2", si = {
+  chip: ii
+}, ci = {
+  gate: z.chip.gate,
+  system: z.chip.system,
+  write: z.chip.write,
+  drift: z.chip.drift,
+  done: z.chip.done,
+  attention: z.chip.attention,
+  failed: z.chip.failed,
+  pending: z.chip.pending,
+  running: z.chip.running,
+  warn: z.chip.warn,
+  meta: z.chip.meta,
+  soft: z.chip.soft,
+  quiet: z.chip.quiet,
+  owed: z.chip.owed
 };
-function oi(e, a) {
-  if (e === "stream") return ii(a);
+function di(e, a) {
+  if (e === "stream") return ui(a);
   if (a) throw new Error("Chip: streamStep is only valid when role is 'stream'");
-  const n = li[e];
+  const n = ci[e];
   return { "--ward-chip-bg": n.bg, "--ward-chip-fg": n.fg, "--ward-chip-line": n.line };
 }
-function ii(e) {
+function ui(e) {
   if (!e || !Aa(e))
     throw new Error(`Chip: stream step ${String(e)} is not validated — add its measured dark pair to tokens.json first`);
   const a = tt(e);
@@ -1405,10 +1415,10 @@ function ii(e) {
 }
 function h({ role: e, label: a, streamStep: n, size: r }) {
   if (!a) throw new Error("Chip: label is required");
-  return /* @__PURE__ */ t("span", { className: `${ri.chip} ward-chip ward-chip--${e}`, style: oi(e, n), "data-ward-chip": e, "data-size": r, children: a });
+  return /* @__PURE__ */ t("span", { className: `${si.chip} ward-chip ward-chip--${e}`, style: di(e, n), "data-ward-chip": e, "data-size": r, children: a });
 }
-const si = "_clamp_zn74g_3", Nt = {
-  clamp: si
+const mi = "_clamp_zn74g_3", Nt = {
+  clamp: mi
 };
 function ta({ text: e, as: a = "span", className: n }) {
   return /* @__PURE__ */ t(a, { className: n === void 0 ? Nt.clamp : `${Nt.clamp} ${n}`, "data-ward-clamp": "", title: e, children: e });
@@ -1424,21 +1434,21 @@ function Ba(e, a) {
   const n = da(a);
   return n === null ? { role: "meta", label: e } : { role: "stream", label: e, streamStep: n };
 }
-const ci = "_root_zvypg_3", di = "_nav_zvypg_7", ui = "_list_zvypg_13", mi = "_item_zvypg_21", hi = "_link_zvypg_41", wi = "_sep_zvypg_51", fi = "_current_zvypg_55", _i = "_chips_zvypg_59", Ae = {
-  root: ci,
-  nav: di,
-  list: ui,
-  item: mi,
-  link: hi,
-  sep: wi,
-  current: fi,
-  chips: _i
+const hi = "_root_13eei_3", wi = "_nav_13eei_8", fi = "_list_13eei_16", _i = "_item_13eei_24", vi = "_link_13eei_44", bi = "_sep_13eei_54", pi = "_current_13eei_58", gi = "_chips_13eei_62", Ae = {
+  root: hi,
+  nav: wi,
+  list: fi,
+  item: _i,
+  link: vi,
+  sep: bi,
+  current: pi,
+  chips: gi
 };
-function vi({ path: e, chips: a }) {
+function yi({ path: e, chips: a }) {
   return /* @__PURE__ */ t("div", { className: Ae.root, children: /* @__PURE__ */ o("nav", { "aria-label": "Breadcrumb", className: Ae.nav, children: [
     /* @__PURE__ */ t("ol", { className: Ae.list, children: e.map((n, r) => /* @__PURE__ */ o("li", { className: Ae.item, children: [
       r > 0 ? /* @__PURE__ */ t("span", { className: Ae.sep, "aria-hidden": "true", children: "›" }) : null,
-      r < e.length - 1 ? n.href ? /* @__PURE__ */ t("a", { className: `${Ae.link} ward-target`, href: j(n.href), title: n.label, children: n.label }) : /* @__PURE__ */ t("span", { title: n.label, children: n.label }) : /* @__PURE__ */ t("span", { className: Ae.current, "aria-current": "page", title: n.label, children: n.label })
+      r < e.length - 1 ? n.href ? /* @__PURE__ */ t("a", { className: `${Ae.link} ward-target`, href: F(n.href), title: n.label, children: n.label }) : /* @__PURE__ */ t("span", { title: n.label, children: n.label }) : /* @__PURE__ */ t("span", { className: Ae.current, "aria-current": "page", title: n.label, children: n.label })
     ] }, n.label)) }),
     a != null && a.length ? /* @__PURE__ */ t("span", { className: `${Ae.chips} ward-chiprow`, children: a.map((n) => /* @__PURE__ */ t(h, { ...n }, n.label)) }) : null
   ] }) });
@@ -1454,7 +1464,7 @@ function rn(e, a, n) {
     return document.addEventListener("mousedown", l), () => document.removeEventListener("mousedown", l);
   }, [e, a]);
 }
-const bi = 500;
+const Ni = 500;
 function ln(e) {
   return e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey;
 }
@@ -1462,38 +1472,38 @@ function on() {
   const e = f(""), a = f(void 0);
   return S(() => () => clearTimeout(a.current), []), (n) => (clearTimeout(a.current), e.current += n.toLowerCase(), a.current = setTimeout(() => {
     e.current = "";
-  }, bi), e.current);
+  }, Ni), e.current);
 }
 const ma = 4;
-function pi(e, a, n) {
+function ki(e, a, n) {
   const r = Math.max(0, n - e.bottom - ma * 2), l = Math.max(0, e.top - ma * 2);
   return a <= r || r >= l ? { top: e.bottom + ma, maxHeight: r } : { top: e.top - ma - Math.min(a, l), maxHeight: l };
 }
-function gi(e, a, n, r) {
+function $i(e, a, n, r) {
   const l = { start: e.left, end: e.right - a }, i = { start: l.start + a <= n, end: l.end >= 0 }, s = r === "end" ? "start" : "end", c = i[r] || !i[s] ? r : s;
   return Math.min(Math.max(l[c], 0), Math.max(0, n - a));
 }
-function yi(e, a, n, r) {
-  return { ...pi(e, a.height, n.height), left: gi(e, a.width, n.width, r) };
+function Ci(e, a, n, r) {
+  return { ...ki(e, a.height, n.height), left: $i(e, a.width, n.width, r) };
 }
 function va(e) {
   return `${Math.round(e * 100) / 100}px`;
 }
-function Ni(e, a) {
+function Si(e, a) {
   const n = a.getBoundingClientRect();
   e.style.setProperty("--ward-anchor-width", va(n.width)), Object.assign(e.style, { left: "0px", top: "0px", maxHeight: "none" });
   const r = e.getBoundingClientRect(), l = document.documentElement;
   return { edges: n, box: r, view: { width: l.clientWidth, height: l.clientHeight } };
 }
-function ki(e) {
+function Ri(e) {
   const a = [e, ...e.querySelectorAll("*")].filter((r) => r.scrollTop > 0), n = a.map((r) => r.scrollTop);
   return () => a.forEach((r, l) => r.scrollTop = n[l]);
 }
 function kt(e, a, n) {
-  const r = ki(e), l = Ni(e, a), i = yi(l.edges, l.box, l.view, n);
+  const r = Ri(e), l = Si(e, a), i = Ci(l.edges, l.box, l.view, n);
   Object.assign(e.style, { left: va(i.left - l.box.left), top: va(i.top - l.box.top), maxHeight: va(i.maxHeight) }), r();
 }
-function $i(e) {
+function Ti(e) {
   return typeof e.showPopover != "function" || e.matches(":popover-open") ? () => {
   } : (e.popover = "manual", e.showPopover(), () => {
     e.matches(":popover-open") && e.hidePopover();
@@ -1503,7 +1513,7 @@ function sn(e, a, n = "start") {
   aa(() => {
     const r = a.current, l = e.current;
     if (!r || !l) return;
-    const i = $i(r), s = () => kt(r, l, n), c = (d) => {
+    const i = Ti(r), s = () => kt(r, l, n), c = (d) => {
       r.contains(d.target) || s();
     };
     return window.addEventListener("scroll", c, !0), window.addEventListener("resize", s), () => {
@@ -1513,25 +1523,25 @@ function sn(e, a, n = "start") {
     a.current && e.current && kt(a.current, e.current, n);
   });
 }
-const Ci = "_root_axvxm_2", Si = "_trigger_axvxm_7", Ri = "_value_axvxm_32", Ti = "_menu_axvxm_50", xi = "_find_axvxm_72", Li = "_list_axvxm_88", Ai = "_option_axvxm_99", Ei = "_check_axvxm_118", Ii = "_empty_axvxm_129", fe = {
-  root: Ci,
-  trigger: Si,
-  value: Ri,
-  menu: Ti,
-  find: xi,
-  list: Li,
-  option: Ai,
-  check: Ei,
-  empty: Ii
-}, Mi = 7;
-function Bi(e, a) {
+const xi = "_root_axvxm_2", Li = "_trigger_axvxm_7", Ai = "_value_axvxm_32", Ei = "_menu_axvxm_50", Ii = "_find_axvxm_72", Mi = "_list_axvxm_88", Bi = "_option_axvxm_99", Pi = "_check_axvxm_118", ji = "_empty_axvxm_129", fe = {
+  root: xi,
+  trigger: Li,
+  value: Ai,
+  menu: Ei,
+  find: Ii,
+  list: Mi,
+  option: Bi,
+  check: Pi,
+  empty: ji
+}, Di = 7;
+function Oi(e, a) {
   const n = a.trim().toLowerCase();
   return e.map((r, l) => ({ option: r, index: l })).filter(({ option: r }) => r.label.toLowerCase().includes(n));
 }
 function $t(e, a) {
   return Math.max(0, e.findIndex((n) => n.value === a));
 }
-function Pi(e, a) {
+function Hi(e, a) {
   const [n, r] = p(e.defaultOpen === !0), [l, i] = p(""), [s, c] = p(() => $t(e.options, e.value)), d = (u) => {
     var m;
     Yt(() => r(!1)), u && ((m = a.current) == null || m.focus());
@@ -1540,8 +1550,8 @@ function Pi(e, a) {
     open: n,
     query: l,
     active: s,
-    entries: Bi(e.options, l),
-    findable: e.options.length > Mi,
+    entries: Oi(e.options, l),
+    findable: e.options.length > Di,
     show: () => {
       e.disabled || (i(""), c($t(e.options, e.value)), r(!0));
     },
@@ -1556,7 +1566,7 @@ function Pi(e, a) {
     }
   };
 }
-function Di(e, a) {
+function Fi(e, a) {
   const n = f(!1);
   return S(() => {
     var r;
@@ -1565,7 +1575,7 @@ function Di(e, a) {
     n.current = !0;
   };
 }
-function Oi(e) {
+function qi(e) {
   const a = on();
   return (n) => {
     const r = a(n), l = e.entries.findIndex((i) => i.option.label.toLowerCase().startsWith(r));
@@ -1581,7 +1591,7 @@ function cn(e) {
     Escape: () => e.close(!0)
   };
 }
-function Hi(e) {
+function Wi(e) {
   return { ...cn(e), Home: () => e.to(0), End: () => e.to(Math.max(0, e.entries.length - 1)) };
 }
 function dn(e, a, n) {
@@ -1592,19 +1602,19 @@ function dn(e, a, n) {
     r.preventDefault(), r.stopPropagation(), l();
   };
 }
-const Fi = /* @__PURE__ */ new Set(["ArrowDown", "ArrowUp", "Enter", " "]);
-function ji(e, a) {
+const zi = /* @__PURE__ */ new Set(["ArrowDown", "ArrowUp", "Enter", " "]);
+function Ki(e, a) {
   const n = () => {
     a(), e.show();
   };
   return {
     onClick: () => e.open ? e.close(!1) : n(),
     onKeyDown: (r) => {
-      Fi.has(r.key) && (r.preventDefault(), n());
+      zi.has(r.key) && (r.preventDefault(), n());
     }
   };
 }
-function qi({ entry: e, at: a, menu: n, ids: r, value: l }) {
+function Gi({ entry: e, at: a, menu: n, ids: r, value: l }) {
   return /* @__PURE__ */ o(
     "li",
     {
@@ -1627,7 +1637,7 @@ function rt(e, a) {
   const n = e.entries[e.active];
   return n ? a.option(n.index) : void 0;
 }
-function zi({ menu: e, ids: a, focusRef: n }) {
+function Ui({ menu: e, ids: a, focusRef: n }) {
   return /* @__PURE__ */ t(
     "input",
     {
@@ -1648,14 +1658,14 @@ function zi({ menu: e, ids: a, focusRef: n }) {
     }
   );
 }
-function Wi({ props: e, menu: a, ids: n, focusRef: r, trigger: l }) {
-  const i = Oi(a), s = f(null);
+function Vi({ props: e, menu: a, ids: n, focusRef: r, trigger: l }) {
+  const i = qi(a), s = f(null);
   sn(l, s);
   const c = (d) => {
     ln(d) && i(d.key);
   };
   return /* @__PURE__ */ o("div", { ref: s, className: fe.menu, children: [
-    a.findable && /* @__PURE__ */ t(zi, { menu: a, ids: n, focusRef: r }),
+    a.findable && /* @__PURE__ */ t(Ui, { menu: a, ids: n, focusRef: r }),
     /* @__PURE__ */ t(
       "ul",
       {
@@ -1667,14 +1677,14 @@ function Wi({ props: e, menu: a, ids: n, focusRef: r, trigger: l }) {
         "aria-label": e["aria-label"],
         "aria-labelledby": e["aria-labelledby"],
         "aria-activedescendant": a.findable ? void 0 : rt(a, n),
-        onKeyDown: dn(a, Hi(a), c),
-        children: a.entries.map((d, u) => /* @__PURE__ */ t(qi, { entry: d, at: u, menu: a, ids: n, value: e.value }, d.index))
+        onKeyDown: dn(a, Wi(a), c),
+        children: a.entries.map((d, u) => /* @__PURE__ */ t(Gi, { entry: d, at: u, menu: a, ids: n, value: e.value }, d.index))
       }
     ),
     a.entries.length === 0 && /* @__PURE__ */ t("p", { className: fe.empty, children: "No match" })
   ] });
 }
-function Ki(e, a) {
+function Yi(e, a) {
   const n = e.open ? rt(e, a) : void 0;
   S(() => {
     var r, l;
@@ -1684,13 +1694,13 @@ function Ki(e, a) {
 function un(...e) {
   return e.filter(Boolean).join(" ");
 }
-function Gi(e) {
+function Ji(e) {
   var a;
   return ((a = e.options.find((n) => n.value === e.value)) == null ? void 0 : a.label) ?? e.placeholder;
 }
-function Ui({ props: e, menu: a, ids: n, trigger: r, wantFocus: l }) {
+function Xi({ props: e, menu: a, ids: n, trigger: r, wantFocus: l }) {
   var c;
-  const i = !e.options.some((d) => d.value === e.value), s = (c = De()) == null ? void 0 : c.reason;
+  const i = !e.options.some((d) => d.value === e.value), s = (c = je()) == null ? void 0 : c.reason;
   return /* @__PURE__ */ t(
     "button",
     {
@@ -1707,39 +1717,39 @@ function Ui({ props: e, menu: a, ids: n, trigger: r, wantFocus: l }) {
       "aria-invalid": e["aria-invalid"],
       disabled: e.disabled,
       title: s,
-      ...ji(a, l),
-      children: /* @__PURE__ */ t("span", { id: n.value, className: fe.value, "data-placeholder": i || void 0, children: Gi(e) })
+      ...Ki(a, l),
+      children: /* @__PURE__ */ t("span", { id: n.value, className: fe.value, "data-placeholder": i || void 0, children: Ji(e) })
     }
   );
 }
 function mn(e) {
-  const a = De(), n = a ? { ...e, disabled: !0, "aria-describedby": Ea(e["aria-describedby"], a) } : e, r = N(), l = { list: `${r}-list`, value: `${r}-value`, option: (m) => `${r}-option-${m}` }, i = f(null), s = f(null), c = f(null), d = Pi(n, s), u = Di(d.open, c);
-  return rn(d.open, i, () => d.close(!1)), Ki(d, l), /* @__PURE__ */ o("div", { ref: i, className: un(fe.root, n.className), "data-ward-select": "", children: [
-    /* @__PURE__ */ t(Ui, { props: n, menu: d, ids: l, trigger: s, wantFocus: u }),
+  const a = je(), n = a ? { ...e, disabled: !0, "aria-describedby": Ea(e["aria-describedby"], a) } : e, r = N(), l = { list: `${r}-list`, value: `${r}-value`, option: (m) => `${r}-option-${m}` }, i = f(null), s = f(null), c = f(null), d = Hi(n, s), u = Fi(d.open, c);
+  return rn(d.open, i, () => d.close(!1)), Yi(d, l), /* @__PURE__ */ o("div", { ref: i, className: un(fe.root, n.className), "data-ward-select": "", children: [
+    /* @__PURE__ */ t(Xi, { props: n, menu: d, ids: l, trigger: s, wantFocus: u }),
     n.name && /* @__PURE__ */ t("input", { type: "hidden", name: n.name, value: n.value }),
-    d.open && /* @__PURE__ */ t(Wi, { props: n, menu: d, ids: l, focusRef: c, trigger: s })
+    d.open && /* @__PURE__ */ t(Vi, { props: n, menu: d, ids: l, focusRef: c, trigger: s })
   ] });
 }
-const Vi = "_field_13oav_2", Yi = "_label_13oav_8", Ji = "_labelHidden_13oav_15", Xi = "_control_13oav_25", Qi = "_mono_13oav_45", Zi = "_area_13oav_50", es = "_invalid_13oav_57", Pe = {
-  field: Vi,
-  label: Yi,
-  labelHidden: Ji,
-  control: Xi,
-  mono: Qi,
-  area: Zi,
-  invalid: es
-}, as = {
+const Qi = "_field_13oav_2", Zi = "_label_13oav_8", es = "_labelHidden_13oav_15", as = "_control_13oav_25", ts = "_mono_13oav_45", ns = "_area_13oav_50", rs = "_invalid_13oav_57", Pe = {
+  field: Qi,
+  label: Zi,
+  labelHidden: es,
+  control: as,
+  mono: ts,
+  area: ns,
+  invalid: rs
+}, ls = {
   type: "password",
   autoComplete: "new-password",
   spellCheck: !1,
   "data-1p-ignore": "",
   "data-lpignore": "true"
 }, hn = (e) => `${e}-label`;
-function ts({ props: e, controlProps: a, cls: n }) {
-  const r = e.secret ? as : {};
+function os({ props: e, controlProps: a, cls: n }) {
+  const r = e.secret ? ls : {};
   return /* @__PURE__ */ t("input", { className: n, ...r, ...a });
 }
-function ns({ props: e, controlProps: a, cls: n }) {
+function is({ props: e, controlProps: a, cls: n }) {
   return /* @__PURE__ */ t(
     mn,
     {
@@ -1756,15 +1766,15 @@ function ns({ props: e, controlProps: a, cls: n }) {
     }
   );
 }
-function rs({ props: e, controlProps: a, cls: n }) {
+function ss({ props: e, controlProps: a, cls: n }) {
   return /* @__PURE__ */ t("textarea", { className: n, rows: e.rows ?? 3, ...a });
 }
-const ls = { input: ts, select: ns, textarea: rs };
-function os(e, a, n) {
-  const r = ls[e.kind ?? "input"];
+const cs = { input: os, select: is, textarea: ss };
+function ds(e, a, n) {
+  const r = cs[e.kind ?? "input"];
   return /* @__PURE__ */ t(r, { props: e, controlProps: a, cls: n });
 }
-function is(e, a, n, r) {
+function us(e, a, n, r) {
   const l = e.invalid ? "true" : void 0;
   return {
     id: a,
@@ -1780,33 +1790,33 @@ function is(e, a, n, r) {
     }
   };
 }
-function ss(e) {
+function ms(e) {
   const a = e.mono ? [Pe.mono, "ward-field-input--mono"] : [], n = e.kind === "textarea" ? [Pe.area] : [];
   return [Pe.control, "ward-field-input", ...a, ...n].filter(Boolean).join(" ");
 }
-function cs(e) {
+function hs(e) {
   return e ? `${Pe.label} ${Pe.labelHidden} ward-field-label` : `${Pe.label} ward-field-label`;
 }
 function M(e) {
-  const a = N(), n = `${a}-msg`, r = is(e, a, n, De()), l = ss(e);
+  const a = N(), n = `${a}-msg`, r = us(e, a, n, je()), l = ms(e);
   return /* @__PURE__ */ o("div", { className: `${Pe.field} ward-field`, "data-ward-field": "", "data-variant": e.variant, children: [
-    /* @__PURE__ */ t("label", { id: hn(a), className: cs(e.labelHidden), htmlFor: a, children: e.label }),
-    os(e, r, l),
+    /* @__PURE__ */ t("label", { id: hn(a), className: hs(e.labelHidden), htmlFor: a, children: e.label }),
+    ds(e, r, l),
     e.invalid && /* @__PURE__ */ t("p", { id: n, className: `${Pe.invalid} ward-field-error`, children: e.invalid })
   ] });
 }
-const ds = "_root_1gft5_2", us = "_trigger_1gft5_9", ms = "_panel_1gft5_33", hs = "_menu_1gft5_52", ws = "_group_1gft5_57", fs = "_heading_1gft5_62", _s = "_item_1gft5_68", vs = "_separator_1gft5_94", bs = "_footer_1gft5_100", _e = {
-  root: ds,
-  trigger: us,
-  panel: ms,
-  menu: hs,
-  group: ws,
-  heading: fs,
-  item: _s,
-  separator: vs,
-  footer: bs
+const ws = "_root_1gft5_2", fs = "_trigger_1gft5_9", _s = "_panel_1gft5_33", vs = "_menu_1gft5_52", bs = "_group_1gft5_57", ps = "_heading_1gft5_62", gs = "_item_1gft5_68", ys = "_separator_1gft5_94", Ns = "_footer_1gft5_100", _e = {
+  root: ws,
+  trigger: fs,
+  panel: _s,
+  menu: vs,
+  group: bs,
+  heading: ps,
+  item: gs,
+  separator: ys,
+  footer: Ns
 }, wn = Te(null);
-function ps(e, a) {
+function ks(e, a) {
   const [n, r] = p({ open: e, start: null, request: 0 });
   return {
     ...n,
@@ -1817,17 +1827,17 @@ function ps(e, a) {
     }
   };
 }
-const gs = /* @__PURE__ */ new Map([
+const $s = /* @__PURE__ */ new Map([
   ["ArrowDown", "first"],
   ["Enter", "first"],
   [" ", "first"],
   ["ArrowUp", "last"]
 ]);
-function ys(e) {
+function Cs(e) {
   return {
     onClick: () => e.open ? e.close(!1) : e.show("first"),
     onKeyDown: (a) => {
-      const n = gs.get(a.key);
+      const n = $s.get(a.key);
       n && (a.preventDefault(), e.show(n));
     },
     onKeyUp: (a) => {
@@ -1838,19 +1848,19 @@ function ys(e) {
 function fn(...e) {
   return e.filter(Boolean).join(" ");
 }
-function Ns(e, a = {}) {
+function Ss(e, a = {}) {
   const { ref: n, className: r, ...l } = a;
   return { ...l, ref: (s) => {
     e.current = s, n == null || n(s);
   }, className: fn(_e.trigger, r) };
 }
-function ks(e) {
-  const a = N(), n = { menuId: `${a}-menu`, buttonId: `${a}-button` }, r = f(null), l = f(null), i = ps(e.defaultOpen === !0, l);
+function Rs(e) {
+  const a = N(), n = { menuId: `${a}-menu`, buttonId: `${a}-button` }, r = f(null), l = f(null), i = ks(e.defaultOpen === !0, l);
   return rn(i.open, r, () => i.close(!1)), /* @__PURE__ */ o("div", { ref: r, className: fn(_e.root, e.className), "data-ward-menu": "", children: [
     /* @__PURE__ */ t(
       "button",
       {
-        ...Ns(l, e.trigger),
+        ...Ss(l, e.trigger),
         id: n.buttonId,
         type: "button",
         "aria-haspopup": "menu",
@@ -1858,19 +1868,19 @@ function ks(e) {
         "aria-controls": i.open ? n.menuId : void 0,
         "aria-label": e["aria-label"],
         disabled: e.disabled,
-        ...ys(i),
+        ...Cs(i),
         children: e.label
       }
     ),
     i.open && /* @__PURE__ */ t(wn.Provider, { value: { ...n, popup: i, button: l }, children: e.children })
   ] });
 }
-function $s(e) {
+function Ts(e) {
   let a = 0;
   const n = (r) => ({ item: r, at: a++ });
   return e.map((r) => r === "separator" ? { kind: "separator" } : "items" in r ? { kind: "group", heading: r.heading, rows: r.items.map(n) } : { kind: "item", row: n(r) });
 }
-function Cs(e) {
+function xs(e) {
   return e.kind === "group" ? e.rows : e.kind === "item" ? [e.row] : [];
 }
 const _n = (e, a) => (e % a + a) % a;
@@ -1881,16 +1891,16 @@ function Ze(e, a, n) {
   }
   return -1;
 }
-const Ss = (e) => e.split("").every((a) => a === e[0]);
-function Rs(e, a, n) {
-  const r = Ss(n), l = r ? n[0] : n, i = r ? a : a - 1, s = (c) => !c.disabled && c.label.toLowerCase().startsWith(l);
+const Ls = (e) => e.split("").every((a) => a === e[0]);
+function As(e, a, n) {
+  const r = Ls(n), l = r ? n[0] : n, i = r ? a : a - 1, s = (c) => !c.disabled && c.label.toLowerCase().startsWith(l);
   for (let c = 1; c <= e.length; c++) {
     const d = _n(i + c, e.length);
     if (s(e[d])) return d;
   }
   return -1;
 }
-function Ts(e) {
+function Es(e) {
   const a = f([]);
   return {
     items: e,
@@ -1902,7 +1912,7 @@ function Ts(e) {
     }
   };
 }
-function xs(e, a) {
+function Is(e, a) {
   const { items: n } = e, r = () => {
     var l;
     return (l = e.refs.current[e.current()]) == null ? void 0 : l.click();
@@ -1917,9 +1927,9 @@ function xs(e, a) {
     [" ", r]
   ]);
 }
-function Ls(e, a) {
-  const n = f(!1), r = on(), l = xs(e, a), i = (s) => {
-    ln(s) && e.focus(Rs(e.items, e.current(), r(s.key)));
+function Ms(e, a) {
+  const n = f(!1), r = on(), l = Is(e, a), i = (s) => {
+    ln(s) && e.focus(As(e.items, e.current(), r(s.key)));
   };
   return {
     onKeyDown: (s) => {
@@ -1936,14 +1946,14 @@ function Ls(e, a) {
     }
   };
 }
-function As(e, a) {
+function Bs(e, a) {
   const { start: n, request: r } = a, l = f(e);
   l.current = e, S(() => {
     const { items: i, focus: s } = l.current;
     n && s(n === "first" ? Ze(i, -1, 1) : Ze(i, i.length, -1));
   }, [n, r]);
 }
-function Es({ row: e, nav: a, popup: n }) {
+function Ps({ row: e, nav: a, popup: n }) {
   const { item: r, at: l } = e;
   return {
     onMouseDown: (i) => i.preventDefault(),
@@ -1966,38 +1976,38 @@ function vn(e) {
     tabIndex: -1,
     className: _e.item,
     "aria-disabled": a.disabled ? "true" : void 0,
-    ...Es(e)
+    ...Ps(e)
   };
-  return a.href && !a.disabled ? /* @__PURE__ */ t("a", { href: j(a.href), ...r, children: a.label }) : /* @__PURE__ */ t("button", { type: "button", ...r, children: a.label });
+  return a.href && !a.disabled ? /* @__PURE__ */ t("a", { href: F(a.href), ...r, children: a.label }) : /* @__PURE__ */ t("button", { type: "button", ...r, children: a.label });
 }
-function Is({ heading: e, rows: a, nav: n, popup: r }) {
+function js({ heading: e, rows: a, nav: n, popup: r }) {
   const l = N();
   return /* @__PURE__ */ o("div", { role: "group", "aria-labelledby": l, className: _e.group, children: [
     /* @__PURE__ */ t("div", { id: l, className: _e.heading, children: e }),
     a.map((i) => /* @__PURE__ */ t(vn, { row: i, nav: n, popup: r }, i.at))
   ] });
 }
-function Ms({ block: e, nav: a, popup: n }) {
-  return e.kind === "separator" ? /* @__PURE__ */ t("div", { role: "separator", className: _e.separator }) : e.kind === "group" ? /* @__PURE__ */ t(Is, { heading: e.heading, rows: e.rows, nav: a, popup: n }) : /* @__PURE__ */ t(vn, { row: e.row, nav: a, popup: n });
+function Ds({ block: e, nav: a, popup: n }) {
+  return e.kind === "separator" ? /* @__PURE__ */ t("div", { role: "separator", className: _e.separator }) : e.kind === "group" ? /* @__PURE__ */ t(js, { heading: e.heading, rows: e.rows, nav: a, popup: n }) : /* @__PURE__ */ t(vn, { row: e.row, nav: a, popup: n });
 }
-function Bs() {
+function Os() {
   const e = Re(wn);
   if (!e) throw new Error("Menu: render it as the child of a MenuButton");
   return e;
 }
-function Ps({ entries: e, footer: a, align: n = "start" }) {
-  const { popup: r, menuId: l, buttonId: i, button: s } = Bs(), c = f(null);
+function Hs({ entries: e, footer: a, align: n = "start" }) {
+  const { popup: r, menuId: l, buttonId: i, button: s } = Os(), c = f(null);
   sn(s, c, n);
-  const d = $s(e), u = Ts(d.flatMap(Cs).map((w) => w.item)), m = Ls(u, r);
-  return As(u, r), /* @__PURE__ */ o("div", { ref: c, className: _e.panel, children: [
-    /* @__PURE__ */ t("div", { role: "menu", id: l, "aria-labelledby": i, className: _e.menu, ...m, children: d.map((w, v) => /* @__PURE__ */ t(Ms, { block: w, nav: u, popup: r }, v)) }),
+  const d = Ts(e), u = Es(d.flatMap(xs).map((w) => w.item)), m = Ms(u, r);
+  return Bs(u, r), /* @__PURE__ */ o("div", { ref: c, className: _e.panel, children: [
+    /* @__PURE__ */ t("div", { role: "menu", id: l, "aria-labelledby": i, className: _e.menu, ...m, children: d.map((w, v) => /* @__PURE__ */ t(Ds, { block: w, nav: u, popup: r }, v)) }),
     a && /* @__PURE__ */ t("p", { className: _e.footer, children: a })
   ] });
 }
-const Ds = (e, a) => e.reduce((n, r) => n + r + a, -a);
-function Os({ room: e, widths: a, more: n, gap: r }, l) {
+const Fs = (e, a) => e.reduce((n, r) => n + r + a, -a);
+function qs({ room: e, widths: a, more: n, gap: r }, l) {
   const i = a.map((d, u) => u);
-  if (Ds(a, r) <= e) return i;
+  if (Fs(a, r) <= e) return i;
   const s = /* @__PURE__ */ new Set([l]);
   let c = a[l] + r + n;
   for (const d of i)
@@ -2007,44 +2017,44 @@ function Os({ room: e, widths: a, more: n, gap: r }, l) {
     }
   return i.filter((d) => s.has(d));
 }
-const ja = (e) => Number.parseFloat(e) || 0, Ct = (e) => e.getBoundingClientRect().width;
-function Hs(e) {
+const Fa = (e) => Number.parseFloat(e) || 0, Ct = (e) => e.getBoundingClientRect().width;
+function Ws(e) {
   const a = getComputedStyle(e), n = e.querySelector(":scope > [data-more-probe]");
   return {
-    room: e.clientWidth - ja(a.paddingInlineStart) - ja(a.paddingInlineEnd),
+    room: e.clientWidth - Fa(a.paddingInlineStart) - Fa(a.paddingInlineEnd),
     widths: Array.from(e.querySelectorAll(':scope > [role="tab"]'), Ct),
     more: n ? Ct(n) : 0,
-    gap: ja(a.columnGap)
+    gap: Fa(a.columnGap)
   };
 }
-function Fs(e, a) {
+function zs(e, a) {
   if (typeof ResizeObserver > "u") return;
   const n = new ResizeObserver(a);
   return [e, ...e.children].forEach((r) => n.observe(r)), () => n.disconnect();
 }
-const js = (e, a) => JSON.stringify(e) === JSON.stringify(a);
-function qs(e, a, n) {
+const Ks = (e, a) => JSON.stringify(e) === JSON.stringify(a);
+function Gs(e, a, n) {
   const [r, l] = p(null);
   return aa(() => {
     const i = e.current;
     if (!i) return;
     const s = () => {
-      const c = Hs(i);
-      l((d) => js(d, c) ? d : c);
+      const c = Ws(i);
+      l((d) => Ks(d, c) ? d : c);
     };
-    return s(), Fs(i, s);
-  }, [e, n]), r && Os(r, a);
+    return s(), zs(i, s);
+  }, [e, n]), r && qs(r, a);
 }
-const zs = "_strip_1x6px_2", Ws = "_fits_1x6px_33", Ks = "_probe_1x6px_41", Gs = "_moreRoot_1x6px_50", Us = "_more_1x6px_50", Vs = "_tab_1x6px_69", Ys = "_count_1x6px_105", ve = {
-  strip: zs,
-  fits: Ws,
-  probe: Ks,
-  moreRoot: Gs,
-  more: Us,
-  tab: Vs,
-  count: Ys
+const Us = "_strip_14kyj_2", Vs = "_fits_14kyj_19", Ys = "_probe_14kyj_27", Js = "_moreRoot_14kyj_36", Xs = "_more_14kyj_36", Qs = "_tab_14kyj_55", Zs = "_count_14kyj_91", ve = {
+  strip: Us,
+  fits: Vs,
+  probe: Ys,
+  moreRoot: Js,
+  more: Xs,
+  tab: Qs,
+  count: Zs
 }, bn = "More";
-function Js(e, a) {
+function ec(e, a) {
   const n = e.findIndex((r) => r.id === a);
   return n < 0 ? 0 : n;
 }
@@ -2052,8 +2062,8 @@ const pn = (e) => e.count === void 0 ? e.label : `${e.label} · ${e.count}`;
 function gn(e) {
   return `${ve.strip} ward-tabs${e === 2 ? " ward-tabs--level2" : ""}`;
 }
-const Xs = { tabIndex: -1, "aria-hidden": !0, "data-overflow": "" };
-function Qs({ tab: e, active: a, place: n, onChange: r }) {
+const ac = { tabIndex: -1, "aria-hidden": !0, "data-overflow": "" };
+function tc({ tab: e, active: a, place: n, onChange: r }) {
   return /* @__PURE__ */ o(
     "button",
     {
@@ -2075,7 +2085,7 @@ function Qs({ tab: e, active: a, place: n, onChange: r }) {
     }
   );
 }
-function Zs(e, a) {
+function nc(e, a) {
   return (n) => {
     a(n), requestAnimationFrame(() => {
       var l;
@@ -2084,28 +2094,28 @@ function Zs(e, a) {
     });
   };
 }
-function ec({ tabs: e, trigger: a, onPick: n }) {
-  return /* @__PURE__ */ t(ks, { label: bn, className: ve.moreRoot, trigger: { ...a, role: "tab", "aria-selected": !1, className: ve.more }, children: /* @__PURE__ */ t(Ps, { align: "end", entries: e.map((r) => ({ label: pn(r), onSelect: () => n(r.id) })) }) });
+function rc({ tabs: e, trigger: a, onPick: n }) {
+  return /* @__PURE__ */ t(Rs, { label: bn, className: ve.moreRoot, trigger: { ...a, role: "tab", "aria-selected": !1, className: ve.more }, children: /* @__PURE__ */ t(Hs, { align: "end", entries: e.map((r) => ({ label: pn(r), onSelect: () => n(r.id) })) }) });
 }
-function ac(e, a, n) {
-  return !a || a.includes(n) ? e.itemProps(n) : Xs;
+function lc(e, a, n) {
+  return !a || a.includes(n) ? e.itemProps(n) : ac;
 }
-function LS({ tabs: e, active: a, onChange: n, label: r = "Tabs", level: l = 1 }) {
-  const i = xa({ orientation: "horizontal" }), s = Js(e, a);
+function MS({ tabs: e, active: a, onChange: n, label: r = "Tabs", level: l = 1 }) {
+  const i = xa({ orientation: "horizontal" }), s = ec(e, a);
   S(() => i.setActive(s), [i.setActive, s]);
-  const c = f(null), d = qs(c, s, e.map(pn).join(`
+  const c = f(null), d = Gs(c, s, e.map(pn).join(`
 `)), u = d ? e.filter((m, w) => !d.includes(w)) : [];
   return /* @__PURE__ */ o("div", { ref: c, className: `${gn(l)} ${ve.fits}`, role: "tablist", "aria-label": r, "data-level": l, ...i.containerProps, children: [
-    e.map((m, w) => /* @__PURE__ */ t(Qs, { tab: m, active: a, place: ac(i, d, w), onChange: n }, m.id)),
+    e.map((m, w) => /* @__PURE__ */ t(tc, { tab: m, active: a, place: lc(i, d, w), onChange: n }, m.id)),
     /* @__PURE__ */ t("span", { "aria-hidden": "true", "data-more-probe": "", className: `${_e.trigger} ${ve.more} ${ve.probe}`, children: bn }),
-    u.length > 0 && /* @__PURE__ */ t(ec, { tabs: u, trigger: i.itemProps(e.length), onPick: Zs(c, n) })
+    u.length > 0 && /* @__PURE__ */ t(rc, { tabs: u, trigger: i.itemProps(e.length), onPick: nc(c, n) })
   ] });
 }
 const St = 7;
-function AS({ links: e, active: a, label: n, level: r = 1 }) {
+function BS({ links: e, active: a, label: n, level: r = 1 }) {
   if (e.length > St) throw new Error(`TabLinks: ${e.length} links exceeds the cap of ${St} — the set is fixed`);
   const l = f(null);
-  return Ma(l, e.length), an(l, e.findIndex((i) => i.id === a), "a"), /* @__PURE__ */ t("nav", { ref: l, className: gn(r), "aria-label": n, "data-level": r, children: e.map((i) => /* @__PURE__ */ o("a", { href: i.href, className: `${ve.tab} ward-tab`, "aria-current": i.id === a ? "page" : void 0, children: [
+  return an(l, e.findIndex((i) => i.id === a), "a"), /* @__PURE__ */ t(Ma, { as: "nav", rowRef: l, className: gn(r), label: n, count: e.length, focusable: !1, "data-level": r, children: e.map((i) => /* @__PURE__ */ o("a", { href: i.href, className: `${ve.tab} ward-tab`, "aria-current": i.id === a ? "page" : void 0, children: [
     i.label,
     i.count === void 0 ? null : /* @__PURE__ */ o(T, { children: [
       " ",
@@ -2113,9 +2123,9 @@ function AS({ links: e, active: a, label: n, level: r = 1 }) {
     ] })
   ] }, i.id)) });
 }
-const tc = "_root_v56ff_3", nc = "_segment_v56ff_9", Rt = {
-  root: tc,
-  segment: nc
+const oc = "_root_v56ff_3", ic = "_segment_v56ff_9", Rt = {
+  root: oc,
+  segment: ic
 };
 function yn({ options: e, value: a, onChange: n, label: r = "Options", disabled: l = !1, describedBy: i }) {
   if (e.length < 2 || e.length > 3)
@@ -2137,39 +2147,39 @@ function yn({ options: e, value: a, onChange: n, label: r = "Options", disabled:
     d.value
   )) });
 }
-const rc = "_sidebar_s9o1j_3", lc = "_brand_s9o1j_9", oc = "_mark_s9o1j_17", ic = "_word_s9o1j_24", sc = "_nav_s9o1j_30", cc = "_navItem_s9o1j_39", dc = "_footLink_s9o1j_49", uc = "_group_s9o1j_58", mc = "_groupName_s9o1j_65", hc = "_agents_s9o1j_81", wc = "_agent_s9o1j_81", fc = "_root_s9o1j_96", _c = "_agentTop_s9o1j_105", vc = "_dot_s9o1j_112", bc = "_agentName_s9o1j_124", pc = "_agentMeta_s9o1j_138", gc = "_foot_s9o1j_49", yc = "_footName_s9o1j_150", Nc = "_footLinks_s9o1j_157", kc = "_linkBrand_s9o1j_184", $c = "_label_s9o1j_205", Cc = "_note_s9o1j_210", Sc = "_footer_s9o1j_226", x = {
-  sidebar: rc,
-  brand: lc,
-  mark: oc,
-  word: ic,
-  nav: sc,
-  navItem: cc,
+const sc = "_sidebar_s9o1j_3", cc = "_brand_s9o1j_9", dc = "_mark_s9o1j_17", uc = "_word_s9o1j_24", mc = "_nav_s9o1j_30", hc = "_navItem_s9o1j_39", wc = "_footLink_s9o1j_49", fc = "_group_s9o1j_58", _c = "_groupName_s9o1j_65", vc = "_agents_s9o1j_81", bc = "_agent_s9o1j_81", pc = "_root_s9o1j_96", gc = "_agentTop_s9o1j_105", yc = "_dot_s9o1j_112", Nc = "_agentName_s9o1j_124", kc = "_agentMeta_s9o1j_138", $c = "_foot_s9o1j_49", Cc = "_footName_s9o1j_150", Sc = "_footLinks_s9o1j_157", Rc = "_linkBrand_s9o1j_184", Tc = "_label_s9o1j_205", xc = "_note_s9o1j_210", Lc = "_footer_s9o1j_226", x = {
+  sidebar: sc,
+  brand: cc,
+  mark: dc,
+  word: uc,
+  nav: mc,
+  navItem: hc,
   new: "_new_s9o1j_48",
-  footLink: dc,
-  group: uc,
-  groupName: mc,
-  agents: hc,
-  agent: wc,
-  root: fc,
-  agentTop: _c,
-  dot: vc,
-  agentName: bc,
-  agentMeta: pc,
-  foot: gc,
-  footName: yc,
-  footLinks: Nc,
-  linkBrand: kc,
-  label: $c,
-  note: Cc,
-  footer: Sc
+  footLink: wc,
+  group: fc,
+  groupName: _c,
+  agents: vc,
+  agent: bc,
+  root: pc,
+  agentTop: gc,
+  dot: yc,
+  agentName: Nc,
+  agentMeta: kc,
+  foot: $c,
+  footName: Cc,
+  footLinks: Sc,
+  linkBrand: Rc,
+  label: Tc,
+  note: xc,
+  footer: Lc
 };
-function Rc({ agent: e }) {
+function Ac({ agent: e }) {
   const a = e.paused === !0;
   return /* @__PURE__ */ t("li", { children: /* @__PURE__ */ o(
     "a",
     {
       className: x.agent,
-      href: j(e.href),
+      href: F(e.href),
       "aria-current": e.current === !0 ? "page" : void 0,
       "data-paused": a ? "true" : void 0,
       children: [
@@ -2189,80 +2199,80 @@ function Rc({ agent: e }) {
     }
   ) });
 }
-function Tc({ shared: e }) {
+function Ec({ shared: e }) {
   return e ? /* @__PURE__ */ o("div", { className: x.foot, children: [
     /* @__PURE__ */ t("span", { className: x.footName, children: e.heading }),
-    /* @__PURE__ */ t("div", { className: x.footLinks, children: e.links.map((a) => /* @__PURE__ */ t("a", { className: `${x.footLink} ward-target`, href: j(a.href), children: a.label }, a.href)) })
+    /* @__PURE__ */ t("div", { className: x.footLinks, children: e.links.map((a) => /* @__PURE__ */ t("a", { className: `${x.footLink} ward-target`, href: F(a.href), children: a.label }, a.href)) })
   ] }) : null;
 }
-function xc({ brand: e, nav: a, agentsHeading: n, agents: r, newAction: l, shared: i }) {
+function Ic({ brand: e, nav: a, agentsHeading: n, agents: r, newAction: l, shared: i }) {
   if (!e) throw new Error("Sidebar: brand is required");
   return /* @__PURE__ */ o("nav", { className: x.sidebar, "aria-label": e, children: [
     /* @__PURE__ */ o("div", { className: x.brand, children: [
       /* @__PURE__ */ t("span", { className: x.mark }),
       /* @__PURE__ */ t("span", { className: x.word, children: e })
     ] }),
-    /* @__PURE__ */ t("div", { className: x.nav, children: a.map((s) => /* @__PURE__ */ t("a", { className: x.navItem, href: j(s.href), "aria-current": s.current === !0 ? "page" : void 0, children: s.label }, s.href)) }),
+    /* @__PURE__ */ t("div", { className: x.nav, children: a.map((s) => /* @__PURE__ */ t("a", { className: x.navItem, href: F(s.href), "aria-current": s.current === !0 ? "page" : void 0, children: s.label }, s.href)) }),
     /* @__PURE__ */ o("div", { className: x.group, children: [
       /* @__PURE__ */ o("span", { className: x.groupName, children: [
         n,
         " · ",
         ee(r.length)
       ] }),
-      l && /* @__PURE__ */ t("a", { className: x.new, href: j(l.href), children: l.label })
+      l && /* @__PURE__ */ t("a", { className: x.new, href: F(l.href), children: l.label })
     ] }),
-    /* @__PURE__ */ t("ul", { className: x.agents, children: r.map((s) => /* @__PURE__ */ t(Rc, { agent: s }, s.href)) }),
-    /* @__PURE__ */ t(Tc, { shared: i })
+    /* @__PURE__ */ t("ul", { className: x.agents, children: r.map((s) => /* @__PURE__ */ t(Ac, { agent: s }, s.href)) }),
+    /* @__PURE__ */ t(Ec, { shared: i })
   ] });
 }
-function Lc(e) {
+function Mc(e) {
   return e.destinations ?? e.items ?? [];
 }
-function Ac({ brand: e }) {
+function Bc({ brand: e }) {
   return e === void 0 ? null : /* @__PURE__ */ t("div", { className: x.linkBrand, children: e });
 }
-function Ec({ children: e }) {
+function Pc({ children: e }) {
   return e === void 0 ? null : /* @__PURE__ */ t("div", { className: x.footer, children: e });
 }
-function Ic({ link: e, active: a }) {
-  return /* @__PURE__ */ o("a", { href: j(e.href), "aria-current": a ? "page" : void 0, children: [
+function jc({ link: e, active: a }) {
+  return /* @__PURE__ */ o("a", { href: F(e.href), "aria-current": a ? "page" : void 0, children: [
     /* @__PURE__ */ t("span", { className: x.label, children: e.label }),
     e.note === void 0 ? null : /* @__PURE__ */ t("span", { className: x.note, children: e.note })
   ] });
 }
-function Mc(e) {
+function Dc(e) {
   return /* @__PURE__ */ o("aside", { className: `${x.root} ward-sidebar`, "data-ward-sidebar": !0, children: [
-    /* @__PURE__ */ t(Ac, { brand: e.brand }),
-    /* @__PURE__ */ t("nav", { "aria-label": e.label ?? "Sidebar", children: Lc(e).map((a) => /* @__PURE__ */ t(Ic, { link: a, active: a.id === e.active }, a.id)) }),
-    /* @__PURE__ */ t(Ec, { children: e.children })
+    /* @__PURE__ */ t(Bc, { brand: e.brand }),
+    /* @__PURE__ */ t("nav", { "aria-label": e.label ?? "Sidebar", children: Mc(e).map((a) => /* @__PURE__ */ t(jc, { link: a, active: a.id === e.active }, a.id)) }),
+    /* @__PURE__ */ t(Pc, { children: e.children })
   ] });
 }
-function Bc(e) {
+function Oc(e) {
   return "agents" in e;
 }
-function ES(e) {
-  return Bc(e) ? /* @__PURE__ */ t(xc, { ...e }) : /* @__PURE__ */ t(Mc, { ...e });
+function PS(e) {
+  return Oc(e) ? /* @__PURE__ */ t(Ic, { ...e }) : /* @__PURE__ */ t(Dc, { ...e });
 }
-const Pc = "_mark_wlgi8_3", Dc = {
-  mark: Pc
-}, Oc = { met: "✓", unmet: "", failed: "✕" };
+const Hc = "_mark_wlgi8_3", Fc = {
+  mark: Hc
+}, qc = { met: "✓", unmet: "", failed: "✕" };
 function lt({ state: e, label: a }) {
   return /* @__PURE__ */ t(
     "span",
     {
-      className: Dc.mark,
+      className: Fc.mark,
       "data-state": e,
       "data-testid": "mark",
       role: a ? "img" : void 0,
       "aria-label": a,
       "aria-hidden": a ? void 0 : !0,
-      children: Oc[e]
+      children: qc[e]
     }
   );
 }
-const Hc = "_marker_br9fi_2", Fc = {
-  marker: Hc
-}, jc = {
+const Wc = "_marker_br9fi_2", zc = {
+  marker: Wc
+}, Kc = {
   stream: "var(--stream)",
   green: "var(--ward-color-done)",
   blue: "var(--ward-color-running)",
@@ -2281,13 +2291,13 @@ const Hc = "_marker_br9fi_2", Fc = {
   attention: "var(--ward-color-waiting)",
   tick: "var(--ward-color-done)",
   box: "var(--ward-color-line2)"
-}, qc = { running: " ward-running" };
-function Oe({ size: e, kind: a, label: n }) {
-  const r = { "--marker": jc[a], width: e, height: e };
+}, Gc = { running: " ward-running" };
+function De({ size: e, kind: a, label: n }) {
+  const r = { "--marker": Kc[a], width: e, height: e };
   return /* @__PURE__ */ t(
     "span",
     {
-      className: `${Fc.marker} ward-marker ward-marker--${a}${qc[a] ?? ""}`,
+      className: `${zc.marker} ward-marker ward-marker--${a}${Gc[a] ?? ""}`,
       style: r,
       "data-testid": "marker",
       role: n ? "img" : void 0,
@@ -2296,18 +2306,18 @@ function Oe({ size: e, kind: a, label: n }) {
     }
   );
 }
-const zc = "_root_ti0pq_2", Wc = "_chip_ti0pq_11", Kc = "_noCase_ti0pq_23", ha = {
-  root: zc,
-  chip: Wc,
-  noCase: Kc
+const Uc = "_root_ti0pq_2", Vc = "_chip_ti0pq_11", Yc = "_noCase_ti0pq_23", ha = {
+  root: Uc,
+  chip: Vc,
+  noCase: Yc
 };
-function Gc(e, a) {
+function Jc(e, a) {
   return e ?? a ?? (/* @__PURE__ */ new Date()).toISOString();
 }
 function ot({ connection: e, since: a, lastEventAt: n }) {
-  const r = Gc(a, n), l = nt(r, e === "reconnecting");
+  const r = Jc(a, n), l = nt(r, e === "reconnecting");
   return e === "live" ? /* @__PURE__ */ o("span", { className: `${ha.root} ward-connection`, role: "status", children: [
-    /* @__PURE__ */ t(Oe, { size: 6, kind: "green" }),
+    /* @__PURE__ */ t(De, { size: 6, kind: "green" }),
     "LIVE"
   ] }) : e === "reconnecting" ? /* @__PURE__ */ o("span", { className: `${ha.chip} ward-connection`, role: "status", children: [
     "RECONNECTING ·",
@@ -2318,28 +2328,28 @@ function ot({ connection: e, since: a, lastEventAt: n }) {
     de(r)
   ] });
 }
-const Uc = "_root_1cvxf_2", Vc = "_context_1cvxf_12", Yc = "_row_1cvxf_1", Jc = "_heading_1cvxf_25", Xc = "_headingWrap_1cvxf_33", Qc = "_chips_1cvxf_38", Zc = "_title_1cvxf_45", ed = "_consequence_1cvxf_55", ad = "_actionsWrap_1cvxf_62", td = "_actions_1cvxf_62", nd = "_action_1cvxf_62", rd = "_overflowPanel_1cvxf_91", ld = "_measureClip_1cvxf_102", od = "_measure_1cvxf_102", Y = {
-  root: Uc,
-  context: Vc,
-  row: Yc,
-  heading: Jc,
-  headingWrap: Xc,
-  chips: Qc,
-  title: Zc,
-  consequence: ed,
-  actionsWrap: ad,
-  actions: td,
-  action: nd,
-  overflowPanel: rd,
-  measureClip: ld,
-  measure: od
+const Xc = "_root_u8ort_2", Qc = "_context_u8ort_13", Zc = "_row_u8ort_1", ed = "_heading_u8ort_27", ad = "_headingWrap_u8ort_35", td = "_chips_u8ort_40", nd = "_title_u8ort_48", rd = "_consequence_u8ort_58", ld = "_actionsWrap_u8ort_65", od = "_actions_u8ort_65", id = "_action_u8ort_65", sd = "_overflowPanel_u8ort_94", cd = "_measureClip_u8ort_105", dd = "_measure_u8ort_105", Y = {
+  root: Xc,
+  context: Qc,
+  row: Zc,
+  heading: ed,
+  headingWrap: ad,
+  chips: td,
+  title: nd,
+  consequence: rd,
+  actionsWrap: ld,
+  actions: od,
+  action: id,
+  overflowPanel: sd,
+  measureClip: cd,
+  measure: dd
 };
-function id({ title: e, density: a }) {
+function ud({ title: e, density: a }) {
   return a === "record" ? /* @__PURE__ */ t(ta, { as: "h1", className: Y.title, text: e }) : /* @__PURE__ */ t("h1", { className: Y.title, children: e });
 }
-function sd({ title: e, consequence: a, consequenceHint: n, density: r }) {
+function md({ title: e, consequence: a, consequenceHint: n, density: r }) {
   return /* @__PURE__ */ o("div", { className: Y.heading, children: [
-    /* @__PURE__ */ t(id, { title: e, density: r }),
+    /* @__PURE__ */ t(ud, { title: e, density: r }),
     a && /* @__PURE__ */ t("p", { className: Y.consequence, title: n, children: a })
   ] });
 }
@@ -2349,173 +2359,173 @@ function Ya({ actions: e }) {
 function Tt({ disclosure: e }) {
   return /* @__PURE__ */ t(b, { variant: "overflow", onClick: e.toggle, expanded: e.open, controls: e.panelId, children: "···" });
 }
-function cd({ actions: e, hasMore: a, collapsed: n, onOverflow: r, disclosure: l }) {
+function hd({ actions: e, hasMore: a, collapsed: n, onOverflow: r, disclosure: l }) {
   return n ? r ? /* @__PURE__ */ t(b, { variant: "overflow", onClick: r, children: "···" }) : /* @__PURE__ */ t(Tt, { disclosure: l }) : a ? [/* @__PURE__ */ t(Tt, { disclosure: l }, "more"), /* @__PURE__ */ t(Ya, { actions: e }, "actions")] : /* @__PURE__ */ t(Ya, { actions: e });
 }
-function dd(e, a, n, r) {
+function wd(e, a, n, r) {
   return n ? r ? null : [...e, ...a] : e.length > 0 ? e : null;
 }
-function ud({ actions: e, disclosure: a, onEscape: n }) {
+function fd({ actions: e, disclosure: a, onEscape: n }) {
   if (e === null) return null;
   const r = (l) => {
     l.key === "Escape" && n();
   };
   return /* @__PURE__ */ t("div", { id: a.panelId, className: Y.overflowPanel, "data-ward-overflow-panel": "", hidden: !a.open, onKeyDown: r, children: /* @__PURE__ */ t(Ya, { actions: e }) });
 }
-function md(e, a) {
+function _d(e, a) {
   const n = N(), [r, l] = p(!1), i = r && e;
   return { disclosure: { open: i, panelId: n, toggle: () => l(!i) }, close: () => {
     var d, u;
     l(!1), (u = (d = a.current) == null ? void 0 : d.querySelector("button")) == null || u.focus();
   } };
 }
-function hd({ crumb: e, chips: a }) {
+function vd({ crumb: e, chips: a }) {
   return /* @__PURE__ */ o("div", { className: Y.context, children: [
-    /* @__PURE__ */ t(vi, { path: e }),
+    /* @__PURE__ */ t(yi, { path: e }),
     a != null && a.length ? /* @__PURE__ */ t("div", { className: Y.chips, children: a.map((n) => /* @__PURE__ */ t(h, { ...n }, n.label)) }) : null
   ] });
 }
-function wd(...e) {
+function bd(...e) {
   return e.some((a) => a === null);
 }
-function fd(e) {
+function pd(e) {
   return Number.parseFloat(getComputedStyle(e).columnGap) || 0;
 }
-function _d(e, a) {
-  return getComputedStyle(e).flexDirection === "column" ? 0 : a.offsetWidth + fd(e);
+function gd(e, a) {
+  return getComputedStyle(e).flexDirection === "column" ? 0 : a.offsetWidth + pd(e);
 }
-function vd(e, a, n, r, l) {
-  if (l === 0 || wd(a, n, r)) return !1;
-  const [i, s, c] = [a, n, r], d = Math.max(0, e.clientWidth - _d(e, i));
+function yd(e, a, n, r, l) {
+  if (l === 0 || bd(a, n, r)) return !1;
+  const [i, s, c] = [a, n, r], d = Math.max(0, e.clientWidth - gd(e, i));
   return c.offsetWidth > d || s.scrollWidth > s.clientWidth + 1;
 }
-function bd(e) {
+function Nd(e) {
   return e !== null && typeof ResizeObserver < "u";
 }
-function pd(e) {
+function kd(e) {
   return fr(e) && (e.type === "a" || typeof e.props.href == "string");
 }
-function gd(e, a) {
-  return a.length === 0 && e.length === 1 && pd(e[0]);
+function $d(e, a) {
+  return a.length === 0 && e.length === 1 && kd(e[0]);
 }
-function yd(e, a) {
+function Cd(e, a) {
   const n = f(null), r = f(null), l = f(null), i = f(null), [s, c] = p(!1);
   return S(() => {
     const d = n.current;
-    if (!bd(d)) return;
-    const u = () => c(vd(d, r.current, l.current, i.current, e.length)), m = new ResizeObserver(u);
+    if (!Nd(d)) return;
+    const u = () => c(yd(d, r.current, l.current, i.current, e.length)), m = new ResizeObserver(u);
     return m.observe(d), i.current && m.observe(i.current), u(), () => m.disconnect();
   }, [e]), { rowRef: n, headingRef: r, actionsRef: l, measureRef: i, collapsed: s && !a };
 }
-function Nd({ actions: e, hasMore: a, measureRef: n }) {
+function Sd({ actions: e, hasMore: a, measureRef: n }) {
   return /* @__PURE__ */ t("div", { className: Y.measureClip, children: /* @__PURE__ */ o("div", { className: Y.measure, ref: n, "aria-hidden": "true", "data-ward-measure": !0, children: [
     a ? /* @__PURE__ */ t("span", { children: /* @__PURE__ */ t(b, { variant: "overflow", children: "···" }) }) : null,
     e.map((r, l) => /* @__PURE__ */ t("span", { children: r }, l))
   ] }) });
 }
-function kd({ connection: e }) {
+function Rd({ connection: e }) {
   return e ? /* @__PURE__ */ t(ot, { connection: e.connection, since: e.since }) : null;
 }
-function IS({ crumb: e, chips: a, title: n, consequence: r, consequenceHint: l, actions: i = [], more: s = [], connection: c, onOverflow: d, density: u = "page" }) {
-  const { rowRef: m, headingRef: w, actionsRef: v, measureRef: y, collapsed: L } = yd(i, gd(i, s)), B = s.length > 0, { disclosure: le, close: Le } = md(L || B, v), ae = dd(s, i, L, d);
+function jS({ crumb: e, chips: a, title: n, consequence: r, consequenceHint: l, actions: i = [], more: s = [], connection: c, onOverflow: d, density: u = "page" }) {
+  const { rowRef: m, headingRef: w, actionsRef: v, measureRef: y, collapsed: L } = Cd(i, $d(i, s)), B = s.length > 0, { disclosure: le, close: Le } = _d(L || B, v), ae = wd(s, i, L, d);
   return /* @__PURE__ */ o("header", { className: Y.root, "data-density": u, children: [
-    /* @__PURE__ */ t(hd, { crumb: e, chips: a }),
+    /* @__PURE__ */ t(vd, { crumb: e, chips: a }),
     /* @__PURE__ */ o("div", { className: Y.row, ref: m, children: [
-      /* @__PURE__ */ t("div", { ref: w, className: Y.headingWrap, children: /* @__PURE__ */ t(sd, { title: n, consequence: r, consequenceHint: l, density: u }) }),
+      /* @__PURE__ */ t("div", { ref: w, className: Y.headingWrap, children: /* @__PURE__ */ t(md, { title: n, consequence: r, consequenceHint: l, density: u }) }),
       /* @__PURE__ */ o("div", { className: Y.actionsWrap, children: [
-        /* @__PURE__ */ t(kd, { connection: c }),
-        /* @__PURE__ */ t("div", { className: Y.actions, ref: v, "data-ward-actions": !0, children: /* @__PURE__ */ t(cd, { actions: i, hasMore: B, collapsed: L, onOverflow: d, disclosure: le }) })
+        /* @__PURE__ */ t(Rd, { connection: c }),
+        /* @__PURE__ */ t("div", { className: Y.actions, ref: v, "data-ward-actions": !0, children: /* @__PURE__ */ t(hd, { actions: i, hasMore: B, collapsed: L, onOverflow: d, disclosure: le }) })
       ] })
     ] }),
-    /* @__PURE__ */ t(ud, { actions: ae, disclosure: le, onEscape: Le }),
-    /* @__PURE__ */ t(Nd, { actions: i, hasMore: B, measureRef: y })
+    /* @__PURE__ */ t(fd, { actions: ae, disclosure: le, onEscape: Le }),
+    /* @__PURE__ */ t(Sd, { actions: i, hasMore: B, measureRef: y })
   ] });
 }
-const $d = "_root_td96x_2", Cd = "_body_td96x_16", xt = {
-  root: $d,
-  body: Cd
+const Td = "_root_td96x_2", xd = "_body_td96x_16", xt = {
+  root: Td,
+  body: xd
 };
-function MS({ variant: e = "info", ticket: a, children: n }) {
+function DS({ variant: e = "info", ticket: a, children: n }) {
   if (!a) throw new Error("Callout: a callout must cite the ticket that decided it");
   return /* @__PURE__ */ t("aside", { className: `${xt.root} ward-callout${e === "warn" ? " ward-callout--warn" : ""}`, role: "note", "data-variant": e, "data-ticket": a, children: /* @__PURE__ */ t("div", { className: xt.body, children: n }) });
 }
-const Sd = "_root_bf1pc_2", Rd = "_table_bf1pc_9", Td = "_caption_bf1pc_14", xd = "_series_bf1pc_23", Ld = "_category_bf1pc_31", Ad = "_cell_bf1pc_39", Ed = "_track_bf1pc_45", Id = "_lane_bf1pc_52", Md = "_bar_bf1pc_56", Bd = "_value_bf1pc_63", Pd = "_swatch_bf1pc_70", Dd = "_empty_bf1pc_78", J = {
-  root: Sd,
-  table: Rd,
-  caption: Td,
-  series: xd,
-  category: Ld,
-  cell: Ad,
-  track: Ed,
-  lane: Id,
-  bar: Md,
-  value: Bd,
-  swatch: Pd,
-  empty: Dd
-}, Od = "—", Lt = 6;
-function Hd(e, a) {
+const Ld = "_root_bf1pc_2", Ad = "_table_bf1pc_9", Ed = "_caption_bf1pc_14", Id = "_series_bf1pc_23", Md = "_category_bf1pc_31", Bd = "_cell_bf1pc_39", Pd = "_track_bf1pc_45", jd = "_lane_bf1pc_52", Dd = "_bar_bf1pc_56", Od = "_value_bf1pc_63", Hd = "_swatch_bf1pc_70", Fd = "_empty_bf1pc_78", J = {
+  root: Ld,
+  table: Ad,
+  caption: Ed,
+  series: Id,
+  category: Md,
+  cell: Bd,
+  track: Pd,
+  lane: jd,
+  bar: Dd,
+  value: Od,
+  swatch: Hd,
+  empty: Fd
+}, qd = "—", Lt = 6;
+function Wd(e, a) {
   if (a.length < 1 || a.length > Lt)
     throw new Error(`BarChart: ${a.length} series; the chart takes one to ${Lt}`);
   const n = a.find((r) => r.values.length !== e.length);
   if (n) throw new Error(`BarChart: series "${n.name}" has ${n.values.length} values for ${e.length} categories`);
 }
-function Fd(e) {
+function zd(e) {
   return Math.max(0, ...e.flatMap((a) => a.values.map((n) => n ?? 0)));
 }
 function Nn(e, a) {
   return a > 1 ? e + 1 : void 0;
 }
-function jd(e, a) {
+function Kd(e, a) {
   return e !== null && a > 0 ? e / a * 100 : 0;
 }
-function qd({ value: e, top: a, step: n, format: r, missing: l }) {
-  const i = jd(e, a), s = { "--share": `${i}%` };
+function Gd({ value: e, top: a, step: n, format: r, missing: l }) {
+  const i = Kd(e, a), s = { "--share": `${i}%` };
   return /* @__PURE__ */ t("td", { className: J.cell, children: /* @__PURE__ */ o("span", { className: J.track, children: [
     /* @__PURE__ */ t("span", { className: J.lane, children: i > 0 ? /* @__PURE__ */ t("span", { className: `${J.bar} ward-barchart-bar`, "data-step": n, style: s, "aria-hidden": "true" }) : null }),
     /* @__PURE__ */ t("span", { className: J.value, children: e === null ? l : r(e) })
   ] }) });
 }
-function zd({ series: e }) {
+function Ud({ series: e }) {
   return /* @__PURE__ */ t(T, { children: e.map((a, n) => /* @__PURE__ */ o("th", { scope: "col", className: J.series, children: [
     e.length > 1 ? /* @__PURE__ */ t("span", { className: J.swatch, "data-step": Nn(n, e.length), "aria-hidden": "true" }) : null,
     a.name
   ] }, a.name)) });
 }
-function Wd({ title: e, empty: a = "Nothing to chart yet." }) {
+function Vd({ title: e, empty: a = "Nothing to chart yet." }) {
   return /* @__PURE__ */ o("section", { className: `${J.root} ward-barchart`, "aria-label": e, children: [
     /* @__PURE__ */ t("p", { className: J.caption, children: e }),
     /* @__PURE__ */ t("p", { className: J.empty, children: a })
   ] });
 }
-function Kd({ title: e, categories: a, series: n, top: r, format: l = ee, categoryHead: i = "Category", missing: s = Od }) {
+function Yd({ title: e, categories: a, series: n, top: r, format: l = ee, categoryHead: i = "Category", missing: s = qd }) {
   return /* @__PURE__ */ t("div", { className: `${J.root} ward-barchart`, children: /* @__PURE__ */ o("table", { className: J.table, children: [
     /* @__PURE__ */ t("caption", { className: J.caption, children: e }),
     /* @__PURE__ */ t("thead", { children: /* @__PURE__ */ o("tr", { children: [
       /* @__PURE__ */ t("th", { scope: "col", className: J.series, children: /* @__PURE__ */ t("span", { className: "ward-visually-hidden", children: i }) }),
-      /* @__PURE__ */ t(zd, { series: n })
+      /* @__PURE__ */ t(Ud, { series: n })
     ] }) }),
     /* @__PURE__ */ t("tbody", { children: a.map((c, d) => /* @__PURE__ */ o("tr", { children: [
       /* @__PURE__ */ t("th", { scope: "row", className: J.category, children: c }),
-      n.map((u, m) => /* @__PURE__ */ t(qd, { value: u.values[d], top: r, step: Nn(m, n.length), format: l, missing: s }, u.name))
+      n.map((u, m) => /* @__PURE__ */ t(Gd, { value: u.values[d], top: r, step: Nn(m, n.length), format: l, missing: s }, u.name))
     ] }, c)) })
   ] }) });
 }
-function BS(e) {
-  Hd(e.categories, e.series);
-  const a = Fd(e.series);
-  return a === 0 ? /* @__PURE__ */ t(Wd, { title: e.title, empty: e.empty }) : /* @__PURE__ */ t(Kd, { ...e, top: a });
+function OS(e) {
+  Wd(e.categories, e.series);
+  const a = zd(e.series);
+  return a === 0 ? /* @__PURE__ */ t(Vd, { title: e.title, empty: e.empty }) : /* @__PURE__ */ t(Yd, { ...e, top: a });
 }
-const Gd = "_root_1bfqw_2", Ud = "_figure_1bfqw_7", Vd = "_of_1bfqw_13", Yd = "_bar_1bfqw_18", Jd = "_rows_1bfqw_38", Xd = "_row_1bfqw_38", Qd = "_label_1bfqw_49", Zd = "_amount_1bfqw_54", Ee = {
-  root: Gd,
-  figure: Ud,
-  of: Vd,
-  bar: Yd,
-  rows: Jd,
-  row: Xd,
-  label: Qd,
-  amount: Zd
+const Jd = "_root_1bfqw_2", Xd = "_figure_1bfqw_7", Qd = "_of_1bfqw_13", Zd = "_bar_1bfqw_18", eu = "_rows_1bfqw_38", au = "_row_1bfqw_38", tu = "_label_1bfqw_49", nu = "_amount_1bfqw_54", Ee = {
+  root: Jd,
+  figure: Xd,
+  of: Qd,
+  bar: Zd,
+  rows: eu,
+  row: au,
+  label: tu,
+  amount: nu
 };
-function eu({ spent: e, ceiling: a, breakdown: n }) {
+function ru({ spent: e, ceiling: a, breakdown: n }) {
   const r = a > 0 ? Math.min(e / a, 1) : 0;
   return /* @__PURE__ */ o("div", { className: `${Ee.root} ward-costmeter`, children: [
     /* @__PURE__ */ o("p", { className: `${Ee.figure} ward-stat-value`, children: [
@@ -2543,40 +2553,40 @@ function eu({ spent: e, ceiling: a, breakdown: n }) {
     ] }, l.label)) })
   ] });
 }
-const au = "_frame_9xel2_2", tu = "_table_9xel2_6", nu = "_th_9xel2_12", ru = "_td_9xel2_13", lu = "_sort_9xel2_48", ou = "_row_9xel2_60", iu = "_empty_9xel2_68", Me = {
-  frame: au,
-  table: tu,
-  th: nu,
-  td: ru,
-  sort: lu,
-  row: ou,
-  empty: iu
-}, su = { asc: "ascending", desc: "descending" };
-function cu(e, a) {
+const lu = "_frame_9xel2_2", ou = "_table_9xel2_6", iu = "_th_9xel2_12", su = "_td_9xel2_13", cu = "_sort_9xel2_48", du = "_row_9xel2_60", uu = "_empty_9xel2_68", Me = {
+  frame: lu,
+  table: ou,
+  th: iu,
+  td: su,
+  sort: cu,
+  row: du,
+  empty: uu
+}, mu = { asc: "ascending", desc: "descending" };
+function hu(e, a) {
   if (!(a === void 0 || a.key !== e.key))
-    return su[a.direction];
+    return mu[a.direction];
 }
-function du(e, a) {
+function wu(e, a) {
   return e.sortable && a ? /* @__PURE__ */ t("button", { type: "button", className: Me.sort, onClick: () => a(e.key), children: e.header }) : e.header;
 }
-function uu(e) {
+function fu(e) {
   return e === void 0 ? void 0 : { width: e };
 }
-function mu({ column: e, sort: a, onSort: n }) {
+function _u({ column: e, sort: a, onSort: n }) {
   return /* @__PURE__ */ t(
     "th",
     {
       scope: "col",
       className: Me.th,
-      style: uu(e.width),
+      style: fu(e.width),
       "data-align": e.align,
       "data-drop": e.dropPriority,
-      "aria-sort": cu(e, a),
-      children: du(e, n)
+      "aria-sort": hu(e, a),
+      children: wu(e, n)
     }
   );
 }
-function hu({ row: e, props: a }) {
+function vu({ row: e, props: a }) {
   const n = a.rowId(e), r = (a.lockedIds ?? []).includes(n);
   return /* @__PURE__ */ t(
     "tr",
@@ -2589,7 +2599,7 @@ function hu({ row: e, props: a }) {
     }
   );
 }
-function wu({
+function bu({
   label: e,
   columns: a,
   rows: n,
@@ -2602,52 +2612,52 @@ function wu({
   empty: u
 }) {
   return n.length === 0 ? /* @__PURE__ */ t("div", { className: Me.empty, children: u }) : /* @__PURE__ */ t("div", { className: Me.frame, children: /* @__PURE__ */ o("table", { className: Me.table, "aria-label": e, children: [
-    /* @__PURE__ */ t("thead", { children: /* @__PURE__ */ t("tr", { className: Me.head, children: a.map((m) => /* @__PURE__ */ t(mu, { column: m, sort: c, onSort: d }, m.key)) }) }),
-    /* @__PURE__ */ t("tbody", { children: n.map((m) => /* @__PURE__ */ t(hu, { row: m, props: { label: e, columns: a, rows: n, rowId: r, renderCell: l, selectedId: i, lockedIds: s, sort: c, onSort: d, empty: u } }, r(m))) })
+    /* @__PURE__ */ t("thead", { children: /* @__PURE__ */ t("tr", { className: Me.head, children: a.map((m) => /* @__PURE__ */ t(_u, { column: m, sort: c, onSort: d }, m.key)) }) }),
+    /* @__PURE__ */ t("tbody", { children: n.map((m) => /* @__PURE__ */ t(vu, { row: m, props: { label: e, columns: a, rows: n, rowId: r, renderCell: l, selectedId: i, lockedIds: s, sort: c, onSort: d, empty: u } }, r(m))) })
   ] }) });
 }
-const fu = "_list_v0s52_2", _u = {
-  list: fu
+const pu = "_list_v0s52_2", gu = {
+  list: pu
 };
-function PS({ children: e, label: a }) {
-  return /* @__PURE__ */ t("ul", { className: _u.list, role: "list", "aria-label": a, "data-ward-plain-list": "", children: e });
+function HS({ children: e, label: a }) {
+  return /* @__PURE__ */ t("ul", { className: gu.list, role: "list", "aria-label": a, "data-ward-plain-list": "", children: e });
 }
-const vu = "_label_1u62a_2", bu = {
-  label: vu
+const yu = "_label_1u62a_2", Nu = {
+  label: yu
 };
-function DS({ columns: e }) {
-  return /* @__PURE__ */ t("thead", { "data-ward-table-head": "", children: /* @__PURE__ */ t("tr", { children: e.map((a) => /* @__PURE__ */ t("th", { scope: "col", title: a.header, style: a.width === void 0 ? void 0 : { width: a.width }, children: /* @__PURE__ */ t("span", { className: bu.label, children: a.header }) }, a.key)) }) });
+function FS({ columns: e }) {
+  return /* @__PURE__ */ t("thead", { "data-ward-table-head": "", children: /* @__PURE__ */ t("tr", { children: e.map((a) => /* @__PURE__ */ t("th", { scope: "col", title: a.header, style: a.width === void 0 ? void 0 : { width: a.width }, children: /* @__PURE__ */ t("span", { className: Nu.label, children: a.header }) }, a.key)) }) });
 }
-const pu = "_stack_bp6a0_2", gu = {
-  stack: pu
+const ku = "_stack_bp6a0_2", $u = {
+  stack: ku
 };
-function OS({ children: e }) {
-  return /* @__PURE__ */ t("span", { className: gu.stack, "data-ward-action-stack": "", children: e });
+function qS({ children: e }) {
+  return /* @__PURE__ */ t("span", { className: $u.stack, "data-ward-action-stack": "", children: e });
 }
-const yu = "_set_1z0sq_2", Nu = "_legend_1z0sq_7", ku = "_row_1z0sq_15", $u = "_control_1z0sq_20", Cu = "_input_1z0sq_26", Su = "_label_1z0sq_31", Ru = "_consequence_1z0sq_36", Fe = {
-  set: yu,
-  legend: Nu,
-  row: ku,
-  control: $u,
-  input: Cu,
-  label: Su,
-  consequence: Ru
+const Cu = "_set_1z0sq_2", Su = "_legend_1z0sq_7", Ru = "_row_1z0sq_15", Tu = "_control_1z0sq_20", xu = "_input_1z0sq_26", Lu = "_label_1z0sq_31", Au = "_consequence_1z0sq_36", He = {
+  set: Cu,
+  legend: Su,
+  row: Ru,
+  control: Tu,
+  input: xu,
+  label: Lu,
+  consequence: Au
 };
 function kn({ legend: e, options: a, value: n, onChange: r, disabled: l, name: i, describedBy: s, variant: c }) {
   const d = N(), u = i ?? d;
-  return /* @__PURE__ */ o("fieldset", { className: Fe.set, "data-variant": c, children: [
-    /* @__PURE__ */ t("legend", { className: Fe.legend, children: e }),
+  return /* @__PURE__ */ o("fieldset", { className: He.set, "data-variant": c, children: [
+    /* @__PURE__ */ t("legend", { className: He.legend, children: e }),
     a.map((m) => {
       const w = `${u}-${m.value}`, v = m.consequence ? `${w}-note` : void 0;
-      return /* @__PURE__ */ o("div", { className: Fe.row, children: [
-        /* @__PURE__ */ o("span", { className: Fe.control, children: [
+      return /* @__PURE__ */ o("div", { className: He.row, children: [
+        /* @__PURE__ */ o("span", { className: He.control, children: [
           /* @__PURE__ */ t(
             "input",
             {
               id: w,
               type: "radio",
               name: u,
-              className: Fe.input,
+              className: He.input,
               value: m.value,
               checked: n === m.value,
               disabled: l,
@@ -2655,35 +2665,35 @@ function kn({ legend: e, options: a, value: n, onChange: r, disabled: l, name: i
               onChange: () => !l && (r == null ? void 0 : r(m.value))
             }
           ),
-          /* @__PURE__ */ t("label", { htmlFor: w, className: Fe.label, children: m.label })
+          /* @__PURE__ */ t("label", { htmlFor: w, className: He.label, children: m.label })
         ] }),
-        m.consequence && /* @__PURE__ */ t("p", { id: v, className: `${Fe.consequence} ward-check-consequence`, children: m.consequence })
+        m.consequence && /* @__PURE__ */ t("p", { id: v, className: `${He.consequence} ward-check-consequence`, children: m.consequence })
       ] }, m.value);
     })
   ] });
 }
-const Tu = "_root_11gpw_2", xu = "_head_11gpw_10", Lu = "_note_11gpw_29", Au = "_index_11gpw_34", Eu = "_dot_11gpw_38", Iu = "_counter_11gpw_49", Mu = "_trailing_11gpw_57", qe = {
-  root: Tu,
-  head: xu,
-  note: Lu,
-  index: Au,
-  dot: Eu,
-  counter: Iu,
-  trailing: Mu
+const Eu = "_root_11gpw_2", Iu = "_head_11gpw_10", Mu = "_note_11gpw_29", Bu = "_index_11gpw_34", Pu = "_dot_11gpw_38", ju = "_counter_11gpw_49", Du = "_trailing_11gpw_57", qe = {
+  root: Eu,
+  head: Iu,
+  note: Mu,
+  index: Bu,
+  dot: Pu,
+  counter: ju,
+  trailing: Du
 };
-function Bu({ index: e }) {
+function Ou({ index: e }) {
   return e ? /* @__PURE__ */ o(T, { children: [
     /* @__PURE__ */ t("span", { className: `${qe.index} ward-sh-index`, children: e }),
     /* @__PURE__ */ t("span", { className: qe.dot, "aria-hidden": "true", children: "·" })
   ] }) : null;
 }
-function Pu({ counter: e }) {
+function Hu({ counter: e }) {
   return e ? /* @__PURE__ */ t("span", { className: qe.counter, "aria-hidden": "true", children: e }) : null;
 }
 function At({ title: e, index: a, note: n, counter: r, kind: l = "micro", trailing: i }) {
   return /* @__PURE__ */ o("div", { className: `${qe.root} ward-sh`, "data-kind": l, children: [
     /* @__PURE__ */ o("h2", { className: qe.head, children: [
-      /* @__PURE__ */ t(Bu, { index: a }),
+      /* @__PURE__ */ t(Ou, { index: a }),
       e,
       r && /* @__PURE__ */ o("span", { className: "ward-visually-hidden", children: [
         " · ",
@@ -2691,58 +2701,58 @@ function At({ title: e, index: a, note: n, counter: r, kind: l = "micro", traili
       ] })
     ] }),
     n && /* @__PURE__ */ t("span", { className: qe.note, children: n }),
-    /* @__PURE__ */ t(Pu, { counter: r }),
+    /* @__PURE__ */ t(Hu, { counter: r }),
     i === void 0 ? null : /* @__PURE__ */ t("span", { className: qe.trailing, children: i })
   ] });
 }
-const Du = "_strip_ww53x_2", Ou = "_cell_ww53x_7", Hu = "_value_ww53x_12", Fu = "_link_ww53x_29", ju = "_label_ww53x_49", Ke = {
-  strip: Du,
-  cell: Ou,
-  value: Hu,
-  link: Fu,
-  label: ju
+const Fu = "_strip_ww53x_2", qu = "_cell_ww53x_7", Wu = "_value_ww53x_12", zu = "_link_ww53x_29", Ku = "_label_ww53x_49", Ke = {
+  strip: Fu,
+  cell: qu,
+  value: Wu,
+  link: zu,
+  label: Ku
 };
-function qu(e) {
+function Gu(e) {
   if (e.length < 2 || e.length > 4)
     throw new Error(`StatStrip: ${e.length} cells — the strip takes two to four`);
   if (e.filter((a) => a.accent).length > 1) throw new Error("StatStrip: only the cell carrying the argument may be accented");
 }
 const $n = (e) => `${Ke.value} ward-stat-value${e.accent ? ` ward-stat-accent--${e.accent}` : ""}`;
-function zu({ cell: e }) {
+function Uu({ cell: e }) {
   return /* @__PURE__ */ o("div", { className: Ke.cell, "data-accent": e.accent, children: [
     /* @__PURE__ */ t("dd", { className: $n(e), title: e.hint, children: e.value }),
     /* @__PURE__ */ t("dt", { className: `${Ke.label} ward-stat-label`, children: e.label })
   ] });
 }
-function Wu({ cell: e, href: a }) {
+function Vu({ cell: e, href: a }) {
   return /* @__PURE__ */ o("div", { className: Ke.cell, "data-accent": e.accent, "data-ward-rowlink": !0, children: [
     /* @__PURE__ */ t("dt", { className: "ward-visually-hidden", children: e.label }),
-    /* @__PURE__ */ t("dd", { className: $n(e), title: e.hint, children: /* @__PURE__ */ o("a", { className: `${Ke.link} ward-stat-link`, href: j(a), "aria-label": `${e.label}: ${e.value}`, children: [
+    /* @__PURE__ */ t("dd", { className: $n(e), title: e.hint, children: /* @__PURE__ */ o("a", { className: `${Ke.link} ward-stat-link`, href: F(a), "aria-label": `${e.label}: ${e.value}`, children: [
       /* @__PURE__ */ t("span", { children: e.value }),
       /* @__PURE__ */ t("span", { className: `${Ke.label} ward-stat-label`, children: e.label })
     ] }) })
   ] });
 }
 function Pa({ cells: e, divided: a = !1 }) {
-  return qu(e), /* @__PURE__ */ t("dl", { className: `${Ke.strip} ward-statstrip`, "data-divided": a || void 0, children: e.map((n) => n.href === void 0 ? /* @__PURE__ */ t(zu, { cell: n }, n.label) : /* @__PURE__ */ t(Wu, { cell: n, href: n.href }, n.label)) });
+  return Gu(e), /* @__PURE__ */ t("dl", { className: `${Ke.strip} ward-statstrip`, "data-divided": a || void 0, children: e.map((n) => n.href === void 0 ? /* @__PURE__ */ t(Uu, { cell: n }, n.label) : /* @__PURE__ */ t(Vu, { cell: n, href: n.href }, n.label)) });
 }
-const Ku = "_root_1eb1u_2", Gu = "_track_1eb1u_8", Uu = "_thumb_1eb1u_46", Vu = "_labelHidden_1eb1u_64", Yu = "_label_1eb1u_64", Ju = "_lockedNote_1eb1u_84", ze = {
-  root: Ku,
-  track: Gu,
-  thumb: Uu,
-  labelHidden: Vu,
-  label: Yu,
-  lockedNote: Ju
+const Yu = "_root_1eb1u_2", Ju = "_track_1eb1u_8", Xu = "_thumb_1eb1u_46", Qu = "_labelHidden_1eb1u_64", Zu = "_label_1eb1u_64", em = "_lockedNote_1eb1u_84", We = {
+  root: Yu,
+  track: Ju,
+  thumb: Xu,
+  labelHidden: Qu,
+  label: Zu,
+  lockedNote: em
 };
-function Xu(e, a, n, r) {
+function am(e, a, n, r) {
   return { on: n ? !0 : e, off: !!(a || n || r) };
 }
-function Qu(e) {
-  return e ? `${ze.label} ${ze.labelHidden}` : ze.label;
+function tm(e) {
+  return e ? `${We.label} ${We.labelHidden}` : We.label;
 }
 function Ge({ label: e, checked: a, onChange: n, disabled: r, locked: l, describedBy: i, labelHidden: s }) {
-  const c = N(), d = `${c}switch`, u = De(), { on: m, off: w } = Xu(a, r, l, u !== null);
-  return /* @__PURE__ */ o("span", { className: `${ze.root} ward-switchrow`, children: [
+  const c = N(), d = `${c}switch`, u = je(), { on: m, off: w } = am(a, r, l, u !== null);
+  return /* @__PURE__ */ o("span", { className: `${We.root} ward-switchrow`, children: [
     /* @__PURE__ */ t(
       "button",
       {
@@ -2754,42 +2764,42 @@ function Ge({ label: e, checked: a, onChange: n, disabled: r, locked: l, describ
         "aria-labelledby": c,
         "aria-describedby": Ea(i, u),
         title: u == null ? void 0 : u.reason,
-        className: `${ze.track} ward-switch`,
+        className: `${We.track} ward-switch`,
         "data-on": m,
         "data-locked": l ? !0 : void 0,
         disabled: w,
         onClick: () => !w && (n == null ? void 0 : n(!m)),
-        children: /* @__PURE__ */ t("span", { className: ze.thumb })
+        children: /* @__PURE__ */ t("span", { className: We.thumb })
       }
     ),
-    /* @__PURE__ */ o("label", { id: c, htmlFor: d, className: Qu(s), children: [
+    /* @__PURE__ */ o("label", { id: c, htmlFor: d, className: tm(s), children: [
       e,
-      l && /* @__PURE__ */ t("span", { className: ze.lockedNote, children: "always on" })
+      l && /* @__PURE__ */ t("span", { className: We.lockedNote, children: "always on" })
     ] })
   ] });
 }
-const Zu = "_bar_1vp69_2", em = "_skip_1vp69_11", am = "_mark_1vp69_22", tm = "_nav_1vp69_30", nm = "_list_1vp69_34", rm = "_select_1vp69_41", lm = "_selectTrigger_1vp69_45", om = "_dest_1vp69_52", im = "_actor_1vp69_71", sm = "_actorMark_1vp69_84", cm = "_actorLabel_1vp69_89", dm = "_tagline_1vp69_108", oe = {
-  bar: Zu,
-  skip: em,
-  mark: am,
-  nav: tm,
-  list: nm,
-  select: rm,
-  selectTrigger: lm,
-  dest: om,
-  actor: im,
-  actorMark: sm,
-  actorLabel: cm,
-  tagline: dm
+const nm = "_bar_1vp69_2", rm = "_skip_1vp69_11", lm = "_mark_1vp69_22", om = "_nav_1vp69_30", im = "_list_1vp69_34", sm = "_select_1vp69_41", cm = "_selectTrigger_1vp69_45", dm = "_dest_1vp69_52", um = "_actor_1vp69_71", mm = "_actorMark_1vp69_84", hm = "_actorLabel_1vp69_89", wm = "_tagline_1vp69_108", oe = {
+  bar: nm,
+  skip: rm,
+  mark: lm,
+  nav: om,
+  list: im,
+  select: sm,
+  selectTrigger: cm,
+  dest: dm,
+  actor: um,
+  actorMark: mm,
+  actorLabel: hm,
+  tagline: wm
 };
-function um(e) {
+function fm(e) {
   return e.split(/\s+/).slice(0, 2).map((a) => a[0] ?? "").join("").toUpperCase();
 }
-function mm(e) {
+function _m(e) {
   return typeof e == "string" ? e : e == null ? void 0 : e.label;
 }
-function HS({ wordmark: e = "Trellis", destinations: a, active: n, actor: r, tagline: l, onNavigate: i, skipTo: s = "main" }) {
-  const c = mm(r);
+function WS({ wordmark: e = "Trellis", destinations: a, active: n, actor: r, tagline: l, onNavigate: i, skipTo: s = "main" }) {
+  const c = _m(r);
   return /* @__PURE__ */ o("header", { className: oe.bar, children: [
     /* @__PURE__ */ t("a", { className: `${oe.skip} ward-target`, href: `#${s}`, children: "Skip to content" }),
     /* @__PURE__ */ t("span", { className: oe.mark, children: e }),
@@ -2799,7 +2809,7 @@ function HS({ wordmark: e = "Trellis", destinations: a, active: n, actor: r, tag
         "a",
         {
           className: `${oe.dest} ward-target`,
-          href: j(d.href),
+          href: F(d.href),
           "aria-current": d.id === n ? "page" : void 0,
           onClick: () => i == null ? void 0 : i(d.id),
           children: d.label
@@ -2819,61 +2829,61 @@ function HS({ wordmark: e = "Trellis", destinations: a, active: n, actor: r, tag
     ] }),
     c && /* @__PURE__ */ o("span", { className: oe.actor, children: [
       /* @__PURE__ */ t("span", { className: oe.actorLabel, children: c }),
-      /* @__PURE__ */ t("span", { className: oe.actorMark, "aria-hidden": "true", children: um(c) })
+      /* @__PURE__ */ t("span", { className: oe.actorMark, "aria-hidden": "true", children: fm(c) })
     ] })
   ] });
 }
-const hm = "_tree_zzoob_2", wm = "_item_zzoob_6", fm = "_row_zzoob_10", _m = "_button_zzoob_22", ka = {
-  tree: hm,
-  item: wm,
-  row: fm,
-  button: _m
+const vm = "_tree_zzoob_2", bm = "_item_zzoob_6", pm = "_row_zzoob_10", gm = "_button_zzoob_22", ka = {
+  tree: vm,
+  item: bm,
+  row: pm,
+  button: gm
 }, Cn = Te(null);
-function vm({ label: e, children: a }) {
+function ym({ label: e, children: a }) {
   const { containerProps: n, itemProps: r } = xa({ orientation: "vertical" });
   return /* @__PURE__ */ t(Cn.Provider, { value: r, children: /* @__PURE__ */ t("ul", { className: ka.tree, role: "tree", "aria-label": e, ...n, children: a }) });
 }
-const bm = { ArrowRight: !0, ArrowLeft: !1 };
+const Nm = { ArrowRight: !0, ArrowLeft: !1 };
 function Et(e) {
   return e ? !0 : void 0;
 }
-function pm(e, a) {
-  const n = bm[e.key];
+function km(e, a) {
+  const n = Nm[e.key];
   !a.leaf && a.onToggle && n !== void 0 && !!a.expanded !== n && a.onToggle();
 }
-function gm(e) {
+function $m(e) {
   var a, n;
   e.leaf || (a = e.onToggle) == null || a.call(e), (n = e.onSelect) == null || n.call(e);
 }
-function ym(e) {
+function Cm(e) {
   const a = [ka.row, "ward-treerow"];
   return e.unresolved && a.push("ward-treerow--unresolved"), e.inherited && a.push("ward-treerow--inherited"), a.join(" ");
 }
-function Nm(e) {
+function Sm(e) {
   return e.leaf ? void 0 : !!e.expanded;
 }
-function km(e) {
+function Rm(e) {
   return e.leaf ? "·" : e.expanded ? "▾" : "▸";
 }
-function $m(e) {
+function Tm(e) {
   return typeof e == "string" ? e : void 0;
 }
-function Cm({ value: e }) {
+function xm({ value: e }) {
   return e === void 0 ? null : /* @__PURE__ */ t("span", { className: "ward-treeitem-mark ward-truncate", children: e });
 }
-function Sm({ unresolved: e, inherited: a }) {
+function Lm({ unresolved: e, inherited: a }) {
   const n = [e ? "unresolved" : "", a ? "inherited" : ""].filter(Boolean).join(", ");
   return n === "" ? null : /* @__PURE__ */ t("span", { className: "ward-visually-hidden", children: n });
 }
 function Sn(e) {
   const a = Re(Cn);
   if (!a) throw new Error("TreeRow: must be rendered inside a Tree");
-  const n = Nm(e);
+  const n = Sm(e);
   return /* @__PURE__ */ o("li", { className: ka.item, role: "none", children: [
     /* @__PURE__ */ t(
       "div",
       {
-        className: ym(e),
+        className: Cm(e),
         role: "treeitem",
         style: { "--depth": e.depth },
         "aria-level": e.depth + 1,
@@ -2887,14 +2897,14 @@ function Sn(e) {
           {
             type: "button",
             className: `${ka.button} ward-treeitem-btn`,
-            onClick: () => gm(e),
-            onKeyDown: (r) => pm(r, e),
+            onClick: () => $m(e),
+            onKeyDown: (r) => km(r, e),
             ...a(e.index),
             children: [
-              /* @__PURE__ */ t("span", { className: "ward-treeitem-mark", "aria-hidden": "true", children: km(e) }),
-              /* @__PURE__ */ t("span", { className: "ward-truncate", title: $m(e.label), children: e.label }),
-              /* @__PURE__ */ t(Cm, { value: e.detail }),
-              /* @__PURE__ */ t(Sm, { unresolved: e.unresolved, inherited: e.inherited })
+              /* @__PURE__ */ t("span", { className: "ward-treeitem-mark", "aria-hidden": "true", children: Rm(e) }),
+              /* @__PURE__ */ t("span", { className: "ward-truncate", title: Tm(e.label), children: e.label }),
+              /* @__PURE__ */ t(xm, { value: e.detail }),
+              /* @__PURE__ */ t(Lm, { unresolved: e.unresolved, inherited: e.inherited })
             ]
           }
         )
@@ -2903,45 +2913,45 @@ function Sn(e) {
     n && e.children ? /* @__PURE__ */ t("ul", { role: "group", children: e.children }) : null
   ] });
 }
-const Rm = "_frame_1nuth_2", Tm = "_subjectRail_1nuth_22", xm = "_subject_1nuth_22", Lm = "_rail_1nuth_42", Am = "_record_1nuth_66", Em = "_recordBody_1nuth_71", Im = "_stageGrid_1nuth_120", Mm = "_band_1nuth_146", Bm = "_bandBody_1nuth_154", Pm = "_bandActions_1nuth_159", Dm = "_scroller_1nuth_167", Om = "_board_1nuth_203", Hm = "_lanes_1nuth_212", Z = {
-  frame: Rm,
-  subjectRail: Tm,
-  subject: xm,
-  rail: Lm,
-  record: Am,
-  recordBody: Em,
-  stageGrid: Im,
-  band: Mm,
-  bandBody: Bm,
-  bandActions: Pm,
-  scroller: Dm,
-  board: Om,
-  lanes: Hm
+const Am = "_frame_gij4e_2", Em = "_subjectRail_gij4e_22", Im = "_subject_gij4e_22", Mm = "_rail_gij4e_42", Bm = "_record_gij4e_66", Pm = "_recordBody_gij4e_71", jm = "_stageGrid_gij4e_120", Dm = "_band_gij4e_134", Om = "_bandBody_gij4e_142", Hm = "_bandActions_gij4e_147", Fm = "_scroller_gij4e_155", qm = "_board_gij4e_182", Wm = "_lanes_gij4e_191", Z = {
+  frame: Am,
+  subjectRail: Em,
+  subject: Im,
+  rail: Mm,
+  record: Bm,
+  recordBody: Pm,
+  stageGrid: jm,
+  band: Dm,
+  bandBody: Om,
+  bandActions: Hm,
+  scroller: Fm,
+  board: qm,
+  lanes: Wm
 };
-function FS({ children: e, as: a = "main", inset: n = "page" }) {
+function zS({ children: e, as: a = "main", inset: n = "page" }) {
   return /* @__PURE__ */ t(a, { className: Z.frame, "data-ward-page-frame": "", "data-inset": n, children: e });
 }
 function It(e) {
   return e ? "true" : void 0;
 }
-function jS({ children: e, rail: a, width: n = "preview", railLabel: r = "Supporting details", sticky: l, ruled: i }) {
+function KS({ children: e, rail: a, width: n = "preview", railLabel: r = "Supporting details", sticky: l, ruled: i }) {
   return /* @__PURE__ */ o("div", { className: Z.subjectRail, "data-ward-subject-rail": n, "data-ruled": It(i), children: [
     /* @__PURE__ */ t("div", { className: Z.subject, children: e }),
     /* @__PURE__ */ t("aside", { className: Z.rail, "data-sticky": It(l), "aria-label": r, children: a })
   ] });
 }
-function qS({ title: e, children: a, note: n, trailing: r, pad: l = "block", label: i, empty: s, measure: c }) {
+function GS({ title: e, children: a, note: n, trailing: r, pad: l = "block", label: i, empty: s, measure: c }) {
   return s === "inline" ? /* @__PURE__ */ t("section", { className: Z.record, "aria-label": i, "data-ward-record-section": "", "data-empty": "inline", children: /* @__PURE__ */ t(At, { kind: "key", title: e, note: a, trailing: r }) }) : /* @__PURE__ */ o("section", { className: Z.record, "aria-label": i, "data-ward-record-section": "", children: [
     /* @__PURE__ */ t(At, { kind: "key", title: e, note: n, trailing: r }),
     /* @__PURE__ */ t("div", { className: Z.recordBody, "data-pad": l, "data-measure": c, children: a })
   ] });
 }
-const Fm = "_form_1j8ub_2", jm = "_fields_1j8ub_9", qm = "_actions_1j8ub_19", qa = {
-  form: Fm,
-  fields: jm,
-  actions: qm
+const zm = "_form_1j8ub_2", Km = "_fields_1j8ub_9", Gm = "_actions_1j8ub_19", qa = {
+  form: zm,
+  fields: Km,
+  actions: Gm
 };
-function zS({ label: e, children: a, actions: n, onSubmit: r }) {
+function US({ label: e, children: a, actions: n, onSubmit: r }) {
   const l = (i) => {
     i.preventDefault(), r == null || r();
   };
@@ -2950,79 +2960,75 @@ function zS({ label: e, children: a, actions: n, onSubmit: r }) {
     n == null ? null : /* @__PURE__ */ t("div", { className: qa.actions, role: "group", "aria-label": `${e} actions`, children: n })
   ] });
 }
-function WS({ children: e, actions: a, label: n }) {
+function VS({ children: e, actions: a, label: n }) {
   return /* @__PURE__ */ o("section", { className: Z.band, "aria-label": n, "data-ward-section-band": "", children: [
     /* @__PURE__ */ t("div", { className: Z.bandBody, children: e }),
     a === void 0 ? null : /* @__PURE__ */ t("div", { className: Z.bandActions, children: a })
   ] });
 }
-const zm = "(max-width: 767.98px)";
+const Um = "(max-width: 767.98px)";
 function it({ label: e, children: a, laneCount: n }) {
-  const r = f(null);
-  Ma(r, n ?? _r.count(a));
-  const l = n === void 0 ? void 0 : { "--ward-board-lanes": n };
-  return /* @__PURE__ */ t("div", { ref: r, className: Z.scroller, role: "region", "aria-label": e, tabIndex: 0, "data-ward-board-scroller": "", style: l, children: a });
+  const r = n === void 0 ? void 0 : { "--ward-board-lanes": n };
+  return /* @__PURE__ */ t(Ma, { className: Z.scroller, label: e, count: n ?? _r.count(a), "data-ward-board-scroller": "", style: r, children: a });
 }
-function Wm({ lanes: e, label: a, laneLabel: n }) {
+function Vm({ lanes: e, label: a, laneLabel: n }) {
   const [r, l] = p(null), i = e.find((c) => c.id === r) ?? e[0], s = e.map((c) => ({ value: c.id, label: `${c.label} · ${c.count}` }));
   return /* @__PURE__ */ o("div", { className: Z.lanes, "data-ward-board-lanes": "", children: [
     /* @__PURE__ */ t(M, { kind: "select", label: n, value: (i == null ? void 0 : i.id) ?? "", options: s, onChange: l }),
     /* @__PURE__ */ t(it, { label: a, children: i == null ? void 0 : i.content })
   ] });
 }
-function Km({ lanes: e, label: a }) {
+function Ym({ lanes: e, label: a }) {
   return /* @__PURE__ */ t("div", { className: Z.board, "data-ward-board": "", children: /* @__PURE__ */ t(it, { label: a, laneCount: e.length, children: e.map((n) => /* @__PURE__ */ t(vr, { children: n.content }, n.id)) }) });
 }
-function KS({ children: e, label: a = "Workflow board", lanes: n, laneLabel: r = "Column" }) {
-  const l = Ia(zm);
-  return n === void 0 ? /* @__PURE__ */ t(it, { label: a, children: e }) : l ? /* @__PURE__ */ t(Wm, { lanes: n, label: a, laneLabel: r }) : /* @__PURE__ */ t(Km, { lanes: n, label: a });
+function YS({ children: e, label: a = "Workflow board", lanes: n, laneLabel: r = "Column" }) {
+  const l = Ia(Um);
+  return n === void 0 ? /* @__PURE__ */ t(it, { label: a, children: e }) : l ? /* @__PURE__ */ t(Vm, { lanes: n, label: a, laneLabel: r }) : /* @__PURE__ */ t(Ym, { lanes: n, label: a });
 }
-function GS({ columns: e, children: a, label: n = "Stages", floor: r = "stage" }) {
-  const l = f(null), i = Math.max(e, 1);
-  Ma(l, i);
-  const s = { "--ward-stage-grid-columns": i };
-  return /* @__PURE__ */ t("div", { ref: l, className: Z.stageGrid, role: "region", "aria-label": n, tabIndex: 0, "data-ward-stage-grid": "", "data-floor": r, style: s, children: a });
+function JS({ columns: e, children: a, label: n = "Stages", floor: r = "stage" }) {
+  const l = Math.max(e, 1), i = { "--ward-stage-grid-columns": l };
+  return /* @__PURE__ */ t(Ma, { className: Z.stageGrid, label: n, count: l, "data-ward-stage-grid": "", "data-floor": r, style: i, children: a });
 }
-const Gm = "_block_b38uc_3", Um = "_sentence_b38uc_10", Vm = "_meta_b38uc_19", Ym = "_action_b38uc_24", Jm = "_strip_b38uc_28", Xm = "_loading_b38uc_47", Qm = "_label_b38uc_55", Zm = "_counter_b38uc_62", be = {
-  block: Gm,
-  sentence: Um,
-  meta: Vm,
-  action: Ym,
-  strip: Jm,
-  loading: Xm,
-  label: Qm,
-  counter: Zm
+const Jm = "_block_b38uc_3", Xm = "_sentence_b38uc_10", Qm = "_meta_b38uc_19", Zm = "_action_b38uc_24", eh = "_strip_b38uc_28", ah = "_loading_b38uc_47", th = "_label_b38uc_55", nh = "_counter_b38uc_62", be = {
+  block: Jm,
+  sentence: Xm,
+  meta: Qm,
+  action: Zm,
+  strip: eh,
+  loading: ah,
+  label: th,
+  counter: nh
 };
-function eh({ action: e }) {
+function rh({ action: e }) {
   return e === void 0 ? null : /* @__PURE__ */ t("span", { className: be.action, children: /* @__PURE__ */ t(b, { onClick: e.onClick, children: e.label }) });
 }
-function Da({ sentence: e, action: a, children: n, role: r = "status", tone: l, kind: i }) {
+function ja({ sentence: e, action: a, children: n, role: r = "status", tone: l, kind: i }) {
   return /* @__PURE__ */ o("div", { className: `${be.block} ward-state${i === void 0 ? "" : ` ${i}`}`, role: r, "data-tone": l, children: [
     /* @__PURE__ */ t("p", { className: be.sentence, children: e }),
     n,
-    /* @__PURE__ */ t(eh, { action: a })
+    /* @__PURE__ */ t(rh, { action: a })
   ] });
 }
-function ah(e) {
-  return /* @__PURE__ */ t(Da, { ...e, kind: "ward-emptystate" });
+function lh(e) {
+  return /* @__PURE__ */ t(ja, { ...e, kind: "ward-emptystate" });
 }
-function US({ sentence: e, total: a, action: n }) {
-  return /* @__PURE__ */ t(Da, { sentence: e, action: n, children: /* @__PURE__ */ o("p", { className: be.meta, children: [
+function XS({ sentence: e, total: a, action: n }) {
+  return /* @__PURE__ */ t(ja, { sentence: e, action: n, children: /* @__PURE__ */ o("p", { className: be.meta, children: [
     "0 of ",
     a,
     " match the filter"
   ] }) });
 }
-function VS(e) {
-  return /* @__PURE__ */ t(Da, { ...e });
+function QS(e) {
+  return /* @__PURE__ */ t(ja, { ...e });
 }
-function YS({ sentence: e, at: a, onRetry: n }) {
-  return /* @__PURE__ */ t(Da, { role: "alert", tone: "failed", sentence: e, action: { label: "Retry", onClick: n }, children: /* @__PURE__ */ o("p", { className: be.meta, children: [
+function ZS({ sentence: e, at: a, onRetry: n }) {
+  return /* @__PURE__ */ t(ja, { role: "alert", tone: "failed", sentence: e, action: { label: "Retry", onClick: n }, children: /* @__PURE__ */ o("p", { className: be.meta, children: [
     "failed at ",
     de(a)
   ] }) });
 }
-function JS({ lastReachableAt: e, snapshotAt: a }) {
+function eR({ lastReachableAt: e, snapshotAt: a }) {
   return /* @__PURE__ */ o("div", { className: be.strip, role: "status", "data-tone": "warn", children: [
     "Live data stopped ",
     de(e),
@@ -3030,7 +3036,7 @@ function JS({ lastReachableAt: e, snapshotAt: a }) {
     de(a)
   ] });
 }
-function XS({ queued: e, since: a }) {
+function aR({ queued: e, since: a }) {
   return /* @__PURE__ */ o("div", { className: be.strip, role: "alert", "data-tone": "failed", children: [
     "Writes unavailable: ",
     e,
@@ -3038,7 +3044,7 @@ function XS({ queued: e, since: a }) {
     de(a)
   ] });
 }
-function QS({ label: e, startedAt: a }) {
+function tR({ label: e, startedAt: a }) {
   const n = f(a ?? (/* @__PURE__ */ new Date()).toISOString()), [r, l] = p(!1);
   S(() => {
     const s = window.setTimeout(() => l(!0), we.load);
@@ -3050,11 +3056,11 @@ function QS({ label: e, startedAt: a }) {
     r ? /* @__PURE__ */ t("span", { className: be.counter, children: at(i) }) : null
   ] });
 }
-const th = "_note_cigdt_2", nh = {
-  note: th
+const oh = "_note_cigdt_2", ih = {
+  note: oh
 };
-function rh({ label: e, count: a, cap: n }) {
-  return /* @__PURE__ */ o("p", { className: nh.note, role: "status", children: [
+function sh({ label: e, count: a, cap: n }) {
+  return /* @__PURE__ */ o("p", { className: ih.note, role: "status", children: [
     e,
     " is over cap now: ",
     a,
@@ -3062,24 +3068,24 @@ function rh({ label: e, count: a, cap: n }) {
     n
   ] });
 }
-const lh = "_card_k7btg_3", oh = "_hit_k7btg_31", ih = "_head_k7btg_44", sh = "_title_k7btg_51", ch = "_meta_k7btg_57", dh = "_since_k7btg_66", uh = "_sep_k7btg_76", mh = "_fields_k7btg_80", hh = "_field_k7btg_80", wh = "_last_k7btg_98", fh = "_reason_k7btg_110", se = {
-  card: lh,
-  hit: oh,
-  head: ih,
-  title: sh,
-  meta: ch,
-  since: dh,
-  sep: uh,
-  fields: mh,
-  field: hh,
-  last: wh,
-  reason: fh
-}, _h = {
+const ch = "_card_k7btg_3", dh = "_hit_k7btg_31", uh = "_head_k7btg_44", mh = "_title_k7btg_51", hh = "_meta_k7btg_57", wh = "_since_k7btg_66", fh = "_sep_k7btg_76", _h = "_fields_k7btg_80", vh = "_field_k7btg_80", bh = "_last_k7btg_98", ph = "_reason_k7btg_110", se = {
+  card: ch,
+  hit: dh,
+  head: uh,
+  title: mh,
+  meta: hh,
+  since: wh,
+  sep: fh,
+  fields: _h,
+  field: vh,
+  last: bh,
+  reason: ph
+}, gh = {
   "run.step": "blue",
   "run.finding": "orange",
   "run.finished": "green"
 };
-function vh(e, a, n) {
+function yh(e, a, n) {
   const r = _a(e, "blue"), l = _a(e, "orange"), i = _a(e, "green"), s = f(/* @__PURE__ */ new Set());
   S(() => {
     if (!n) return;
@@ -3087,21 +3093,21 @@ function vh(e, a, n) {
     return n.subscribe(a, (d) => {
       if (s.current.has(d.id)) return;
       s.current.add(d.id);
-      const u = _h[d.type];
+      const u = gh[d.type];
       u && c[u]();
     });
   }, [r, n, i, a, l]);
 }
-const bh = {
+const Nh = {
   key: (e) => e.key,
   lastAgentAction: (e) => e.lastAgentAction ?? "",
   cost: (e) => e.cost === void 0 ? "" : ne(e.cost),
   jiraLink: (e) => e.jiraKey ?? ""
 };
-function ph(e, a) {
-  return bh[a](e);
+function kh(e, a) {
+  return Nh[a](e);
 }
-function gh({ item: e, connection: a }) {
+function $h({ item: e, connection: a }) {
   const n = /* @__PURE__ */ t("span", { className: se.sep, "aria-hidden": "true", children: " · " });
   return e.run ? /* @__PURE__ */ o("p", { className: se.meta, "data-ward-card-meta": "", children: [
     "waits on ",
@@ -3118,41 +3124,41 @@ function gh({ item: e, connection: a }) {
     ] })
   ] });
 }
-function yh({ item: e }) {
+function Ch({ item: e }) {
   const a = e.run ? { role: "running", label: "Agent working" } : e.state;
   return /* @__PURE__ */ o("div", { className: se.head, children: [
     e.flagged && /* @__PURE__ */ t(h, { role: "drift", label: "Drift flag" }),
     a && /* @__PURE__ */ t(h, { role: a.role, label: a.label })
   ] });
 }
-function Nh({ reason: e }) {
+function Sh({ reason: e }) {
   return e ? /* @__PURE__ */ o("p", { className: se.reason, children: [
     "Blocked: ",
     e
   ] }) : null;
 }
-function kh({ item: e, fields: a }) {
-  return a.length === 0 ? null : /* @__PURE__ */ t("p", { className: se.fields, children: a.map((n) => /* @__PURE__ */ t("span", { className: se.field, children: ph(e, n) }, n)) });
+function Rh({ item: e, fields: a }) {
+  return a.length === 0 ? null : /* @__PURE__ */ t("p", { className: se.fields, children: a.map((n) => /* @__PURE__ */ t("span", { className: se.field, children: kh(e, n) }, n)) });
 }
 const Ja = (e) => e ? !0 : void 0;
-function $h(e) {
+function Th(e) {
   return { "--stream": pe(e.streamStep, "id") };
 }
-function Ch(e, a, n) {
+function xh(e, a, n) {
   e == null || e(a, n);
 }
-function Sh(e) {
+function Lh(e) {
   return (e == null ? void 0 : e.connection) ?? "live";
 }
-function Rh({ item: e, stale: a }) {
+function Ah({ item: e, stale: a }) {
   var r, l;
   const n = ((l = (r = e.run) == null ? void 0 : r.lastStep) == null ? void 0 : l.label) ?? e.finding;
   return n ? /* @__PURE__ */ t("p", { className: se.last, "data-stale": Ja(a), children: n }) : null;
 }
-function Oa(e) {
+function Da(e) {
   const a = e.fields ?? [], n = e.item, r = f(null);
-  vh(r, n.key, e.feed);
-  const l = Sh(e.feed), i = $h(n);
+  yh(r, n.key, e.feed);
+  const l = Lh(e.feed), i = Th(n);
   return /* @__PURE__ */ o(
     "div",
     {
@@ -3164,32 +3170,32 @@ function Oa(e) {
       "data-selected": Ja(e.selected),
       "data-flagged": Ja(n.flagged),
       children: [
-        /* @__PURE__ */ t("button", { type: "button", className: se.hit, onClick: (s) => Ch(e.onOpen, n.key, s.currentTarget), ...e.rovingProps, children: /* @__PURE__ */ o("span", { className: "ward-visually-hidden", children: [
+        /* @__PURE__ */ t("button", { type: "button", className: se.hit, onClick: (s) => xh(e.onOpen, n.key, s.currentTarget), ...e.rovingProps, children: /* @__PURE__ */ o("span", { className: "ward-visually-hidden", children: [
           n.key,
           " ",
           n.title
         ] }) }),
-        /* @__PURE__ */ t(yh, { item: n }),
+        /* @__PURE__ */ t(Ch, { item: n }),
         /* @__PURE__ */ t(ta, { as: "p", className: se.title, text: n.title }),
-        /* @__PURE__ */ t(gh, { item: n, connection: l }),
-        /* @__PURE__ */ t(Nh, { reason: n.blockedReason }),
-        /* @__PURE__ */ t(kh, { item: n, fields: a }),
-        /* @__PURE__ */ t(Rh, { item: n, stale: l === "stale" })
+        /* @__PURE__ */ t($h, { item: n, connection: l }),
+        /* @__PURE__ */ t(Sh, { reason: n.blockedReason }),
+        /* @__PURE__ */ t(Rh, { item: n, fields: a }),
+        /* @__PURE__ */ t(Ah, { item: n, stale: l === "stale" })
       ]
     }
   );
 }
-const Th = "_column_1j8bi_3", xh = "_head_1j8bi_21", Lh = "_label_1j8bi_30", Ah = "_count_1j8bi_39", Eh = "_list_1j8bi_53", la = {
-  column: Th,
-  head: xh,
-  label: Lh,
-  count: Ah,
-  list: Eh
+const Eh = "_column_1j8bi_3", Ih = "_head_1j8bi_21", Mh = "_label_1j8bi_30", Bh = "_count_1j8bi_39", Ph = "_list_1j8bi_53", la = {
+  column: Eh,
+  head: Ih,
+  label: Mh,
+  count: Bh,
+  list: Ph
 };
 function Rn(e, a) {
   return [...e].sort((n, r) => a === "oldest" ? r.timeInStage - n.timeInStage : n.timeInStage - r.timeInStage);
 }
-function Ih({ column: e, count: a, id: n }) {
+function jh({ column: e, count: a, id: n }) {
   return /* @__PURE__ */ o("div", { className: la.head, children: [
     /* @__PURE__ */ t("h2", { className: la.label, id: n, title: e.label, children: e.label }),
     e.gate && /* @__PURE__ */ t(h, { role: "gate", label: "Gate" }),
@@ -3199,11 +3205,11 @@ function Ih({ column: e, count: a, id: n }) {
     ] })
   ] });
 }
-function Mh(e) {
+function Dh(e) {
   return /* @__PURE__ */ t("div", { className: la.list, role: "list", children: e.rows.map((a, n) => {
     var r;
     return /* @__PURE__ */ t(
-      Oa,
+      Da,
       {
         item: a,
         fields: e.fields,
@@ -3217,64 +3223,64 @@ function Mh(e) {
     );
   }) });
 }
-function Bh({ column: e, items: a, fields: n, sort: r, onOpen: l, selectedKey: i, feed: s, roving: c, onKeyDown: d }) {
+function Oh({ column: e, items: a, fields: n, sort: r, onOpen: l, selectedKey: i, feed: s, roving: c, onKeyDown: d }) {
   const u = N(), m = e.cap !== void 0 && a.length > e.cap, w = Rn(a, r);
   return /* @__PURE__ */ o("section", { className: la.column, "aria-labelledby": u, "data-gate": e.gate ? !0 : void 0, "data-overcap": m ? !0 : void 0, onKeyDown: d, children: [
-    /* @__PURE__ */ t(Ih, { column: e, count: a.length, id: u }),
-    /* @__PURE__ */ t(Mh, { column: e, items: a, fields: n, sort: r, onOpen: l, selectedKey: i, feed: s, roving: c, rows: w }),
-    m && /* @__PURE__ */ t(rh, { label: e.label, count: a.length, cap: e.cap })
+    /* @__PURE__ */ t(jh, { column: e, count: a.length, id: u }),
+    /* @__PURE__ */ t(Dh, { column: e, items: a, fields: n, sort: r, onOpen: l, selectedKey: i, feed: s, roving: c, rows: w }),
+    m && /* @__PURE__ */ t(sh, { label: e.label, count: a.length, cap: e.cap })
   ] });
 }
-const Ph = "_foot_cs4jr_2", Dh = "_note_cs4jr_13", Oh = "_link_cs4jr_19", za = {
-  foot: Ph,
-  note: Dh,
-  link: Oh
+const Hh = "_foot_cs4jr_2", Fh = "_note_cs4jr_13", qh = "_link_cs4jr_19", Wa = {
+  foot: Hh,
+  note: Fh,
+  link: qh
 };
-function ZS({ configureHref: e }) {
-  return /* @__PURE__ */ o("footer", { className: za.foot, "data-ward-board-footnote": "", children: [
-    /* @__PURE__ */ t("p", { className: za.note, children: "Columns, labels and caps come from this stream's board config. Personal filters aren't saved to it." }),
-    e === void 0 ? null : /* @__PURE__ */ t("a", { className: `${za.link} ward-target`, href: j(e), children: "Configure board" })
+function nR({ configureHref: e }) {
+  return /* @__PURE__ */ o("footer", { className: Wa.foot, "data-ward-board-footnote": "", children: [
+    /* @__PURE__ */ t("p", { className: Wa.note, children: "Columns, labels and caps come from this stream's board config. Personal filters aren't saved to it." }),
+    e === void 0 ? null : /* @__PURE__ */ t("a", { className: `${Wa.link} ward-target`, href: F(e), children: "Configure board" })
   ] });
 }
-const Hh = "_head_1tfi5_3", Fh = "_identity_1tfi5_12", jh = "_titleRow_1tfi5_18", qh = "_title_1tfi5_18", zh = "_key_1tfi5_35", Wh = "_rollup_1tfi5_45", Kh = "_tools_1tfi5_53", Gh = "_swatch_1tfi5_101", Uh = "_mark_1tfi5_108", ke = {
-  head: Hh,
-  identity: Fh,
-  titleRow: jh,
-  title: qh,
-  key: zh,
-  rollup: Wh,
-  tools: Kh,
-  swatch: Gh,
-  mark: Uh
+const Wh = "_head_1tfi5_3", zh = "_identity_1tfi5_12", Kh = "_titleRow_1tfi5_18", Gh = "_title_1tfi5_18", Uh = "_key_1tfi5_35", Vh = "_rollup_1tfi5_45", Yh = "_tools_1tfi5_53", Jh = "_swatch_1tfi5_101", Xh = "_mark_1tfi5_108", ke = {
+  head: Wh,
+  identity: zh,
+  titleRow: Kh,
+  title: Gh,
+  key: Uh,
+  rollup: Vh,
+  tools: Yh,
+  swatch: Jh,
+  mark: Xh
 }, Mt = "initials:";
-function Vh(e) {
+function Qh(e) {
   return e === void 0 ? "loaded this week unavailable" : `${ee(e)} loaded this week`;
 }
-function Yh(e) {
-  const a = [Vh(e.loadedThisWeek)];
+function Zh(e) {
+  const a = [Qh(e.loadedThisWeek)];
   return e.agentsWorking !== void 0 && a.push(`${ee(e.agentsWorking)} agents working`), e.p50 !== void 0 && a.push(`P50 ${ce(e.p50)}`), e.p90 !== void 0 && a.push(`P90 ${ce(e.p90)}`), a.join(" · ");
 }
-function Jh(e) {
+function ew(e) {
   return /* @__PURE__ */ o(T, { children: [
     /* @__PURE__ */ o("span", { title: e.inFlightHint, children: [
       ee(e.inFlight),
       " in flight"
     ] }),
     " · ",
-    Yh(e)
+    Zh(e)
   ] });
 }
-function Xh(e) {
+function aw(e) {
   return e.startsWith(Mt) ? e.slice(Mt.length).split(/[\s_-]+/).filter(Boolean).slice(0, 2).map((n) => n[0].toUpperCase()).join("") : "";
 }
-function Qh({ markRef: e, streamStep: a }) {
+function tw({ markRef: e, streamStep: a }) {
   const n = { "--stream": pe(a, "id") };
-  return e ? /* @__PURE__ */ t("span", { className: `${ke.mark} ward-stream-mark`, style: n, "data-mark-ref": e, "aria-hidden": "true", children: Xh(e) }) : /* @__PURE__ */ t("span", { className: ke.swatch, style: n, "data-ward-stream-swatch": "", "aria-hidden": "true" });
+  return e ? /* @__PURE__ */ t("span", { className: `${ke.mark} ward-stream-mark`, style: n, "data-mark-ref": e, "aria-hidden": "true", children: aw(e) }) : /* @__PURE__ */ t("span", { className: ke.swatch, style: n, "data-ward-stream-swatch": "", "aria-hidden": "true" });
 }
-function Zh({ owners: e, owner: a, onOwnerChange: n }) {
+function nw({ owners: e, owner: a, onOwnerChange: n }) {
   return e === void 0 || e.length === 0 ? null : /* @__PURE__ */ t(M, { kind: "select", label: "Owner", value: a ?? e[0].value, onChange: n, options: e });
 }
-function eR({
+function rR({
   stream: e,
   rollups: a,
   connection: n,
@@ -3288,206 +3294,206 @@ function eR({
   return /* @__PURE__ */ o("div", { className: ke.head, children: [
     /* @__PURE__ */ o("div", { className: ke.identity, children: [
       /* @__PURE__ */ o("div", { className: ke.titleRow, children: [
-        /* @__PURE__ */ t(Qh, { markRef: e.markRef, streamStep: e.streamStep }),
+        /* @__PURE__ */ t(tw, { markRef: e.markRef, streamStep: e.streamStep }),
         /* @__PURE__ */ t("h1", { className: ke.title, children: e.name }),
         /* @__PURE__ */ t("span", { className: ke.key, children: e.key })
       ] }),
-      /* @__PURE__ */ t("p", { className: ke.rollup, "aria-live": "polite", children: Jh(a) })
+      /* @__PURE__ */ t("p", { className: ke.rollup, "aria-live": "polite", children: ew(a) })
     ] }),
     /* @__PURE__ */ o("div", { className: ke.tools, role: "region", "aria-label": "Board header controls", children: [
-      /* @__PURE__ */ t(Zh, { owners: l, owner: i, onOwnerChange: s }),
+      /* @__PURE__ */ t(nw, { owners: l, owner: i, onOwnerChange: s }),
       c === void 0 ? null : /* @__PURE__ */ t(b, { onClick: c, children: "Configure board" }),
       d,
       /* @__PURE__ */ t(ot, { connection: n, since: r ?? void 0 })
     ] })
   ] });
 }
-const ew = "_head_1sejb_14", aw = "_line_1sejb_15", tw = "_cHandle_1sejb_36", nw = "_cName_1sejb_41", rw = "_nameLine_1sejb_49", lw = "_cLabel_1sejb_56", ow = "_cCap_1sejb_61", iw = "_cShown_1sejb_66", sw = "_name_1sejb_49", cw = "_noCap_1sejb_88", dw = "_state_1sejb_102", uw = "_handle_1sejb_111", mw = "_sub_1sejb_137", D = {
-  head: ew,
-  line: aw,
-  cHandle: tw,
-  cName: nw,
-  nameLine: rw,
-  cLabel: lw,
-  cCap: ow,
-  cShown: iw,
-  name: sw,
-  noCap: cw,
-  state: dw,
-  handle: uw,
-  sub: mw
-}, hw = "can't be hidden or collapsed", ww = "terminal · counted, not a column";
-function aR() {
-  return /* @__PURE__ */ o("div", { className: D.head, "aria-hidden": "true", children: [
-    /* @__PURE__ */ t("span", { className: D.cHandle }),
-    /* @__PURE__ */ t("span", { className: D.cName, children: "Stage" }),
-    /* @__PURE__ */ t("span", { className: D.cLabel, children: "Column label" }),
-    /* @__PURE__ */ t("span", { className: D.cCap, children: "WIP cap" }),
-    /* @__PURE__ */ t("span", { className: D.cShown, children: "Shown" })
+const rw = "_head_1sejb_14", lw = "_line_1sejb_15", ow = "_cHandle_1sejb_36", iw = "_cName_1sejb_41", sw = "_nameLine_1sejb_49", cw = "_cLabel_1sejb_56", dw = "_cCap_1sejb_61", uw = "_cShown_1sejb_66", mw = "_name_1sejb_49", hw = "_noCap_1sejb_88", ww = "_state_1sejb_102", fw = "_handle_1sejb_111", _w = "_sub_1sejb_137", j = {
+  head: rw,
+  line: lw,
+  cHandle: ow,
+  cName: iw,
+  nameLine: sw,
+  cLabel: cw,
+  cCap: dw,
+  cShown: uw,
+  name: mw,
+  noCap: hw,
+  state: ww,
+  handle: fw,
+  sub: _w
+}, vw = "can't be hidden or collapsed", bw = "terminal · counted, not a column";
+function lR() {
+  return /* @__PURE__ */ o("div", { className: j.head, "aria-hidden": "true", children: [
+    /* @__PURE__ */ t("span", { className: j.cHandle }),
+    /* @__PURE__ */ t("span", { className: j.cName, children: "Stage" }),
+    /* @__PURE__ */ t("span", { className: j.cLabel, children: "Column label" }),
+    /* @__PURE__ */ t("span", { className: j.cCap, children: "WIP cap" }),
+    /* @__PURE__ */ t("span", { className: j.cShown, children: "Shown" })
   ] });
 }
-function fw(e, a) {
+function pw(e, a) {
   return e.gate ? { shown: !0, state: "locked" } : e.terminal ? { shown: !1, state: "off" } : { shown: a, state: a ? "on" : "off" };
 }
-function _w(e) {
+function gw(e) {
   if (e !== 0)
     return e === 1 ? "1 agent mounted" : `${e} agents mounted`;
 }
 function Bt(e) {
-  return e.gate ? hw : e.terminal ? ww : _w(e.agentsMounted);
+  return e.gate ? vw : e.terminal ? bw : gw(e.agentsMounted);
 }
-function vw(e, a) {
+function yw(e, a) {
   e.key === "ArrowUp" && (a == null || a(-1)), e.key === "ArrowDown" && (a == null || a(1));
 }
-function bw({ stage: e }) {
-  return /* @__PURE__ */ o("span", { className: D.cName, children: [
-    /* @__PURE__ */ o("span", { className: D.nameLine, children: [
-      /* @__PURE__ */ t("span", { className: D.name, children: e.name }),
+function Nw({ stage: e }) {
+  return /* @__PURE__ */ o("span", { className: j.cName, children: [
+    /* @__PURE__ */ o("span", { className: j.nameLine, children: [
+      /* @__PURE__ */ t("span", { className: j.name, children: e.name }),
       e.gate && /* @__PURE__ */ t(h, { role: "gate", label: "Human gate", size: "tag" })
     ] }),
-    Bt(e) && /* @__PURE__ */ t("span", { className: D.sub, children: Bt(e) })
+    Bt(e) && /* @__PURE__ */ t("span", { className: j.sub, children: Bt(e) })
   ] });
 }
-function pw(e) {
+function kw(e) {
   return e === void 0 ? "" : String(e);
 }
-function gw(e) {
+function $w(e) {
   return e === "" ? void 0 : Number(e);
 }
-function yw({ name: e, onReorder: a }) {
-  const n = De();
-  return /* @__PURE__ */ t("span", { className: D.cHandle, children: /* @__PURE__ */ t(
+function Cw({ name: e, onReorder: a }) {
+  const n = je();
+  return /* @__PURE__ */ t("span", { className: j.cHandle, children: /* @__PURE__ */ t(
     "button",
     {
       type: "button",
-      className: D.handle,
+      className: j.handle,
       "aria-label": `Reorder ${e}`,
       disabled: n !== null,
       title: n == null ? void 0 : n.reason,
       "aria-describedby": n == null ? void 0 : n.reasonId,
-      onKeyDown: (r) => !n && vw(r, a),
+      onKeyDown: (r) => !n && yw(r, a),
       children: "⠿"
     }
   ) });
 }
-function Nw({ stage: e, config: a, onChange: n }) {
-  return e.terminal ? /* @__PURE__ */ t("span", { className: `${D.cCap} ${D.noCap}`, "aria-hidden": "true", children: "—" }) : /* @__PURE__ */ t("span", { className: D.cCap, children: /* @__PURE__ */ t(M, { kind: "input", label: "WIP cap", labelHidden: !0, placeholder: "none", value: pw(a.cap), onChange: (r) => n({ ...a, cap: gw(r) }) }) });
+function Sw({ stage: e, config: a, onChange: n }) {
+  return e.terminal ? /* @__PURE__ */ t("span", { className: `${j.cCap} ${j.noCap}`, "aria-hidden": "true", children: "—" }) : /* @__PURE__ */ t("span", { className: j.cCap, children: /* @__PURE__ */ t(M, { kind: "input", label: "WIP cap", labelHidden: !0, placeholder: "none", value: kw(a.cap), onChange: (r) => n({ ...a, cap: $w(r) }) }) });
 }
-function kw({ stage: e, config: a, onChange: n }) {
-  const r = De() !== null, l = fw(e, a.shown), i = e.gate || e.terminal || r, s = (c) => n({ ...a, shown: c });
-  return /* @__PURE__ */ o("span", { className: D.cShown, children: [
+function Rw({ stage: e, config: a, onChange: n }) {
+  const r = je() !== null, l = pw(e, a.shown), i = e.gate || e.terminal || r, s = (c) => n({ ...a, shown: c });
+  return /* @__PURE__ */ o("span", { className: j.cShown, children: [
     /* @__PURE__ */ t(Ge, { label: "Shown as a column", labelHidden: !0, checked: l.shown, locked: e.gate, disabled: e.terminal, onChange: s }),
-    /* @__PURE__ */ t("span", { className: D.state, "data-fixed": i || void 0, "aria-hidden": "true", onClick: () => !i && s(!l.shown), children: l.state })
+    /* @__PURE__ */ t("span", { className: j.state, "data-fixed": i || void 0, "aria-hidden": "true", onClick: () => !i && s(!l.shown), children: l.state })
   ] });
 }
-function $w(e) {
+function Tw(e) {
   return e.gate ? "gate" : e.terminal ? "terminal" : void 0;
 }
-function tR({ stage: e, config: a, onChange: n, onReorder: r }) {
-  return /* @__PURE__ */ o("div", { className: D.line, "data-kind": $w(e), children: [
-    /* @__PURE__ */ t(yw, { name: e.name, onReorder: r }),
-    /* @__PURE__ */ t(bw, { stage: e }),
-    /* @__PURE__ */ t("span", { className: D.cLabel, children: /* @__PURE__ */ t(M, { kind: "input", label: "Column label", labelHidden: !0, value: a.label, onChange: (l) => n({ ...a, label: l }) }) }),
-    /* @__PURE__ */ t(Nw, { stage: e, config: a, onChange: n }),
-    /* @__PURE__ */ t(kw, { stage: e, config: a, onChange: n })
+function oR({ stage: e, config: a, onChange: n, onReorder: r }) {
+  return /* @__PURE__ */ o("div", { className: j.line, "data-kind": Tw(e), children: [
+    /* @__PURE__ */ t(Cw, { name: e.name, onReorder: r }),
+    /* @__PURE__ */ t(Nw, { stage: e }),
+    /* @__PURE__ */ t("span", { className: j.cLabel, children: /* @__PURE__ */ t(M, { kind: "input", label: "Column label", labelHidden: !0, value: a.label, onChange: (l) => n({ ...a, label: l }) }) }),
+    /* @__PURE__ */ t(Sw, { stage: e, config: a, onChange: n }),
+    /* @__PURE__ */ t(Rw, { stage: e, config: a, onChange: n })
   ] });
 }
-const Cw = "_body_1a4f4_2", Sw = "_head_1a4f4_9", Rw = "_summary_1a4f4_19", Tw = "_block_1a4f4_20", xw = "_actionsBlock_1a4f4_21", Lw = "_title_1a4f4_41", Aw = "_note_1a4f4_46", Ew = "_k_1a4f4_51", Iw = "_kv_1a4f4_58", Mw = "_row_1a4f4_64", Bw = "_label_1a4f4_75", Pw = "_value_1a4f4_84", Dw = "_quote_1a4f4_90", Ow = "_actions_1a4f4_21", Hw = "_resolve_1a4f4_103", O = {
-  body: Cw,
-  head: Sw,
-  summary: Rw,
-  block: Tw,
-  actionsBlock: xw,
-  title: Lw,
-  note: Aw,
-  k: Ew,
-  kv: Iw,
-  row: Mw,
-  label: Bw,
-  value: Pw,
-  quote: Dw,
-  actions: Ow,
-  resolve: Hw
+const xw = "_body_1a4f4_2", Lw = "_head_1a4f4_9", Aw = "_summary_1a4f4_19", Ew = "_block_1a4f4_20", Iw = "_actionsBlock_1a4f4_21", Mw = "_title_1a4f4_41", Bw = "_note_1a4f4_46", Pw = "_k_1a4f4_51", jw = "_kv_1a4f4_58", Dw = "_row_1a4f4_64", Ow = "_label_1a4f4_75", Hw = "_value_1a4f4_84", Fw = "_quote_1a4f4_90", qw = "_actions_1a4f4_21", Ww = "_resolve_1a4f4_103", D = {
+  body: xw,
+  head: Lw,
+  summary: Aw,
+  block: Ew,
+  actionsBlock: Iw,
+  title: Mw,
+  note: Bw,
+  k: Pw,
+  kv: jw,
+  row: Dw,
+  label: Ow,
+  value: Hw,
+  quote: Fw,
+  actions: qw,
+  resolve: Ww
 };
-function Fw(e) {
+function zw(e) {
   return e.blockedReason ? [["Blocked", e.blockedReason]] : [];
 }
-function jw(e, a) {
+function Kw(e, a) {
   if (!e.run) return [];
   const n = (a == null ? void 0 : a.connection) ?? "live";
   return [["Running", /* @__PURE__ */ t(xe, { startedAt: e.run.startedAt, connection: n, turn: e.run.turn, lastEvent: e.run.lastStep }, "l")]];
 }
-function qw(e) {
+function Gw(e) {
   const a = da(e);
   return a === null ? "No colour" : `Step ${a}`;
 }
-function zw(e) {
+function Uw(e) {
   return (e ?? []).map((a, n) => [a.label, a.value, `fact-${n}`]);
 }
-function Ww(e, a, n) {
+function Vw(e, a, n) {
   return [
-    ["Stream", e.streamName ?? /* @__PURE__ */ t(h, { ...Ba(qw(e.streamStep), e.streamStep) }, "s")],
+    ["Stream", e.streamName ?? /* @__PURE__ */ t(h, { ...Ba(Gw(e.streamStep), e.streamStep) }, "s")],
     ["Workflow", e.workflow],
     ["State", e.stateLabel],
     ["Time in stage", ce(e.timeInStage)],
     ["Waits on", e.run ? e.run.agent : e.waitsOn],
-    ...Fw(e),
-    ...zw(n),
-    ...jw(e, a)
+    ...zw(e),
+    ...Uw(n),
+    ...Kw(e, a)
   ];
 }
-function Kw({ resolve: e, label: a }) {
-  return e == null ? null : /* @__PURE__ */ o("section", { className: O.resolve, "aria-label": a, children: [
-    /* @__PURE__ */ t("h3", { className: O.k, children: a }),
+function Yw({ resolve: e, label: a }) {
+  return e == null ? null : /* @__PURE__ */ o("section", { className: D.resolve, "aria-label": a, children: [
+    /* @__PURE__ */ t("h3", { className: D.k, children: a }),
     e
   ] });
 }
-function Gw(e) {
+function Jw(e) {
   return e.run ? { role: "running", label: "Agent working" } : e.state;
 }
-function Uw({ item: e, showKey: a }) {
-  const n = Gw(e);
-  return !a && !n ? null : /* @__PURE__ */ o("div", { className: O.head, children: [
+function Xw({ item: e, showKey: a }) {
+  const n = Jw(e);
+  return !a && !n ? null : /* @__PURE__ */ o("div", { className: D.head, children: [
     a && /* @__PURE__ */ t(h, { role: "meta", label: e.key }),
     n && /* @__PURE__ */ t(h, { role: n.role, label: n.label })
   ] });
 }
-function Vw({ item: e }) {
-  return e.agentSentence ? /* @__PURE__ */ o("div", { className: O.block, children: [
-    /* @__PURE__ */ t("p", { className: O.k, children: "What the agent says" }),
-    /* @__PURE__ */ t("p", { className: O.quote, children: e.agentSentence }),
-    e.agentMeta && /* @__PURE__ */ t("p", { className: O.note, children: e.agentMeta })
+function Qw({ item: e }) {
+  return e.agentSentence ? /* @__PURE__ */ o("div", { className: D.block, children: [
+    /* @__PURE__ */ t("p", { className: D.k, children: "What the agent says" }),
+    /* @__PURE__ */ t("p", { className: D.quote, children: e.agentSentence }),
+    e.agentMeta && /* @__PURE__ */ t("p", { className: D.note, children: e.agentMeta })
   ] }) : null;
 }
-function nR({ item: e, actions: a, onClose: n, returnFocusTo: r, feed: l, resolve: i, resolveLabel: s, actionsNote: c, facts: d, showKey: u = !1 }) {
-  const m = N(), w = Ww(e, l, d);
-  return /* @__PURE__ */ t(na, { kind: "drawer", labelledBy: m, onClose: n, returnFocusTo: r, flush: !0, children: /* @__PURE__ */ o("div", { className: O.body, children: [
-    /* @__PURE__ */ t(Uw, { item: e, showKey: u }),
-    /* @__PURE__ */ o("div", { className: O.summary, children: [
-      /* @__PURE__ */ t("h2", { className: O.title, id: m, children: e.title }),
-      e.summary && /* @__PURE__ */ t("p", { className: O.note, children: e.summary })
+function iR({ item: e, actions: a, onClose: n, returnFocusTo: r, feed: l, resolve: i, resolveLabel: s, actionsNote: c, facts: d, showKey: u = !1 }) {
+  const m = N(), w = Vw(e, l, d);
+  return /* @__PURE__ */ t(na, { kind: "drawer", labelledBy: m, onClose: n, returnFocusTo: r, flush: !0, children: /* @__PURE__ */ o("div", { className: D.body, children: [
+    /* @__PURE__ */ t(Xw, { item: e, showKey: u }),
+    /* @__PURE__ */ o("div", { className: D.summary, children: [
+      /* @__PURE__ */ t("h2", { className: D.title, id: m, children: e.title }),
+      e.summary && /* @__PURE__ */ t("p", { className: D.note, children: e.summary })
     ] }),
-    /* @__PURE__ */ t("dl", { className: O.kv, children: w.map(([v, y, L]) => /* @__PURE__ */ o("div", { className: O.row, children: [
-      /* @__PURE__ */ t("dt", { className: O.label, children: v }),
-      /* @__PURE__ */ t("dd", { className: O.value, children: y })
+    /* @__PURE__ */ t("dl", { className: D.kv, children: w.map(([v, y, L]) => /* @__PURE__ */ o("div", { className: D.row, children: [
+      /* @__PURE__ */ t("dt", { className: D.label, children: v }),
+      /* @__PURE__ */ t("dd", { className: D.value, children: y })
     ] }, L ?? v)) }),
-    /* @__PURE__ */ t(Vw, { item: e }),
-    /* @__PURE__ */ o("div", { className: O.actionsBlock, children: [
-      /* @__PURE__ */ t("div", { className: O.actions, children: a }),
-      c && /* @__PURE__ */ t("p", { className: O.note, children: c })
+    /* @__PURE__ */ t(Qw, { item: e }),
+    /* @__PURE__ */ o("div", { className: D.actionsBlock, children: [
+      /* @__PURE__ */ t("div", { className: D.actions, children: a }),
+      c && /* @__PURE__ */ t("p", { className: D.note, children: c })
     ] }),
-    /* @__PURE__ */ t(Kw, { resolve: i, label: s ?? "Ways out of this hold" })
+    /* @__PURE__ */ t(Yw, { resolve: i, label: s ?? "Ways out of this hold" })
   ] }) });
 }
-const Yw = "_root_3azmy_2", Jw = "_list_3azmy_7", Xw = "_item_3azmy_12", Qw = "_box_3azmy_18", Zw = "_text_3azmy_23", ef = "_note_3azmy_28", Ye = {
-  root: Yw,
-  list: Jw,
-  item: Xw,
-  box: Qw,
-  text: Zw,
-  note: ef
+const Zw = "_root_3azmy_2", ef = "_list_3azmy_7", af = "_item_3azmy_12", tf = "_box_3azmy_18", nf = "_text_3azmy_23", rf = "_note_3azmy_28", Ye = {
+  root: Zw,
+  list: ef,
+  item: af,
+  box: tf,
+  text: nf,
+  note: rf
 };
-function Ha({ items: e, note: a, density: n }) {
+function Oa({ items: e, note: a, density: n }) {
   return /* @__PURE__ */ o("div", { className: Ye.root, "data-density": n, children: [
     /* @__PURE__ */ t("ul", { className: `${Ye.list} ward-checklist`, children: e.map((r) => /* @__PURE__ */ o("li", { className: `${Ye.item} ward-checklist-item`, "data-met": r.met, children: [
       /* @__PURE__ */ t("span", { role: "checkbox", "aria-checked": r.met, "aria-disabled": "true", "aria-label": r.text, className: Ye.box, children: /* @__PURE__ */ t(lt, { state: r.met ? "met" : "unmet" }) }),
@@ -3496,157 +3502,157 @@ function Ha({ items: e, note: a, density: n }) {
     a !== void 0 && /* @__PURE__ */ t("p", { className: `${Ye.note} ward-checklist-note`, children: a })
   ] });
 }
-const af = "_rail_znbbp_2", tf = "_k_znbbp_11", nf = "_head_znbbp_19", rf = "_section_znbbp_25", lf = "_card_znbbp_39", of = "_strip_znbbp_46", sf = "_skeleton_znbbp_60", cf = "_skeletonLabel_znbbp_74", df = "_bar_znbbp_80", uf = "_note_znbbp_89", me = {
-  rail: af,
-  k: tf,
-  head: nf,
-  section: rf,
-  card: lf,
-  strip: of,
-  skeleton: sf,
-  skeletonLabel: cf,
-  bar: df,
-  note: uf
+const lf = "_rail_znbbp_2", of = "_k_znbbp_11", sf = "_head_znbbp_19", cf = "_section_znbbp_25", df = "_card_znbbp_39", uf = "_strip_znbbp_46", mf = "_skeleton_znbbp_60", hf = "_skeletonLabel_znbbp_74", wf = "_bar_znbbp_80", ff = "_note_znbbp_89", me = {
+  rail: lf,
+  k: of,
+  head: sf,
+  section: cf,
+  card: df,
+  strip: uf,
+  skeleton: mf,
+  skeletonLabel: hf,
+  bar: wf,
+  note: ff
 };
-function mf(e) {
+function _f(e) {
   return (a) => e == null ? void 0 : e(a);
 }
-function Wa({ title: e, children: a }) {
+function za({ title: e, children: a }) {
   return /* @__PURE__ */ o("section", { className: me.section, "aria-label": e, children: [
     /* @__PURE__ */ t("h3", { className: me.k, children: e }),
     a
   ] });
 }
-function hf({ column: e, count: a }) {
+function vf({ column: e, count: a }) {
   return /* @__PURE__ */ o("div", { className: me.skeleton, "data-kind": e.gate ? "gate" : void 0, children: [
     /* @__PURE__ */ t("span", { className: me.skeletonLabel, children: e.label }),
     /* @__PURE__ */ t("span", { className: "ward-visually-hidden", children: `${a} ${a === 1 ? "item" : "items"}` }),
     Array.from({ length: a }, (n, r) => /* @__PURE__ */ t("span", { className: me.bar, "aria-hidden": "true" }, r))
   ] });
 }
-function wf({ draft: e, sample: a, open: n, feed: r }) {
-  return e.columns.map((l) => /* @__PURE__ */ t(Bh, { column: l, items: a.filter((i) => i.stage === l.id), fields: e.fields, sort: e.sort, onOpen: n, feed: r }, l.id));
+function bf({ draft: e, sample: a, open: n, feed: r }) {
+  return e.columns.map((l) => /* @__PURE__ */ t(Oh, { column: l, items: a.filter((i) => i.stage === l.id), fields: e.fields, sort: e.sort, onOpen: n, feed: r }, l.id));
 }
-function ff(e) {
-  return e.strip !== "skeleton" ? /* @__PURE__ */ t(wf, { draft: e.draft, sample: e.sample, open: e.open, feed: e.feed }) : e.draft.columns.map((a) => /* @__PURE__ */ t(hf, { column: a, count: e.sample.filter((n) => n.stage === a.id).length }, a.id));
+function pf(e) {
+  return e.strip !== "skeleton" ? /* @__PURE__ */ t(bf, { draft: e.draft, sample: e.sample, open: e.open, feed: e.feed }) : e.draft.columns.map((a) => /* @__PURE__ */ t(vf, { column: a, count: e.sample.filter((n) => n.stage === a.id).length }, a.id));
 }
-function rR(e) {
-  const a = mf(e.onOpen), n = Rn(e.sample, e.draft.sort)[0];
+function sR(e) {
+  const a = _f(e.onOpen), n = Rn(e.sample, e.draft.sort)[0];
   return /* @__PURE__ */ o("aside", { className: me.rail, "aria-label": "Preview", children: [
     /* @__PURE__ */ t("h2", { className: `${me.k} ${me.head}`, children: "Live preview" }),
-    /* @__PURE__ */ t(Wa, { title: "Card", children: /* @__PURE__ */ t("div", { className: me.card, children: n && /* @__PURE__ */ t(Oa, { item: n, fields: e.draft.fields, onOpen: a, feed: e.feed }) }) }),
-    /* @__PURE__ */ o(Wa, { title: `Columns · ${e.draft.columns.length} shown`, children: [
-      /* @__PURE__ */ t("div", { className: me.strip, role: "group", "aria-label": "Column preview", tabIndex: 0, "data-strip": e.strip ?? "cards", children: /* @__PURE__ */ t(ff, { ...e, open: a }) }),
+    /* @__PURE__ */ t(za, { title: "Card", children: /* @__PURE__ */ t("div", { className: me.card, children: n && /* @__PURE__ */ t(Da, { item: n, fields: e.draft.fields, onOpen: a, feed: e.feed }) }) }),
+    /* @__PURE__ */ o(za, { title: `Columns · ${e.draft.columns.length} shown`, children: [
+      /* @__PURE__ */ t("div", { className: me.strip, role: "group", "aria-label": "Column preview", tabIndex: 0, "data-strip": e.strip ?? "cards", children: /* @__PURE__ */ t(pf, { ...e, open: a }) }),
       e.columnsNote === void 0 ? null : /* @__PURE__ */ t("p", { className: me.note, children: e.columnsNote })
     ] }),
-    /* @__PURE__ */ t(Wa, { title: "Effect of this config", children: /* @__PURE__ */ t(Ha, { items: e.effects, density: "compact" }) })
+    /* @__PURE__ */ t(za, { title: "Effect of this config", children: /* @__PURE__ */ t(Oa, { items: e.effects, density: "compact" }) })
   ] });
 }
-function _f(e, a) {
+function gf(e, a) {
   return (n) => {
     e.current = n, a(n);
   };
 }
-function vf(e) {
+function yf(e) {
   return Math.ceil(e.length / 2);
 }
-function bf(e) {
+function Nf(e) {
   return e === "run.finding" ? "orange" : e === "run.finished" ? "green" : "blue";
 }
 function Tn(e) {
   return e.step === void 0 ? void 0 : e.step.label;
 }
-function pf(e, a, n, r) {
+function kf(e, a, n, r) {
   if (a.current.has(e.id)) return;
   a.current.add(e.id);
   const l = Tn(e);
-  l !== void 0 && n(l), r(bf(e.type));
+  l !== void 0 && n(l), r(Nf(e.type));
 }
-function gf(e, a, n, r, l) {
+function $f(e, a, n, r, l) {
   S(() => {
     if (e !== null)
-      return e.subscribe(a, (i) => pf(i, n, r, l));
+      return e.subscribe(a, (i) => kf(i, n, r, l));
   }, [e, a, n, r, l]);
 }
-function yf(e) {
+function Cf(e) {
   return e.run === void 0 ? void 0 : e.run.lastStep;
 }
-function Nf(e, a) {
+function Sf(e, a) {
   return a ? { role: "running", label: "Agent working" } : e.state ?? { role: "pending", label: e.key };
 }
-function kf(e, a) {
+function Rf(e, a) {
   return a !== void 0 ? ce(e.timeInStage) + " · waits on " + a.agent : ce(e.timeInStage) + " · waiting on " + e.waitsOn;
 }
-function $f(e, a) {
+function Tf(e, a) {
   return {
     "--stream": `var(--ward-stream-${e.streamStep}-chip)`,
-    minHeight: "calc(" + W.height.card + " + " + W.height.cardRow + " * " + String(vf(a ?? [])) + ")"
+    minHeight: "calc(" + z.height.card + " + " + z.height.cardRow + " * " + String(yf(a ?? [])) + ")"
   };
 }
-function Cf(e, a) {
+function xf(e, a) {
   return /* @__PURE__ */ t("span", { className: (a ?? []).includes("key") ? "ward-workcard-meta" : "ward-visually-hidden", children: e.key });
 }
-function Sf(e, a) {
+function Lf(e, a) {
   return e.cost !== void 0 && (a ?? []).includes("cost") ? /* @__PURE__ */ t(h, { role: "meta", label: ne(e.cost) }) : null;
 }
-function Rf(e, a) {
+function Af(e, a) {
   return e.jiraKey !== void 0 && (a ?? []).includes("jiraLink") ? /* @__PURE__ */ t(h, { role: "meta", label: e.jiraKey }) : null;
 }
-function Tf(e, a, n, r) {
+function Ef(e, a, n, r) {
   return e === void 0 ? null : /* @__PURE__ */ t(xe, { startedAt: e.startedAt, lastEvent: a === void 0 ? void 0 : { label: a, at: r }, connection: n ?? "live", turn: e.turn });
 }
-function xf(e, a, n) {
+function If(e, a, n) {
   return a === void 0 ? e.finding ?? "" : n ?? "";
 }
-function Lf(e, a) {
-  return a === void 0 ? e : _f(e, a.ref);
+function Mf(e, a) {
+  return a === void 0 ? e : gf(e, a.ref);
 }
-function Af(e) {
+function Bf(e) {
   return e.rovingItem ?? { tabIndex: e.tabIndex ?? 0 };
 }
 function ia(e) {
   return e === !0 ? "true" : void 0;
 }
 function xn(e) {
-  const a = e.item, n = a.run, r = n !== void 0, l = f(null), i = _a(l), s = f(/* @__PURE__ */ new Set()), [c, d] = p(yf(a));
-  gf(e.feed, a.key, s, d, i);
-  const u = Nf(a, r), m = kf(a, n), w = $f(a, e.fields), v = xf(a, n, c);
+  const a = e.item, n = a.run, r = n !== void 0, l = f(null), i = _a(l), s = f(/* @__PURE__ */ new Set()), [c, d] = p(Cf(a));
+  $f(e.feed, a.key, s, d, i);
+  const u = Sf(a, r), m = Rf(a, n), w = Tf(a, e.fields), v = If(a, n, c);
   return /* @__PURE__ */ t("li", { role: "listitem", style: { listStyle: "none" }, children: /* @__PURE__ */ o(
     "button",
     {
       type: "button",
-      ...Af(e),
+      ...Bf(e),
       className: "ward-workcard",
       "data-flagged": ia(a.flagged),
       "data-selected": ia(e.selected),
       style: w,
-      ref: Lf(l, e.rovingItem),
+      ref: Mf(l, e.rovingItem),
       onClick: () => e.onOpen(a.key),
       children: [
-        Cf(a, e.fields),
+        xf(a, e.fields),
         /* @__PURE__ */ t("span", { className: "ward-workcard-title ward-truncate", title: a.title, children: a.title }),
         a.flagged === !0 ? /* @__PURE__ */ t("span", { className: "ward-visually-hidden", children: "drift flag" }) : null,
         /* @__PURE__ */ o("span", { className: "ward-chiprow", children: [
           /* @__PURE__ */ t(h, { role: u.role, label: u.label }),
-          Sf(a, e.fields),
-          Rf(a, e.fields)
+          Lf(a, e.fields),
+          Af(a, e.fields)
         ] }),
         /* @__PURE__ */ t("span", { className: "ward-workcard-meta ward-truncate", title: m, children: m }),
         /* @__PURE__ */ o("span", { className: "ward-workcard-lastrow", children: [
-          Tf(n, c, e.connection, a.changedAt),
+          Ef(n, c, e.connection, a.changedAt),
           v !== "" ? /* @__PURE__ */ t("span", { className: "ward-truncate", title: v, children: v }) : null
         ] })
       ]
     }
   ) });
 }
-function Ef({ count: e, cap: a }) {
+function Pf({ count: e, cap: a }) {
   return /* @__PURE__ */ t("p", { className: "ward-overcap", role: "status", children: String(e) + " items in a column capped at " + String(a) + ". Move " + String(e - a) + " out or raise the cap." });
 }
-function If(e) {
+function jf(e) {
   return e.column.cap !== void 0 && e.items.length > e.column.cap;
 }
-function Mf(e, a, n) {
+function Df(e, a, n) {
   return /* @__PURE__ */ o("div", { className: "ward-boardcol-head", children: [
     /* @__PURE__ */ t("span", { id: n, className: "ward-boardcol-label", title: e.label, children: e.label }),
     /* @__PURE__ */ o("span", { className: "ward-chiprow", children: [
@@ -3655,16 +3661,16 @@ function Mf(e, a, n) {
     ] })
   ] });
 }
-function Bf(e, a) {
-  return !a || e.column.cap === void 0 ? null : /* @__PURE__ */ t(Ef, { count: e.items.length, cap: e.column.cap });
+function Of(e, a) {
+  return !a || e.column.cap === void 0 ? null : /* @__PURE__ */ t(Pf, { count: e.items.length, cap: e.column.cap });
 }
-function Pf(e, a) {
+function Hf(e, a) {
   return e.roving ?? a;
 }
-function Df(e, a) {
+function Ff(e, a) {
   return e.roving === void 0 ? a.containerProps : {};
 }
-function Of(e, a) {
+function qf(e, a) {
   return e.items.map((n, r) => /* @__PURE__ */ t(
     xn,
     {
@@ -3679,74 +3685,74 @@ function Of(e, a) {
     n.key
   ));
 }
-function Hf(e) {
-  const a = N(), n = xa({ orientation: "vertical" }), r = Pf(e, n), l = If(e);
+function Wf(e) {
+  const a = N(), n = xa({ orientation: "vertical" }), r = Hf(e, n), l = jf(e);
   return /* @__PURE__ */ o("section", { className: "ward-boardcol", "aria-labelledby": a, "data-overcap": ia(l), "data-gate": ia(e.column.gate), children: [
-    Mf(e.column, e.items.length, a),
-    Bf(e, l),
-    /* @__PURE__ */ t("ul", { role: "list", className: "ward-boardcol-list", ...Df(e, n), children: Of(e, r) })
+    Df(e.column, e.items.length, a),
+    Of(e, l),
+    /* @__PURE__ */ t("ul", { role: "list", className: "ward-boardcol-list", ...Ff(e, n), children: qf(e, r) })
   ] });
 }
-function Ff(e) {
+function zf(e) {
   let a = "in flight " + String(e.inFlight) + " · loaded this week " + String(e.loadedThisWeek) + " · agents working " + String(e.agentsWorking);
   return e.p50 !== void 0 && (a += " · p50 " + ce(e.p50)), e.p90 !== void 0 && (a += " · p90 " + ce(e.p90)), a;
 }
-function jf(e) {
+function Kf(e) {
   return e.owners === void 0 || e.owners.length === 0 ? null : /* @__PURE__ */ t(M, { kind: "select", label: "Owner", value: e.owner ?? e.owners[0], options: e.owners.map((a) => ({ value: a, label: a })), onChange: e.onOwnerChange });
 }
-function qf(e) {
+function Gf(e) {
   return e === void 0 ? null : /* @__PURE__ */ t(b, { variant: "secondary", size: "sm", label: "Configure board", onClick: e });
 }
-function lR(e) {
+function cR(e) {
   return /* @__PURE__ */ o("header", { className: "ward-boardheader", children: [
     /* @__PURE__ */ o("div", { children: [
       /* @__PURE__ */ o("div", { className: "ward-chiprow", children: [
         /* @__PURE__ */ t(h, { role: "stream", label: e.stream.name, streamStep: e.stream.streamStep }),
         /* @__PURE__ */ t(h, { role: "meta", label: e.stream.key })
       ] }),
-      /* @__PURE__ */ t("div", { className: "ward-rollup", "aria-live": "polite", children: Ff(e.rollups) })
+      /* @__PURE__ */ t("div", { className: "ward-rollup", "aria-live": "polite", children: zf(e.rollups) })
     ] }),
     /* @__PURE__ */ o("div", { className: "ward-chiprow", children: [
-      jf(e),
-      qf(e.onConfigure),
+      Kf(e),
+      Gf(e.onConfigure),
       /* @__PURE__ */ t(ot, { connection: e.connection, lastEventAt: e.lastEventAt })
     ] })
   ] });
 }
-function zf(e) {
+function Uf(e) {
   return e.gate === !0 || e.terminal === !0 || (e.agentsMounted ?? 0) > 0;
 }
-function Wf(e) {
+function Vf(e) {
   return e.stage.gate === !0 ? /* @__PURE__ */ t(Ge, { label: e.stage.name + " gate", checked: !0, onChange: void 0, locked: !0 }) : /* @__PURE__ */ t(Ge, { label: e.stage.terminal === !0 ? "terminal stage" : e.stage.name, checked: e.config.shown, onChange: (a) => e.onChange({ ...e.config, shown: a }) });
 }
-function Kf(e) {
+function Yf(e) {
   const a = e.agentsMounted ?? 0;
   return /* @__PURE__ */ o(T, { children: [
     a > 0 ? /* @__PURE__ */ t(h, { role: "running", label: String(a) + " AGENTS" }) : null,
     e.terminal === !0 ? /* @__PURE__ */ t(h, { role: "soft", label: "Terminal" }) : null
   ] });
 }
-function oR(e) {
+function dR(e) {
   const a = e.stage;
-  return /* @__PURE__ */ o("div", { className: "ward-configrow", "data-mandatory": ia(zf(a)), children: [
+  return /* @__PURE__ */ o("div", { className: "ward-configrow", "data-mandatory": ia(Uf(a)), children: [
     /* @__PURE__ */ t("span", { className: "ward-configrow-handle", "aria-hidden": "true", children: "⠿" }),
     /* @__PURE__ */ t("span", { className: "ward-truncate", title: e.config.label, children: e.config.label }),
-    /* @__PURE__ */ t("span", { children: Wf(e) }),
+    /* @__PURE__ */ t("span", { children: Vf(e) }),
     /* @__PURE__ */ t(M, { kind: "input", label: "Cap", mono: !0, value: e.config.cap ?? "", disabled: a.gate === !0, onChange: (n) => e.onChange({ ...e.config, cap: n }) }),
     /* @__PURE__ */ t(nn, { label: "Shown on cards", checked: e.config.shown, disabled: !0, locked: !0 }),
-    Kf(a),
+    Yf(a),
     /* @__PURE__ */ t("button", { type: "button", className: "ward-configrow-handle", "aria-label": "Move " + a.name + " up", disabled: e.onMoveUp === void 0, onClick: e.onMoveUp, children: "↑" }),
     /* @__PURE__ */ t("button", { type: "button", className: "ward-configrow-handle", "aria-label": "Move " + a.name + " down", disabled: e.onMoveDown === void 0, onClick: e.onMoveDown, children: "↓" })
   ] });
 }
-function iR(e) {
+function uR(e) {
   const a = e.sample[0];
   return /* @__PURE__ */ o("aside", { "aria-label": "Preview", className: "ward-previewrail", children: [
     a !== void 0 ? /* @__PURE__ */ t(xn, { item: a, fields: e.fields, onOpen: (n) => {
       var r;
       return (r = e.onOpen) == null ? void 0 : r.call(e, n);
     }, feed: null }) : null,
-    /* @__PURE__ */ t(Hf, { column: { id: "preview", label: e.columnLabel, cap: e.cap, gate: e.gate }, items: e.sample, fields: e.fields, onOpen: (n) => {
+    /* @__PURE__ */ t(Wf, { column: { id: "preview", label: e.columnLabel, cap: e.cap, gate: e.gate }, items: e.sample, fields: e.fields, onOpen: (n) => {
       var r;
       return (r = e.onOpen) == null ? void 0 : r.call(e, n);
     }, feed: null, selectedKey: null }),
@@ -3756,74 +3762,74 @@ function iR(e) {
     ] }, n.text)) })
   ] });
 }
-function Gf(e, a) {
+function Jf(e, a) {
   const n = Tn(e);
   n !== void 0 && a(n);
 }
-function Uf(e, a, n) {
+function Xf(e, a, n) {
   S(() => {
     if (e != null)
-      return e.subscribe(a, (r) => Gf(r, n));
+      return e.subscribe(a, (r) => Jf(r, n));
   }, [e, a, n]);
 }
-function Vf(e) {
+function Qf(e) {
   const a = [["key", e.key]];
   return e.stream !== void 0 && a.push(["stream", e.stream.name]), e.workflow !== void 0 && a.push(["workflow", e.workflow]), e.state !== void 0 && a.push(["state", e.state.label]), a;
 }
-function Yf(e) {
+function Zf(e) {
   const a = [];
   return e.timeInStage !== void 0 && a.push(["time in stage", ce(e.timeInStage)]), e.waitsOn !== void 0 && a.push(["waits on", e.waitsOn]), e.cost !== void 0 && a.push(["cost", ne(e.cost)]), a;
 }
-function Jf(e, a) {
+function e_(e, a) {
   return e === void 0 ? null : /* @__PURE__ */ t("div", { className: "ward-drawer-actions", children: /* @__PURE__ */ t(xe, { startedAt: e.startedAt, lastEvent: a === void 0 ? void 0 : { label: a, at: e.startedAt }, connection: "live", turn: e.turn }) });
 }
-function Xf(e, a) {
+function a_(e, a) {
   return /* @__PURE__ */ o(T, { children: [
     e.state !== void 0 ? /* @__PURE__ */ t(h, { role: e.state.role, label: e.state.label }) : null,
     e.agentSay !== void 0 ? /* @__PURE__ */ t("blockquote", { className: "ward-agentsay", children: e.agentSay }) : null,
     a !== void 0 && a.length > 0 ? /* @__PURE__ */ t("div", { className: "ward-drawer-actions", children: a }) : null
   ] });
 }
-function sR(e) {
+function mR(e) {
   var s;
   const a = e.item, n = a.run, [r, l] = p((s = a.run) == null ? void 0 : s.lastStep);
-  Uf(e.feed, a.key, l);
-  const i = [...Vf(a), ...Yf(a)];
+  Xf(e.feed, a.key, l);
+  const i = [...Qf(a), ...Zf(a)];
   return /* @__PURE__ */ o(na, { kind: "drawer", title: a.title, onClose: e.onClose, returnFocusTo: e.returnFocusTo, children: [
     /* @__PURE__ */ o("dl", { className: "ward-kv", children: [
       i.map((c) => /* @__PURE__ */ o("div", { children: [
         /* @__PURE__ */ t("dt", { children: c[0] }),
         /* @__PURE__ */ t("dd", { className: "ward-truncate", title: String(c[1]), children: c[1] })
       ] }, c[0])),
-      Jf(n, r)
+      e_(n, r)
     ] }),
-    Xf(a, e.actions)
+    a_(a, e.actions)
   ] });
 }
-const Qf = "_card_54446_3", Zf = "_head_54446_30", e_ = "_mark_54446_38", a_ = "_name_54446_50", t_ = "_chips_54446_71", n_ = "_description_54446_77", r_ = "_run_54446_82", l_ = "_sep_54446_91", o_ = "_facts_54446_96", i_ = "_fact_54446_96", s_ = "_factLabel_54446_109", c_ = "_factValue_54446_113", re = {
-  card: Qf,
-  head: Zf,
-  mark: e_,
-  name: a_,
-  chips: t_,
-  description: n_,
-  run: r_,
-  sep: l_,
-  facts: o_,
-  fact: i_,
-  factLabel: s_,
-  factValue: c_
-}, d_ = { live: "done", draft: "running", paused: "meta" };
-function u_(e) {
+const t_ = "_card_54446_3", n_ = "_head_54446_30", r_ = "_mark_54446_38", l_ = "_name_54446_50", o_ = "_chips_54446_71", i_ = "_description_54446_77", s_ = "_run_54446_82", c_ = "_sep_54446_91", d_ = "_facts_54446_96", u_ = "_fact_54446_96", m_ = "_factLabel_54446_109", h_ = "_factValue_54446_113", re = {
+  card: t_,
+  head: n_,
+  mark: r_,
+  name: l_,
+  chips: o_,
+  description: i_,
+  run: s_,
+  sep: c_,
+  facts: d_,
+  fact: u_,
+  factLabel: m_,
+  factValue: h_
+}, w_ = { live: "done", draft: "running", paused: "meta" };
+function f_(e) {
   return e === void 0 ? re.card : `${re.card} ${e}`;
 }
-function m_({ versions: e }) {
-  return /* @__PURE__ */ t("div", { className: re.chips, children: e.map((a) => /* @__PURE__ */ t(h, { role: d_[a.status], size: "tag", label: a.label ?? `${a.v} ${a.status}` }, a.v)) });
+function __({ versions: e }) {
+  return /* @__PURE__ */ t("div", { className: re.chips, children: e.map((a) => /* @__PURE__ */ t(h, { role: w_[a.status], size: "tag", label: a.label ?? `${a.v} ${a.status}` }, a.v)) });
 }
-function h_({ description: e }) {
+function v_({ description: e }) {
   return e === void 0 ? null : /* @__PURE__ */ t("p", { className: re.description, children: e });
 }
-function w_({ run: e, connection: a, lastEvent: n }) {
+function b_({ run: e, connection: a, lastEvent: n }) {
   return e === void 0 ? null : /* @__PURE__ */ o("p", { className: re.run, children: [
     "working on ",
     e.itemKey,
@@ -3831,71 +3837,71 @@ function w_({ run: e, connection: a, lastEvent: n }) {
     /* @__PURE__ */ t(xe, { startedAt: e.startedAt, connection: a ?? "live", lastEvent: n, turn: e.turn })
   ] });
 }
-function f_({ facts: e }) {
+function p_({ facts: e }) {
   return e === void 0 || e.length === 0 ? null : /* @__PURE__ */ t("dl", { className: re.facts, children: e.map((a) => /* @__PURE__ */ o("div", { className: re.fact, children: [
     /* @__PURE__ */ t("dt", { className: re.factLabel, children: a.label }),
     /* @__PURE__ */ t("dd", { className: re.factValue, children: a.value })
   ] }, a.label)) });
 }
-function __(e) {
+function g_(e) {
   return e.length > 0 && e.every((a) => a.status === "paused") ? !0 : void 0;
 }
-function v_({ agent: e, href: a, selected: n, connection: r = "live", lastEvent: l, facts: i, className: s }) {
+function y_({ agent: e, href: a, selected: n, connection: r = "live", lastEvent: l, facts: i, className: s }) {
   const c = { "--stream": pe(e.streamStep, "id") }, d = n ? "true" : void 0;
   return /* @__PURE__ */ o(
     "article",
     {
       "aria-current": d,
-      className: u_(s),
+      className: f_(s),
       style: c,
       "data-selected": d,
-      "data-paused": __(e.versions),
+      "data-paused": g_(e.versions),
       "data-ward-rowlink": !0,
       children: [
         /* @__PURE__ */ o("h3", { className: re.head, children: [
           /* @__PURE__ */ t("span", { className: re.mark, "aria-hidden": "true" }),
-          /* @__PURE__ */ t("a", { className: `${re.name} ward-rowlink ward-target`, href: j(a), "aria-current": d, children: e.name })
+          /* @__PURE__ */ t("a", { className: `${re.name} ward-rowlink ward-target`, href: F(a), "aria-current": d, children: e.name })
         ] }),
-        /* @__PURE__ */ t(h_, { description: e.description }),
-        /* @__PURE__ */ t(w_, { run: e.run, connection: r, lastEvent: l }),
-        /* @__PURE__ */ t(m_, { versions: e.versions }),
-        /* @__PURE__ */ t(f_, { facts: i })
+        /* @__PURE__ */ t(v_, { description: e.description }),
+        /* @__PURE__ */ t(b_, { run: e.run, connection: r, lastEvent: l }),
+        /* @__PURE__ */ t(__, { versions: e.versions }),
+        /* @__PURE__ */ t(p_, { facts: i })
       ]
     }
   );
 }
-const b_ = "_list_4dcyc_2", p_ = "_row_4dcyc_11", g_ = "_head_4dcyc_23", y_ = "_id_4dcyc_30", N_ = "_lock_4dcyc_35", k_ = "_reason_4dcyc_41", $_ = "_remove_4dcyc_46", C_ = "_clauses_4dcyc_50", S_ = "_clause_4dcyc_50", R_ = "_label_4dcyc_64", T_ = "_cell_4dcyc_71", x_ = "_value_4dcyc_76", ie = {
-  list: b_,
-  row: p_,
-  head: g_,
-  id: y_,
-  lock: N_,
-  reason: k_,
-  remove: $_,
-  clauses: C_,
-  clause: S_,
-  label: R_,
-  cell: T_,
-  value: x_
+const N_ = "_list_4dcyc_2", k_ = "_row_4dcyc_11", $_ = "_head_4dcyc_23", C_ = "_id_4dcyc_30", S_ = "_lock_4dcyc_35", R_ = "_reason_4dcyc_41", T_ = "_remove_4dcyc_46", x_ = "_clauses_4dcyc_50", L_ = "_clause_4dcyc_50", A_ = "_label_4dcyc_64", E_ = "_cell_4dcyc_71", I_ = "_value_4dcyc_76", ie = {
+  list: N_,
+  row: k_,
+  head: $_,
+  id: C_,
+  lock: S_,
+  reason: R_,
+  remove: T_,
+  clauses: x_,
+  clause: L_,
+  label: A_,
+  cell: E_,
+  value: I_
 }, Ln = Te(!1);
-function cR({ children: e, label: a = "Rules" }) {
+function hR({ children: e, label: a = "Rules" }) {
   return /* @__PURE__ */ t(Ln.Provider, { value: !0, children: /* @__PURE__ */ t("ol", { className: ie.list, "aria-label": a, children: e }) });
 }
-function L_({ clause: e, ruleId: a, onChange: n }) {
+function M_({ clause: e, ruleId: a, onChange: n }) {
   if (!n) return /* @__PURE__ */ t("span", { className: ie.value, children: e.value });
   const r = e.options ? "select" : "input";
   return /* @__PURE__ */ t(M, { kind: r, labelHidden: !0, label: `${a} ${e.label}`, value: e.value, options: e.options, invalid: e.invalid, onChange: (l) => n(e.key, l) });
 }
-function A_({ reason: e }) {
+function B_({ reason: e }) {
   return /* @__PURE__ */ o("span", { className: ie.lock, children: [
     /* @__PURE__ */ t(h, { role: "quiet", label: "Locked" }),
     e && /* @__PURE__ */ t("span", { className: ie.reason, children: e })
   ] });
 }
-function E_({ rule: e, onRemove: a }) {
+function P_({ rule: e, onRemove: a }) {
   return /* @__PURE__ */ o("span", { className: ie.head, children: [
     /* @__PURE__ */ t("span", { className: ie.id, children: e.id }),
-    e.locked && /* @__PURE__ */ t(A_, { reason: e.lockedReason }),
+    e.locked && /* @__PURE__ */ t(B_, { reason: e.lockedReason }),
     a && /* @__PURE__ */ t("span", { className: ie.remove, children: /* @__PURE__ */ o(b, { variant: "ghost", size: "sm", onClick: a, children: [
       "Remove ",
       e.id
@@ -3905,49 +3911,49 @@ function E_({ rule: e, onRemove: a }) {
 function Pt(e, a) {
   return e.locked ? void 0 : a;
 }
-function dR({ rule: e, onChange: a, onRemove: n }) {
+function wR({ rule: e, onChange: a, onRemove: n }) {
   if (!Re(Ln)) throw new Error("ClauseRuleRow: must be rendered inside ClauseRules");
   const r = Pt(e, a);
   return /* @__PURE__ */ o("li", { className: ie.row, "data-locked": e.locked ? "true" : void 0, children: [
-    /* @__PURE__ */ t(E_, { rule: e, onRemove: Pt(e, n) }),
+    /* @__PURE__ */ t(P_, { rule: e, onRemove: Pt(e, n) }),
     /* @__PURE__ */ t("dl", { className: ie.clauses, children: e.clauses.map((l) => /* @__PURE__ */ o("div", { className: ie.clause, children: [
       /* @__PURE__ */ t("dt", { className: ie.label, children: l.label }),
-      /* @__PURE__ */ t("dd", { className: ie.cell, children: /* @__PURE__ */ t(L_, { clause: l, ruleId: e.id, onChange: r }) })
+      /* @__PURE__ */ t("dd", { className: ie.cell, children: /* @__PURE__ */ t(M_, { clause: l, ruleId: e.id, onChange: r }) })
     ] }, l.key)) })
   ] });
 }
-const I_ = "_ladder_n8eeo_2", M_ = "_cell_n8eeo_7", B_ = "_empty_n8eeo_26", P_ = "_name_n8eeo_34", D_ = "_holder_n8eeo_40", O_ = "_request_n8eeo_46", H_ = "_swatches_n8eeo_51", F_ = "_swatch_n8eeo_51", j_ = "_tilesFrame_n8eeo_78", q_ = "_tiles_n8eeo_78", z_ = "_tile_n8eeo_78", W_ = "_bar_n8eeo_117", K_ = "_hex_n8eeo_128", G_ = "_note_n8eeo_138", E = {
-  ladder: I_,
-  cell: M_,
-  empty: B_,
-  name: P_,
-  holder: D_,
-  request: O_,
-  swatches: H_,
-  swatch: F_,
-  tilesFrame: j_,
-  tiles: q_,
-  tile: z_,
-  bar: W_,
-  hex: K_,
-  note: G_
-}, uR = "not validated yet, pending a CVD matrix and dark stepping";
-function U_(e) {
+const j_ = "_ladder_n8eeo_2", D_ = "_cell_n8eeo_7", O_ = "_empty_n8eeo_26", H_ = "_name_n8eeo_34", F_ = "_holder_n8eeo_40", q_ = "_request_n8eeo_46", W_ = "_swatches_n8eeo_51", z_ = "_swatch_n8eeo_51", K_ = "_tilesFrame_n8eeo_78", G_ = "_tiles_n8eeo_78", U_ = "_tile_n8eeo_78", V_ = "_bar_n8eeo_117", Y_ = "_hex_n8eeo_128", J_ = "_note_n8eeo_138", E = {
+  ladder: j_,
+  cell: D_,
+  empty: O_,
+  name: H_,
+  holder: F_,
+  request: q_,
+  swatches: W_,
+  swatch: z_,
+  tilesFrame: K_,
+  tiles: G_,
+  tile: U_,
+  bar: V_,
+  hex: Y_,
+  note: J_
+}, fR = "not validated yet, pending a CVD matrix and dark stepping";
+function X_(e) {
   return e.reserved ? "reserved" : Aa(e.step) ? "validated" : "partial";
 }
 function An(e, a) {
   return a !== void 0 && e !== "reserved" ? `taken by ${a}` : e === "reserved" ? "reserved" : e === "partial" ? "not validated" : "free";
 }
-function V_(e, a) {
+function Q_(e, a) {
   return a === "reserved" ? {} : { "--stream": `var(--ward-stream-${e.step}-id)` };
 }
-function Y_({ validation: e }) {
-  return e === "validated" ? /* @__PURE__ */ t(Oe, { size: 14, kind: "stream" }) : /* @__PURE__ */ t("span", { className: `${E.empty} ward-ladder-swatch ward-ladder-swatch--empty`, "aria-hidden": "true" });
+function Z_({ validation: e }) {
+  return e === "validated" ? /* @__PURE__ */ t(De, { size: 14, kind: "stream" }) : /* @__PURE__ */ t("span", { className: `${E.empty} ward-ladder-swatch ward-ladder-swatch--empty`, "aria-hidden": "true" });
 }
-function J_(e, a) {
+function ev(e, a) {
   e.key !== "Enter" && e.key !== " " || (e.preventDefault(), a());
 }
-function X_(e, a, n) {
+function av(e, a, n) {
   return {
     "aria-checked": a,
     "aria-disabled": n || void 0,
@@ -3956,60 +3962,60 @@ function X_(e, a, n) {
     "data-unavailable": e ? "true" : void 0
   };
 }
-const Dt = (e) => String(e).padStart(2, "0");
-function Q_(e, a, n) {
+const jt = (e) => String(e).padStart(2, "0");
+function tv(e, a, n) {
   return e === "reserved" ? "Reserved until revalidated" : n ? "yours" : a ?? An(e, void 0);
 }
-function Z_({ step: e, validation: a, note: n }) {
+function nv({ step: e, validation: a, note: n }) {
   const r = a === "reserved";
   return /* @__PURE__ */ o(T, { children: [
     /* @__PURE__ */ t("span", { className: `${E.bar} ward-ladder-bar`, "aria-hidden": "true" }),
-    /* @__PURE__ */ t("span", { className: `${E.hex} ward-ladder-hex`, children: r ? `step ${Dt(e)}` : Br(e) }),
-    /* @__PURE__ */ t("span", { className: `${E.note} ward-ladder-note`, children: r ? n : `Step ${Dt(e)} · ${n}` })
+    /* @__PURE__ */ t("span", { className: `${E.hex} ward-ladder-hex`, children: r ? `step ${jt(e)}` : Br(e) }),
+    /* @__PURE__ */ t("span", { className: `${E.note} ward-ladder-note`, children: r ? n : `Step ${jt(e)} · ${n}` })
   ] });
 }
-function ev({ step: e, value: a, taken: n, onChange: r, presentation: l, disabled: i }) {
-  const s = U_(e), c = An(s, n), d = c !== "free", u = d || i, m = a === e.step, w = e.name ?? `Step ${e.step}`, v = () => {
+function rv({ step: e, value: a, taken: n, onChange: r, presentation: l, disabled: i }) {
+  const s = X_(e), c = An(s, n), d = c !== "free", u = d || i, m = a === e.step, w = e.name ?? `Step ${e.step}`, v = () => {
     u || r(e.step);
   }, y = `${w} · ${l === "tiles" && m ? "yours" : c}`;
-  return { shared: { role: "radio", "aria-label": y, ...X_(d, m, u), "data-validation": s, style: V_(e, s), onClick: v, onKeyDown: (B) => J_(B, v) }, label: y, name: w, holder: c, validation: s, note: Q_(s, n, m), step: e.step };
+  return { shared: { role: "radio", "aria-label": y, ...av(d, m, u), "data-validation": s, style: Q_(e, s), onClick: v, onKeyDown: (B) => ev(B, v) }, label: y, name: w, holder: c, validation: s, note: tv(s, n, m), step: e.step };
 }
-const av = {
+const lv = {
   swatches: (e) => /* @__PURE__ */ t("span", { ...e.shared, title: e.label, className: `${E.swatch} ward-ladder-cell` }),
-  tiles: (e) => /* @__PURE__ */ t("span", { ...e.shared, className: `${E.tile} ward-ladder-cell`, children: /* @__PURE__ */ t(Z_, { step: e.step, validation: e.validation, note: e.note }) }),
+  tiles: (e) => /* @__PURE__ */ t("span", { ...e.shared, className: `${E.tile} ward-ladder-cell`, children: /* @__PURE__ */ t(nv, { step: e.step, validation: e.validation, note: e.note }) }),
   list: (e) => /* @__PURE__ */ o("span", { ...e.shared, className: `${E.cell} ward-ladder-cell`, children: [
-    /* @__PURE__ */ t(Y_, { validation: e.validation }),
+    /* @__PURE__ */ t(Z_, { validation: e.validation }),
     /* @__PURE__ */ t("span", { className: `${E.name} ward-ladder-name`, children: e.name }),
     /* @__PURE__ */ t("span", { className: `${E.holder} ward-ladder-holder`, children: e.holder })
   ] })
 };
-function tv(e) {
-  return av[e.presentation](ev(e));
+function ov(e) {
+  return lv[e.presentation](rv(e));
 }
-function nv(e) {
+function iv(e) {
   for (const a of e)
     if (!a.reserved && !La(a.step)) throw new Error("colour ladder renders token steps only");
 }
-function rv() {
+function sv() {
   return /* @__PURE__ */ o("div", { className: `${E.cell} ward-ladder-cell ${E.request}`, "data-validation": "request", children: [
     /* @__PURE__ */ t("span", { className: `${E.empty} ward-ladder-swatch ward-ladder-swatch--empty`, "aria-hidden": "true" }),
     /* @__PURE__ */ t("span", { className: `${E.name} ward-ladder-name`, children: "request" }),
     /* @__PURE__ */ t("span", { className: `${E.holder} ward-ladder-holder`, children: "Ask design for a new step" })
   ] });
 }
-function lv(e) {
+function cv(e) {
   return ("presentation" in e ? e.presentation : void 0) ?? "list";
 }
-const ov = { list: E.ladder, swatches: E.swatches, tiles: E.tilesFrame };
-function iv() {
+const dv = { list: E.ladder, swatches: E.swatches, tiles: E.tilesFrame };
+function uv() {
   return /* @__PURE__ */ o("div", { className: `${E.tile} ward-ladder-cell`, "data-validation": "request", children: [
     /* @__PURE__ */ t("span", { className: `${E.bar} ward-ladder-bar`, "aria-hidden": "true" }),
     /* @__PURE__ */ t("span", { className: `${E.hex} ward-ladder-hex`, children: "request" }),
     /* @__PURE__ */ t("span", { className: `${E.note} ward-ladder-note`, children: "Ask design for a new step" })
   ] });
 }
-const sv = { list: rv, swatches: () => null, tiles: iv };
-function cv(e) {
+const mv = { list: sv, swatches: () => null, tiles: uv };
+function hv(e) {
   return e ? { "aria-disabled": !0, "data-disabled": !0 } : {};
 }
 function En(e) {
@@ -4017,105 +4023,105 @@ function En(e) {
     var c;
     (c = e.onChange) == null || c.call(e, s);
   };
-  nv(e.steps);
-  const r = lv(e), l = sv[r], i = /* @__PURE__ */ o(T, { children: [
-    e.steps.map((s) => /* @__PURE__ */ t(tv, { step: s, value: e.value, taken: a[s.step], onChange: n, presentation: r, disabled: e.disabled === !0 }, s.step)),
+  iv(e.steps);
+  const r = cv(e), l = mv[r], i = /* @__PURE__ */ o(T, { children: [
+    e.steps.map((s) => /* @__PURE__ */ t(ov, { step: s, value: e.value, taken: a[s.step], onChange: n, presentation: r, disabled: e.disabled === !0 }, s.step)),
     /* @__PURE__ */ t(l, {})
   ] });
-  return /* @__PURE__ */ t("div", { role: "radiogroup", "aria-label": e.label ?? "Stream colour, validated steps only", ...cv(e.disabled === !0), className: `${ov[r]} ward-ladder`, children: r === "tiles" ? /* @__PURE__ */ t("div", { className: E.tiles, children: i }) : i });
+  return /* @__PURE__ */ t("div", { role: "radiogroup", "aria-label": e.label ?? "Stream colour, validated steps only", ...hv(e.disabled === !0), className: `${dv[r]} ward-ladder`, children: r === "tiles" ? /* @__PURE__ */ t("div", { className: E.tiles, children: i }) : i });
 }
-const dv = "_rail_s06lm_2", uv = "_section_s06lm_12", mv = "_sectionFlush_s06lm_22", hv = "_head_s06lm_26", wv = "_headLabel_s06lm_34", fv = "_sample_s06lm_42", _v = "_sampleLabel_s06lm_47", vv = "_sampleTitle_s06lm_54", bv = "_sampleMeta_s06lm_59", pv = "_trace_s06lm_65", gv = "_traceHead_s06lm_70", yv = "_steps_s06lm_78", Nv = "_step_s06lm_78", kv = "_stepTitle_s06lm_97", $v = "_hollow_s06lm_107", Cv = "_stepBody_s06lm_115", Sv = "_stepDetail_s06lm_127", Rv = "_publish_s06lm_132", Tv = "_reason_s06lm_138", xv = "_note_s06lm_143", Lv = "_reveal_s06lm_148", k = {
-  rail: dv,
-  section: uv,
-  sectionFlush: mv,
-  head: hv,
-  headLabel: wv,
-  sample: fv,
-  sampleLabel: _v,
-  sampleTitle: vv,
-  sampleMeta: bv,
-  trace: pv,
-  traceHead: gv,
-  steps: yv,
-  step: Nv,
-  stepTitle: kv,
-  hollow: $v,
-  stepBody: Cv,
-  stepDetail: Sv,
-  publish: Rv,
-  reason: Tv,
-  note: xv,
-  reveal: Lv
-}, Ot = {
+const wv = "_rail_s06lm_2", fv = "_section_s06lm_12", _v = "_sectionFlush_s06lm_22", vv = "_head_s06lm_26", bv = "_headLabel_s06lm_34", pv = "_sample_s06lm_42", gv = "_sampleLabel_s06lm_47", yv = "_sampleTitle_s06lm_54", Nv = "_sampleMeta_s06lm_59", kv = "_trace_s06lm_65", $v = "_traceHead_s06lm_70", Cv = "_steps_s06lm_78", Sv = "_step_s06lm_78", Rv = "_stepTitle_s06lm_97", Tv = "_hollow_s06lm_107", xv = "_stepBody_s06lm_115", Lv = "_stepDetail_s06lm_127", Av = "_publish_s06lm_132", Ev = "_reason_s06lm_138", Iv = "_note_s06lm_143", Mv = "_reveal_s06lm_148", k = {
+  rail: wv,
+  section: fv,
+  sectionFlush: _v,
+  head: vv,
+  headLabel: bv,
+  sample: pv,
+  sampleLabel: gv,
+  sampleTitle: yv,
+  sampleMeta: Nv,
+  trace: kv,
+  traceHead: $v,
+  steps: Cv,
+  step: Sv,
+  stepTitle: Rv,
+  hollow: Tv,
+  stepBody: xv,
+  stepDetail: Lv,
+  publish: Av,
+  reason: Ev,
+  note: Iv,
+  reveal: Mv
+}, Dt = {
   passed: { role: "done", label: "Passed" },
   failed: { role: "failed", label: "Failed" },
   running: { role: "running", label: "Running" },
   notRun: { role: "pending", label: "Not run" }
-}, Av = { running: "dry run in progress", notRun: "dry run has not run yet", failed: "dry run failed" }, Ev = { ok: "greenFill", finding: "orangeFill", action: "blue" }, Iv = { notSimulated: "not simulated", running: "running" };
-function Mv(e) {
+}, Bv = { running: "dry run in progress", notRun: "dry run has not run yet", failed: "dry run failed" }, Pv = { ok: "greenFill", finding: "orangeFill", action: "blue" }, jv = { notSimulated: "not simulated", running: "running" };
+function Dv(e) {
   return e.presentation === "foundry";
 }
-function Bv(e, a) {
+function Ov(e, a) {
   if (e.status === "running") return "Publish is disabled: dry run in progress.";
   const n = a.filter((r) => !r.met);
   return n.length > 0 ? `Publish is disabled: ${n.length} of ${a.length} gate conditions unmet: ${n[0].text}` : e.status === "passed" ? null : "Publish is disabled: the dry run has not passed.";
 }
-function Pv(e, a) {
+function Hv(e, a) {
   var r;
-  const n = Av[e.status];
+  const n = Bv[e.status];
   return n !== void 0 ? n : ((r = a.find((l) => !l.met)) == null ? void 0 : r.text) ?? null;
 }
-function Dv(e) {
+function Fv(e) {
   return (e.status === "passed" || e.status === "failed") && (e.gateCount ?? 0) > 0;
 }
-function Ov(e, a) {
+function qv(e, a) {
   if (a.length > 0 && !e.steps.some((n) => n.kind === "notSimulated")) throw new Error("DryRunRail: a gate exists, so the trace must carry a notSimulated step — a human wait is never simulated");
 }
-function Hv(e) {
-  if (Dv(e) && !e.steps.some((a) => a.kind === "notSimulated")) throw new Error("DryRunRail: a gate exists, so the trace must carry a notSimulated step — a human wait is never simulated");
+function Wv(e) {
+  if (Fv(e) && !e.steps.some((a) => a.kind === "notSimulated")) throw new Error("DryRunRail: a gate exists, so the trace must carry a notSimulated step — a human wait is never simulated");
 }
-function Fv(e) {
+function zv(e) {
   const [a, n] = p(!1);
   S(() => n(!0), []);
   const r = e.kind === "running" ? "step" : void 0;
   return /* @__PURE__ */ t("li", { className: `${k.step} ${k.reveal} ward-dryrun-step ward-reveal`, "data-in": a ? "true" : void 0, "data-kind": e.kind, "aria-current": r, children: e.children });
 }
-function jv(e) {
-  const a = Iv[e.kind];
-  return a !== void 0 ? /* @__PURE__ */ t("span", { className: k.hollow, "data-hollow": "true", role: "img", "aria-label": a }) : /* @__PURE__ */ t(Oe, { size: 6, kind: Ev[e.kind], label: e.kind });
+function Kv(e) {
+  const a = jv[e.kind];
+  return a !== void 0 ? /* @__PURE__ */ t("span", { className: k.hollow, "data-hollow": "true", role: "img", "aria-label": a }) : /* @__PURE__ */ t(De, { size: 6, kind: Pv[e.kind], label: e.kind });
 }
-function qv(e) {
+function Gv(e) {
   return e.detail === void 0 ? null : /* @__PURE__ */ o("span", { className: k.stepDetail, children: [
     e.foundry ? " · " : "",
     e.detail
   ] });
 }
-function zv(e) {
+function Uv(e) {
   return e.kind === "running" && e.run.startedAt !== void 0 ? /* @__PURE__ */ t(xe, { startedAt: e.run.startedAt, connection: e.connection, turn: e.run.turns }) : null;
 }
-function Wv(e) {
+function Vv(e) {
   const { step: a } = e;
-  return /* @__PURE__ */ o(Fv, { kind: a.kind, children: [
-    /* @__PURE__ */ t(jv, { kind: a.kind }),
+  return /* @__PURE__ */ o(zv, { kind: a.kind, children: [
+    /* @__PURE__ */ t(Kv, { kind: a.kind }),
     /* @__PURE__ */ o("span", { className: k.stepBody, "data-current": a.kind === "running" ? "true" : void 0, children: [
       /* @__PURE__ */ t("span", { className: k.stepTitle, children: a.title }),
-      /* @__PURE__ */ t(qv, { detail: a.detail, foundry: e.foundry })
+      /* @__PURE__ */ t(Gv, { detail: a.detail, foundry: e.foundry })
     ] }),
-    /* @__PURE__ */ t(zv, { run: e.run, kind: a.kind, connection: e.connection })
+    /* @__PURE__ */ t(Uv, { run: e.run, kind: a.kind, connection: e.connection })
   ] });
 }
-function Kv(e, a) {
+function Yv(e, a) {
   const n = ["Trace", `${e.length} step${e.length === 1 ? "" : "s"}`];
   return a !== void 0 && n.push(ce(a)), n.join(" · ");
 }
 function In(e) {
   const a = N();
   return e.steps.length === 0 ? null : /* @__PURE__ */ o("section", { className: `${k.trace} ${k.section}`, children: [
-    /* @__PURE__ */ t("p", { className: k.traceHead, id: a, children: Kv(e.steps, e.run.durationMs) }),
-    /* @__PURE__ */ t("ol", { className: k.steps, "aria-labelledby": a, children: e.steps.map((n, r) => /* @__PURE__ */ t(Wv, { ...e, step: n }, n.title + String(r))) })
+    /* @__PURE__ */ t("p", { className: k.traceHead, id: a, children: Yv(e.steps, e.run.durationMs) }),
+    /* @__PURE__ */ t("ol", { className: k.steps, "aria-labelledby": a, children: e.steps.map((n, r) => /* @__PURE__ */ t(Vv, { ...e, step: n }, n.title + String(r))) })
   ] });
 }
-function Gv(e) {
+function Jv(e) {
   return e.sample === void 0 ? null : /* @__PURE__ */ o("div", { className: `${k.sample} ${k.section}`, children: [
     /* @__PURE__ */ t("p", { className: k.sampleLabel, children: "Sample item" }),
     /* @__PURE__ */ o("p", { className: k.sampleTitle, children: [
@@ -4129,21 +4135,21 @@ function Gv(e) {
     ] })
   ] });
 }
-function Uv(e) {
+function Xv(e) {
   if (e.sample === void 0) return null;
   const a = e.sample.replayedFrom === void 0 ? "" : " · replayed from " + de(e.sample.replayedFrom);
   return /* @__PURE__ */ t("p", { className: `${k.sampleMeta} ${k.section} ward-dryrun-sample`, children: "Sample item: " + e.sample.key + " · " + e.sample.title + a + " · no writes committed" });
 }
-function Vv(e) {
+function Qv(e) {
   const a = [{ value: e.run.cost === void 0 ? "—" : ne(e.run.cost), label: "Cost" }, { value: e.run.turns ? Jt(e.run.turns[0], e.run.turns[1]) : "—", label: "Turns used" }];
   return /* @__PURE__ */ t("div", { className: k.sectionFlush, children: /* @__PURE__ */ t(Pa, { divided: !0, cells: a }) });
 }
-function Yv(e) {
+function Zv(e) {
   const a = [];
   return e.cost !== void 0 && a.push({ value: ne(e.cost), label: "Cost" }), e.turns !== void 0 && a.push({ value: Jt(e.turns[0], e.turns[1]), label: "Turns used" }), a;
 }
-function Jv(e) {
-  const a = Yv(e.run);
+function eb(e) {
+  const a = Zv(e.run);
   return a.length === 0 ? null : a.length === 1 ? /* @__PURE__ */ o("p", { className: k.section, children: [
     /* @__PURE__ */ t("span", { className: "ward-stat-value", children: a[0].value }),
     " ",
@@ -4157,23 +4163,23 @@ function Mn(e) {
     /* @__PURE__ */ t(b, { variant: "primary", label: "Publish", disabled: !0, describedBy: a })
   ] }) : /* @__PURE__ */ t(b, { variant: "primary", label: "Publish", onClick: e.onPublish });
 }
-function Xv(e) {
+function ab(e) {
   return /* @__PURE__ */ o("div", { className: `${k.publish} ${k.section}`, children: [
     /* @__PURE__ */ t(Mn, { reason: e.reason, onPublish: e.onPublish }),
     /* @__PURE__ */ t("p", { className: k.note, children: e.note })
   ] });
 }
-function Qv(e) {
+function tb(e) {
   return e.onPublish === void 0 ? null : /* @__PURE__ */ t("div", { className: `${k.publish} ${k.section}`, children: /* @__PURE__ */ t(Mn, { reason: e.reason, onPublish: e.onPublish }) });
 }
 function Bn(e) {
   return /* @__PURE__ */ o("div", { className: `${k.head} ${k.section}`, children: [
     e.foundry && /* @__PURE__ */ t("span", { className: k.headLabel, children: "Dry run" }),
-    /* @__PURE__ */ t(h, { role: Ot[e.run.status].role, label: Ot[e.run.status].label }),
+    /* @__PURE__ */ t(h, { role: Dt[e.run.status].role, label: Dt[e.run.status].label }),
     e.run.status === "running" && e.run.startedAt !== void 0 && /* @__PURE__ */ t(xe, { startedAt: e.run.startedAt, connection: e.connection, turn: e.run.turns })
   ] });
 }
-function Zv(e, a) {
+function nb(e, a) {
   const [n, r] = p(e.steps);
   return S(() => r(e.steps), [e.steps]), S(() => {
     if (!((a == null ? void 0 : a.subscribe) === void 0 || e.status !== "running"))
@@ -4185,46 +4191,46 @@ function Zv(e, a) {
       });
   }, [a, e.status]), n;
 }
-function eb(e) {
+function rb(e) {
   var n;
-  Ov(e.run, e.checklist);
+  qv(e.run, e.checklist);
   const a = ((n = e.feed) == null ? void 0 : n.connection) ?? "live";
   return /* @__PURE__ */ o("aside", { className: `${k.rail} ward-dryrun`, "aria-label": "Dry run", children: [
     /* @__PURE__ */ t(Bn, { run: e.run, foundry: !1, connection: a }),
-    /* @__PURE__ */ t(Gv, { sample: e.run.sample }),
+    /* @__PURE__ */ t(Jv, { sample: e.run.sample }),
     /* @__PURE__ */ t(In, { run: e.run, steps: e.run.steps, connection: a, foundry: !1 }),
-    /* @__PURE__ */ t(Vv, { run: e.run }),
-    /* @__PURE__ */ t("div", { className: k.section, children: /* @__PURE__ */ t(Ha, { items: e.checklist }) }),
-    /* @__PURE__ */ t(Xv, { reason: Bv(e.run, e.checklist), note: e.publishNote, onPublish: e.onPublish })
+    /* @__PURE__ */ t(Qv, { run: e.run }),
+    /* @__PURE__ */ t("div", { className: k.section, children: /* @__PURE__ */ t(Oa, { items: e.checklist }) }),
+    /* @__PURE__ */ t(ab, { reason: Ov(e.run, e.checklist), note: e.publishNote, onPublish: e.onPublish })
   ] });
 }
-function ab(e) {
+function lb(e) {
   var r;
-  const a = Zv(e.run, e.feed);
-  Hv(e.run);
+  const a = nb(e.run, e.feed);
+  Wv(e.run);
   const n = ((r = e.feed) == null ? void 0 : r.connection) ?? "live";
   return /* @__PURE__ */ o("aside", { className: `${k.rail} ward-dryrun`, "aria-label": "Dry run", children: [
     /* @__PURE__ */ t(Bn, { run: e.run, foundry: !0, connection: n }),
-    /* @__PURE__ */ t(Uv, { sample: e.run.sample }),
+    /* @__PURE__ */ t(Xv, { sample: e.run.sample }),
     /* @__PURE__ */ t(In, { run: e.run, steps: a, connection: n, foundry: !0 }),
-    /* @__PURE__ */ t(Jv, { run: e.run }),
-    /* @__PURE__ */ t("div", { className: k.section, children: /* @__PURE__ */ t(Ha, { items: e.checklist, note: e.publishNote }) }),
-    /* @__PURE__ */ t(Qv, { reason: Pv(e.run, e.checklist), onPublish: e.onPublish })
+    /* @__PURE__ */ t(eb, { run: e.run }),
+    /* @__PURE__ */ t("div", { className: k.section, children: /* @__PURE__ */ t(Oa, { items: e.checklist, note: e.publishNote }) }),
+    /* @__PURE__ */ t(tb, { reason: Hv(e.run, e.checklist), onPublish: e.onPublish })
   ] });
 }
-function mR(e) {
-  return Mv(e) ? /* @__PURE__ */ t(ab, { ...e }) : /* @__PURE__ */ t(eb, { ...e });
+function _R(e) {
+  return Dv(e) ? /* @__PURE__ */ t(lb, { ...e }) : /* @__PURE__ */ t(rb, { ...e });
 }
-const tb = "_list_142ip_3", nb = "_row_142ip_9", rb = "_condition_142ip_18", lb = "_action_142ip_24", ba = {
-  list: tb,
-  row: nb,
-  condition: rb,
-  action: lb
+const ob = "_list_142ip_3", ib = "_row_142ip_9", sb = "_condition_142ip_18", cb = "_action_142ip_24", ba = {
+  list: ob,
+  row: ib,
+  condition: sb,
+  action: cb
 }, Pn = Te(!1);
-function hR({ children: e, label: a = "Handoff rules" }) {
+function vR({ children: e, label: a = "Handoff rules" }) {
   return /* @__PURE__ */ t(Pn.Provider, { value: !0, children: /* @__PURE__ */ t("ol", { className: ba.list, "aria-label": a, children: e }) });
 }
-function wR({ rule: e }) {
+function bR({ rule: e }) {
   if (!Re(Pn)) throw new Error("HandoffRuleRow: must be rendered inside HandoffRules");
   return /* @__PURE__ */ o("li", { className: ba.row, children: [
     /* @__PURE__ */ t(h, { role: "system", label: "When" }),
@@ -4233,153 +4239,153 @@ function wR({ rule: e }) {
     /* @__PURE__ */ t("span", { className: ba.action, children: e.then })
   ] });
 }
-const ob = "_move_tmppt_3", ib = {
-  move: ob
+const db = "_move_tmppt_3", ub = {
+  move: db
 };
 function Xa(e, a, n) {
   if (n < 0 || n >= e.length) return e;
   const r = e.slice(), [l] = r.splice(a, 1);
   return r.splice(n, 0, l), r;
 }
-function Dn(e, a) {
+function jn(e, a) {
   return a === "up" ? e - 1 : e + 1;
 }
-function On(e, a, n) {
+function Dn(e, a, n) {
   return `${e} moved to position ${a + 1} of ${n}.`;
 }
-function Ht(e, a, n) {
+function Ot(e, a, n) {
   return e.querySelector(`[data-move="${a}-${n}"]`);
 }
-function sb(e) {
+function mb(e) {
   return e === "up" ? "down" : "up";
 }
-function cb(e, a) {
-  const n = Ht(e, a.id, a.direction) ?? Ht(e, a.id, sb(a.direction));
+function hb(e, a) {
+  const n = Ot(e, a.id, a.direction) ?? Ot(e, a.id, mb(a.direction));
   n == null || n.focus();
 }
-function Hn() {
+function On() {
   const e = f(null), [a, n] = p(null), [r, l] = p("");
   return S(() => {
-    e.current !== null && a !== null && cb(e.current, a);
+    e.current !== null && a !== null && hb(e.current, a);
   }, [a]), { root: e, announcement: r, moved: (s, c) => {
     n(s), l(c);
   } };
 }
-function Fn({ text: e }) {
+function Hn({ text: e }) {
   return /* @__PURE__ */ t("p", { role: "status", "aria-live": "polite", className: "ward-visually-hidden", children: e });
 }
 function $a({ id: e, name: a, direction: n, onMove: r }) {
-  return /* @__PURE__ */ t("button", { type: "button", className: `${ib.move} ward-btn ward-btn--sm ward-btn--ghost`, "data-move": `${e}-${n}`, "aria-label": `Move ${a} ${n}`, onClick: r, children: /* @__PURE__ */ t("span", { "aria-hidden": "true", children: n === "up" ? "↑" : "↓" }) });
+  return /* @__PURE__ */ t("button", { type: "button", className: `${ub.move} ward-btn ward-btn--sm ward-btn--ghost`, "data-move": `${e}-${n}`, "aria-label": `Move ${a} ${n}`, onClick: r, children: /* @__PURE__ */ t("span", { "aria-hidden": "true", children: n === "up" ? "↑" : "↓" }) });
 }
-const db = "_body_1jd1i_2", ub = "_title_1jd1i_8", mb = "_section_1jd1i_13", hb = "_legend_1jd1i_18", wb = "_stages_1jd1i_26", fb = "_stage_1jd1i_26", _b = "_stageIndex_1jd1i_44", vb = "_stageName_1jd1i_50", bb = "_footer_1jd1i_59", pb = "_note_1jd1i_66", gb = "_reason_1jd1i_71", yb = "_actions_1jd1i_76", Nb = "_webHead_1jd1i_83", kb = "_kicker_1jd1i_92", $b = "_webTitle_1jd1i_99", Cb = "_webBody_1jd1i_105", Sb = "_webSection_1jd1i_109", Rb = "_sectionHead_1jd1i_121", Tb = "_sectionNote_1jd1i_129", xb = "_formLabel_1jd1i_134", Lb = "_identityRow_1jd1i_139", Ab = "_nameCell_1jd1i_145", Eb = "_keyCell_1jd1i_150", Ib = "_colourCell_1jd1i_154", Mb = "_colourStatus_1jd1i_161", Bb = "_webStages_1jd1i_166", Pb = "_webStageList_1jd1i_172", Db = "_webStage_1jd1i_166", Ob = "_webIndex_1jd1i_191", Hb = "_webStageName_1jd1i_196", Fb = "_webMoves_1jd1i_201", jb = "_addStage_1jd1i_215", qb = "_addStageButton_1jd1i_223", zb = "_addStageNote_1jd1i_231", Wb = "_webFooter_1jd1i_236", Kb = "_webFooterNotes_1jd1i_244", Gb = "_webNote_1jd1i_251", _ = {
-  body: db,
-  title: ub,
-  section: mb,
-  legend: hb,
-  stages: wb,
-  stage: fb,
-  stageIndex: _b,
-  stageName: vb,
-  footer: bb,
-  note: pb,
-  reason: gb,
-  actions: yb,
-  webHead: Nb,
-  kicker: kb,
-  webTitle: $b,
-  webBody: Cb,
-  webSection: Sb,
-  sectionHead: Rb,
-  sectionNote: Tb,
-  formLabel: xb,
-  identityRow: Lb,
-  nameCell: Ab,
-  keyCell: Eb,
-  colourCell: Ib,
-  colourStatus: Mb,
-  webStages: Bb,
-  webStageList: Pb,
-  webStage: Db,
-  webIndex: Ob,
-  webStageName: Hb,
-  webMoves: Fb,
-  addStage: jb,
-  addStageButton: qb,
-  addStageNote: zb,
-  webFooter: Wb,
-  webFooterNotes: Kb,
-  webNote: Gb
-}, Ub = [
+const wb = "_body_1jd1i_2", fb = "_title_1jd1i_8", _b = "_section_1jd1i_13", vb = "_legend_1jd1i_18", bb = "_stages_1jd1i_26", pb = "_stage_1jd1i_26", gb = "_stageIndex_1jd1i_44", yb = "_stageName_1jd1i_50", Nb = "_footer_1jd1i_59", kb = "_note_1jd1i_66", $b = "_reason_1jd1i_71", Cb = "_actions_1jd1i_76", Sb = "_webHead_1jd1i_83", Rb = "_kicker_1jd1i_92", Tb = "_webTitle_1jd1i_99", xb = "_webBody_1jd1i_105", Lb = "_webSection_1jd1i_109", Ab = "_sectionHead_1jd1i_121", Eb = "_sectionNote_1jd1i_129", Ib = "_formLabel_1jd1i_134", Mb = "_identityRow_1jd1i_139", Bb = "_nameCell_1jd1i_145", Pb = "_keyCell_1jd1i_150", jb = "_colourCell_1jd1i_154", Db = "_colourStatus_1jd1i_161", Ob = "_webStages_1jd1i_166", Hb = "_webStageList_1jd1i_172", Fb = "_webStage_1jd1i_166", qb = "_webIndex_1jd1i_191", Wb = "_webStageName_1jd1i_196", zb = "_webMoves_1jd1i_201", Kb = "_addStage_1jd1i_215", Gb = "_addStageButton_1jd1i_223", Ub = "_addStageNote_1jd1i_231", Vb = "_webFooter_1jd1i_236", Yb = "_webFooterNotes_1jd1i_244", Jb = "_webNote_1jd1i_251", _ = {
+  body: wb,
+  title: fb,
+  section: _b,
+  legend: vb,
+  stages: bb,
+  stage: pb,
+  stageIndex: gb,
+  stageName: yb,
+  footer: Nb,
+  note: kb,
+  reason: $b,
+  actions: Cb,
+  webHead: Sb,
+  kicker: Rb,
+  webTitle: Tb,
+  webBody: xb,
+  webSection: Lb,
+  sectionHead: Ab,
+  sectionNote: Eb,
+  formLabel: Ib,
+  identityRow: Mb,
+  nameCell: Bb,
+  keyCell: Pb,
+  colourCell: jb,
+  colourStatus: Db,
+  webStages: Ob,
+  webStageList: Hb,
+  webStage: Fb,
+  webIndex: qb,
+  webStageName: Wb,
+  webMoves: zb,
+  addStage: Kb,
+  addStageButton: Gb,
+  addStageNote: Ub,
+  webFooter: Vb,
+  webFooterNotes: Yb,
+  webNote: Jb
+}, Xb = [
   { value: "entry", label: "entry" },
   { value: "agent", label: "agent allowed" },
   { value: "gate", label: "human gate" },
   { value: "terminal", label: "terminal" }
-], jn = "not in catalogue";
-function Vb(e, a) {
+], Fn = "not in catalogue";
+function Qb(e, a) {
   const n = e.map((r) => ({ value: r, label: r }));
-  return e.includes(a) ? n : [{ value: a, label: `${a || "(unnamed)"} · ${jn}` }, ...n];
+  return e.includes(a) ? n : [{ value: a, label: `${a || "(unnamed)"} · ${Fn}` }, ...n];
 }
-function Yb({ stage: e, index: a, catalogue: n, onName: r }) {
+function Zb({ stage: e, index: a, catalogue: n, onName: r }) {
   const l = `Stage ${a + 1} name`;
   if (!n) return /* @__PURE__ */ t(M, { variant: "inline", labelHidden: !0, placeholder: "Name this stage", label: l, value: e.name, onChange: r });
-  const i = n.includes(e.name) ? void 0 : `${e.name || "This stage"} is ${jn}`;
-  return /* @__PURE__ */ t(M, { variant: "inline", kind: "select", labelHidden: !0, label: l, value: e.name, options: Vb(n, e.name), invalid: i, onChange: r });
+  const i = n.includes(e.name) ? void 0 : `${e.name || "This stage"} is ${Fn}`;
+  return /* @__PURE__ */ t(M, { variant: "inline", kind: "select", labelHidden: !0, label: l, value: e.name, options: Qb(n, e.name), invalid: i, onChange: r });
 }
 function qn(e, a) {
   return e.name || `stage ${a + 1}`;
 }
-function Jb(e) {
+function ep(e) {
   const a = f([]), n = f(0);
   for (; a.current.length < e; ) a.current.push(`stage-row-${n.current++}`);
   return a.current.length > e && (a.current = a.current.slice(0, e)), a;
 }
-function Xb({ id: e, stage: a, index: n, total: r, catalogue: l, onReplace: i, onMove: s }) {
+function ap({ id: e, stage: a, index: n, total: r, catalogue: l, onReplace: i, onMove: s }) {
   const c = qn(a, n), d = a.kind === "gate";
   return /* @__PURE__ */ o("li", { className: `${_.webStage} ward-stageedit`, "data-gate": d ? "true" : void 0, children: [
     /* @__PURE__ */ t("span", { className: _.webIndex, "aria-hidden": "true", children: String(n + 1) }),
-    /* @__PURE__ */ t("div", { className: _.webStageName, children: /* @__PURE__ */ t(Yb, { stage: a, index: n, catalogue: l, onName: (u) => i({ ...a, name: u }) }) }),
-    /* @__PURE__ */ t(M, { variant: d ? "tagGate" : "tag", labelHidden: !0, kind: "select", label: `Stage ${n + 1} kind`, value: a.kind, options: Ub, onChange: (u) => i({ ...a, kind: u }) }),
+    /* @__PURE__ */ t("div", { className: _.webStageName, children: /* @__PURE__ */ t(Zb, { stage: a, index: n, catalogue: l, onName: (u) => i({ ...a, name: u }) }) }),
+    /* @__PURE__ */ t(M, { variant: d ? "tagGate" : "tag", labelHidden: !0, kind: "select", label: `Stage ${n + 1} kind`, value: a.kind, options: Xb, onChange: (u) => i({ ...a, kind: u }) }),
     /* @__PURE__ */ o("span", { className: _.webMoves, children: [
       n > 0 && /* @__PURE__ */ t($a, { id: e, name: c, direction: "up", onMove: () => s("up") }),
       n < r - 1 && /* @__PURE__ */ t($a, { id: e, name: c, direction: "down", onMove: () => s("down") })
     ] })
   ] });
 }
-function Qb({ stages: e, onChange: a, catalogue: n }) {
-  const r = Jb(e.length), l = Hn(), i = (c, d) => {
-    const u = Dn(c, d);
-    r.current = Xa(r.current, c, u), l.moved({ id: r.current[u], direction: d }, On(qn(e[c], c), u, e.length)), a(Xa(e, c, u));
+function tp({ stages: e, onChange: a, catalogue: n }) {
+  const r = ep(e.length), l = On(), i = (c, d) => {
+    const u = jn(c, d);
+    r.current = Xa(r.current, c, u), l.moved({ id: r.current[u], direction: d }, Dn(qn(e[c], c), u, e.length)), a(Xa(e, c, u));
   }, s = (c, d) => a(e.map((u, m) => m === c ? d : u));
   return /* @__PURE__ */ o("div", { className: _.webStages, children: [
-    /* @__PURE__ */ t("ol", { ref: l.root, className: _.webStageList, "aria-label": "Workflow stages in order", children: e.map((c, d) => /* @__PURE__ */ t(Xb, { id: r.current[d], stage: c, index: d, total: e.length, catalogue: n, onReplace: (u) => s(d, u), onMove: (u) => i(d, u) }, r.current[d])) }),
-    /* @__PURE__ */ t(Fn, { text: l.announcement }),
+    /* @__PURE__ */ t("ol", { ref: l.root, className: _.webStageList, "aria-label": "Workflow stages in order", children: e.map((c, d) => /* @__PURE__ */ t(ap, { id: r.current[d], stage: c, index: d, total: e.length, catalogue: n, onReplace: (u) => s(d, u), onMove: (u) => i(d, u) }, r.current[d])) }),
+    /* @__PURE__ */ t(Hn, { text: l.announcement }),
     /* @__PURE__ */ o("p", { className: _.addStage, children: [
       /* @__PURE__ */ t("button", { type: "button", className: _.addStageButton, onClick: () => a([...e, { name: "", kind: "agent" }]), children: "+ Add stage" }),
       /* @__PURE__ */ t("span", { className: _.addStageNote, children: "· a human gate can't be removed once items have passed through it" })
     ] })
   ] });
 }
-const Zb = [
+const np = [
   { id: "intake", name: "Intake" },
   { id: "build", name: "In progress" },
   { id: "review", name: "Review", gate: !0 },
   { id: "done", name: "Done" }
-], ep = [
+], rp = [
   { value: "advance", label: "Advance on a met contract", consequence: "An item leaves the stage without a person once every criterion is met." },
   { value: "review", label: "Hold every item at the gate", consequence: "Every item waits for a named reviewer, whatever the agent found." },
   { value: "block", label: "Block on a finding", consequence: "One finding holds the item until a person resolves it." }
-], ap = "A new stream starts as a draft. Nothing runs on it until you publish it.", tp = "Create is disabled: name the stream and give it a key first.", np = "reorder with the ↑ ↓ buttons · min 2";
+], lp = "A new stream starts as a draft. Nothing runs on it until you publish it.", op = "Create is disabled: name the stream and give it a key first.", ip = "reorder with the ↑ ↓ buttons · min 2";
 function st(e, a) {
   return !e.reserved && Aa(e.step) && a[e.step] === void 0;
 }
-function rp(e, a) {
+function sp(e, a) {
   const n = e.find((r) => st(r, a));
   return n ? n.step : 1;
 }
-function lp({ stages: e, onMove: a }) {
-  const n = Hn(), r = (l, i) => {
-    const s = Dn(l, i);
-    n.moved({ id: e[l].id, direction: i }, On(e[l].name, s, e.length)), a(l, s);
+function cp({ stages: e, onMove: a }) {
+  const n = On(), r = (l, i) => {
+    const s = jn(l, i);
+    n.moved({ id: e[l].id, direction: i }, Dn(e[l].name, s, e.length)), a(l, s);
   };
   return /* @__PURE__ */ o(T, { children: [
     /* @__PURE__ */ t("ol", { ref: n.root, className: _.stages, "aria-label": "Stages in order", children: e.map((l, i) => /* @__PURE__ */ o("li", { className: _.stage, "data-gate": l.gate ? !0 : void 0, children: [
@@ -4389,13 +4395,13 @@ function lp({ stages: e, onMove: a }) {
       i > 0 && /* @__PURE__ */ t($a, { id: l.id, name: l.name, direction: "up", onMove: () => r(i, "up") }),
       i < e.length - 1 && /* @__PURE__ */ t($a, { id: l.id, name: l.name, direction: "down", onMove: () => r(i, "down") })
     ] }, l.id)) }),
-    /* @__PURE__ */ t(Fn, { text: n.announcement })
+    /* @__PURE__ */ t(Hn, { text: n.announcement })
   ] });
 }
-function op({ reason: e, onCreate: a, onDraft: n }) {
+function dp({ reason: e, onCreate: a, onDraft: n }) {
   const r = N();
   return /* @__PURE__ */ o("div", { className: _.footer, children: [
-    /* @__PURE__ */ t("p", { className: _.note, children: ap }),
+    /* @__PURE__ */ t("p", { className: _.note, children: lp }),
     e && /* @__PURE__ */ t("p", { className: _.reason, id: r, children: e }),
     /* @__PURE__ */ o("div", { className: _.actions, children: [
       /* @__PURE__ */ t(b, { variant: "secondary", onClick: n, children: "Save draft" }),
@@ -4403,11 +4409,11 @@ function op({ reason: e, onCreate: a, onDraft: n }) {
     ] })
   ] });
 }
-function ip(e, a) {
-  return e !== "" && a !== "" ? null : tp;
+function up(e, a) {
+  return e !== "" && a !== "" ? null : op;
 }
-function sp(e) {
-  const { owners: a, ladder: n, takenBy: r = {}, policies: l = ep, onCreate: i, onDraft: s, onClose: c, returnFocusTo: d } = e, u = N(), [m, w] = p(""), [v, y] = p(""), [L, B] = p(a[0].value), [le, Le] = p(() => rp(n, r)), [ae, Ue] = p(e.stages ?? Zb), [Ve, R] = p(l[0].value), G = { name: m, key: v, streamStep: le, owner: L, stages: ae, policy: Ve }, ge = ip(m, v);
+function mp(e) {
+  const { owners: a, ladder: n, takenBy: r = {}, policies: l = rp, onCreate: i, onDraft: s, onClose: c, returnFocusTo: d } = e, u = N(), [m, w] = p(""), [v, y] = p(""), [L, B] = p(a[0].value), [le, Le] = p(() => sp(n, r)), [ae, Ue] = p(e.stages ?? np), [Ve, R] = p(l[0].value), G = { name: m, key: v, streamStep: le, owner: L, stages: ae, policy: Ve }, ge = up(m, v);
   return /* @__PURE__ */ t(na, { kind: "modal", labelledBy: u, onClose: c, returnFocusTo: d, children: /* @__PURE__ */ o("div", { className: _.body, children: [
     /* @__PURE__ */ t("h2", { className: _.title, id: u, children: "New stream" }),
     /* @__PURE__ */ o("fieldset", { className: _.section, children: [
@@ -4422,61 +4428,61 @@ function sp(e) {
     ] }),
     /* @__PURE__ */ o("fieldset", { className: _.section, children: [
       /* @__PURE__ */ t("legend", { className: _.legend, children: "Stages" }),
-      /* @__PURE__ */ t(lp, { stages: ae, onMove: (He, wr) => Ue(Xa(ae, He, wr)) })
+      /* @__PURE__ */ t(cp, { stages: ae, onMove: (Oe, wr) => Ue(Xa(ae, Oe, wr)) })
     ] }),
     /* @__PURE__ */ t(kn, { legend: "Loop policy", options: l, value: Ve, onChange: R }),
-    /* @__PURE__ */ t(op, { reason: ge, onCreate: () => i(G), onDraft: () => s(G) })
+    /* @__PURE__ */ t(dp, { reason: ge, onCreate: () => i(G), onDraft: () => s(G) })
   ] }) });
 }
-const zn = [
+const Wn = [
   { value: "relay", label: "All writes go through relay", consequence: "At-least-once, deduped on req_hash. Agents never touch Foundry or Jira directly." },
   { value: "direct", label: "Direct writes, per-agent approval", consequence: "Needs a second admin to co-sign each grant." },
   { value: "readonly", label: "Read-only stream", consequence: "Agents can observe and report; nothing leaves Trellis." }
-], cp = "A stream can't be created without a name, a key, one named owner and at least two named stages.";
-function dp(e, a, n, r, l, i) {
+], hp = "A stream can't be created without a name, a key, one named owner and at least two named stages.";
+function wp(e, a, n, r, l, i) {
   var c;
-  const s = ((c = zn.find((d) => d.value === l)) == null ? void 0 : c.value) ?? "relay";
+  const s = ((c = Wn.find((d) => d.value === l)) == null ? void 0 : c.value) ?? "relay";
   return { name: e, key: a, owner: n, colourStep: r, writePolicyMode: s, stages: i };
 }
-function up(e, a) {
-  return mp(e) && hp(e, a) && wp(e);
+function fp(e, a) {
+  return _p(e) && vp(e, a) && bp(e);
 }
-function mp(e) {
+function _p(e) {
   return e.name.trim() !== "" && e.key.trim() !== "" && e.owner !== "";
 }
-function hp(e, a) {
+function vp(e, a) {
   return e.colourStep === null || st({ step: e.colourStep }, a);
 }
-function wp(e) {
+function bp(e) {
   return e.stages.length >= 2 && e.stages.every((a) => a.name.trim() !== "");
 }
-function fp(e, a) {
+function pp(e, a) {
   return e === null ? "Colour: none picked. You can set one later on the stream's Identity tab." : st({ step: e }, a) ? `Colour: step ${e} is validated and free.` : `Colour: step ${e} cannot be used.`;
 }
-function _p({ stage: e }) {
+function gp({ stage: e }) {
   return e ? /* @__PURE__ */ o("p", { className: _.webNote, children: [
     "Next: mount your first agent on ",
     /* @__PURE__ */ t("b", { children: e.name }),
     ". Nothing runs until you publish it."
   ] }) : /* @__PURE__ */ t("p", { className: _.webNote, children: "Add a stage an agent can run on." });
 }
-function vp({ ready: e, draft: a, agentStage: n, onCreate: r, onDraft: l, reasonId: i }) {
+function yp({ ready: e, draft: a, agentStage: n, onCreate: r, onDraft: l, reasonId: i }) {
   return /* @__PURE__ */ o("div", { className: _.webFooter, children: [
     /* @__PURE__ */ o("div", { className: _.webFooterNotes, children: [
-      /* @__PURE__ */ t(_p, { stage: n }),
-      !e && /* @__PURE__ */ t("p", { id: i, className: _.reason, children: cp })
+      /* @__PURE__ */ t(gp, { stage: n }),
+      !e && /* @__PURE__ */ t("p", { id: i, className: _.reason, children: hp })
     ] }),
     l && /* @__PURE__ */ t(b, { variant: "secondary", onClick: () => l(a), children: "Save draft" }),
     e ? /* @__PURE__ */ t(b, { variant: "primary", onClick: () => r(a), children: "Create stream" }) : /* @__PURE__ */ t(b, { variant: "primary", disabled: !0, describedBy: i, children: "Create stream" })
   ] });
 }
-function bp({ titleId: e }) {
+function Np({ titleId: e }) {
   return /* @__PURE__ */ o("header", { className: _.webHead, children: [
     /* @__PURE__ */ t("span", { className: _.kicker, children: "Studio / Streams" }),
     /* @__PURE__ */ t("h2", { id: e, className: _.webTitle, children: "New stream" })
   ] });
 }
-function pp({ name: e, setName: a, streamKey: n, setKey: r, colour: l, owner: i }) {
+function kp({ name: e, setName: a, streamKey: n, setKey: r, colour: l, owner: i }) {
   return /* @__PURE__ */ o("section", { className: _.webSection, children: [
     /* @__PURE__ */ t("h3", { className: _.kicker, children: "01 · Identity" }),
     /* @__PURE__ */ o("div", { className: _.identityRow, children: [
@@ -4487,42 +4493,42 @@ function pp({ name: e, setName: a, streamKey: n, setKey: r, colour: l, owner: i 
     i
   ] });
 }
-function gp(e) {
-  const a = N(), n = N(), r = e.takenBy ?? {}, [l, i] = p(""), [s, c] = p(""), [d, u] = p(e.owners[0] ?? ""), [m, w] = p(null), [v, y] = p("relay"), [L, B] = p([{ name: "", kind: "entry" }, { name: "", kind: "agent" }]), le = dp(l, s, d, m, v, L), Le = up(le, r), ae = L.find((R) => R.kind === "agent" && R.name.trim() !== ""), Ue = /* @__PURE__ */ o("div", { className: _.colourCell, children: [
+function $p(e) {
+  const a = N(), n = N(), r = e.takenBy ?? {}, [l, i] = p(""), [s, c] = p(""), [d, u] = p(e.owners[0] ?? ""), [m, w] = p(null), [v, y] = p("relay"), [L, B] = p([{ name: "", kind: "entry" }, { name: "", kind: "agent" }]), le = wp(l, s, d, m, v, L), Le = fp(le, r), ae = L.find((R) => R.kind === "agent" && R.name.trim() !== ""), Ue = /* @__PURE__ */ o("div", { className: _.colourCell, children: [
     /* @__PURE__ */ t("span", { className: _.formLabel, children: "Colour" }),
     /* @__PURE__ */ t(En, { presentation: "swatches", label: "Stream colour, validated steps only", steps: e.ladder, value: m, onChange: w, takenBy: r })
   ] }), Ve = /* @__PURE__ */ o(T, { children: [
-    /* @__PURE__ */ t("p", { className: _.colourStatus, "data-colour-status": "", children: fp(m, r) }),
+    /* @__PURE__ */ t("p", { className: _.colourStatus, "data-colour-status": "", children: pp(m, r) }),
     /* @__PURE__ */ t(M, { variant: "form", kind: "select", label: "Owner, accountable for every agent published here", value: d, options: e.owners.map((R) => ({ value: R, label: R })), onChange: u })
   ] });
   return /* @__PURE__ */ o(na, { kind: "modal", wide: !0, flush: !0, labelledBy: n, onClose: e.onClose, returnFocusTo: e.returnFocusTo, children: [
-    /* @__PURE__ */ t(bp, { titleId: n }),
+    /* @__PURE__ */ t(Np, { titleId: n }),
     /* @__PURE__ */ o("div", { className: _.webBody, children: [
-      /* @__PURE__ */ t(pp, { name: l, setName: i, streamKey: s, setKey: c, colour: Ue, owner: Ve }),
+      /* @__PURE__ */ t(kp, { name: l, setName: i, streamKey: s, setKey: c, colour: Ue, owner: Ve }),
       /* @__PURE__ */ o("section", { className: _.webSection, children: [
         /* @__PURE__ */ o("div", { className: _.sectionHead, children: [
           /* @__PURE__ */ t("h3", { className: _.kicker, children: "02 · Workflow stages" }),
-          /* @__PURE__ */ t("span", { className: _.sectionNote, children: np })
+          /* @__PURE__ */ t("span", { className: _.sectionNote, children: ip })
         ] }),
-        /* @__PURE__ */ t(Qb, { stages: L, onChange: B })
+        /* @__PURE__ */ t(tp, { stages: L, onChange: B })
       ] }),
-      /* @__PURE__ */ t("section", { className: _.webSection, children: /* @__PURE__ */ t(kn, { variant: "cards", legend: "03 · Write policy, inherited by every agent on this stream", value: v, options: zn, onChange: y }) }),
-      /* @__PURE__ */ t(vp, { ready: Le, draft: le, agentStage: ae, onCreate: e.onCreate, onDraft: e.onDraft, reasonId: a })
+      /* @__PURE__ */ t("section", { className: _.webSection, children: /* @__PURE__ */ t(kn, { variant: "cards", legend: "03 · Write policy, inherited by every agent on this stream", value: v, options: Wn, onChange: y }) }),
+      /* @__PURE__ */ t(yp, { ready: Le, draft: le, agentStage: ae, onCreate: e.onCreate, onDraft: e.onDraft, reasonId: a })
     ] })
   ] });
 }
-function fR(e) {
-  return "presentation" in e ? /* @__PURE__ */ t(gp, { ...e }) : /* @__PURE__ */ t(sp, { ...e });
+function pR(e) {
+  return "presentation" in e ? /* @__PURE__ */ t($p, { ...e }) : /* @__PURE__ */ t(mp, { ...e });
 }
-const yp = "_row_bs8hc_2", Np = "_cell_bs8hc_6", kp = "_condition_bs8hc_11", $p = "_action_bs8hc_18", Cp = "_contract_bs8hc_24", Sp = "_contractCondition_bs8hc_33", Rp = "_contractAction_bs8hc_39", Q = {
-  row: yp,
-  cell: Np,
-  condition: kp,
-  action: $p,
-  contract: Cp,
-  contractCondition: Sp,
-  contractAction: Rp
-}, Wn = ["advance", "block", "escalate", "requestReview"], Ft = {
+const Cp = "_row_bs8hc_2", Sp = "_cell_bs8hc_6", Rp = "_condition_bs8hc_11", Tp = "_action_bs8hc_18", xp = "_contract_bs8hc_24", Lp = "_contractCondition_bs8hc_33", Ap = "_contractAction_bs8hc_39", Q = {
+  row: Cp,
+  cell: Sp,
+  condition: Rp,
+  action: Tp,
+  contract: xp,
+  contractCondition: Lp,
+  contractAction: Ap
+}, zn = ["advance", "block", "escalate", "requestReview"], Ht = {
   advance: "Advance",
   block: "Block",
   escalate: "Escalate",
@@ -4532,7 +4538,7 @@ function Ca(e, a) {
   return (a == null ? void 0 : a.conditionText) ?? `${e.when.field} ${e.when.op} ${e.when.value}`;
 }
 function ct(e, a, n, r) {
-  return n || !a ? /* @__PURE__ */ t("span", { className: Q.action, children: Ft[e.then] }) : /* @__PURE__ */ t(
+  return n || !a ? /* @__PURE__ */ t("span", { className: Q.action, children: Ht[e.then] }) : /* @__PURE__ */ t(
     M,
     {
       kind: "select",
@@ -4540,11 +4546,11 @@ function ct(e, a, n, r) {
       labelHidden: r,
       value: e.then,
       onChange: (l) => a({ ...e, then: l }),
-      options: Wn.map((l) => ({ value: l, label: Ft[l] }))
+      options: zn.map((l) => ({ value: l, label: Ht[l] }))
     }
   );
 }
-function Tp({ rule: e, onChange: a, readOnly: n, presentation: r }) {
+function Ep({ rule: e, onChange: a, readOnly: n, presentation: r }) {
   return /* @__PURE__ */ o("tr", { className: Q.row, children: [
     /* @__PURE__ */ t("td", { className: Q.cell, children: /* @__PURE__ */ t(h, { role: "system", label: "When" }) }),
     /* @__PURE__ */ t("td", { className: Q.cell, children: /* @__PURE__ */ t("span", { className: Q.condition, title: Ca(e, r), children: Ca(e, r) }) }),
@@ -4552,7 +4558,7 @@ function Tp({ rule: e, onChange: a, readOnly: n, presentation: r }) {
     /* @__PURE__ */ t("td", { className: Q.cell, children: ct(e, a, n) })
   ] });
 }
-function xp({ rule: e, onChange: a, readOnly: n, presentation: r }) {
+function Ip({ rule: e, onChange: a, readOnly: n, presentation: r }) {
   return /* @__PURE__ */ o("tr", { className: Q.row, children: [
     /* @__PURE__ */ o("td", { className: Q.cell, children: [
       /* @__PURE__ */ t(h, { role: "system", label: "When" }),
@@ -4561,7 +4567,7 @@ function xp({ rule: e, onChange: a, readOnly: n, presentation: r }) {
     /* @__PURE__ */ t("td", { className: Q.cell, children: ct(e, a, n) })
   ] });
 }
-function Lp({ rule: e, onChange: a, readOnly: n, presentation: r }) {
+function Mp({ rule: e, onChange: a, readOnly: n, presentation: r }) {
   return /* @__PURE__ */ o("li", { className: Q.contract, children: [
     /* @__PURE__ */ t(h, { role: "system", label: "When" }),
     /* @__PURE__ */ t("span", { className: Q.contractCondition, children: Ca(e, r) }),
@@ -4569,50 +4575,50 @@ function Lp({ rule: e, onChange: a, readOnly: n, presentation: r }) {
     /* @__PURE__ */ t("span", { className: Q.contractAction, children: ct(e, a, n, !0) })
   ] });
 }
-const Ap = { two: xp, four: Tp, contract: Lp };
-function _R(e) {
+const Bp = { two: Ip, four: Ep, contract: Mp };
+function gR(e) {
   var n;
-  if (!Wn.includes(e.rule.then)) throw new Error(`RuleRow: '${e.rule.then}' is not a contract action`);
-  const a = Ap[((n = e.presentation) == null ? void 0 : n.cellLayout) ?? "two"];
+  if (!zn.includes(e.rule.then)) throw new Error(`RuleRow: '${e.rule.then}' is not a contract action`);
+  const a = Bp[((n = e.presentation) == null ? void 0 : n.cellLayout) ?? "two"];
   return /* @__PURE__ */ t(a, { ...e });
 }
-const Ep = "_column_11id3_2", Ip = "_head_11id3_17", Mp = "_index_11id3_23", Bp = "_name_11id3_29", Pp = "_meta_11id3_38", Dp = "_mono_11id3_43", Op = "_gate_11id3_50", Hp = "_reviewersLabel_11id3_57", Fp = "_reviewers_11id3_57", jp = "_reviewer_11id3_57", qp = "_agents_11id3_74", zp = "_workflowColumn_11id3_79", Wp = "_workflowHead_11id3_96", Kp = "_stageRow_11id3_102", Gp = "_stageLabel_11id3_109", Up = "_workflowTitle_11id3_116", Vp = "_workflowMeta_11id3_122", Yp = "_workflowGate_11id3_127", Jp = "_gateNote_11id3_135", Xp = "_cardNote_11id3_140", Qp = "_reviewerList_11id3_145", Zp = "_reviewerRow_11id3_151", eg = "_reviewerMark_11id3_157", ag = "_reviewerName_11id3_167", tg = "_terminalCard_11id3_173", ng = "_terminalCount_11id3_182", rg = "_workflowAgents_11id3_188", lg = "_mount_11id3_194", C = {
-  column: Ep,
-  head: Ip,
-  index: Mp,
-  name: Bp,
-  meta: Pp,
-  mono: Dp,
-  gate: Op,
-  reviewersLabel: Hp,
-  reviewers: Fp,
-  reviewer: jp,
-  agents: qp,
-  workflowColumn: zp,
-  workflowHead: Wp,
-  stageRow: Kp,
-  stageLabel: Gp,
-  workflowTitle: Up,
-  workflowMeta: Vp,
-  workflowGate: Yp,
-  gateNote: Jp,
-  cardNote: Xp,
-  reviewerList: Qp,
-  reviewerRow: Zp,
-  reviewerMark: eg,
-  reviewerName: ag,
-  terminalCard: tg,
-  terminalCount: ng,
-  workflowAgents: rg,
-  mount: lg
-}, og = { entry: "Entry", agent: "Agent", gate: "Gate", terminal: "Terminal" };
+const Pp = "_column_11id3_2", jp = "_head_11id3_17", Dp = "_index_11id3_23", Op = "_name_11id3_29", Hp = "_meta_11id3_38", Fp = "_mono_11id3_43", qp = "_gate_11id3_50", Wp = "_reviewersLabel_11id3_57", zp = "_reviewers_11id3_57", Kp = "_reviewer_11id3_57", Gp = "_agents_11id3_74", Up = "_workflowColumn_11id3_79", Vp = "_workflowHead_11id3_96", Yp = "_stageRow_11id3_102", Jp = "_stageLabel_11id3_109", Xp = "_workflowTitle_11id3_116", Qp = "_workflowMeta_11id3_122", Zp = "_workflowGate_11id3_127", eg = "_gateNote_11id3_135", ag = "_cardNote_11id3_140", tg = "_reviewerList_11id3_145", ng = "_reviewerRow_11id3_151", rg = "_reviewerMark_11id3_157", lg = "_reviewerName_11id3_167", og = "_terminalCard_11id3_173", ig = "_terminalCount_11id3_182", sg = "_workflowAgents_11id3_188", cg = "_mount_11id3_194", C = {
+  column: Pp,
+  head: jp,
+  index: Dp,
+  name: Op,
+  meta: Hp,
+  mono: Fp,
+  gate: qp,
+  reviewersLabel: Wp,
+  reviewers: zp,
+  reviewer: Kp,
+  agents: Gp,
+  workflowColumn: Up,
+  workflowHead: Vp,
+  stageRow: Yp,
+  stageLabel: Jp,
+  workflowTitle: Xp,
+  workflowMeta: Qp,
+  workflowGate: Zp,
+  gateNote: eg,
+  cardNote: ag,
+  reviewerList: tg,
+  reviewerRow: ng,
+  reviewerMark: rg,
+  reviewerName: lg,
+  terminalCard: og,
+  terminalCount: ig,
+  workflowAgents: sg,
+  mount: cg
+}, dg = { entry: "Entry", agent: "Agent", gate: "Gate", terminal: "Terminal" };
 function dt(e, a = String) {
   return e === void 0 ? "—" : a(e);
 }
 function Kn(e) {
   return `${Math.round(e * 100)}%`;
 }
-function ig({ stage: e }) {
+function ug({ stage: e }) {
   const a = e.reviewers ?? [];
   return /* @__PURE__ */ o("div", { className: C.gate, "data-panel": "gate", children: [
     /* @__PURE__ */ t("p", { className: C.reviewersLabel, children: "Reviewers" }),
@@ -4623,20 +4629,20 @@ function ig({ stage: e }) {
     ] })
   ] });
 }
-function sg({ stage: e }) {
+function mg({ stage: e }) {
   return /* @__PURE__ */ t(Pa, { cells: [
     { value: ee(e.count), label: "In stage" },
     { value: dt(e.closedThisWeek, ee), label: "Closed this week" }
   ] });
 }
-function cg({ stage: e, titleId: a }) {
+function hg({ stage: e, titleId: a }) {
   return /* @__PURE__ */ o("header", { className: C.head, children: [
     /* @__PURE__ */ t("span", { className: C.index, children: String(e.index).padStart(2, "0") }),
     /* @__PURE__ */ t("h3", { className: C.name, id: a, children: e.name }),
-    /* @__PURE__ */ t(h, { role: e.kind === "gate" ? "gate" : "soft", label: og[e.kind] })
+    /* @__PURE__ */ t(h, { role: e.kind === "gate" ? "gate" : "soft", label: dg[e.kind] })
   ] });
 }
-function dg({ stage: e }) {
+function wg({ stage: e }) {
   return /* @__PURE__ */ o("p", { className: C.meta, children: [
     /* @__PURE__ */ o("span", { className: C.mono, children: [
       ee(e.count),
@@ -4648,65 +4654,65 @@ function dg({ stage: e }) {
     ] })
   ] });
 }
-function ug({ stage: e }) {
-  return e.kind === "gate" ? /* @__PURE__ */ t(ig, { stage: e }) : e.kind === "terminal" ? /* @__PURE__ */ t(sg, { stage: e }) : null;
+function fg({ stage: e }) {
+  return e.kind === "gate" ? /* @__PURE__ */ t(ug, { stage: e }) : e.kind === "terminal" ? /* @__PURE__ */ t(mg, { stage: e }) : null;
 }
-function mg({ onMount: e }) {
+function _g({ onMount: e }) {
   return e ? /* @__PURE__ */ t(b, { variant: "ghost", size: "sm", onClick: () => e(), children: "Mount an agent" }) : null;
 }
-function hg({ stage: e, agents: a = [], onMount: n, feed: r }) {
+function vg({ stage: e, agents: a = [], onMount: n, feed: r }) {
   const l = N(), i = (r == null ? void 0 : r.connection) ?? "live";
   return /* @__PURE__ */ o("section", { className: C.column, "aria-labelledby": l, "data-kind": e.kind, children: [
-    /* @__PURE__ */ t(cg, { stage: e, titleId: l }),
-    /* @__PURE__ */ t(dg, { stage: e }),
-    /* @__PURE__ */ t(ug, { stage: e }),
-    /* @__PURE__ */ t("div", { className: C.agents, children: a.map((s) => /* @__PURE__ */ t(v_, { ...s, connection: i }, s.agent.id)) }),
-    /* @__PURE__ */ t(mg, { onMount: n })
+    /* @__PURE__ */ t(hg, { stage: e, titleId: l }),
+    /* @__PURE__ */ t(wg, { stage: e }),
+    /* @__PURE__ */ t(fg, { stage: e }),
+    /* @__PURE__ */ t("div", { className: C.agents, children: a.map((s) => /* @__PURE__ */ t(y_, { ...s, connection: i }, s.agent.id)) }),
+    /* @__PURE__ */ t(_g, { onMount: n })
   ] });
 }
-const wg = {
+const bg = {
   gate: { role: "gate", label: "Human gate" },
   terminal: { role: "quiet", label: "Terminal" }
 };
-function fg({ reviewers: e }) {
+function pg({ reviewers: e }) {
   return /* @__PURE__ */ t("ul", { className: C.reviewerList, children: e.map((a, n) => /* @__PURE__ */ o("li", { className: C.reviewerRow, children: [
     /* @__PURE__ */ t("span", { className: C.reviewerMark, "aria-hidden": "true", children: a.initials }),
     /* @__PURE__ */ t("span", { className: C.reviewerName, children: a.name })
   ] }, `${n}-${a.name}`)) });
 }
-function _g({ stage: e }) {
+function gg({ stage: e }) {
   const a = e.reviewers ?? [];
   return /* @__PURE__ */ o("div", { className: C.workflowGate, "data-panel": "gate", children: [
     /* @__PURE__ */ o("p", { className: C.gateNote, children: [
       "No agent can advance an item out of this stage.",
       a.length === 0 ? null : " Reviewers:"
     ] }),
-    a.length === 0 ? null : /* @__PURE__ */ t(fg, { reviewers: a }),
+    a.length === 0 ? null : /* @__PURE__ */ t(pg, { reviewers: a }),
     e.gateShare === void 0 ? null : /* @__PURE__ */ o("p", { className: C.cardNote, "data-note": "gate-share", children: [
       /* @__PURE__ */ t("span", { children: Kn(e.gateShare) }),
       " of elapsed time is spent here"
     ] })
   ] });
 }
-function vg(e) {
+function yg(e) {
   return e === void 0 ? "items closed this week" : `items closed · ${e} ${e === 1 ? "rollback" : "rollbacks"}`;
 }
-function bg({ stage: e }) {
+function Ng({ stage: e }) {
   return /* @__PURE__ */ o("div", { className: C.terminalCard, children: [
     /* @__PURE__ */ t("span", { className: C.terminalCount, children: dt(e.closedThisWeek) }),
-    /* @__PURE__ */ t("span", { className: C.cardNote, children: vg(e.rolledBackThisWeek) })
+    /* @__PURE__ */ t("span", { className: C.cardNote, children: yg(e.rolledBackThisWeek) })
   ] });
 }
-function pg(e = 0) {
+function kg(e = 0) {
   return `${e} ${e === 1 ? "item" : "items"}`;
 }
-function gg(e) {
+function $g(e) {
   if (e.kind === "terminal") return `${dt(e.closedThisWeek)} this week`;
-  const a = pg(e.count);
+  const a = kg(e.count);
   return e.medianWait === void 0 ? a : `${a} · median wait ${e.medianWait}`;
 }
-function yg({ stage: e, titleId: a }) {
-  const n = wg[e.kind];
+function Cg({ stage: e, titleId: a }) {
+  const n = bg[e.kind];
   return /* @__PURE__ */ o("header", { className: C.workflowHead, children: [
     /* @__PURE__ */ o("span", { className: C.stageRow, children: [
       /* @__PURE__ */ o("span", { className: C.stageLabel, id: `${a}-index`, children: [
@@ -4716,55 +4722,55 @@ function yg({ stage: e, titleId: a }) {
       n === void 0 ? null : /* @__PURE__ */ t(h, { ...n, size: "tag" })
     ] }),
     /* @__PURE__ */ t("h3", { id: a, className: C.workflowTitle, children: e.name }),
-    /* @__PURE__ */ t("span", { className: C.workflowMeta, children: gg(e) })
+    /* @__PURE__ */ t("span", { className: C.workflowMeta, children: $g(e) })
   ] });
 }
-function Ng(e) {
+function Sg(e) {
   return e === "entry" || e === "agent";
 }
-function kg({ stage: e, onMount: a }) {
-  return a === void 0 || !Ng(e.kind) ? null : /* @__PURE__ */ t(b, { variant: "secondary", size: "sm", className: C.mount, onClick: () => a(e.index), children: "+ Mount agent" });
+function Rg({ stage: e, onMount: a }) {
+  return a === void 0 || !Sg(e.kind) ? null : /* @__PURE__ */ t(b, { variant: "secondary", size: "sm", className: C.mount, onClick: () => a(e.index), children: "+ Mount agent" });
 }
-function $g({ stage: e, agentCards: a, onMount: n }) {
+function Tg({ stage: e, agentCards: a, onMount: n }) {
   const r = N();
   return /* @__PURE__ */ o("section", { className: C.workflowColumn, "aria-labelledby": `${r}-index ${r}`, "data-kind": e.kind, children: [
-    /* @__PURE__ */ t(yg, { stage: e, titleId: r }),
-    e.kind === "gate" ? /* @__PURE__ */ t(_g, { stage: e }) : null,
-    e.kind === "terminal" ? /* @__PURE__ */ t(bg, { stage: e }) : null,
+    /* @__PURE__ */ t(Cg, { stage: e, titleId: r }),
+    e.kind === "gate" ? /* @__PURE__ */ t(gg, { stage: e }) : null,
+    e.kind === "terminal" ? /* @__PURE__ */ t(Ng, { stage: e }) : null,
     a === void 0 ? null : /* @__PURE__ */ t("div", { className: C.workflowAgents, children: a }),
-    /* @__PURE__ */ t(kg, { stage: e, onMount: n })
+    /* @__PURE__ */ t(Rg, { stage: e, onMount: n })
   ] });
 }
-function Cg(e) {
+function xg(e) {
   return "presentation" in e && e.presentation.mode === "workflow";
 }
-function vR(e) {
-  return Cg(e) ? /* @__PURE__ */ t($g, { ...e }) : /* @__PURE__ */ t(hg, { ...e });
+function yR(e) {
+  return xg(e) ? /* @__PURE__ */ t(Tg, { ...e }) : /* @__PURE__ */ t(vg, { ...e });
 }
-const Sg = "_row_1tdra_6", Rg = "_name_1tdra_12", Tg = "_compactRow_1tdra_13", xg = "_compactName_1tdra_13", Lg = "_cell_1tdra_30", Ag = "_chain_1tdra_45", Eg = "_owner_1tdra_51", Ig = "_mono_1tdra_57", Mg = "_compactCell_1tdra_79", Bg = "_stack_1tdra_96", Pg = "_stat_1tdra_103", Dg = "_identityLine_1tdra_110", Og = "_identity_1tdra_110", Hg = "_ownerLine_1tdra_140", Fg = "_link_1tdra_160", jg = "_gateMark_1tdra_166", qg = "_emptyChain_1tdra_171", zg = "_arrow_1tdra_177", Wg = "_muted_1tdra_182", Kg = "_define_1tdra_187", Gg = "_statValue_1tdra_194", Ug = "_policyId_1tdra_200", Vg = "_sub_1tdra_205", g = {
-  row: Sg,
-  name: Rg,
-  compactRow: Tg,
-  compactName: xg,
-  cell: Lg,
-  chain: Ag,
-  owner: Eg,
-  mono: Ig,
-  compactCell: Mg,
-  stack: Bg,
-  stat: Pg,
-  identityLine: Dg,
-  identity: Og,
-  ownerLine: Hg,
-  link: Fg,
-  gateMark: jg,
-  emptyChain: qg,
-  arrow: zg,
-  muted: Wg,
-  define: Kg,
-  statValue: Gg,
-  policyId: Ug,
-  sub: Vg
+const Lg = "_row_1tdra_6", Ag = "_name_1tdra_12", Eg = "_compactRow_1tdra_13", Ig = "_compactName_1tdra_13", Mg = "_cell_1tdra_30", Bg = "_chain_1tdra_45", Pg = "_owner_1tdra_51", jg = "_mono_1tdra_57", Dg = "_compactCell_1tdra_79", Og = "_stack_1tdra_96", Hg = "_stat_1tdra_103", Fg = "_identityLine_1tdra_110", qg = "_identity_1tdra_110", Wg = "_ownerLine_1tdra_140", zg = "_link_1tdra_160", Kg = "_gateMark_1tdra_166", Gg = "_emptyChain_1tdra_171", Ug = "_arrow_1tdra_177", Vg = "_muted_1tdra_182", Yg = "_define_1tdra_187", Jg = "_statValue_1tdra_194", Xg = "_policyId_1tdra_200", Qg = "_sub_1tdra_205", g = {
+  row: Lg,
+  name: Ag,
+  compactRow: Eg,
+  compactName: Ig,
+  cell: Mg,
+  chain: Bg,
+  owner: Pg,
+  mono: jg,
+  compactCell: Dg,
+  stack: Og,
+  stat: Hg,
+  identityLine: Fg,
+  identity: qg,
+  ownerLine: Wg,
+  link: zg,
+  gateMark: Kg,
+  emptyChain: Gg,
+  arrow: Ug,
+  muted: Vg,
+  define: Yg,
+  statValue: Jg,
+  policyId: Xg,
+  sub: Qg
 };
 function Gn(e) {
   var c;
@@ -4772,28 +4778,28 @@ function Gn(e) {
   const { ctrlKey: a, metaKey: n, shiftKey: r, altKey: l, button: i } = e, s = { bubbles: !0, cancelable: !0, ctrlKey: a, metaKey: n, shiftKey: r, altKey: l, button: i };
   (c = e.currentTarget.querySelector("a")) == null || c.dispatchEvent(new MouseEvent("click", s));
 }
-function Yg(e) {
+function Zg(e) {
   const a = [`${e.live} live`];
   return e.draft > 0 && a.push(`${e.draft} draft`), e.paused > 0 && a.push(`${e.paused} paused`), a.join(" · ");
 }
-function Jg(e) {
+function ey(e) {
   return e === void 0 ? g.compactRow : `${g.compactRow} ${e}`;
 }
 function Un(e) {
   return `${ee(e)} ${e === 1 ? "member" : "members"}`;
 }
-function Xg(e) {
+function ay(e) {
   return e.members === void 0 ? e.owner : `${e.owner} · ${Un(e.members)}`;
 }
-function Qg(e, a) {
+function ty(e, a) {
   const n = e.draft === !0;
   return /* @__PURE__ */ t("td", { className: g.compactCell, children: /* @__PURE__ */ o("span", { className: g.stack, children: [
     /* @__PURE__ */ o("span", { className: g.identityLine, children: [
       /* @__PURE__ */ t("span", { className: `${g.identity} ward-identity`, "data-draft": n, "aria-hidden": "true" }),
-      /* @__PURE__ */ t("a", { className: `${g.compactName} ward-rowlink ward-target`, href: j(a), "data-draft": n, children: e.name }),
+      /* @__PURE__ */ t("a", { className: `${g.compactName} ward-rowlink ward-target`, href: F(a), "data-draft": n, children: e.name }),
       /* @__PURE__ */ t(h, { role: "meta", size: "tag", label: n ? `${e.key} · DRAFT` : e.key })
     ] }),
-    /* @__PURE__ */ t("span", { className: g.ownerLine, children: Xg(e) })
+    /* @__PURE__ */ t("span", { className: g.ownerLine, children: ay(e) })
   ] }) });
 }
 function Vn({ name: e, gate: a, look: n, size: r }) {
@@ -4803,62 +4809,62 @@ function Vn({ name: e, gate: a, look: n, size: r }) {
     a ? /* @__PURE__ */ t("span", { className: "ward-visually-hidden", children: " (human gate)" }) : null
   ] });
 }
-function Zg(e, a, n) {
+function ny(e, a, n) {
   if (e !== a) return { role: "soft" };
   const r = da(n);
   return r === null ? { role: "gate" } : { role: "stream", streamStep: r };
 }
-function ey({ stages: e, streamStep: a }) {
+function ry({ stages: e, streamStep: a }) {
   const n = e.findIndex((l) => l.gate === !0), r = e.length - 1;
   return /* @__PURE__ */ t("span", { className: `${g.chain} ward-chiprow`, children: e.map((l, i) => /* @__PURE__ */ o("span", { className: g.link, children: [
-    /* @__PURE__ */ t(Vn, { name: l.name, gate: l.gate === !0, look: Zg(i, n, a), size: "tag" }),
+    /* @__PURE__ */ t(Vn, { name: l.name, gate: l.gate === !0, look: ny(i, n, a), size: "tag" }),
     i === r ? null : /* @__PURE__ */ t("span", { className: g.arrow, "aria-hidden": "true", children: "→" })
   ] }, `${l.name}${i}`)) });
 }
-function ay(e) {
+function ly(e) {
   return /* @__PURE__ */ t("td", { className: g.compactCell, children: e.stages.length === 0 ? /* @__PURE__ */ o("span", { className: g.emptyChain, children: [
     /* @__PURE__ */ t("span", { className: g.muted, children: "No stages yet" }),
     /* @__PURE__ */ t("span", { className: g.define, children: "Define workflow" })
-  ] }) : ey(e) });
+  ] }) : ry(e) });
 }
 function Yn(e) {
   return e === void 0 ? void 0 : !0;
 }
-function jt(e, a, n, r) {
+function Ft(e, a, n, r) {
   return /* @__PURE__ */ t("td", { className: g.compactCell, children: e === void 0 ? /* @__PURE__ */ t("span", { className: g.muted, children: n }) : /* @__PURE__ */ o("span", { className: g.stat, children: [
     /* @__PURE__ */ t("span", { className: `${g.statValue} ward-stat-value`, title: r, "data-raised": Yn(r), children: e }),
     a === void 0 ? null : /* @__PURE__ */ t("span", { className: g.sub, children: a })
   ] }) });
 }
-function ty(e) {
+function oy(e) {
   return /* @__PURE__ */ t("td", { className: g.compactCell, children: e === void 0 ? /* @__PURE__ */ t("span", { className: g.muted, children: "not set" }) : /* @__PURE__ */ o("span", { className: g.stat, children: [
     /* @__PURE__ */ t("span", { className: g.policyId, children: e.id }),
     /* @__PURE__ */ t("span", { className: g.sub, children: e.summary })
   ] }) });
 }
-function ny(e) {
+function iy(e) {
   return e === void 0 ? void 0 : String(e.live + e.draft + e.paused);
 }
-function ry({ stream: e, href: a, presentation: n }) {
-  const r = Jg(n.className);
+function sy({ stream: e, href: a, presentation: n }) {
+  const r = ey(n.className);
   return /* @__PURE__ */ o("tr", { className: `${r} ward-streamrow`, onClick: Gn, "data-ward-rowlink": !0, "data-draft": e.draft === !0, style: { "--stream": pe(e.streamStep, "chip") }, children: [
-    Qg(e, a),
-    ay(e),
-    jt(ny(e.agents), e.agents === void 0 ? void 0 : Yg(e.agents), "—"),
-    ty(e.policy),
-    jt(e.inFlight === void 0 ? void 0 : String(e.inFlight), e.p50 === void 0 ? void 0 : `P50 ${e.p50}`, "—", e.inFlightHint)
+    ty(e, a),
+    ly(e),
+    Ft(iy(e.agents), e.agents === void 0 ? void 0 : Zg(e.agents), "—"),
+    oy(e.policy),
+    Ft(e.inFlight === void 0 ? void 0 : String(e.inFlight), e.p50 === void 0 ? void 0 : `P50 ${e.p50}`, "—", e.inFlightHint)
   ] });
 }
-function ly(e) {
+function cy(e) {
   var a;
   return ((a = e.presentation) == null ? void 0 : a.columns) === 5;
 }
-function bR(e) {
-  if (ly(e)) return ry(e);
+function NR(e) {
+  if (cy(e)) return sy(e);
   const { stream: a, href: n } = e;
   return /* @__PURE__ */ o("tr", { className: g.row, onClick: Gn, "data-ward-rowlink": !0, children: [
     /* @__PURE__ */ o("td", { className: g.cell, children: [
-      /* @__PURE__ */ t("a", { className: `${g.name} ward-target`, href: j(n), children: a.name }),
+      /* @__PURE__ */ t("a", { className: `${g.name} ward-target`, href: F(n), children: a.name }),
       /* @__PURE__ */ t(h, { ...Ba(a.key, a.streamStep) }),
       a.draft && /* @__PURE__ */ t(h, { role: "running", label: "Draft" })
     ] }),
@@ -4879,21 +4885,21 @@ function bR(e) {
     /* @__PURE__ */ t("td", { className: g.cell, "data-align": "end", children: /* @__PURE__ */ t("span", { className: g.mono, children: a.p50 === void 0 ? "" : ce(a.p50) }) })
   ] });
 }
-const oy = "_row_2u4ll_2", iy = "_name_2u4ll_16", sy = "_scope_2u4ll_24", Sa = {
-  row: oy,
-  name: iy,
-  scope: sy
+const dy = "_row_2u4ll_2", uy = "_name_2u4ll_16", my = "_scope_2u4ll_24", Sa = {
+  row: dy,
+  name: uy,
+  scope: my
 };
 function ut(e) {
   return e.charAt(0).toUpperCase() + e.slice(1);
 }
-function cy(e) {
+function hy(e) {
   return e === void 0 ? `${Sa.row} ward-toolrow` : `${Sa.row} ward-toolrow ${e}`;
 }
-function dy(e, a) {
+function wy(e, a) {
   return e.grant !== "locked" ? { locked: !1 } : { locked: !0, reason: e.reason ?? (a == null ? void 0 : a.lockedReasonFallback) ?? "locked by stream policy" };
 }
-function uy({ id: e, reasonId: a, tool: n, state: r, onChange: l }) {
+function fy({ id: e, reasonId: a, tool: n, state: r, onChange: l }) {
   return /* @__PURE__ */ t(
     "input",
     {
@@ -4909,43 +4915,43 @@ function uy({ id: e, reasonId: a, tool: n, state: r, onChange: l }) {
     }
   );
 }
-function my({ classification: e }) {
+function _y({ classification: e }) {
   return /* @__PURE__ */ t(h, { role: e === "write" ? "write" : "meta", label: ut(e) });
 }
-function hy({ tool: e, state: a, reasonId: n }) {
+function vy({ tool: e, state: a, reasonId: n }) {
   const r = a.reason ?? e.scope;
   return /* @__PURE__ */ t("span", { id: a.locked ? n : void 0, className: `${Sa.scope} ward-tooldetail ward-truncate`, title: r, children: r });
 }
-function wy(e) {
+function by(e) {
   return (e == null ? void 0 : e.as) === "li" ? "li" : "div";
 }
-function pR({ tool: e, onChange: a, presentation: n }) {
-  const r = N(), l = N(), i = dy(e, n), s = wy(n);
-  return /* @__PURE__ */ o(s, { className: cy(n == null ? void 0 : n.className), "data-locked": i.locked ? "true" : void 0, children: [
-    /* @__PURE__ */ t(uy, { id: r, reasonId: l, tool: e, state: i, onChange: a }),
+function kR({ tool: e, onChange: a, presentation: n }) {
+  const r = N(), l = N(), i = wy(e, n), s = by(n);
+  return /* @__PURE__ */ o(s, { className: hy(n == null ? void 0 : n.className), "data-locked": i.locked ? "true" : void 0, children: [
+    /* @__PURE__ */ t(fy, { id: r, reasonId: l, tool: e, state: i, onChange: a }),
     /* @__PURE__ */ t("label", { htmlFor: r, className: `${Sa.name} ward-toolname`, children: e.name }),
-    /* @__PURE__ */ t(hy, { tool: e, state: i, reasonId: l }),
-    /* @__PURE__ */ t(my, { classification: e.classification }),
+    /* @__PURE__ */ t(vy, { tool: e, state: i, reasonId: l }),
+    /* @__PURE__ */ t(_y, { classification: e.classification }),
     i.locked ? /* @__PURE__ */ t(h, { role: "meta", label: "Locked" }) : null
   ] });
 }
-const fy = "_strip_4ppv9_2", _y = "_well_4ppv9_11", vy = "_head_4ppv9_18", by = "_name_4ppv9_24", py = "_chart_4ppv9_32", gy = "_segment_4ppv9_38", yy = "_detailedChart_4ppv9_44", Ny = "_rail_4ppv9_57", ky = "_section_4ppv9_63", $y = "_label_4ppv9_74", Cy = "_note_4ppv9_91", K = {
-  strip: fy,
-  well: _y,
-  head: vy,
-  name: by,
-  chart: py,
-  segment: gy,
-  detailedChart: yy,
-  rail: Ny,
-  section: ky,
-  label: $y,
-  note: Cy
-}, Sy = "No item in flight to preview.", Ry = "This is the view the validation exists for: six adjacent segments, direct-labelled, no legend to lean on.", Ty = "The action blue, the navy gate chip, the state colours and every rule stay fixed. A stream owns a colour and a mark, not a theme. Two teams theming the same product produces two products.", Qa = [1, 2, 3, 4, 5, 6], Ra = 100;
-function xy(e, a) {
+const py = "_strip_4ppv9_2", gy = "_well_4ppv9_11", yy = "_head_4ppv9_18", Ny = "_name_4ppv9_24", ky = "_chart_4ppv9_32", $y = "_segment_4ppv9_38", Cy = "_detailedChart_4ppv9_44", Sy = "_rail_4ppv9_57", Ry = "_section_4ppv9_63", Ty = "_label_4ppv9_74", xy = "_note_4ppv9_91", K = {
+  strip: py,
+  well: gy,
+  head: yy,
+  name: Ny,
+  chart: ky,
+  segment: $y,
+  detailedChart: Cy,
+  rail: Sy,
+  section: Ry,
+  label: Ty,
+  note: xy
+}, Ly = "No item in flight to preview.", Ay = "This is the view the validation exists for: six adjacent segments, direct-labelled, no legend to lean on.", Ey = "The action blue, the navy gate chip, the state colours and every rule stay fixed. A stream owns a colour and a mark, not a theme. Two teams theming the same product produces two products.", Qa = [1, 2, 3, 4, 5, 6], Ra = 100;
+function Iy(e, a) {
   return a.has(e) ? pe(e, "id") : "var(--ward-color-line)";
 }
-function Ly({ draft: e, streams: a }) {
+function My({ draft: e, streams: a }) {
   const n = /* @__PURE__ */ new Set([e.streamStep, ...a.map((r) => r.streamStep)]);
   return /* @__PURE__ */ t("svg", { className: K.chart, viewBox: "0 0 600 8", preserveAspectRatio: "none", role: "img", "aria-label": "Stream colours in use", children: Qa.map((r, l) => /* @__PURE__ */ t(
     "rect",
@@ -4955,18 +4961,18 @@ function Ly({ draft: e, streams: a }) {
       y: "0",
       width: Ra,
       height: "8",
-      fill: xy(r, n),
+      fill: Iy(r, n),
       "data-draft": r === e.streamStep ? !0 : void 0
     },
     r
   )) });
 }
-function Ay(e) {
+function By(e) {
   const a = e.slice(0, Qa.length);
   for (; a.length < Qa.length; ) a.push({ key: "—", name: "unclaimed", streamStep: null });
   return a;
 }
-function Ey({ identities: e }) {
+function Py({ identities: e }) {
   return /* @__PURE__ */ o("figure", { className: `${K.detailedChart} ward-appearance-chart`, children: [
     /* @__PURE__ */ t("svg", { viewBox: "0 0 600 40", role: "img", "aria-label": "Overview chart segments", children: e.map((a, n) => /* @__PURE__ */ t(
       "rect",
@@ -4992,63 +4998,63 @@ function wa({ label: e, children: a }) {
     a
   ] });
 }
-function Iy({ sample: e, sampleEmpty: a, draft: n, onOpen: r }) {
-  return e === void 0 ? /* @__PURE__ */ t("p", { className: K.note, children: a ?? Sy }) : /* @__PURE__ */ t("div", { className: K.well, children: /* @__PURE__ */ t(Oa, { item: { ...e, streamStep: da(n.streamStep) }, onOpen: Jn(r), feed: null }) });
+function jy({ sample: e, sampleEmpty: a, draft: n, onOpen: r }) {
+  return e === void 0 ? /* @__PURE__ */ t("p", { className: K.note, children: a ?? Ly }) : /* @__PURE__ */ t("div", { className: K.well, children: /* @__PURE__ */ t(Da, { item: { ...e, streamStep: da(n.streamStep) }, onOpen: Jn(r), feed: null }) });
 }
-function My({ draft: e }) {
+function Dy({ draft: e }) {
   const a = { "--stream": pe(e.streamStep, "id") };
   return /* @__PURE__ */ o("p", { className: K.head, style: a, children: [
-    /* @__PURE__ */ t(Oe, { size: 8, kind: "stream" }),
+    /* @__PURE__ */ t(De, { size: 8, kind: "stream" }),
     /* @__PURE__ */ t("span", { className: K.name, children: e.name }),
     /* @__PURE__ */ t(h, { ...Ba(e.key, e.streamStep) })
   ] });
 }
-function By(e) {
-  const a = Ay(e.identities ?? [e.draft, ...e.streams]), n = a[0];
+function Oy(e) {
+  const a = By(e.identities ?? [e.draft, ...e.streams]), n = a[0];
   return /* @__PURE__ */ o("div", { className: K.rail, role: "group", "aria-label": "Appearance", children: [
-    /* @__PURE__ */ t(wa, { label: "Board card", children: /* @__PURE__ */ t(Iy, { ...e, draft: n }) }),
-    /* @__PURE__ */ t(wa, { label: "Streams index row", children: /* @__PURE__ */ t(My, { draft: n }) }),
+    /* @__PURE__ */ t(wa, { label: "Board card", children: /* @__PURE__ */ t(jy, { ...e, draft: n }) }),
+    /* @__PURE__ */ t(wa, { label: "Streams index row", children: /* @__PURE__ */ t(Dy, { draft: n }) }),
     /* @__PURE__ */ o(wa, { label: "Overview chart segment", children: [
-      /* @__PURE__ */ t(Ey, { identities: a }),
-      /* @__PURE__ */ t("p", { className: K.note, children: Ry })
+      /* @__PURE__ */ t(Py, { identities: a }),
+      /* @__PURE__ */ t("p", { className: K.note, children: Ay })
     ] }),
-    /* @__PURE__ */ t(wa, { label: "Not themeable", children: /* @__PURE__ */ t("p", { className: K.note, children: Ty }) })
+    /* @__PURE__ */ t(wa, { label: "Not themeable", children: /* @__PURE__ */ t("p", { className: K.note, children: Ey }) })
   ] });
 }
-function Py({ draft: e, sample: a, streams: n, onOpen: r }) {
+function Hy({ draft: e, sample: a, streams: n, onOpen: r }) {
   const l = { "--stream": pe(e.streamStep, "id") };
   return /* @__PURE__ */ o("section", { className: K.strip, "aria-label": "Appearance", style: l, children: [
     /* @__PURE__ */ o("div", { className: K.head, children: [
-      /* @__PURE__ */ t(Oe, { size: 8, kind: "stream" }),
+      /* @__PURE__ */ t(De, { size: 8, kind: "stream" }),
       /* @__PURE__ */ t("span", { className: K.name, children: e.name }),
       /* @__PURE__ */ t(h, { ...Ba(e.key, e.streamStep) })
     ] }),
-    a === void 0 ? null : /* @__PURE__ */ t("div", { className: K.well, children: /* @__PURE__ */ t(Oa, { item: { ...a, streamStep: e.streamStep }, onOpen: Jn(r) }) }),
-    /* @__PURE__ */ t(Ly, { draft: e, streams: n })
+    a === void 0 ? null : /* @__PURE__ */ t("div", { className: K.well, children: /* @__PURE__ */ t(Da, { item: { ...a, streamStep: e.streamStep }, onOpen: Jn(r) }) }),
+    /* @__PURE__ */ t(My, { draft: e, streams: n })
   ] });
 }
-function gR(e) {
-  return e.presentation === "detailed" ? /* @__PURE__ */ t(By, { ...e }) : /* @__PURE__ */ t(Py, { ...e });
+function $R(e) {
+  return e.presentation === "detailed" ? /* @__PURE__ */ t(Oy, { ...e }) : /* @__PURE__ */ t(Hy, { ...e });
 }
-const Dy = "_row_ixlg5_6", Oy = "_headCell_ixlg5_10", Hy = "_cell_ixlg5_11", Fy = "_name_ixlg5_23", jy = "_consequence_ixlg5_29", qy = "_governed_ixlg5_36", zy = "_control_ixlg5_42", Wy = "_byRole_ixlg5_48", Ky = "_webControl_ixlg5_59", Gy = "_webConsequence_ixlg5_65", Uy = "_webGoverned_ixlg5_71", F = {
-  row: Dy,
-  headCell: Oy,
-  cell: Hy,
-  name: Fy,
-  consequence: jy,
-  governed: qy,
-  control: zy,
-  byRole: Wy,
-  webControl: Ky,
-  webConsequence: Gy,
-  webGoverned: Uy
+const Fy = "_row_ixlg5_6", qy = "_headCell_ixlg5_10", Wy = "_cell_ixlg5_11", zy = "_name_ixlg5_23", Ky = "_consequence_ixlg5_29", Gy = "_governed_ixlg5_36", Uy = "_control_ixlg5_42", Vy = "_byRole_ixlg5_48", Yy = "_webControl_ixlg5_59", Jy = "_webConsequence_ixlg5_65", Xy = "_webGoverned_ixlg5_71", H = {
+  row: Fy,
+  headCell: qy,
+  cell: Wy,
+  name: zy,
+  consequence: Ky,
+  governed: Gy,
+  control: Uy,
+  byRole: Vy,
+  webControl: Yy,
+  webConsequence: Jy,
+  webGoverned: Xy
 };
-function Vy({
+function Qy({
   capability: e,
   cell: a,
   onChange: n
 }) {
-  return a.value === "byRole" ? /* @__PURE__ */ t("span", { className: F.byRole, children: "by role" }) : /* @__PURE__ */ o("span", { className: F.control, children: [
+  return a.value === "byRole" ? /* @__PURE__ */ t("span", { className: H.byRole, children: "by role" }) : /* @__PURE__ */ o("span", { className: H.control, children: [
     /* @__PURE__ */ t(
       Ge,
       {
@@ -5060,25 +5066,25 @@ function Vy({
     a.value === "pilot" && /* @__PURE__ */ t(h, { role: "running", label: "Pilot" })
   ] });
 }
-function Yy({ capability: e, cells: a, onChange: n }) {
-  return /* @__PURE__ */ o("tr", { className: F.row, children: [
-    /* @__PURE__ */ o("th", { scope: "row", className: F.headCell, children: [
-      /* @__PURE__ */ t("span", { className: F.name, children: e.name }),
-      /* @__PURE__ */ t("span", { className: F.consequence, children: e.consequence }),
-      /* @__PURE__ */ o("span", { className: F.governed, children: [
+function Zy({ capability: e, cells: a, onChange: n }) {
+  return /* @__PURE__ */ o("tr", { className: H.row, children: [
+    /* @__PURE__ */ o("th", { scope: "row", className: H.headCell, children: [
+      /* @__PURE__ */ t("span", { className: H.name, children: e.name }),
+      /* @__PURE__ */ t("span", { className: H.consequence, children: e.consequence }),
+      /* @__PURE__ */ o("span", { className: H.governed, children: [
         "governed by ",
         e.governedBy,
         e.ticket ? ` · ${e.ticket}` : ""
       ] })
     ] }),
-    a.map((r) => /* @__PURE__ */ t("td", { className: F.cell, children: /* @__PURE__ */ t(Vy, { capability: e, cell: r, onChange: n }) }, r.streamStep))
+    a.map((r) => /* @__PURE__ */ t("td", { className: H.cell, children: /* @__PURE__ */ t(Qy, { capability: e, cell: r, onChange: n }) }, r.streamStep))
   ] });
 }
-function Jy(e) {
+function eN(e) {
   return e.ticket === void 0 ? e.governedBy : `${e.governedBy} · ${e.ticket}`;
 }
-function Xy({ name: e, cell: a, onChange: n }) {
-  if (a.value === "byRole") return /* @__PURE__ */ t("span", { className: `${F.webControl} ${F.byRole} ward-envrow`, children: "by role" });
+function aN({ name: e, cell: a, onChange: n }) {
+  if (a.value === "byRole") return /* @__PURE__ */ t("span", { className: `${H.webControl} ${H.byRole} ward-envrow`, children: "by role" });
   const r = /* @__PURE__ */ t(
     Ge,
     {
@@ -5088,40 +5094,40 @@ function Xy({ name: e, cell: a, onChange: n }) {
       onChange: (l) => n == null ? void 0 : n(a.streamStep, l ? "on" : "off")
     }
   );
-  return a.value !== "pilot" ? r : /* @__PURE__ */ o("span", { className: `${F.webControl} ward-envrow`, children: [
+  return a.value !== "pilot" ? r : /* @__PURE__ */ o("span", { className: `${H.webControl} ward-envrow`, children: [
     /* @__PURE__ */ t(h, { role: "running", label: "Pilot" }),
     r
   ] });
 }
-function Qy({ capability: e, cells: a, onChange: n }) {
-  return /* @__PURE__ */ o("tr", { className: F.row, children: [
-    /* @__PURE__ */ o("td", { className: F.cell, children: [
-      /* @__PURE__ */ t("span", { className: F.name, children: e.name }),
-      /* @__PURE__ */ t("p", { className: `${F.webConsequence} ward-policy-consequence`, children: e.consequence })
+function tN({ capability: e, cells: a, onChange: n }) {
+  return /* @__PURE__ */ o("tr", { className: H.row, children: [
+    /* @__PURE__ */ o("td", { className: H.cell, children: [
+      /* @__PURE__ */ t("span", { className: H.name, children: e.name }),
+      /* @__PURE__ */ t("p", { className: `${H.webConsequence} ward-policy-consequence`, children: e.consequence })
     ] }),
-    a.map((r) => /* @__PURE__ */ t("td", { className: F.cell, children: /* @__PURE__ */ t(Xy, { name: e.name, cell: r, onChange: n }) }, String(r.streamStep))),
-    /* @__PURE__ */ t("td", { className: F.cell, children: /* @__PURE__ */ t("span", { className: `${F.webGoverned} ward-cellmeta`, children: Jy(e) }) })
+    a.map((r) => /* @__PURE__ */ t("td", { className: H.cell, children: /* @__PURE__ */ t(aN, { name: e.name, cell: r, onChange: n }) }, String(r.streamStep))),
+    /* @__PURE__ */ t("td", { className: H.cell, children: /* @__PURE__ */ t("span", { className: `${H.webGoverned} ward-cellmeta`, children: eN(e) }) })
   ] });
 }
-function yR(e) {
-  return "presentation" in e ? /* @__PURE__ */ t(Qy, { ...e }) : /* @__PURE__ */ t(Yy, { ...e });
+function CR(e) {
+  return "presentation" in e ? /* @__PURE__ */ t(tN, { ...e }) : /* @__PURE__ */ t(Zy, { ...e });
 }
-const Zy = "_row_vv64h_2", eN = "_cell_vv64h_6", aN = "_name_vv64h_25", tN = "_note_vv64h_30", nN = "_webName_vv64h_41", rN = "_webMeta_vv64h_47", V = {
-  row: Zy,
-  cell: eN,
-  name: aN,
-  note: tN,
-  webName: nN,
-  webMeta: rN
+const nN = "_row_vv64h_2", rN = "_cell_vv64h_6", lN = "_name_vv64h_25", oN = "_note_vv64h_30", iN = "_webName_vv64h_41", sN = "_webMeta_vv64h_47", V = {
+  row: nN,
+  cell: rN,
+  name: lN,
+  note: oN,
+  webName: iN,
+  webMeta: sN
 }, Xn = {
   ready: { role: "done", label: "Ready" },
   drainFirst: { role: "attention", label: "Drain first" },
   restartDue: { role: "failed", label: "Restart due" }
 };
-function lN(e) {
+function cN(e) {
   return e === "drainFirst" ? "Drain & restart" : "Restart";
 }
-function oN({ component: e, onRestart: a }) {
+function dN({ component: e, onRestart: a }) {
   const n = N(), r = Xn[e.state], l = e.state === "drainFirst";
   return /* @__PURE__ */ o("tr", { className: V.row, children: [
     /* @__PURE__ */ t("td", { className: V.cell, children: /* @__PURE__ */ t("span", { className: V.name, children: e.name }) }),
@@ -5134,35 +5140,35 @@ function oN({ component: e, onRestart: a }) {
     /* @__PURE__ */ t("td", { className: V.cell, "data-align": "end", children: l ? /* @__PURE__ */ t(b, { size: "sm", disabled: !0, describedBy: n, children: "Restart" }) : /* @__PURE__ */ t(b, { size: "sm", onClick: () => a(e.name), children: "Restart" }) })
   ] });
 }
-function iN({ component: e, onRestart: a }) {
-  return a === void 0 ? null : /* @__PURE__ */ t(b, { size: "sm", onClick: () => a(e.name), children: lN(e.state) });
+function uN({ component: e, onRestart: a }) {
+  return a === void 0 ? null : /* @__PURE__ */ t(b, { size: "sm", onClick: () => a(e.name), children: cN(e.state) });
 }
-function sN({ component: e, onRestart: a }) {
+function mN({ component: e, onRestart: a }) {
   return /* @__PURE__ */ o("tr", { className: V.row, children: [
     /* @__PURE__ */ t("td", { className: V.cell, children: /* @__PURE__ */ t("span", { className: `${V.webName} ward-toolname`, children: e.name }) }),
     /* @__PURE__ */ t("td", { className: V.cell, children: /* @__PURE__ */ t("span", { className: `${V.webMeta} ward-cellmeta ward-truncate`, title: e.note, children: `${e.pods} · ${e.note}` }) }),
     /* @__PURE__ */ t("td", { className: V.cell, children: /* @__PURE__ */ t(h, { ...Xn[e.state] }) }),
-    /* @__PURE__ */ t("td", { className: V.cell, children: /* @__PURE__ */ t(iN, { component: e, onRestart: a }) })
+    /* @__PURE__ */ t("td", { className: V.cell, children: /* @__PURE__ */ t(uN, { component: e, onRestart: a }) })
   ] });
 }
-function NR(e) {
-  return "presentation" in e ? /* @__PURE__ */ t(sN, { ...e }) : /* @__PURE__ */ t(oN, { ...e });
+function SR(e) {
+  return "presentation" in e ? /* @__PURE__ */ t(mN, { ...e }) : /* @__PURE__ */ t(dN, { ...e });
 }
-const cN = "_row_jcm5k_7", dN = "_cell_jcm5k_11", uN = "_next_jcm5k_28", mN = "_headCell_jcm5k_38", hN = "_webId_jcm5k_77", wN = "_webPurpose_jcm5k_83", fN = "_webMeta_jcm5k_91", _N = "_webUrgent_jcm5k_97", q = {
-  row: cN,
-  cell: dN,
-  next: uN,
-  headCell: mN,
-  webId: hN,
-  webPurpose: wN,
-  webMeta: fN,
-  webUrgent: _N
-}, vN = {
+const hN = "_row_jcm5k_7", wN = "_cell_jcm5k_11", fN = "_next_jcm5k_28", _N = "_headCell_jcm5k_38", vN = "_webId_jcm5k_77", bN = "_webPurpose_jcm5k_83", pN = "_webMeta_jcm5k_91", gN = "_webUrgent_jcm5k_97", q = {
+  row: hN,
+  cell: wN,
+  next: fN,
+  headCell: _N,
+  webId: vN,
+  webPurpose: bN,
+  webMeta: pN,
+  webUrgent: gN
+}, yN = {
   healthy: { role: "done", label: "Healthy" },
   rotateSoon: { role: "attention", label: "Rotate soon" },
   rotateNow: { role: "failed", label: "Rotate now" },
   idpOwned: { role: "meta", label: "IdP owned" }
-}, bN = {
+}, NN = {
   healthy: { role: "done", label: "Healthy" },
   rotateSoon: { role: "attention", label: "Rotate soon" },
   rotateNow: { role: "failed", label: "Rotate now" },
@@ -5175,9 +5181,9 @@ const cN = "_row_jcm5k_7", dN = "_cell_jcm5k_11", uN = "_next_jcm5k_28", mN = "_
   { key: "cls", header: "Class", width: 112 },
   { key: "tier", header: "Tier", width: 124, dropPriority: 2 },
   { key: "next", header: "Next rotation", width: 96, mono: !0, dropPriority: 1 }
-], pN = Object.fromEntries(Qn.map((e) => [e.key, e]));
+], kN = Object.fromEntries(Qn.map((e) => [e.key, e]));
 function Je({ column: e, children: a }) {
-  const n = pN[e];
+  const n = kN[e];
   return /* @__PURE__ */ t(
     "td",
     {
@@ -5189,7 +5195,7 @@ function Je({ column: e, children: a }) {
     }
   );
 }
-function kR() {
+function RR() {
   return /* @__PURE__ */ t("tr", { children: Qn.map((e) => /* @__PURE__ */ t(
     "th",
     {
@@ -5203,8 +5209,8 @@ function kR() {
     e.key
   )) });
 }
-function gN({ cred: e }) {
-  const a = vN[e.state];
+function $N({ cred: e }) {
+  const a = yN[e.state];
   return /* @__PURE__ */ o("tr", { className: q.row, children: [
     /* @__PURE__ */ t(Je, { column: "purpose", children: e.purpose }),
     /* @__PURE__ */ t(Je, { column: "id", children: e.id }),
@@ -5214,40 +5220,40 @@ function gN({ cred: e }) {
     /* @__PURE__ */ t(Je, { column: "next", children: /* @__PURE__ */ t("span", { className: q.next, "data-urgent": e.state === "rotateNow" ? !0 : void 0, children: e.next }) })
   ] });
 }
-function yN({ cred: e }) {
+function CN({ cred: e }) {
   return e.state !== "rotateNow" ? /* @__PURE__ */ t("span", { className: `${q.webMeta} ward-cellmeta`, children: e.next }) : /* @__PURE__ */ t("span", { className: `${q.webMeta} ${q.webUrgent} ward-cellmeta ward-redink`, style: { color: "var(--ward-color-danger)" }, children: e.next });
 }
-function NN({ cred: e }) {
+function SN({ cred: e }) {
   return /* @__PURE__ */ o("tr", { className: q.row, children: [
     /* @__PURE__ */ t("td", { className: q.cell, children: /* @__PURE__ */ t("span", { className: `${q.webId} ward-toolname`, children: e.id }) }),
     /* @__PURE__ */ t("td", { className: q.cell, children: /* @__PURE__ */ t("span", { className: `${q.webPurpose} ward-resfield-value ward-truncate`, title: e.purpose, children: e.purpose }) }),
     /* @__PURE__ */ t("td", { className: q.cell, children: /* @__PURE__ */ t(h, { role: e.cls.includes("WRITE") ? "write" : "meta", label: e.cls }) }),
     /* @__PURE__ */ t("td", { className: q.cell, children: /* @__PURE__ */ t("span", { className: `${q.webMeta} ward-cellmeta`, children: e.tier }) }),
-    /* @__PURE__ */ t("td", { className: q.cell, children: /* @__PURE__ */ t(yN, { cred: e }) }),
-    /* @__PURE__ */ t("td", { className: q.cell, children: /* @__PURE__ */ t(h, { ...bN[e.state] }) })
+    /* @__PURE__ */ t("td", { className: q.cell, children: /* @__PURE__ */ t(CN, { cred: e }) }),
+    /* @__PURE__ */ t("td", { className: q.cell, children: /* @__PURE__ */ t(h, { ...NN[e.state] }) })
   ] });
 }
-function $R(e) {
-  return "presentation" in e ? /* @__PURE__ */ t(NN, { ...e }) : /* @__PURE__ */ t(gN, { ...e });
+function TR(e) {
+  return "presentation" in e ? /* @__PURE__ */ t(SN, { ...e }) : /* @__PURE__ */ t($N, { ...e });
 }
-const kN = "_card_17zba_2", $N = "_head_17zba_11", CN = "_env_17zba_18", SN = "_version_17zba_25", RN = "_meta_17zba_32", TN = "_webCard_17zba_37", xN = "_webRow_17zba_47", LN = "_webTitle_17zba_55", AN = "_webLine_17zba_65", EN = "_webVersion_17zba_72", IN = "_webMeta_17zba_77", U = {
-  card: kN,
-  head: $N,
-  env: CN,
-  version: SN,
-  meta: RN,
-  webCard: TN,
-  webRow: xN,
-  webTitle: LN,
-  webLine: AN,
-  webVersion: EN,
-  webMeta: IN
+const RN = "_card_17zba_2", TN = "_head_17zba_11", xN = "_env_17zba_18", LN = "_version_17zba_25", AN = "_meta_17zba_32", EN = "_webCard_17zba_37", IN = "_webRow_17zba_47", MN = "_webTitle_17zba_55", BN = "_webLine_17zba_65", PN = "_webVersion_17zba_72", jN = "_webMeta_17zba_77", U = {
+  card: RN,
+  head: TN,
+  env: xN,
+  version: LN,
+  meta: AN,
+  webCard: EN,
+  webRow: IN,
+  webTitle: MN,
+  webLine: BN,
+  webVersion: PN,
+  webMeta: jN
 }, qt = { dev: "Dev", uat: "UAT", prod: "Prod" }, Zn = {
   current: { role: "done", label: "Current" },
   soaking: { role: "running", label: "Soaking" },
   live: { role: "done", label: "Live" }
 };
-function MN({ env: e }) {
+function DN({ env: e }) {
   const a = Zn[e.state], n = [e.by, e.ticket].filter(Boolean).join(" · ");
   return /* @__PURE__ */ o("section", { className: U.card, "aria-label": qt[e.env], children: [
     /* @__PURE__ */ o("div", { className: U.head, children: [
@@ -5262,29 +5268,29 @@ function MN({ env: e }) {
     n && /* @__PURE__ */ t("p", { className: U.meta, children: n })
   ] });
 }
-function BN(e) {
+function ON(e) {
   const a = e.by !== void 0 ? `promoted by ${e.by}` : null;
   return [de(e.deployedAt), a, e.ticket].filter((n) => n !== null).join(" · ");
 }
-function PN(e) {
+function HN(e) {
   return /* @__PURE__ */ o("article", { className: `${U.webCard} ward-envcard`, children: [
     /* @__PURE__ */ o("span", { className: `${U.webRow} ward-envrow`, children: [
       /* @__PURE__ */ t("span", { className: `${U.webTitle} ward-stagecol-title`, children: e.env }),
       /* @__PURE__ */ t(h, { ...Zn[e.state] })
     ] }),
     /* @__PURE__ */ t("span", { className: `${U.version} ${U.webVersion} ${U.webLine} ward-envmeta`, children: e.version }),
-    /* @__PURE__ */ t("span", { className: `${U.meta} ${U.webMeta} ${U.webLine} ward-cellmeta`, children: BN(e) })
+    /* @__PURE__ */ t("span", { className: `${U.meta} ${U.webMeta} ${U.webLine} ward-cellmeta`, children: ON(e) })
   ] });
 }
-function CR(e) {
-  return "presentation" in e ? /* @__PURE__ */ t(PN, { ...e }) : /* @__PURE__ */ t(MN, { ...e });
+function xR(e) {
+  return "presentation" in e ? /* @__PURE__ */ t(HN, { ...e }) : /* @__PURE__ */ t(DN, { ...e });
 }
-const DN = "_panel_1hmja_2", ON = "_line_1hmja_8", HN = "_actions_1hmja_14", fa = {
-  panel: DN,
-  line: ON,
-  actions: HN
+const FN = "_panel_1hmja_2", qN = "_line_1hmja_8", WN = "_actions_1hmja_14", fa = {
+  panel: FN,
+  line: qN,
+  actions: WN
 };
-function SR(e) {
+function LR(e) {
   return /* @__PURE__ */ o("div", { className: fa.panel, children: [
     /* @__PURE__ */ t("p", { className: fa.line, children: e.status }),
     /* @__PURE__ */ t(M, { kind: "input", label: "New " + e.label.toLowerCase(), value: e.value, onChange: e.onChange, secret: !0 }),
@@ -5292,17 +5298,17 @@ function SR(e) {
     /* @__PURE__ */ t("p", { role: "status", className: fa.line, children: e.note ?? "" })
   ] });
 }
-const FN = "_upload_13fcl_2", jN = "_preview_13fcl_7", qN = "_mark_13fcl_17", zN = "_empty_13fcl_22", WN = "_actions_13fcl_28", KN = "_input_13fcl_33", GN = "_reasons_13fcl_41", UN = "_reason_13fcl_41", VN = "_accepted_13fcl_57", te = {
-  upload: FN,
-  preview: jN,
-  mark: qN,
-  empty: zN,
-  actions: WN,
-  input: KN,
-  reasons: GN,
-  reason: UN,
-  accepted: VN
-}, er = 1.5, ar = 22, Ta = "script elements or event handlers", Ie = "links or external references", Se = ["multiple fills", "embedded rasters", "text elements", `a stroke under ${er}px at ${ar}px`], YN = [Se[1], Se[2], Ta, Ie], JN = /* @__PURE__ */ new Map([
+const zN = "_upload_13fcl_2", KN = "_preview_13fcl_7", GN = "_mark_13fcl_17", UN = "_empty_13fcl_22", VN = "_actions_13fcl_28", YN = "_input_13fcl_33", JN = "_reasons_13fcl_41", XN = "_reason_13fcl_41", QN = "_accepted_13fcl_57", te = {
+  upload: zN,
+  preview: KN,
+  mark: GN,
+  empty: UN,
+  actions: VN,
+  input: YN,
+  reasons: JN,
+  reason: XN,
+  accepted: QN
+}, er = 1.5, ar = 22, Ta = "script elements or event handlers", Ie = "links or external references", Se = ["multiple fills", "embedded rasters", "text elements", `a stroke under ${er}px at ${ar}px`], ZN = [Se[1], Se[2], Ta, Ie], e1 = /* @__PURE__ */ new Map([
   ["image", Se[1]],
   ["text", Se[2]],
   ["tspan", Se[2]],
@@ -5314,7 +5320,7 @@ const FN = "_upload_13fcl_2", jN = "_preview_13fcl_7", qN = "_mark_13fcl_17", zN
   ["style", Ie],
   ["feImage", Ie],
   ["set", Ie]
-]), XN = "http://www.w3.org/2000/svg", QN = "http://www.w3.org/2000/xmlns/", ZN = /* @__PURE__ */ new Set([
+]), a1 = "http://www.w3.org/2000/svg", t1 = "http://www.w3.org/2000/xmlns/", n1 = /* @__PURE__ */ new Set([
   "svg",
   "path",
   "rect",
@@ -5332,7 +5338,7 @@ const FN = "_upload_13fcl_2", jN = "_preview_13fcl_7", qN = "_mark_13fcl_17", zN
   "stop",
   "title",
   "desc"
-]), e1 = /* @__PURE__ */ new Set([
+]), r1 = /* @__PURE__ */ new Set([
   "viewBox",
   "width",
   "height",
@@ -5373,14 +5379,14 @@ const FN = "_upload_13fcl_2", jN = "_preview_13fcl_7", qN = "_mark_13fcl_17", zN
   "offset",
   "stop-color",
   "stop-opacity"
-]), mt = /url\(\s*(['"]?)#([^'"()\\\s]*)\1\s*\)/gi, a1 = /url\s*\(|['"\\]/i;
-function t1() {
+]), mt = /url\(\s*(['"]?)#([^'"()\\\s]*)\1\s*\)/gi, l1 = /url\s*\(|['"\\]/i;
+function o1() {
   return { ok: !1, reasons: [Se[1]] };
 }
 function tr(e) {
-  return e.namespaceURI === XN;
+  return e.namespaceURI === a1;
 }
-function n1(e) {
+function i1(e) {
   try {
     const a = new DOMParser().parseFromString(e, "image/svg+xml").documentElement;
     return a.localName === "svg" && tr(a) ? a : null;
@@ -5388,122 +5394,122 @@ function n1(e) {
     return null;
   }
 }
-function r1(e) {
+function s1(e) {
   return new Set(
     Array.from(e.querySelectorAll("[fill]")).map((n) => n.getAttribute("fill") ?? "").filter((n) => n !== "" && n !== "none")
   ).size > 1 ? [Se[0]] : [];
 }
-function l1(e) {
-  return JN.get(e.localName) ?? (e.localName.startsWith("animate") ? Ie : void 0);
+function c1(e) {
+  return e1.get(e.localName) ?? (e.localName.startsWith("animate") ? Ie : void 0);
 }
-function o1(e) {
-  return a1.test(e.replace(mt, ""));
+function d1(e) {
+  return l1.test(e.replace(mt, ""));
 }
-function i1(e) {
-  return /^on/i.test(e.localName) ? Ta : e.localName === "href" || o1(e.value) ? Ie : void 0;
+function u1(e) {
+  return /^on/i.test(e.localName) ? Ta : e.localName === "href" || d1(e.value) ? Ie : void 0;
 }
-function s1(e) {
+function m1(e) {
   const a = /* @__PURE__ */ new Set();
   for (const n of [e, ...Array.from(e.querySelectorAll("*"))]) {
-    a.add(l1(n));
-    for (const r of Array.from(n.attributes)) a.add(i1(r));
+    a.add(c1(n));
+    for (const r of Array.from(n.attributes)) a.add(u1(r));
   }
-  return YN.filter((n) => a.has(n));
+  return ZN.filter((n) => a.has(n));
 }
-function c1(e) {
+function h1(e) {
   const a = (e.getAttribute("viewBox") ?? "").split(/[\s,]+/).map(Number), n = Math.max(...a.filter((l) => Number.isFinite(l) && l > 0), 0), r = n > 0 ? ar / n : 1;
   return Array.from(e.querySelectorAll("[stroke-width]")).some((l) => {
     const i = Number(l.getAttribute("stroke-width"));
     return Number.isFinite(i) && i * r < er;
   }) ? [Se[3]] : [];
 }
-function d1(e) {
-  if (e.namespaceURI === QN) return !0;
+function w1(e) {
+  if (e.namespaceURI === t1) return !0;
   const a = e.localName;
-  return e.namespaceURI === null && (e1.has(a) || a.startsWith("stroke"));
+  return e.namespaceURI === null && (r1.has(a) || a.startsWith("stroke"));
 }
-function u1(e) {
+function f1(e) {
   if (e.nodeType === Node.TEXT_NODE) return !0;
   const a = e;
-  return e.nodeType === Node.ELEMENT_NODE && tr(a) && ZN.has(a.localName);
+  return e.nodeType === Node.ELEMENT_NODE && tr(a) && n1.has(a.localName);
 }
-function m1(e, a) {
-  u1(a) ? a.nodeType === Node.ELEMENT_NODE && nr(a) : e.removeChild(a);
+function _1(e, a) {
+  f1(a) ? a.nodeType === Node.ELEMENT_NODE && nr(a) : e.removeChild(a);
 }
 function nr(e) {
-  for (const a of Array.from(e.attributes)) d1(a) || e.removeAttributeNode(a);
-  for (const a of Array.from(e.childNodes)) m1(e, a);
+  for (const a of Array.from(e.attributes)) w1(a) || e.removeAttributeNode(a);
+  for (const a of Array.from(e.childNodes)) _1(e, a);
   return e;
 }
-function h1(e) {
+function v1(e) {
   return Array.from(e.matchAll(mt), (a) => a[2]).filter((a) => a !== "");
 }
-function w1(e) {
+function b1(e) {
   let a = 2166136261;
   for (let n = 0; n < e.length; n += 1) a = Math.imul(a ^ e.charCodeAt(n), 16777619);
   return `ward-mark-${(a >>> 0).toString(36)}`;
 }
-function f1(e, a) {
+function p1(e, a) {
   const n = /* @__PURE__ */ new Map();
   for (const r of e)
     for (const l of Array.from(r.attributes))
-      for (const i of h1(l.value)) n.has(i) || n.set(i, `${a}-${n.size}`);
+      for (const i of v1(l.value)) n.has(i) || n.set(i, `${a}-${n.size}`);
   return n;
 }
-function _1(e, a) {
+function g1(e, a) {
   for (const n of Array.from(e.attributes))
     n.value = n.value.replace(mt, (r, l, i) => {
       const s = a.get(i);
       return s === void 0 ? r : r.replace(`#${i}`, `#${s}`);
     });
 }
-function v1(e, a) {
-  const n = [e, ...Array.from(e.querySelectorAll("*"))], r = f1(n, a);
+function y1(e, a) {
+  const n = [e, ...Array.from(e.querySelectorAll("*"))], r = p1(n, a);
   for (const l of n) {
     const i = r.get(l.getAttribute("id") ?? "");
-    i === void 0 ? l.removeAttribute("id") : l.setAttribute("id", i), _1(l, r);
+    i === void 0 ? l.removeAttribute("id") : l.setAttribute("id", i), g1(l, r);
   }
   return e;
 }
-function RR(e) {
-  const a = n1(e);
-  if (a === null) return t1();
-  const n = [...r1(a), ...s1(a), ...c1(a)];
-  return n.length > 0 ? { ok: !1, reasons: n } : { ok: !0, svg: new XMLSerializer().serializeToString(v1(nr(a), w1(e))) };
+function AR(e) {
+  const a = i1(e);
+  if (a === null) return o1();
+  const n = [...s1(a), ...m1(a), ...h1(a)];
+  return n.length > 0 ? { ok: !1, reasons: n } : { ok: !0, svg: new XMLSerializer().serializeToString(y1(nr(a), b1(e))) };
 }
-const b1 = "Mark accepted.", p1 = /^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i, g1 = new Set(Qt.flatMap((e) => [pe(e, "id"), pe(e, "chip")]));
-function y1(e) {
-  return e !== void 0 && (p1.test(e) || g1.has(e)) ? e : void 0;
+const N1 = "Mark accepted.", k1 = /^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i, $1 = new Set(Qt.flatMap((e) => [pe(e, "id"), pe(e, "chip")]));
+function C1(e) {
+  return e !== void 0 && (k1.test(e) || $1.has(e)) ? e : void 0;
 }
-function N1({ current: e }) {
+function S1({ current: e }) {
   const a = e ? `data:image/svg+xml;utf8,${encodeURIComponent(e.svg)}` : void 0;
-  return /* @__PURE__ */ t("div", { className: te.preview, style: { "--mark": y1(e == null ? void 0 : e.colour) }, children: a ? /* @__PURE__ */ t("img", { className: te.mark, src: a, alt: "Current mark" }) : /* @__PURE__ */ t("span", { className: te.empty }) });
+  return /* @__PURE__ */ t("div", { className: te.preview, style: { "--mark": C1(e == null ? void 0 : e.colour) }, children: a ? /* @__PURE__ */ t("img", { className: te.mark, src: a, alt: "Current mark" }) : /* @__PURE__ */ t("span", { className: te.empty }) });
 }
-function k1(e, a) {
+function R1(e, a) {
   const n = e === null ? "idle" : e.ok ? "accepted" : "rejected";
   return a.classNames[n];
 }
-function $1(e, a) {
+function T1(e, a) {
   return e === null ? a.idle : e.ok ? a.accepted : a.rejected(e.reasons);
 }
-function C1({ result: e }) {
-  return e === null ? /* @__PURE__ */ t("div", { className: te.result, role: "status" }) : e.ok && e.reasons.length === 0 ? /* @__PURE__ */ t("div", { className: te.result, role: "status", children: /* @__PURE__ */ t("p", { className: te.accepted, children: b1 }) }) : /* @__PURE__ */ t("div", { className: te.result, role: "status", children: /* @__PURE__ */ t("ul", { className: te.reasons, "data-rejected": e.ok ? void 0 : !0, children: e.reasons.map((a) => /* @__PURE__ */ t("li", { className: te.reason, children: a }, a)) }) });
+function x1({ result: e }) {
+  return e === null ? /* @__PURE__ */ t("div", { className: te.result, role: "status" }) : e.ok && e.reasons.length === 0 ? /* @__PURE__ */ t("div", { className: te.result, role: "status", children: /* @__PURE__ */ t("p", { className: te.accepted, children: N1 }) }) : /* @__PURE__ */ t("div", { className: te.result, role: "status", children: /* @__PURE__ */ t("ul", { className: te.reasons, "data-rejected": e.ok ? void 0 : !0, children: e.reasons.map((a) => /* @__PURE__ */ t("li", { className: te.reason, children: a }, a)) }) });
 }
-function S1({ result: e, presentation: a }) {
+function L1({ result: e, presentation: a }) {
   const n = a == null ? void 0 : a.status;
-  return n === void 0 ? /* @__PURE__ */ t(C1, { result: e }) : /* @__PURE__ */ t("p", { className: `${te.result} ${k1(e, n)}`, role: "status", children: $1(e, n) });
+  return n === void 0 ? /* @__PURE__ */ t(x1, { result: e }) : /* @__PURE__ */ t("p", { className: `${te.result} ${R1(e, n)}`, role: "status", children: T1(e, n) });
 }
-function zt(e) {
+function Wt(e) {
   return e === void 0 ? {} : { disabled: !0, disabledReason: e };
 }
-function TR({ current: e, onUpload: a, onUseInitials: n, presentation: r, disabledReason: l }) {
+function ER({ current: e, onUpload: a, onUseInitials: n, presentation: r, disabledReason: l }) {
   const i = f(null), [s, c] = p(null), d = (u) => {
     if (u === void 0) return;
     const m = a(u);
     m instanceof Promise ? m.then(c) : c(m);
   };
   return /* @__PURE__ */ o("div", { className: te.upload, children: [
-    /* @__PURE__ */ t(N1, { current: e }),
+    /* @__PURE__ */ t(S1, { current: e }),
     /* @__PURE__ */ o("div", { className: te.actions, children: [
       /* @__PURE__ */ t(
         "input",
@@ -5520,25 +5526,25 @@ function TR({ current: e, onUpload: a, onUseInitials: n, presentation: r, disabl
           }
         }
       ),
-      /* @__PURE__ */ t(b, { ...zt(l), onClick: () => {
+      /* @__PURE__ */ t(b, { ...Wt(l), onClick: () => {
         var u;
         return (u = i.current) == null ? void 0 : u.click();
       }, children: "Upload SVG" }),
-      /* @__PURE__ */ t(b, { ...zt(l), variant: "ghost", onClick: n, children: (r == null ? void 0 : r.useInitialsLabel) ?? "Use initials" })
+      /* @__PURE__ */ t(b, { ...Wt(l), variant: "ghost", onClick: n, children: (r == null ? void 0 : r.useInitialsLabel) ?? "Use initials" })
     ] }),
-    /* @__PURE__ */ t(S1, { result: s, presentation: r })
+    /* @__PURE__ */ t(L1, { result: s, presentation: r })
   ] });
 }
-const R1 = "_row_o3t6y_7", T1 = "_cell_o3t6y_11", x1 = "_head_o3t6y_28", L1 = "_name_o3t6y_34", A1 = "_pinned_o3t6y_42", E1 = "_headCell_o3t6y_49", I1 = "_webName_o3t6y_88", M1 = "_webMeta_o3t6y_95", B1 = "_webWarn_o3t6y_103", P = {
-  row: R1,
-  cell: T1,
-  head: x1,
-  name: L1,
-  pinned: A1,
-  headCell: E1,
-  webName: I1,
-  webMeta: M1,
-  webWarn: B1
+const A1 = "_row_o3t6y_7", E1 = "_cell_o3t6y_11", I1 = "_head_o3t6y_28", M1 = "_name_o3t6y_34", B1 = "_pinned_o3t6y_42", P1 = "_headCell_o3t6y_49", j1 = "_webName_o3t6y_88", D1 = "_webMeta_o3t6y_95", O1 = "_webWarn_o3t6y_103", P = {
+  row: A1,
+  cell: E1,
+  head: I1,
+  name: M1,
+  pinned: B1,
+  headCell: P1,
+  webName: j1,
+  webMeta: D1,
+  webWarn: O1
 }, ht = {
   healthy: { role: "done", label: "Healthy" },
   degraded: { role: "attention", label: "Degraded" },
@@ -5550,18 +5556,18 @@ const R1 = "_row_o3t6y_7", T1 = "_cell_o3t6y_11", x1 = "_head_o3t6y_28", L1 = "_
   { key: "transport", header: "Transport", width: 118, mono: !0 },
   { key: "credentialId", header: "Credential", width: 108, mono: !0, dropPriority: 2 },
   { key: "tools", header: "Tools", mono: !0, dropPriority: 1 }
-], P1 = Object.fromEntries(rr.map((e) => [e.key, e]));
-function D1(e, a) {
+], H1 = Object.fromEntries(rr.map((e) => [e.key, e]));
+function F1(e, a) {
   return `mcp.${e}.${a}`;
 }
-function O1(e) {
+function q1(e) {
   return Object.keys(ht).includes(e);
 }
-function H1(e) {
-  return ht[e !== void 0 && O1(e) ? e : "unknown"];
+function W1(e) {
+  return ht[e !== void 0 && q1(e) ? e : "unknown"];
 }
 function ra({ column: e, children: a }) {
-  const n = P1[e];
+  const n = H1[e];
   return /* @__PURE__ */ t(
     "td",
     {
@@ -5573,7 +5579,7 @@ function ra({ column: e, children: a }) {
     }
   );
 }
-function xR() {
+function IR() {
   return /* @__PURE__ */ t("tr", { children: rr.map((e) => /* @__PURE__ */ t(
     "th",
     {
@@ -5587,7 +5593,7 @@ function xR() {
     e.key
   )) });
 }
-function F1({ server: e }) {
+function z1({ server: e }) {
   const a = ht[e.connection];
   return /* @__PURE__ */ o("tr", { className: P.row, children: [
     /* @__PURE__ */ o(ra, { column: "name", children: [
@@ -5603,71 +5609,71 @@ function F1({ server: e }) {
     /* @__PURE__ */ t(ra, { column: "connection", children: /* @__PURE__ */ t(h, { role: a.role, label: a.label }) }),
     /* @__PURE__ */ t(ra, { column: "transport", children: e.transport }),
     /* @__PURE__ */ t(ra, { column: "credentialId", children: e.credentialId }),
-    /* @__PURE__ */ t(ra, { column: "tools", children: e.tools.map((n) => D1(e.name, n)).join(" · ") })
+    /* @__PURE__ */ t(ra, { column: "tools", children: e.tools.map((n) => F1(e.name, n)).join(" · ") })
   ] });
 }
-function j1(e) {
+function K1(e) {
   return `${e.transport ?? ""} · ${e.credential_id ?? ""}`;
 }
-function q1(e) {
+function G1(e) {
   var a;
   return (((a = e.write_tools) == null ? void 0 : a.length) ?? 0) > 0 ? { role: "write", label: "Write class" } : { role: "meta", label: "Read only" };
 }
-function z1({ pinned: e }) {
+function U1({ pinned: e }) {
   return e === null ? /* @__PURE__ */ t("span", { className: `${P.webWarn} ward-warnink`, children: "unpinned" }) : /* @__PURE__ */ t("span", { className: `${P.webMeta} ward-cellmeta`, children: e });
 }
-function W1({ server: e, onRestart: a }) {
+function V1({ server: e, onRestart: a }) {
   var n;
   return a === void 0 ? null : ((n = e.restart) == null ? void 0 : n.implemented) !== !0 ? /* @__PURE__ */ t("span", { className: `${P.webMeta} ward-cellmeta`, children: "Restart unavailable: no supervisor configured" }) : /* @__PURE__ */ t(b, { size: "sm", onClick: () => a(e.name), children: "Restart server" });
 }
-function K1({ name: e, pinned: a, onPin: n }) {
+function Y1({ name: e, pinned: a, onPin: n }) {
   return a !== null || n === void 0 ? null : /* @__PURE__ */ t(b, { size: "sm", onClick: () => n(e), children: "Pin version" });
 }
-function G1({ server: e, onRestart: a, onPin: n }) {
+function J1({ server: e, onRestart: a, onPin: n }) {
   const r = e.pinned_version ?? null, l = e.tools ?? [];
   return /* @__PURE__ */ o("tr", { className: P.row, children: [
     /* @__PURE__ */ o("td", { className: P.cell, children: [
       /* @__PURE__ */ t("span", { className: `${P.webName} ward-toolname`, children: e.name }),
-      /* @__PURE__ */ t("span", { className: `${P.webMeta} ward-cellmeta`, children: j1(e) })
+      /* @__PURE__ */ t("span", { className: `${P.webMeta} ward-cellmeta`, children: K1(e) })
     ] }),
     /* @__PURE__ */ t("td", { className: P.cell, children: /* @__PURE__ */ t("span", { className: `${P.webMeta} ward-cellmeta ward-truncate`, title: l.map((i) => i.tool).join(", "), children: `${l.length} discovered` }) }),
-    /* @__PURE__ */ t("td", { className: P.cell, children: /* @__PURE__ */ t(h, { ...q1(e) }) }),
-    /* @__PURE__ */ t("td", { className: P.cell, children: /* @__PURE__ */ t(z1, { pinned: r }) }),
-    /* @__PURE__ */ t("td", { className: P.cell, children: /* @__PURE__ */ t(h, { ...H1(e.connection) }) }),
+    /* @__PURE__ */ t("td", { className: P.cell, children: /* @__PURE__ */ t(h, { ...G1(e) }) }),
+    /* @__PURE__ */ t("td", { className: P.cell, children: /* @__PURE__ */ t(U1, { pinned: r }) }),
+    /* @__PURE__ */ t("td", { className: P.cell, children: /* @__PURE__ */ t(h, { ...W1(e.connection) }) }),
     /* @__PURE__ */ o("td", { className: P.cell, children: [
-      /* @__PURE__ */ t(W1, { server: e, onRestart: a }),
-      /* @__PURE__ */ t(K1, { name: e.name, pinned: r, onPin: n })
+      /* @__PURE__ */ t(V1, { server: e, onRestart: a }),
+      /* @__PURE__ */ t(Y1, { name: e.name, pinned: r, onPin: n })
     ] })
   ] });
 }
-function LR(e) {
-  return "presentation" in e ? /* @__PURE__ */ t(G1, { ...e }) : /* @__PURE__ */ t(F1, { ...e });
+function MR(e) {
+  return "presentation" in e ? /* @__PURE__ */ t(J1, { ...e }) : /* @__PURE__ */ t(z1, { ...e });
 }
-const U1 = "_row_1ibo7_2", V1 = "_headCell_1ibo7_14", Y1 = "_cell_1ibo7_15", J1 = "_name_1ibo7_26", X1 = "_consequence_1ibo7_32", Q1 = "_reason_1ibo7_38", Z1 = "_value_1ibo7_44", ek = "_webRow_1ibo7_60", ak = "_webSetting_1ibo7_73", tk = "_webName_1ibo7_81", nk = "_webConsequence_1ibo7_89", rk = "_webControl_1ibo7_95", lk = "_webState_1ibo7_109", ok = "_webChip_1ibo7_114", I = {
-  row: U1,
-  headCell: V1,
-  cell: Y1,
-  name: J1,
-  consequence: X1,
-  reason: Q1,
-  value: Z1,
-  webRow: ek,
-  webSetting: ak,
-  webName: tk,
-  webConsequence: nk,
-  webControl: rk,
-  webState: lk,
-  webChip: ok
+const X1 = "_row_1ibo7_2", Q1 = "_headCell_1ibo7_14", Z1 = "_cell_1ibo7_15", ek = "_name_1ibo7_26", ak = "_consequence_1ibo7_32", tk = "_reason_1ibo7_38", nk = "_value_1ibo7_44", rk = "_webRow_1ibo7_60", lk = "_webSetting_1ibo7_73", ok = "_webName_1ibo7_81", ik = "_webConsequence_1ibo7_89", sk = "_webControl_1ibo7_95", ck = "_webState_1ibo7_109", dk = "_webChip_1ibo7_114", I = {
+  row: X1,
+  headCell: Q1,
+  cell: Z1,
+  name: ek,
+  consequence: ak,
+  reason: tk,
+  value: nk,
+  webRow: rk,
+  webSetting: lk,
+  webName: ok,
+  webConsequence: ik,
+  webControl: sk,
+  webState: ck,
+  webChip: dk
 }, lr = 104, or = {
   inherited: { role: "meta", label: "Inherited" },
   overridden: { role: "running", label: "Overridden" },
   locked: { role: "meta", label: "Locked" },
   derived: { role: "soft", label: "Derived" }
 };
-function ik({ control: e, name: a, locked: n, describedBy: r }) {
+function uk({ control: e, name: a, locked: n, describedBy: r }) {
   return e.kind === "switch" ? /* @__PURE__ */ t(Ge, { label: a, checked: e.checked, locked: n || void 0, onChange: e.onChange, describedBy: r }) : e.kind === "segment" ? /* @__PURE__ */ t(yn, { label: a, options: e.options, value: e.value, onChange: e.onChange, disabled: n, describedBy: r }) : /* @__PURE__ */ t("span", { className: I.value, "data-locked": n ? !0 : void 0, children: e.text });
 }
-function sk({ setting: e, control: a, inheritance: n, reason: r }) {
+function mk({ setting: e, control: a, inheritance: n, reason: r }) {
   if (n === "locked" && !r) throw new Error("PolicyRow: a locked setting must say why in the row");
   const l = N(), i = or[n], s = n === "locked";
   return /* @__PURE__ */ o("tr", { className: I.row, "data-inheritance": n, children: [
@@ -5676,35 +5682,35 @@ function sk({ setting: e, control: a, inheritance: n, reason: r }) {
       /* @__PURE__ */ t("span", { className: I.consequence, children: e.consequence }),
       r && /* @__PURE__ */ t("span", { id: l, className: I.reason, children: r })
     ] }),
-    /* @__PURE__ */ t("td", { className: I.cell, children: /* @__PURE__ */ t(ik, { control: a, name: e.name, locked: s, describedBy: s ? l : void 0 }) }),
+    /* @__PURE__ */ t("td", { className: I.cell, children: /* @__PURE__ */ t(uk, { control: a, name: e.name, locked: s, describedBy: s ? l : void 0 }) }),
     /* @__PURE__ */ t("td", { className: I.cell, style: { width: lr }, children: /* @__PURE__ */ t(h, { role: i.role, label: i.label }) })
   ] });
 }
 function ir(e, a) {
   return String(e ?? a);
 }
-function ck(e, a) {
+function hk(e, a) {
   return e.kind === "segment" && !a ? e.options : void 0;
 }
-function dk(e) {
+function wk(e) {
   var n;
   const a = e.kind === "segment" ? (n = e.options) == null ? void 0 : n.find((r) => r.value === e.value) : void 0;
   return (a == null ? void 0 : a.label) ?? ir(e.value, "—");
 }
-function uk({ control: e, name: a, locked: n, describedBy: r, onChange: l }) {
+function fk({ control: e, name: a, locked: n, describedBy: r, onChange: l }) {
   const i = e.value === !0;
   return /* @__PURE__ */ o("span", { className: I.webControl, children: [
     /* @__PURE__ */ t(Ge, { label: a, labelHidden: !0, checked: i, locked: n, describedBy: r, onChange: (s) => l == null ? void 0 : l(s) }),
     /* @__PURE__ */ t("span", { className: I.webState, "aria-hidden": "true", children: n || i ? "on" : "off" })
   ] });
 }
-function mk(e) {
+function _k(e) {
   const { control: a, locked: n, onChange: r } = e;
-  if (a.kind === "switch") return /* @__PURE__ */ t(uk, { ...e });
-  const l = ck(a, n);
-  return l !== void 0 ? /* @__PURE__ */ t("span", { className: I.webControl, "data-kind": "segment", children: /* @__PURE__ */ t(yn, { options: l, value: ir(a.value, ""), onChange: (i) => r == null ? void 0 : r(i) }) }) : /* @__PURE__ */ t("span", { className: `${I.webControl} ${I.value} ward-envmeta`, "data-locked": n ? !0 : void 0, children: dk(a) });
+  if (a.kind === "switch") return /* @__PURE__ */ t(fk, { ...e });
+  const l = hk(a, n);
+  return l !== void 0 ? /* @__PURE__ */ t("span", { className: I.webControl, "data-kind": "segment", children: /* @__PURE__ */ t(yn, { options: l, value: ir(a.value, ""), onChange: (i) => r == null ? void 0 : r(i) }) }) : /* @__PURE__ */ t("span", { className: `${I.webControl} ${I.value} ward-envmeta`, "data-locked": n ? !0 : void 0, children: wk(a) });
 }
-function hk({ setting: e, control: a, inheritance: n, reason: r, onChange: l, renderControl: i }) {
+function vk({ setting: e, control: a, inheritance: n, reason: r, onChange: l, renderControl: i }) {
   const s = N(), c = n === "locked";
   return /* @__PURE__ */ o("div", { className: `${I.row} ${I.webRow} ward-policyrow`, "data-inheritance": n, children: [
     /* @__PURE__ */ o("span", { className: I.webSetting, children: [
@@ -5714,27 +5720,27 @@ function hk({ setting: e, control: a, inheritance: n, reason: r, onChange: l, re
         r !== void 0 ? " " + r : null
       ] })
     ] }),
-    i ? /* @__PURE__ */ t("span", { className: I.webControl, children: i(s) }) : /* @__PURE__ */ t(mk, { control: a, name: e.name, locked: c, describedBy: c ? s : void 0, onChange: l }),
+    i ? /* @__PURE__ */ t("span", { className: I.webControl, children: i(s) }) : /* @__PURE__ */ t(_k, { control: a, name: e.name, locked: c, describedBy: c ? s : void 0, onChange: l }),
     /* @__PURE__ */ t("span", { className: `${I.webChip} ward-policy-chip`, style: { width: lr }, children: /* @__PURE__ */ t(h, { ...or[n], size: "tag" }) })
   ] });
 }
-function AR(e) {
-  return "presentation" in e ? /* @__PURE__ */ t(hk, { ...e }) : /* @__PURE__ */ t(sk, { ...e });
+function BR(e) {
+  return "presentation" in e ? /* @__PURE__ */ t(vk, { ...e }) : /* @__PURE__ */ t(mk, { ...e });
 }
-const wk = "_label_h9m4w_7", fk = "_name_h9m4w_15", _k = "_column_h9m4w_24", vk = "_webFrame_h9m4w_57", bk = "_webHead_h9m4w_62", pk = "_webHeadLabel_h9m4w_74", gk = "_webLabel_h9m4w_117", yk = "_webColumns_h9m4w_124", Nk = "_webGroup_h9m4w_130", kk = "_webPeople_h9m4w_131", $k = "_webVia_h9m4w_132", Ck = "_webMeta_h9m4w_161", z = {
-  label: wk,
-  name: fk,
-  column: _k,
-  webFrame: vk,
-  webHead: bk,
-  webHeadLabel: pk,
-  webLabel: gk,
-  webColumns: yk,
-  webGroup: Nk,
-  webPeople: kk,
-  webVia: $k,
-  webMeta: Ck
-}, Sk = {
+const bk = "_label_h9m4w_7", pk = "_name_h9m4w_15", gk = "_column_h9m4w_24", yk = "_webFrame_h9m4w_57", Nk = "_webHead_h9m4w_62", kk = "_webHeadLabel_h9m4w_74", $k = "_webLabel_h9m4w_117", Ck = "_webColumns_h9m4w_124", Sk = "_webGroup_h9m4w_130", Rk = "_webPeople_h9m4w_131", Tk = "_webVia_h9m4w_132", xk = "_webMeta_h9m4w_161", W = {
+  label: bk,
+  name: pk,
+  column: gk,
+  webFrame: yk,
+  webHead: Nk,
+  webHeadLabel: kk,
+  webLabel: $k,
+  webColumns: Ck,
+  webGroup: Sk,
+  webPeople: Rk,
+  webVia: Tk,
+  webMeta: xk
+}, Lk = {
   platformAdmin: { role: "gate", label: "Platform admin" },
   approver: { role: "running", label: "Approver" },
   streamAdmin: { role: "meta", label: "Stream admin" },
@@ -5749,7 +5755,7 @@ function Ga({ column: e, children: a }) {
   return /* @__PURE__ */ t(
     "span",
     {
-      className: z.column,
+      className: W.column,
       style: { width: e.width },
       "data-drop": e.dropPriority,
       "data-mono": e.mono,
@@ -5758,30 +5764,30 @@ function Ga({ column: e, children: a }) {
     }
   );
 }
-function Rk(e) {
+function Ak(e) {
   if (!e.matrixRole) return;
-  const a = Sk[e.matrixRole];
+  const a = Lk[e.matrixRole];
   if (!a) throw new Error(`RoleMatrixRow: '${e.matrixRole}' is not a Trellis role`);
   return a;
 }
-function Tk({ node: e }) {
-  const a = Rk(e);
-  return /* @__PURE__ */ o("span", { className: z.label, children: [
-    /* @__PURE__ */ t("span", { className: z.name, children: e.name }),
-    /* @__PURE__ */ t(xk, { role: a, node: e }),
+function Ek({ node: e }) {
+  const a = Ak(e);
+  return /* @__PURE__ */ o("span", { className: W.label, children: [
+    /* @__PURE__ */ t("span", { className: W.name, children: e.name }),
+    /* @__PURE__ */ t(Ik, { role: a, node: e }),
     /* @__PURE__ */ t(Ga, { column: Ka[0], children: e.adGroup ?? "" }),
     /* @__PURE__ */ t(Ga, { column: Ka[1], children: e.people === void 0 ? "" : ee(e.people) }),
     /* @__PURE__ */ t(Ga, { column: Ka[2], children: e.requestedVia ?? "" })
   ] });
 }
-function xk({ role: e, node: a }) {
+function Ik({ role: e, node: a }) {
   return /* @__PURE__ */ o(T, { children: [
     e && /* @__PURE__ */ t(h, { role: e.role, label: e.label }),
     a.floor && /* @__PURE__ */ t(h, { role: "soft", label: "Floor" }),
     a.unresolved && /* @__PURE__ */ t(h, { role: "warn", label: "Unresolved" })
   ] });
 }
-function Lk({ index: e, depth: a, node: n, expanded: r, leaf: l, onToggle: i, children: s }) {
+function Mk({ index: e, depth: a, node: n, expanded: r, leaf: l, onToggle: i, children: s }) {
   return /* @__PURE__ */ t(
     Sn,
     {
@@ -5792,7 +5798,7 @@ function Lk({ index: e, depth: a, node: n, expanded: r, leaf: l, onToggle: i, ch
       onToggle: i,
       unresolved: n.unresolved,
       inherited: n.inherited,
-      label: /* @__PURE__ */ t(Tk, { node: n }),
+      label: /* @__PURE__ */ t(Ek, { node: n }),
       children: s
     }
   );
@@ -5800,43 +5806,43 @@ function Lk({ index: e, depth: a, node: n, expanded: r, leaf: l, onToggle: i, ch
 function Ua({ className: e, text: a }) {
   return /* @__PURE__ */ t("span", { className: e, title: a, children: a });
 }
-function Ak({ row: e }) {
-  return /* @__PURE__ */ o("span", { className: `${z.webColumns} ward-rolecols`, children: [
-    /* @__PURE__ */ t(Ua, { className: `${z.webMeta} ${z.webGroup} ward-cellmeta ward-truncate`, text: e.group ?? "—" }),
-    /* @__PURE__ */ t(Ua, { className: `${z.webPeople} ward-rolepeople ward-truncate`, text: e.people ?? "" }),
-    /* @__PURE__ */ t(Ua, { className: `${z.webMeta} ${z.webVia} ward-cellmeta ward-truncate`, text: e.requestedVia ?? "" })
+function Bk({ row: e }) {
+  return /* @__PURE__ */ o("span", { className: `${W.webColumns} ward-rolecols`, children: [
+    /* @__PURE__ */ t(Ua, { className: `${W.webMeta} ${W.webGroup} ward-cellmeta ward-truncate`, text: e.group ?? "—" }),
+    /* @__PURE__ */ t(Ua, { className: `${W.webPeople} ward-rolepeople ward-truncate`, text: e.people ?? "" }),
+    /* @__PURE__ */ t(Ua, { className: `${W.webMeta} ${W.webVia} ward-cellmeta ward-truncate`, text: e.requestedVia ?? "" })
   ] });
 }
-function Ek() {
-  return /* @__PURE__ */ o("div", { className: z.webHead, "aria-hidden": "true", children: [
-    /* @__PURE__ */ t("span", { className: z.webHeadLabel, children: "Scope → role → person" }),
-    /* @__PURE__ */ o("span", { className: z.webColumns, children: [
-      /* @__PURE__ */ t("span", { className: z.webGroup, children: "AD group" }),
-      /* @__PURE__ */ t("span", { className: z.webPeople, children: "People" }),
-      /* @__PURE__ */ t("span", { className: z.webVia, children: "Requested via" })
+function Pk() {
+  return /* @__PURE__ */ o("div", { className: W.webHead, "aria-hidden": "true", children: [
+    /* @__PURE__ */ t("span", { className: W.webHeadLabel, children: "Scope → role → person" }),
+    /* @__PURE__ */ o("span", { className: W.webColumns, children: [
+      /* @__PURE__ */ t("span", { className: W.webGroup, children: "AD group" }),
+      /* @__PURE__ */ t("span", { className: W.webPeople, children: "People" }),
+      /* @__PURE__ */ t("span", { className: W.webVia, children: "Requested via" })
     ] })
   ] });
 }
-function Ik({ row: e }) {
-  return /* @__PURE__ */ o("span", { className: `${z.webLabel} ward-envrow`, children: [
+function jk({ row: e }) {
+  return /* @__PURE__ */ o("span", { className: `${W.webLabel} ward-envrow`, children: [
     /* @__PURE__ */ t("span", { children: e.label }),
     e.role !== void 0 ? /* @__PURE__ */ t(h, { role: e.role.role, label: e.role.label }) : null,
     e.state === "floor" ? /* @__PURE__ */ t(h, { role: "meta", label: "implicit floor" }) : null
   ] });
 }
-function Mk(e) {
+function Dk(e) {
   return e.expanded ?? (e.leaf === !0 ? void 0 : !1);
 }
-function Bk({ rows: e, label: a }) {
-  return /* @__PURE__ */ o("div", { className: z.webFrame, "data-ward-rolematrix": "", children: [
-    /* @__PURE__ */ t(Ek, {}),
-    /* @__PURE__ */ t(vm, { label: a ?? "Role matrix", children: e.map((n, r) => /* @__PURE__ */ t(
+function Ok({ rows: e, label: a }) {
+  return /* @__PURE__ */ o("div", { className: W.webFrame, "data-ward-rolematrix": "", children: [
+    /* @__PURE__ */ t(Pk, {}),
+    /* @__PURE__ */ t(ym, { label: a ?? "Role matrix", children: e.map((n, r) => /* @__PURE__ */ t(
       Sn,
       {
         depth: n.depth,
-        label: /* @__PURE__ */ t(Ik, { row: n }),
-        detail: /* @__PURE__ */ t(Ak, { row: n }),
-        expanded: Mk(n),
+        label: /* @__PURE__ */ t(jk, { row: n }),
+        detail: /* @__PURE__ */ t(Bk, { row: n }),
+        expanded: Dk(n),
         leaf: n.leaf === !0,
         unresolved: n.state === "unresolved",
         inherited: n.state === "inherited",
@@ -5846,24 +5852,24 @@ function Bk({ rows: e, label: a }) {
     )) })
   ] });
 }
-function ER(e) {
-  return "presentation" in e ? /* @__PURE__ */ t(Bk, { ...e }) : /* @__PURE__ */ t(Lk, { ...e });
+function PR(e) {
+  return "presentation" in e ? /* @__PURE__ */ t(Ok, { ...e }) : /* @__PURE__ */ t(Mk, { ...e });
 }
-const Pk = "_runbook_b9agc_2", Dk = "_list_b9agc_7", Ok = "_step_b9agc_15", Hk = "_numeral_b9agc_21", Fk = "_body_b9agc_28", jk = "_head_b9agc_34", qk = "_title_b9agc_40", zk = "_detail_b9agc_45", Wk = "_actions_b9agc_50", Kk = "_webList_b9agc_56", Gk = "_webStep_b9agc_60", Uk = "_webBody_b9agc_66", Vk = "_webTitle_b9agc_74", Yk = "_webDetail_b9agc_78", A = {
-  runbook: Pk,
-  list: Dk,
-  step: Ok,
-  numeral: Hk,
-  body: Fk,
-  head: jk,
-  title: qk,
-  detail: zk,
-  actions: Wk,
-  webList: Kk,
-  webStep: Gk,
-  webBody: Uk,
-  webTitle: Vk,
-  webDetail: Yk
+const Hk = "_runbook_b9agc_2", Fk = "_list_b9agc_7", qk = "_step_b9agc_15", Wk = "_numeral_b9agc_21", zk = "_body_b9agc_28", Kk = "_head_b9agc_34", Gk = "_title_b9agc_40", Uk = "_detail_b9agc_45", Vk = "_actions_b9agc_50", Yk = "_webList_b9agc_56", Jk = "_webStep_b9agc_60", Xk = "_webBody_b9agc_66", Qk = "_webTitle_b9agc_74", Zk = "_webDetail_b9agc_78", A = {
+  runbook: Hk,
+  list: Fk,
+  step: qk,
+  numeral: Wk,
+  body: zk,
+  head: Kk,
+  title: Gk,
+  detail: Uk,
+  actions: Vk,
+  webList: Yk,
+  webStep: Jk,
+  webBody: Xk,
+  webTitle: Qk,
+  webDetail: Zk
 }, sr = {
   done: { role: "done", label: "Done" },
   running: { role: "running", label: "Running" },
@@ -5872,7 +5878,7 @@ const Pk = "_runbook_b9agc_2", Dk = "_list_b9agc_7", Ok = "_step_b9agc_15", Hk =
 function cr(e) {
   return String(e + 1).padStart(2, "0");
 }
-function Jk({ step: e, index: a, connection: n }) {
+function e$({ step: e, index: a, connection: n }) {
   const r = sr[e.state], l = e.state === "running";
   return /* @__PURE__ */ o("li", { className: A.step, "aria-current": l ? "step" : void 0, children: [
     /* @__PURE__ */ t("span", { className: A.numeral, children: cr(a) }),
@@ -5886,13 +5892,13 @@ function Jk({ step: e, index: a, connection: n }) {
     ] })
   ] });
 }
-function Xk({ steps: e, actions: a, connection: n = "live" }) {
+function a$({ steps: e, actions: a, connection: n = "live" }) {
   return /* @__PURE__ */ o("div", { className: A.runbook, children: [
-    /* @__PURE__ */ t("ol", { className: A.list, children: e.map((r, l) => /* @__PURE__ */ t(Jk, { step: r, index: l, connection: n }, r.title)) }),
+    /* @__PURE__ */ t("ol", { className: A.list, children: e.map((r, l) => /* @__PURE__ */ t(e$, { step: r, index: l, connection: n }, r.title)) }),
     a && /* @__PURE__ */ t("div", { className: A.actions, children: a })
   ] });
 }
-function Qk({ step: e, index: a, connection: n }) {
+function t$({ step: e, index: a, connection: n }) {
   return /* @__PURE__ */ o("li", { className: `${A.step} ${A.webStep} ward-runbook-step`, children: [
     /* @__PURE__ */ t("span", { className: `${A.numeral} ward-runbook-num`, style: { color: "var(--ward-color-muted)" }, children: cr(a) }),
     /* @__PURE__ */ o("span", { className: `${A.body} ${A.webBody}`, children: [
@@ -5905,28 +5911,28 @@ function Qk({ step: e, index: a, connection: n }) {
     ] })
   ] });
 }
-function Zk({ steps: e, actions: a, connection: n = "live" }) {
+function n$({ steps: e, actions: a, connection: n = "live" }) {
   return /* @__PURE__ */ o("div", { className: A.runbook, children: [
-    /* @__PURE__ */ t("ol", { className: `${A.list} ${A.webList} ward-runbook`, children: e.map((r, l) => /* @__PURE__ */ t(Qk, { step: r, index: l, connection: n }, r.title)) }),
+    /* @__PURE__ */ t("ol", { className: `${A.list} ${A.webList} ward-runbook`, children: e.map((r, l) => /* @__PURE__ */ t(t$, { step: r, index: l, connection: n }, r.title)) }),
     a !== void 0 ? /* @__PURE__ */ t("span", { className: `${A.actions} ward-clarity-actions`, children: a }) : null
   ] });
 }
-function IR(e) {
-  return "presentation" in e ? /* @__PURE__ */ t(Zk, { ...e }) : /* @__PURE__ */ t(Xk, { ...e });
+function jR(e) {
+  return "presentation" in e ? /* @__PURE__ */ t(n$, { ...e }) : /* @__PURE__ */ t(a$, { ...e });
 }
-const e$ = "_list_1gu6a_2", a$ = "_check_1gu6a_10", t$ = "_body_1gu6a_16", n$ = "_text_1gu6a_23", r$ = "_pending_1gu6a_32", l$ = "_measured_1gu6a_37", Qe = {
-  list: e$,
-  check: a$,
-  body: t$,
-  text: n$,
-  pending: r$,
-  measured: l$
+const r$ = "_list_1gu6a_2", l$ = "_check_1gu6a_10", o$ = "_body_1gu6a_16", i$ = "_text_1gu6a_23", s$ = "_pending_1gu6a_32", c$ = "_measured_1gu6a_37", Qe = {
+  list: r$,
+  check: l$,
+  body: o$,
+  text: i$,
+  pending: s$,
+  measured: c$
 };
-function o$(e) {
+function d$(e) {
   return e === null ? { state: "unmet", label: "pending" } : e ? { state: "met", label: "passed" } : { state: "failed", label: "failed" };
 }
-function i$({ check: e }) {
-  const a = o$(e.passed);
+function u$({ check: e }) {
+  const a = d$(e.passed);
   return /* @__PURE__ */ o("li", { className: `${Qe.check} ward-checklist-item`, "data-pending": e.passed === null ? !0 : void 0, children: [
     /* @__PURE__ */ t(lt, { state: a.state, label: a.label }),
     /* @__PURE__ */ o("span", { className: Qe.body, children: [
@@ -5939,20 +5945,20 @@ function i$({ check: e }) {
     e.measured && /* @__PURE__ */ t("span", { className: Qe.measured, children: e.measured })
   ] });
 }
-function MR({ checks: e }) {
-  return /* @__PURE__ */ t("ul", { className: `${Qe.list} ward-checklist`, children: e.map((a) => /* @__PURE__ */ t(i$, { check: a }, a.text)) });
+function DR({ checks: e }) {
+  return /* @__PURE__ */ t("ul", { className: `${Qe.list} ward-checklist`, children: e.map((a) => /* @__PURE__ */ t(u$, { check: a }, a.text)) });
 }
-const s$ = "_root_a6xzy_2", c$ = "_list_a6xzy_10", d$ = "_line_a6xzy_21", u$ = "_at_a6xzy_48", m$ = "_text_a6xzy_52", h$ = "_foot_a6xzy_56", w$ = "_idle_a6xzy_68", f$ = "_caret_a6xzy_76", _$ = "_jump_a6xzy_83", he = {
-  root: s$,
-  list: c$,
-  line: d$,
-  at: u$,
-  text: m$,
-  foot: h$,
-  idle: w$,
-  caret: f$,
-  jump: _$
-}, v$ = new Intl.DateTimeFormat("en-GB", {
+const m$ = "_root_a6xzy_2", h$ = "_list_a6xzy_10", w$ = "_line_a6xzy_21", f$ = "_at_a6xzy_48", _$ = "_text_a6xzy_52", v$ = "_foot_a6xzy_56", b$ = "_idle_a6xzy_68", p$ = "_caret_a6xzy_76", g$ = "_jump_a6xzy_83", he = {
+  root: m$,
+  list: h$,
+  line: w$,
+  at: f$,
+  text: _$,
+  foot: v$,
+  idle: b$,
+  caret: p$,
+  jump: g$
+}, y$ = new Intl.DateTimeFormat("en-GB", {
   timeZone: "Europe/London",
   hour: "2-digit",
   minute: "2-digit",
@@ -5960,17 +5966,17 @@ const s$ = "_root_a6xzy_2", c$ = "_list_a6xzy_10", d$ = "_line_a6xzy_21", u$ = "
   hour12: !1
 });
 function wt(e) {
-  return Number.isNaN(Date.parse(e)) ? "" : v$.format(new Date(e));
+  return Number.isNaN(Date.parse(e)) ? "" : y$.format(new Date(e));
 }
-const b$ = { warn: "warning", ok: "ok" };
-function p$({ kind: e }) {
-  const a = b$[e];
+const N$ = { warn: "warning", ok: "ok" };
+function k$({ kind: e }) {
+  const a = N$[e];
   return a === void 0 ? null : /* @__PURE__ */ t("span", { className: "ward-visually-hidden", children: a });
 }
-function g$({ at: e }) {
+function $$({ at: e }) {
   return e === void 0 ? null : /* @__PURE__ */ t("span", { children: `last event ${wt(e)}` });
 }
-function y$({ connection: e, idleSince: a, last: n, children: r }) {
+function C$({ connection: e, idleSince: a, last: n, children: r }) {
   const l = [a, n == null ? void 0 : n.at, ""].find(Boolean), i = {
     stale: `no new events as of ${wt(l)}`,
     live: "waiting for the next event…",
@@ -5979,19 +5985,19 @@ function y$({ connection: e, idleSince: a, last: n, children: r }) {
   return /* @__PURE__ */ o("p", { className: `${he.foot} ward-consline ward-consline--dim`, children: [
     /* @__PURE__ */ t("span", { className: `${he.caret} ward-caret`, "aria-hidden": "true" }),
     /* @__PURE__ */ t("span", { className: he.idle, children: i }),
-    /* @__PURE__ */ t(g$, { at: n == null ? void 0 : n.at }),
+    /* @__PURE__ */ t($$, { at: n == null ? void 0 : n.at }),
     r
   ] });
 }
-const N$ = 8;
-function k$(e) {
-  return e.scrollHeight - e.scrollTop - e.clientHeight > N$;
+const S$ = 8;
+function R$(e) {
+  return e.scrollHeight - e.scrollTop - e.clientHeight > S$;
 }
-function $$({ shown: e, onJump: a }) {
+function T$({ shown: e, onJump: a }) {
   return e ? /* @__PURE__ */ t("button", { type: "button", className: `${he.jump} ward-consjump`, onClick: a, children: "Jump to latest" }) : null;
 }
 const dr = Te(null);
-function BR({ announce: e, onAnnounceChange: a, children: n }) {
+function OR({ announce: e, onAnnounceChange: a, children: n }) {
   const [r, l] = p(!1), i = Vt(() => ({
     announce: e ?? r,
     setAnnounce: (s) => {
@@ -6000,12 +6006,12 @@ function BR({ announce: e, onAnnounceChange: a, children: n }) {
   }), [e, r, a]);
   return /* @__PURE__ */ t(dr.Provider, { value: i, children: n });
 }
-function C$() {
+function x$() {
   const e = Re(dr), [a, n] = p(!1);
   return e ? [e.announce, e.setAnnounce] : [a, n];
 }
-function PR({ lines: e, connection: a, idleSince: n, label: r = "Live activity" }) {
-  const l = f(null), [i, s] = p(0), [c, d] = C$(), [u, m] = p(!1), w = e.at(-1);
+function HR({ lines: e, connection: a, idleSince: n, label: r = "Live activity" }) {
+  const l = f(null), [i, s] = p(0), [c, d] = x$(), [u, m] = p(!1), w = e.at(-1);
   S(() => {
     s(e.length);
   }, [e.length]), aa(() => {
@@ -6020,33 +6026,33 @@ function PR({ lines: e, connection: a, idleSince: n, label: r = "Live activity" 
     (B = L.item(L.length - 1)) == null || B.focus(), m(!1);
   };
   return /* @__PURE__ */ o("div", { className: he.root, children: [
-    /* @__PURE__ */ t("ol", { className: he.list, ref: l, "aria-live": c ? "polite" : "off", "aria-label": r, onScroll: (y) => m(k$(y.currentTarget)), children: e.map((y, L) => /* @__PURE__ */ o("li", { className: `${he.line} ward-consline ward-reveal ward-consline--${y.kind}`, "data-kind": y.kind, "data-revealed": L < i, children: [
+    /* @__PURE__ */ t("ol", { className: he.list, ref: l, "aria-live": c ? "polite" : "off", "aria-label": r, onScroll: (y) => m(R$(y.currentTarget)), children: e.map((y, L) => /* @__PURE__ */ o("li", { className: `${he.line} ward-consline ward-reveal ward-consline--${y.kind}`, "data-kind": y.kind, "data-revealed": L < i, children: [
       /* @__PURE__ */ t("span", { className: he.at, children: wt(y.at) }),
-      /* @__PURE__ */ t(p$, { kind: y.kind }),
+      /* @__PURE__ */ t(k$, { kind: y.kind }),
       /* @__PURE__ */ t("span", { className: he.text, "data-consline-text": !0, tabIndex: -1, children: y.text })
     ] }, `${y.at}-${L}`)) }),
-    /* @__PURE__ */ o(y$, { connection: a, idleSince: n, last: w, children: [
+    /* @__PURE__ */ o(C$, { connection: a, idleSince: n, last: w, children: [
       /* @__PURE__ */ t("button", { type: "button", className: `${he.jump} ward-consannounce`, "aria-pressed": c, onClick: () => d(!c), children: "Read new events" }),
-      /* @__PURE__ */ t($$, { shown: u, onJump: v })
+      /* @__PURE__ */ t(T$, { shown: u, onJump: v })
     ] })
   ] });
 }
-const S$ = "_row_1k8wl_2", R$ = "_head_1k8wl_14", T$ = "_author_1k8wl_20", x$ = "_eta_1k8wl_25", L$ = "_edited_1k8wl_26", A$ = "_body_1k8wl_32", E$ = "_reason_1k8wl_37", I$ = "_actions_1k8wl_42", Ne = {
-  row: S$,
-  head: R$,
-  author: T$,
-  eta: x$,
-  edited: L$,
-  body: A$,
-  reason: E$,
-  actions: I$
-}, M$ = {
+const L$ = "_row_1k8wl_2", A$ = "_head_1k8wl_14", E$ = "_author_1k8wl_20", I$ = "_eta_1k8wl_25", M$ = "_edited_1k8wl_26", B$ = "_body_1k8wl_32", P$ = "_reason_1k8wl_37", j$ = "_actions_1k8wl_42", Ne = {
+  row: L$,
+  head: A$,
+  author: E$,
+  eta: I$,
+  edited: M$,
+  body: B$,
+  reason: P$,
+  actions: j$
+}, D$ = {
   queued: { role: "running", label: "Queued" },
   delivered: { role: "done", label: "Delivered" },
   retrying: { role: "attention", label: "Retrying" },
   failed: { role: "failed", label: "Failed" }
 };
-function B$(e) {
+function O$(e) {
   return {
     queued: `Still in the outbox. Editing replaces it, so ${e} gets one comment, not two.`,
     delivered: `Already in ${e}, so an edit is a ${e} edit: it will show as edited by you there, and the original stays in the audit row.`,
@@ -6054,7 +6060,7 @@ function B$(e) {
     failed: "Delivery failed. Edit and resend, or cancel the delivery."
   };
 }
-function P$({ comment: e, reasonId: a, onEdit: n, onWithdraw: r, onCancelDelivery: l, onViewOriginal: i }) {
+function H$({ comment: e, reasonId: a, onEdit: n, onWithdraw: r, onCancelDelivery: l, onViewOriginal: i }) {
   return e.delivery === "queued" ? /* @__PURE__ */ o(T, { children: [
     /* @__PURE__ */ t(b, { variant: "primary", size: "sm", onClick: n, children: "Edit" }),
     /* @__PURE__ */ t(b, { variant: "ghost", size: "sm", onClick: r, children: "Withdraw" })
@@ -6069,23 +6075,23 @@ function P$({ comment: e, reasonId: a, onEdit: n, onWithdraw: r, onCancelDeliver
     /* @__PURE__ */ t(b, { variant: "ghost", size: "sm", onClick: r, children: "Withdraw" })
   ] });
 }
-function D$({ reason: e, reasonId: a }) {
+function F$({ reason: e, reasonId: a }) {
   return /* @__PURE__ */ o(T, { children: [
     /* @__PURE__ */ t(b, { variant: "primary", size: "sm", disabled: !0, describedBy: a, children: "Edit" }),
     /* @__PURE__ */ t("span", { className: Ne.reason, id: a, children: e })
   ] });
 }
-function O$(e) {
+function q$(e) {
   if (e.unavailable === void 0 && e.onEdit === void 0)
     throw new Error("ClarificationRow: an editable comment needs onEdit, or must say why editing is unavailable");
 }
-function H$(e) {
-  return e.unavailable === void 0 ? /* @__PURE__ */ t(P$, { ...e }) : /* @__PURE__ */ t(D$, { reason: e.unavailable, reasonId: e.unavailableId });
+function W$(e) {
+  return e.unavailable === void 0 ? /* @__PURE__ */ t(H$, { ...e }) : /* @__PURE__ */ t(F$, { reason: e.unavailable, reasonId: e.unavailableId });
 }
-function DR(e) {
+function FR(e) {
   const { comment: a } = e;
-  O$(e);
-  const n = N(), r = `${n}-unavailable`, l = M$[a.delivery];
+  q$(e);
+  const n = N(), r = `${n}-unavailable`, l = D$[a.delivery];
   return /* @__PURE__ */ o("div", { className: `${Ne.row} ward-clarityrow`, "data-delivery": a.delivery, "data-queued": a.delivery === "queued" ? "true" : void 0, children: [
     /* @__PURE__ */ o("div", { className: Ne.head, children: [
       /* @__PURE__ */ t("span", { className: Ne.author, children: a.author }),
@@ -6094,52 +6100,52 @@ function DR(e) {
       a.editedAt !== void 0 ? /* @__PURE__ */ t("span", { className: Ne.edited, children: "edited " + a.editedAt }) : null
     ] }),
     /* @__PURE__ */ t("p", { className: Ne.body, children: a.body }),
-    /* @__PURE__ */ t("p", { className: Ne.reason, id: n, children: B$(e.tracker ?? "Jira")[a.delivery] }),
-    /* @__PURE__ */ t("div", { className: Ne.actions, children: /* @__PURE__ */ t(H$, { ...e, reasonId: n, unavailableId: r }) })
+    /* @__PURE__ */ t("p", { className: Ne.reason, id: n, children: O$(e.tracker ?? "Jira")[a.delivery] }),
+    /* @__PURE__ */ t("div", { className: Ne.actions, children: /* @__PURE__ */ t(W$, { ...e, reasonId: n, unavailableId: r }) })
   ] });
 }
-const F$ = "_root_rvhdw_2", j$ = "_attach_rvhdw_11", q$ = "_actions_rvhdw_17", z$ = "_reply_rvhdw_23", W$ = "_replyField_rvhdw_28", K$ = "_send_rvhdw_54", G$ = "_sendIcon_rvhdw_65", U$ = "_sendsAs_rvhdw_75", Be = {
-  root: F$,
-  attach: j$,
-  actions: q$,
-  reply: z$,
-  replyField: W$,
-  send: K$,
-  sendIcon: G$,
-  sendsAs: U$
+const z$ = "_root_rvhdw_2", K$ = "_attach_rvhdw_11", G$ = "_actions_rvhdw_17", U$ = "_reply_rvhdw_23", V$ = "_replyField_rvhdw_28", Y$ = "_send_rvhdw_54", J$ = "_sendIcon_rvhdw_65", X$ = "_sendsAs_rvhdw_75", Be = {
+  root: z$,
+  attach: K$,
+  actions: G$,
+  reply: U$,
+  replyField: V$,
+  send: Y$,
+  sendIcon: J$,
+  sendsAs: X$
 };
 function ur({ value: e, onChange: a }) {
   const [n, r] = p("");
   return e === void 0 ? [n, r] : [e, a ?? (() => {
   })];
 }
-function V$() {
+function Q$() {
   return /* @__PURE__ */ t("svg", { className: Be.sendIcon, viewBox: "0 0 24 24", "aria-hidden": "true", focusable: "false", children: /* @__PURE__ */ t("path", { d: "M12 19V5M5 12l7-7 7 7" }) });
 }
-function Y$(e) {
+function Z$(e) {
   return e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing;
 }
-function J$(e) {
+function e0(e) {
   const { placeholder: a, asUser: n, onPost: r } = e, [l, i] = ur(e), s = N(), c = () => {
     l.trim() !== "" && r(n, l);
   }, d = (u) => {
-    Y$(u) && (u.preventDefault(), c());
+    Z$(u) && (u.preventDefault(), c());
   };
   return /* @__PURE__ */ o("div", { className: Be.reply, "data-ward-composer": "reply", children: [
     /* @__PURE__ */ o("div", { className: Be.replyField, "data-ward-composer-field": "", "data-ward-focus-host": "", onKeyDown: d, children: [
       /* @__PURE__ */ t(M, { variant: "reply", kind: "textarea", rows: 1, labelHidden: !0, placeholder: a, label: a, value: l, onChange: i, describedBy: s }),
       /* @__PURE__ */ o(b, { variant: "primary", className: Be.send, describedBy: s, onClick: c, children: [
-        /* @__PURE__ */ t(V$, {}),
+        /* @__PURE__ */ t(Q$, {}),
         /* @__PURE__ */ t("span", { className: "ward-visually-hidden", children: "Send" })
       ] })
     ] }),
     /* @__PURE__ */ t("p", { id: s, className: Be.sendsAs, children: `Sends as ${n}.` })
   ] });
 }
-function OR(e) {
-  return e.variant === "reply" ? /* @__PURE__ */ t(J$, { ...e }) : /* @__PURE__ */ t(X$, { ...e });
+function qR(e) {
+  return e.variant === "reply" ? /* @__PURE__ */ t(e0, { ...e }) : /* @__PURE__ */ t(a0, { ...e });
 }
-function X$(e) {
+function a0(e) {
   const { placeholder: a, asUser: n, attachTo: r, requeueAfter: l, onPost: i, onDraft: s } = e, [c, d] = ur(e);
   return /* @__PURE__ */ o("div", { className: Be.root, children: [
     /* @__PURE__ */ t(M, { kind: "textarea", label: a, value: c, onChange: d }),
@@ -6162,89 +6168,89 @@ function X$(e) {
     ] })
   ] });
 }
-const Q$ = "_list_1yhks_2", Z$ = "_item_1yhks_6", e0 = "_body_1yhks_22", a0 = "_text_1yhks_28", t0 = "_evidence_1yhks_37", n0 = "_consequence_1yhks_49", r0 = "_note_1yhks_54", We = {
-  list: Q$,
-  item: Z$,
-  body: e0,
-  text: a0,
-  evidence: t0,
-  consequence: n0,
-  note: r0
+const t0 = "_list_1yhks_2", n0 = "_item_1yhks_6", r0 = "_body_1yhks_22", l0 = "_text_1yhks_28", o0 = "_evidence_1yhks_37", i0 = "_consequence_1yhks_49", s0 = "_note_1yhks_54", ze = {
+  list: t0,
+  item: n0,
+  body: r0,
+  text: l0,
+  evidence: o0,
+  consequence: i0,
+  note: s0
 };
-function l0({ criterion: e }) {
-  return /* @__PURE__ */ t(Oe, { size: 14, kind: e.met ? "tick" : "box", label: e.met ? "met" : "unmet" });
+function c0({ criterion: e }) {
+  return /* @__PURE__ */ t(De, { size: 14, kind: e.met ? "tick" : "box", label: e.met ? "met" : "unmet" });
 }
-function Wt({ text: e }) {
+function zt({ text: e }) {
   return /* @__PURE__ */ t("span", { className: "ward-visually-hidden", children: e });
 }
-function o0(e) {
+function d0(e) {
   return e ? `${e} · keeps the item held` : "keeps the item held";
 }
-function i0({ criterion: e }) {
-  return /* @__PURE__ */ o("span", { className: We.body, children: [
-    /* @__PURE__ */ t("span", { className: We.text, children: e.text }),
+function u0({ criterion: e }) {
+  return /* @__PURE__ */ o("span", { className: ze.body, children: [
+    /* @__PURE__ */ t("span", { className: ze.text, children: e.text }),
     e.evidence ? /* @__PURE__ */ o(T, { children: [
-      /* @__PURE__ */ t(Wt, { text: " · " }),
-      /* @__PURE__ */ t("code", { className: We.evidence, title: e.evidence, children: e.evidence })
+      /* @__PURE__ */ t(zt, { text: " · " }),
+      /* @__PURE__ */ t("code", { className: ze.evidence, title: e.evidence, children: e.evidence })
     ] }) : null,
     e.met ? null : /* @__PURE__ */ o(T, { children: [
-      /* @__PURE__ */ t(Wt, { text: " · " }),
-      /* @__PURE__ */ t("span", { className: We.consequence, children: o0(e.why) })
+      /* @__PURE__ */ t(zt, { text: " · " }),
+      /* @__PURE__ */ t("span", { className: ze.consequence, children: d0(e.why) })
     ] })
   ] });
 }
-function s0({ criterion: e }) {
-  return /* @__PURE__ */ o("li", { className: We.item, "data-met": e.met, role: "checkbox", "aria-checked": e.met, "aria-disabled": "true", children: [
-    /* @__PURE__ */ t(l0, { criterion: e }),
-    /* @__PURE__ */ t(i0, { criterion: e })
+function m0({ criterion: e }) {
+  return /* @__PURE__ */ o("li", { className: ze.item, "data-met": e.met, role: "checkbox", "aria-checked": e.met, "aria-disabled": "true", children: [
+    /* @__PURE__ */ t(c0, { criterion: e }),
+    /* @__PURE__ */ t(u0, { criterion: e })
   ] });
 }
-function HR({ criteria: e }) {
+function WR({ criteria: e }) {
   return /* @__PURE__ */ o("div", { children: [
-    /* @__PURE__ */ t("ul", { className: `${We.list} ward-checklist`, children: e.map((a) => /* @__PURE__ */ t(s0, { criterion: a }, a.text)) }),
-    e.some((a) => !a.met) ? /* @__PURE__ */ t("p", { className: We.note, children: "A criterion with no evidence keeps the item held. Nothing advances until it has evidence or a human overrides it on the record." }) : null
+    /* @__PURE__ */ t("ul", { className: `${ze.list} ward-checklist`, children: e.map((a) => /* @__PURE__ */ t(m0, { criterion: a }, a.text)) }),
+    e.some((a) => !a.met) ? /* @__PURE__ */ t("p", { className: ze.note, children: "A criterion with no evidence keeps the item held. Nothing advances until it has evidence or a human overrides it on the record." }) : null
   ] });
 }
-const c0 = "_list_dwhoz_2", d0 = "_rung_dwhoz_6", u0 = "_name_dwhoz_18", m0 = "_actor_dwhoz_32", pa = {
-  list: c0,
-  rung: d0,
-  name: u0,
-  actor: m0
-}, h0 = {
+const h0 = "_list_dwhoz_2", w0 = "_rung_dwhoz_6", f0 = "_name_dwhoz_18", _0 = "_actor_dwhoz_32", pa = {
+  list: h0,
+  rung: w0,
+  name: f0,
+  actor: _0
+}, v0 = {
   passed: { role: "done", label: "Passed" },
   waiting: { role: "attention", label: "Waiting" },
   pending: { role: "pending", label: "Pending" }
 };
-function w0({ rung: e }) {
+function b0({ rung: e }) {
   if (e.state === "waiting" && !e.actor)
     throw new Error(`GateLadder: the waiting rung "${e.name}" names no actor — a wait always names who it waits on`);
-  const a = h0[e.state];
+  const a = v0[e.state];
   return /* @__PURE__ */ o("li", { className: pa.rung, "data-state": e.state, children: [
     /* @__PURE__ */ t("span", { className: pa.name, children: e.name }),
     /* @__PURE__ */ t(h, { role: a.role, label: a.label }),
     /* @__PURE__ */ t("span", { className: `${pa.actor} ward-cellmeta`, children: e.actor ?? "—" })
   ] });
 }
-function FR({ rungs: e }) {
-  return /* @__PURE__ */ t("ol", { className: `${pa.list} ward-gateladder`, children: e.map((a) => /* @__PURE__ */ t(w0, { rung: a }, a.name)) });
+function zR({ rungs: e }) {
+  return /* @__PURE__ */ t("ol", { className: `${pa.list} ward-gateladder`, children: e.map((a) => /* @__PURE__ */ t(b0, { rung: a }, a.name)) });
 }
-const f0 = "_sheet_pw37w_2", _0 = "_title_pw37w_9", v0 = "_stage_pw37w_15", b0 = "_effects_pw37w_20", p0 = "_effect_pw37w_20", g0 = "_numeral_pw37w_31", y0 = "_effectText_pw37w_38", N0 = "_refusals_pw37w_43", k0 = "_reasons_pw37w_52", $0 = "_reason_pw37w_52", C0 = "_actions_pw37w_62", ue = {
-  sheet: f0,
-  title: _0,
-  stage: v0,
-  effects: b0,
-  effect: p0,
-  numeral: g0,
-  effectText: y0,
-  refusals: N0,
-  reasons: k0,
-  reason: $0,
-  actions: C0
+const p0 = "_sheet_pw37w_2", g0 = "_title_pw37w_9", y0 = "_stage_pw37w_15", N0 = "_effects_pw37w_20", k0 = "_effect_pw37w_20", $0 = "_numeral_pw37w_31", C0 = "_effectText_pw37w_38", S0 = "_refusals_pw37w_43", R0 = "_reasons_pw37w_52", T0 = "_reason_pw37w_52", x0 = "_actions_pw37w_62", ue = {
+  sheet: p0,
+  title: g0,
+  stage: y0,
+  effects: N0,
+  effect: k0,
+  numeral: $0,
+  effectText: C0,
+  refusals: S0,
+  reasons: R0,
+  reason: T0,
+  actions: x0
 };
-function S0({ refused: e, reasonId: a, note: n, onRequeue: r }) {
+function L0({ refused: e, reasonId: a, note: n, onRequeue: r }) {
   return e ? /* @__PURE__ */ t(b, { variant: "primary", disabled: !0, describedBy: a, children: "Requeue" }) : r === void 0 ? null : /* @__PURE__ */ t(b, { variant: "primary", onClick: () => r(n === "" ? void 0 : n), children: "Requeue" });
 }
-function jR({ run: e, effects: a, refusals: n, cost: r, onRequeue: l, onClose: i, returnFocusTo: s }) {
+function KR({ run: e, effects: a, refusals: n, cost: r, onRequeue: l, onClose: i, returnFocusTo: s }) {
   const c = N(), d = `${c}-refusal`, [u, m] = p(""), w = n.length > 0;
   return /* @__PURE__ */ t(na, { kind: "sheet", labelledBy: c, onClose: i, returnFocusTo: s, children: /* @__PURE__ */ o("div", { className: ue.sheet, children: [
     /* @__PURE__ */ o("h2", { className: ue.title, id: c, children: [
@@ -6257,7 +6263,7 @@ function jR({ run: e, effects: a, refusals: n, cost: r, onRequeue: l, onClose: i
       /* @__PURE__ */ t("span", { className: ue.effectText, children: v })
     ] }, v)) }),
     /* @__PURE__ */ t(
-      eu,
+      ru,
       {
         spent: r.spent,
         ceiling: r.ceiling,
@@ -6273,18 +6279,18 @@ function jR({ run: e, effects: a, refusals: n, cost: r, onRequeue: l, onClose: i
       /* @__PURE__ */ t("ul", { className: ue.reasons, children: n.map((v, y) => /* @__PURE__ */ t("li", { className: ue.reason, id: y === 0 ? d : void 0, children: v.reason }, v.reason)) })
     ] }),
     /* @__PURE__ */ o("div", { className: ue.actions, children: [
-      /* @__PURE__ */ t(S0, { refused: w, reasonId: d, note: u, onRequeue: l }),
+      /* @__PURE__ */ t(L0, { refused: w, reasonId: d, note: u, onRequeue: l }),
       /* @__PURE__ */ t(b, { onClick: i, children: "Cancel" })
     ] })
   ] }) });
 }
-const R0 = "_list_1rowi_2", T0 = "_path_1rowi_7", x0 = "_head_1rowi_21", L0 = "_label_1rowi_28", A0 = "_consequence_1rowi_35", E0 = "_ask_1rowi_36", ea = {
-  list: R0,
-  path: T0,
-  head: x0,
-  label: L0,
-  consequence: A0,
-  ask: E0
+const A0 = "_list_1rowi_2", E0 = "_path_1rowi_7", I0 = "_head_1rowi_21", M0 = "_label_1rowi_28", B0 = "_consequence_1rowi_35", P0 = "_ask_1rowi_36", ea = {
+  list: A0,
+  path: E0,
+  head: I0,
+  label: M0,
+  consequence: B0,
+  ask: P0
 }, Za = {
   clarify: "Ask a clarifying question",
   requeue: "Requeue the agent",
@@ -6296,14 +6302,14 @@ function Kt(e) {
 function Gt(e) {
   return e ? "primary" : "secondary";
 }
-function I0({ path: e, primary: a, onChoose: n }) {
+function j0({ path: e, primary: a, onChoose: n }) {
   const r = N();
   return e.allowed ? /* @__PURE__ */ t(b, { variant: Gt(a), size: "sm", onClick: () => n(e.kind), children: Za[e.kind] }) : /* @__PURE__ */ o(T, { children: [
     /* @__PURE__ */ t(b, { variant: Gt(a), size: "sm", disabled: !0, describedBy: r, children: Za[e.kind] }),
     /* @__PURE__ */ t("span", { className: ea.ask, id: r, children: e.askInstead })
   ] });
 }
-function M0({ path: e, primary: a, onChoose: n }) {
+function D0({ path: e, primary: a, onChoose: n }) {
   if (!e.allowed && !e.askInstead)
     throw new Error(`ResolveBlock: the ${e.kind} path is not yours to take and names nobody to ask — askInstead is required`);
   return /* @__PURE__ */ o("li", { className: ea.path, "data-allowed": e.allowed, "data-role": Kt(e.requiredRole), children: [
@@ -6312,40 +6318,40 @@ function M0({ path: e, primary: a, onChoose: n }) {
       /* @__PURE__ */ t(h, { role: Kt(e.requiredRole), label: e.requiredRole })
     ] }),
     /* @__PURE__ */ t("span", { className: ea.consequence, children: e.consequence }),
-    /* @__PURE__ */ t(I0, { path: e, primary: a, onChoose: n })
+    /* @__PURE__ */ t(j0, { path: e, primary: a, onChoose: n })
   ] });
 }
-function qR({ paths: e, onChoose: a }) {
-  return /* @__PURE__ */ t("ul", { className: ea.list, children: e.map((n, r) => /* @__PURE__ */ t(M0, { path: n, primary: r === 0, onChoose: a }, n.kind)) });
+function GR({ paths: e, onChoose: a }) {
+  return /* @__PURE__ */ t("ul", { className: ea.list, children: e.map((n, r) => /* @__PURE__ */ t(D0, { path: n, primary: r === 0, onChoose: a }, n.kind)) });
 }
-const B0 = "_list_1m7i0_2", P0 = "_item_1m7i0_6", D0 = "_node_1m7i0_18", O0 = "_body_1m7i0_24", H0 = "_head_1m7i0_30", F0 = "_stage_1m7i0_36", j0 = "_version_1m7i0_41", q0 = "_sentence_1m7i0_49", z0 = "_meta_1m7i0_54", $e = {
-  list: B0,
-  item: P0,
-  node: D0,
-  body: O0,
-  head: H0,
-  stage: F0,
-  version: j0,
-  sentence: q0,
-  meta: z0
-}, W0 = {
+const O0 = "_list_1m7i0_2", H0 = "_item_1m7i0_6", F0 = "_node_1m7i0_18", q0 = "_body_1m7i0_24", W0 = "_head_1m7i0_30", z0 = "_stage_1m7i0_36", K0 = "_version_1m7i0_41", G0 = "_sentence_1m7i0_49", U0 = "_meta_1m7i0_54", $e = {
+  list: O0,
+  item: H0,
+  node: F0,
+  body: q0,
+  head: W0,
+  stage: z0,
+  version: K0,
+  sentence: G0,
+  meta: U0
+}, V0 = {
   done: "tick",
   hold: "attention",
   pending: "hollow"
 };
-function K0({ entry: e }) {
+function Y0({ entry: e }) {
   return /* @__PURE__ */ o("span", { className: $e.head, children: [
     /* @__PURE__ */ t("span", { className: $e.stage, children: e.stage }),
     e.version ? /* @__PURE__ */ t("span", { className: $e.version, title: e.version, children: e.version }) : null
   ] });
 }
-function G0({ entry: e }) {
+function J0({ entry: e }) {
   if (!e.actor)
     throw new Error(`StageHistory: the "${e.stage}" entry names no actor — every entry names who or what acted`);
   return /* @__PURE__ */ o("li", { className: `${$e.item} ward-history-entry`, "data-state": e.state, "data-hold": e.state === "hold" ? "true" : void 0, children: [
-    /* @__PURE__ */ t("span", { className: `${$e.node} ward-history-node`, children: /* @__PURE__ */ t(Oe, { size: 9, kind: W0[e.state], label: e.state }) }),
+    /* @__PURE__ */ t("span", { className: `${$e.node} ward-history-node`, children: /* @__PURE__ */ t(De, { size: 9, kind: V0[e.state], label: e.state }) }),
     /* @__PURE__ */ o("span", { className: `${$e.body} ward-history-stage`, children: [
-      /* @__PURE__ */ t(K0, { entry: e }),
+      /* @__PURE__ */ t(Y0, { entry: e }),
       /* @__PURE__ */ t("span", { className: $e.sentence, children: e.sentence }),
       /* @__PURE__ */ o("span", { className: `${$e.meta} ward-history-meta`, children: [
         `${de(e.at)} · ${e.actor}`,
@@ -6354,19 +6360,19 @@ function G0({ entry: e }) {
     ] })
   ] });
 }
-function zR({ entries: e }) {
-  return /* @__PURE__ */ t("ol", { className: `${$e.list} ward-history`, children: e.map((a, n) => /* @__PURE__ */ t(G0, { entry: a }, a.stage + String(n))) });
+function UR({ entries: e }) {
+  return /* @__PURE__ */ t("ol", { className: `${$e.list} ward-history`, children: e.map((a, n) => /* @__PURE__ */ t(J0, { entry: a }, a.stage + String(n))) });
 }
-const U0 = "_thread_1e70p_3", V0 = "_turn_1e70p_8", Y0 = "_who_1e70p_27", J0 = "_body_1e70p_32", ga = {
-  thread: U0,
-  turn: V0,
-  who: Y0,
-  body: J0
+const X0 = "_thread_1e70p_3", Q0 = "_turn_1e70p_8", Z0 = "_who_1e70p_27", eC = "_body_1e70p_32", ga = {
+  thread: X0,
+  turn: Q0,
+  who: Z0,
+  body: eC
 }, mr = Te(!1);
-function WR({ children: e, density: a }) {
+function VR({ children: e, density: a }) {
   return /* @__PURE__ */ t(mr.Provider, { value: !0, children: /* @__PURE__ */ t("ol", { className: `${ga.thread} ward-chat`, "aria-label": "Conversation", "data-density": a, children: e }) });
 }
-function KR({ turn: e }) {
+function YR({ turn: e }) {
   if (!Re(mr)) throw new Error("ChatMessage: must be rendered inside a Conversation");
   return /* @__PURE__ */ o("li", { className: `${ga.turn} ward-chatmsg`, "data-side": e.role, "data-turn": e.role, children: [
     /* @__PURE__ */ o("span", { className: `${ga.who} ward-chat-who`, children: [
@@ -6377,120 +6383,120 @@ function KR({ turn: e }) {
     /* @__PURE__ */ t("p", { className: `${ga.body} ward-chat-body`, children: e.body })
   ] });
 }
-const X0 = "_list_yiolt_3", Q0 = "_row_yiolt_7", Z0 = "_label_yiolt_20", eC = "_n_yiolt_26", aC = "_cause_yiolt_33", oa = {
-  list: X0,
-  row: Q0,
-  label: Z0,
-  n: eC,
-  cause: aC
+const aC = "_list_yiolt_3", tC = "_row_yiolt_7", nC = "_label_yiolt_20", rC = "_n_yiolt_26", lC = "_cause_yiolt_33", oa = {
+  list: aC,
+  row: tC,
+  label: nC,
+  n: rC,
+  cause: lC
 };
-function tC(e) {
+function oC(e) {
   if (e.failed && !e.cause) throw new Error(`DeliveryHealth: the failed row "${e.label}" names no cause`);
 }
-const nC = { failed: { kind: "red", label: "failed" }, ok: { kind: "green", label: "ok" } };
-function rC({ row: e, formatNumber: a }) {
-  return tC(e), /* @__PURE__ */ o("li", { className: `${oa.row} ward-healthrow`, "data-failed": e.failed ? "true" : null, children: [
-    /* @__PURE__ */ t(Oe, { size: 8, ...nC[e.failed ? "failed" : "ok"] }),
+const iC = { failed: { kind: "red", label: "failed" }, ok: { kind: "green", label: "ok" } };
+function sC({ row: e, formatNumber: a }) {
+  return oC(e), /* @__PURE__ */ o("li", { className: `${oa.row} ward-healthrow`, "data-failed": e.failed ? "true" : null, children: [
+    /* @__PURE__ */ t(De, { size: 8, ...iC[e.failed ? "failed" : "ok"] }),
     /* @__PURE__ */ t("span", { className: oa.label, children: e.label }),
     /* @__PURE__ */ t("span", { className: `${oa.n} ward-stat-value`, children: a(e.n) }),
-    /* @__PURE__ */ t(lC, { cause: e.cause })
+    /* @__PURE__ */ t(cC, { cause: e.cause })
   ] });
 }
-function lC({ cause: e }) {
+function cC({ cause: e }) {
   return e ? /* @__PURE__ */ t("span", { className: `${oa.cause} ward-healthrow-cause`, children: e }) : null;
 }
-function GR({ rows: e, formatNumber: a = ee }) {
-  return /* @__PURE__ */ t("ul", { className: `${oa.list} ward-checklist`, children: e.map((n) => /* @__PURE__ */ t(rC, { row: n, formatNumber: a }, n.label)) });
+function JR({ rows: e, formatNumber: a = ee }) {
+  return /* @__PURE__ */ t("ul", { className: `${oa.list} ward-checklist`, children: e.map((n) => /* @__PURE__ */ t(sC, { row: n, formatNumber: a }, n.label)) });
 }
-const oC = "_root_1jxwp_2", iC = {
-  root: oC
+const dC = "_root_1jxwp_2", uC = {
+  root: dC
 };
-function UR({ items: e, note: a, actionLabel: n = "Review & create", onAction: r, density: l }) {
-  return /* @__PURE__ */ o("div", { className: iC.root, "data-density": l, children: [
-    /* @__PURE__ */ t(Ha, { items: e, note: a, density: l }),
+function XR({ items: e, note: a, actionLabel: n = "Review & create", onAction: r, density: l }) {
+  return /* @__PURE__ */ o("div", { className: uC.root, "data-density": l, children: [
+    /* @__PURE__ */ t(Oa, { items: e, note: a, density: l }),
     /* @__PURE__ */ t(b, { variant: l === "rail" ? "secondary" : "primary", onClick: r, children: n })
   ] });
 }
-const sC = "_row_dhbre_3", cC = "_key_dhbre_13", dC = "_stack_dhbre_24", uC = "_value_dhbre_32", mC = "_evidence_dhbre_39", hC = "_mark_dhbre_47", Xe = {
-  row: sC,
-  key: cC,
-  stack: dC,
-  value: uC,
-  evidence: mC,
-  mark: hC
+const mC = "_row_dhbre_3", hC = "_key_dhbre_13", wC = "_stack_dhbre_24", fC = "_value_dhbre_32", _C = "_evidence_dhbre_39", vC = "_mark_dhbre_47", Xe = {
+  row: mC,
+  key: hC,
+  stack: wC,
+  value: fC,
+  evidence: _C,
+  mark: vC
 };
-function wC({ state: e }) {
+function bC({ state: e }) {
   return e === "confirm" ? /* @__PURE__ */ t(h, { role: "warn", label: "Confirm" }) : /* @__PURE__ */ t(lt, { state: e === "resolved" ? "met" : "unmet", label: e === "resolved" ? "Resolved" : "Unresolved" });
 }
-function VR({ field: e }) {
+function QR({ field: e }) {
   return /* @__PURE__ */ o("li", { className: `${Xe.row} ward-resfield`, "data-state": e.state, children: [
     /* @__PURE__ */ t("span", { className: `${Xe.key} ward-resfield-key`, children: e.key }),
     /* @__PURE__ */ o("span", { className: `${Xe.stack} ward-resfield-stack`, children: [
       /* @__PURE__ */ t("span", { className: `${Xe.value} ward-resfield-value`, children: e.value }),
       e.evidence && /* @__PURE__ */ t("span", { className: `${Xe.evidence} ward-resfield-evidence`, title: e.evidence, children: e.evidence })
     ] }),
-    /* @__PURE__ */ t("span", { className: `${Xe.mark} ward-resfield-mark`, children: /* @__PURE__ */ t(wC, { state: e.state }) })
+    /* @__PURE__ */ t("span", { className: `${Xe.mark} ward-resfield-mark`, children: /* @__PURE__ */ t(bC, { state: e.state }) })
   ] });
 }
-const fC = "_cell_gh2sd_2", _C = {
-  cell: fC
-}, vC = [
+const pC = "_cell_gh2sd_2", gC = {
+  cell: pC
+}, yC = [
   { key: "rejectedBy", header: "Rejected by" },
   { key: "reEntersAt", header: "Re-enters at" },
   { key: "skips", header: "Skips" },
   { key: "typedInput", header: "Typed input", mono: !0 }
 ];
-function bC(e) {
+function NC(e) {
   return e.noRerun ? e.why ? `No rerun: ${e.why}` : "No rerun" : e.reEntersAt ?? "—";
 }
-function pC(e, a) {
+function kC(e, a) {
   const n = e.find((r) => r.noRerun && !r.why);
   if (a && n) throw new Error(`RoutingTable: the "${n.rejectedBy}" row never reruns and says nothing about why`);
 }
-function gC(e, a) {
+function $C(e, a) {
   return {
     rejectedBy: e.rejectedBy,
-    reEntersAt: bC(e),
+    reEntersAt: NC(e),
     skips: e.skips ?? "—",
     typedInput: e.typedInput
   }[a] ?? "—";
 }
-function yC(e) {
+function CC(e) {
   return e.map((a, n) => ({ ...a, id: a.id ?? String(n) }));
 }
-function YR({ rows: e, empty: a, requireNoRerunReason: n = !0 }) {
-  pC(e, n);
-  const r = yC(e);
+function ZR({ rows: e, empty: a, requireNoRerunReason: n = !0 }) {
+  kC(e, n);
+  const r = CC(e);
   return /* @__PURE__ */ t(
-    wu,
+    bu,
     {
       label: "Rejection routing",
-      columns: vC,
+      columns: yC,
       rows: r,
       rowId: (l) => l.id,
-      renderCell: (l, i) => /* @__PURE__ */ t("span", { className: _C.cell, "data-norerun": l.noRerun ? !0 : void 0, children: gC(l, i) }),
-      empty: a ?? /* @__PURE__ */ t(ah, { sentence: "No rejection route is configured for this stream yet." })
+      renderCell: (l, i) => /* @__PURE__ */ t("span", { className: gC.cell, "data-norerun": l.noRerun ? !0 : void 0, children: $C(l, i) }),
+      empty: a ?? /* @__PURE__ */ t(lh, { sentence: "No rejection route is configured for this stream yet." })
     }
   );
 }
-const NC = "_row_1f2re_2", kC = "_title_1f2re_12", $C = "_turns_1f2re_18", CC = "_waiting_1f2re_19", SC = "_resolved_1f2re_20", RC = "_activity_1f2re_21", TC = "_cost_1f2re_28", xC = "_link_1f2re_29", LC = "_tableLink_1f2re_47", AC = "_tableRecord_1f2re_48", EC = "_tableRow_1f2re_59", IC = "_tableTitle_1f2re_71", MC = "_tableResolved_1f2re_76", BC = "_tableMeta_1f2re_87", PC = "_tableCost_1f2re_94", DC = "_tableActivity_1f2re_95", OC = "_tableState_1f2re_105", H = {
-  row: NC,
-  title: kC,
-  turns: $C,
-  waiting: CC,
-  resolved: SC,
-  activity: RC,
-  cost: TC,
-  link: xC,
-  tableLink: LC,
-  tableRecord: AC,
-  tableRow: EC,
-  tableTitle: IC,
-  tableResolved: MC,
-  tableMeta: BC,
-  tableCost: PC,
-  tableActivity: DC,
-  tableState: OC
+const SC = "_row_1f2re_2", RC = "_title_1f2re_12", TC = "_turns_1f2re_18", xC = "_waiting_1f2re_19", LC = "_resolved_1f2re_20", AC = "_activity_1f2re_21", EC = "_cost_1f2re_28", IC = "_link_1f2re_29", MC = "_tableLink_1f2re_47", BC = "_tableRecord_1f2re_48", PC = "_tableRow_1f2re_59", jC = "_tableTitle_1f2re_71", DC = "_tableResolved_1f2re_76", OC = "_tableMeta_1f2re_87", HC = "_tableCost_1f2re_94", FC = "_tableActivity_1f2re_95", qC = "_tableState_1f2re_105", O = {
+  row: SC,
+  title: RC,
+  turns: TC,
+  waiting: xC,
+  resolved: LC,
+  activity: AC,
+  cost: EC,
+  link: IC,
+  tableLink: MC,
+  tableRecord: BC,
+  tableRow: PC,
+  tableTitle: jC,
+  tableResolved: DC,
+  tableMeta: OC,
+  tableCost: HC,
+  tableActivity: FC,
+  tableState: qC
 }, hr = {
   open: { role: "pending", label: "Open" },
   draft: { role: "running", label: "Draft" },
@@ -6498,7 +6504,7 @@ const NC = "_row_1f2re_2", kC = "_title_1f2re_12", $C = "_turns_1f2re_18", CC = 
   duplicate: { role: "meta", label: "Duplicate" },
   expired: { role: "meta", label: "Expired" }
 };
-function HC(e) {
+function WC(e) {
   if (e === "") return "—";
   const a = Math.floor((Date.now() - new Date(e).getTime()) / 6e4);
   if (a < 1) return "just now";
@@ -6506,89 +6512,89 @@ function HC(e) {
   const n = Math.floor(a / 60);
   return n < 24 ? `${n}h ago` : `${Math.floor(n / 24)}d ago`;
 }
-function FC(e) {
+function zC(e) {
   return `${e.turns} ${e.turns === 1 ? "turn" : "turns"}${e.turnsNote === void 0 ? "" : ` · ${e.turnsNote}`}`;
 }
-function jC(e) {
+function KC(e) {
   const a = e.join(", ");
   return a === "" ? "nothing resolved" : a;
 }
-const qC = { duplicate: "Closed · duplicate" };
-function zC({ value: e }) {
-  return e === void 0 ? null : /* @__PURE__ */ t(ta, { className: H.tableMeta, text: `waiting on ${e}` });
+const GC = { duplicate: "Closed · duplicate" };
+function UC({ value: e }) {
+  return e === void 0 ? null : /* @__PURE__ */ t(ta, { className: O.tableMeta, text: `waiting on ${e}` });
 }
-function WC({ value: e }) {
-  return /* @__PURE__ */ t("td", { className: H.tableCost, children: e === void 0 ? null : ne(e) });
+function VC({ value: e }) {
+  return /* @__PURE__ */ t("td", { className: O.tableCost, children: e === void 0 ? null : ne(e) });
 }
-function KC({ link: e }) {
-  return e === void 0 ? null : /* @__PURE__ */ t("a", { className: `${H.tableRecord} ward-target`, href: j(e.href), children: `→ ${e.key}` });
+function YC({ link: e }) {
+  return e === void 0 ? null : /* @__PURE__ */ t("a", { className: `${O.tableRecord} ward-target`, href: F(e.href), children: `→ ${e.key}` });
 }
-function GC({ session: e, href: a }) {
+function JC({ session: e, href: a }) {
   const n = hr[e.state];
-  return /* @__PURE__ */ o("tr", { className: H.tableRow, "data-state": e.state, children: [
-    /* @__PURE__ */ o("td", { className: H.tableTitle, children: [
-      /* @__PURE__ */ t("a", { className: `${H.tableLink} ward-target`, href: j(a), children: /* @__PURE__ */ t(ta, { text: e.title }) }),
-      /* @__PURE__ */ t("span", { className: H.tableMeta, children: FC(e) })
+  return /* @__PURE__ */ o("tr", { className: O.tableRow, "data-state": e.state, children: [
+    /* @__PURE__ */ o("td", { className: O.tableTitle, children: [
+      /* @__PURE__ */ t("a", { className: `${O.tableLink} ward-target`, href: F(a), children: /* @__PURE__ */ t(ta, { text: e.title }) }),
+      /* @__PURE__ */ t("span", { className: O.tableMeta, children: zC(e) })
     ] }),
-    /* @__PURE__ */ o("td", { className: H.tableResolved, children: [
-      jC(e.resolved),
-      /* @__PURE__ */ t(zC, { value: e.waitingOn })
+    /* @__PURE__ */ o("td", { className: O.tableResolved, children: [
+      KC(e.resolved),
+      /* @__PURE__ */ t(UC, { value: e.waitingOn })
     ] }),
-    /* @__PURE__ */ t(WC, { value: e.cost }),
-    /* @__PURE__ */ t("td", { className: H.tableActivity, children: HC(e.lastActivity) }),
-    /* @__PURE__ */ t("td", { className: H.tableState, children: /* @__PURE__ */ o("span", { children: [
-      /* @__PURE__ */ t(h, { role: n.role, label: qC[e.state] ?? n.label }),
-      /* @__PURE__ */ t(KC, { link: e.link })
+    /* @__PURE__ */ t(VC, { value: e.cost }),
+    /* @__PURE__ */ t("td", { className: O.tableActivity, children: WC(e.lastActivity) }),
+    /* @__PURE__ */ t("td", { className: O.tableState, children: /* @__PURE__ */ o("span", { children: [
+      /* @__PURE__ */ t(h, { role: n.role, label: GC[e.state] ?? n.label }),
+      /* @__PURE__ */ t(YC, { link: e.link })
     ] }) })
   ] });
 }
-function UC({ session: e }) {
+function XC({ session: e }) {
   const a = hr[e.state];
-  return /* @__PURE__ */ o("div", { className: H.row, "data-state": e.state, tabIndex: 0, role: "region", "aria-label": e.title, children: [
-    /* @__PURE__ */ t(ta, { className: H.title, text: e.title }),
-    /* @__PURE__ */ t("span", { className: H.turns, children: `${e.turns} turns` }),
-    /* @__PURE__ */ t(ta, { className: H.waiting, text: e.waitingOn ?? "" }),
-    /* @__PURE__ */ t("span", { className: H.resolved, children: e.resolved.join(" · ") }),
-    /* @__PURE__ */ t("span", { className: H.cost, "data-testid": "session-cost", children: e.cost === void 0 ? "" : ne(e.cost) }),
-    /* @__PURE__ */ t("span", { className: H.activity, children: de(e.lastActivity) }),
-    e.link && /* @__PURE__ */ t("a", { className: H.link, href: j(e.link.href), children: e.link.key }),
+  return /* @__PURE__ */ o("div", { className: O.row, "data-state": e.state, tabIndex: 0, role: "region", "aria-label": e.title, children: [
+    /* @__PURE__ */ t(ta, { className: O.title, text: e.title }),
+    /* @__PURE__ */ t("span", { className: O.turns, children: `${e.turns} turns` }),
+    /* @__PURE__ */ t(ta, { className: O.waiting, text: e.waitingOn ?? "" }),
+    /* @__PURE__ */ t("span", { className: O.resolved, children: e.resolved.join(" · ") }),
+    /* @__PURE__ */ t("span", { className: O.cost, "data-testid": "session-cost", children: e.cost === void 0 ? "" : ne(e.cost) }),
+    /* @__PURE__ */ t("span", { className: O.activity, children: de(e.lastActivity) }),
+    e.link && /* @__PURE__ */ t("a", { className: O.link, href: F(e.link.href), children: e.link.key }),
     /* @__PURE__ */ t(h, { role: a.role, label: a.label })
   ] });
 }
-function JR(e) {
-  return e.presentation === "table" ? /* @__PURE__ */ t(GC, { session: e.session, href: e.href }) : /* @__PURE__ */ t(UC, { session: e.session });
+function e2(e) {
+  return e.presentation === "table" ? /* @__PURE__ */ t(JC, { session: e.session, href: e.href }) : /* @__PURE__ */ t(XC, { session: e.session });
 }
-const VC = "_block_1yy2v_3", YC = "_list_1yy2v_9", JC = "_line_1yy2v_14", et = {
-  block: VC,
-  list: YC,
-  line: JC
-}, XC = { warn: "warning", ok: "ok" };
-function QC({ kind: e }) {
-  const a = XC[e];
+const QC = "_block_1yy2v_3", ZC = "_list_1yy2v_9", eS = "_line_1yy2v_14", et = {
+  block: QC,
+  list: ZC,
+  line: eS
+}, aS = { warn: "warning", ok: "ok" };
+function tS({ kind: e }) {
+  const a = aS[e];
   return a === void 0 ? null : /* @__PURE__ */ t("span", { className: "ward-visually-hidden", children: a });
 }
-function ZC({ line: e }) {
+function nS({ line: e }) {
   const a = e.kind === "tool" ? "field" : e.kind;
   return /* @__PURE__ */ o("li", { className: `${et.line} ward-typed-line ward-typed-line--${a}`, "data-kind": a, children: [
-    /* @__PURE__ */ t(QC, { kind: a }),
+    /* @__PURE__ */ t(tS, { kind: a }),
     /* @__PURE__ */ t("span", { "data-typed-text": !0, children: e.text })
   ] });
 }
-function XR({ lines: e, label: a = "Typed input the agent receives" }) {
-  return /* @__PURE__ */ t("div", { className: `${et.block} ward-typed`, children: /* @__PURE__ */ t("ol", { className: et.list, "aria-label": a, children: e.map((n, r) => /* @__PURE__ */ t(ZC, { line: n }, `${r}-${n.text}`)) }) });
+function a2({ lines: e, label: a = "Typed input the agent receives" }) {
+  return /* @__PURE__ */ t("div", { className: `${et.block} ward-typed`, children: /* @__PURE__ */ t("ol", { className: et.list, "aria-label": a, children: e.map((n, r) => /* @__PURE__ */ t(nS, { line: n }, `${r}-${n.text}`)) }) });
 }
-const eS = "_band_tt7hp_1", aS = "_head_tt7hp_8", tS = "_cell_tt7hp_19", nS = "_index_tt7hp_35", rS = "_title_tt7hp_42", lS = "_note_tt7hp_48", oS = "_cellTitle_tt7hp_53", iS = "_cellBody_tt7hp_58", sS = "_tag_tt7hp_64", ye = {
-  band: eS,
-  head: aS,
-  cell: tS,
-  index: nS,
-  title: rS,
-  note: lS,
-  cellTitle: oS,
-  cellBody: iS,
-  tag: sS
+const rS = "_band_tt7hp_1", lS = "_head_tt7hp_8", oS = "_cell_tt7hp_19", iS = "_index_tt7hp_35", sS = "_title_tt7hp_42", cS = "_note_tt7hp_48", dS = "_cellTitle_tt7hp_53", uS = "_cellBody_tt7hp_58", mS = "_tag_tt7hp_64", ye = {
+  band: rS,
+  head: lS,
+  cell: oS,
+  index: iS,
+  title: sS,
+  note: cS,
+  cellTitle: dS,
+  cellBody: uS,
+  tag: mS
 }, Ut = 4;
-function QR({ index: e, title: a, note: n, cells: r }) {
+function t2({ index: e, title: a, note: n, cells: r }) {
   if (r.length !== Ut)
     throw new Error(`Band: ${r.length} cells — the band is a fixed ${Ut}-cell grid`);
   return /* @__PURE__ */ o("section", { className: ye.band, "aria-label": `${e} ${a}`, children: [
@@ -6605,172 +6611,173 @@ function QR({ index: e, title: a, note: n, cells: r }) {
   ] });
 }
 export {
-  pS as ACCENT_PRESETS,
-  OS as ActionStack,
-  PR as ActivityConsole,
-  TS as AdminIcon,
-  v_ as AgentCard,
-  xS as AppShell,
-  gR as AppearanceStrip,
-  QR as Band,
-  BS as BarChart,
-  Bh as BoardColumn,
-  ZS as BoardFootnote,
-  eR as BoardHeader,
-  SS as BoardIcon,
-  KS as BoardScroller,
+  kS as ACCENT_PRESETS,
+  qS as ActionStack,
+  HR as ActivityConsole,
+  ES as AdminIcon,
+  y_ as AgentCard,
+  IS as AppShell,
+  $R as AppearanceStrip,
+  t2 as Band,
+  OS as BarChart,
+  Oh as BoardColumn,
+  nR as BoardFootnote,
+  rR as BoardHeader,
+  LS as BoardIcon,
+  YS as BoardScroller,
   b as Btn,
-  bS as CHIP_ROLES,
+  NS as CHIP_ROLES,
   Qn as CREDENTIAL_COLUMNS,
-  MS as Callout,
-  yR as CapabilityRow,
-  KR as ChatMessage,
+  DS as Callout,
+  CR as CapabilityRow,
+  YR as ChatMessage,
   nn as Checkbox,
   h as Chip,
   ta as ClampText,
-  DR as ClarificationRow,
-  dR as ClauseRuleRow,
-  cR as ClauseRules,
+  FR as ClarificationRow,
+  wR as ClauseRuleRow,
+  hR as ClauseRules,
   En as ColourLadder,
-  NR as ComponentRow,
-  OR as Composer,
-  tR as ConfigRow,
-  aR as ConfigRowHead,
+  SR as ComponentRow,
+  qR as Composer,
+  oR as ConfigRow,
+  lR as ConfigRowHead,
   ot as ConnectionMark,
-  BR as ConsoleAnnounceProvider,
-  WR as Conversation,
-  eu as CostMeter,
-  $R as CredentialRow,
-  kR as CredentialRowHead,
-  HR as CriteriaList,
-  vi as Crumb,
-  gS as DENSITIES,
-  GR as DeliveryHealth,
-  VS as DeniedState,
-  $S as DisabledScope,
-  mR as DryRunRail,
-  ah as EmptyState,
-  CR as EnvCard,
+  OR as ConsoleAnnounceProvider,
+  VR as Conversation,
+  ru as CostMeter,
+  TR as CredentialRow,
+  RR as CredentialRowHead,
+  WR as CriteriaList,
+  yi as Crumb,
+  $S as DENSITIES,
+  JR as DeliveryHealth,
+  QS as DeniedState,
+  TS as DisabledScope,
+  _R as DryRunRail,
+  lh as EmptyState,
+  xR as EnvCard,
   M as Field,
-  US as FilteredEmpty,
-  zS as FormStack,
-  Ha as GateChecklist,
-  FR as GateLadder,
-  wu as Grid,
-  wR as HandoffRuleRow,
-  hR as HandoffRules,
-  CS as HomeIcon,
-  nR as ItemDrawer,
-  SR as KeyPanel,
+  XS as FilteredEmpty,
+  US as FormStack,
+  Oa as GateChecklist,
+  zR as GateLadder,
+  bu as Grid,
+  bR as HandoffRuleRow,
+  vR as HandoffRules,
+  xS as HomeIcon,
+  iR as ItemDrawer,
+  LR as KeyPanel,
   Ir as LIVE_EVENT_TYPES,
-  Hf as LegacyBoardColumn,
-  lR as LegacyBoardHeader,
-  oR as LegacyConfigRow,
-  sR as LegacyItemDrawer,
-  Ef as LegacyOverCapNote,
-  iR as LegacyPreviewRail,
+  Wf as LegacyBoardColumn,
+  cR as LegacyBoardHeader,
+  dR as LegacyConfigRow,
+  mR as LegacyItemDrawer,
+  Pf as LegacyOverCapNote,
+  uR as LegacyPreviewRail,
   xn as LegacyWorkCard,
   xe as LiveIndicator,
-  YS as LoadFailed,
-  QS as Loading,
+  ZS as LoadFailed,
+  tR as Loading,
   rr as MCP_SERVER_COLUMNS,
   lt as Mark,
-  TR as MarkUpload,
-  Oe as Marker,
-  LR as McpServerRow,
-  xR as McpServerRowHead,
-  Ps as Menu,
-  ks as MenuButton,
-  fR as NewStreamModal,
-  rh as OverCapNote,
+  ER as MarkUpload,
+  De as Marker,
+  MR as McpServerRow,
+  IR as McpServerRowHead,
+  Hs as Menu,
+  Rs as MenuButton,
+  pR as NewStreamModal,
+  sh as OverCapNote,
+  Ma as OverflowRow,
   na as Overlay,
-  uR as PARTIAL_STEP_REASON,
+  fR as PARTIAL_STEP_REASON,
   lr as POLICY_CHIP_WIDTH,
-  FS as PageFrame,
-  IS as PageHeader,
-  PS as PlainList,
-  AR as PolicyRow,
-  rR as PreviewRail,
+  zS as PageFrame,
+  jS as PageHeader,
+  HS as PlainList,
+  BR as PolicyRow,
+  sR as PreviewRail,
   Ka as ROLE_MATRIX_COLUMNS,
-  Wn as RULE_ACTIONS,
+  zn as RULE_ACTIONS,
   kn as Radio,
-  UR as ReadyChecklist,
-  qS as RecordSection,
-  jR as RequeueSheet,
-  qR as ResolveBlock,
-  VR as ResolvedFieldRow,
-  ER as RoleMatrixRow,
-  YR as RoutingTable,
-  _R as RuleRow,
-  IR as RunbookSteps,
+  XR as ReadyChecklist,
+  GS as RecordSection,
+  KR as RequeueSheet,
+  GR as ResolveBlock,
+  QR as ResolvedFieldRow,
+  PR as RoleMatrixRow,
+  ZR as RoutingTable,
+  gR as RuleRow,
+  jR as RunbookSteps,
   Er as STREAM_STEPS,
-  WS as SectionBand,
+  VS as SectionBand,
   At as SectionHeader,
   yn as SegmentedControl,
   mn as Select,
-  JR as SessionRow,
-  ES as Sidebar,
-  vR as StageColumn,
-  GS as StageGrid,
-  zR as StageHistory,
-  Qb as StageListEditor,
-  JS as StaleStrip,
+  e2 as SessionRow,
+  PS as Sidebar,
+  yR as StageColumn,
+  JS as StageGrid,
+  UR as StageHistory,
+  tp as StageListEditor,
+  eR as StaleStrip,
   Pa as StatStrip,
-  bR as StreamRow,
-  RS as StudioIcon,
-  jS as SubjectRail,
+  NR as StreamRow,
+  AS as StudioIcon,
+  KS as SubjectRail,
   Ge as Switch,
-  AS as TabLinks,
-  DS as TableHead,
-  LS as Tabs,
-  wS as ThemeProvider,
-  pR as ToolRow,
-  HS as TopBar,
-  vm as Tree,
+  BS as TabLinks,
+  FS as TableHead,
+  MS as Tabs,
+  bS as ThemeProvider,
+  kR as ToolRow,
+  WS as TopBar,
+  ym as Tree,
   Sn as TreeRow,
-  XR as TypedInputBlock,
+  a2 as TypedInputBlock,
   fo as UNSAFE_HREF,
-  MR as ValidationList,
-  mS as VisibilityProvider,
-  hS as Visible,
-  vS as WARD_VERSION,
-  Oa as WorkCard,
-  XS as WriteUnavailableStrip,
-  HC as agoSince,
+  DR as ValidationList,
+  _S as VisibilityProvider,
+  vS as Visible,
+  yS as WARD_VERSION,
+  Da as WorkCard,
+  aR as WriteUnavailableStrip,
+  WC as agoSince,
   yr as clock,
-  fp as colourStatus,
+  pp as colourStatus,
   ee as count,
   ce as duration,
   at as elapsed,
-  _S as eventSourceTransport,
+  gS as eventSourceTransport,
   La as isStreamStep,
   Aa as isValidatedStreamStep,
-  U_ as ladderValidation,
-  H1 as mcpConnectionChip,
-  D1 as mcpToolName,
+  X_ as ladderValidation,
+  W1 as mcpConnectionChip,
+  F1 as mcpToolName,
   ne as money,
   we as ms,
   Rn as ordered,
   Jt as ratio,
-  lN as restartLabel,
-  j as safeHref,
+  cN as restartLabel,
+  F as safeHref,
   de as stamp,
   tt as stream,
-  NS as streamChip,
+  SS as streamChip,
   Ba as streamChipProps,
   pe as streamColour,
   Br as streamHex,
-  yS as streamVars,
+  CS as streamVars,
   _a as useBorderFlash,
-  De as useDisabledScope,
+  je as useDisabledScope,
   xr as useFocusTrap,
-  kS as useLiveFeed,
-  fS as useReturnFocus,
+  RS as useLiveFeed,
+  pS as useReturnFocus,
   xa as useRovingTabindex,
   nt as useTicker,
   Nr as useVisible,
-  W as v,
-  RR as validateMark,
+  z as v,
+  AR as validateMark,
   da as validatedStep,
   Qt as validatedStreamSteps
 };

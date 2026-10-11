@@ -7,26 +7,12 @@
   border-bottom: var(--ward-border) solid var(--ward-color-line);
   flex-wrap: nowrap;
   overflow-x: auto;
-  scroll-padding-inline: var(--ward-space-6);
 }
 
 /* The scrolling strip clips its top edge; a gutter the size of the focus ring, cancelled by margin, keeps the ring whole. */
 .strip[data-level="1"] {
   padding-block-start: calc(var(--ward-focus-ring) + var(--ward-focus-offset));
   margin-block-start: calc(-1 * (var(--ward-focus-ring) + var(--ward-focus-offset)));
-}
-
-/* A strip wider than its column scrolls; the fade says which edge hides more tabs. */
-.strip[data-fade-start] {
-  mask-image: linear-gradient(to right, transparent, currentColor var(--ward-space-6));
-}
-
-.strip[data-fade-end] {
-  mask-image: linear-gradient(to left, transparent, currentColor var(--ward-space-6));
-}
-
-.strip[data-fade-start][data-fade-end] {
-  mask-image: linear-gradient(to right, transparent, currentColor var(--ward-space-6), currentColor calc(100% - var(--ward-space-6)), transparent);
 }
 
 /* Tabs never scroll: a tab that does not fit waits in More, so rings and the More menu are never clipped. */
