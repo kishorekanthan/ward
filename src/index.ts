@@ -55,7 +55,7 @@ export type { SelectOption, SelectProps } from "./primitives/Select";
 export { Menu, MenuButton } from "./primitives/Menu";
 export type { MenuButtonProps, MenuEntry, MenuGroup, MenuItem, MenuProps } from "./primitives/Menu";
 export { Tabs } from "./primitives/Tabs";
-export type { Tab, TabDef, TabsProps } from "./primitives/Tabs";
+export type { Tab, TabDef, TabLevel, TabsProps } from "./primitives/Tabs";
 export { TabLinks } from "./primitives/TabLinks";
 export type { TabLink, TabLinksProps } from "./primitives/TabLinks";
 export { SegmentedControl } from "./primitives/SegmentedControl";
