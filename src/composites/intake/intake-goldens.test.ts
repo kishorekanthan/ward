@@ -47,11 +47,12 @@ describe("intake conversation geometry against Intake 12c", () => {
     expect(value(CHAT, `${INTAKE} \\.turn\\[data-turn="requester"\\] \\.body`, "background")).toBe(bubble.requesterGround);
   });
 
-  it("draws the reply row inside a stronger ring", () => {
+  it("draws the chat field as one rounded ring", () => {
     const { reply } = golden;
-    expect(value(COMPOSER, "\\.replyRow", "padding")).toBe(reply.padding);
-    expect(value(COMPOSER, "\\.replyRow", "gap")).toBe(reply.gap);
-    expect(value(COMPOSER, "\\.replyRow", "box-shadow")).toBe(reply.ring);
+    expect(value(COMPOSER, "\\.replyField", "padding")).toBe(reply.padding);
+    expect(value(COMPOSER, "\\.replyField", "gap")).toBe(reply.gap);
+    expect(value(COMPOSER, "\\.replyField", "box-shadow")).toBe(reply.ring);
+    expect(value(COMPOSER, "\\.replyField", "border-radius")).toBe(reply.radius);
   });
 });
 

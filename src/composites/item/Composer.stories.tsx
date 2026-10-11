@@ -46,3 +46,16 @@ function FilledByExample() {
 }
 
 export const FilledFromExample = { render: () => <FilledByExample /> };
+
+const LONG = [
+  "We need a weekly report of late approvals for the finance stream.",
+  "It should list each item, who holds it, and how long it has waited.",
+  "Send it to the stream owners every Monday morning.",
+  "Leave out items that are on hold by request.",
+  "Show the oldest first.",
+  "Add a total at the end.",
+  "Keep it short enough to read on a phone.",
+].join("\n");
+
+export const Chat = { args: { ...base, variant: "reply" } };
+export const ChatLongMessage = { args: { ...base, variant: "reply", value: LONG } };
