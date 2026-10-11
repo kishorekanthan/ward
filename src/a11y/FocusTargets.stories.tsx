@@ -91,7 +91,7 @@ export const Links = {
         <StatStrip cells={[{ value: "2", label: "Items waiting at a gate", href: "/gates" }, { value: "5", label: "Done", href: "/done" }]} />
       </div>
       <Sidebar brand="Studio" nav={[]} agentsHeading="Agents" agents={[]} shared={shared} />
-      <TabLinks links={sections} active="gates" label="Studio sections" />
+      <TabLinks level="page" links={sections} active="gates" label="Studio sections" />
       <ConfigRow stage={{ id: "review", name: "Review", gate: false, terminal: false, agentsMounted: 0 }} config={{ label: "Review", shown: true }} onChange={() => {}} />
       <Switch label="Hidden as a column" labelHidden checked={false} onChange={() => {}} />
       <Field label="Stream name" value="" onChange={() => {}} />

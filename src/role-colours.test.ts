@@ -16,6 +16,8 @@ const ROLE_USES: Record<Reason, string[]> = {
     "primitives/Tabs.module.css .tab[aria-selected=\"true\"] sageInk",
     "primitives/Tabs.module.css .tab[aria-current=\"page\"] sageTint",
     "primitives/Tabs.module.css .tab[aria-current=\"page\"] sageInk",
+    // TRELLIS-522: a section strip marks its current tab with a sage underline, not a fill.
+    "primitives/Tabs.module.css .strip[data-level=\"section\"] .tab[aria-selected=\"true\"], .strip[data-level=\"section\"] .tab[aria-current=\"page\"] sageInk",
     "primitives/TopBar.module.css .dest[aria-current=\"page\"] sageTint",
     "primitives/TopBar.module.css .dest[aria-current=\"page\"] sageInk",
     "layout/AppShell.module.css .nav a[aria-current=\"page\"] sageTint",

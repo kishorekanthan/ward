@@ -87,23 +87,25 @@ describe("PageHeader", () => {
 describe("Tabs", () => {
   const sevenTabs = Array.from({ length: 7 }, (_, index) => ({ id: `tab-${index + 1}`, label: `Tab ${index + 1}` }));
 
-  it("supports the seven-section admin cap and level-two current indicator", () => {
-    render(<Tabs tabs={sevenTabs} active="tab-4" level={2} onChange={() => {}} label="Admin sections" />);
+  it("supports the seven-section admin cap and the section-level current indicator", () => {
+    render(<Tabs tabs={sevenTabs} active="tab-4" level="section" onChange={() => {}} label="Admin sections" />);
 
     expect(screen.getAllByRole("tab")).toHaveLength(golden.tabs.cap);
     expect(screen.getByRole("tab", { name: "Tab 4" }).getAttribute("aria-selected")).toBe("true");
-    expect(screen.getByRole("tablist").getAttribute("data-level")).toBe("2");
-    // Both levels mark the current tab with one filled pill; no level draws an underline.
+    expect(screen.getByRole("tablist").getAttribute("data-level")).toBe("section");
+    // A page strip marks its current tab with a pill; a section strip with an underline and no fill.
     expect(rule(tabsCss, '.tab[aria-selected="true"]')).toContain(golden.tabs.current);
     expect(rule(tabsCss, ".tab:hover")).toContain(golden.tabs.hover);
-    expect(tabsCss).not.toMatch(/border-bottom-color|\.strip\[data-level="2"\] \.tab/);
+    const section = rule(tabsCss, '.strip[data-level="section"] .tab[aria-current="page"]');
+    expect(section).toContain("background: transparent");
+    expect(section).toContain("box-shadow: inset 0 calc(-1 * var(--ward-underline)) 0 var(--ward-color-sageInk)");
   });
 
   // Web pages render the panel themselves, so the id format is the contract they build against.
   it("points every tab at the panel id its page renders, and labels that panel back", () => {
     render(
       <>
-        <Tabs tabs={[{ id: "overview", label: "Overview" }, { id: "policy", label: "Loop policy" }]} active="overview" onChange={() => {}} />
+        <Tabs level="page" tabs={[{ id: "overview", label: "Overview" }, { id: "policy", label: "Loop policy" }]} active="overview" onChange={() => {}} />
         <div role="tabpanel" id="panel-overview" aria-labelledby="tab-overview">
           Overview body
         </div>
@@ -119,7 +121,7 @@ describe("Tabs", () => {
   });
 
   it("keeps an eighth tab in the same strip instead of wrapping another screen section into the row", () => {
-    render(<Tabs tabs={[...sevenTabs, { id: "tab-8", label: "Tab 8" }]} active="tab-1" onChange={() => {}} />);
+    render(<Tabs level="page" tabs={[...sevenTabs, { id: "tab-8", label: "Tab 8" }]} active="tab-1" onChange={() => {}} />);
     expect(screen.getAllByRole("tablist")).toHaveLength(1);
     expect(screen.getAllByRole("tab")).toHaveLength(8);
   });

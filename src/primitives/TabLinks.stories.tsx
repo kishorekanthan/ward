@@ -16,15 +16,15 @@ export default {
 };
 
 export const Default = {
-  args: { links: studio, active: "gates", label: "Studio sections" },
+  args: { links: studio, active: "gates", level: "page", label: "Studio sections" },
 };
 
-export const SecondLevel = {
-  args: { links: studio, active: "console", level: 2, label: "Studio sections" },
+export const Section = {
+  args: { links: studio, active: "console", level: "section", label: "Studio sections" },
 };
 
 // Five links at phone width scroll inside the strip; the current last link starts in view, clear of the fades.
 export const PhoneWidth = {
-  args: { links: studio, active: "audit", label: "Studio sections" },
+  args: { links: studio, active: "audit", level: "page", label: "Studio sections" },
   parameters: { viewport: { defaultViewport: "mobile1" } },
 };
