@@ -9,6 +9,7 @@ import { sweepPhoneWidth } from "./phone-width.mjs";
 import { sweepFocusTargets } from "./focus-targets.mjs";
 import { sweepBoardHeight } from "./board-height.mjs";
 import { sweepBoardToolbar } from "./board-toolbar.mjs";
+import { sweepToolbarRow } from "./toolbar-row.mjs";
 import { sweepMenuEscape } from "./menu-escape.mjs";
 import { sweepStudioFrame } from "./studio-frame.mjs";
 import { sweepHeaderGeometry } from "./header-geometry.mjs";
@@ -306,6 +307,11 @@ else fail("flash ring", flashDiffs.join("; "));
 const tabDiffs = await sweepTabLevels();
 if (tabDiffs.length === 0) pass("tab levels", "light and dark: the page strip's current tab is a sage pill, the section strip's is text ink over a sage underline, and idle tabs have no fill");
 else fail("tab levels", tabDiffs.join("; "));
+
+// 19. toolbar row: a PageHeader row with a button, a hidden-label and a labelled toolbar dropdown, and the ··· button: equal height and top within 1px (#253)
+const rowDiffs = await sweepToolbarRow();
+if (rowDiffs.length === 0) pass("toolbar row", "button, two toolbar dropdowns and the ··· button share height and top within 1px, light and dark, at 1280 and 1024px");
+else fail("toolbar row", rowDiffs.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);
 process.exitCode = failures === 0 ? 0 : 1;
