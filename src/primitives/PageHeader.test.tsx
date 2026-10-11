@@ -1,5 +1,9 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { ruleBody } from "../test-css";
 import { Btn } from "./Btn";
 import { PageHeader } from "./PageHeader";
 
@@ -254,5 +258,13 @@ describe("PageHeader consequence hint", () => {
   it("adds no title without a hint", () => {
     render(<PageHeader crumb={crumb} title="Data engineering" consequence={consequence} />);
     expect(screen.getByText(consequence).hasAttribute("title")).toBe(false);
+  });
+});
+
+describe("PageHeader chips beside a long crumb", () => {
+  it("wrap under the crumb in place of shrinking under a rail", () => {
+    const css = join(dirname(fileURLToPath(import.meta.url)), "PageHeader.module.css");
+    expect(ruleBody(css, ".context")).toContain("flex-wrap: wrap");
+    expect(readFileSync(css, "utf8")).toMatch(/\n\.chips \{[^}]*flex-wrap: wrap;/);
   });
 });

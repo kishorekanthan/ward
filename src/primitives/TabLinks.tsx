@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { useEdgeFades } from "../layout/useEdgeFades";
+import { OverflowRow } from "../layout/OverflowRow";
 import { usePageStrip } from "./pageStrip";
 import { tabClass, type TabLevel } from "./Tabs";
 import { useRevealActive } from "./useRevealActive";
@@ -21,16 +21,15 @@ export function TabLinks({ links, active, label, level }: TabLinksProps) {
   if (links.length > MAX_TABS) throw new Error(`TabLinks: ${links.length} links exceeds the cap of ${MAX_TABS} — the set is fixed`);
   const stripRef = useRef<HTMLElement>(null);
   usePageStrip(stripRef, level);
-  useEdgeFades(stripRef, links.length);
   useRevealActive(stripRef, links.findIndex((link) => link.id === active), "a");
   return (
-    <nav ref={stripRef} className={tabClass(level)} aria-label={label} data-level={level}>
+    <OverflowRow as="nav" rowRef={stripRef} className={tabClass(level)} label={label} count={links.length} focusable={false} data-level={level}>
       {links.map((link) => (
         <a key={link.id} href={link.href} className={`${s.tab} ward-tab`} aria-current={link.id === active ? "page" : undefined}>
           {link.label}
           {link.count === undefined ? null : <> <span className={s.count}>{`· ${link.count}`}</span></>}
         </a>
       ))}
-    </nav>
+    </OverflowRow>
   );
 }

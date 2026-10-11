@@ -66,6 +66,11 @@ describe("TabLinks", () => {
     expect(screen.getAllByRole("link").map((link) => link.getAttribute("tabindex"))).toEqual([null, null, null]);
   });
 
+  it("is no tab stop itself: its links take focus and scroll into view", () => {
+    render(<TabLinks level="section" links={studio} active="gates" label="Studio sections" />);
+    expect(screen.getByRole("navigation", { name: "Studio sections" }).hasAttribute("tabindex")).toBe(false);
+  });
+
   it("shows a count after its label, as Tabs does", () => {
     render(<TabLinks level="page" links={[{ id: "open", label: "Open", href: "#/open", count: 14 }, ...studio]} active="open" label="Item states" />);
     expect(screen.getByRole("link", { current: "page" }).textContent).toBe("Open · 14");

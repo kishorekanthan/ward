@@ -15,7 +15,7 @@ export function markEdges(scroller: HTMLElement): Edges {
   return edges;
 }
 
-export function useEdgeFades(scrollerRef: RefObject<HTMLElement | null>, count: number): void {
+export function useEdgeFades(scrollerRef: RefObject<HTMLElement | null>, count?: number): void {
   useEffect(() => {
     const scroller = scrollerRef.current;
     if (!scroller) return;

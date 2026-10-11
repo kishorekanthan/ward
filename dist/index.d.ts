@@ -102,6 +102,8 @@ export type { FormStackProps } from './layout/FormStack';
 export { SectionBand } from './layout/SectionBand';
 export type { SectionBandProps } from './layout/SectionBand';
 export { BoardScroller } from './layout/BoardScroller';
+export { OverflowRow } from './layout/OverflowRow';
+export type { OverflowRowProps } from './layout/OverflowRow';
 export { StageGrid } from './layout/StageGrid';
 export type { StageGridProps } from './layout/StageGrid';
 export type { BoardLane, BoardScrollerProps } from './layout/BoardScroller';
