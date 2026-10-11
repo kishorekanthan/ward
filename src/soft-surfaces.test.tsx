@@ -2,6 +2,10 @@ import { readFileSync } from "node:fs";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { BoardColumn } from "./composites/board/BoardColumn";
+import { SectionBand } from "./layout/SectionBand";
+import layoutClasses from "./layout/layout.module.css";
+import { SectionHeader } from "./primitives/SectionHeader";
+import headerClasses from "./primitives/SectionHeader.module.css";
 import columnClasses from "./composites/board/BoardColumn.module.css";
 import cardClasses from "./composites/board/WorkCard.module.css";
 import type { BoardItem } from "./composites/board/types";
@@ -34,6 +38,7 @@ const STAT = "src/primitives/StatStrip.module.css";
 const AGENT = "src/composites/studio/AgentCard.module.css";
 const OVERLAY = "src/primitives/Overlay.module.css";
 const STAGE = "src/composites/studio/StageColumn.module.css";
+const HEADER = "src/primitives/SectionHeader.module.css";
 const RAIL = "src/composites/board/PreviewRail.module.css";
 const APPEARANCE = "src/composites/admin/AppearanceStrip.module.css";
 const THEMES: Theme[] = ["light", "dark"];
@@ -97,6 +102,29 @@ describe("soft surfaces against the chosen look (#217)", () => {
     for (const selector of [".scroller", '.frame[data-inset="board"] .scroller', '.frame[data-inset="board"] .scroller > *']) {
       expect(ruleBody(LAYOUT, selector), selector).not.toMatch(/(^|\n)(border(?!-radius)|box-shadow|column-rule)/);
     }
+  });
+
+  it("lets section heads take their holder's ground with one rule under them, whatever rule draws them (#248)", () => {
+    const removeHeader = injectModuleCss(HEADER, headerClasses);
+    const removeLayout = injectModuleCss(LAYOUT, layoutClasses);
+    render(
+      <>
+        <SectionHeader kind="key" title="Conversation" />
+        <SectionBand label="Queue controls">Find a request</SectionBand>
+      </>,
+    );
+    const heads = [screen.getByText("Conversation").parentElement!, screen.getByText("Find a request").parentElement!].map(edge);
+    removeLayout();
+    removeHeader();
+    expect(heads).toEqual(Array(2).fill({ shadow: "", ground: "" }));
+    const rule = ["border-bottom: var(--ward-border) solid var(--ward-color-line)"];
+    // The top-level rule only: the phone query restacks the band without touching its edges.
+    const topRule = (path: string, selector: string) => readFileSync(path, "utf8").split(`\n${selector} {`)[1].split("}")[0];
+    for (const [path, selector] of [[HEADER, ".root"], [LAYOUT, ".band"]]) expect(topRule(path, selector).match(/border(?!-radius)[\w-]*\s*:[^;]*/g), selector).toEqual(rule);
+  });
+
+  it("keeps one dark card grey (#248)", () => {
+    expect(themeVars.dark.get("--ward-color-surface3")).toBe(themeVars.dark.get("--ward-color-surface"));
   });
 
   it("never draws a one-side edge or stripe on a card, lane, stat block or agent card", () => {

@@ -1,15 +1,14 @@
 /* Provenance: not established — no comp block identified; values are comp-transcribed tokens, not measured geometry. */
+/* A state is inline text in whatever holds it, never a second frame (#248). */
 .block {
   display: grid;
   gap: var(--ward-space-2);
   justify-items: start;
   padding: var(--ward-space-5);
-  background: var(--ward-color-surface);
-  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
 }
 
-.block[data-tone="failed"] {
-  background: var(--ward-color-dangerTint);
+.block[data-tone="failed"] .sentence {
+  color: var(--ward-color-danger);
 }
 
 .sentence {
