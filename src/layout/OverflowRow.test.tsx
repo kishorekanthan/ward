@@ -10,13 +10,14 @@ const here = dirname(fileURLToPath(import.meta.url));
 const CSS = join(here, "OverflowRow.module.css");
 const ROW = { client: 375, scroll: 1000 };
 
-function mockRowLayout(scroll: number): void {
+function mockRowLayout(scroll: { current: number } | number): void {
+  const width = () => (typeof scroll === "number" ? scroll : scroll.current);
   const isRow = (el: HTMLElement) => el.hasAttribute("data-ward-overflow-row");
   vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockImplementation(function (this: HTMLElement) {
     return isRow(this) ? ROW.client : 0;
   });
   vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockImplementation(function (this: HTMLElement) {
-    return isRow(this) ? scroll : 0;
+    return isRow(this) ? width() : 0;
   });
 }
 
@@ -50,6 +51,28 @@ describe("OverflowRow", () => {
     expect(ruleBody(CSS, ".row")).toContain("scroll-padding-inline: var(--ward-overflow-fade)");
     expect(ruleBody(CSS, ".row[data-fade-end]")).toBe("mask-image: linear-gradient(to left, transparent, currentColor var(--ward-overflow-fade))");
     expect(ruleBody(CSS, ".row[data-fade-start]")).toBe("mask-image: linear-gradient(to right, transparent, currentColor var(--ward-overflow-fade))");
+  });
+
+  it("measures the edges again when the item count changes", () => {
+    const width = { current: ROW.scroll };
+    mockRowLayout(width);
+    const { rerender } = render(<OverflowRow label="Lanes" count={5}>lanes</OverflowRow>);
+    const row = screen.getByRole("region", { name: "Lanes" });
+    expect(row.hasAttribute("data-fade-end")).toBe(true);
+    width.current = ROW.client;
+    rerender(<OverflowRow label="Lanes" count={1}>lanes</OverflowRow>);
+    expect(row.hasAttribute("data-fade-end")).toBe(false);
+  });
+
+  it("scrolls sideways and rings the focused row inside its own edge", () => {
+    expect(ruleBody(CSS, ".row")).toContain("overflow-x: auto");
+    expect(ruleBody(CSS, ".row:focus-visible")).toContain("outline: var(--ward-focus-ring) solid var(--ward-color-focus)");
+    expect(ruleBody(CSS, ".row:focus-visible")).toContain("outline-offset: calc(-1 * var(--ward-focus-ring))");
+  });
+
+  it("keeps the navigation role on a focusable nav row", () => {
+    render(<OverflowRow as="nav" label="Sections">x</OverflowRow>);
+    expect(screen.getByRole("navigation", { name: "Sections" }).tabIndex).toBe(0);
   });
 
   it("takes focus with its label so arrow keys scroll it, unless its children take focus", () => {
