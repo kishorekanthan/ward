@@ -38,14 +38,14 @@ afterEach(() => {
 describe("Tabs", () => {
   it("shows all eight tabs in one strip, and no More, when they fit", () => {
     mockFit(1000);
-    render(<Tabs label="Stream" tabs={eight} active="t0" onChange={() => {}} />);
+    render(<Tabs level="page" label="Stream" tabs={eight} active="t0" onChange={() => {}} />);
     expect(screen.getAllByRole("tablist")).toHaveLength(1);
     expect(shownLabels()).toEqual(["Tab 0", "Tab 1", "Tab 2", "Tab 3", "Tab 4", "Tab 5", "Tab 6", "Tab 7 · 3"]);
   });
 
   it("moves the tabs that do not fit into More, in order", () => {
     mockFit(300);
-    render(<Tabs label="Stream" tabs={eight} active="t0" onChange={() => {}} />);
+    render(<Tabs level="page" label="Stream" tabs={eight} active="t0" onChange={() => {}} />);
     // 90 for Tab 0 and 60 for More leave 150: Tab 1 fits, Tab 2 would need 330.
     expect(shownLabels()).toEqual(["Tab 0", "Tab 1", "More"]);
     fireEvent.click(screen.getByRole("tab", { name: "More" }));
@@ -54,7 +54,7 @@ describe("Tabs", () => {
 
   it("keeps a waiting tab out of the tab order and out of the reader's tree", () => {
     mockFit(300);
-    const { container } = render(<Tabs label="Stream" tabs={eight} active="t0" onChange={() => {}} />);
+    const { container } = render(<Tabs level="page" label="Stream" tabs={eight} active="t0" onChange={() => {}} />);
     const waiting = Array.from(container.querySelectorAll<HTMLElement>("[data-overflow]"));
     expect(waiting).toHaveLength(6);
     waiting.forEach((tab) => {
@@ -65,14 +65,14 @@ describe("Tabs", () => {
 
   it("keeps the selected tab in the strip, in place of the last tab that fits", () => {
     mockFit(300);
-    render(<Tabs label="Stream" tabs={eight} active="t6" onChange={() => {}} />);
+    render(<Tabs level="page" label="Stream" tabs={eight} active="t6" onChange={() => {}} />);
     expect(shownLabels()).toEqual(["Tab 0", "Tab 6", "More"]);
     expect(screen.getByRole("tab", { name: "Tab 6" }).getAttribute("aria-selected")).toBe("true");
   });
 
   it("walks the arrows across the shown tabs into More, and Escape closes More onto its button", () => {
     mockFit(300);
-    render(<Tabs label="Stream" tabs={eight} active="t0" onChange={() => {}} />);
+    render(<Tabs level="page" label="Stream" tabs={eight} active="t0" onChange={() => {}} />);
     const strip = screen.getByRole("tablist");
     screen.getByRole("tab", { name: "Tab 0" }).focus();
     fireEvent.keyDown(strip, { key: "ArrowRight" });
@@ -92,7 +92,7 @@ describe("Tabs", () => {
     const picked = vi.fn();
     function Host() {
       const [active, setActive] = useState("t0");
-      return <Tabs label="Stream" tabs={eight} active={active} onChange={(id) => (picked(id), setActive(id))} />;
+      return <Tabs level="page" label="Stream" tabs={eight} active={active} onChange={(id) => (picked(id), setActive(id))} />;
     }
     render(<Host />);
     fireEvent.click(screen.getByRole("tab", { name: "More" }));
@@ -105,27 +105,52 @@ describe("Tabs", () => {
   });
 
   it("marks exactly one tab selected", () => {
-    render(<Tabs label="Stream" tabs={seven.slice(0, 3)} active="t1" onChange={() => {}} />);
+    render(<Tabs level="page" label="Stream" tabs={seven.slice(0, 3)} active="t1" onChange={() => {}} />);
     const selected = screen.getAllByRole("tab").filter((t) => t.getAttribute("aria-selected") === "true");
     expect(selected.map((t) => t.textContent)).toEqual(["Tab 1"]);
   });
 
   it("keeps one tab stop in the strip and moves with arrows", () => {
-    render(<Tabs label="Stream" tabs={seven.slice(0, 3)} active="t0" onChange={() => {}} />);
+    render(<Tabs level="page" label="Stream" tabs={seven.slice(0, 3)} active="t0" onChange={() => {}} />);
     const tabs = screen.getAllByRole("tab");
     expect(tabs.map((t) => t.getAttribute("tabindex"))).toEqual(["0", "-1", "-1"]);
     fireEvent.keyDown(screen.getByRole("tablist"), { key: "ArrowRight" });
     expect(document.activeElement).toBe(tabs[1]);
   });
 
-  it("marks the second level so it never repeats the primary underline", () => {
-    render(<Tabs label="Sessions" level={2} tabs={seven.slice(0, 3)} active="t0" onChange={() => {}} />);
-    expect(screen.getByRole("tablist").dataset.level).toBe("2");
+  it("marks its level on the strip", () => {
+    render(<Tabs label="Sessions" level="section" tabs={seven.slice(0, 3)} active="t0" onChange={() => {}} />);
+    expect(screen.getByRole("tablist").dataset.level).toBe("section");
+    expect(screen.getByRole("tablist").className).toContain("ward-tabs--section");
+  });
+
+  describe("one page strip", () => {
+    const error = () => vi.spyOn(console, "error").mockImplementation(() => {});
+    const strip = (level: "page" | "section", label: string) => <Tabs label={label} level={level} tabs={seven.slice(0, 2)} active="t0" onChange={() => {}} />;
+
+    it("names the fix once when a second page strip shows", () => {
+      const spy = error();
+      render(<>{strip("page", "Studio")}{strip("page", "Stream")}</>);
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(String(spy.mock.calls[0]?.[0])).toContain('level="section"');
+    });
+
+    it("lets a page strip sit over a section strip", () => {
+      const spy = error();
+      render(<>{strip("page", "Studio")}{strip("section", "Stream")}</>);
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it("counts page strips per themed root, as each theme copy is its own page", () => {
+      const spy = error();
+      render(<><div data-theme="light">{strip("page", "Light")}</div><div data-theme="dark">{strip("page", "Dark")}</div></>);
+      expect(spy).not.toHaveBeenCalled();
+    });
   });
 
   it("reports the tab the reader picked", () => {
     const onChange = vi.fn();
-    render(<Tabs label="Stream" tabs={seven.slice(0, 3)} active="t0" onChange={onChange} />);
+    render(<Tabs level="page" label="Stream" tabs={seven.slice(0, 3)} active="t0" onChange={onChange} />);
     fireEvent.click(screen.getAllByRole("tab")[2]);
     expect(onChange).toHaveBeenCalledWith("t2");
   });
@@ -136,7 +161,7 @@ describe("Tabs", () => {
   });
 
   it("reaches the last of seven tabs by keyboard, from the first and from its neighbour", () => {
-    render(<Tabs label="Admin" tabs={seven} active="t0" onChange={() => {}} />);
+    render(<Tabs level="page" label="Admin" tabs={seven} active="t0" onChange={() => {}} />);
     const tabs = screen.getAllByRole("tab");
     const strip = screen.getByRole("tablist");
     fireEvent.keyDown(strip, { key: "End" });
@@ -148,7 +173,7 @@ describe("Tabs", () => {
   });
 
   it("makes the selected last tab the strip's one tab stop", () => {
-    render(<Tabs label="Admin" tabs={seven} active="t6" onChange={() => {}} />);
+    render(<Tabs level="page" label="Admin" tabs={seven} active="t6" onChange={() => {}} />);
     expect(screen.getAllByRole("tab").map((t) => t.getAttribute("tabindex"))).toEqual(["-1", "-1", "-1", "-1", "-1", "-1", "0"]);
   });
 
