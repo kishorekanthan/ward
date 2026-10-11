@@ -152,9 +152,17 @@
   },
   "console": {
     "story": "item-activityconsole--empty",
-    "listLines": 6,
+    "listLines": 0,
     "jumpShown": false,
     "idleClipped": false,
+    "pageScrollsSideways": false
+  },
+  "drawerActions": {
+    "story": "board-itemdrawer--phone-width-actions",
+    "sheetFillsScrim": true,
+    "actionRows": 2,
+    "firstRowActions": 2,
+    "actionsWhole": true,
     "pageScrollsSideways": false
   },
   "consoleFoot": {
