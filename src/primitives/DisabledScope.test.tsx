@@ -86,6 +86,7 @@ describe("DisabledScope", () => {
     const handle = screen.getByRole("button", { name: "Reorder Implement" }) as HTMLButtonElement;
     expect(handle.disabled).toBe(true);
     expect(description(handle)).toBe(REASON);
+    expect(handle.title).toBe(REASON);
     fireEvent.keyDown(handle, { key: "ArrowUp" });
     fireEvent.click(screen.getByText("on"));
     expect(onReorder).not.toHaveBeenCalled();
