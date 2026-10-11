@@ -125,7 +125,7 @@ export function ActivityConsole({ lines, connection, idleSince, label = "Live ac
 
   return (
     <div className={s.root}>
-      <ol className={s.list} ref={listRef} aria-live={announce ? "polite" : "off"} aria-label={label} onScroll={(e) => setAway(scrolledUp(e.currentTarget))}>
+      <ol className={s.list} ref={listRef} aria-live={announce ? "polite" : "off"} aria-label={label} data-empty={lines.length === 0 || undefined} onScroll={(e) => setAway(scrolledUp(e.currentTarget))}>
         {lines.map((l, i) => (
           <li className={`${s.line} ward-consline ward-reveal ward-consline--${l.kind}`} key={`${l.at}-${i}`} data-kind={l.kind} data-revealed={i < revealed}>
             <span className={s.at}>{time(l.at)}</span>
