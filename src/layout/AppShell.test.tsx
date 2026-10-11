@@ -534,13 +534,10 @@ describe("AppShell Primary nav overflow", () => {
     expect(document.querySelector<HTMLElement>('nav[aria-label="Primary"]')?.scrollLeft).toBe(88);
   });
 
-  it("masks each faded edge as wide as the scroll-padding that keeps a revealed link clear of it", () => {
-    expect(rule(".nav")).toContain("scroll-padding-inline: 24px;");
-    expect(rule(".nav[data-fade-start]")).toContain("mask-image: linear-gradient(to right, transparent, currentColor 24px);");
-    expect(rule(".nav[data-fade-end]")).toContain("mask-image: linear-gradient(to left, transparent, currentColor 24px);");
-    expect(rule(".nav[data-fade-start][data-fade-end]")).toContain(
-      "mask-image: linear-gradient(to right, transparent, currentColor 24px, currentColor calc(100% - 24px), transparent);",
-    );
+  it("hands its scroll and fades to the shared OverflowRow", () => {
+    render(navShell("home"));
+    expect(screen.getByRole("navigation", { name: "Primary" }).hasAttribute("data-ward-overflow-row")).toBe(true);
+    expect(rule(".nav")).not.toContain("scroll-padding-inline");
   });
 });
 

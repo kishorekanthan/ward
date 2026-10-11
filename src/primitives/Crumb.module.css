@@ -4,8 +4,11 @@
   min-width: 0;
 }
 
+/* Chips that do not fit beside the steps wrap to a second line. */
 .nav {
   display: flex;
+  flex-wrap: wrap;
+  row-gap: var(--ward-space-1);
   align-items: baseline;
   min-width: 0;
 }
@@ -58,6 +61,7 @@
 
 .chips {
   display: inline-flex;
+  flex-wrap: wrap;
   gap: var(--ward-space-2);
   padding-left: var(--ward-space-2);
 }

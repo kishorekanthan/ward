@@ -43,8 +43,8 @@
     "viewport": { "width": 375, "height": 667 },
     "lanesOverflowSideways": true,
     "laneOverflowY": "visible",
-    "fadeEndAtStart": false,
-    "fadeEdge": "none"
+    "fadeEndAtStart": true,
+    "fadeEdge": "right"
   },
   "nineLanes1280Light": {
     "story": "layout-boardscroller--board-page-nine-lanes",
