@@ -164,7 +164,8 @@
     "firstRowActions": 2,
     "actionsEqualWidth": true,
     "actionsWhole": true,
-    "pageScrollsSideways": false
+    "pageScrollsSideways": false,
+    "openRingOff": true
   },
   "consoleFoot": {
     "story": "item-activityconsole--history",

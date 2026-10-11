@@ -307,6 +307,9 @@ function probeDrawerActions() {
   const dialog = document.querySelector('[role="dialog"]');
   const panel = dialog.getBoundingClientRect();
   const scrim = dialog.parentElement.getBoundingClientRect();
+  // The story stacks themed copies, so a later one makes this dialog inert; lift that, then a scripted focus with no key press decides the ring.
+  dialog.closest("[inert]")?.removeAttribute("inert");
+  dialog.focus();
   const lead = Array.from(dialog.querySelectorAll("button")).find((b) => b.textContent === "Jira");
   const buttons = Array.from(lead.parentElement.children);
   const tops = buttons.map((b) => Math.round(b.getBoundingClientRect().top));
@@ -317,6 +320,7 @@ function probeDrawerActions() {
     actionsEqualWidth: new Set(buttons.map((b) => Math.round(b.getBoundingClientRect().width))).size === 1,
     actionsWhole: buttons.every((b) => b.scrollWidth <= b.clientWidth + 0.5),
     pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+    openRingOff: getComputedStyle(dialog).outlineStyle === "none",
   };
 }
 
