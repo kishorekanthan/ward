@@ -51,7 +51,7 @@ function ReplyRow(props: ComposerProps) {
   };
   return (
     <div className={s.reply} data-ward-composer="reply">
-      <div className={s.replyField} data-ward-composer-field="" onKeyDown={onKeyDown}>
+      <div className={s.replyField} data-ward-composer-field="" data-ward-focus-host="" onKeyDown={onKeyDown}>
         <Field variant="reply" kind="textarea" rows={1} labelHidden placeholder={placeholder} label={placeholder} value={body} onChange={setBody} describedBy={sendsAs} />
         <Btn variant="primary" className={s.send} describedBy={sendsAs} onClick={send}>
           <SendIcon />

@@ -6098,7 +6098,7 @@ function DR(e) {
     /* @__PURE__ */ t("div", { className: Ne.actions, children: /* @__PURE__ */ t(H$, { ...e, reasonId: n, unavailableId: r }) })
   ] });
 }
-const F$ = "_root_wnax1_2", j$ = "_attach_wnax1_11", q$ = "_actions_wnax1_17", z$ = "_reply_wnax1_23", W$ = "_replyField_wnax1_28", K$ = "_send_wnax1_53", G$ = "_sendIcon_wnax1_64", U$ = "_sendsAs_wnax1_74", Be = {
+const F$ = "_root_rvhdw_2", j$ = "_attach_rvhdw_11", q$ = "_actions_rvhdw_17", z$ = "_reply_rvhdw_23", W$ = "_replyField_rvhdw_28", K$ = "_send_rvhdw_54", G$ = "_sendIcon_rvhdw_65", U$ = "_sendsAs_rvhdw_75", Be = {
   root: F$,
   attach: j$,
   actions: q$,
@@ -6126,7 +6126,7 @@ function J$(e) {
     Y$(u) && (u.preventDefault(), c());
   };
   return /* @__PURE__ */ o("div", { className: Be.reply, "data-ward-composer": "reply", children: [
-    /* @__PURE__ */ o("div", { className: Be.replyField, "data-ward-composer-field": "", onKeyDown: d, children: [
+    /* @__PURE__ */ o("div", { className: Be.replyField, "data-ward-composer-field": "", "data-ward-focus-host": "", onKeyDown: d, children: [
       /* @__PURE__ */ t(M, { variant: "reply", kind: "textarea", rows: 1, labelHidden: !0, placeholder: a, label: a, value: l, onChange: i, describedBy: s }),
       /* @__PURE__ */ o(b, { variant: "primary", className: Be.send, describedBy: s, onClick: c, children: [
         /* @__PURE__ */ t(V$, {}),

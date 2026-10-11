@@ -99,9 +99,11 @@ describe("Composer chat field", () => {
     expect(field?.contains(screen.getByRole("button", { name: "Send" }))).toBe(true);
   });
 
-  it("names the icon button Send and hides its drawing", () => {
+  it("names the icon button Send, hides its drawing and marks the field as the focus host", () => {
     render(<Composer {...chat} onPost={() => {}} />);
     const send = screen.getByRole("button", { name: "Send" });
+    expect(send.closest("[data-ward-focus-host]")).toBe(screen.getByRole("textbox").closest("[data-ward-focus-host]"));
+    expect(send.closest("[data-ward-focus-host]")).not.toBeNull();
     expect(send.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
     expect(send.querySelector("svg")?.getAttribute("focusable")).toBe("false");
   });
@@ -134,12 +136,10 @@ describe("Composer chat field", () => {
     );
   });
 
-  it("rings the rounded field in the theme accent on focus and draws no frame on the text", () => {
+  it("rings the whole rounded field on focus and draws no frame on the text", () => {
     const path = css("./Composer.module.css");
     expect(ruleBody(path, ".replyField")).toContain("border-radius: var(--ward-radius-panel)");
-    expect(ruleBody(path, ".replyField:focus-within")).toBe(
-      "box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-sage), 0 0 0 var(--ward-focus-ring) var(--ward-color-sageTint)",
-    );
+    expect(ruleBody(path, ".replyField:focus-within")).toBe("outline: var(--ward-focus-ring) solid var(--ward-color-focus);\noutline-offset: 0");
     expect(ruleBody(path, ".replyField textarea:focus-visible")).toBe("outline: none");
     expect(ruleBody(css("../../primitives/Field.module.css"), '.field[data-variant="reply"] .control')).toContain("box-shadow: none");
   });

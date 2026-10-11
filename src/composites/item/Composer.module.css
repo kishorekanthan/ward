@@ -19,7 +19,7 @@
   gap: var(--ward-space-2);
 }
 
-/* A chat composer: one rounded field holds the text and the send button; focus rings the whole field in the theme accent. */
+/* A chat composer: one rounded field holds the text and the send button; focus rings the whole field, never the text alone. */
 .reply {
   display: grid;
   gap: var(--ward-space-2);
@@ -36,10 +36,11 @@
 }
 
 .replyField:focus-within {
-  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-sage), 0 0 0 var(--ward-focus-ring) var(--ward-color-sageTint);
+  outline: var(--ward-focus-ring) solid var(--ward-color-focus);
+  outline-offset: 0;
 }
 
-/* The field's ring marks focus, so the text area inside draws none of its own. */
+/* The field's ring marks focus (data-ward-focus-host), so the text area inside draws none of its own. */
 .replyField textarea:focus-visible {
   outline: none;
 }
