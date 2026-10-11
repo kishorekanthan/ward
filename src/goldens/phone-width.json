@@ -351,6 +351,9 @@
     "labelPx": "15px / 14px / 14px",
     "peoplePx": "14px",
     "rowHeightAtLeast": 36,
+    "labelsCut": 0,
+    "labelsOverColumns": 0,
+    "columnsUnderLabel": 8,
     "pageScrollsSideways": false
   },
   "roleMatrixRowsWide": {
@@ -360,6 +363,9 @@
     "labelPx": "15px / 14px / 14px",
     "peoplePx": "14px",
     "rowHeightAtLeast": 36,
+    "labelsCut": 0,
+    "labelsOverColumns": 0,
+    "columnsUnderLabel": 0,
     "pageScrollsSideways": false
   }
 }

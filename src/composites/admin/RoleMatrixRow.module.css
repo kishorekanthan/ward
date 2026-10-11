@@ -170,8 +170,28 @@
   }
 }
 
+/* A phone-width matrix stacks each row: its label on one line, its AD group below, under the label. */
 @container (max-width: 471.98px) {
   .webPeople {
     display: none;
+  }
+
+  .webHead,
+  .webFrame [role="treeitem"] > button {
+    flex-wrap: wrap;
+  }
+
+  .webHeadLabel,
+  .webFrame [role="treeitem"] > button > span:nth-child(2) {
+    flex: 1 1 0;
+  }
+
+  .webHeadLabel {
+    flex-basis: 100%;
+  }
+
+  .webFrame [role="treeitem"] > button > span:nth-child(3) {
+    flex: 1 0 100%;
+    padding-left: calc(1ch + var(--ward-space-2));
   }
 }
