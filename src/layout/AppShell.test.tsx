@@ -867,5 +867,6 @@ describe("AppShell fold owned by the consumer", () => {
     expect(css).toContain(folded + " :global([data-ward-tip]:is(:hover, :focus-visible))::after {");
     expect(rule(folded + " :global([data-ward-tip]:is(:hover, :focus-visible))::after")).toContain("content: attr(data-ward-tip);");
     expect(css.match(/data-ward-tip\]:is\(/g)).toHaveLength(1);
+    expect(rule(folded + " :global([data-ward-tip])")).toContain("position: relative;");
   });
 });

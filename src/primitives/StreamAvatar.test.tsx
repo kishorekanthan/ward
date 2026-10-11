@@ -1,7 +1,9 @@
+import { readFileSync } from "node:fs";
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { StreamAvatar, streamInitials } from "./StreamAvatar";
 
+const css = readFileSync("src/primitives/StreamAvatar.module.css", "utf8");
 const avatar = (container: HTMLElement) => container.firstElementChild as HTMLElement;
 
 describe("StreamAvatar", () => {
@@ -22,5 +24,11 @@ describe("StreamAvatar", () => {
     const md = avatar(render(<StreamAvatar name="Integration" />).container);
     const lg = avatar(render(<StreamAvatar name="Integration" size="lg" />).container);
     expect([md.getAttribute("aria-hidden"), md.dataset.size, lg.dataset.size, md.textContent]).toEqual(["true", "md", "lg", "IN"]);
+  });
+
+  it("sizes lg from its own height token and falls back to the meta chip pair without a step", () => {
+    expect(css).toContain('.avatar[data-size="lg"] {\n  width: var(--ward-height-streamAvatarLg);\n  height: var(--ward-height-streamAvatarLg);');
+    expect(css).toContain("background: var(--stream, var(--ward-chip-meta-bg));");
+    expect(css).toContain("color: var(--streamText, var(--ward-chip-meta-fg));");
   });
 });
