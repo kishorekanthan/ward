@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useId, useState, type KeyboardEvent } from "react";
 import { Btn } from "../../primitives/Btn";
 import { Checkbox } from "../../primitives/Checkbox";
 import { Chip } from "../../primitives/Chip";
@@ -15,7 +15,7 @@ export type ComposerProps = {
   // With value the page owns the text, so it can fill the box from a suggestion.
   value?: string;
   onChange?: (body: string) => void;
-  // reply: Intake 12c's one-line reply row with a text Send; the label stays attached but hidden.
+  // reply: a chat composer, one rounded field with an icon Send inside; the label stays attached but hidden.
   variant?: "reply";
 };
 
@@ -24,16 +24,38 @@ function useBody({ value, onChange }: ComposerProps): [string, (body: string) =>
   return value === undefined ? [own, setOwn] : [value, onChange ?? (() => undefined)];
 }
 
+function SendIcon() {
+  return (
+    <svg className={s.sendIcon} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M12 19V5M5 12l7-7 7 7" />
+    </svg>
+  );
+}
+
+// Enter sends and Shift+Enter keeps its new line; the Enter that ends an IME composition stays with the text.
+function sendsOnEnter(event: KeyboardEvent<HTMLElement>): boolean {
+  return event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing;
+}
+
 function ReplyRow(props: ComposerProps) {
   const { placeholder, asUser, onPost } = props;
   const [body, setBody] = useBody(props);
   const sendsAs = useId();
+  const send = () => {
+    if (body.trim() !== "") onPost(asUser, body);
+  };
+  const onKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    if (!sendsOnEnter(event)) return;
+    event.preventDefault();
+    send();
+  };
   return (
     <div className={s.reply} data-ward-composer="reply">
-      <div className={s.replyRow}>
-        <Field variant="reply" labelHidden placeholder={placeholder} label={placeholder} value={body} onChange={setBody} describedBy={sendsAs} />
-        <Btn variant="ghost" describedBy={sendsAs} onClick={() => onPost(asUser, body)}>
-          Send
+      <div className={s.replyField} data-ward-composer-field="" onKeyDown={onKeyDown}>
+        <Field variant="reply" kind="textarea" rows={1} labelHidden placeholder={placeholder} label={placeholder} value={body} onChange={setBody} describedBy={sendsAs} />
+        <Btn variant="primary" className={s.send} describedBy={sendsAs} onClick={send}>
+          <SendIcon />
+          <span className="ward-visually-hidden">Send</span>
         </Btn>
       </div>
       <p id={sendsAs} className={s.sendsAs}>{`Sends as ${asUser}.`}</p>

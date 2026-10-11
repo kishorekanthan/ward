@@ -1,6 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { useState } from "react";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it, vi } from "vitest";
+import { ruleBody } from "../../test-css";
 import { Composer } from "./Composer";
 
 describe("Composer", () => {
@@ -83,6 +85,63 @@ describe("Composer reply row", () => {
     expect(document.getElementById(send.getAttribute("aria-describedby") ?? "")?.textContent).toBe("Sends as M. Chen.");
     fireEvent.click(send);
     expect(onPost).toHaveBeenCalledWith("M. Chen", "Six hours covers it.");
+  });
+});
+
+describe("Composer chat field", () => {
+  const chat = { variant: "reply" as const, placeholder: "Ask the advisor", asUser: "M. Chen" };
+  const css = (file: string) => fileURLToPath(new URL(file, import.meta.url));
+
+  it("holds the text area and the send button in one field", () => {
+    render(<Composer {...chat} onPost={() => {}} />);
+    const field = screen.getByRole("textbox", { name: "Ask the advisor" }).closest("[data-ward-composer-field]");
+    expect(screen.getByRole("textbox", { name: "Ask the advisor" }).tagName).toBe("TEXTAREA");
+    expect(field?.contains(screen.getByRole("button", { name: "Send" }))).toBe(true);
+  });
+
+  it("names the icon button Send and hides its drawing", () => {
+    render(<Composer {...chat} onPost={() => {}} />);
+    const send = screen.getByRole("button", { name: "Send" });
+    expect(send.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
+    expect(send.querySelector("svg")?.getAttribute("focusable")).toBe("false");
+  });
+
+  it("sends on Enter and keeps a new line on Shift+Enter and while composing", () => {
+    const onPost = vi.fn();
+    render(<Composer {...chat} onPost={onPost} />);
+    const box = screen.getByRole("textbox", { name: "Ask the advisor" });
+    fireEvent.change(box, { target: { value: "Who owns triage?" } });
+    expect(fireEvent.keyDown(box, { key: "Enter", shiftKey: true })).toBe(true);
+    expect(fireEvent.keyDown(box, { key: "Enter", isComposing: true })).toBe(true);
+    expect(onPost).not.toHaveBeenCalled();
+    expect(fireEvent.keyDown(box, { key: "Enter" })).toBe(false);
+    expect(onPost).toHaveBeenCalledWith("M. Chen", "Who owns triage?");
+  });
+
+  it("sends nothing for a blank message", () => {
+    const onPost = vi.fn();
+    render(<Composer {...chat} value={"  \n "} onPost={onPost} />);
+    fireEvent.keyDown(screen.getByRole("textbox", { name: "Ask the advisor" }), { key: "Enter" });
+    fireEvent.click(screen.getByRole("button", { name: "Send" }));
+    expect(onPost).not.toHaveBeenCalled();
+  });
+
+  it("starts at one line and grows to six, then scrolls", () => {
+    render(<Composer {...chat} onPost={() => {}} />);
+    expect(screen.getByRole("textbox", { name: "Ask the advisor" }).getAttribute("rows")).toBe("1");
+    expect(ruleBody(css("../../primitives/Field.module.css"), '.field[data-variant="reply"] .area').split(";\n")).toEqual(
+      expect.arrayContaining(["min-height: 1lh", "max-height: 6lh", "overflow-y: auto", "resize: none", "field-sizing: content"]),
+    );
+  });
+
+  it("rings the rounded field in the theme accent on focus and draws no frame on the text", () => {
+    const path = css("./Composer.module.css");
+    expect(ruleBody(path, ".replyField")).toContain("border-radius: var(--ward-radius-panel)");
+    expect(ruleBody(path, ".replyField:focus-within")).toBe(
+      "box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-sage), 0 0 0 var(--ward-focus-ring) var(--ward-color-sageTint)",
+    );
+    expect(ruleBody(path, ".replyField textarea:focus-visible")).toBe("outline: none");
+    expect(ruleBody(css("../../primitives/Field.module.css"), '.field[data-variant="reply"] .control')).toContain("box-shadow: none");
   });
 });
 
