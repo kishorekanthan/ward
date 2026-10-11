@@ -81,3 +81,11 @@ describe("density", () => {
     expect(ruleBody(join(src, file), selector)).toContain(decl);
   });
 });
+
+// Typed by hand: a 40% scrim in light dims the page behind a drawer enough to read which layer is live (#266).
+describe("scrim", () => {
+  it("is 40% in light and 55% in dark", () => {
+    const scrimOf = (selector: string) => declared(selector)["--ward-color-scrim"];
+    expect([scrimOf(":root"), scrimOf('[data-theme="light"]'), scrimOf('[data-theme="dark"]')]).toEqual(["rgba(25,25,24,0.40)", "rgba(25,25,24,0.40)", "rgba(0,0,0,0.55)"]);
+  });
+});
