@@ -19,24 +19,57 @@
   gap: var(--ward-space-2);
 }
 
-/* Mirrors ward/screens/Trellis Intake and Rerun.dc.html block 12c — 11px 13px row on a line2 inset, 8px gap. */
+/* A chat composer: one rounded field holds the text and the send button; focus rings the whole field, never the text alone. */
 .reply {
   display: grid;
-  gap: var(--ward-gap-intakeThread);
+  gap: var(--ward-space-2);
 }
 
-.replyRow {
+.replyField {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: var(--ward-gap-row);
-  padding: var(--ward-pad-intakeTurn);
+  padding: var(--ward-space-2) var(--ward-space-2) var(--ward-space-2) var(--ward-space-3);
   background: var(--ward-color-surface);
+  border-radius: var(--ward-radius-panel);
   box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line2);
 }
 
-.replyRow > :first-child {
+.replyField:focus-within {
+  outline: var(--ward-focus-ring) solid var(--ward-color-focus);
+  outline-offset: 0;
+}
+
+/* The field's ring marks focus (data-ward-focus-host), so the text area inside draws none of its own. */
+.replyField textarea:focus-visible {
+  outline: none;
+}
+
+.replyField > :first-child {
   flex: 1;
   min-width: 0;
+  align-self: center;
+}
+
+.replyField .send {
+  flex: none;
+  width: var(--ward-height-control);
+  height: var(--ward-height-control);
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ward-radius-card);
+}
+
+.sendIcon {
+  width: var(--ward-space-4);
+  height: var(--ward-space-4);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .sendsAs {

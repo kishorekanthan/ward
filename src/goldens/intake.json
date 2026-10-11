@@ -17,9 +17,10 @@
     "requesterGround": "#F3F3F1"
   },
   "reply": {
-    "padding": "11px 13px",
+    "padding": "8px 8px 8px 12px",
     "gap": "8px",
-    "ring": "inset 0 0 0 1px #DAD8D3"
+    "ring": "inset 0 0 0 1px #DAD8D3",
+    "radius": "14px"
   },
   "policy": {
     "padding": "13px 15px",
