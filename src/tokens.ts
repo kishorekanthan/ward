@@ -399,6 +399,8 @@ export const v = {
     skeletonBar: 'var(--ward-height-skeletonBar)',
     target: 'var(--ward-height-target)',
     navIcon: 'var(--ward-height-navIcon)',
+    streamAvatar: 'var(--ward-height-streamAvatar)',
+    streamAvatarLg: 'var(--ward-height-streamAvatarLg)',
   },
   size: {
     marker6: 'var(--ward-size-marker6)',
@@ -521,6 +523,7 @@ export const v = {
     personName: 'var(--ward-type-personName)',
     rowText: 'var(--ward-type-rowText)',
     rowTextStrong: 'var(--ward-type-rowTextStrong)',
+    streamAvatar: 'var(--ward-type-streamAvatar)',
   },
   motion: {
     fast: 'var(--ward-motion-fast)',

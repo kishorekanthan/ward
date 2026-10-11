@@ -140,6 +140,15 @@
   box-shadow: none;
 }
 
+/* The reply text area starts at one line, grows with its text to six, then scrolls. */
+.field[data-variant="reply"] .area {
+  min-height: 1lh;
+  max-height: 6lh;
+  overflow-y: auto;
+  resize: none;
+  field-sizing: content;
+}
+
 .field[data-variant="reply"] .control::placeholder {
   color: var(--ward-color-muted);
 }

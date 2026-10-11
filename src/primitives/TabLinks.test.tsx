@@ -39,7 +39,7 @@ afterEach(() => vi.restoreAllMocks());
 
 describe("TabLinks", () => {
   it("renders one labelled nav with one link per entry, at its href", () => {
-    render(<TabLinks links={studio} active="gates" label="Studio sections" />);
+    render(<TabLinks level="page" links={studio} active="gates" label="Studio sections" />);
     const nav = screen.getByRole("navigation", { name: "Studio sections" });
     const links = Array.from(nav.querySelectorAll("a"));
     expect(links.map((link) => [link.textContent, link.getAttribute("href")])).toEqual([
@@ -51,35 +51,40 @@ describe("TabLinks", () => {
   });
 
   it("marks exactly the active entry as the current page", () => {
-    render(<TabLinks links={studio} active="audit" label="Studio sections" />);
+    render(<TabLinks level="page" links={studio} active="audit" label="Studio sections" />);
     const current = screen.getAllByRole("link").filter((link) => link.getAttribute("aria-current") !== null);
     expect(current.map((link) => [link.textContent, link.getAttribute("aria-current")])).toEqual([["Audit", "page"]]);
   });
 
   it("marks nothing when the active id names no entry", () => {
-    render(<TabLinks links={studio} active="console" label="Studio sections" />);
+    render(<TabLinks level="page" links={studio} active="console" label="Studio sections" />);
     expect(screen.getAllByRole("link").filter((link) => link.hasAttribute("aria-current"))).toEqual([]);
   });
 
   it("leaves every link in the tab order, as plain links", () => {
-    render(<TabLinks links={studio} active="gates" label="Studio sections" />);
+    render(<TabLinks level="page" links={studio} active="gates" label="Studio sections" />);
     expect(screen.getAllByRole("link").map((link) => link.getAttribute("tabindex"))).toEqual([null, null, null]);
   });
 
+  it("is no tab stop itself: its links take focus and scroll into view", () => {
+    render(<TabLinks level="section" links={studio} active="gates" label="Studio sections" />);
+    expect(screen.getByRole("navigation", { name: "Studio sections" }).hasAttribute("tabindex")).toBe(false);
+  });
+
   it("shows a count after its label, as Tabs does", () => {
-    render(<TabLinks links={[{ id: "open", label: "Open", href: "#/open", count: 14 }, ...studio]} active="open" label="Item states" />);
+    render(<TabLinks level="page" links={[{ id: "open", label: "Open", href: "#/open", count: 14 }, ...studio]} active="open" label="Item states" />);
     expect(screen.getByRole("link", { current: "page" }).textContent).toBe("Open · 14");
   });
 
   it("refuses a set above the cap, as Tabs does", () => {
     const eight = Array.from({ length: 8 }, (_, i) => ({ id: `l${i}`, label: `Link ${i}`, href: `#/${i}` }));
-    expect(() => render(<TabLinks links={eight} active="l0" label="Sections" />)).toThrow(/8 links exceeds the cap of 7/);
-    expect(() => render(<TabLinks links={eight.slice(0, 7)} active="l0" label="Sections" />)).not.toThrow();
+    expect(() => render(<TabLinks level="page" links={eight} active="l0" label="Sections" />)).toThrow(/8 links exceeds the cap of 7/);
+    expect(() => render(<TabLinks level="page" links={eight.slice(0, 7)} active="l0" label="Sections" />)).not.toThrow();
   });
 
   it("scrolls a current link off the right edge into view on mount", () => {
     mockStripLayout();
-    render(<TabLinks links={seven} active="l5" label="Sections" />);
+    render(<TabLinks level="page" links={seven} active="l5" label="Sections" />);
     const nav = screen.getByRole("navigation");
     expect(nav.scrollLeft).toBe(290);
     expect(nav.hasAttribute("data-fade-start")).toBe(true);
@@ -87,16 +92,16 @@ describe("TabLinks", () => {
 
   it("brings back a current link that sits left of the scrolled window, and leaves one in view alone", () => {
     mockStripLayout();
-    const { rerender } = render(<TabLinks links={seven} active="l6" label="Sections" />);
-    rerender(<TabLinks links={seven} active="l1" label="Sections" />);
+    const { rerender } = render(<TabLinks level="page" links={seven} active="l6" label="Sections" />);
+    rerender(<TabLinks level="page" links={seven} active="l1" label="Sections" />);
     expect(screen.getByRole("navigation").scrollLeft).toBe(100);
-    rerender(<TabLinks links={seven} active="l2" label="Sections" />);
+    rerender(<TabLinks level="page" links={seven} active="l2" label="Sections" />);
     expect(screen.getByRole("navigation").scrollLeft).toBe(100);
   });
 
   it("fades only the edges that hide links, following the scroll", () => {
     mockStripLayout();
-    render(<TabLinks links={seven} active="l0" label="Sections" />);
+    render(<TabLinks level="page" links={seven} active="l0" label="Sections" />);
     const nav = screen.getByRole("navigation");
     const fades = () => [nav.hasAttribute("data-fade-start"), nav.hasAttribute("data-fade-end")];
     expect(fades()).toEqual([false, true]);
@@ -112,7 +117,7 @@ describe("TabLinks", () => {
     mockStripLayout();
     const computed = window.getComputedStyle;
     vi.spyOn(window, "getComputedStyle").mockImplementation((el) => (el.tagName === "NAV" ? ({ scrollPaddingInlineStart: "24px" } as CSSStyleDeclaration) : computed(el)));
-    render(<TabLinks links={seven} active="l2" label="Sections" />);
+    render(<TabLinks level="page" links={seven} active="l2" label="Sections" />);
     // Link 2 ends at 290, inside the 300px window but under the right fade: 290 - 300 + 24 = 14.
     expect(screen.getByRole("navigation").scrollLeft).toBe(14);
   });
@@ -120,7 +125,21 @@ describe("TabLinks", () => {
   it("draws the current link like the selected tab, at both levels", () => {
     expect(ruleFor('.tab[aria-current="page"]')).toBe(ruleFor('.tab[aria-selected="true"]'));
     expect(ruleFor('.tab[aria-current="page"]')).toContain("background: var(--ward-color-sageTint)");
-    expect(ruleFor('.strip[data-level="2"] .tab[aria-current="page"]')).toBe("");
+    const section = '.strip[data-level="section"] .tab';
+    expect(ruleFor(`${section}[aria-current="page"]`)).toBe(ruleFor(`${section}[aria-selected="true"]`));
+    expect(ruleFor(`${section}[aria-current="page"]:hover`)).toBe(ruleFor(`${section}[aria-selected="true"]:hover`));
+  });
+
+  it("names the fix when a second page strip of links shows", () => {
+    const spy = vi.spyOn(console, "error").mockImplementation(() => {});
+    render(<><TabLinks level="page" links={studio} active="gates" label="Studio" /><TabLinks level="page" links={studio} active="audit" label="Admin" /></>);
+    expect(spy).toHaveBeenCalledTimes(1);
+  });
+
+  it("marks its level on the strip", () => {
+    render(<TabLinks level="section" links={studio} active="gates" label="Studio" />);
+    expect(screen.getByRole("navigation").dataset.level).toBe("section");
+    expect(screen.getByRole("navigation").className).toContain("ward-tabs--section");
   });
 
   it("drops the body-link underline and tints on hover", () => {

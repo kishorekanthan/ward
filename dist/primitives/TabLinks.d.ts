@@ -1,3 +1,4 @@
+import { TabLevel } from './Tabs';
 export type TabLink = {
     id: string;
     label: string;
@@ -8,6 +9,6 @@ export type TabLinksProps = {
     links: TabLink[];
     active: string;
     label: string;
-    level?: 1 | 2;
+    level: TabLevel;
 };
 export declare function TabLinks({ links, active, label, level }: TabLinksProps): import("react").JSX.Element;

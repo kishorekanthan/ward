@@ -64,6 +64,33 @@
   display: none;
 }
 
+/* A consumer's folded strip is short and never scrolls, so a tip beside it shows whole instead of clipped. */
+.app[data-collapsed="true"][data-consumer-fold] .side {
+  overflow: visible;
+}
+
+.app[data-collapsed="true"][data-consumer-fold] .side :global([data-ward-tip]) {
+  position: relative;
+}
+
+/* Ward has no tooltip primitive: a folded item names itself beside the strip on hover and on keyboard focus. */
+.app[data-collapsed="true"][data-consumer-fold] .side :global([data-ward-tip]:is(:hover, :focus-visible))::after {
+  content: attr(data-ward-tip);
+  position: absolute;
+  top: 50%;
+  left: calc(100% + var(--ward-space-3));
+  z-index: 40;
+  transform: translateY(-50%);
+  padding: var(--ward-space-1) var(--ward-space-2);
+  border-radius: var(--ward-radius);
+  background: var(--ward-color-surface2);
+  box-shadow: 0 0 0 var(--ward-border) var(--ward-color-line), var(--ward-shadow-card);
+  color: var(--ward-color-text);
+  font: var(--ward-type-control);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
 .iconRail {
   display: flex;
   flex-direction: column;
@@ -273,22 +300,7 @@
   margin-left: var(--ward-space-3);
   gap: var(--ward-space-4);
   overflow-x: auto;
-  scroll-padding-inline: var(--ward-space-6);
-  scrollbar-width: none;
   font: var(--ward-type-tabLabel);
-}
-
-/* The Tabs fades: a scrolled nav shows which edge hides more links. */
-.nav[data-fade-start] {
-  mask-image: linear-gradient(to right, transparent, currentColor var(--ward-space-6));
-}
-
-.nav[data-fade-end] {
-  mask-image: linear-gradient(to left, transparent, currentColor var(--ward-space-6));
-}
-
-.nav[data-fade-start][data-fade-end] {
-  mask-image: linear-gradient(to right, transparent, currentColor var(--ward-space-6), currentColor calc(100% - var(--ward-space-6)), transparent);
 }
 
 /* A destination is a pill: a light tint on hover, a filled tint when current, never an underline bar. */
