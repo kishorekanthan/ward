@@ -4,8 +4,9 @@ import { describedByScope, useDisabledScope, type ScopeReason } from "./Disabled
 import { Select } from "./Select";
 import s from "./Field.module.css";
 
-// form: Studio 3b labelled inputs; inline: a borderless row name; tag/tagGate: a select drawn as a stage tag; reply: Intake 12c's reply line.
-export type FieldVariant = "form" | "inline" | "tag" | "tagGate" | "reply";
+// form: Studio 3b labelled inputs; inline: a borderless row name; tag/tagGate: a select drawn as a stage tag; reply: Intake 12c's reply line;
+// toolbar: a header or toolbar row, label beside a box the size of the buttons next to it.
+export type FieldVariant = "form" | "inline" | "tag" | "tagGate" | "reply" | "toolbar";
 
 export type FieldOption = { value: string; label: string };
 
@@ -69,6 +70,7 @@ function SelectControl({ props, controlProps, cls }: FieldControlProps) {
       disabled={controlProps.disabled}
       placeholder={props.placeholder}
       onChange={props.onChange}
+      size={props.variant === "toolbar" ? "md" : undefined}
     />
   );
 }

@@ -89,6 +89,33 @@
   font: var(--ward-type-inputMono);
 }
 
+/* A toolbar field is one row item: label beside the box, so a centred row lines the box up with its buttons. */
+.field[data-variant="toolbar"] {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--ward-gap-row);
+  max-width: 100%;
+}
+
+.field[data-variant="toolbar"] > * {
+  min-width: 0;
+}
+
+.field[data-variant="toolbar"] .label {
+  flex: none;
+}
+
+.field[data-variant="toolbar"] .control {
+  width: auto;
+  max-width: 100%;
+}
+
+.field[data-variant="toolbar"] input.control {
+  height: var(--ward-height-control);
+  padding-block: 0;
+  padding-inline: var(--ward-space-3);
+}
+
 .field[data-variant="inline"] .control {
   height: auto;
   padding: 0;

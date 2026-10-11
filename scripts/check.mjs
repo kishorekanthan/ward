@@ -9,6 +9,7 @@ import { sweepPhoneWidth } from "./phone-width.mjs";
 import { sweepFocusTargets } from "./focus-targets.mjs";
 import { sweepBoardHeight } from "./board-height.mjs";
 import { sweepBoardToolbar } from "./board-toolbar.mjs";
+import { sweepToolbarRow } from "./toolbar-row.mjs";
 import { sweepMenuEscape } from "./menu-escape.mjs";
 import { sweepStudioFrame } from "./studio-frame.mjs";
 import { sweepHeaderGeometry } from "./header-geometry.mjs";
@@ -300,6 +301,11 @@ else fail("menu escape", menuDiffs.join("; "));
 const flashDiffs = await sweepFlashRing();
 if (flashDiffs.length === 0) pass("flash ring", "light and dark: the first frame rings the card in the flash colour (or running), its box and shadow hold, the ring fades out, and reduced motion runs no flash");
 else fail("flash ring", flashDiffs.join("; "));
+
+// 18. toolbar row: a PageHeader row with a button, a hidden-label and a labelled toolbar dropdown, and the ··· button: equal height and top within 1px (#253)
+const rowDiffs = await sweepToolbarRow();
+if (rowDiffs.length === 0) pass("toolbar row", "button, two toolbar dropdowns and the ··· button share height and top within 1px, light and dark, at 1280 and 1024px");
+else fail("toolbar row", rowDiffs.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);
 process.exitCode = failures === 0 ? 0 : 1;

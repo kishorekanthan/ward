@@ -17,5 +17,6 @@ export type SelectProps = {
     defaultOpen?: boolean;
     className?: string;
     triggerClassName?: string;
+    size?: "md" | "sm";
 };
 export declare function Select(given: SelectProps): import("react").JSX.Element;
