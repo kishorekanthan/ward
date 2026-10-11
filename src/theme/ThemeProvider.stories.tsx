@@ -28,7 +28,7 @@ function Sample({ title }: { title: string }) {
   return (
     <>
       <p style={{ font: v.type.title }}>{title}</p>
-      <Tabs tabs={tabs} active="board" onChange={() => {}} label={`${title} tabs`} />
+      <Tabs level="page" tabs={tabs} active="board" onChange={() => {}} label={`${title} tabs`} />
       <div style={{ display: "flex", flexWrap: "wrap", gap: v.space.s2, alignItems: "center" }}>
         <Btn variant="primary">Save changes</Btn>
         <Chip role="owed" label="Owed to you" />

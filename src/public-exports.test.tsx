@@ -33,7 +33,7 @@ describe("public Ward exports", () => {
       <>
         <Btn>Save</Btn>
         <Field label="Name" value="Ada" />
-        <Tabs tabs={[{ id: "one", label: "One", count: 2 }]} active="one" onChange={onChange} />
+        <Tabs level="page" tabs={[{ id: "one", label: "One", count: 2 }]} active="one" onChange={onChange} />
         <SegmentedControl options={[{ value: "a", label: "A" }, { value: "b", label: "B" }]} value="a" onChange={onChange} />
         <Sidebar items={[{ id: "home", label: "Home", href: "/" }]} active="home" />
         <Loading label="Loading" />
