@@ -6,6 +6,28 @@ import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import { Field, type FieldVariant } from "./Field";
 import s from "./Field.module.css";
 
+describe("Field toolbar variant", () => {
+  afterEach(cleanup);
+
+  it("names a button-sized trigger by its label beside it", () => {
+    render(<Field kind="select" variant="toolbar" label="Stream" value="demo" options={[{ value: "demo", label: "Demo" }]} />);
+    const trigger = screen.getByRole("button", { name: "Stream" });
+    expect(trigger.dataset.wardSize).toBe("md");
+    expect(screen.getByText("Stream").className).not.toMatch(/labelHidden/);
+  });
+
+  it("keeps the name when the label is hidden", () => {
+    render(<Field kind="select" variant="toolbar" labelHidden label="Stream" value="demo" options={[{ value: "demo", label: "Demo" }]} />);
+    expect(screen.getByRole("button", { name: "Stream" }).dataset.wardSize).toBe("md");
+    expect(screen.getByText("Stream").className).toMatch(/labelHidden/);
+  });
+
+  it("leaves a form select unsized", () => {
+    render(<Field kind="select" variant="form" label="Stream" value="demo" options={[{ value: "demo", label: "Demo" }]} />);
+    expect(screen.getByRole("button", { name: "Stream" }).dataset.wardSize).toBeUndefined();
+  });
+});
+
 describe("Field labelHidden", () => {
   it("keeps the label tied to the control while hiding it visually", () => {
     render(<Field kind="input" label="Search agents" value="" onChange={() => {}} labelHidden />);

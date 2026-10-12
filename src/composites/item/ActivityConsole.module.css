@@ -12,10 +12,15 @@
   align-content: start;
   gap: var(--ward-gap-console);
   font: var(--ward-type-consoleLine);
-  /* Six console lines tall before the first event, so the block never collapses to a sliver. */
+  /* Six lines tall once events flow, so the block does not grow line by line. */
   min-height: calc(6lh + 5 * var(--ward-gap-console));
   max-height: 40vh;
   overflow: auto;
+}
+
+/* With no events yet the console is its idle line alone, so it does not push the record down. */
+.list[data-empty] {
+  min-height: 0;
 }
 
 .line {

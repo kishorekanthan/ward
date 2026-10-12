@@ -25,3 +25,16 @@ export const ReadOnlyRegion = {
     </DisabledScope>
   ),
 };
+
+// A region the viewer's role can never change: the actions leave, the values stay readable.
+export const HiddenActions = {
+  render: () => (
+    <DisabledScope reason="You can look but not change anything here. Ask a Stream admin." actions="hide">
+      <ConfigRow stage={stage} config={{ label: "Implementing", cap: 6, shown: true }} onChange={() => {}} onReorder={() => {}} />
+      <Field label="Stream name" value="Regulatory Ops" onChange={() => {}} />
+      <Switch label="Gate notifications" checked onChange={() => {}} />
+      <Btn variant="primary" label="Save changes" onClick={() => {}} />
+    </DisabledScope>
+  ),
+};
+

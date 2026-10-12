@@ -28,6 +28,11 @@
   transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
 }
 
+/* A dialog opened by pointer or deep link takes focus quietly; one opened from the keyboard keeps the ring. */
+.panel:focus:not([data-focus-ring]) {
+  outline: none;
+}
+
 .panel.drawer {
   height: 100%;
   width: var(--ward-width-drawer);

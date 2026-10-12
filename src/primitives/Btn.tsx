@@ -70,7 +70,12 @@ function buttonContent(props: BtnProps): ReactNode {
   return props.children ?? props.label;
 }
 
+// A scope that hides actions renders no button at all.
 export function Btn(props: BtnProps) {
+  return useDisabledScope()?.actions === "hide" ? null : <ShownBtn {...props} />;
+}
+
+function ShownBtn(props: BtnProps) {
   const scope = useDisabledScope();
   validate(props, scope);
   const variant = props.variant ?? "secondary";

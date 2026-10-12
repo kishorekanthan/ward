@@ -27,5 +27,5 @@ type Unavailable = Base & {
     disabledReason: string;
 });
 export type BtnProps = Available | Unavailable;
-export declare function Btn(props: BtnProps): import("react").JSX.Element;
+export declare function Btn(props: BtnProps): import("react").JSX.Element | null;
 export {};
