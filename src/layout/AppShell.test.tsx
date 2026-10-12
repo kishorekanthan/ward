@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import type { ReactNode } from "react";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { axe } from "jest-axe";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AppShell, type AppShellRailItem } from "./AppShell";
@@ -108,10 +108,10 @@ describe("AppShell studio frame", () => {
     for (const column of [".side", ".main", ".page", ".rail"]) expect(rule(column)).toContain("min-height: 0;");
   });
 
-  it("lets the document scroll again as one column below 792px", () => {
-    const narrow = css.slice(css.indexOf("@media (max-width: 791.98px)"));
+  it("lets the document scroll again as one column below 768px", () => {
+    const narrow = css.slice(css.indexOf("@media (max-width: 767.98px)"));
     expect(narrow).toMatch(/\.app,\s*\.app\[data-rail="false"\] \{[^}]*grid-template-columns: minmax\(0, 1fr\);[^}]*height: auto;[^}]*min-height: 100dvh;/);
-    expect(narrow).toMatch(/\.side,\s*\.rail,\s*\.page \{\s*overflow-y: visible;/);
+    expect(narrow).toMatch(/\.side,\s*\.rail,\s*\.page,\s*\.main \{\s*overflow-y: visible;/);
   });
 });
 
@@ -135,7 +135,7 @@ function openDrawer(): { toggle: HTMLElement; dialog: HTMLElement } {
   return { toggle, dialog: screen.getByRole("dialog", { name: "Menu" }) };
 }
 
-describe("AppShell sidebar drawer below 792px", () => {
+describe("AppShell sidebar drawer below 768px", () => {
   const original = window.matchMedia;
   afterEach(() => {
     window.matchMedia = original;
@@ -230,7 +230,7 @@ describe("AppShell sidebar drawer below 792px", () => {
     expect(screen.queryByRole("dialog")).toBeNull();
   });
 
-  it("draws no toggle at 792px and wider, where the sidebar keeps its column", () => {
+  it("draws no toggle at 768px and wider, where the sidebar keeps its column", () => {
     stubMatchMedia(false);
     render(drawerShell());
     expect(screen.queryByRole("button", { name: "Menu" })).toBeNull();
@@ -238,7 +238,7 @@ describe("AppShell sidebar drawer below 792px", () => {
     expect(screen.getByRole("main").firstElementChild?.textContent).toBe("Claims");
   });
 
-  it("folds below 792px, the rail-stack breakpoint, not at another width", () => {
+  it("puts the sidebar in a drawer below 768px and folds it to the strip below 1024px, not at another width", () => {
     stubMatchMedia(false);
     const stubbed = window.matchMedia;
     const queries: string[] = [];
@@ -247,7 +247,8 @@ describe("AppShell sidebar drawer below 792px", () => {
       return stubbed(query);
     }) as typeof window.matchMedia;
     render(drawerShell());
-    expect(queries).toContain("(max-width: 791.98px)");
+    expect(queries).toEqual(expect.arrayContaining(["(max-width: 767.98px)", "(max-width: 1023.98px)"]));
+    expect(queries.filter((query) => query.includes("791.98"))).toEqual([]);
   });
 });
 
@@ -666,13 +667,13 @@ describe("AppShell collapsible sidebar", () => {
     expect(setItem).toHaveBeenCalledTimes(2);
   });
 
-  it("draws no panel button and ignores [ without an icon rail, as before", () => {
+  it("draws the panel button without an icon rail too, folding a plain sidebar to the bare strip", () => {
     window.localStorage.setItem("ward:sidebar-collapsed", "true");
     const { container } = render(foldShell(false));
-    expect(screen.queryByRole("button", { name: /sidebar$/ })).toBeNull();
+    expect([foldButton().getAttribute("aria-expanded"), isCollapsed(), container.firstElementChild?.getAttribute("data-collapsed")]).toEqual(["false", true, "true"]);
+    expect(screen.queryByRole("navigation", { name: "Menu" })).toBeNull();
     pressBracket();
-    expect(isCollapsed()).toBe(false);
-    expect(container.firstElementChild?.getAttribute("data-collapsed")).toBe("false");
+    expect([isCollapsed(), container.firstElementChild?.getAttribute("data-collapsed")]).toEqual([false, "false"]);
   });
 
   it("leaves the narrow drawer as it was: no panel button, no [ and the whole sidebar in the drawer", () => {
@@ -741,18 +742,17 @@ const shellCss = "src/layout/AppShell.module.css";
 const sidebarCss = "src/layout/Sidebar.module.css";
 
 describe("floating sidebar surface", () => {
-  it("floats 10px in from the window edge with a ring on four sides, never a one-side rule", () => {
+  it("draws a ring on four sides in the panel edge colour, never a one-side rule", () => {
     const declarations = rule(".side").split("{")[1].split(";").map((d) => d.trim()).filter(Boolean);
     expect(declarations).toEqual([
       "display: flex",
       "flex-direction: column",
       "min-height: 0",
-      "margin: 10px 0 10px 10px",
       "overflow-y: auto",
       "scroll-padding-block: calc(2px + 1px)",
       "border-radius: 11px",
       "background: #FFFFFF",
-      "box-shadow: 0 0 0 1px #EDEDEB",
+      "box-shadow: 0 0 0 1px #CFCCC5",
     ]);
   });
 
@@ -794,7 +794,7 @@ describe("floating sidebar surface", () => {
     window.localStorage.clear();
     expect(current).toEqual({ shadow: "", ground: "var(--ward-color-sagetint)" });
     expect(other).toEqual({ shadow: "", ground: "" });
-    expect(panel).toEqual({ shadow: "0 0 0 var(--ward-border) var(--ward-color-line)", ground: "var(--ward-color-surface)" });
+    expect(panel).toEqual({ shadow: "0 0 0 var(--ward-border) var(--ward-color-paneledge)", ground: "var(--ward-color-surface)" });
   });
 
   it("lets a destination list fill the floating panel with no right rule of its own", () => {
@@ -868,5 +868,136 @@ describe("AppShell fold owned by the consumer", () => {
     expect(rule(folded + " :global([data-ward-tip]:is(:hover, :focus-visible))::after")).toContain("content: attr(data-ward-tip);");
     expect(css.match(/data-ward-tip\]:is\(/g)).toHaveLength(1);
     expect(rule(folded + " :global([data-ward-tip])")).toContain("position: relative;");
+  });
+});
+
+// Answers each media query as a window of this width would, so the three bands can be told apart.
+function stubWidth(width: number) {
+  window.matchMedia = ((query: string) => {
+    const max = /max-width: ([\d.]+)px/.exec(query);
+    const min = /min-width: ([\d.]+)px/.exec(query);
+    const matches = max ? width <= Number(max[1]) : width >= Number(min?.[1] ?? 0);
+    return { matches, media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false };
+  }) as unknown as typeof window.matchMedia;
+}
+
+describe("app frame owns the layout (TRELLIS-528)", () => {
+  const original = window.matchMedia;
+  afterEach(() => {
+    window.matchMedia = original;
+    window.localStorage.clear();
+  });
+
+  const told: boolean[] = [];
+  const drawnShell = (props: { collapsed?: boolean; pageFill?: boolean } = {}) => (
+    <AppShell
+      sidebar={(folded) => {
+        told.push(folded);
+        return <nav aria-label="Sections">{folded ? "strip" : "full"}</nav>;
+      }}
+      header={<div>Claims</div>}
+      {...props}
+    >
+      <p>page</p>
+    </AppShell>
+  );
+
+  it("draws the content panel as the sidebar's twin: rounded, on the surface, ringed in the panel edge colour", () => {
+    expect(rule(".main")).toContain("border-radius: 11px;\n  background: #FFFFFF;\n  box-shadow: 0 0 0 1px #CFCCC5;");
+    expect(rule(".main")).toContain("overflow: clip;");
+    expect(rule(".app")).toContain("column-gap: 10px;");
+    expect(rule(".app")).toContain("padding-block: 10px;");
+    expect(rule(".app")).toContain("padding-inline: max(10px, calc((100% - 1928px) / 2));");
+  });
+
+  it("keeps the header inside the content panel, above the page", () => {
+    stubWidth(1440);
+    render(drawnShell());
+    const main = screen.getByRole("main");
+    expect([main.hasAttribute("data-ward-shell-content"), main.firstElementChild?.textContent, main.lastElementChild?.textContent]).toEqual([true, "Claims", "page"]);
+  });
+
+  it("gives a plain shell Ward's fold: the stored choice at wide width, the strip first at medium width", () => {
+    window.localStorage.setItem("ward:sidebar-collapsed", "false");
+    stubWidth(1440);
+    told.length = 0;
+    const wide = render(drawnShell());
+    expect([wide.container.firstElementChild?.getAttribute("data-band"), told.at(-1), foldButton().getAttribute("aria-expanded")]).toEqual(["wide", false, "true"]);
+    wide.unmount();
+    stubWidth(1024);
+    expect(render(drawnShell()).container.firstElementChild?.getAttribute("data-band")).toBe("wide");
+    cleanup();
+    stubWidth(768);
+    const { container } = render(drawnShell());
+    const app = container.firstElementChild as HTMLElement;
+    expect([app.dataset.band, app.dataset.collapsed, app.hasAttribute("data-consumer-fold"), told.at(-1)]).toEqual(["medium", "true", true, true]);
+    expect(screen.getByRole("navigation", { name: "Sections" }).textContent).toBe("strip");
+  });
+
+  it("opens the medium strip for the visit only, leaving the stored wide choice alone", () => {
+    window.localStorage.setItem("ward:sidebar-collapsed", "true");
+    stubWidth(800);
+    const { container } = render(drawnShell());
+    fireEvent.click(foldButton());
+    expect([(container.firstElementChild as HTMLElement).dataset.collapsed, screen.getByRole("navigation", { name: "Sections" }).textContent]).toEqual(["false", "full"]);
+    expect(window.localStorage.getItem("ward:sidebar-collapsed")).toBe("true");
+    pressBracket();
+    expect((container.firstElementChild as HTMLElement).dataset.collapsed).toBe("false");
+  });
+
+  it("forgets the medium visit's open sidebar once the window leaves the medium band", () => {
+    const listeners: Array<() => void> = [];
+    let width = 800;
+    window.matchMedia = ((query: string) => {
+      const matches = () => width <= Number(/max-width: ([\d.]+)px/.exec(query)?.[1]);
+      return {
+        get matches() {
+          return matches();
+        },
+        media: query,
+        addEventListener: (_: string, fn: (e: MediaQueryListEvent) => void) => listeners.push(() => fn({ matches: matches() } as MediaQueryListEvent)),
+        removeEventListener() {},
+      };
+    }) as unknown as typeof window.matchMedia;
+    const resize = (next: number) => {
+      width = next;
+      act(() => listeners.forEach((notify) => notify()));
+    };
+    const { container } = render(drawnShell());
+    fireEvent.click(foldButton());
+    resize(1440);
+    resize(800);
+    expect((container.firstElementChild as HTMLElement).dataset.collapsed).toBe("true");
+  });
+
+  it("folds a consumer-owned sidebar at medium width even when the consumer says expanded", () => {
+    stubWidth(900);
+    told.length = 0;
+    const { container } = render(drawnShell({ collapsed: false }));
+    expect([(container.firstElementChild as HTMLElement).dataset.collapsed, told.at(-1), screen.queryByRole("button", { name: /sidebar$/ })]).toEqual(["true", true, null]);
+  });
+
+  it("closes the phone drawer on any navigation: a hash change or the history moving", () => {
+    stubWidth(375);
+    render(drawnShell());
+    for (const event of ["hashchange", "popstate"]) {
+      const toggle = screen.getByRole("button", { name: "Menu" });
+      fireEvent.click(toggle);
+      expect(screen.getByRole("dialog", { name: "Menu" })).not.toBeNull();
+      act(() => {
+        window.dispatchEvent(new Event(event));
+      });
+      expect([event, screen.queryByRole("dialog")]).toEqual([event, null]);
+    }
+  });
+
+  it("lets the page fill the content panel edge to edge and scroll both ways inside it", () => {
+    stubWidth(1440);
+    render(drawnShell({ pageFill: true }));
+    expect(screen.getByText("page").parentElement?.hasAttribute("data-fill")).toBe(true);
+    expect(rule(".page[data-fill]")).toMatch(/--ward-page-inset: 0;\s*display: flex;\s*flex-direction: column;\s*overflow: auto;\s*padding: 0;/);
+    cleanup();
+    render(drawnShell());
+    expect(screen.getByText("page").parentElement?.hasAttribute("data-fill")).toBe(false);
   });
 });

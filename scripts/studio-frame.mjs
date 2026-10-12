@@ -53,6 +53,48 @@ function probeDrawer() {
   };
 }
 
+// Runs in the page: the two panels, the header inside the content panel, and whether each panel's ring shows on the ground (TRELLIS-528).
+function probePanels() {
+  const channel = (c) => (c / 255 <= 0.04045 ? c / 255 / 12.92 : ((c / 255 + 0.055) / 1.055) ** 2.4);
+  const luminance = (css) => {
+    const [r, g, b] = css.match(/\d+(\.\d+)?/g).map(Number);
+    return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+  };
+  const ratio = (a, b) => (Math.max(luminance(a), luminance(b)) + 0.05) / (Math.min(luminance(a), luminance(b)) + 0.05);
+  // A panel with no ring drawn reads as the ground itself, so it fails the ratio.
+  const ring = (el, ground) => getComputedStyle(el).boxShadow.match(/rgba?\([^)]*\)/)?.[0] ?? ground;
+  const sideFacts = (s, m, h) => ({
+    sideWidth: Math.round(s.width),
+    sideInset: [Math.round(s.left), Math.round(s.top)],
+    panelGap: Math.round(m.left - s.right),
+    panelsApart: s.right <= m.left || s.bottom <= m.top,
+    headerClearOfSide: h.left - s.right >= 1,
+  });
+  const noSide = { sideWidth: null, sideInset: null, panelGap: null, panelsApart: true, headerClearOfSide: true };
+  const pageFacts = (page, m) => {
+    const p = page.getBoundingClientRect();
+    const style = getComputedStyle(page);
+    return {
+      pageMeetsPanel: Math.round(p.left - m.left) === 0 && Math.round(m.right - p.right) === 0 && style.paddingLeft === "0px",
+      pageScrollsSideways: page.scrollWidth > page.clientWidth && /auto|scroll/.test(style.overflowX),
+    };
+  };
+  const main = document.querySelector("[data-ward-shell-content]");
+  if (!main) return {};
+  const side = document.querySelector("[data-ward-shell-side]");
+  const ground = getComputedStyle(main.parentElement).backgroundColor;
+  const m = main.getBoundingClientRect();
+  const h = main.firstElementChild.getBoundingClientRect();
+  return {
+    band: main.parentElement.dataset.band,
+    ...(side ? sideFacts(side.getBoundingClientRect(), m, h) : noSide),
+    contentInset: [Math.round(m.top + scrollY), Math.round(innerWidth - m.right)],
+    headerInPanel: h.top >= m.top && h.left >= m.left && h.right <= m.right + 0.5,
+    edgesShow: [main, side].filter(Boolean).every((el) => ratio(ring(el, ground), ground) >= 1.5),
+    ...pageFacts(main.lastElementChild, m),
+  };
+}
+
 // Tabs once past every focusable in the drawer; a trapped focus is still inside.
 async function tabStaysInside(page) {
   const stops = await page.evaluate(() => document.querySelectorAll("[role=dialog] a[href], [role=dialog] button").length);
@@ -68,22 +110,37 @@ async function probeEscape(page) {
   }));
 }
 
+const drawerShut = (page) => page.evaluate(() => document.querySelector("[role=dialog]") === null);
+
+// A press on the scrim beside the drawer, then a link inside it: each closes the drawer.
+async function probeOtherCloses(page) {
+  await page.locator(TOGGLE).click();
+  const width = await page.evaluate(() => innerWidth);
+  await page.mouse.click(width - 4, 200);
+  const outsideCloses = await drawerShut(page);
+  await page.locator(TOGGLE).click();
+  await page.locator("[role=dialog] a[href]").first().click();
+  return { outsideCloses, linkCloses: await drawerShut(page) };
+}
+
 async function probeOpened(page) {
   if ((await page.locator(TOGGLE).count()) === 0) return {};
   await page.locator(TOGGLE).click();
   const drawer = await page.evaluate(probeDrawer);
   const tabStaysInDrawer = await tabStaysInside(page);
-  return { ...drawer, tabStaysInDrawer, ...(await probeEscape(page)) };
+  return { ...drawer, tabStaysInDrawer, ...(await probeEscape(page)), ...(await probeOtherCloses(page)) };
 }
 
-async function measure(browser, base, { story, viewport }) {
+async function measure(browser, base, { story, viewport, theme }) {
   const page = await browser.newPage({ viewport });
   try {
     await page.goto(`${base}/iframe.html?viewMode=story&id=${story}`, { waitUntil: "load", timeout: 30000 });
     await page.waitForFunction(() => document.querySelector("#storybook-root main") !== null, null, { timeout: 8000 });
+    await page.evaluate((pinned) => pinned && document.documentElement.setAttribute("data-theme", pinned), theme ?? null);
     await page.evaluate(() => document.fonts.ready);
     const frame = await page.evaluate(probeFrame);
-    return { ...frame, ...(await probeOpened(page)) };
+    const panels = await page.evaluate(probePanels);
+    return { ...frame, ...panels, ...(await probeOpened(page)) };
   } finally {
     await page.close();
   }
@@ -91,7 +148,7 @@ async function measure(browser, base, { story, viewport }) {
 
 function differences(key, want, got) {
   return Object.entries(want)
-    .filter(([fact, value]) => got[fact] !== value)
+    .filter(([fact, value]) => JSON.stringify(got[fact]) !== JSON.stringify(value))
     .map(([fact, value]) => `${key}.${fact}: got ${JSON.stringify(got[fact])}, want ${JSON.stringify(value)}`);
 }
 
@@ -105,8 +162,8 @@ export async function sweepStudioFrame() {
   const diffs = [];
   try {
     const cases = Object.entries(golden).filter(([key]) => !key.startsWith("$"));
-    for (const [key, { story, viewport, ...want }] of cases) {
-      diffs.push(...differences(key, want, await measure(browser, base, { story, viewport })));
+    for (const [key, { story, viewport, theme, ...want }] of cases) {
+      diffs.push(...differences(key, want, await measure(browser, base, { story, viewport, theme })));
     }
   } finally {
     await browser.close();

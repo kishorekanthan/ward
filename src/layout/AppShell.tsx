@@ -1,4 +1,4 @@
-import { useId, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode, type RefObject } from "react";
+import { useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode, type RefObject } from "react";
 import s from "./AppShell.module.css";
 import { stream, type StreamStep } from "../tokens";
 import { Btn } from "../primitives/Btn";
@@ -29,12 +29,14 @@ export type StudioShellProps = {
   children: ReactNode;
   /** The 316px right column; omitted or null draws no third track. */
   rail?: ReactNode;
-  /** Below 792px the sidebar folds into a drawer: this labels its toggle and titles it, and names the collapsed rail. */
+  /** Below 768px the sidebar folds into a drawer: this labels its toggle and titles it, and names the collapsed rail. */
   sidebarLabel?: string;
-  /** Given, a panel button at the top of the sidebar collapses it to a 60px rail of these items; each viewer's choice is kept. */
+  /** The folded strip shows these items; without them a function sidebar draws its own strip. */
   iconRail?: AppShellRailItem[];
-  /** Given, the consumer owns the fold: true narrows the track to the icon rail on a wide screen, and Ward draws no panel button or rail. */
+  /** Given, the consumer owns the fold: true narrows the track to the 60px strip, and Ward draws no panel button or rail. */
   collapsed?: boolean;
+  /** The page fills the content panel edge to edge, with no padding, and scrolls both ways inside it (a board). */
+  pageFill?: boolean;
 };
 
 export type TopBarShellProps = {
@@ -55,9 +57,18 @@ export type AppShellProps = StudioShellProps | TopBarShellProps;
 
 type SidebarDrawer = { narrow: boolean; open: boolean; drawerId: string; slotRef: RefObject<HTMLSpanElement | null>; toggle: () => void; close: () => void };
 
-// Same width as the rail-stack reflow: below it three columns cannot coexist, so the sidebar leaves the grid.
-function useSidebarDrawer(): SidebarDrawer {
-  const narrow = useMediaQuery("(max-width: 791.98px)");
+type Band = "wide" | "medium" | "phone";
+
+// Wide shows both panels, medium folds the sidebar to its strip, a phone puts it in a drawer.
+function useBand(): Band {
+  const phone = useMediaQuery("(max-width: 767.98px)");
+  const medium = useMediaQuery("(max-width: 1023.98px)");
+  if (phone) return "phone";
+  return medium ? "medium" : "wide";
+}
+
+function useSidebarDrawer(band: Band): SidebarDrawer {
+  const narrow = band === "phone";
   const drawerId = useId();
   const slotRef = useRef<HTMLSpanElement>(null);
   const [open, setOpen] = useState(false);
@@ -79,8 +90,21 @@ function StudioHeader({ header, label, drawer }: { header: ReactNode; label: str
   );
 }
 
-// Following a link in the drawer is a navigation, so the drawer gets out of the way.
+// Any navigation closes the drawer, whether a link inside it or the history moving.
+function useCloseOnNavigation(open: boolean, close: () => void) {
+  useEffect(() => {
+    if (!open) return undefined;
+    window.addEventListener("hashchange", close);
+    window.addEventListener("popstate", close);
+    return () => {
+      window.removeEventListener("hashchange", close);
+      window.removeEventListener("popstate", close);
+    };
+  }, [open, close]);
+}
+
 function SidebarDrawerPanel({ sidebar, label, drawer }: { sidebar: StudioShellProps["sidebar"]; label: string; drawer: SidebarDrawer }) {
+  useCloseOnNavigation(drawer.open, drawer.close);
   if (!drawer.open) return null;
   const closeOnLink = (event: MouseEvent) => {
     if ((event.target as Element).closest("a[href]")) drawer.close();
@@ -94,22 +118,36 @@ function SidebarDrawerPanel({ sidebar, label, drawer }: { sidebar: StudioShellPr
   );
 }
 
-// `rail` is Ward's own fold: its panel button and icon rail. A consumer's fold sets neither.
-type SidebarFold = { enabled: boolean; collapsed: boolean; rail: boolean; owned: boolean; toggle: () => void };
+// `enabled` draws Ward's panel button; `rail` shows the icon rail; `drawsStrip` lets the sidebar draw its own folded strip.
+type SidebarFold = { enabled: boolean; collapsed: boolean; rail: boolean; drawsStrip: boolean; toggle: () => void };
 
-// The collapse is for the wide layout only: below 792px the drawer shows the whole sidebar.
-function useSidebarFold(iconRail: AppShellRailItem[] | undefined, narrow: boolean, owned: boolean | undefined): SidebarFold {
-  const enabled = owned === undefined && iconRail !== undefined && !narrow;
-  const { collapsed, toggle } = useSidebarCollapse(enabled);
-  return owned === undefined ? wardFold(enabled, collapsed, toggle) : consumerFold(owned, narrow, toggle);
+// A phone has the drawer, so no fold. At medium width the strip shows first; opening it lasts the visit, not the stored choice.
+function useMediumOpen(band: Band): { open: boolean; toggle: () => void } {
+  const [open, setOpen] = useState(false);
+  if (open && band !== "medium") setOpen(false);
+  return { open, toggle: () => setOpen(!open) };
 }
 
-function wardFold(enabled: boolean, collapsed: boolean, toggle: () => void): SidebarFold {
-  return { enabled, collapsed: enabled && collapsed, rail: enabled && collapsed, owned: false, toggle };
+function useWardFold(band: Band, owned: boolean): { collapsed: boolean; toggle: () => void } {
+  const stored = useSidebarCollapse(band === "wide" && !owned);
+  const medium = useMediumOpen(band);
+  if (band === "medium") return { collapsed: !medium.open, toggle: medium.toggle };
+  return { collapsed: band === "wide" && stored.collapsed, toggle: stored.toggle };
 }
 
-function consumerFold(collapsed: boolean, narrow: boolean, toggle: () => void): SidebarFold {
-  return { enabled: false, collapsed: collapsed && !narrow, rail: false, owned: true, toggle };
+function useSidebarFold(props: StudioShellProps, band: Band): SidebarFold {
+  const ward = useWardFold(band, props.collapsed !== undefined);
+  if (props.collapsed !== undefined) return consumerFold(props.collapsed, band);
+  const collapsed = ward.collapsed;
+  const rail = collapsed && props.iconRail !== undefined;
+  return { enabled: band !== "phone", collapsed, rail, drawsStrip: !rail && typeof props.sidebar === "function", toggle: ward.toggle };
+}
+
+const drawsOwnStrip = (fold: SidebarFold): boolean => fold.collapsed && fold.drawsStrip;
+
+function consumerFold(collapsed: boolean, band: Band): SidebarFold {
+  const folded = band === "medium" || (collapsed && band === "wide");
+  return { enabled: false, collapsed: folded, rail: false, drawsStrip: true, toggle: () => undefined };
 }
 
 const presence = (on: boolean): "" | undefined => (on ? "" : undefined);
@@ -155,7 +193,7 @@ function SidePanel({ sidebar, label, iconRail, fold }: { sidebar: StudioShellPro
   return (
     <div className={s.side} data-ward-shell-side="">
       <FoldToggle fold={fold} />
-      <div className={s.sideBody} hidden={fold.rail}>
+      <div className={s.sideBody} hidden={fold.collapsed && !fold.drawsStrip}>
         {drawSidebar(sidebar, fold.collapsed)}
       </div>
       {fold.rail && <IconRail items={iconRail ?? []} label={label} />}
@@ -163,17 +201,22 @@ function SidePanel({ sidebar, label, iconRail, fold }: { sidebar: StudioShellPro
   );
 }
 
-function StudioShell({ sidebar, header, children, rail, sidebarLabel, iconRail, collapsed }: StudioShellProps) {
-  const hasRail = rail !== undefined && rail !== null;
-  const drawer = useSidebarDrawer();
-  const fold = useSidebarFold(iconRail, drawer.narrow, collapsed);
-  const label = sidebarLabel ?? "Menu";
+const isPresent = (node: ReactNode): boolean => node !== undefined && node !== null;
+
+// Two rounded panels, the sidebar and the content panel; the header sits inside the content panel, above the page.
+function StudioShell(props: StudioShellProps) {
+  const { sidebar, header, children, rail, iconRail, pageFill } = props;
+  const hasRail = isPresent(rail);
+  const band = useBand();
+  const drawer = useSidebarDrawer(band);
+  const fold = useSidebarFold(props, band);
+  const label = props.sidebarLabel ?? "Menu";
   return (
-    <div className={s.app} data-rail={String(hasRail)} data-collapsed={String(fold.collapsed)} data-consumer-fold={presence(fold.owned)}>
+    <div className={s.app} data-rail={String(hasRail)} data-collapsed={String(fold.collapsed)} data-consumer-fold={presence(drawsOwnStrip(fold))} data-band={band}>
       {!drawer.narrow && <SidePanel sidebar={sidebar} label={label} iconRail={iconRail} fold={fold} />}
-      <main className={s.main}>
+      <main className={s.main} data-ward-shell-content="">
         <StudioHeader header={header} label={label} drawer={drawer} />
-        <div className={s.page}>{children}</div>
+        <div className={s.page} data-fill={presence(pageFill === true)}>{children}</div>
       </main>
       {hasRail && <div className={s.rail}>{rail}</div>}
       <SidebarDrawerPanel sidebar={sidebar} label={label} drawer={drawer} />
