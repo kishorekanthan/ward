@@ -18,7 +18,7 @@
     "story": "primitives-pageheader--phone-width",
     "chipsBelowCrumb": true,
     "chipLines": 2,
-    "titleBelowChips": true,
+    "chipsBelowTitle": true,
     "everyChipWhole": true,
     "chipFontSize": "12px",
     "actionsShown": 2,

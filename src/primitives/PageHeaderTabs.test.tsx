@@ -47,7 +47,7 @@ afterEach(() => {
 });
 
 describe("PageHeader", () => {
-  it("keeps breadcrumb and chips above the title and consequence", () => {
+  it("keeps the breadcrumb above the title, and the chips under it before the consequence", () => {
     const { container } = render(
       <PageHeader
         crumb={[{ label: "Studio", href: "#/studio" }, { label: "Streams" }]}
@@ -60,8 +60,9 @@ describe("PageHeader", () => {
 
     const header = container.querySelector("header") as HTMLElement;
     const context = header.firstElementChild as HTMLElement;
-    expect(context.textContent).toBe("Studio›StreamsData Eng");
+    expect(context.textContent).toBe("Studio›Streams");
     expect(header.querySelector("h1")?.textContent).toBe("Board configuration");
+    expect(header.querySelector("h1")?.nextElementSibling?.textContent).toBe("Data EngChanges affect every person opening this board.");
     expect(header.querySelector("p")?.textContent).toBe("Changes affect every person opening this board.");
   });
 

@@ -37,12 +37,20 @@
   min-width: 0;
 }
 
+/* The line under the title: chips, then the consequence; it wraps, so no chip is ever cut. */
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ward-space-2);
+  min-width: 0;
+}
+
 .chips {
   display: flex;
   flex-wrap: wrap;
   gap: var(--ward-space-2);
   min-width: 0;
-  white-space: nowrap;
 }
 
 .title {
@@ -128,12 +136,6 @@
 
 @media (max-width: 767.98px) {
   .context {
-    flex-wrap: wrap;
-  }
-
-  /* Own line under the crumb, each chip whole: a phone cannot afford a chip cut to one letter. */
-  .chips {
-    flex: 1 0 100%;
     flex-wrap: wrap;
   }
 

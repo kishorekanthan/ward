@@ -51,7 +51,7 @@ function probePageHeader() {
   return {
     chipsBelowCrumb: chipBoxes.length > 0 && chipBoxes.every(({ r }) => r.top >= crumb.bottom - 0.5),
     chipLines: new Set(chipBoxes.map(({ r }) => Math.round(r.top))).size,
-    titleBelowChips: chipBoxes.every(({ r }) => title.top >= r.bottom - 0.5),
+    chipsBelowTitle: chipBoxes.every(({ r }) => r.top >= title.bottom - 0.5),
     everyChipWhole: chipBoxes.every(whole),
     chipFontSize: chipBoxes.length ? getComputedStyle(chipBoxes[0].c).fontSize : "",
     actionsShown: header.querySelectorAll("[data-ward-actions] [data-action]").length,
