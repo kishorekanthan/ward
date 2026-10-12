@@ -864,10 +864,22 @@ describe("AppShell fold owned by the consumer", () => {
   it("lets a folded strip overflow and names a tipped item on hover and keyboard focus only", () => {
     const folded = '.app[data-collapsed="true"][data-consumer-fold] .side';
     expect(rule(folded)).toContain("overflow: visible;");
-    expect(css).toContain(folded + " :global([data-ward-tip]:is(:hover, :focus-visible))::after {");
-    expect(rule(folded + " :global([data-ward-tip]:is(:hover, :focus-visible))::after")).toContain("content: attr(data-ward-tip);");
+    const tip = folded + ':not(:has([aria-haspopup][aria-expanded="true"])) :global([data-ward-tip]:is(:hover, :focus-visible))::after';
+    expect(css).toContain(tip + " {");
+    expect(rule(tip)).toContain("content: attr(data-ward-tip);");
     expect(css.match(/data-ward-tip\]:is\(/g)).toHaveLength(1);
     expect(rule(folded + " :global([data-ward-tip])")).toContain("position: relative;");
+  });
+
+  it("shows no folded-strip tip while a menu in the strip is open, and keeps tips beside a plain open toggle", () => {
+    const strip = document.createElement("div");
+    strip.innerHTML = '<span data-ward-tip="Ops"><button aria-haspopup="menu" aria-expanded="false">Ops</button></span><button aria-expanded="true">Fold</button>';
+    const guard = /\.side(:not\(:has\(.+?\)\)) :global\(\[data-ward-tip\]:is/.exec(css)?.[1];
+    expect(guard).toBeDefined();
+    const tipsShow = () => strip.matches(guard ?? "");
+    expect(tipsShow()).toBe(true);
+    strip.querySelector("[aria-haspopup]")?.setAttribute("aria-expanded", "true");
+    expect(tipsShow()).toBe(false);
   });
 });
 
