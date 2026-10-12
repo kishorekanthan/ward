@@ -129,6 +129,22 @@ export const LinkItems = {
   ),
 };
 
+const streams: MenuEntry[] = [
+  { label: "Data Engineering", href: "#de" },
+  { label: "Demo", href: "#demo", current: true },
+  { label: "Finance", href: "#finance" },
+];
+
+export const CurrentItem = {
+  render: () => (
+    <Roomy>
+      <MenuButton label="Switch stream" defaultOpen>
+        <Menu entries={streams} />
+      </MenuButton>
+    </Roomy>
+  ),
+};
+
 // A box that clips its overflow, as a top bar or a table cell does; the open menu still shows whole.
 export const InsideClippingBox = {
   render: () => (

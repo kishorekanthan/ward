@@ -17,8 +17,8 @@ import { useAnchoredMenu } from "./anchorMenu";
 import { safeHref } from "./safeHref";
 import s from "./Menu.module.css";
 
-/** A button item calls onSelect; an item with href is a link, and onSelect still runs before it opens. */
-export type MenuItem = { label: string; description?: string; onSelect?: () => void; href?: string; disabled?: boolean };
+/** A button item calls onSelect; an item with href is a link, and onSelect still runs before it opens. current marks the choice in use. */
+export type MenuItem = { label: string; description?: string; onSelect?: () => void; href?: string; disabled?: boolean; current?: boolean };
 export type MenuGroup = { heading: string; items: MenuItem[] };
 export type MenuEntry = MenuItem | MenuGroup | "separator";
 
@@ -241,6 +241,12 @@ function useMenuKeys(nav: Nav, popup: Popup) {
   };
 }
 
+// Opening from the top lands on the current choice when there is one.
+function firstFocus(items: MenuItem[]): number {
+  const at = items.findIndex((item) => item.current && !item.disabled);
+  return at === -1 ? nextEnabled(items, -1, 1) : at;
+}
+
 // Focus moves in only when a person opens the menu, never on a first render held open; request numbers each open.
 function useOpenFocus(nav: Nav, popup: Popup) {
   const { start, request } = popup;
@@ -248,7 +254,7 @@ function useOpenFocus(nav: Nav, popup: Popup) {
   latest.current = nav;
   useEffect(() => {
     const { items, focus } = latest.current;
-    if (start) focus(start === "first" ? nextEnabled(items, -1, 1) : nextEnabled(items, items.length, -1));
+    if (start) focus(start === "first" ? firstFocus(items) : nextEnabled(items, items.length, -1));
   }, [start, request]);
 }
 
@@ -284,22 +290,38 @@ function itemText(item: MenuItem, id: string) {
   return { aria, content };
 }
 
+function CheckMark() {
+  return (
+    <svg className={s.check} viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+      <path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+// When any item is current, every row keeps the check mark's space, so labels line up.
+function rowContent(item: MenuItem, content: ReactNode, marked: boolean) {
+  if (!marked) return { className: s.item, content };
+  return { className: s.item + " " + s.marked, content: <>{item.current ? <CheckMark /> : null}{content}</> };
+}
+
 function ItemRow(props: ItemProps) {
   const { item, at } = props.row;
   const text = itemText(item, useId());
+  const row = rowContent(item, text.content, props.nav.items.some((each) => each.current));
   const common = {
     ref: (el: HTMLElement | null) => {
       props.nav.refs.current[at] = el;
     },
     role: "menuitem",
     tabIndex: -1,
-    className: s.item,
+    className: row.className,
+    "aria-current": item.current ? ("true" as const) : undefined,
     "aria-disabled": item.disabled ? ("true" as const) : undefined,
     ...text.aria,
     ...itemHandlers(props),
   };
-  if (item.href && !item.disabled) return <a href={safeHref(item.href)} {...common}>{text.content}</a>;
-  return <button type="button" {...common}>{text.content}</button>;
+  if (item.href && !item.disabled) return <a href={safeHref(item.href)} {...common}>{row.content}</a>;
+  return <button type="button" {...common}>{row.content}</button>;
 }
 
 function GroupBlock({ heading, rows, nav, popup }: { heading: string; rows: Row[]; nav: Nav; popup: Popup }) {

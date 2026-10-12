@@ -89,6 +89,21 @@
   padding-block: var(--ward-space-1);
 }
 
+/* A menu with a current item indents every row by the check mark, which sits in that space. */
+.marked {
+  position: relative;
+  padding-inline-start: calc(var(--ward-space-2) + var(--ward-space-4) + var(--ward-space-1));
+}
+
+.check {
+  position: absolute;
+  inset-inline-start: var(--ward-space-2);
+  top: calc(50% - var(--ward-space-4) / 2);
+  width: var(--ward-space-4);
+  height: var(--ward-space-4);
+  color: var(--ward-color-sageInk);
+}
+
 .description {
   font: var(--ward-type-meta);
   color: var(--ward-color-muted);
