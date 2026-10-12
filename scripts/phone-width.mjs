@@ -51,7 +51,7 @@ function probePageHeader() {
   return {
     chipsBelowCrumb: chipBoxes.length > 0 && chipBoxes.every(({ r }) => r.top >= crumb.bottom - 0.5),
     chipLines: new Set(chipBoxes.map(({ r }) => Math.round(r.top))).size,
-    titleBelowChips: chipBoxes.every(({ r }) => title.top >= r.bottom - 0.5),
+    chipsBelowTitle: chipBoxes.every(({ r }) => r.top >= title.bottom - 0.5),
     everyChipWhole: chipBoxes.every(whole),
     chipFontSize: chipBoxes.length ? getComputedStyle(chipBoxes[0].c).fontSize : "",
     actionsShown: header.querySelectorAll("[data-ward-actions] [data-action]").length,
@@ -286,7 +286,7 @@ async function probeTopBarNav() {
   };
 }
 
-// The Empty story: the event list keeps six console lines of height, and the foot has no jump button.
+// The Empty story: the event list takes no height before its first event, and the foot has no jump button.
 function probeConsole() {
   const list = document.querySelector("#storybook-root ol");
   const style = getComputedStyle(list);
@@ -299,6 +299,28 @@ function probeConsole() {
     jumpShown: foot.querySelector(".ward-consjump") !== null,
     idleClipped: idle.scrollWidth > idle.clientWidth + 0.5,
     pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+  };
+}
+
+// The drawer fills its scrim edge to edge, and its actions sit two to a row, each whole (#266).
+function probeDrawerActions() {
+  const dialog = document.querySelector('[role="dialog"]');
+  const panel = dialog.getBoundingClientRect();
+  const scrim = dialog.parentElement.getBoundingClientRect();
+  // The story stacks themed copies, so a later one makes this dialog inert; lift that, then a scripted focus with no key press decides the ring.
+  dialog.closest("[inert]")?.removeAttribute("inert");
+  dialog.focus();
+  const lead = Array.from(dialog.querySelectorAll("button")).find((b) => b.textContent === "Jira");
+  const buttons = Array.from(lead.parentElement.children);
+  const tops = buttons.map((b) => Math.round(b.getBoundingClientRect().top));
+  return {
+    sheetFillsScrim: Math.round(panel.left) === Math.round(scrim.left) && Math.round(panel.width) === Math.round(scrim.width),
+    actionRows: new Set(tops).size,
+    firstRowActions: tops.filter((t) => t === tops[0]).length,
+    actionsEqualWidth: new Set(buttons.map((b) => Math.round(b.getBoundingClientRect().width))).size === 1,
+    actionsWhole: buttons.every((b) => b.scrollWidth <= b.clientWidth + 0.5),
+    pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+    openRingOff: getComputedStyle(dialog).outlineStyle === "none",
   };
 }
 
@@ -446,7 +468,7 @@ function probeThemeSamples() {
 }
 
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { themePresets: probeThemeSamples, themeDensities: probeThemeSamples, tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, consoleFoot: probeConsoleFoot, workCardLongTitle: probeLongText, workCardLongTitleWide: probeLongText, sessionLongTitle: probeLongText, sessionLongTitleWide: probeLongText, sessionTableLongTitle: probeLongText, sessionTableLongTitleWide: probeLongText, caseHeaderLongTitle: probeLongText, caseHeaderLongTitleWide: probeLongText, caseHeaderLongCrumb: probeLongCrumb, caseHeaderLongCrumbWide: probeLongCrumb, streamChain: probeStreamChain, streamChainWide: probeStreamChain, streamChainFour: probeStreamChain, streamSummary: probeStreamChain, roleMatrixRows: probeRoleMatrixRows, roleMatrixRowsWide: probeRoleMatrixRows, gridStacked: probeStackedGrid, gridStackedWide: probeStackedGrid };
+const PROBES = { themePresets: probeThemeSamples, themeDensities: probeThemeSamples, tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, drawerActions: probeDrawerActions, consoleFoot: probeConsoleFoot, workCardLongTitle: probeLongText, workCardLongTitleWide: probeLongText, sessionLongTitle: probeLongText, sessionLongTitleWide: probeLongText, sessionTableLongTitle: probeLongText, sessionTableLongTitleWide: probeLongText, caseHeaderLongTitle: probeLongText, caseHeaderLongTitleWide: probeLongText, caseHeaderLongCrumb: probeLongCrumb, caseHeaderLongCrumbWide: probeLongCrumb, streamChain: probeStreamChain, streamChainWide: probeStreamChain, streamChainFour: probeStreamChain, streamSummary: probeStreamChain, roleMatrixRows: probeRoleMatrixRows, roleMatrixRowsWide: probeRoleMatrixRows, gridStacked: probeStackedGrid, gridStackedWide: probeStackedGrid };
 
 async function measure(page, base, key) {
   const { story, label, longLabel, width = golden.viewport.width } = golden[key];

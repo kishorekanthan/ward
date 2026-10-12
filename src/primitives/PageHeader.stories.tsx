@@ -1,5 +1,6 @@
 import { bothThemes } from "../../.storybook/bothThemes";
 import { Btn } from "./Btn";
+import { Field } from "./Field";
 import { PageHeader } from "./PageHeader";
 
 const crumb = [
@@ -215,4 +216,26 @@ export const RecordLongTitle = { args: longCase };
 // A request title as the current crumb step cuts on one line and keeps the header its width.
 export const RecordLongCrumb = {
   args: { ...longCase, crumb: [{ label: "Board", href: "/board" }, { label: "data-eng", href: "/streams/data-eng" }, { label: "Reconcile late-arriving inbound shipments against the carrier's manifest before the nightly warehouse cut-off has closed, and flag every pallet whose scan time falls after the cut-off for the controller." }] },
+};
+
+const streams = [{ value: "demo", label: "Demo" }, { value: "data-eng", label: "Data Engineering" }];
+
+// A header row with a button, a dropdown, a labelled dropdown and the ··· menu button: each box lines up with the others (#253).
+export const ToolbarRow = {
+  args: {
+    crumb,
+    title: "Requests",
+    actions: [
+      <Btn key="share" onClick={() => {}}>
+        Share
+      </Btn>,
+      <Field key="view" kind="select" variant="toolbar" labelHidden label="View" value="demo" options={streams} onChange={() => {}} />,
+      <Field key="stream" kind="select" variant="toolbar" label="Stream" value="data-eng" options={streams} onChange={() => {}} />,
+    ],
+    more: [
+      <Btn key="archive" onClick={() => {}}>
+        Archive
+      </Btn>,
+    ],
+  },
 };

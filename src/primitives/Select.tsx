@@ -24,6 +24,8 @@ export type SelectProps = {
   defaultOpen?: boolean;
   className?: string;
   triggerClassName?: string;
+  // A sized trigger takes Btn's box for that size, so it lines up with buttons in a row; unsized keeps the form look.
+  size?: "md" | "sm";
 };
 
 // A list longer than this gets a Find box; a shorter one is quicker to scan or type-ahead.
@@ -258,6 +260,7 @@ function Trigger({ props, menu, ids, trigger, wantFocus }: { props: SelectProps;
       aria-labelledby={props["aria-labelledby"]}
       aria-describedby={joinIds(props["aria-describedby"], ids.value)}
       aria-invalid={props["aria-invalid"]}
+      data-ward-size={props.size}
       disabled={props.disabled}
       title={scopeReason}
       {...triggerHandlers(menu, wantFocus)}

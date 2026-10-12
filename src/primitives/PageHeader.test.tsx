@@ -1,5 +1,9 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { ruleBody } from "../test-css";
 import { Btn } from "./Btn";
 import { PageHeader } from "./PageHeader";
 
@@ -254,5 +258,83 @@ describe("PageHeader consequence hint", () => {
   it("adds no title without a hint", () => {
     render(<PageHeader crumb={crumb} title="Data engineering" consequence={consequence} />);
     expect(screen.getByText(consequence).hasAttribute("title")).toBe(false);
+  });
+});
+
+describe("PageHeader says its name once", () => {
+  const steps = () => Array.from(document.querySelectorAll("nav[aria-label='Breadcrumb'] li")).map((li) => li.textContent?.replace("›", "").trim());
+  const chips = [{ role: "meta" as const, label: "Relay only" }, { role: "running" as const, label: "Draft" }];
+
+  it("drops a crumb leaf that repeats the title, in any case or spacing", () => {
+    render(<PageHeader crumb={[{ label: "Studio", href: "/studio" }, { label: " data Engineering" }]} title="Data engineering" />);
+    expect(steps()).toEqual(["Studio"]);
+  });
+
+  it("keeps a leaf that differs from the title", () => {
+    render(<PageHeader crumb={[{ label: "Board", href: "/board" }, { label: "DE-008" }]} title="Claim line dedup thresholds" />);
+    expect(steps()).toEqual(["Board", "DE-008"]);
+  });
+
+  it("keeps a leaf that is only part of the title, or the title only part of the leaf", () => {
+    const { unmount } = render(<PageHeader crumb={[{ label: "Find" }]} title="Find item" />);
+    expect(steps()).toEqual(["Find"]);
+    unmount();
+    render(<PageHeader crumb={[{ label: "Find item" }]} title="Find" />);
+    expect(steps()).toEqual(["Find item"]);
+  });
+
+  it("drops only the leaf, not an earlier step with the title's words", () => {
+    render(<PageHeader crumb={[{ label: "Tracker", href: "/tracker" }, { label: "Backlog" }]} title="Tracker" />);
+    expect(steps()).toEqual(["Tracker", "Backlog"]);
+  });
+
+  it("renders no Breadcrumb when the only step is the title", () => {
+    render(<PageHeader crumb={[{ label: "Find item" }]} title="Find item" />);
+    expect(screen.queryByRole("navigation")).toBeNull();
+  });
+
+  it("renders no Breadcrumb for an empty or missing crumb", () => {
+    const { unmount } = render(<PageHeader crumb={[]} title="Queue" />);
+    expect(screen.queryByRole("navigation")).toBeNull();
+    unmount();
+    render(<PageHeader title="Queue" />);
+    expect(screen.queryByRole("navigation")).toBeNull();
+  });
+
+  it("puts the chips on the line under the title, before the consequence", () => {
+    const { container } = render(<PageHeader crumb={crumb} chips={chips} title="Data engineering" consequence="Priya Nayar · 16 members" />);
+    const order = Array.from(container.querySelectorAll("h1, [class*='chip'], p")).map((el) => el.textContent);
+    expect(order[0]).toBe("Data engineering");
+    expect(order.at(-1)).toBe("Priya Nayar · 16 members");
+    expect(order).toContain("Relay only");
+    expect(container.querySelector("header")?.firstElementChild?.textContent).toBe("Studio");
+  });
+
+  it("shows the chips under the title with no consequence and no crumb", () => {
+    const { container } = render(<PageHeader chips={chips} title="Session 12" />);
+    const h1 = container.querySelector("h1") as HTMLElement;
+    expect(h1.nextElementSibling?.textContent).toBe("Relay onlyDraft");
+  });
+
+  it("renders no empty meta line or chip row", () => {
+    const { container, unmount } = render(<PageHeader title="Queue" />);
+    expect(container.querySelector("[class*='meta'], [class*='chips']")).toBeNull();
+    unmount();
+    const withConsequence = render(<PageHeader title="Queue" consequence="Two open" />);
+    expect(withConsequence.container.querySelector("[class*='chips']")).toBeNull();
+  });
+
+  it("wraps the meta line and its chips, so no chip is cut", () => {
+    const path = "src/primitives/PageHeader.module.css";
+    expect(ruleBody(path, ".meta")).toBe("display: flex;\nflex-wrap: wrap;\nalign-items: center;\ngap: var(--ward-space-2);\nmin-width: 0");
+    expect(ruleBody(path, ".chips")).toBe("display: flex;\nflex-wrap: wrap;\ngap: var(--ward-space-2);\nmin-width: 0");
+  });
+});
+
+describe("PageHeader chips beside a long crumb", () => {
+  it("wrap under the crumb in place of shrinking under a rail", () => {
+    const css = join(dirname(fileURLToPath(import.meta.url)), "PageHeader.module.css");
+    expect(ruleBody(css, ".context")).toContain("flex-wrap: wrap");
+    expect(readFileSync(css, "utf8")).toMatch(/\n\.chips \{[^}]*flex-wrap: wrap;/);
   });
 });

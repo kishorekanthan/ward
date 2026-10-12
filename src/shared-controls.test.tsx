@@ -127,7 +127,7 @@ describe("disabled controls reach the reason they are given", () => {
   });
 });
 
-// #191: the current destination is a filled pill; a border, inset shadow or text decoration would bring back the underline bar.
+// #191: the current destination is a filled pill; a border, inset shadow or text decoration would bring back the underline bar. A section strip is the one exception (#250).
 const DESTINATION_CSS = ["primitives/TopBar.module.css", "primitives/Tabs.module.css", "layout/AppShell.module.css", "layout/Sidebar.module.css"];
 const CURRENT = /\[aria-(current="page"|selected="true")\](::?(before|after))?$/;
 
@@ -140,12 +140,22 @@ function currentRules(): Array<[string, string]> {
   });
 }
 
+const SECTION = '.strip[data-level="section"]';
+
 describe("the current destination is a filled pill", () => {
   it("fills every current TopBar, Tabs, AppShell and Sidebar destination with the sage tint and draws no underline bar", () => {
-    const rules = currentRules();
+    const rules = currentRules().filter(([where]) => !where.includes(SECTION));
     expect(rules).toHaveLength(7);
     expect(rules.filter(([, body]) => !body.includes("background: var(--ward-color-sageTint)")).map(([where]) => where)).toEqual([]);
     expect(rules.filter(([, body]) => /box-shadow|border(?!-radius)|text-decoration/.test(body)).map(([where]) => where)).toEqual([]);
+  });
+
+  // TRELLIS-522: a section strip sits under a page strip, so its current tab is an underline and never a second pill.
+  it("marks the current section tab with an underline and no fill", () => {
+    const sections = currentRules().filter(([where]) => where.includes(SECTION));
+    expect(sections.map(([where]) => where)).toEqual([`primitives/Tabs.module.css ${SECTION} .tab[aria-selected="true"], ${SECTION} .tab[aria-current="page"]`]);
+    expect(sections[0]?.[1]).toContain("background: transparent");
+    expect(sections[0]?.[1]).toContain("box-shadow: inset 0 calc(-1 * var(--ward-underline)) 0 var(--ward-color-sageInk)");
   });
 });
 

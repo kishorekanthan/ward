@@ -9,8 +9,10 @@
   margin-inline: calc(-1 * var(--ward-page-inset));
 }
 
+/* Chips that do not fit beside the crumb wrap under it, never past the column edge. */
 .context {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--ward-space-2);
   min-width: 0;
@@ -35,11 +37,20 @@
   min-width: 0;
 }
 
-.chips {
+/* The line under the title: chips, then the consequence; it wraps, so no chip is ever cut. */
+.meta {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: var(--ward-space-2);
   min-width: 0;
-  white-space: nowrap;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ward-space-2);
+  min-width: 0;
 }
 
 .title {
@@ -125,12 +136,6 @@
 
 @media (max-width: 767.98px) {
   .context {
-    flex-wrap: wrap;
-  }
-
-  /* Own line under the crumb, each chip whole: a phone cannot afford a chip cut to one letter. */
-  .chips {
-    flex: 1 0 100%;
     flex-wrap: wrap;
   }
 

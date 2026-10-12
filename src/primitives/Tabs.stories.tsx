@@ -1,4 +1,5 @@
 import { bothThemes } from "../../.storybook/bothThemes";
+import { useState } from "react";
 import { Tabs } from "./Tabs";
 
 const board = [
@@ -41,23 +42,44 @@ export default {
 };
 
 export const Default = {
-  args: { tabs: board, active: "board", label: "Stream sections", onChange: () => {} },
+  args: { tabs: board, active: "board", level: "page", label: "Stream sections", onChange: () => {} },
 };
 
 export const WithCounts = {
-  args: { tabs: counted, active: "gate", label: "Item states", onChange: () => {} },
+  args: { tabs: counted, active: "gate", level: "page", label: "Item states", onChange: () => {} },
 };
 
-export const SecondLevel = {
-  args: { tabs: board, active: "agents", level: 2, label: "Agent sections", onChange: () => {} },
+export const Section = {
+  args: { tabs: board, active: "agents", level: "section", label: "Agent sections", onChange: () => {} },
 };
 
 export const SevenTabs = {
-  args: { tabs: admin, active: "roles", label: "Admin sections", onChange: () => {} },
+  args: { tabs: admin, active: "roles", level: "page", label: "Admin sections", onChange: () => {} },
 };
 
 // Eight tabs at phone width: those that do not fit wait in More, and the selected sixth tab stays in the strip.
 export const PhoneWidth = {
-  args: { tabs: stream, active: "connections", label: "Stream sections", onChange: () => {} },
+  args: { tabs: stream, active: "connections", level: "page", label: "Stream sections", onChange: () => {} },
   parameters: { viewport: { defaultViewport: "mobile1" } },
 };
+
+const studio = [
+  { id: "streams", label: "Streams" },
+  { id: "gates", label: "Gates" },
+  { id: "audit", label: "Audit" },
+];
+
+function PageOverSection() {
+  const [page, setPage] = useState("streams");
+  const [section, setSection] = useState("workflow");
+  return (
+    <div>
+      <Tabs tabs={studio} active={page} level="page" label="Studio" onChange={setPage} />
+      <h1>Data Engineering</h1>
+      <Tabs tabs={stream.slice(0, 4)} active={section} level="section" label="Stream sections" onChange={setSection} />
+    </div>
+  );
+}
+
+// One page strip above the title and one section strip below it: only the page strip draws a pill.
+export const PageAndSection = { render: () => <PageOverSection /> };

@@ -1,8 +1,8 @@
-import { Children, Fragment, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { Children, Fragment, useState, type CSSProperties, type ReactNode } from "react";
 import { Field } from "../primitives/Field";
 import s from "./layout.module.css";
-import { useEdgeFades } from "./useEdgeFades";
 import { useMediaQuery } from "./useMediaQuery";
+import { OverflowRow } from "./OverflowRow";
 
 export type BoardLane = { id: string; label: string; count: number; content: ReactNode };
 
@@ -20,13 +20,11 @@ type ScrollerProps = { label: string; children: ReactNode; laneCount?: number };
 
 // A lane count lets the lanes share the board width before it scrolls.
 function Scroller({ label, children, laneCount }: ScrollerProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  useEdgeFades(ref, laneCount ?? Children.count(children));
   const style = laneCount === undefined ? undefined : ({ "--ward-board-lanes": laneCount } as CSSProperties);
   return (
-    <div ref={ref} className={s.scroller} role="region" aria-label={label} tabIndex={0} data-ward-board-scroller="" style={style}>
+    <OverflowRow className={s.scroller} label={label} count={laneCount ?? Children.count(children)} data-ward-board-scroller="" style={style}>
       {children}
-    </div>
+    </OverflowRow>
   );
 }
 

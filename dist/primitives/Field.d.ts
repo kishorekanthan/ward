@@ -1,4 +1,4 @@
-export type FieldVariant = "form" | "inline" | "tag" | "tagGate" | "reply";
+export type FieldVariant = "form" | "inline" | "tag" | "tagGate" | "reply" | "toolbar";
 export type FieldOption = {
     value: string;
     label: string;

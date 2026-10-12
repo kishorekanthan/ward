@@ -9,12 +9,15 @@ import { sweepPhoneWidth } from "./phone-width.mjs";
 import { sweepFocusTargets } from "./focus-targets.mjs";
 import { sweepBoardHeight } from "./board-height.mjs";
 import { sweepBoardToolbar } from "./board-toolbar.mjs";
+import { sweepToolbarRow } from "./toolbar-row.mjs";
 import { sweepMenuEscape } from "./menu-escape.mjs";
 import { sweepStudioFrame } from "./studio-frame.mjs";
 import { sweepHeaderGeometry } from "./header-geometry.mjs";
 import { sweepPolicyRow } from "./policy-row.mjs";
+import { sweepCardGrid } from "./card-grid.mjs";
 import { sweepAffordance } from "./affordance.mjs";
 import { sweepFlashRing } from "./flash-ring.mjs";
+import { sweepTabLevels } from "./tab-levels.mjs";
 import { workflowFindings } from "./workflows.mjs";
 import { NAME, OLD_NAME, OLD_TARBALL, oldNameFiles } from "./old-name.mjs";
 import { FAMILY_OF, breakpoints, buildCss, buildTokens, containerBreakpoints, declaredFaces, palette, readTokens } from "./gen-css.mjs";
@@ -276,6 +279,11 @@ const policyDiffs = await sweepPolicyRow();
 if (policyDiffs.length === 0) pass("policy row", "5 web rows, both themes: at 1280px narrow controls keep the 150px column and a wide segment ends before the chip; at 375px the setting stacks above control and chip, unclipped");
 else fail("policy row", policyDiffs.join("; "));
 
+// 12b. card grid: in each CardGrid and agent-card row the card bottoms and facts bottoms sit within 2px; StatTiles rows share one width and fill the row (#262).
+const cardGridDiffs = await sweepCardGrid();
+if (cardGridDiffs.length === 0) pass("card grid", "4 stories, both themes: card and facts bottoms line up a row; five tiles fill one row, seven wrap six and one at one width");
+else fail("card grid", cardGridDiffs.join("; "));
+
 // 13. affordance: every story, both themes; no link underlines at rest or on hover, every control is marked, answers hover and shows a whole focus ring (#191)
 const affordance = await sweepAffordance();
 if (affordance.failures.length === 0) pass("affordance", `${affordance.stories} stories, ${affordance.controls} controls, ${affordance.hovered} hovered, ${affordance.focused} focused: no underline, no plain-text control, no missing hover ground or focus ring`);
@@ -300,6 +308,16 @@ else fail("menu escape", menuDiffs.join("; "));
 const flashDiffs = await sweepFlashRing();
 if (flashDiffs.length === 0) pass("flash ring", "light and dark: the first frame rings the card in the flash colour (or running), its box and shadow hold, the ring fades out, and reduced motion runs no flash");
 else fail("flash ring", flashDiffs.join("; "));
+
+// 18. tab levels: in both themes a page strip marks its current tab with the sage pill and a section strip with a sage underline and no fill (src/goldens/tab-levels.json, #250)
+const tabDiffs = await sweepTabLevels();
+if (tabDiffs.length === 0) pass("tab levels", "light and dark: the page strip's current tab is a sage pill, the section strip's is text ink over a sage underline, and idle tabs have no fill");
+else fail("tab levels", tabDiffs.join("; "));
+
+// 19. toolbar row: a PageHeader row with a button, a hidden-label and a labelled toolbar dropdown, and the ··· button: equal height and top within 1px (#253)
+const rowDiffs = await sweepToolbarRow();
+if (rowDiffs.length === 0) pass("toolbar row", "button, two toolbar dropdowns and the ··· button share height and top within 1px, light and dark, at 1280 and 1024px");
+else fail("toolbar row", rowDiffs.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);
 process.exitCode = failures === 0 ? 0 : 1;
