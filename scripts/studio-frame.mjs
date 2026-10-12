@@ -61,7 +61,8 @@ function probePanels() {
     return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
   };
   const ratio = (a, b) => (Math.max(luminance(a), luminance(b)) + 0.05) / (Math.min(luminance(a), luminance(b)) + 0.05);
-  const ring = (el) => getComputedStyle(el).boxShadow.match(/rgba?\([^)]*\)/)?.[0] ?? "rgb(0, 0, 0)";
+  // A panel with no ring drawn reads as the ground itself, so it fails the ratio.
+  const ring = (el, ground) => getComputedStyle(el).boxShadow.match(/rgba?\([^)]*\)/)?.[0] ?? ground;
   const sideFacts = (s, m, h) => ({
     sideWidth: Math.round(s.width),
     sideInset: [Math.round(s.left), Math.round(s.top)],
@@ -89,7 +90,7 @@ function probePanels() {
     ...(side ? sideFacts(side.getBoundingClientRect(), m, h) : noSide),
     contentInset: [Math.round(m.top + scrollY), Math.round(innerWidth - m.right)],
     headerInPanel: h.top >= m.top && h.left >= m.left && h.right <= m.right + 0.5,
-    edgesShow: [main, side].filter(Boolean).every((el) => ratio(ring(el), ground) >= 1.5),
+    edgesShow: [main, side].filter(Boolean).every((el) => ratio(ring(el, ground), ground) >= 1.5),
     ...pageFacts(main.lastElementChild, m),
   };
 }

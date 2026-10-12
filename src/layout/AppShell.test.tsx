@@ -945,6 +945,31 @@ describe("app frame owns the layout (TRELLIS-528)", () => {
     expect((container.firstElementChild as HTMLElement).dataset.collapsed).toBe("false");
   });
 
+  it("forgets the medium visit's open sidebar once the window leaves the medium band", () => {
+    const listeners: Array<() => void> = [];
+    let width = 800;
+    window.matchMedia = ((query: string) => {
+      const matches = () => width <= Number(/max-width: ([\d.]+)px/.exec(query)?.[1]);
+      return {
+        get matches() {
+          return matches();
+        },
+        media: query,
+        addEventListener: (_: string, fn: (e: MediaQueryListEvent) => void) => listeners.push(() => fn({ matches: matches() } as MediaQueryListEvent)),
+        removeEventListener() {},
+      };
+    }) as unknown as typeof window.matchMedia;
+    const resize = (next: number) => {
+      width = next;
+      act(() => listeners.forEach((notify) => notify()));
+    };
+    const { container } = render(drawnShell());
+    fireEvent.click(foldButton());
+    resize(1440);
+    resize(800);
+    expect((container.firstElementChild as HTMLElement).dataset.collapsed).toBe("true");
+  });
+
   it("folds a consumer-owned sidebar at medium width even when the consumer says expanded", () => {
     stubWidth(900);
     told.length = 0;
