@@ -88,6 +88,11 @@ describe("Crumb that stops at the page's parent", () => {
     expect(screen.getByTitle("Data engineering").getAttribute("aria-current")).toBeNull();
   });
 
+  it("passes every step href through safeHref, the last one too", () => {
+    render(<Crumb path={[{ label: "Studio", href: "javascript:alert(1)" }, { label: "Streams", href: "javascript:alert(2)" }]} current={false} />);
+    expect(screen.getAllByRole("link").map((a) => a.getAttribute("href"))).toEqual(["#", "#"]);
+  });
+
   it("keeps the last step current by default", () => {
     render(<Crumb path={path} current />);
     expect(screen.getByTitle("Data engineering").getAttribute("aria-current")).toBe("page");
