@@ -76,8 +76,9 @@
   position: relative;
 }
 
-/* Ward has no tooltip primitive: a folded item names itself beside the strip on hover and on keyboard focus. */
-.app[data-collapsed="true"][data-consumer-fold] .side :global([data-ward-tip]:is(:hover, :focus-visible))::after {
+/* Ward has no tooltip primitive: a folded item names itself beside the strip on hover and on keyboard focus.
+   No tip shows while a menu in the strip is open, so it never covers the menu. */
+.app[data-collapsed="true"][data-consumer-fold] .side:not(:has([aria-haspopup][aria-expanded="true"])) :global([data-ward-tip]:is(:hover, :focus-visible))::after {
   content: attr(data-ward-tip);
   position: absolute;
   top: 50%;
