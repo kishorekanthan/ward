@@ -409,3 +409,43 @@ describe("Menu sizes and focus ring", () => {
     expect(ratios.every((ratio) => ratio >= 3)).toBe(true);
   });
 });
+
+// "Feed" starts only a description, so type-ahead on "f" must not land on that row.
+const described: MenuItem[] = [
+  { label: "Bring in new data", description: "Feed a new source in on a schedule." },
+  { label: "Change data we load", description: "Add or fix fields in a feed you have." },
+  { label: "Ask a question" },
+];
+
+describe("Described items", () => {
+  it("names the item by its label and describes it by the line below", () => {
+    render(<NewRequest entries={described} defaultOpen />);
+    const item = screen.getByRole("menuitem", { name: "Bring in new data" });
+    expect(item.getAttribute("aria-describedby")).not.toBeNull();
+    expect(document.getElementById(item.getAttribute("aria-describedby") ?? "")?.textContent).toBe("Feed a new source in on a schedule.");
+    expect(screen.getByRole("menuitem", { name: "Ask a question" }).hasAttribute("aria-describedby")).toBe(false);
+  });
+
+  it("matches type-ahead on the label only", () => {
+    render(<NewRequest entries={described} />);
+    openWith("ArrowUp");
+    press("f");
+    expect(document.activeElement).toBe(screen.getByRole("menuitem", { name: "Ask a question" }));
+  });
+
+  it("reads the description at 4.5:1 on the panel and on a hovered row in both themes", () => {
+    const ratios = [tokens.color, tokens.dark].flatMap((theme) => [contrast(theme.muted, theme.surface), contrast(theme.muted, theme.accentTint)]);
+    expect(ratios.every((ratio) => ratio >= 4.5)).toBe(true);
+    expect(declared(".description", "color")).toBe("var(--ward-color-muted)");
+  });
+
+  it("stacks the description under the label in the meta type, with a gap and block padding", () => {
+    const row = menuCss.match(/\.item:has\(\.description\) \{([^}]*)\}/)?.[1] ?? "";
+    const set = (property: string) => row.match(new RegExp(`(?:^|\\s)${property}: ([^;]+);`))?.[1];
+    expect(set("flex-direction")).toBe("column");
+    expect(set("align-items")).toBe("flex-start");
+    expect(set("gap")).toBe("var(--ward-space-1)");
+    expect(set("padding-block")).toBe("var(--ward-space-1)");
+    expect(declared(".description", "font")).toBe("var(--ward-type-meta)");
+  });
+});

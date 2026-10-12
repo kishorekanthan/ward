@@ -81,9 +81,10 @@ function parsedCap(cap: string): number | undefined {
   return cap === "" ? undefined : Number(cap);
 }
 
-// Inside a disabled scope the handle is disabled, names the reason and ignores arrow keys.
+// Inside a disabled scope the handle is disabled, names the reason and ignores arrow keys; a hide scope drops it.
 function Handle({ name, onReorder }: { name: string; onReorder?: (direction: -1 | 1) => void }) {
   const scope = useDisabledScope();
+  if (scope?.actions === "hide") return <span className={s.cHandle} />;
   return (
     <span className={s.cHandle}>
       <button

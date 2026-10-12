@@ -417,6 +417,8 @@ export declare const v: {
         readonly skeletonBar: "var(--ward-height-skeletonBar)";
         readonly target: "var(--ward-height-target)";
         readonly navIcon: "var(--ward-height-navIcon)";
+        readonly streamAvatar: "var(--ward-height-streamAvatar)";
+        readonly streamAvatarLg: "var(--ward-height-streamAvatarLg)";
     };
     readonly size: {
         readonly marker6: "var(--ward-size-marker6)";
@@ -542,6 +544,7 @@ export declare const v: {
         readonly personName: "var(--ward-type-personName)";
         readonly rowText: "var(--ward-type-rowText)";
         readonly rowTextStrong: "var(--ward-type-rowTextStrong)";
+        readonly streamAvatar: "var(--ward-type-streamAvatar)";
     };
     readonly motion: {
         readonly fast: "var(--ward-motion-fast)";

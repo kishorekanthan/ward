@@ -2,18 +2,21 @@ import { useEffect, useRef, type RefObject } from "react";
 import { useRovingTabindex } from "../a11y/useRovingTabindex";
 import { Menu, MenuButton, type MenuTrigger } from "./Menu";
 import menuCss from "./Menu.module.css";
+import { usePageStrip } from "./pageStrip";
 import { useShownTabs } from "./tabsFit";
 import s from "./Tabs.module.css";
 
 export type Tab = { id: string; label: string; count?: number };
 export type TabDef = Tab;
+// A page strip is pills above the title, one per page; a section strip is text tabs below it.
+export type TabLevel = "page" | "section";
 
 export type TabsProps = {
   tabs: Tab[];
   active: string;
   onChange: (id: string) => void;
   label?: string;
-  level?: 1 | 2;
+  level: TabLevel;
 };
 
 const MORE = "More";
@@ -25,8 +28,8 @@ function selectedIndex(tabs: Tab[], active: string): number {
 
 const labelOf = (tab: Tab) => (tab.count === undefined ? tab.label : `${tab.label} · ${tab.count}`);
 
-export function tabClass(level: 1 | 2): string {
-  return `${s.strip} ward-tabs${level === 2 ? " ward-tabs--level2" : ""}`;
+export function tabClass(level: TabLevel): string {
+  return `${s.strip} ward-tabs ward-tabs--${level}`;
 }
 
 type Roving = ReturnType<typeof useRovingTabindex>;
@@ -75,11 +78,12 @@ function placeOf(roving: Roving, shown: number[] | null, index: number): object 
   return !shown || shown.includes(index) ? roving.itemProps(index) : WAITING;
 }
 
-export function Tabs({ tabs, active, onChange, label = "Tabs", level = 1 }: TabsProps) {
+export function Tabs({ tabs, active, onChange, label = "Tabs", level }: TabsProps) {
   const roving = useRovingTabindex({ orientation: "horizontal" });
   const index = selectedIndex(tabs, active);
   useEffect(() => roving.setActive(index), [roving.setActive, index]);
   const stripRef = useRef<HTMLDivElement>(null);
+  usePageStrip(stripRef, level);
   const shown = useShownTabs(stripRef, index, tabs.map(labelOf).join("\n"));
   const waiting = shown ? tabs.filter((_, i) => !shown.includes(i)) : [];
   return (
