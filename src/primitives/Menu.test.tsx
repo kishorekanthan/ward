@@ -475,6 +475,12 @@ describe("Current item", () => {
     expect(focusedText()).toBe("Demo");
   });
 
+  it("opens on the first enabled item when the current one is disabled", () => {
+    render(<NewRequest entries={streams.map((item) => (item.current ? { ...item, disabled: true } : item))} />);
+    openWith("Enter");
+    expect(focusedText()).toBe("Data Engineering");
+  });
+
   it("indents every row by the check mark's space, so labels line up", () => {
     render(<NewRequest entries={streams} defaultOpen />);
     const classes = screen.getAllByRole("menuitem").map((item) => item.className.split(" "));
