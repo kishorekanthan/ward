@@ -73,7 +73,9 @@ export type {
 export { Sidebar } from "./layout/Sidebar";
 export { Mark } from "./primitives/Mark";
 export type { MarkProps, MarkState } from "./primitives/Mark";
-export { StreamAvatar, streamInitials } from "./primitives/StreamAvatar";
+export { StreamAvatar, streamInitials, uniqueStreamInitials } from "./primitives/StreamAvatar";
+export { useAnchoredMenu as useAnchoredPanel } from "./primitives/anchorMenu";
+export type { MenuAlign as PanelAlign } from "./primitives/anchorMenu";
 export type { StreamAvatarProps } from "./primitives/StreamAvatar";
 export { PageHeader } from "./primitives/PageHeader";
 export type { PageHeaderProps } from "./primitives/PageHeader";

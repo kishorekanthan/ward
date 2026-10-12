@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import * as Ward from "./index";
+import { useAnchoredMenu } from "./primitives/anchorMenu";
 import {
   Btn,
   BoardColumn,
@@ -100,5 +101,9 @@ describe("public Ward exports", () => {
     expect(typeof Ward.ThemeProvider).toBe("function");
     expect(Ward.ACCENT_PRESETS.map(({ name, label }) => `${name}: ${label}`)).toEqual(["green: Trellis green", "blue: Blue", "violet: Violet", "orange: Orange", "rose: Rose"]);
     expect(Ward.DENSITIES.map(({ name, label }) => `${name}: ${label}`)).toEqual(["comfortable: Comfortable", "compact: Compact"]);
+  });
+
+  it("publishes the anchored placement Menu and Select use, for panels that are not menus", () => {
+    expect(Ward.useAnchoredPanel).toBe(useAnchoredMenu);
   });
 });
