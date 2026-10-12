@@ -316,6 +316,14 @@ describe("PageHeader says its name once", () => {
     expect(h1.nextElementSibling?.textContent).toBe("Relay onlyDraft");
   });
 
+  it("renders no empty meta line or chip row", () => {
+    const { container, unmount } = render(<PageHeader title="Queue" />);
+    expect(container.querySelector("[class*='meta'], [class*='chips']")).toBeNull();
+    unmount();
+    const withConsequence = render(<PageHeader title="Queue" consequence="Two open" />);
+    expect(withConsequence.container.querySelector("[class*='chips']")).toBeNull();
+  });
+
   it("wraps the meta line and its chips, so no chip is cut", () => {
     const path = "src/primitives/PageHeader.module.css";
     expect(ruleBody(path, ".meta")).toBe("display: flex;\nflex-wrap: wrap;\nalign-items: center;\ngap: var(--ward-space-2);\nmin-width: 0");
