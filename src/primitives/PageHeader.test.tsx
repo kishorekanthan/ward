@@ -261,6 +261,36 @@ describe("PageHeader consequence hint", () => {
   });
 });
 
+describe("PageHeader keeps the way back when the crumb stops at the parent", () => {
+  const trail = [{ label: "Admin", href: "/admin" }, { label: "Credentials", href: "/admin/credentials" }];
+  const links = () => screen.queryAllByRole("link").map((a) => [a.textContent, a.getAttribute("href")]);
+  const currentSteps = () => document.querySelectorAll("nav[aria-label='Breadcrumb'] [aria-current]").length;
+
+  it("links every step left after it drops the leaf that repeats the title, and marks none current", () => {
+    render(<PageHeader crumb={[...trail, { label: "Secret storage", href: "/admin/credentials/storage" }]} title="Secret storage" />);
+    expect(links()).toEqual([["Admin", "/admin"], ["Credentials", "/admin/credentials"]]);
+    expect(currentSteps()).toBe(0);
+  });
+
+  it("keeps the leaf current and unlinked when it differs from the title", () => {
+    render(<PageHeader crumb={[...trail, { label: "Secret storage", href: "/admin/credentials/storage" }]} title="Where secrets live" />);
+    expect(links()).toEqual([["Admin", "/admin"], ["Credentials", "/admin/credentials"]]);
+    expect(document.querySelector("nav[aria-label='Breadcrumb'] [aria-current='page']")?.textContent).toBe("Secret storage");
+  });
+
+  it("links the last step of a crumb the app already trimmed, when told it stops at the parent", () => {
+    render(<PageHeader crumb={trail} crumbCurrent={false} title="Secret storage" />);
+    expect(links()).toEqual([["Admin", "/admin"], ["Credentials", "/admin/credentials"]]);
+    expect(currentSteps()).toBe(0);
+  });
+
+  it("keeps the last step current when told the crumb ends at this page", () => {
+    render(<PageHeader crumb={trail} crumbCurrent title="Where secrets live" />);
+    expect(links()).toEqual([["Admin", "/admin"]]);
+    expect(currentSteps()).toBe(1);
+  });
+});
+
 describe("PageHeader says its name once", () => {
   const steps = () => Array.from(document.querySelectorAll("nav[aria-label='Breadcrumb'] li")).map((li) => li.textContent?.replace("›", "").trim());
   const chips = [{ role: "meta" as const, label: "Relay only" }, { role: "running" as const, label: "Draft" }];

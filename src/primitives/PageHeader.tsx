@@ -9,6 +9,8 @@ import s from "./PageHeader.module.css";
 
 export type PageHeaderProps = {
   crumb?: CrumbPath[];
+  /** false: the app already trimmed the crumb to the page's parent, so its last step links back. */
+  crumbCurrent?: boolean;
   chips?: ChipProps[];
   title: string;
   consequence?: string;
@@ -114,17 +116,20 @@ function useDisclosure(togglable: boolean, actionsRef: RefObject<HTMLDivElement 
 
 const sameWords = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
 
-// A crumb leaf that repeats the title says the page's name twice, so it goes (#260).
-function headerCrumb(crumb: CrumbPath[] = [], title: string): CrumbPath[] {
+type HeaderCrumb = { path: CrumbPath[]; current: boolean };
+
+// A crumb leaf that repeats the title says the page's name twice, so it goes (#260); the H1 is then the current page, and the step left links back (#275).
+function headerCrumb(crumb: CrumbPath[] = [], title: string, current?: boolean): HeaderCrumb {
   const leaf = crumb.at(-1);
-  return leaf !== undefined && sameWords(leaf.label, title) ? crumb.slice(0, -1) : crumb;
+  if (leaf !== undefined && sameWords(leaf.label, title)) return { path: crumb.slice(0, -1), current: false };
+  return { path: crumb, current: current !== false };
 }
 
-function HeaderContext({ crumb }: { crumb: CrumbPath[] }) {
-  if (crumb.length === 0) return null;
+function HeaderContext({ crumb }: { crumb: HeaderCrumb }) {
+  if (crumb.path.length === 0) return null;
   return (
     <div className={s.context}>
-      <Crumb path={crumb} />
+      <Crumb path={crumb.path} current={crumb.current} />
     </div>
   );
 }
@@ -199,14 +204,14 @@ function Connection({ connection }: Pick<PageHeaderProps, "connection">) {
   return connection ? <ConnectionMark connection={connection.connection} since={connection.since} /> : null;
 }
 
-export function PageHeader({ crumb, chips, title, consequence, consequenceHint, actions = [], more = [], connection, onOverflow, density = "page" }: PageHeaderProps) {
+export function PageHeader({ crumb, crumbCurrent, chips, title, consequence, consequenceHint, actions = [], more = [], connection, onOverflow, density = "page" }: PageHeaderProps) {
   const { rowRef, headingRef, actionsRef, measureRef, collapsed } = useActionOverflow(actions, isLoneLink(actions, more));
   const hasMore = more.length > 0;
   const { disclosure, close } = useDisclosure(collapsed || hasMore, actionsRef);
   const panel = panelItems(more, actions, collapsed, onOverflow);
   return (
     <header className={s.root} data-density={density}>
-      <HeaderContext crumb={headerCrumb(crumb, title)} />
+      <HeaderContext crumb={headerCrumb(crumb, title, crumbCurrent)} />
       <div className={s.row} ref={rowRef}>
         <div ref={headingRef} className={s.headingWrap}>
           <Heading title={title} chips={chips} consequence={consequence} consequenceHint={consequenceHint} density={density} />

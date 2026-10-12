@@ -4,9 +4,31 @@ import { safeHref } from "./safeHref";
 
 export type CrumbPath = { label: string; href?: string };
 
-export type CrumbProps = { path: CrumbPath[]; chips?: ChipProps[] };
+export type CrumbProps = {
+  path: CrumbPath[];
+  chips?: ChipProps[];
+  /** false: the path stops at the page's parent, so its last step links back and no step is the current page. */
+  current?: boolean;
+};
 
-export function Crumb({ path, chips }: CrumbProps) {
+function Step({ step, isCurrent }: { step: CrumbPath; isCurrent: boolean }) {
+  if (isCurrent) {
+    return (
+      <span className={s.current} aria-current="page" title={step.label}>
+        {step.label}
+      </span>
+    );
+  }
+  return step.href ? (
+    <a className={`${s.link} ward-target`} href={safeHref(step.href)} title={step.label}>
+      {step.label}
+    </a>
+  ) : (
+    <span title={step.label}>{step.label}</span>
+  );
+}
+
+export function Crumb({ path, chips, current = true }: CrumbProps) {
   return (
     <div className={s.root}>
       <nav aria-label="Breadcrumb" className={s.nav}>
@@ -18,19 +40,7 @@ export function Crumb({ path, chips }: CrumbProps) {
                   ›
                 </span>
               ) : null}
-              {i < path.length - 1 ? (
-                c.href ? (
-                  <a className={`${s.link} ward-target`} href={safeHref(c.href)} title={c.label}>
-                    {c.label}
-                  </a>
-                ) : (
-                  <span title={c.label}>{c.label}</span>
-                )
-              ) : (
-                <span className={s.current} aria-current="page" title={c.label}>
-                  {c.label}
-                </span>
-              )}
+              <Step step={c} isCurrent={current && i === path.length - 1} />
             </li>
           ))}
         </ol>
