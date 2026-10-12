@@ -162,6 +162,24 @@ export const SidebarNarrow = {
   parameters: { viewport: { defaultViewport: "mobile1" } },
 };
 
+// The consumer owns the fold: Ward narrows the track and tells the sidebar, which draws its own strip with tips.
+function OwnSidebar({ folded }: { folded: boolean }) {
+  return (
+    <nav aria-label="Menu">
+      {studioNav.map((item) => (
+        <a key={item.href} href={item.href} data-ward-tip={folded ? item.label : undefined} aria-label={item.label} style={{ display: "block", marginBlockEnd: "var(--ward-space-1)", padding: "var(--ward-space-2)", borderRadius: "var(--ward-radius)", background: "var(--ward-color-accentTint)", font: "var(--ward-type-control)", color: "var(--ward-color-text)", textDecoration: "none" }}>
+          {folded ? item.label.charAt(0) : item.label}
+        </a>
+      ))}
+    </nav>
+  );
+}
+
+export const SidebarOwnFold = {
+  decorators: [bothThemes],
+  args: { ...floatingArgs, iconRail: undefined, collapsed: true, sidebar: (folded: boolean) => <OwnSidebar folded={folded} /> },
+};
+
 const stages = ["Intake", "Triage", "Design", "Build", "Review", "Release", "Verify", "Done"].map((label) => ({ value: label.toLowerCase(), label }));
 
 // A dialog clips its overflow, yet its open Stage menu shows whole and above it. One copy, since a second dialog would make the first inert.

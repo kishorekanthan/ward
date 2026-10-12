@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 /** A button item calls onSelect; an item with href is a link, and onSelect still runs before it opens. */
 export type MenuItem = {
     label: string;
+    description?: string;
     onSelect?: () => void;
     href?: string;
     disabled?: boolean;

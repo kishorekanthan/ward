@@ -9,12 +9,14 @@ import { sweepPhoneWidth } from "./phone-width.mjs";
 import { sweepFocusTargets } from "./focus-targets.mjs";
 import { sweepBoardHeight } from "./board-height.mjs";
 import { sweepBoardToolbar } from "./board-toolbar.mjs";
+import { sweepToolbarRow } from "./toolbar-row.mjs";
 import { sweepMenuEscape } from "./menu-escape.mjs";
 import { sweepStudioFrame } from "./studio-frame.mjs";
 import { sweepHeaderGeometry } from "./header-geometry.mjs";
 import { sweepPolicyRow } from "./policy-row.mjs";
 import { sweepAffordance } from "./affordance.mjs";
 import { sweepFlashRing } from "./flash-ring.mjs";
+import { sweepTabLevels } from "./tab-levels.mjs";
 import { workflowFindings } from "./workflows.mjs";
 import { NAME, OLD_NAME, OLD_TARBALL, oldNameFiles } from "./old-name.mjs";
 import { FAMILY_OF, breakpoints, buildCss, buildTokens, containerBreakpoints, declaredFaces, palette, readTokens } from "./gen-css.mjs";
@@ -300,6 +302,16 @@ else fail("menu escape", menuDiffs.join("; "));
 const flashDiffs = await sweepFlashRing();
 if (flashDiffs.length === 0) pass("flash ring", "light and dark: the first frame rings the card in the flash colour (or running), its box and shadow hold, the ring fades out, and reduced motion runs no flash");
 else fail("flash ring", flashDiffs.join("; "));
+
+// 18. tab levels: in both themes a page strip marks its current tab with the sage pill and a section strip with a sage underline and no fill (src/goldens/tab-levels.json, #250)
+const tabDiffs = await sweepTabLevels();
+if (tabDiffs.length === 0) pass("tab levels", "light and dark: the page strip's current tab is a sage pill, the section strip's is text ink over a sage underline, and idle tabs have no fill");
+else fail("tab levels", tabDiffs.join("; "));
+
+// 19. toolbar row: a PageHeader row with a button, a hidden-label and a labelled toolbar dropdown, and the ··· button: equal height and top within 1px (#253)
+const rowDiffs = await sweepToolbarRow();
+if (rowDiffs.length === 0) pass("toolbar row", "button, two toolbar dropdowns and the ··· button share height and top within 1px, light and dark, at 1280 and 1024px");
+else fail("toolbar row", rowDiffs.join("; "));
 
 console.log(failures === 0 ? "check: green" : `check: ${failures} failure(s)`);
 process.exitCode = failures === 0 ? 0 : 1;

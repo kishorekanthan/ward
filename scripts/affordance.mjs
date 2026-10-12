@@ -208,14 +208,16 @@ function focusFacts() {
   el.dataset.wardAuditSeen = "1";
   // Focus can leave a control half outside a scroller; scroll it whole first, so only a missing gutter counts as a clip.
   el.scrollIntoView({ block: "nearest", inline: "nearest" });
-  const cs = getComputedStyle(el);
+  // A field that holds the control and its buttons (data-ward-focus-host) may draw the ring for it.
+  const host = el.closest("[data-ward-focus-host]") ?? el;
+  const cs = getComputedStyle(host);
   return {
     name: W.name(el),
     theme: W.theme(el),
     focusVisible: el.matches(":focus-visible"),
     outline: { style: cs.outlineStyle, width: Number.parseFloat(cs.outlineWidth), color: cs.outlineColor },
-    ground: W.ground(el.parentElement),
-    clippedBy: W.clipper(el),
+    ground: W.ground(host.parentElement),
+    clippedBy: W.clipper(host),
   };
 }
 

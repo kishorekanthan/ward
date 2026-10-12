@@ -9,8 +9,10 @@
   margin-inline: calc(-1 * var(--ward-page-inset));
 }
 
+/* Chips that do not fit beside the crumb wrap under it, never past the column edge. */
 .context {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--ward-space-2);
   min-width: 0;

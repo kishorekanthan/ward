@@ -80,6 +80,19 @@
   cursor: pointer;
 }
 
+.item:has(.description) {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--ward-space-1);
+  padding-block: var(--ward-space-1);
+}
+
+.description {
+  font: var(--ward-type-meta);
+  color: var(--ward-color-muted);
+}
+
 .item:hover,
 .item:focus {
   background-color: var(--ward-color-accentTint);

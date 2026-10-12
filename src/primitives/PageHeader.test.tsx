@@ -1,7 +1,10 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { Btn } from "./Btn";
 import { ruleBody } from "../test-css";
+import { Btn } from "./Btn";
 import { PageHeader } from "./PageHeader";
 
 const crumb = [{ label: "Studio", href: "/studio" }, { label: "Data engineering" }];
@@ -317,5 +320,13 @@ describe("PageHeader says its name once", () => {
     const path = "src/primitives/PageHeader.module.css";
     expect(ruleBody(path, ".meta")).toBe("display: flex;\nflex-wrap: wrap;\nalign-items: center;\ngap: var(--ward-space-2);\nmin-width: 0");
     expect(ruleBody(path, ".chips")).toBe("display: flex;\nflex-wrap: wrap;\ngap: var(--ward-space-2);\nmin-width: 0");
+  });
+});
+
+describe("PageHeader chips beside a long crumb", () => {
+  it("wrap under the crumb in place of shrinking under a rail", () => {
+    const css = join(dirname(fileURLToPath(import.meta.url)), "PageHeader.module.css");
+    expect(ruleBody(css, ".context")).toContain("flex-wrap: wrap");
+    expect(readFileSync(css, "utf8")).toMatch(/\n\.chips \{[^}]*flex-wrap: wrap;/);
   });
 });

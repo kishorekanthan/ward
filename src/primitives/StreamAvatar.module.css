@@ -1,0 +1,19 @@
+/* Provenance: mirrors the Trellis nav options canvas, Option 3 board — `.sav` 22px rounded square with 700 initials; 26px in the folded strip. */
+/* Fill is the stream's chip pair (gated for contrast in both themes), not its id colour; no step falls back to the meta chip. */
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--ward-height-streamAvatar);
+  height: var(--ward-height-streamAvatar);
+  border-radius: var(--ward-radius);
+  background: var(--stream, var(--ward-chip-meta-bg));
+  color: var(--streamText, var(--ward-chip-meta-fg));
+  font: var(--ward-type-streamAvatar);
+}
+
+.avatar[data-size="lg"] {
+  width: var(--ward-height-streamAvatarLg);
+  height: var(--ward-height-streamAvatarLg);
+}

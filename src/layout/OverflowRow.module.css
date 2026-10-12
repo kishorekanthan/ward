@@ -1,0 +1,33 @@
+/* Provenance: not established, no comp block; the 32px fade is Fable visual review VIS-2 (#259). */
+.row {
+  --ward-overflow-fade: var(--ward-space-7);
+  min-width: 0;
+  overflow-x: auto;
+  /* A link scrolled into view stops clear of the fade. */
+  scroll-padding-inline: var(--ward-overflow-fade);
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+/* The scrollbar keeps its room at rest and shows on hover or focus, so the row never jumps. */
+.row:hover,
+.row:focus-visible {
+  scrollbar-color: var(--ward-color-muted) transparent;
+}
+
+.row:focus-visible {
+  outline: var(--ward-focus-ring) solid var(--ward-color-focus);
+  outline-offset: calc(-1 * var(--ward-focus-ring));
+}
+
+.row[data-fade-start] {
+  mask-image: linear-gradient(to right, transparent, currentColor var(--ward-overflow-fade));
+}
+
+.row[data-fade-end] {
+  mask-image: linear-gradient(to left, transparent, currentColor var(--ward-overflow-fade));
+}
+
+.row[data-fade-start][data-fade-end] {
+  mask-image: linear-gradient(to right, transparent, currentColor var(--ward-overflow-fade), currentColor calc(100% - var(--ward-overflow-fade)), transparent);
+}

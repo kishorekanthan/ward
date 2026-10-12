@@ -23,6 +23,21 @@
   background-repeat: no-repeat;
 }
 
+/* Btn's tokens for the same size: height, inline padding, radius; the attribute outranks a Field control's input padding. */
+.trigger[data-ward-size] {
+  padding-block: 0;
+  padding-inline-start: var(--ward-space-3);
+  border-radius: var(--ward-radius);
+}
+
+.trigger[data-ward-size="md"] {
+  height: var(--ward-height-control);
+}
+
+.trigger[data-ward-size="sm"] {
+  height: var(--ward-height-controlSm);
+}
+
 .trigger:disabled {
   background-color: var(--ward-color-surface2);
   color: var(--ward-color-faint);

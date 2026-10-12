@@ -1,6 +1,6 @@
 {
   "name": "@kishorekanthan/ward",
-  "version": "0.18.93",
+  "version": "0.18.99",
   "description": "Shared React component library for Trellis — tokens, primitives, composites, patterns.",
   "license": "MIT",
   "type": "module",

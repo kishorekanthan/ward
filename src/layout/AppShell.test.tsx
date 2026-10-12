@@ -534,13 +534,10 @@ describe("AppShell Primary nav overflow", () => {
     expect(document.querySelector<HTMLElement>('nav[aria-label="Primary"]')?.scrollLeft).toBe(88);
   });
 
-  it("masks each faded edge as wide as the scroll-padding that keeps a revealed link clear of it", () => {
-    expect(rule(".nav")).toContain("scroll-padding-inline: 24px;");
-    expect(rule(".nav[data-fade-start]")).toContain("mask-image: linear-gradient(to right, transparent, currentColor 24px);");
-    expect(rule(".nav[data-fade-end]")).toContain("mask-image: linear-gradient(to left, transparent, currentColor 24px);");
-    expect(rule(".nav[data-fade-start][data-fade-end]")).toContain(
-      "mask-image: linear-gradient(to right, transparent, currentColor 24px, currentColor calc(100% - 24px), transparent);",
-    );
+  it("hands its scroll and fades to the shared OverflowRow", () => {
+    render(navShell("home"));
+    expect(screen.getByRole("navigation", { name: "Primary" }).hasAttribute("data-ward-overflow-row")).toBe(true);
+    expect(rule(".nav")).not.toContain("scroll-padding-inline");
   });
 });
 
@@ -808,5 +805,68 @@ describe("floating sidebar surface", () => {
     const style = { width: list.width, right: list.borderRightWidth || list.getPropertyValue("border-right") };
     removeCss();
     expect(style).toEqual({ width: "auto", right: "0px" });
+  });
+});
+
+describe("AppShell fold owned by the consumer", () => {
+  const original = window.matchMedia;
+  beforeEach(() => {
+    window.localStorage.clear();
+    stubMatchMedia(false);
+  });
+  afterEach(() => {
+    window.matchMedia = original;
+  });
+
+  const told: boolean[] = [];
+  const ownShell = (collapsed: boolean) => (
+    <AppShell
+      sidebar={(folded) => {
+        told.push(folded);
+        return <nav aria-label="Sections">{folded ? "strip" : "full"}</nav>;
+      }}
+      header={<div>Claims</div>}
+      iconRail={railItems}
+      collapsed={collapsed}
+    >
+      <p>page</p>
+    </AppShell>
+  );
+
+  it("narrows the track and hands the folded state to the sidebar, with no Ward panel button or rail", () => {
+    told.length = 0;
+    const { container, rerender } = render(ownShell(true));
+    const app = container.firstElementChild as HTMLElement;
+    expect([app.dataset.collapsed, app.hasAttribute("data-consumer-fold"), told.at(-1)]).toEqual(["true", true, true]);
+    expect(screen.getByRole("navigation", { name: "Sections" }).textContent).toBe("strip");
+    expect([screen.queryByRole("button", { name: /sidebar$/ }), screen.queryByRole("navigation", { name: "Menu" })]).toEqual([null, null]);
+    rerender(ownShell(false));
+    expect([app.dataset.collapsed, screen.getByRole("navigation", { name: "Sections" }).textContent]).toEqual(["false", "full"]);
+  });
+
+  it("ignores Ward's stored fold and its [ key", () => {
+    window.localStorage.setItem("ward:sidebar-collapsed", "true");
+    const { container } = render(ownShell(false));
+    pressBracket();
+    expect([(container.firstElementChild as HTMLElement).dataset.collapsed, window.localStorage.getItem("ward:sidebar-collapsed")]).toEqual(["false", "true"]);
+  });
+
+  it("shows the whole sidebar in the narrow drawer, told it is not folded", () => {
+    told.length = 0;
+    stubMatchMedia(true);
+    const { container } = render(ownShell(true));
+    expect((container.firstElementChild as HTMLElement).dataset.collapsed).toBe("false");
+    fireEvent.click(screen.getByRole("button", { name: "Menu" }));
+    expect(within(screen.getByRole("dialog", { name: "Menu" })).getByRole("navigation", { name: "Sections" }).textContent).toBe("full");
+    expect(told.every((folded) => !folded)).toBe(true);
+  });
+
+  it("lets a folded strip overflow and names a tipped item on hover and keyboard focus only", () => {
+    const folded = '.app[data-collapsed="true"][data-consumer-fold] .side';
+    expect(rule(folded)).toContain("overflow: visible;");
+    expect(css).toContain(folded + " :global([data-ward-tip]:is(:hover, :focus-visible))::after {");
+    expect(rule(folded + " :global([data-ward-tip]:is(:hover, :focus-visible))::after")).toContain("content: attr(data-ward-tip);");
+    expect(css.match(/data-ward-tip\]:is\(/g)).toHaveLength(1);
+    expect(rule(folded + " :global([data-ward-tip])")).toContain("position: relative;");
   });
 });
