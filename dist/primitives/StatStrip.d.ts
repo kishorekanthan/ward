@@ -9,3 +9,6 @@ export declare function StatStrip({ cells, divided }: {
     cells: StatCell[];
     divided?: boolean;
 }): import("react").JSX.Element;
+export declare function StatTiles({ cells }: {
+    cells: StatCell[];
+}): import("react").JSX.Element;

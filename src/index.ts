@@ -102,6 +102,7 @@ export type { RadioOption, RadioProps } from "./primitives/Radio";
 export { SectionHeader } from "./primitives/SectionHeader";
 export type { SectionHeaderProps } from "./primitives/SectionHeader";
 export { StatStrip } from "./primitives/StatStrip";
+export { StatTiles } from "./primitives/StatStrip";
 export type { StatCell } from "./primitives/StatStrip";
 export { Switch } from "./primitives/Switch";
 export type { SwitchProps } from "./primitives/Switch";
@@ -125,6 +126,8 @@ export { OverflowRow } from "./layout/OverflowRow";
 export type { OverflowRowProps } from "./layout/OverflowRow";
 export { StageGrid } from "./layout/StageGrid";
 export type { StageGridProps } from "./layout/StageGrid";
+export { CardGrid } from "./layout/CardGrid";
+export type { CardGridProps } from "./layout/CardGrid";
 export type { BoardLane, BoardScrollerProps } from "./layout/BoardScroller";
 
 export { EmptyState, FilteredEmpty, DeniedState, LoadFailed, StaleStrip, WriteUnavailableStrip } from "./states/States";

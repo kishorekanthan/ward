@@ -220,3 +220,13 @@
     margin-left: 0;
   }
 }
+
+/* Cards share each row in equal columns down to the drawer width, and every card stretches to its row's tallest (#262). */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--ward-width-drawer)), 1fr));
+  gap: var(--ward-gap-adminGrid);
+  align-items: stretch;
+  min-width: 0;
+  max-width: var(--ward-width-max);
+}

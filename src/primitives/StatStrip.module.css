@@ -96,3 +96,16 @@
     gap: var(--ward-space-4) var(--ward-space-6);
   }
 }
+
+/* Tiles: equal columns that fill the row, at most six; a seventh wraps below at the same width (#262). */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(var(--ward-stat-tiles-columns), minmax(0, 1fr));
+  gap: var(--ward-space-4) var(--ward-space-6);
+}
+
+@media (max-width: 767.98px) {
+  .tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
