@@ -75,6 +75,30 @@ describe("Crumb", () => {
   });
 });
 
+describe("Crumb that stops at the page's parent", () => {
+  it("links its last step when it has an href, and marks no step current", () => {
+    render(<Crumb path={[...path.slice(0, 2), { label: "Data engineering", href: "/studio/streams/de" }]} current={false} />);
+    expect(screen.getAllByRole("link").map((a) => a.getAttribute("href"))).toEqual(["/studio", "/studio/streams", "/studio/streams/de"]);
+    expect(document.querySelector("[aria-current]")).toBeNull();
+  });
+
+  it("shows a last step with no href as plain text, not as the current page", () => {
+    render(<Crumb path={path} current={false} />);
+    expect(screen.getAllByRole("link").map((a) => a.textContent)).toEqual(["Studio", "Streams"]);
+    expect(screen.getByTitle("Data engineering").getAttribute("aria-current")).toBeNull();
+  });
+
+  it("passes every step href through safeHref, the last one too", () => {
+    render(<Crumb path={[{ label: "Studio", href: "javascript:alert(1)" }, { label: "Streams", href: "javascript:alert(2)" }]} current={false} />);
+    expect(screen.getAllByRole("link").map((a) => a.getAttribute("href"))).toEqual(["#", "#"]);
+  });
+
+  it("keeps the last step current by default", () => {
+    render(<Crumb path={path} current />);
+    expect(screen.getByTitle("Data engineering").getAttribute("aria-current")).toBe("page");
+  });
+});
+
 describe("Crumb chips on a narrow column", () => {
   it("wrap under the steps in place of running past the column edge", () => {
     expect(ruleBlock(".nav")).toMatch(/flex-wrap:\s*wrap;/);

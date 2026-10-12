@@ -4,6 +4,8 @@ import { ChipProps } from './Chip';
 import { CrumbPath } from './Crumb';
 export type PageHeaderProps = {
     crumb?: CrumbPath[];
+    /** false: the app already trimmed the crumb to the page's parent, so its last step links back. */
+    crumbCurrent?: boolean;
     chips?: ChipProps[];
     title: string;
     consequence?: string;
@@ -21,4 +23,4 @@ export type PageHeaderProps = {
     /** "record" is Board Item 8b's case head: 16px 20px 13px with a 19px title. */
     density?: "page" | "record";
 };
-export declare function PageHeader({ crumb, chips, title, consequence, consequenceHint, actions, more, connection, onOverflow, density }: PageHeaderProps): import("react").JSX.Element;
+export declare function PageHeader({ crumb, crumbCurrent, chips, title, consequence, consequenceHint, actions, more, connection, onOverflow, density }: PageHeaderProps): import("react").JSX.Element;

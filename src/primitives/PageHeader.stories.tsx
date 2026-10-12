@@ -239,3 +239,7 @@ export const ToolbarRow = {
     ],
   },
 };
+
+export const CrumbStopsAtParent = {
+  args: { crumb: [{ label: "Admin", href: "/admin" }, { label: "Credentials", href: "/admin/credentials" }], crumbCurrent: false, title: "Secret storage" },
+};

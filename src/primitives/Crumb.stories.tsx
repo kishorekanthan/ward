@@ -34,3 +34,7 @@ export const SingleStep = {
 export const UnlinkedAncestor = {
   args: { path: [{ label: "Studio" }, { label: "data-eng" }, { label: "FL-229" }] },
 };
+
+export const StopsAtParent = {
+  args: { path: [{ label: "Admin", href: "/admin" }, { label: "Credentials", href: "/admin/credentials" }], current: false },
+};
