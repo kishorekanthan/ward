@@ -2,7 +2,10 @@
   "$source": "Recorded by hand from the acceptance criteria of #209 (TRELLIS-425): 1280 by 720 never scrolls the document; 640px (200% zoom of a 1280px window) and 375px never scroll sideways and fold the sidebar into a drawer.",
   "wide": {
     "story": "layout-appshell--studio-full-page",
-    "viewport": { "width": 1280, "height": 720 },
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
     "documentScrollsDown": false,
     "documentScrollsSideways": false,
     "sidebarInFlow": true,
@@ -12,7 +15,10 @@
   },
   "zoom200": {
     "story": "layout-appshell--studio-full-page",
-    "viewport": { "width": 640, "height": 360 },
+    "viewport": {
+      "width": 640,
+      "height": 360
+    },
     "documentScrollsSideways": false,
     "sidebarInFlow": false,
     "toggleLabel": "Sections",
@@ -29,7 +35,10 @@
   },
   "phone": {
     "story": "layout-appshell--studio-full-page",
-    "viewport": { "width": 375, "height": 667 },
+    "viewport": {
+      "width": 375,
+      "height": 667
+    },
     "documentScrollsSideways": false,
     "sidebarInFlow": false,
     "toggleLabel": "Sections",
@@ -43,5 +52,260 @@
     "tabStaysInDrawer": true,
     "escapeCloses": true,
     "focusBackOnToggle": true
+  },
+  "$source528": "Recorded by hand from the acceptance criteria of #277 (TRELLIS-528): two panels 10px from the window and from each other at 1440 and 1024px, a 60px strip at 768px, a drawer at 375px; the header inside the content panel and clear of the sidebar; both panel rings at 1.5:1 or more on the ground in light and dark; the drawer closes by button, Escape, an outside press and a link; a fill page meets the panel edges and scrolls sideways inside it.",
+  "frame1440Light": {
+    "story": "layout-appshell--app-frame",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "theme": "light",
+    "documentScrollsSideways": false,
+    "contentInset": [
+      10,
+      10
+    ],
+    "panelsApart": true,
+    "headerInPanel": true,
+    "headerClearOfSide": true,
+    "edgesShow": true,
+    "band": "wide",
+    "sideWidth": 236,
+    "sideInset": [
+      10,
+      10
+    ],
+    "panelGap": 10,
+    "toggleLabel": null
+  },
+  "frame1440Dark": {
+    "story": "layout-appshell--app-frame",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "theme": "dark",
+    "documentScrollsSideways": false,
+    "contentInset": [
+      10,
+      10
+    ],
+    "panelsApart": true,
+    "headerInPanel": true,
+    "headerClearOfSide": true,
+    "edgesShow": true,
+    "band": "wide",
+    "sideWidth": 236,
+    "sideInset": [
+      10,
+      10
+    ],
+    "panelGap": 10,
+    "toggleLabel": null
+  },
+  "fill1440": {
+    "story": "layout-appshell--app-frame-fill-page",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "documentScrollsSideways": false,
+    "pageMeetsPanel": true,
+    "pageScrollsSideways": true
+  },
+  "frame1024Light": {
+    "story": "layout-appshell--app-frame",
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "theme": "light",
+    "documentScrollsSideways": false,
+    "contentInset": [
+      10,
+      10
+    ],
+    "panelsApart": true,
+    "headerInPanel": true,
+    "headerClearOfSide": true,
+    "edgesShow": true,
+    "band": "wide",
+    "sideWidth": 236,
+    "sideInset": [
+      10,
+      10
+    ],
+    "panelGap": 10,
+    "toggleLabel": null
+  },
+  "frame1024Dark": {
+    "story": "layout-appshell--app-frame",
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "theme": "dark",
+    "documentScrollsSideways": false,
+    "contentInset": [
+      10,
+      10
+    ],
+    "panelsApart": true,
+    "headerInPanel": true,
+    "headerClearOfSide": true,
+    "edgesShow": true,
+    "band": "wide",
+    "sideWidth": 236,
+    "sideInset": [
+      10,
+      10
+    ],
+    "panelGap": 10,
+    "toggleLabel": null
+  },
+  "fill1024": {
+    "story": "layout-appshell--app-frame-fill-page",
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "documentScrollsSideways": false,
+    "pageMeetsPanel": true,
+    "pageScrollsSideways": true
+  },
+  "frame768Light": {
+    "story": "layout-appshell--app-frame",
+    "viewport": {
+      "width": 768,
+      "height": 1024
+    },
+    "theme": "light",
+    "documentScrollsSideways": false,
+    "contentInset": [
+      10,
+      10
+    ],
+    "panelsApart": true,
+    "headerInPanel": true,
+    "headerClearOfSide": true,
+    "edgesShow": true,
+    "band": "medium",
+    "sideWidth": 60,
+    "sideInset": [
+      10,
+      10
+    ],
+    "panelGap": 10,
+    "toggleLabel": null
+  },
+  "frame768Dark": {
+    "story": "layout-appshell--app-frame",
+    "viewport": {
+      "width": 768,
+      "height": 1024
+    },
+    "theme": "dark",
+    "documentScrollsSideways": false,
+    "contentInset": [
+      10,
+      10
+    ],
+    "panelsApart": true,
+    "headerInPanel": true,
+    "headerClearOfSide": true,
+    "edgesShow": true,
+    "band": "medium",
+    "sideWidth": 60,
+    "sideInset": [
+      10,
+      10
+    ],
+    "panelGap": 10,
+    "toggleLabel": null
+  },
+  "fill768": {
+    "story": "layout-appshell--app-frame-fill-page",
+    "viewport": {
+      "width": 768,
+      "height": 1024
+    },
+    "documentScrollsSideways": false,
+    "pageMeetsPanel": true,
+    "pageScrollsSideways": true
+  },
+  "frame375Light": {
+    "story": "layout-appshell--app-frame",
+    "viewport": {
+      "width": 375,
+      "height": 667
+    },
+    "theme": "light",
+    "documentScrollsSideways": false,
+    "contentInset": [
+      10,
+      10
+    ],
+    "panelsApart": true,
+    "headerInPanel": true,
+    "headerClearOfSide": true,
+    "edgesShow": true,
+    "band": "phone",
+    "sideWidth": null,
+    "sideInset": null,
+    "panelGap": null,
+    "toggleLabel": "Menu",
+    "drawerOpens": true,
+    "drawerNamed": "Menu",
+    "focusInDrawer": true,
+    "drawerWithinViewport": true,
+    "openScrollsSideways": false,
+    "tabStaysInDrawer": true,
+    "escapeCloses": true,
+    "focusBackOnToggle": true,
+    "outsideCloses": true,
+    "linkCloses": true
+  },
+  "frame375Dark": {
+    "story": "layout-appshell--app-frame",
+    "viewport": {
+      "width": 375,
+      "height": 667
+    },
+    "theme": "dark",
+    "documentScrollsSideways": false,
+    "contentInset": [
+      10,
+      10
+    ],
+    "panelsApart": true,
+    "headerInPanel": true,
+    "headerClearOfSide": true,
+    "edgesShow": true,
+    "band": "phone",
+    "sideWidth": null,
+    "sideInset": null,
+    "panelGap": null,
+    "toggleLabel": "Menu",
+    "drawerOpens": true,
+    "drawerNamed": "Menu",
+    "focusInDrawer": true,
+    "drawerWithinViewport": true,
+    "openScrollsSideways": false,
+    "tabStaysInDrawer": true,
+    "escapeCloses": true,
+    "focusBackOnToggle": true,
+    "outsideCloses": true,
+    "linkCloses": true
+  },
+  "fill375": {
+    "story": "layout-appshell--app-frame-fill-page",
+    "viewport": {
+      "width": 375,
+      "height": 667
+    },
+    "documentScrollsSideways": false,
+    "pageMeetsPanel": true,
+    "pageScrollsSideways": true
   }
 }

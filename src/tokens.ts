@@ -24,6 +24,7 @@ export const v = {
     line: 'var(--ward-color-line)',
     line2: 'var(--ward-color-line2)',
     edge: 'var(--ward-color-edge)',
+    panelEdge: 'var(--ward-color-panelEdge)',
     text: 'var(--ward-color-text)',
     muted: 'var(--ward-color-muted)',
     faint: 'var(--ward-color-faint)',

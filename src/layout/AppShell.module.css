@@ -5,8 +5,12 @@
   grid-template-columns: var(--ward-width-sidebar) 1fr var(--ward-width-rail);
   /* Exactly the viewport tall: each column scrolls inside itself, so the document never scrolls (#209). */
   grid-template-rows: minmax(0, 1fr);
+  /* Both panels sit one inset from the window and from each other (TRELLIS-528). */
+  column-gap: var(--ward-gap-sideInset);
+  box-sizing: border-box;
   height: 100dvh;
-  padding-inline: calc((100% - var(--ward-width-maxWide)) / 2);
+  padding-block: var(--ward-gap-sideInset);
+  padding-inline: max(var(--ward-gap-sideInset), calc((100% - var(--ward-width-maxWide)) / 2));
   background: var(--ward-color-bg);
   color: var(--ward-color-text);
 }
@@ -26,17 +30,16 @@
 }
 
 /* A floating panel inset from the window edge (the .dD look): a hairline ring on all four sides, never a one-side rule. */
-/* radiusCard and the line ring stand in for the panel radius and card shadow, which Ward does not have yet. */
+/* panelEdge, not line, so the ring shows on the light ground (TRELLIS-528). */
 .side {
   display: flex;
   flex-direction: column;
   min-height: 0;
-  margin: var(--ward-gap-sideInset) 0 var(--ward-gap-sideInset) var(--ward-gap-sideInset);
   overflow-y: auto;
   scroll-padding-block: calc(var(--ward-focus-ring) + var(--ward-focus-offset));
   border-radius: var(--ward-radius-card);
   background: var(--ward-color-surface);
-  box-shadow: 0 0 0 var(--ward-border) var(--ward-color-line);
+  box-shadow: 0 0 0 var(--ward-border) var(--ward-color-panelEdge);
 }
 
 .sideTop {
@@ -137,12 +140,17 @@
 }
 
 /* min-width: 0 is the comp's own; it stops a long unbroken string widening the 1fr track. */
+/* The content panel: the sidebar's twin, holding the header and the page; it clips the page to its rounded corners. */
 .main {
   display: flex;
   flex-direction: column;
   min-width: 0;
   min-height: 0;
+  overflow: clip;
   overflow-wrap: anywhere;
+  border-radius: var(--ward-radius-card);
+  background: var(--ward-color-surface);
+  box-shadow: 0 0 0 var(--ward-border) var(--ward-color-panelEdge);
 }
 
 .rail {
@@ -161,6 +169,20 @@
   min-height: 0;
   overflow-y: auto;
   padding: var(--ward-pad-page);
+}
+
+/* The page scroller takes focus; the content panel clips at its edge, so its ring is drawn inside. */
+.page:focus-visible {
+  outline-offset: calc(-1 * var(--ward-focus-ring));
+}
+
+/* A fill page (a board) meets the panel edges and scrolls sideways inside the panel when wider. */
+.page[data-fill] {
+  --ward-page-inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  padding: 0;
 }
 
 /* Narrow: the toggle opens the sidebar drawer from the start of the header row. */
@@ -186,21 +208,32 @@
   flex-direction: column;
 }
 
-/* Below railStack three columns cannot coexist: one column, the rail under the page, the sidebar in a drawer.
+/* A phone: one column, the rail under the page, the sidebar in a drawer.
    The document scrolls again, since nested scrollers at phone width or high zoom leave too little to read. */
-@media (max-width: 791.98px) {
+@media (max-width: 767.98px) {
   .app,
   .app[data-rail="false"] {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: none;
+    row-gap: var(--ward-gap-sideInset);
     height: auto;
     min-height: 100dvh;
   }
 
   .side,
   .rail,
-  .page {
+  .page,
+  .main {
     overflow-y: visible;
+  }
+
+  .page[data-fill] {
+    overflow-x: auto;
+  }
+
+  /* The content panel reaches the bottom of a short page, as it does on a wide screen. */
+  .main {
+    min-height: calc(100dvh - 2 * var(--ward-gap-sideInset));
   }
 
   /* Only drawn before script runs; the drawer then takes the sidebar out of the grid. */

@@ -20,12 +20,14 @@ export type StudioShellProps = {
     children: ReactNode;
     /** The 316px right column; omitted or null draws no third track. */
     rail?: ReactNode;
-    /** Below 792px the sidebar folds into a drawer: this labels its toggle and titles it, and names the collapsed rail. */
+    /** Below 768px the sidebar folds into a drawer: this labels its toggle and titles it, and names the collapsed rail. */
     sidebarLabel?: string;
-    /** Given, a panel button at the top of the sidebar collapses it to a 60px rail of these items; each viewer's choice is kept. */
+    /** The folded strip shows these items; without them a function sidebar draws its own strip. */
     iconRail?: AppShellRailItem[];
-    /** Given, the consumer owns the fold: true narrows the track to the icon rail on a wide screen, and Ward draws no panel button or rail. */
+    /** Given, the consumer owns the fold: true narrows the track to the 60px strip, and Ward draws no panel button or rail. */
     collapsed?: boolean;
+    /** The page fills the content panel edge to edge, with no padding, and scrolls both ways inside it (a board). */
+    pageFill?: boolean;
 };
 export type TopBarShellProps = {
     destinations?: AppShellDestination[];

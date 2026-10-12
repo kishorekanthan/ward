@@ -90,7 +90,7 @@ export const TopBarPhoneWidthCurrentPastEdge = {
 };
 
 // More links and more text than a 1280 by 720 window holds: the sidebar and page scroll inside a frame exactly the viewport tall.
-// Below 792px the sidebar folds into a drawer behind the Sections toggle. One copy, so the frame measures the real viewport.
+// Below 768px the sidebar folds into a drawer behind the Sections toggle. One copy, so the frame measures the real viewport.
 const manyDestinations = Array.from({ length: 24 }, (_, i) => ({ id: `stream-${i + 1}`, label: `Stream ${i + 1}`, href: `#/streams/${i + 1}` }));
 
 export const StudioFullPage = {
@@ -155,7 +155,7 @@ export const SidebarCollapsed = {
   args: floatingArgs,
 };
 
-// Below 792px the collapse does not apply: the Menu toggle opens the whole sidebar in a drawer.
+// Below 768px the collapse does not apply: the Menu toggle opens the whole sidebar in a drawer.
 export const SidebarNarrow = {
   decorators: [bothThemes, storedFold(true)],
   args: floatingArgs,
@@ -193,4 +193,25 @@ export const DialogWithSelect = {
       </Overlay>
     </AppShell>
   ),
+};
+
+// Plug and play (TRELLIS-528): only the three slots. Ward draws both panels, folds the sidebar to a strip below 1024px and into a drawer below 768px.
+export const AppFrame = {
+  decorators: [fullPage],
+  args: {
+    sidebar: <Sidebar brand="Trellis" label="Streams" destinations={manyDestinations.slice(0, 6)} active="stream-3" />,
+    header,
+    children: Array.from({ length: 12 }, (_, i) => <p key={i}>Paragraph {i + 1} of the page in the content panel.</p>),
+  },
+};
+
+// A wide page such as a board: it meets the content panel's edges and scrolls sideways inside the panel.
+export const AppFrameFillPage = {
+  decorators: [fullPage],
+  args: {
+    sidebar: <Sidebar brand="Trellis" label="Streams" destinations={manyDestinations.slice(0, 6)} active="stream-3" />,
+    header,
+    pageFill: true,
+    children: <div style={{ display: "flex", gap: "var(--ward-gap-lane)", flex: 1, minWidth: "calc(6 * var(--ward-width-rail))", background: "var(--ward-color-laneTint)" }}>Six lanes, wider than the panel</div>,
+  },
 };
