@@ -1,6 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { StatStrip } from "./StatStrip";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { StatStrip, StatTiles } from "./StatStrip";
+
+const stripCss = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "StatStrip.module.css"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
 
 const cells = [
   { value: "14", label: "In flight" },
@@ -9,7 +14,7 @@ const cells = [
 
 describe("StatStrip", () => {
   it("refuses a strip outside two to four cells", () => {
-    expect(() => render(<StatStrip cells={cells.slice(0, 1)} />)).toThrow(/takes two to four/);
+    expect(() => render(<StatStrip cells={cells.slice(0, 1)} />)).toThrow(/takes 2 to 4/);
   });
 
   it("refuses a second accent — one cell carries the argument", () => {
@@ -65,7 +70,7 @@ describe("StatStrip divided", () => {
   it("keeps the description-list semantics and both guards", () => {
     render(<StatStrip cells={cells} divided />);
     expect(screen.getByText("3.4 d").tagName).toBe("DD");
-    expect(() => render(<StatStrip cells={cells.slice(0, 1)} divided />)).toThrow(/takes two to four/);
+    expect(() => render(<StatStrip cells={cells.slice(0, 1)} divided />)).toThrow(/takes 2 to 4/);
   });
 });
 
@@ -82,5 +87,34 @@ describe("StatStrip hints", () => {
   it("adds no title without a hint", () => {
     const { container } = render(<StatStrip cells={cells} />);
     expect(container.querySelector("[title]")).toBeNull();
+  });
+});
+
+const figures = (n: number) => Array.from({ length: n }, (_, i) => ({ value: String(i), label: `Figure ${i}` }));
+
+describe("StatTiles", () => {
+  it("refuses no figures and more than twelve", () => {
+    expect(() => render(<StatTiles cells={[]} />)).toThrow(/StatTiles: 0 cells/);
+    expect(() => render(<StatTiles cells={figures(13)} />)).toThrow(/StatTiles: 13 cells/);
+  });
+
+  it("refuses a second accent", () => {
+    const two = [{ value: "1", label: "A", accent: "amber" as const }, { value: "2", label: "B", accent: "blue" as const }];
+    expect(() => render(<StatTiles cells={two} />)).toThrow(/only the cell carrying the argument/);
+  });
+
+  it("sets one column a figure up to six, then six", () => {
+    const columns = (n: number) => (render(<StatTiles cells={figures(n)} />).container.querySelector("dl") as HTMLElement).style.getPropertyValue("--ward-stat-tiles-columns");
+    expect([columns(1), columns(5), columns(6), columns(7), columns(12)]).toEqual(["1", "5", "6", "6", "6"]);
+  });
+
+  it("links a figure with an href and names the link by label and value", () => {
+    render(<StatTiles cells={[{ value: "4", label: "Gates waiting", href: "#/board" }]} />);
+    expect(screen.getByRole("link", { name: "Gates waiting: 4" }).getAttribute("href")).toBe("#/board");
+  });
+
+  it("keeps two tiles a row on a phone, and the column count from the figures above it", () => {
+    expect(stripCss).toMatch(/@media \(max-width: 767\.98px\) \{\s*\.tiles \{\s*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\);/);
+    expect(stripCss).toMatch(/\.tiles \{[^}]*grid-template-columns: repeat\(var\(--ward-stat-tiles-columns\), minmax\(0, 1fr\)\);/);
   });
 });

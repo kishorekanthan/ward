@@ -93,7 +93,9 @@
 }
 
 /* Facts: no comp draws them (3c's card has none); built from the card's own tokens. */
+/* The facts sit on the card's foot, so a row of stretched cards keeps them on one line (#262). */
 .facts {
+  margin-block-start: auto;
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
   gap: var(--ward-space-1) var(--ward-space-2);
