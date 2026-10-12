@@ -37,7 +37,8 @@
   margin: 0;
   overflow-y: auto;
   min-width: max(var(--ward-anchor-width), calc(var(--ward-space-7) * 5));
-  max-width: var(--ward-width-drawer);
+  /* Never wider than the screen less a gutter each side, so described rows wrap on a phone. */
+  max-width: min(var(--ward-width-drawer), calc(100vw - var(--ward-space-3) * 2));
   width: max-content;
   padding: var(--ward-space-1);
   color: var(--ward-color-muted);

@@ -402,5 +402,22 @@
     "checkboxLabelsShown": 0,
     "wordsSplit": 0,
     "pageScrollsSideways": false
+  },
+  "menuDescribed": {
+    "story": "primitives-menu--phone-width-described",
+    "rows": 3,
+    "panelInView": true,
+    "panelUnderDrawerWidth": true,
+    "rowsWhole": true,
+    "pageScrollsSideways": false
+  },
+  "menuDescribedWide": {
+    "story": "primitives-menu--phone-width-described",
+    "width": 1280,
+    "rows": 3,
+    "panelInView": true,
+    "panelUnderDrawerWidth": true,
+    "rowsWhole": true,
+    "pageScrollsSideways": false
   }
 }
