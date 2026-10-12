@@ -449,3 +449,56 @@ describe("Described items", () => {
     expect(declared(".description", "font")).toBe("var(--ward-type-meta)");
   });
 });
+
+const streams: MenuItem[] = [
+  { label: "Data Engineering", href: "#/s/de" },
+  { label: "Demo", href: "#/s/demo", current: true },
+  { label: "Finance", href: "#/s/finance" },
+];
+
+describe("Current item", () => {
+  it("marks only the current item, with a check mark and aria-current", () => {
+    render(<NewRequest entries={streams} defaultOpen />);
+    const demo = screen.getByRole("menuitem", { name: "Demo" });
+    expect(demo.getAttribute("aria-current")).toBe("true");
+    expect(demo.querySelectorAll("svg[aria-hidden='true']")).toHaveLength(1);
+    for (const name of ["Data Engineering", "Finance"]) {
+      const other = screen.getByRole("menuitem", { name });
+      expect(other.hasAttribute("aria-current")).toBe(false);
+      expect(other.querySelector("svg")).toBeNull();
+    }
+  });
+
+  it("opens on the current item", () => {
+    render(<NewRequest entries={streams} />);
+    openWith("Enter");
+    expect(focusedText()).toBe("Demo");
+  });
+
+  it("opens on the first enabled item when the current one is disabled", () => {
+    render(<NewRequest entries={streams.map((item) => (item.current ? { ...item, disabled: true } : item))} />);
+    openWith("Enter");
+    expect(focusedText()).toBe("Data Engineering");
+  });
+
+  it("indents every row by the check mark's space, so labels line up", () => {
+    render(<NewRequest entries={streams} defaultOpen />);
+    const classes = screen.getAllByRole("menuitem").map((item) => item.className.split(" "));
+    expect(classes.every((each) => each.length === 2 && each[1] === classes[0][1])).toBe(true);
+    expect(declared(".marked", "padding-inline-start")).toBe("calc(var(--ward-space-2) + var(--ward-space-4) + var(--ward-space-1))");
+    expect(declared(".check", "inset-inline-start")).toBe("var(--ward-space-2)");
+  });
+
+  it("leaves a menu with no current item unindented", () => {
+    render(<NewRequest defaultOpen />);
+    expect(screen.getAllByRole("menuitem").every((item) => item.className.split(" ").length === 1)).toBe(true);
+    expect(screen.getAllByRole("menuitem").some((item) => item.hasAttribute("aria-current"))).toBe(false);
+    expect(screen.getByRole("menu").querySelector("svg")).toBeNull();
+  });
+
+  it("draws the check at 3:1 on the panel and on a hovered row in both themes", () => {
+    const ratios = [tokens.color, tokens.dark].flatMap((theme) => [contrast(theme.sageInk, theme.surface), contrast(theme.sageInk, theme.accentTint)]);
+    expect(ratios.every((ratio) => ratio >= 3)).toBe(true);
+    expect(declared(".check", "color")).toBe("var(--ward-color-sageInk)");
+  });
+});

@@ -29,6 +29,8 @@ const ROLE_USES: Record<Reason, string[]> = {
     "layout/Sidebar.module.css .root nav a[aria-current=\"page\"] .label sageInk",
     "layout/AppShell.module.css .railItem[aria-current=\"page\"] sageTint",
     "layout/AppShell.module.css .railItem[aria-current=\"page\"] sageInk",
+    // ward#282: the check mark on a menu's current choice.
+    "primitives/Menu.module.css .check sageInk",
   ],
   owed: ["primitives/Marker.tsx owed: \"var(--ward-color-peach)\", peach"],
 };
