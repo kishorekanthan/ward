@@ -467,8 +467,23 @@ function probeThemeSamples() {
   return { panels: panels.length, controlsInView: panels.every(within), plainScreenText: !/—|\b[A-Z][A-Z0-9]+-\d+\b|developer|TODO/.test(text), pageScrollsSideways: document.documentElement.scrollWidth > innerWidth };
 }
 
+// An open described menu stays on screen and under the drawer width, and each row wraps its text inside itself.
+async function probeDescribedMenu() {
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const panel = document.querySelector('[role="menu"]').parentElement;
+  const r = panel.getBoundingClientRect();
+  const rows = Array.from(panel.querySelectorAll('[role="menuitem"]'));
+  return {
+    rows: rows.length,
+    panelInView: r.left >= 0 && r.right <= innerWidth,
+    panelUnderDrawerWidth: r.width <= 430.5,
+    rowsWhole: rows.every((row) => row.scrollWidth <= row.clientWidth + 0.5),
+    pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+  };
+}
+
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { themePresets: probeThemeSamples, themeDensities: probeThemeSamples, tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, drawerActions: probeDrawerActions, consoleFoot: probeConsoleFoot, workCardLongTitle: probeLongText, workCardLongTitleWide: probeLongText, sessionLongTitle: probeLongText, sessionLongTitleWide: probeLongText, sessionTableLongTitle: probeLongText, sessionTableLongTitleWide: probeLongText, caseHeaderLongTitle: probeLongText, caseHeaderLongTitleWide: probeLongText, caseHeaderLongCrumb: probeLongCrumb, caseHeaderLongCrumbWide: probeLongCrumb, streamChain: probeStreamChain, streamChainWide: probeStreamChain, streamChainFour: probeStreamChain, streamSummary: probeStreamChain, roleMatrixRows: probeRoleMatrixRows, roleMatrixRowsWide: probeRoleMatrixRows, gridStacked: probeStackedGrid, gridStackedWide: probeStackedGrid };
+const PROBES = { themePresets: probeThemeSamples, themeDensities: probeThemeSamples, tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, drawerActions: probeDrawerActions, consoleFoot: probeConsoleFoot, workCardLongTitle: probeLongText, workCardLongTitleWide: probeLongText, sessionLongTitle: probeLongText, sessionLongTitleWide: probeLongText, sessionTableLongTitle: probeLongText, sessionTableLongTitleWide: probeLongText, caseHeaderLongTitle: probeLongText, caseHeaderLongTitleWide: probeLongText, caseHeaderLongCrumb: probeLongCrumb, caseHeaderLongCrumbWide: probeLongCrumb, streamChain: probeStreamChain, streamChainWide: probeStreamChain, streamChainFour: probeStreamChain, streamSummary: probeStreamChain, roleMatrixRows: probeRoleMatrixRows, roleMatrixRowsWide: probeRoleMatrixRows, gridStacked: probeStackedGrid, gridStackedWide: probeStackedGrid, menuDescribed: probeDescribedMenu, menuDescribedWide: probeDescribedMenu };
 
 async function measure(page, base, key) {
   const { story, label, longLabel, width = golden.viewport.width } = golden[key];

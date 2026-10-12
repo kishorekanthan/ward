@@ -29,6 +29,12 @@ const describedTypes: MenuEntry[] = [
   { label: "Ask a question", onSelect: chosen },
 ];
 
+const longDescribedTypes: MenuEntry[] = [
+  { label: "Bring in new data", description: "We connect a new source and load it on a schedule. For example: daily sales from the shop tills.", onSelect: chosen },
+  { label: "Change data we already load", description: "We add, fix or remove fields in a feed you already have. For example: add the store region to sales.", onSelect: chosen },
+  { label: "Not sure? Describe it", description: "Tell us what you need. We pick the type, and you can change it.", onSelect: chosen },
+];
+
 // Room below the button keeps an open menu inside its own themed copy.
 function Roomy({ children, end = false }: { children: ReactNode; end?: boolean }) {
   return (
@@ -77,6 +83,17 @@ export const DescribedItems = {
     <Roomy>
       <MenuButton label="New request" defaultOpen>
         <Menu entries={describedTypes} />
+      </MenuButton>
+    </Roomy>
+  ),
+};
+
+// Long descriptions at phone width, on an end-aligned menu whose button sits at the start, as a page header lays it out.
+export const PhoneWidthDescribed = {
+  render: () => (
+    <Roomy>
+      <MenuButton label="New request" defaultOpen>
+        <Menu entries={longDescribedTypes} align="end" />
       </MenuButton>
     </Roomy>
   ),
