@@ -1,5 +1,6 @@
 import { bothThemes } from "../../.storybook/bothThemes";
 import type { ReactNode } from "react";
+import { Checkbox } from "./Checkbox";
 import { Grid, type GridColumn } from "./Grid";
 
 type Item = { id: string; key: string; title: string; owner: string; cost: string };
@@ -55,4 +56,41 @@ export const LockedRow = {
 
 export const Empty = {
   args: { ...base, rows: [], empty: "No items match the current filter." },
+};
+
+type Connection = { id: string; port: string; adapter: string; owner: string; health: string; approver: boolean };
+
+const connectionColumns: GridColumn[] = [
+  { key: "id", header: "Connection" },
+  { key: "port", header: "Port" },
+  { key: "adapter", header: "Adapter", mono: true },
+  { key: "owner", header: "Owner", dropPriority: 1 },
+  { key: "health", header: "Health" },
+  { key: "approver", header: "Approver sees it" },
+];
+
+const connections: Connection[] = [
+  { id: "tracker", port: "Work tracker", adapter: "jira-cloud", owner: "Delivery team", health: "Working", approver: true },
+  { id: "codehost", port: "Code host", adapter: "github", owner: "Platform team", health: "Not tested", approver: false },
+  { id: "databricks", port: "Data platform", adapter: "databricks-sql", owner: "Data engineering", health: "Failed", approver: true },
+];
+
+function connectionCell(row: Connection, key: string): ReactNode {
+  if (key === "approver") return <Checkbox label="Approver sees it" labelHidden checked={row.approver} onChange={() => {}} />;
+  return row[key as Exclude<keyof Connection, "approver">];
+}
+
+// At 375px each row is a card of header and value lines; at 1280px the same grid is a table.
+export const Stacked = {
+  render: () => (
+    <Grid<Connection>
+      label="Connections"
+      columns={connectionColumns}
+      rows={connections}
+      rowId={(row) => row.id}
+      renderCell={connectionCell}
+      empty="No connections yet."
+      narrow="stack"
+    />
+  ),
 };

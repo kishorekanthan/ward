@@ -8,5 +8,6 @@ export type CheckboxProps = {
     describedBy?: string;
     variant?: "cell";
     sample?: string;
+    labelHidden?: boolean;
 };
 export declare function Checkbox(props: CheckboxProps): import("react").JSX.Element;

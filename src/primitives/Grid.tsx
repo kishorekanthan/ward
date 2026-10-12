@@ -22,6 +22,8 @@ export type GridProps<Row> = {
   sort?: { key: string; direction: "asc" | "desc" };
   onSort?: (key: string) => void;
   empty: ReactNode;
+  // stack: under the narrow container step (472px) of its own width each row becomes a card of header and value lines; a cell holds one value.
+  narrow?: "stack";
 };
 
 const ARIA_SORT = { asc: "ascending", desc: "descending" } as const;
@@ -69,7 +71,14 @@ function BodyRow<Row>({ row, props }: { row: Row; props: GridProps<Row> }) {
       inert={locked ? true : undefined}
     >
       {props.columns.map((column) => (
-        <td key={column.key} className={s.td} data-align={column.align} data-mono={column.mono} data-drop={column.dropPriority}>
+        <td
+          key={column.key}
+          className={s.td}
+          data-align={column.align}
+          data-mono={column.mono}
+          data-drop={column.dropPriority}
+          data-label={props.narrow ? column.header : undefined}
+        >
           {props.renderCell(row, column.key)}
         </td>
       ))}
@@ -88,11 +97,12 @@ export function Grid<Row>({
   sort,
   onSort,
   empty,
+  narrow,
 }: GridProps<Row>) {
   if (rows.length === 0) return <div className={s.empty}>{empty}</div>;
   // The frame is a size container, so columns drop on the width the grid actually gets rather than the viewport's.
   return (
-    <div className={s.frame}>
+    <div className={s.frame} data-narrow={narrow}>
       <table className={s.table} aria-label={label}>
         <thead>
           <tr className={s.head}>
@@ -102,7 +112,7 @@ export function Grid<Row>({
           </tr>
         </thead>
         <tbody>
-          {rows.map((row) => <BodyRow key={rowId(row)} row={row} props={{ label, columns, rows, rowId, renderCell, selectedId, lockedIds, sort, onSort, empty }} />)}
+          {rows.map((row) => <BodyRow key={rowId(row)} row={row} props={{ label, columns, rows, rowId, renderCell, selectedId, lockedIds, sort, onSort, empty, narrow }} />)}
         </tbody>
       </table>
     </div>

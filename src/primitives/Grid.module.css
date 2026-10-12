@@ -86,3 +86,46 @@
 .row[data-locked="true"] .td {
   color: var(--ward-color-muted);
 }
+
+/* Stack: last, so a stacked card shows the columns the drop rules above would hide. */
+@container (max-width: 471.98px) {
+  [data-narrow="stack"] > .table,
+  [data-narrow="stack"] tbody,
+  [data-narrow="stack"] .row {
+    display: block;
+  }
+
+  [data-narrow="stack"] thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  [data-narrow="stack"] .row {
+    padding-block: var(--ward-space-2);
+    border-bottom: var(--ward-border) solid var(--ward-color-line);
+  }
+
+  [data-narrow="stack"] .td {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    column-gap: var(--ward-space-3);
+    align-items: baseline;
+    padding-block: var(--ward-space-1);
+    border-bottom: none;
+    text-align: left;
+    white-space: normal;
+  }
+
+  [data-narrow="stack"] .td::before {
+    content: attr(data-label);
+    font: var(--ward-type-micro);
+    letter-spacing: var(--ward-type-micro-tracking);
+    text-transform: var(--ward-type-micro-transform);
+    color: var(--ward-color-muted);
+  }
+}

@@ -416,6 +416,45 @@ function probeRoleMatrixRows() {
   };
 }
 
+// A stacked Grid (#265): one card per row below 600px, each line a header beside its value, and no word split across lines.
+function probeStackedGrid() {
+  const table = document.querySelector('#storybook-root [role="table"], #storybook-root table');
+  const rows = Array.from(table.querySelectorAll("tbody tr"));
+  const cells = rows.flatMap((row) => Array.from(row.cells));
+  const words = (node) => Array.from(node.textContent.matchAll(/\S+/g), (m) => [m.index, m.index + m[0].length]);
+  const split = (text) => words(text).filter(([start, end]) => {
+    const range = document.createRange();
+    range.setStart(text, start);
+    range.setEnd(text, end);
+    return new Set(Array.from(range.getClientRects()).filter((r) => r.width > 0).map((r) => Math.round(r.top))).size > 1;
+  }).length;
+  const textsOf = (cell) => {
+    const walker = document.createTreeWalker(cell, NodeFilter.SHOW_TEXT);
+    const found = [];
+    while (walker.nextNode()) found.push(walker.currentNode);
+    return found;
+  };
+  const texts = cells.flatMap(textsOf);
+  // A value's lines are the distinct tops of its shown text; a hidden label is 1px and does not count.
+  const valueLines = (cell) => new Set(textsOf(cell).flatMap((text) => {
+    const range = document.createRange();
+    range.selectNodeContents(text);
+    return Array.from(range.getClientRects()).filter((r) => r.width > 1).map((r) => Math.round(r.top));
+  })).size;
+  const head = table.querySelector("thead").getBoundingClientRect();
+  return {
+    rows: rows.length,
+    cardsStacked: rows.filter((row) => getComputedStyle(row).display === "block").length,
+    headShown: head.width > 1 && head.height > 1,
+    labelledCells: cells.filter((cell) => getComputedStyle(cell, "::before").content.replace(/"/g, "") === cell.dataset.label).length,
+    shownCells: cells.filter((cell) => cell.getBoundingClientRect().height > 0).length,
+    mostValueLines: Math.max(...cells.map(valueLines)),
+    checkboxLabelsShown: Array.from(table.querySelectorAll("[data-ward-checkbox] label")).filter((label) => label.getBoundingClientRect().width > 1).length,
+    wordsSplit: texts.reduce((sum, text) => sum + split(text), 0),
+    pageScrollsSideways: document.documentElement.scrollWidth > innerWidth,
+  };
+}
+
 // Theme comparisons must keep every control inside its panel and the phone viewport.
 function probeThemeSamples() {
   const panels = Array.from(document.querySelectorAll("#storybook-root section"));
@@ -429,7 +468,7 @@ function probeThemeSamples() {
 }
 
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { themePresets: probeThemeSamples, themeDensities: probeThemeSamples, tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, drawerActions: probeDrawerActions, consoleFoot: probeConsoleFoot, workCardLongTitle: probeLongText, workCardLongTitleWide: probeLongText, sessionLongTitle: probeLongText, sessionLongTitleWide: probeLongText, sessionTableLongTitle: probeLongText, sessionTableLongTitleWide: probeLongText, caseHeaderLongTitle: probeLongText, caseHeaderLongTitleWide: probeLongText, caseHeaderLongCrumb: probeLongCrumb, caseHeaderLongCrumbWide: probeLongCrumb, streamChain: probeStreamChain, streamChainWide: probeStreamChain, streamChainFour: probeStreamChain, streamSummary: probeStreamChain, roleMatrixRows: probeRoleMatrixRows, roleMatrixRowsWide: probeRoleMatrixRows };
+const PROBES = { themePresets: probeThemeSamples, themeDensities: probeThemeSamples, tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, drawerActions: probeDrawerActions, consoleFoot: probeConsoleFoot, workCardLongTitle: probeLongText, workCardLongTitleWide: probeLongText, sessionLongTitle: probeLongText, sessionLongTitleWide: probeLongText, sessionTableLongTitle: probeLongText, sessionTableLongTitleWide: probeLongText, caseHeaderLongTitle: probeLongText, caseHeaderLongTitleWide: probeLongText, caseHeaderLongCrumb: probeLongCrumb, caseHeaderLongCrumbWide: probeLongCrumb, streamChain: probeStreamChain, streamChainWide: probeStreamChain, streamChainFour: probeStreamChain, streamSummary: probeStreamChain, roleMatrixRows: probeRoleMatrixRows, roleMatrixRowsWide: probeRoleMatrixRows, gridStacked: probeStackedGrid, gridStackedWide: probeStackedGrid };
 
 async function measure(page, base, key) {
   const { story, label, longLabel, width = golden.viewport.width } = golden[key];

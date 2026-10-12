@@ -36,4 +36,12 @@ describe("Checkbox", () => {
     expect(screen.getByText("T-012")).not.toBeNull();
     expect(screen.getByRole("checkbox", { name: "Item key" })).not.toBeNull();
   });
+
+  it("keeps a hidden label as the box's name but not on screen", () => {
+    render(<Checkbox label="Approver sees it" labelHidden checked onChange={() => {}} />);
+    const label = screen.getByText("Approver sees it");
+    expect(screen.getByRole("checkbox", { name: "Approver sees it" })).not.toBeNull();
+    expect(label.className).toMatch(/labelHidden/);
+    expect(label.className).not.toMatch(/(^|\s)_?label(_|\s|$)/);
+  });
 });

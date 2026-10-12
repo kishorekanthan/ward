@@ -22,5 +22,6 @@ export type GridProps<Row> = {
     };
     onSort?: (key: string) => void;
     empty: ReactNode;
+    narrow?: "stack";
 };
-export declare function Grid<Row>({ label, columns, rows, rowId, renderCell, selectedId, lockedIds, sort, onSort, empty, }: GridProps<Row>): import("react").JSX.Element;
+export declare function Grid<Row>({ label, columns, rows, rowId, renderCell, selectedId, lockedIds, sort, onSort, empty, narrow, }: GridProps<Row>): import("react").JSX.Element;

@@ -98,7 +98,9 @@ describe("soft surfaces against the chosen look (#217)", () => {
   it("puts no outer border on a card or a lane and no column rule between lanes, whatever rule draws them", () => {
     expect(borders(CARD)).toEqual([]);
     expect(borders(COLUMN)).toEqual([]);
-    expect(borders(GRID)).toEqual(["border-bottom: var(--ward-border) solid var(--ward-color-line)"]);
+    // A stacked Grid moves its row rule from the cells to the row: still one row rule, never a column rule.
+    const rowRule = "border-bottom: var(--ward-border) solid var(--ward-color-line)";
+    expect(borders(GRID)).toEqual([rowRule, rowRule, "border-bottom: none"]);
     for (const selector of [".scroller", '.frame[data-inset="board"] .scroller', '.frame[data-inset="board"] .scroller > *']) {
       expect(ruleBody(LAYOUT, selector), selector).not.toMatch(/(^|\n)(border(?!-radius)|box-shadow|column-rule)/);
     }
