@@ -87,6 +87,12 @@ describe("DeniedState says who to ask and offers ways on (#290)", () => {
     expect(container.querySelector("strong")).toBeNull();
   });
 
+  it("keeps the plain denied state's markup when no ways are given", () => {
+    const { container } = render(<DeniedState sentence="You cannot see this." ways={[]} />);
+    expect(container.querySelector(".ward-state-ways")).toBeNull();
+    expect(container.firstElementChild?.childElementCount).toBe(1);
+  });
+
   it("renders one secondary button per way, in order, each calling its own handler", () => {
     render(<DeniedState sentence="You cannot see this." ways={ways} />);
     const buttons = screen.getAllByRole("button");
