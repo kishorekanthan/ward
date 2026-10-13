@@ -46,6 +46,7 @@ describe("StreamAvatar", () => {
   it("numbers a name once every letter pair it has is taken", () => {
     expect([...uniqueStreamInitials(["Ab", "A b", "A"]).values()]).toEqual(["AB", "A2", "A"]);
     expect([...uniqueStreamInitials(["A", "A b", "a"]).values()]).toEqual(["A", "AB", "A2"]);
+    expect([...uniqueStreamInitials(["A", "a", "A "]).values()]).toEqual(["A", "A2", "A3"]);
   });
 
   it("draws the initials it is given in place of the name's own", () => {
