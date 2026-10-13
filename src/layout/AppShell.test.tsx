@@ -738,6 +738,24 @@ describe("frame ground and fold button in the sidebar (#285)", () => {
     expect([button.textContent, container.firstElementChild?.getAttribute("data-collapsed")]).toEqual(["Expand sidebar", "true"]);
   });
 
+  it("keeps an expand button reachable when a folded sidebar is a plain node", () => {
+    stubMatchMedia(false);
+    render(headShell());
+    fireEvent.click(screen.getByRole("button", { name: "Collapse sidebar" }));
+    expect(screen.getAllByRole("button", { name: "Expand sidebar" })).toHaveLength(1);
+  });
+
+  it("keeps an expand button reachable when the folded sidebar shows an icon rail", () => {
+    stubMatchMedia(false);
+    render(
+      <AppShell foldButtonInSidebar iconRail={[{ label: "Home", href: "#/", icon: <HomeIcon /> }]} sidebar={<SidebarFoldButton />}>
+        <p>page</p>
+      </AppShell>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Collapse sidebar" }));
+    expect(screen.getAllByRole("button", { name: "Expand sidebar" })).toHaveLength(1);
+  });
+
   it("keeps its own fold row without the flag", () => {
     stubMatchMedia(false);
     const { container } = render(<AppShell sidebar={<nav aria-label="Sections">nav</nav>}><p>page</p></AppShell>);

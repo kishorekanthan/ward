@@ -207,10 +207,11 @@ function IconRail({ items, label }: { items: AppShellRailItem[]; label: string }
 
 // The sidebar stays mounted while collapsed, so its own state (open groups, a search) survives the round trip.
 function SidePanel({ sidebar, label, iconRail, fold, inSidebar }: { sidebar: StudioShellProps["sidebar"]; label: string; iconRail?: AppShellRailItem[]; fold: SidebarFold; inSidebar: boolean }) {
+  const bodyHidden = fold.collapsed && !fold.drawsStrip;
   return (
     <div className={s.side} data-ward-shell-side="">
-      <FoldToggle fold={fold} inSidebar={inSidebar} />
-      <div className={s.sideBody} hidden={fold.collapsed && !fold.drawsStrip}>
+      <FoldToggle fold={fold} inSidebar={inSidebar && !bodyHidden} />
+      <div className={s.sideBody} hidden={bodyHidden}>
         {drawSidebar(sidebar, fold.collapsed)}
       </div>
       {fold.rail && <IconRail items={iconRail ?? []} label={label} />}
