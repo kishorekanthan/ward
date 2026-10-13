@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { StreamAvatar, streamInitials } from "./StreamAvatar";
+import { StreamAvatar, streamInitials, uniqueStreamInitials } from "./StreamAvatar";
 
 const css = readFileSync("src/primitives/StreamAvatar.module.css", "utf8");
 const avatar = (container: HTMLElement) => container.firstElementChild as HTMLElement;
@@ -30,5 +30,26 @@ describe("StreamAvatar", () => {
     expect(css).toContain('.avatar[data-size="lg"] {\n  width: var(--ward-height-streamAvatarLg);\n  height: var(--ward-height-streamAvatarLg);');
     expect(css).toContain("background: var(--stream, var(--ward-chip-meta-bg));");
     expect(css).toContain("color: var(--streamText, var(--ward-chip-meta-fg));");
+  });
+
+  it("keeps each name's own initials when none clash", () => {
+    const names = ["Data Engineering", "Integration", "kpi config", "ops-team"];
+    expect([...uniqueStreamInitials(names).values()]).toEqual(names.map(streamInitials));
+  });
+
+  it("gives a later name whose initials are taken its next free pair, in the order given", () => {
+    const badges = uniqueStreamInitials(["Data Engineering", "Demo", "Delivery Engine", "Data Engineering"]);
+    expect([...badges.entries()]).toEqual([["Data Engineering", "DE"], ["Demo", "DM"], ["Delivery Engine", "DL"]]);
+    expect(uniqueStreamInitials(["Demo", "Data Engineering"]).get("Data Engineering")).toBe("DA");
+  });
+
+  it("numbers a name once every letter pair it has is taken", () => {
+    expect([...uniqueStreamInitials(["Ab", "A b", "A"]).values()]).toEqual(["AB", "A2", "A"]);
+    expect([...uniqueStreamInitials(["A", "A b", "a"]).values()]).toEqual(["A", "AB", "A2"]);
+    expect([...uniqueStreamInitials(["A", "a", "A "]).values()]).toEqual(["A", "A2", "A3"]);
+  });
+
+  it("draws the initials it is given in place of the name's own", () => {
+    expect(avatar(render(<StreamAvatar name="Demo" initials="DM" />).container).textContent).toBe("DM");
   });
 });
