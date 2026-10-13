@@ -38,6 +38,9 @@ const STAT = "src/primitives/StatStrip.module.css";
 const AGENT = "src/composites/studio/AgentCard.module.css";
 const OVERLAY = "src/primitives/Overlay.module.css";
 const STAGE = "src/composites/studio/StageColumn.module.css";
+const ENV = "src/composites/admin/EnvCard.module.css";
+const RESOLVE = "src/composites/item/ResolveBlock.module.css";
+const LADDER = "src/composites/studio/ColourLadder.module.css";
 const HEADER = "src/primitives/SectionHeader.module.css";
 const RAIL = "src/composites/board/PreviewRail.module.css";
 const APPEARANCE = "src/composites/admin/AppearanceStrip.module.css";
@@ -85,11 +88,28 @@ describe("soft surfaces against the chosen look (#217)", () => {
     }
   });
 
-  it("gives stat blocks and agent cards the card shadow and ring, and drawers the panel radius", () => {
+  it.each(THEMES)("sets stat blocks and agent cards on the inset ground with its ring and the card shadow (%s)", (theme) => {
+    for (const [path, rest] of [[STAT, ".link"], [AGENT, ".card"]]) {
+      expect(value(path, rest, "background", theme), path).toBe(golden.insetCard[theme].ground);
+      expect(value(path, rest, "box-shadow", theme), path).toBe(golden.insetCard[theme].shadow);
+    }
+  });
+
+  // #287: a card on a panel never paints the panel's own colour, so dark cards no longer vanish into it.
+  it.each(THEMES)("paints every ringed card on a panel in the inset ground and ring, never the panel colour (%s)", (theme) => {
+    const ringed = [[ENV, ".card"], [ENV, ".webCard"], [STAGE, ".terminalCard"], [RESOLVE, ".path"]];
+    for (const [path, selector] of [...ringed, [LADDER, ".tile"]]) {
+      expect(value(path, selector, "background", theme), `${path} ${selector}`).toBe(golden.insetCard[theme].ground);
+      expect(ruleBody(path, selector), `${path} ${selector}`).not.toContain("--ward-color-surface)");
+    }
+    for (const [path, selector] of ringed) {
+      expect(value(path, selector, "box-shadow", theme), `${path} ${selector}`).toBe(golden.insetCard[theme].shadow.split(",")[0]);
+    }
+  });
+
+  it("gives stat blocks and agent cards a stronger ring on hover, and drawers the panel radius", () => {
     for (const path of [STAT, AGENT]) {
-      const rest = path === STAT ? ".link" : ".card";
       const hover = path === STAT ? ".link:hover" : '.card:not([data-selected="true"]):hover';
-      expect(value(path, rest, "box-shadow"), path).toBe(golden.card.light.shadow);
       expect(value(path, hover, "box-shadow"), path).toBe(golden.card.light.hoverShadow);
     }
     expect(value(OVERLAY, ".panel.modal", "border-radius")).toBe(golden.panel.radius);
@@ -123,6 +143,13 @@ describe("soft surfaces against the chosen look (#217)", () => {
     // The top-level rule only: the phone query restacks the band without touching its edges.
     const topRule = (path: string, selector: string) => readFileSync(path, "utf8").split(`\n${selector} {`)[1].split("}")[0];
     for (const [path, selector] of [[HEADER, ".root"], [LAYOUT, ".band"]]) expect(topRule(path, selector).match(/border(?!-radius)[\w-]*\s*:[^;]*/g), selector).toEqual(rule);
+  });
+
+  // #287: each of ground, panel and inset reads as its own level; the grey units are the hex channels.
+  it("steps the light ground 10 or more grey units under the panel, and lightens ground, panel, inset in dark", () => {
+    const grey = (theme: Theme, name: string) => parseInt(themeVars[theme].get(`--ward-color-${name}`)!.slice(1, 3), 16);
+    expect(grey("light", "surface") - grey("light", "ground")).toBeGreaterThanOrEqual(10);
+    expect([grey("dark", "ground"), grey("dark", "surface"), grey("dark", "inset")]).toEqual([15, 31, 43]);
   });
 
   it("keeps one dark card grey (#248)", () => {

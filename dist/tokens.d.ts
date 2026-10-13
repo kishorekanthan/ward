@@ -44,6 +44,8 @@ export declare const v: {
         readonly line2: "var(--ward-color-line2)";
         readonly edge: "var(--ward-color-edge)";
         readonly panelEdge: "var(--ward-color-panelEdge)";
+        readonly inset: "var(--ward-color-inset)";
+        readonly insetEdge: "var(--ward-color-insetEdge)";
         readonly text: "var(--ward-color-text)";
         readonly muted: "var(--ward-color-muted)";
         readonly faint: "var(--ward-color-faint)";

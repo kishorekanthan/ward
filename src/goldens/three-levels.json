@@ -1,0 +1,18 @@
+{
+  "$source": "Ward #287, TRELLIS-531: the window ground, the panel on it and a card on the panel, read from the Tokens/Surfaces story in each theme.",
+  "story": "tokens-surfaces--three-levels",
+  "light": {
+    "ground": "rgb(236, 235, 231)",
+    "panel": "rgb(255, 255, 255)",
+    "tile": "rgb(255, 255, 255)",
+    "agent": "rgb(255, 255, 255)",
+    "ring": "rgb(226, 224, 218)"
+  },
+  "dark": {
+    "ground": "rgb(15, 15, 14)",
+    "panel": "rgb(31, 31, 31)",
+    "tile": "rgb(43, 43, 41)",
+    "agent": "rgb(43, 43, 41)",
+    "ring": "rgb(61, 59, 55)"
+  }
+}

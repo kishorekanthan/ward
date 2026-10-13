@@ -7,8 +7,8 @@
   gap: var(--ward-gap-agentCard);
   padding: var(--ward-pad-card);
   border-radius: var(--ward-radius-card);
-  background: var(--ward-color-surface);
-  box-shadow: var(--ward-shadow-card);
+  background: var(--ward-color-inset);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-insetEdge), var(--ward-shadow-card);
   transition: box-shadow var(--ward-motion-fast), opacity var(--ward-motion-fast);
 }
 
