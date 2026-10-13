@@ -66,12 +66,13 @@
 
 :root {
   --ward-color-bg: #F9F9F8;
+  --ward-color-ground: #ECEBE7;
   --ward-color-surface: #FFFFFF;
   --ward-color-surface2: #F1F1EF;
   --ward-color-line: #EDEDEB;
   --ward-color-line2: #DAD8D3;
   --ward-color-edge: #8D867A;
-  --ward-color-panelEdge: #CFCCC5;
+  --ward-color-panelEdge: #C0BDB5;
   --ward-color-text: #191918;
   --ward-color-muted: #63615C;
   --ward-color-faint: #63605A;
@@ -568,6 +569,7 @@
 
 [data-theme="dark"] {
   --ward-color-bg: #191919;
+  --ward-color-ground: #0F0F0E;
   --ward-color-surface: #1F1F1F;
   --ward-color-surface2: #2A2A2A;
   --ward-color-line: #2F2F2F;
@@ -694,12 +696,13 @@
 
 [data-theme="light"] {
   --ward-color-bg: #F9F9F8;
+  --ward-color-ground: #ECEBE7;
   --ward-color-surface: #FFFFFF;
   --ward-color-surface2: #F1F1EF;
   --ward-color-line: #EDEDEB;
   --ward-color-line2: #DAD8D3;
   --ward-color-edge: #8D867A;
-  --ward-color-panelEdge: #CFCCC5;
+  --ward-color-panelEdge: #C0BDB5;
   --ward-color-text: #191918;
   --ward-color-muted: #63615C;
   --ward-color-faint: #63605A;

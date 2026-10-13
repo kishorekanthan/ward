@@ -1,7 +1,7 @@
 import type { ComponentType, ReactNode } from "react";
 import { bothThemes } from "../../.storybook/bothThemes";
 import { fullPage } from "../../.storybook/fullPage";
-import { AppShell, type AppShellRailItem } from "./AppShell";
+import { AppShell, SidebarFoldButton, type AppShellRailItem } from "./AppShell";
 import { BoardIcon, HomeIcon, StudioIcon } from "./NavIcons";
 import { Sidebar, type SidebarAgent } from "./Sidebar";
 import { SIDEBAR_COLLAPSED_KEY } from "./useSidebarCollapse";
@@ -202,6 +202,23 @@ export const AppFrame = {
     sidebar: <Sidebar brand="Trellis" label="Streams" destinations={manyDestinations.slice(0, 6)} active="stream-3" />,
     header,
     children: Array.from({ length: 12 }, (_, i) => <p key={i}>Paragraph {i + 1} of the page in the content panel.</p>),
+  },
+};
+
+// The fold button sits on the sidebar's own head row, beside the consumer's other controls, so no row holds one icon (Ward #285).
+export const AppFrameFoldInHead = {
+  decorators: [bothThemes],
+  args: {
+    foldButtonInSidebar: true,
+    sidebar: (
+      <div style={{ display: "flex", alignItems: "center", gap: "var(--ward-space-1)", padding: "var(--ward-space-2)" }}>
+        <span style={{ flex: 1, font: "var(--ward-type-brandMark)" }}>Trellis</span>
+        <Btn variant="ghost" size="sm">Search</Btn>
+        <SidebarFoldButton />
+      </div>
+    ),
+    header,
+    children: <p>The page in the content panel.</p>,
   },
 };
 

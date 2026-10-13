@@ -30,7 +30,7 @@ export type { FlashColour } from "./live/useBorderFlash";
 export { LiveIndicator } from "./live/LiveIndicator";
 export type { LiveIndicatorProps } from "./live/LiveIndicator";
 
-export { AppShell } from "./layout/AppShell";
+export { AppShell, SidebarFoldButton } from "./layout/AppShell";
 export type { AppShellDestination, AppShellProps, AppShellRailItem, StudioShellProps, TopBarShellProps } from "./layout/AppShell";
 export { AdminIcon, BoardIcon, HomeIcon, StudioIcon } from "./layout/NavIcons";
 export { Btn } from "./primitives/Btn";

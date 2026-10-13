@@ -91,6 +91,7 @@ function probePanels() {
     contentInset: [Math.round(m.top + scrollY), Math.round(innerWidth - m.right)],
     headerInPanel: h.top >= m.top && h.left >= m.left && h.right <= m.right + 0.5,
     edgesShow: [main, side].filter(Boolean).every((el) => ratio(ring(el, ground), ground) >= 1.5),
+    panelsStandOff: [main, side].filter(Boolean).every((el) => ratio(getComputedStyle(el).backgroundColor, ground) >= 1.15),
     ...pageFacts(main.lastElementChild, m),
   };
 }
