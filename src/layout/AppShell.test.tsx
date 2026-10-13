@@ -748,7 +748,7 @@ describe("frame ground and fold button in the sidebar (#285)", () => {
   it("keeps an expand button reachable when the folded sidebar shows an icon rail", () => {
     stubMatchMedia(false);
     render(
-      <AppShell foldButtonInSidebar iconRail={[{ label: "Home", href: "#/", icon: <HomeIcon /> }]} sidebar={<SidebarFoldButton />}>
+      <AppShell foldButtonInSidebar iconRail={railItems} sidebar={<SidebarFoldButton />}>
         <p>page</p>
       </AppShell>,
     );
