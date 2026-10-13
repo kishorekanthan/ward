@@ -11,7 +11,8 @@
   height: 100dvh;
   padding-block: var(--ward-gap-sideInset);
   padding-inline: max(var(--ward-gap-sideInset), calc((100% - var(--ward-width-maxWide)) / 2));
-  background: var(--ward-color-bg);
+  /* The window ground sits a visible step from the panels' surface (Ward #285). */
+  background: var(--ward-color-ground);
   color: var(--ward-color-text);
 }
 
@@ -39,7 +40,7 @@
   scroll-padding-block: calc(var(--ward-focus-ring) + var(--ward-focus-offset));
   border-radius: var(--ward-radius-card);
   background: var(--ward-color-surface);
-  box-shadow: 0 0 0 var(--ward-border) var(--ward-color-panelEdge);
+  box-shadow: 0 0 0 var(--ward-border) var(--ward-color-panelEdge), var(--ward-shadow-card);
 }
 
 .sideTop {
@@ -151,7 +152,7 @@
   overflow-wrap: anywhere;
   border-radius: var(--ward-radius-card);
   background: var(--ward-color-surface);
-  box-shadow: 0 0 0 var(--ward-border) var(--ward-color-panelEdge);
+  box-shadow: 0 0 0 var(--ward-border) var(--ward-color-panelEdge), var(--ward-shadow-card);
 }
 
 .rail {

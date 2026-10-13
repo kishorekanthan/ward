@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode, type RefObject } from "react";
+import { createContext, useContext, useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode, type RefObject } from "react";
 import s from "./AppShell.module.css";
 import { stream, type StreamStep } from "../tokens";
 import { Btn } from "../primitives/Btn";
@@ -37,6 +37,8 @@ export type StudioShellProps = {
   collapsed?: boolean;
   /** The page fills the content panel edge to edge, with no padding, and scrolls both ways inside it (a board). */
   pageFill?: boolean;
+  /** The consumer places SidebarFoldButton in its own sidebar row, so Ward draws no row for the fold button. */
+  foldButtonInSidebar?: boolean;
 };
 
 export type TopBarShellProps = {
@@ -156,16 +158,31 @@ function drawSidebar(sidebar: StudioShellProps["sidebar"], folded: boolean): Rea
   return typeof sidebar === "function" ? sidebar(folded) : sidebar;
 }
 
-function FoldToggle({ fold }: { fold: SidebarFold }) {
-  if (!fold.enabled) return null;
+function FoldButton({ fold }: { fold: SidebarFold }) {
+  return (
+    <Btn variant="ghost" size="sm" onClick={fold.toggle} expanded={!fold.collapsed}>
+      <PanelIcon />
+      <span className="ward-visually-hidden">{fold.collapsed ? "Expand sidebar" : "Collapse sidebar"}</span>
+    </Btn>
+  );
+}
+
+function FoldToggle({ fold, inSidebar }: { fold: SidebarFold; inSidebar: boolean }) {
+  if (!fold.enabled || inSidebar) return null;
   return (
     <div className={s.sideTop}>
-      <Btn variant="ghost" size="sm" onClick={fold.toggle} expanded={!fold.collapsed}>
-        <PanelIcon />
-        <span className="ward-visually-hidden">{fold.collapsed ? "Expand sidebar" : "Collapse sidebar"}</span>
-      </Btn>
+      <FoldButton fold={fold} />
     </div>
   );
+}
+
+const FoldContext = createContext<SidebarFold | null>(null);
+
+/** The frame's fold button, for a row of the consumer's own sidebar; it renders nothing where the sidebar does not fold. */
+export function SidebarFoldButton() {
+  const fold = useContext(FoldContext);
+  if (fold === null || !fold.enabled) return null;
+  return <FoldButton fold={fold} />;
 }
 
 function RailMark({ item }: { item: AppShellRailItem }) {
@@ -189,11 +206,12 @@ function IconRail({ items, label }: { items: AppShellRailItem[]; label: string }
 }
 
 // The sidebar stays mounted while collapsed, so its own state (open groups, a search) survives the round trip.
-function SidePanel({ sidebar, label, iconRail, fold }: { sidebar: StudioShellProps["sidebar"]; label: string; iconRail?: AppShellRailItem[]; fold: SidebarFold }) {
+function SidePanel({ sidebar, label, iconRail, fold, inSidebar }: { sidebar: StudioShellProps["sidebar"]; label: string; iconRail?: AppShellRailItem[]; fold: SidebarFold; inSidebar: boolean }) {
+  const bodyHidden = fold.collapsed && !fold.drawsStrip;
   return (
     <div className={s.side} data-ward-shell-side="">
-      <FoldToggle fold={fold} />
-      <div className={s.sideBody} hidden={fold.collapsed && !fold.drawsStrip}>
+      <FoldToggle fold={fold} inSidebar={inSidebar && !bodyHidden} />
+      <div className={s.sideBody} hidden={bodyHidden}>
         {drawSidebar(sidebar, fold.collapsed)}
       </div>
       {fold.rail && <IconRail items={iconRail ?? []} label={label} />}
@@ -213,7 +231,11 @@ function StudioShell(props: StudioShellProps) {
   const label = props.sidebarLabel ?? "Menu";
   return (
     <div className={s.app} data-rail={String(hasRail)} data-collapsed={String(fold.collapsed)} data-consumer-fold={presence(drawsOwnStrip(fold))} data-band={band}>
-      {!drawer.narrow && <SidePanel sidebar={sidebar} label={label} iconRail={iconRail} fold={fold} />}
+      {!drawer.narrow && (
+        <FoldContext.Provider value={fold}>
+          <SidePanel sidebar={sidebar} label={label} iconRail={iconRail} fold={fold} inSidebar={props.foldButtonInSidebar === true} />
+        </FoldContext.Provider>
+      )}
       <main className={s.main} data-ward-shell-content="">
         <StudioHeader header={header} label={label} drawer={drawer} />
         <div className={s.page} data-fill={presence(pageFill === true)}>{children}</div>

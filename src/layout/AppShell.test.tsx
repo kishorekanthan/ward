@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { act, cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { axe } from "jest-axe";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { AppShell, type AppShellRailItem } from "./AppShell";
+import { AppShell, SidebarFoldButton, type AppShellRailItem } from "./AppShell";
 import s from "./AppShell.module.css";
 import sidebarStyles from "./Sidebar.module.css";
 import { AdminIcon, BoardIcon, HomeIcon, StudioIcon } from "./NavIcons";
@@ -710,6 +710,76 @@ describe("AppShell collapsible sidebar", () => {
   });
 });
 
+describe("frame ground and fold button in the sidebar (#285)", () => {
+  const original = window.matchMedia;
+  beforeEach(() => window.localStorage.clear());
+  afterEach(() => {
+    window.matchMedia = original;
+  });
+
+  const headShell = () => (
+    <AppShell foldButtonInSidebar sidebar={<div role="group" aria-label="Head"><span>Trellis</span><SidebarFoldButton /></div>}>
+      <p>page</p>
+    </AppShell>
+  );
+
+  it("paints the window ground under both panels, each ringed and raised", () => {
+    expect(rule(".app")).toContain("background: #ECEBE7;");
+    expect(rule(".main")).toContain("box-shadow: 0 0 0 1px #C0BDB5, 0 1px 2px rgba(25,25,24,0.05), 0 3px 10px rgba(25,25,24,0.05);");
+  });
+
+  it("puts the fold button in the sidebar's own row, with no row of its own, and it still folds", () => {
+    stubMatchMedia(false);
+    const { container } = render(headShell());
+    const button = within(screen.getByRole("group", { name: "Head" })).getByRole("button", { name: "Collapse sidebar" });
+    expect(container.querySelector("." + s.sideTop)).toBeNull();
+    expect(screen.getAllByRole("button", { name: "Collapse sidebar" })).toHaveLength(1);
+    fireEvent.click(button);
+    expect([button.textContent, container.firstElementChild?.getAttribute("data-collapsed")]).toEqual(["Expand sidebar", "true"]);
+  });
+
+  it("keeps an expand button reachable when a folded sidebar is a plain node", () => {
+    stubMatchMedia(false);
+    render(headShell());
+    fireEvent.click(screen.getByRole("button", { name: "Collapse sidebar" }));
+    expect(screen.getAllByRole("button", { name: "Expand sidebar" })).toHaveLength(1);
+  });
+
+  it("keeps an expand button reachable when the folded sidebar shows an icon rail", () => {
+    stubMatchMedia(false);
+    render(
+      <AppShell foldButtonInSidebar iconRail={railItems} sidebar={<SidebarFoldButton />}>
+        <p>page</p>
+      </AppShell>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Collapse sidebar" }));
+    expect(screen.getAllByRole("button", { name: "Expand sidebar" })).toHaveLength(1);
+  });
+
+  it("keeps its own fold row without the flag", () => {
+    stubMatchMedia(false);
+    const { container } = render(<AppShell sidebar={<nav aria-label="Sections">nav</nav>}><p>page</p></AppShell>);
+    expect(container.querySelector("." + s.sideTop)?.textContent).toBe("Collapse sidebar");
+  });
+
+  it("draws no fold button below 768px, where the sidebar is a drawer", () => {
+    stubMatchMedia(true);
+    render(headShell());
+    expect(screen.queryByRole("button", { name: /sidebar/ })).toBeNull();
+  });
+
+  it("draws nothing where the consumer holds the fold state", () => {
+    stubMatchMedia(false);
+    render(<AppShell collapsed={false} foldButtonInSidebar sidebar={<SidebarFoldButton />}><p>page</p></AppShell>);
+    expect(screen.queryByRole("button", { name: /sidebar/ })).toBeNull();
+  });
+
+  it("draws nothing outside the frame", () => {
+    render(<SidebarFoldButton />);
+    expect(screen.queryByRole("button")).toBeNull();
+  });
+});
+
 describe("AppShell collapsed sidebar accessibility", () => {
   beforeEach(() => {
     window.localStorage.setItem("ward:sidebar-collapsed", "true");
@@ -752,7 +822,7 @@ describe("floating sidebar surface", () => {
       "scroll-padding-block: calc(2px + 1px)",
       "border-radius: 11px",
       "background: #FFFFFF",
-      "box-shadow: 0 0 0 1px #CFCCC5",
+      "box-shadow: 0 0 0 1px #C0BDB5, 0 1px 2px rgba(25,25,24,0.05), 0 3px 10px rgba(25,25,24,0.05)",
     ]);
   });
 
@@ -794,7 +864,7 @@ describe("floating sidebar surface", () => {
     window.localStorage.clear();
     expect(current).toEqual({ shadow: "", ground: "var(--ward-color-sagetint)" });
     expect(other).toEqual({ shadow: "", ground: "" });
-    expect(panel).toEqual({ shadow: "0 0 0 var(--ward-border) var(--ward-color-paneledge)", ground: "var(--ward-color-surface)" });
+    expect(panel).toEqual({ shadow: "0 0 0 var(--ward-border) var(--ward-color-paneledge), var(--ward-shadow-card)", ground: "var(--ward-color-surface)" });
   });
 
   it("lets a destination list fill the floating panel with no right rule of its own", () => {
@@ -915,7 +985,7 @@ describe("app frame owns the layout (TRELLIS-528)", () => {
   );
 
   it("draws the content panel as the sidebar's twin: rounded, on the surface, ringed in the panel edge colour", () => {
-    expect(rule(".main")).toContain("border-radius: 11px;\n  background: #FFFFFF;\n  box-shadow: 0 0 0 1px #CFCCC5;");
+    expect(rule(".main")).toContain("border-radius: 11px;\n  background: #FFFFFF;\n  box-shadow: 0 0 0 1px #C0BDB5, 0 1px 2px");
     expect(rule(".main")).toContain("overflow: clip;");
     expect(rule(".app")).toContain("column-gap: 10px;");
     expect(rule(".app")).toContain("padding-block: 10px;");

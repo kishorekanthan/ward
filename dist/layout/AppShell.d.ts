@@ -28,6 +28,8 @@ export type StudioShellProps = {
     collapsed?: boolean;
     /** The page fills the content panel edge to edge, with no padding, and scrolls both ways inside it (a board). */
     pageFill?: boolean;
+    /** The consumer places SidebarFoldButton in its own sidebar row, so Ward draws no row for the fold button. */
+    foldButtonInSidebar?: boolean;
 };
 export type TopBarShellProps = {
     destinations?: AppShellDestination[];
@@ -43,4 +45,6 @@ export type TopBarShellProps = {
     toolsLabel?: string;
 };
 export type AppShellProps = StudioShellProps | TopBarShellProps;
+/** The frame's fold button, for a row of the consumer's own sidebar; it renders nothing where the sidebar does not fold. */
+export declare function SidebarFoldButton(): import("react").JSX.Element | null;
 export declare function AppShell(props: AppShellProps): import("react").JSX.Element;

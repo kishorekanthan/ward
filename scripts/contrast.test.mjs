@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { accentPairs, belowFloor, contrastProblems, derivedDarkPairs, edgePairs, graphicPairs, roleInkPairs, textPairs } from "./contrast.mjs";
+import { accentPairs, belowFloor, contrastProblems, derivedDarkPairs, edgePairs, graphicPairs, panelPairs, roleInkPairs, textPairs } from "./contrast.mjs";
 
 const tokens = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "tokens.json"), "utf8"));
 
@@ -24,6 +24,17 @@ describe("derived dark contrast", () => {
   it("fails a surface3 lifted until faint text on it drops below 4.5:1", () => {
     const low = belowFloor(derivedDarkPairs({ ...tokens.dark, surface3: "#5A5A5A" }));
     expect(low).toEqual(["dark muted/surface3 #A5A29C on #5A5A5A = 2.71 (needs 4.5:1)", "dark faint/surface3 #A09D97 on #5A5A5A = 2.55 (needs 4.5:1)"]);
+  });
+});
+
+describe("panel ground", () => {
+  it("passes the shipped ground under the panels, both themes", () => {
+    expect(belowFloor(panelPairs(tokens))).toEqual([]);
+  });
+
+  // The page ground the frame painted before, 1.05:1 on white.
+  it("fails the old page ground as the window ground", () => {
+    expect(belowFloor(panelPairs({ ...tokens, color: { ...tokens.color, ground: tokens.color.bg } }))).toEqual(["light surface/ground #FFFFFF on #F9F9F8 = 1.05 (needs 1.15:1)"]);
   });
 });
 

@@ -82,6 +82,11 @@ export function edgePairs(tokens) {
   return THEMES(tokens).flatMap(([theme, c]) => onGrounds(theme, c, "edge", NEUTRAL, 3));
 }
 
+// The frame's two panels stand off the window ground by a visible step in both themes, not a 1.05:1 near-match (Ward #285).
+export function panelPairs(tokens) {
+  return THEMES(tokens).map(([theme, c]) => [c.surface, c.ground, `${theme} surface/ground`, 1.15]);
+}
+
 // A preset replaces only the sage role, so each is measured on that role's pairs: its ink and the text on its tint at 4.5:1, its mark at 3:1.
 function sagePairs(label, c) {
   return [

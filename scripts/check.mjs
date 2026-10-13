@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
-import { accentPairs, belowFloor, contrast, derivedDarkPairs, edgePairs, graphicPairs, roleInkPairs, textPairs, describeFailures, sweepRenderedContrast } from "./contrast.mjs";
+import { accentPairs, belowFloor, contrast, derivedDarkPairs, edgePairs, graphicPairs, panelPairs, roleInkPairs, textPairs, describeFailures, sweepRenderedContrast } from "./contrast.mjs";
 import { buildFresh, distDrift } from "./dist-fresh.mjs";
 import { sweepConsoleTheme } from "./console-theme.mjs";
 import { sweepPhoneWidth } from "./phone-width.mjs";
@@ -126,6 +126,11 @@ else fail("derived dark contrast", derivedLow.join("; "));
 const edgeLow = belowFloor(edgePairs(tokens));
 if (edgeLow.length === 0) pass("edge contrast", `${edgePairs(tokens).length} pairs: edge on every neutral ground at 3:1, both themes`);
 else fail("edge contrast", edgeLow.join("; "));
+
+// 2a''. the frame's panels stand off the window ground
+const panelLow = belowFloor(panelPairs(tokens));
+if (panelLow.length === 0) pass("panel ground", `${panelPairs(tokens).length} pairs: surface on ground at 1.15:1, both themes`);
+else fail("panel ground", panelLow.join("; "));
 
 // 2b. chart series are graphics, so they need the 3:1 non-text floor on both grounds in each theme
 const GRAPHIC = 3;

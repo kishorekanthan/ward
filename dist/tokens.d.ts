@@ -37,6 +37,7 @@ export type Density = (typeof DENSITIES)[number]["name"];
 export declare const v: {
     readonly color: {
         readonly bg: "var(--ward-color-bg)";
+        readonly ground: "var(--ward-color-ground)";
         readonly surface: "var(--ward-color-surface)";
         readonly surface2: "var(--ward-color-surface2)";
         readonly line: "var(--ward-color-line)";

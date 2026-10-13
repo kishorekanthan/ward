@@ -19,6 +19,7 @@ export type Density = (typeof DENSITIES)[number]["name"];
 export const v = {
   color: {
     bg: 'var(--ward-color-bg)',
+    ground: 'var(--ward-color-ground)',
     surface: 'var(--ward-color-surface)',
     surface2: 'var(--ward-color-surface2)',
     line: 'var(--ward-color-line)',
