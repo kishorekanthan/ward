@@ -148,6 +148,7 @@ describe("AppShell sidebar drawer below 768px", () => {
     expect(toggle.getAttribute("aria-expanded")).toBe("false");
     expect(toggle.getAttribute("aria-controls")).not.toBeNull();
     expect(screen.getByRole("main").firstElementChild?.textContent).toBe("MenuClaims");
+    expect(screen.getByRole("main").firstElementChild?.children).toHaveLength(2);
     expect(screen.queryByRole("navigation", { name: "Sections" })).toBeNull();
   });
 
@@ -163,6 +164,7 @@ describe("AppShell sidebar drawer below 768px", () => {
     expect(ruleBody("src/layout/AppShell.module.css", ".headerAction")).toMatch(/flex: none;\s*padding-inline-end: var\(--ward-space-5\)$/);
     const { dialog } = openDrawer();
     expect(within(dialog).queryByRole("button", { name: "New request" })).toBeNull();
+    expect(screen.getAllByRole("button", { name: "New request", hidden: true })).toHaveLength(1);
   });
 
   it("passes axe with an icon action named by hidden text", async () => {
