@@ -167,6 +167,12 @@ describe("AppShell sidebar drawer below 768px", () => {
     expect(screen.getAllByRole("button", { name: "New request", hidden: true })).toHaveLength(1);
   });
 
+  it("draws no action slot when the action is null", () => {
+    stubMatchMedia(true);
+    render(drawerShell({ action: null }));
+    expect(screen.getByRole("main").firstElementChild?.children).toHaveLength(2);
+  });
+
   it("passes axe with an icon action named by hidden text", async () => {
     stubMatchMedia(true);
     const icon = <button type="button"><svg aria-hidden="true" /><span className="ward-visually-hidden">New request</span></button>;
