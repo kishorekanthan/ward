@@ -73,6 +73,8 @@
   --ward-color-line2: #DAD8D3;
   --ward-color-edge: #8D867A;
   --ward-color-panelEdge: #C0BDB5;
+  --ward-color-inset: #FFFFFF;
+  --ward-color-insetEdge: #E2E0DA;
   --ward-color-text: #191918;
   --ward-color-muted: #63615C;
   --ward-color-faint: #63605A;
@@ -576,6 +578,8 @@
   --ward-color-line2: #434039;
   --ward-color-edge: #7D796C;
   --ward-color-panelEdge: #44423D;
+  --ward-color-inset: #2B2B29;
+  --ward-color-insetEdge: #3D3B37;
   --ward-color-text: #EDEDEC;
   --ward-color-muted: #A5A29C;
   --ward-color-faint: #A09D97;
@@ -703,6 +707,8 @@
   --ward-color-line2: #DAD8D3;
   --ward-color-edge: #8D867A;
   --ward-color-panelEdge: #C0BDB5;
+  --ward-color-inset: #FFFFFF;
+  --ward-color-insetEdge: #E2E0DA;
   --ward-color-text: #191918;
   --ward-color-muted: #63615C;
   --ward-color-faint: #63605A;

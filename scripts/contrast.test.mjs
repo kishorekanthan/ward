@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { accentPairs, belowFloor, contrastProblems, derivedDarkPairs, edgePairs, graphicPairs, panelPairs, roleInkPairs, textPairs } from "./contrast.mjs";
+import { accentPairs, belowFloor, contrastProblems, derivedDarkPairs, edgePairs, graphicPairs, insetPairs, panelPairs, roleInkPairs, textPairs } from "./contrast.mjs";
 
 const tokens = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "tokens.json"), "utf8"));
 
@@ -215,5 +215,26 @@ describe("accent presets hold the sage role's pairs (#221)", () => {
       "dark orange muted/sageTint #A5A29C on #5A4430 = 3.58 (needs 4.5:1)",
       "dark orange faint/sageTint #A09D97 on #5A4430 = 3.37 (needs 4.5:1)",
     ]);
+  });
+});
+
+describe("inset card", () => {
+  it("passes the shipped inset, its ring and the text on it, both themes", () => {
+    expect(belowFloor(insetPairs(tokens))).toEqual([]);
+  });
+
+  // The panel colour a dark card painted before #287, and the light row rule as its ring.
+  it("fails a dark card on the panel colour and a ring as faint as a row rule", () => {
+    const dark = { ...tokens.dark, inset: tokens.dark.surface };
+    const color = { ...tokens.color, insetEdge: tokens.color.line };
+    expect(belowFloor(insetPairs({ ...tokens, dark, color })).slice(0, 2)).toEqual([
+      "dark inset/surface #1F1F1F on #1F1F1F = 1.00 (needs 1.15:1)",
+      "light insetEdge/inset #EDEDEB on #FFFFFF = 1.17 (needs 1.25:1)",
+    ]);
+  });
+
+  it("fails text too faint to read on the inset ground", () => {
+    const dark = { ...tokens.dark, faint: tokens.dark.inset };
+    expect(belowFloor(insetPairs({ ...tokens, dark })).some((m) => m.startsWith("dark faint/inset"))).toBe(true);
   });
 });

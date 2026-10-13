@@ -87,6 +87,13 @@ export function panelPairs(tokens) {
   return THEMES(tokens).map(([theme, c]) => [c.surface, c.ground, `${theme} surface/ground`, 1.15]);
 }
 
+// A card on a panel is the third level (Ward #287): dark steps lighter again, and both themes ring the card.
+export function insetPairs(tokens) {
+  const rings = THEMES(tokens).map(([theme, c]) => [c.insetEdge, c.inset, `${theme} insetEdge/inset`, 1.25]);
+  const text = THEMES(tokens).flatMap(([theme, c]) => TEXT.flatMap((ink) => onGrounds(theme, c, ink, ["inset"], 4.5)));
+  return [[tokens.dark.inset, tokens.dark.surface, "dark inset/surface", 1.15], ...rings, ...text];
+}
+
 // A preset replaces only the sage role, so each is measured on that role's pairs: its ink and the text on its tint at 4.5:1, its mark at 3:1.
 function sagePairs(label, c) {
   return [

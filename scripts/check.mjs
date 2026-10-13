@@ -2,9 +2,10 @@ import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
-import { accentPairs, belowFloor, contrast, derivedDarkPairs, edgePairs, graphicPairs, panelPairs, roleInkPairs, textPairs, describeFailures, sweepRenderedContrast } from "./contrast.mjs";
+import { accentPairs, belowFloor, contrast, derivedDarkPairs, edgePairs, graphicPairs, insetPairs, panelPairs, roleInkPairs, textPairs, describeFailures, sweepRenderedContrast } from "./contrast.mjs";
 import { buildFresh, distDrift } from "./dist-fresh.mjs";
 import { sweepConsoleTheme } from "./console-theme.mjs";
+import { sweepThreeLevels } from "./three-levels.mjs";
 import { sweepPhoneWidth } from "./phone-width.mjs";
 import { sweepFocusTargets } from "./focus-targets.mjs";
 import { sweepBoardHeight } from "./board-height.mjs";
@@ -131,6 +132,11 @@ else fail("edge contrast", edgeLow.join("; "));
 const panelLow = belowFloor(panelPairs(tokens));
 if (panelLow.length === 0) pass("panel ground", `${panelPairs(tokens).length} pairs: surface on ground at 1.15:1, both themes`);
 else fail("panel ground", panelLow.join("; "));
+
+// 2a-inset. a card on a panel is a third surface level
+const insetLow = belowFloor(insetPairs(tokens));
+if (insetLow.length === 0) pass("inset card", `${insetPairs(tokens).length} pairs: dark inset on surface at 1.15:1, its ring at 1.25:1, text at 4.5:1`);
+else fail("inset card", insetLow.join("; "));
 
 // 2b. chart series are graphics, so they need the 3:1 non-text floor on both grounds in each theme
 const GRAPHIC = 3;
@@ -262,6 +268,11 @@ else fail("phone width", phoneDiffs.join("; "));
 const consoleDiffs = await sweepConsoleTheme();
 if (consoleDiffs.length === 0) pass("console theme", "light panel and dark block, ground, rail-card inset and inks match the golden");
 else fail("console theme", consoleDiffs.join("; "));
+
+// 8b. three levels: the window ground, the panel and a card on it, each theme, against src/goldens/three-levels.json (#287)
+const levelDiffs = await sweepThreeLevels();
+if (levelDiffs.length === 0) pass("three levels", "ground, panel, and the stat tile and agent card on the inset ground with their ring, light and dark, match the golden");
+else fail("three levels", levelDiffs.join("; "));
 
 // 9. focus and targets: Tab through every small link in both themes; each paints a ring on four sides and answers across 24px; row links open from anywhere (src/goldens/focus-targets.json)
 const focusDiffs = await sweepFocusTargets();

@@ -4,8 +4,8 @@
   align-content: start;
   gap: var(--ward-space-1);
   padding: var(--ward-space-3);
-  background: var(--ward-color-surface);
-  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+  background: var(--ward-color-inset);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-insetEdge);
 }
 
 .head {
@@ -40,8 +40,8 @@
   gap: var(--ward-space-2);
   min-width: 0;
   padding: var(--ward-pad-adminCard);
-  background: var(--ward-color-surface);
-  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+  background: var(--ward-color-inset);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-insetEdge);
 }
 
 .webRow {
