@@ -232,4 +232,9 @@ describe("inset card", () => {
       "light insetEdge/inset #EDEDEB on #FFFFFF = 1.17 (needs 1.25:1)",
     ]);
   });
+
+  it("fails text too faint to read on the inset ground", () => {
+    const dark = { ...tokens.dark, faint: tokens.dark.inset };
+    expect(belowFloor(insetPairs({ ...tokens, dark })).some((m) => m.startsWith("dark faint/inset"))).toBe(true);
+  });
 });
