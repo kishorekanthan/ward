@@ -115,7 +115,7 @@ export { CardGrid } from './layout/CardGrid';
 export type { CardGridProps } from './layout/CardGrid';
 export type { BoardLane, BoardScrollerProps } from './layout/BoardScroller';
 export { EmptyState, FilteredEmpty, DeniedState, LoadFailed, StaleStrip, WriteUnavailableStrip } from './states/States';
-export type { EmptyStateProps, FilteredEmptyProps, LoadFailedProps, StateAction, StaleStripProps, WriteUnavailableStripProps, } from './states/States';
+export type { DeniedStateProps, EmptyStateProps, FilteredEmptyProps, LoadFailedProps, StateAction, StaleStripProps, WriteUnavailableStripProps, } from './states/States';
 export { Loading } from './states/Loading';
 export type { LoadingProps } from './states/Loading';
 export * from './composites/board/BoardColumn';

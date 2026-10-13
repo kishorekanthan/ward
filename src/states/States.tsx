@@ -17,10 +17,10 @@ function Action({ action }: { action?: StateAction }) {
   );
 }
 
-function Block({ sentence, action, children, role = "status", tone, kind }: BlockProps) {
+function Block({ sentence, action, children, role = "status", tone, kind, ask }: BlockProps & { ask?: string }) {
   return (
     <div className={`${s.block} ward-state${kind === undefined ? "" : ` ${kind}`}`} role={role} data-tone={tone}>
-      <p className={s.sentence}>{sentence}</p>
+      <p className={s.sentence}>{sentence}{ask === undefined || ask === "" ? null : <> <strong>{ask}</strong></>}</p>
       {children}
       <Action action={action} />
     </div>
@@ -36,8 +36,18 @@ export function FilteredEmpty({ sentence, total, action }: FilteredEmptyProps) {
   return <Block sentence={sentence} action={action}><p className={s.meta}>0 of {total} match the filter</p></Block>;
 }
 
-export function DeniedState(props: EmptyStateProps) {
-  return <Block {...props} />;
+// A refusal names who to ask (bold) and offers ways on; a normal state, so no tone and no Retry.
+export type DeniedStateProps = EmptyStateProps & { ask?: string; ways?: StateAction[] };
+function Ways({ ways }: { ways: StateAction[] }) {
+  return (
+    <div className={`${s.ways} ward-state-ways`}>
+      {ways.map((way) => <Btn key={way.label} variant="secondary" onClick={way.onClick}>{way.label}</Btn>)}
+    </div>
+  );
+}
+
+export function DeniedState({ ways, ...props }: DeniedStateProps) {
+  return <Block {...props}>{ways === undefined || ways.length === 0 ? null : <Ways ways={ways} />}</Block>;
 }
 
 export type LoadFailedProps = { sentence: string; at: string; onRetry: () => void };

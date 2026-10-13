@@ -30,6 +30,17 @@ export const Denied = {
   ),
 };
 
+export const DeniedWithWays = {
+  name: "DeniedState with ask and ways",
+  render: () => (
+    <DeniedState
+      sentence="You need the StreamAdmin role on Payments to see this."
+      ask="Ask S. Rao."
+      ways={[{ label: "Open My work", onClick: () => {} }, { label: "Open Payments", onClick: () => {} }]}
+    />
+  ),
+};
+
 export const Failed = {
   name: "LoadFailed",
   render: () => <LoadFailed sentence="The board could not be loaded." at="2026-09-06T02:14:00Z" onRetry={() => {}} />,

@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
-import { borders, edge, injectModuleCss, leftBorders } from "../test-css";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+import { borders, edge, injectModuleCss, leftBorders, ruleBody } from "../test-css";
 import { DeniedState, EmptyState, FilteredEmpty, LoadFailed, StaleStrip, WriteUnavailableStrip } from "./States";
 import s from "./states.module.css";
 
@@ -69,5 +69,49 @@ describe("state blocks take their holder's ground (#248)", () => {
     expect(borders("src/states/states.module.css")).toEqual([]);
     expect(readFileSync("src/states/states.module.css", "utf8")).not.toMatch(/outline/);
     expect(leftBorders("src/states/states.module.css")).toEqual([]);
+  });
+});
+
+describe("DeniedState says who to ask and offers ways on (#290)", () => {
+  const ways = [{ label: "Open My work", onClick: vi.fn() }, { label: "Open Payments", onClick: vi.fn() }];
+
+  it("sets the ask clause in bold after the sentence, in the same paragraph", () => {
+    render(<DeniedState sentence="You need the StreamAdmin role on Payments." ask="Ask S. Rao." />);
+    const ask = screen.getByText("Ask S. Rao.");
+    expect(ask.tagName).toBe("STRONG");
+    expect(ask.parentElement?.textContent).toBe("You need the StreamAdmin role on Payments. Ask S. Rao.");
+  });
+
+  it("sets nothing in bold without an ask", () => {
+    const { container } = render(<DeniedState sentence="You cannot see this." ask="" />);
+    expect(container.querySelector("strong")).toBeNull();
+  });
+
+  it("keeps the plain denied state's markup when no ways are given", () => {
+    const { container } = render(<DeniedState sentence="You cannot see this." ways={[]} />);
+    expect(container.querySelector(".ward-state-ways")).toBeNull();
+    expect(container.firstElementChild?.childElementCount).toBe(1);
+  });
+
+  it("renders one secondary button per way, in order, each calling its own handler", () => {
+    render(<DeniedState sentence="You cannot see this." ways={ways} />);
+    const buttons = screen.getAllByRole("button");
+    expect(buttons.map((b) => b.textContent)).toEqual(["Open My work", "Open Payments"]);
+    expect(buttons.every((b) => b.classList.contains("ward-btn--secondary"))).toBe(true);
+    fireEvent.click(buttons[1]);
+    expect(ways[1].onClick).toHaveBeenCalledTimes(1);
+    expect(ways[0].onClick).not.toHaveBeenCalled();
+  });
+
+  it("stays a normal state: no tone, no Retry", () => {
+    render(<DeniedState sentence="You cannot see this." ask="Ask S. Rao." ways={ways} />);
+    expect(screen.getByRole("status").hasAttribute("data-tone")).toBe(false);
+    expect(screen.queryByRole("button", { name: "Retry" })).toBeNull();
+  });
+
+  it("stacks the ways full width below 768px and wraps them in a row above", () => {
+    const css = readFileSync("src/states/states.module.css", "utf8");
+    expect(ruleBody("src/states/states.module.css", ".ways")).toMatch(/display: flex;[\s\S]*flex-wrap: wrap;/);
+    expect(css).toMatch(/@media \(max-width: 767\.98px\) \{\s*\.ways > \* \{\s*width: 100%;/);
   });
 });
