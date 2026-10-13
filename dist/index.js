@@ -1325,9 +1325,10 @@ function ii({ items: e, label: a }) {
   ] }, n.id)) });
 }
 function si({ sidebar: e, label: a, iconRail: n, fold: r, inSidebar: l }) {
+  const i = r.collapsed && !r.drawsStrip;
   return /* @__PURE__ */ o("div", { className: $.side, "data-ward-shell-side": "", children: [
-    /* @__PURE__ */ t(li, { fold: r, inSidebar: l }),
-    /* @__PURE__ */ t("div", { className: $.sideBody, hidden: r.collapsed && !r.drawsStrip, children: sn(e, r.collapsed) }),
+    /* @__PURE__ */ t(li, { fold: r, inSidebar: l && !i }),
+    /* @__PURE__ */ t("div", { className: $.sideBody, hidden: i, children: sn(e, r.collapsed) }),
     r.rail && /* @__PURE__ */ t(ii, { items: n ?? [], label: a })
   ] });
 }
