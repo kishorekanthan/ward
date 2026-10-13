@@ -205,6 +205,11 @@
   min-width: 0;
 }
 
+.headerAction {
+  flex: none;
+  padding-inline-end: var(--ward-space-5);
+}
+
 .drawerSide {
   display: flex;
   flex-direction: column;

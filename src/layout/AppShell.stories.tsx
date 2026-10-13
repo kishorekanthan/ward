@@ -162,6 +162,22 @@ export const SidebarNarrow = {
   parameters: { viewport: { defaultViewport: "mobile1" } },
 };
 
+// The phone header keeps the app's primary action as an icon button at the end of the row.
+const newRequest = (
+  <Btn variant="primary" size="sm">
+    <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+      <path d="M8 3v10M3 8h10" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+    <span className="ward-visually-hidden">New request</span>
+  </Btn>
+);
+
+export const SidebarNarrowAction = {
+  decorators: [bothThemes],
+  args: { ...floatingArgs, action: newRequest },
+  parameters: { viewport: { defaultViewport: "mobile1" } },
+};
+
 // The consumer owns the fold: Ward narrows the track and tells the sidebar, which draws its own strip with tips.
 function OwnSidebar({ folded }: { folded: boolean }) {
   return (

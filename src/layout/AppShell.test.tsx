@@ -123,7 +123,7 @@ const navLinks = (
   </nav>
 );
 
-const drawerShell = (props: { sidebarLabel?: string } = {}) => (
+const drawerShell = (props: { sidebarLabel?: string; action?: ReactNode } = {}) => (
   <AppShell sidebar={navLinks} header={<div>Claims</div>} {...props}>
     <p>page</p>
   </AppShell>
@@ -149,6 +149,35 @@ describe("AppShell sidebar drawer below 768px", () => {
     expect(toggle.getAttribute("aria-controls")).not.toBeNull();
     expect(screen.getByRole("main").firstElementChild?.textContent).toBe("MenuClaims");
     expect(screen.queryByRole("navigation", { name: "Sections" })).toBeNull();
+  });
+
+  it("ends the phone header row with the primary action, after the header, and keeps it out of the drawer", () => {
+    stubMatchMedia(true);
+    render(drawerShell({ action: <button type="button">New request</button> }));
+    const row = screen.getByRole("main").firstElementChild as HTMLElement;
+    expect(row.textContent).toBe("MenuClaimsNew request");
+    const slot = screen.getByRole("button", { name: "New request" }).parentElement as HTMLElement;
+    expect(slot.parentElement).toBe(row);
+    expect(slot.className).toBe(s.headerAction);
+    expect(ruleBody("src/layout/AppShell.module.css", ".headerSlot")).toMatch(/flex: 1;/);
+    expect(ruleBody("src/layout/AppShell.module.css", ".headerAction")).toMatch(/flex: none;\s*padding-inline-end: var\(--ward-space-5\)$/);
+    const { dialog } = openDrawer();
+    expect(within(dialog).queryByRole("button", { name: "New request" })).toBeNull();
+  });
+
+  it("passes axe with an icon action named by hidden text", async () => {
+    stubMatchMedia(true);
+    const icon = <button type="button"><svg aria-hidden="true" /><span className="ward-visually-hidden">New request</span></button>;
+    const { container } = render(drawerShell({ action: icon }));
+    expect(screen.getByRole("button", { name: "New request" })).not.toBeNull();
+    expect((await axe(container)).violations).toEqual([]);
+  });
+
+  it("draws no action at 768px and wider, where the sidebar holds it", () => {
+    stubMatchMedia(false);
+    render(drawerShell({ action: <button type="button">New request</button> }));
+    expect(screen.queryByRole("button", { name: "New request" })).toBeNull();
+    expect(screen.getByRole("main").firstElementChild?.textContent).toBe("Claims");
   });
 
   it("names the toggle and the drawer from sidebarLabel", () => {
