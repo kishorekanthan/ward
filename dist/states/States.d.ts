@@ -13,7 +13,11 @@ export type FilteredEmptyProps = {
     action?: StateAction;
 };
 export declare function FilteredEmpty({ sentence, total, action }: FilteredEmptyProps): import("react").JSX.Element;
-export declare function DeniedState(props: EmptyStateProps): import("react").JSX.Element;
+export type DeniedStateProps = EmptyStateProps & {
+    ask?: string;
+    ways?: StateAction[];
+};
+export declare function DeniedState({ ways, ...props }: DeniedStateProps): import("react").JSX.Element;
 export type LoadFailedProps = {
     sentence: string;
     at: string;

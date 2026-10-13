@@ -134,6 +134,7 @@ export type { BoardLane, BoardScrollerProps } from "./layout/BoardScroller";
 
 export { EmptyState, FilteredEmpty, DeniedState, LoadFailed, StaleStrip, WriteUnavailableStrip } from "./states/States";
 export type {
+  DeniedStateProps,
   EmptyStateProps,
   FilteredEmptyProps,
   LoadFailedProps,

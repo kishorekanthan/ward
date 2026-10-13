@@ -21,6 +21,20 @@
   color: var(--ward-color-muted);
 }
 
+.ways {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ward-space-2);
+  justify-self: stretch;
+  padding-top: var(--ward-space-1);
+}
+
+@media (max-width: 767.98px) {
+  .ways > * {
+    width: 100%;
+  }
+}
+
 .action {
   padding-top: var(--ward-space-1);
 }
