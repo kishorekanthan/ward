@@ -26,6 +26,8 @@ export type StudioShellProps = {
   sidebar: ReactNode | ((folded: boolean) => ReactNode);
   /** Sits at the top of the centre column, outside the page inset. */
   header?: ReactNode;
+  /** The app's primary action, drawn at the end of the phone header row; wider bands leave it to the sidebar. */
+  action?: ReactNode;
   children: ReactNode;
   /** The 316px right column; omitted or null draws no third track. */
   rail?: ReactNode;
@@ -78,7 +80,7 @@ function useSidebarDrawer(band: Band): SidebarDrawer {
   return { narrow, open, drawerId, slotRef, toggle: () => setOpen(!open), close: () => setOpen(false) };
 }
 
-function StudioHeader({ header, label, drawer }: { header: ReactNode; label: string; drawer: SidebarDrawer }) {
+function StudioHeader({ header, action, label, drawer }: { header: ReactNode; action: ReactNode; label: string; drawer: SidebarDrawer }) {
   if (!drawer.narrow) return header;
   return (
     <div className={s.headerRow}>
@@ -88,6 +90,7 @@ function StudioHeader({ header, label, drawer }: { header: ReactNode; label: str
         </Btn>
       </span>
       <div className={s.headerSlot}>{header}</div>
+      {isPresent(action) && <span className={s.headerAction}>{action}</span>}
     </div>
   );
 }
@@ -223,7 +226,7 @@ const isPresent = (node: ReactNode): boolean => node !== undefined && node !== n
 
 // Two rounded panels, the sidebar and the content panel; the header sits inside the content panel, above the page.
 function StudioShell(props: StudioShellProps) {
-  const { sidebar, header, children, rail, iconRail, pageFill } = props;
+  const { sidebar, header, action, children, rail, iconRail, pageFill } = props;
   const hasRail = isPresent(rail);
   const band = useBand();
   const drawer = useSidebarDrawer(band);
@@ -237,7 +240,7 @@ function StudioShell(props: StudioShellProps) {
         </FoldContext.Provider>
       )}
       <main className={s.main} data-ward-shell-content="">
-        <StudioHeader header={header} label={label} drawer={drawer} />
+        <StudioHeader header={header} action={action} label={label} drawer={drawer} />
         <div className={s.page} data-fill={presence(pageFill === true)}>{children}</div>
       </main>
       {hasRail && <div className={s.rail}>{rail}</div>}

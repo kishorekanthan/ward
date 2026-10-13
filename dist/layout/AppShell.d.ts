@@ -17,6 +17,8 @@ export type StudioShellProps = {
     sidebar: ReactNode | ((folded: boolean) => ReactNode);
     /** Sits at the top of the centre column, outside the page inset. */
     header?: ReactNode;
+    /** The app's primary action, drawn at the end of the phone header row; wider bands leave it to the sidebar. */
+    action?: ReactNode;
     children: ReactNode;
     /** The 316px right column; omitted or null draws no third track. */
     rail?: ReactNode;
