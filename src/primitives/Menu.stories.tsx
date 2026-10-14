@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import { bothThemes } from "../../.storybook/bothThemes";
 import { Menu, MenuButton, type MenuEntry } from "./Menu";
 
@@ -154,4 +154,40 @@ export const InsideClippingBox = {
       </MenuButton>
     </div>
   ),
+};
+
+const dot = (code: string) => (
+  <span aria-hidden="true" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: "var(--ward-height-streamAvatar)", height: "var(--ward-height-streamAvatar)", borderRadius: "var(--ward-radius-chip)", background: "var(--ward-color-surface2)", font: "var(--ward-type-meta)" }}>
+    {code}
+  </span>
+);
+
+const named = ["Data Engineering", "Demo", "Finance", "KPI Config", "Marketing", "Payroll", "Risk", "Sales", "Treasury"];
+
+const switcher: MenuEntry[] = [
+  { heading: "Recent", whileFinding: "hide", items: [{ label: "Demo", icon: dot("DM"), description: "3 waiting for you", trailing: <b>3</b>, current: true, onSelect: chosen }] },
+  { heading: "All streams", items: named.map((label) => ({ label, icon: dot(label.slice(0, 2).toUpperCase()), description: "Nothing waiting", onSelect: chosen })) },
+  "separator",
+  { heading: "More", whileFinding: "keep", items: [{ label: "All streams", href: "/streams" }, { label: "New stream", onSelect: chosen }] },
+];
+
+// A ghost row inside a box: the menu takes the box's edges, with avatars, counts and a find row.
+export const SwitcherWithFind = {
+  render: () => {
+    const Box = () => {
+      const box = useRef<HTMLDivElement>(null);
+      return (
+        <div ref={box} style={{ width: "var(--ward-width-sidebar)", padding: "var(--ward-space-1)", border: "var(--ward-border) solid var(--ward-color-line)", borderRadius: "var(--ward-radius-card)" }}>
+          <MenuButton label="Demo" variant="ghost" defaultOpen>
+            <Menu entries={switcher} find={{ placeholder: "Find a stream" }} edges={box} size="large" />
+          </MenuButton>
+        </div>
+      );
+    };
+    return (
+      <Roomy>
+        <Box />
+      </Roomy>
+    );
+  },
 };

@@ -23,6 +23,19 @@
   background-repeat: no-repeat;
 }
 
+/* A ghost trigger is a row of its host: no ring and no chevron, filled while its menu is open. */
+.ghost {
+  padding: 0 var(--ward-space-2);
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
+}
+
+.ghost:hover,
+.ghost[aria-expanded="true"] {
+  background-color: var(--ward-color-selected);
+}
+
 .trigger:disabled {
   background-color: var(--ward-color-surface2);
   color: var(--ward-color-faint);
@@ -50,6 +63,13 @@
   box-shadow: 0 var(--ward-space-1) var(--ward-space-3) var(--ward-color-scrim);
 }
 
+/* With an edges box the panel is exactly that box's width, flush with both of its edges. */
+.edged {
+  width: var(--ward-anchor-width);
+  min-width: 0;
+  max-width: none;
+}
+
 .menu {
   display: flex;
   flex-direction: column;
@@ -69,6 +89,7 @@
 .item {
   display: flex;
   align-items: center;
+  gap: var(--ward-space-2);
   width: 100%;
   min-height: calc(var(--ward-height-target) + var(--ward-space-1));
   padding: 0 var(--ward-space-2);
@@ -82,23 +103,46 @@
 }
 
 .item:has(.description) {
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: var(--ward-space-1);
   padding-block: var(--ward-space-1);
 }
 
-/* A menu with a current item indents every row by the check mark, which sits in that space. */
-.marked {
-  position: relative;
-  padding-inline-start: calc(var(--ward-space-2) + var(--ward-space-4) + var(--ward-space-1));
+.large .item {
+  min-height: calc(var(--ward-height-target) + var(--ward-space-3));
+}
+
+.touch .item {
+  min-height: var(--ward-height-touch);
+}
+
+.icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--ward-width-menuIcon);
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+}
+
+.text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: calc(var(--ward-space-1) / 2);
+  min-width: 0;
+}
+
+.trailing {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
 }
 
 .check {
-  position: absolute;
-  inset-inline-start: var(--ward-space-2);
-  top: calc(50% - var(--ward-space-4) / 2);
+  flex: none;
   width: var(--ward-space-4);
   height: var(--ward-space-4);
   color: var(--ward-color-sageInk);
@@ -112,6 +156,22 @@
 .item:hover,
 .item:focus {
   background-color: var(--ward-color-accentTint);
+}
+
+/* The current row keeps its sage fill under the pointer, so current and hover never look alike. */
+.item[aria-current="true"] {
+  color: var(--ward-color-sageInk);
+  background-color: var(--ward-color-sageTint);
+}
+
+.item[aria-current="true"]:hover,
+.item[aria-current="true"]:focus {
+  background-color: var(--ward-color-sageTint);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-sageInk);
+}
+
+.item[aria-current="true"] .description {
+  color: var(--ward-color-sageInk);
 }
 
 .item[aria-disabled="true"] {
@@ -131,4 +191,44 @@
   padding: var(--ward-space-2) var(--ward-space-3);
   font: var(--ward-type-meta);
   border-top: var(--ward-border) solid var(--ward-color-line);
+}
+
+.find {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+  height: var(--ward-height-control);
+  margin-bottom: var(--ward-space-1);
+  padding: 0 var(--ward-space-2);
+  color: var(--ward-color-muted);
+  border-radius: var(--ward-radius-chip);
+  background-color: var(--ward-color-surface2);
+}
+
+.findGlyph {
+  flex: none;
+  width: var(--ward-height-mark);
+  height: var(--ward-height-mark);
+}
+
+.findInput {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  font: var(--ward-type-inputText);
+  color: var(--ward-color-text);
+  border: 0;
+  background-color: transparent;
+  appearance: none;
+}
+
+.findInput::placeholder {
+  color: var(--ward-color-muted);
+}
+
+.empty {
+  margin: 0;
+  padding: var(--ward-space-2);
+  font: var(--ward-type-meta);
 }

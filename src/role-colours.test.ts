@@ -31,6 +31,12 @@ const ROLE_USES: Record<Reason, string[]> = {
     "layout/AppShell.module.css .railItem[aria-current=\"page\"] sageInk",
     // ward#282: the check mark on a menu's current choice.
     "primitives/Menu.module.css .check sageInk",
+    // ward#299: the current menu row is a sage fill, kept under the pointer, so current and hover differ.
+    "primitives/Menu.module.css .item[aria-current=\"true\"] sageTint",
+    "primitives/Menu.module.css .item[aria-current=\"true\"] sageInk",
+    "primitives/Menu.module.css .item[aria-current=\"true\"]:hover, .item[aria-current=\"true\"]:focus sageTint",
+    "primitives/Menu.module.css .item[aria-current=\"true\"]:hover, .item[aria-current=\"true\"]:focus sageInk",
+    "primitives/Menu.module.css .item[aria-current=\"true\"] .description sageInk",
   ],
   owed: ["primitives/Marker.tsx owed: \"var(--ward-color-peach)\", peach"],
 };
