@@ -93,6 +93,10 @@ describe("OverflowRow", () => {
     expect(ruleBody(CSS, ".row:hover,\n.row:focus-visible")).toBe("scrollbar-color: var(--ward-color-muted) transparent");
   });
 
+  it("shows the scrollbar at rest on a touch screen, which has no hover", () => {
+    expect(readFileSync(CSS, "utf8")).toMatch(/@media \(hover: none\) \{\s*\.row \{\s*scrollbar-color: var\(--ward-color-muted\) transparent;\s*\}\s*\}/);
+  });
+
   it("is the only place a fade mask is declared", () => {
     const masked = cssFiles(join(here, "..")).filter((f) => /\[data-fade-(start|end)\]\s*\{[^}]*mask-image/.test(readFileSync(f, "utf8")));
     expect(masked.map((f) => f.slice(here.length - "layout".length))).toEqual(["layout/OverflowRow.module.css"]);

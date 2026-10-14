@@ -23,7 +23,7 @@ export const Section = {
   args: { links: studio, active: "console", level: "section", label: "Studio sections" },
 };
 
-// Five links at phone width scroll inside the strip; the current last link starts in view, clear of the fades.
+// Five links at phone width: those that do not fit wait in More, and the current last link stays in the strip.
 export const PhoneWidth = {
   args: { links: studio, active: "audit", level: "page", label: "Studio sections" },
   parameters: { viewport: { defaultViewport: "mobile1" } },

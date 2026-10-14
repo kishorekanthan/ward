@@ -14,6 +14,16 @@
     "menuInView": true,
     "pageScrollsSideways": false
   },
+  "tabLinks": {
+    "story": "primitives-tablinks--phone-width",
+    "stripScrolls": false,
+    "moreShown": true,
+    "activeLinkInView": true,
+    "shownLinksInStrip": true,
+    "menuHoldsTheRest": true,
+    "menuInView": true,
+    "pageScrollsSideways": false
+  },
   "pageHeader": {
     "story": "primitives-pageheader--phone-width",
     "chipsBelowCrumb": true,
