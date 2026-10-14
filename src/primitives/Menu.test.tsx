@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { contrast } from "../../scripts/contrast.mjs";
 import { stubLayout, unstubLayout } from "../test-layout";
-import { Menu, MenuButton, type MenuEntry, type MenuItem } from "./Menu";
+import { findEntries, Menu, MenuButton, type MenuEntry, type MenuItem } from "./Menu";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const tokens = JSON.parse(readFileSync(join(HERE, "..", "..", "tokens.json"), "utf8"));
@@ -440,12 +440,9 @@ describe("Described items", () => {
   });
 
   it("stacks the description under the label in the meta type, with a gap and block padding", () => {
-    const row = menuCss.match(/\.item:has\(\.description\) \{([^}]*)\}/)?.[1] ?? "";
-    const set = (property: string) => row.match(new RegExp(`(?:^|\\s)${property}: ([^;]+);`))?.[1];
-    expect(set("flex-direction")).toBe("column");
-    expect(set("align-items")).toBe("flex-start");
-    expect(set("gap")).toBe("var(--ward-space-1)");
-    expect(set("padding-block")).toBe("var(--ward-space-1)");
+    expect(declared(".text", "flex-direction")).toBe("column");
+    expect(declared(".text", "gap")).toBe("calc(var(--ward-space-1) / 2)");
+    expect(menuCss.match(/\.item:has\(\.description\) \{([^}]*)\}/)?.[1]).toContain("padding-block: var(--ward-space-1);");
     expect(declared(".description", "font")).toBe("var(--ward-type-meta)");
   });
 });
@@ -481,12 +478,25 @@ describe("Current item", () => {
     expect(focusedText()).toBe("Data Engineering");
   });
 
-  it("indents every row by the check mark's space, so labels line up", () => {
+  it("draws the check after the label and indents no row, so labels line up", () => {
     render(<NewRequest entries={streams} defaultOpen />);
-    const classes = screen.getAllByRole("menuitem").map((item) => item.className.split(" "));
-    expect(classes.every((each) => each.length === 2 && each[1] === classes[0][1])).toBe(true);
-    expect(declared(".marked", "padding-inline-start")).toBe("calc(var(--ward-space-2) + var(--ward-space-4) + var(--ward-space-1))");
-    expect(declared(".check", "inset-inline-start")).toBe("var(--ward-space-2)");
+    expect(screen.getByRole("menuitem", { name: "Demo" }).lastElementChild?.tagName).toBe("svg");
+    const classes = screen.getAllByRole("menuitem").map((item) => item.className);
+    expect(classes.every((each) => each === classes[0] && !each.includes(" "))).toBe(true);
+    expect(menuCss).not.toMatch(/\.marked|position: absolute/);
+  });
+
+  it("fills the current row with sageTint, kept under the pointer, while other rows hover in accentTint", () => {
+    const current = (state: string) => menuCss.match(new RegExp(`\\.item\\[aria-current="true"\\]${state}[^{]*\\{([^}]*)\\}`))?.[1] ?? "";
+    expect(current("")).toContain("background-color: var(--ward-color-sageTint);");
+    expect(current("")).toContain("color: var(--ward-color-sageInk);");
+    expect(current(":hover")).toContain("background-color: var(--ward-color-sageTint);");
+    expect(menuCss).toMatch(/\.item:hover,\n\.item:focus \{\n  background-color: var\(--ward-color-accentTint\);/);
+  });
+
+  it("reads sageInk on sageTint at 4.5:1 in both themes", () => {
+    const ratios = [tokens.color, tokens.dark].map((theme) => contrast(theme.sageInk, theme.sageTint));
+    expect(ratios.every((ratio) => ratio >= 4.5)).toBe(true);
   });
 
   it("leaves a menu with no current item unindented", () => {
@@ -500,5 +510,202 @@ describe("Current item", () => {
     const ratios = [tokens.color, tokens.dark].flatMap((theme) => [contrast(theme.sageInk, theme.surface), contrast(theme.sageInk, theme.accentTint)]);
     expect(ratios.every((ratio) => ratio >= 3)).toBe(true);
     expect(declared(".check", "color")).toBe("var(--ward-color-sageInk)");
+  });
+});
+
+const parted: MenuItem = { label: "KPI Config", description: "3 waiting for you", icon: <i data-testid="avatar" />, trailing: <b>3</b>, current: true };
+
+describe("Icon and trailing parts", () => {
+  it("draws the icon, the label and description, the trailing node, then the check, named by the label", () => {
+    render(<NewRequest entries={[parted, { label: "Demo" }]} defaultOpen />);
+    const row = screen.getByRole("menuitem", { name: "KPI Config" });
+    const parts = Array.from(row.children);
+    expect(parts.map((part) => part.getAttribute("class"))).toEqual(["icon", "text", "trailing", "check"].map((name) => expect.stringContaining(name)));
+    expect(parts[0].getAttribute("aria-hidden")).toBe("true");
+    expect(within(row).getByTestId("avatar")).toBeDefined();
+    expect(document.getElementById(row.getAttribute("aria-describedby") ?? "")?.textContent).toBe("3 waiting for you");
+  });
+
+  it("names a row with only an icon by its label, with no description", () => {
+    render(<NewRequest entries={[{ label: "Demo", icon: <i /> }]} defaultOpen />);
+    const row = screen.getByRole("menuitem", { name: "Demo" });
+    expect(row.hasAttribute("aria-describedby")).toBe(false);
+  });
+
+  it("keeps the icon in a 22px column and the trailing node at the end", () => {
+    expect(pixels(declared(".icon", "width"))).toBe(22);
+    expect(declared(".icon", "flex")).toBe("none");
+    expect(declared(".label", "flex")).toBe("1");
+    expect(declared(".trailing", "flex")).toBe("none");
+  });
+});
+
+describe("Ghost trigger", () => {
+  it("drops the ring and chevron and fills with selected while open", () => {
+    render(
+      <MenuButton label="Switch" variant="ghost">
+        <Menu entries={[{ label: "Demo" }]} />
+      </MenuButton>,
+    );
+    const opener = screen.getByRole("button", { name: "Switch" });
+    expect(opener.className.split(" ")).toHaveLength(2);
+    expect(declared(".ghost", "box-shadow")).toBe("none");
+    expect(declared(".ghost", "background-image")).toBe("none");
+    expect(menuCss).toMatch(/\.ghost\[aria-expanded="true"\] \{\n  background-color: var\(--ward-color-selected\);/);
+  });
+
+  it("keeps the field ring when no variant is asked for", () => {
+    render(<NewRequest />);
+    expect(button().className.split(" ")).toHaveLength(1);
+  });
+});
+
+const many: MenuItem[] = ["Data Engineering", "Demo", "Finance", "KPI Config", "Marketing", "Payroll", "Risk", "Sales", "Treasury"].map((label) => ({ label, href: `#/s/${label}` }));
+
+function Streams({ entries, onPick = vi.fn() }: { entries: MenuEntry[]; onPick?: (label: string) => void }) {
+  const picked = entries.map((entry) => (entry === "separator" || "items" in entry ? entry : { ...entry, onSelect: () => onPick(entry.label), href: undefined }));
+  return (
+    <MenuButton label="Switch stream">
+      <Menu entries={picked} find={{ placeholder: "Find a stream" }} />
+    </MenuButton>
+  );
+}
+
+const find = () => screen.getByRole("searchbox", { name: "Find a stream" }) as HTMLInputElement;
+const labels = () => screen.getAllByRole("menuitem").map((item) => item.textContent);
+const openStreams = () => fireEvent.click(screen.getByRole("button", { name: "Switch stream" }));
+
+describe("Find row", () => {
+  it("shows first once the menu has eight items, and filters rows by label", () => {
+    render(<Streams entries={many} />);
+    openStreams();
+    expect(screen.getByRole("menu").previousElementSibling?.contains(find())).toBe(true);
+    fireEvent.change(find(), { target: { value: "kp" } });
+    expect(labels()).toEqual(["KPI Config"]);
+  });
+
+  it("does not show with fewer items than from", () => {
+    render(<Streams entries={many.slice(0, 7)} />);
+    openStreams();
+    expect(screen.queryByRole("searchbox")).toBeNull();
+  });
+
+  it("keeps a keep group whole, hides a hide group and drops a group with no match while a query is typed", () => {
+    const entries: MenuEntry[] = [
+      { heading: "Recent", items: many.slice(0, 2), whileFinding: "hide" },
+      { heading: "All", items: many },
+      "separator",
+      { heading: "More", items: [{ label: "All streams" }], whileFinding: "keep" },
+    ];
+    render(<Streams entries={entries} />);
+    openStreams();
+    expect(screen.getAllByRole("group")).toHaveLength(3);
+    fireEvent.change(find(), { target: { value: "kp" } });
+    expect(labels()).toEqual(["KPI Config", "All streams"]);
+    expect(screen.getAllByRole("separator")).toHaveLength(1);
+    fireEvent.change(find(), { target: { value: "demo" } });
+    expect(labels()).toEqual(["Demo", "All streams"]);
+    fireEvent.change(find(), { target: { value: "zz" } });
+    expect(labels()).toEqual(["All streams"]);
+    expect(screen.queryByRole("separator")).toBeNull();
+  });
+
+  it("drops a separator left at either end or beside another", () => {
+    const entries: MenuEntry[] = ["separator", { label: "Alpha" }, "separator", { label: "Beta" }, "separator", { label: "Gamma" }];
+    expect(findEntries(entries, "a")).toEqual([{ label: "Alpha" }, "separator", { label: "Beta" }, "separator", { label: "Gamma" }]);
+    expect(findEntries(entries, "alp")).toEqual([{ label: "Alpha" }]);
+    expect(findEntries(entries, "gam")).toEqual([{ label: "Gamma" }]);
+  });
+
+  it("says no matches when nothing is left", () => {
+    render(<Streams entries={many} />);
+    openStreams();
+    fireEvent.change(find(), { target: { value: "zz" } });
+    expect(screen.queryAllByRole("menuitem")).toHaveLength(0);
+    expect(screen.getByText("No matches")).toBeDefined();
+  });
+});
+
+describe("Find row keys", () => {
+  it("takes a printable key typed on a row, instead of type-ahead", () => {
+    render(<Streams entries={many} />);
+    screen.getByRole("button", { name: "Switch stream" }).focus();
+    press("Enter");
+    expect(focusedText()).toBe("Data Engineering");
+    press("k");
+    expect(document.activeElement).toBe(find());
+    expect(find().value).toBe("k");
+  });
+
+  it("moves to the first row on ArrowDown and the last on ArrowUp, leaving the arrows to the list", () => {
+    render(<Streams entries={many} />);
+    openStreams();
+    find().focus();
+    press("ArrowDown");
+    expect(focusedText()).toBe("Data Engineering");
+    press("ArrowDown");
+    expect(focusedText()).toBe("Demo");
+    find().focus();
+    press("ArrowUp");
+    expect(focusedText()).toBe("Treasury");
+  });
+
+  it("picks the first row on Enter and closes on Escape", () => {
+    const onPick = vi.fn();
+    render(<Streams entries={many} onPick={onPick} />);
+    openStreams();
+    fireEvent.change(find(), { target: { value: "fin" } });
+    find().focus();
+    press("Enter");
+    expect(onPick).toHaveBeenCalledWith("Finance");
+    expect(screen.queryByRole("menu")).toBeNull();
+    openStreams();
+    find().focus();
+    press("Escape");
+    expect(screen.queryByRole("menu")).toBeNull();
+    expect(document.activeElement).toBe(screen.getByRole("button", { name: "Switch stream" }));
+  });
+
+  it("closes when Tab leaves the find row", () => {
+    render(<Streams entries={many} />);
+    openStreams();
+    find().focus();
+    press("Tab");
+    fireEvent.blur(find());
+    expect(screen.queryByRole("menu")).toBeNull();
+  });
+});
+
+describe("Edges box and row sizes", () => {
+  it("takes the edges box's left and width, and still opens under the trigger", () => {
+    const layout = stubLayout({ width: 1024, height: 768 }, { width: 160, height: 120 });
+    const box = { current: null as HTMLDivElement | null };
+    render(
+      <div ref={(el) => void (box.current = el)}>
+        <MenuButton label="Switch">
+          <Menu entries={[{ label: "Demo" }]} edges={box} />
+        </MenuButton>
+      </div>,
+    );
+    const opener = screen.getByRole("button", { name: "Switch" });
+    layout.place(box.current as HTMLElement, { left: 20, top: 90, width: 220, height: 120 });
+    layout.place(opener, { left: 28, top: 100, width: 204, height: 36 });
+    fireEvent.click(opener);
+    const panel = screen.getByRole("menu").parentElement as HTMLElement;
+    expect([panel.style.top, panel.style.left, panel.style.getPropertyValue("--ward-anchor-width")]).toEqual(["140px", "20px", "220px"]);
+    expect(declared(".edged", "width")).toBe("var(--ward-anchor-width)");
+    expect(declared(".edged", "max-width")).toBe("none");
+  });
+
+  it("makes rows 36px when large and 44px when touch", () => {
+    const rule = (size: string) => menuCss.match(new RegExp(`\\.${size} \\.item \\{([^}]*)\\}`))?.[1]?.match(/min-height: ([^;]+);/)?.[1];
+    expect(pixels(rule("large"))).toBe(36);
+    expect(pixels(rule("touch"))).toBe(44);
+    render(
+      <MenuButton label="Switch" defaultOpen>
+        <Menu entries={[{ label: "Demo" }]} size="touch" />
+      </MenuButton>,
+    );
+    expect((screen.getByRole("menu").parentElement as HTMLElement).className).toContain("touch");
   });
 });

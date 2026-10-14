@@ -379,6 +379,7 @@ export const v = {
     streamChainMin: 'var(--ward-width-streamChainMin)',
     colourPick: 'var(--ward-width-colourPick)',
     iconRail: 'var(--ward-width-iconRail)',
+    menuIcon: 'var(--ward-width-menuIcon)',
   },
   height: {
     control: 'var(--ward-height-control)',

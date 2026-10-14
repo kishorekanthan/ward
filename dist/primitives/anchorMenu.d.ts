@@ -16,5 +16,5 @@ export type Placement = {
     maxHeight: number;
 };
 export declare function placeMenu(anchor: Edges, menu: Extent, view: Extent, align: MenuAlign): Placement;
-/** Holds a mounted menu against its trigger, outside every overflow box, flipping at the viewport edges. */
-export declare function useAnchoredMenu(anchor: RefObject<HTMLElement | null>, menu: RefObject<HTMLElement | null>, align?: MenuAlign): void;
+/** Holds a mounted menu against its trigger, outside every overflow box, flipping at the viewport edges; edges lends its left and right. */
+export declare function useAnchoredMenu(anchor: RefObject<HTMLElement | null>, menu: RefObject<HTMLElement | null>, align?: MenuAlign, edges?: RefObject<HTMLElement | null>): void;

@@ -397,6 +397,7 @@ export declare const v: {
         readonly streamChainMin: "var(--ward-width-streamChainMin)";
         readonly colourPick: "var(--ward-width-colourPick)";
         readonly iconRail: "var(--ward-width-iconRail)";
+        readonly menuIcon: "var(--ward-width-menuIcon)";
     };
     readonly height: {
         readonly control: "var(--ward-height-control)";

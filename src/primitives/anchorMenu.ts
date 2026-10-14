@@ -33,8 +33,15 @@ function px(value: number): string {
   return `${Math.round(value * 100) / 100}px`;
 }
 
-function measure(menu: HTMLElement, anchor: HTMLElement) {
-  const edges = anchor.getBoundingClientRect();
+// Top and bottom come from the trigger; left, right and width from the edges box when there is one.
+function anchorEdges(anchor: HTMLElement, side?: HTMLElement | null): Edges & Extent {
+  const at = anchor.getBoundingClientRect();
+  const span = side ? side.getBoundingClientRect() : at;
+  return { top: at.top, bottom: at.bottom, left: span.left, right: span.right, width: span.width, height: at.height };
+}
+
+function measure(menu: HTMLElement, anchor: HTMLElement, side?: HTMLElement | null) {
+  const edges = anchorEdges(anchor, side);
   menu.style.setProperty("--ward-anchor-width", px(edges.width));
   Object.assign(menu.style, { left: "0px", top: "0px", maxHeight: "none" });
   const box = menu.getBoundingClientRect();
@@ -50,9 +57,9 @@ function keepScroll(menu: HTMLElement): () => void {
 }
 
 // A transformed ancestor without top-layer support offsets fixed boxes, so the box is shifted by where it landed.
-function position(menu: HTMLElement, anchor: HTMLElement, align: MenuAlign) {
+function position(menu: HTMLElement, anchor: HTMLElement, align: MenuAlign, side?: HTMLElement | null) {
   const restore = keepScroll(menu);
-  const got = measure(menu, anchor);
+  const got = measure(menu, anchor, side);
   const spot = placeMenu(got.edges, got.box, got.view, align);
   Object.assign(menu.style, { left: px(spot.left - got.box.left), top: px(spot.top - got.box.top), maxHeight: px(spot.maxHeight) });
   restore();
@@ -68,14 +75,19 @@ function raise(menu: HTMLElement): () => void {
   };
 }
 
-/** Holds a mounted menu against its trigger, outside every overflow box, flipping at the viewport edges. */
-export function useAnchoredMenu(anchor: RefObject<HTMLElement | null>, menu: RefObject<HTMLElement | null>, align: MenuAlign = "start") {
+/** Holds a mounted menu against its trigger, outside every overflow box, flipping at the viewport edges; edges lends its left and right. */
+export function useAnchoredMenu(
+  anchor: RefObject<HTMLElement | null>,
+  menu: RefObject<HTMLElement | null>,
+  align: MenuAlign = "start",
+  edges?: RefObject<HTMLElement | null>,
+) {
   useLayoutEffect(() => {
     const box = menu.current;
     const at = anchor.current;
     if (!box || !at) return;
     const lower = raise(box);
-    const place = () => position(box, at, align);
+    const place = () => position(box, at, align, edges?.current);
     // Scrolling inside the menu leaves it where it is.
     const onScroll = (event: Event) => {
       if (!box.contains(event.target as Node)) place();
@@ -87,9 +99,9 @@ export function useAnchoredMenu(anchor: RefObject<HTMLElement | null>, menu: Ref
       window.removeEventListener("resize", place);
       lower();
     };
-  }, [anchor, menu, align]);
+  }, [anchor, menu, align, edges]);
   // Every render may change the menu's size (a Find query narrows the list), so it is placed again each time.
   useLayoutEffect(() => {
-    if (menu.current && anchor.current) position(menu.current, anchor.current, align);
+    if (menu.current && anchor.current) position(menu.current, anchor.current, align, edges?.current);
   });
 }
