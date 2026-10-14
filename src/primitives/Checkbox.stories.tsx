@@ -40,6 +40,7 @@ export const Locked = {
     consequence: "A human gate is always a column.",
     checked: false,
     locked: true,
+    disabledReason: "People must see what waits for them.",
     onChange: () => {},
   },
 };

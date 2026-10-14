@@ -20,5 +20,5 @@ export const Disabled = {
 };
 
 export const Locked = {
-  args: { label: "Audit trail", checked: false, locked: true, onChange: () => {} },
+  args: { label: "Audit trail", checked: false, locked: true, disabledReason: "Every change is audited.", onChange: () => {} },
 };

@@ -23,6 +23,8 @@ export type ConfigRowProps = {
 
 const GATE_NOTE = "can't be hidden or collapsed";
 const TERMINAL_NOTE = "terminal · counted, not a column";
+const GATE_REASON = "A human gate is always shown, so people see what waits for them.";
+const TERMINAL_REASON = "A terminal stage is counted, not shown as a column.";
 
 /* The head carries the visible names for the row's controls, which is why those
    labels are hidden rather than absent. Export the two together; widths agree. */
@@ -119,6 +121,11 @@ function CapCell({ stage, config, onChange }: CellProps) {
   );
 }
 
+function fixedReason(stage: ConfigStage): string | undefined {
+  if (stage.gate) return GATE_REASON;
+  return stage.terminal ? TERMINAL_REASON : undefined;
+}
+
 // The state word is the switch's visible label, so it toggles the row; the switch keeps its own name.
 function ShownCell({ stage, config, onChange }: CellProps) {
   const scoped = useDisabledScope() !== null;
@@ -127,7 +134,7 @@ function ShownCell({ stage, config, onChange }: CellProps) {
   const toggle = (next: boolean) => onChange({ ...config, shown: next });
   return (
     <span className={s.cShown}>
-      <Switch label="Shown as a column" labelHidden checked={view.shown} locked={stage.gate} disabled={stage.terminal} onChange={toggle} />
+      <Switch label="Shown as a column" labelHidden checked={view.shown} locked={stage.gate} disabled={stage.terminal} disabledReason={fixedReason(stage)} onChange={toggle} />
       <span className={s.state} data-fixed={fixed || undefined} aria-hidden="true" onClick={() => !fixed && toggle(!view.shown)}>
         {view.state}
       </span>

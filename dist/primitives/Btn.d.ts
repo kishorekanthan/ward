@@ -1,9 +1,9 @@
-import { ReactNode } from 'react';
+import { MouseEvent, ReactNode } from 'react';
 export type BtnVariant = "primary" | "destructive" | "secondary" | "ghost" | "overflow";
 type Base = {
     variant?: BtnVariant;
     size?: "md" | "sm";
-    onClick?: () => void;
+    onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
     type?: "button" | "submit" | "reset";
     children?: ReactNode;
     label?: ReactNode;

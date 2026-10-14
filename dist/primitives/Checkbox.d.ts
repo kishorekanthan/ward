@@ -6,6 +6,8 @@ export type CheckboxProps = {
     disabled?: boolean;
     locked?: boolean;
     describedBy?: string;
+    /** Why a disabled or locked box cannot change; a scope's reason replaces it. */
+    disabledReason?: string;
     variant?: "cell";
     sample?: string;
     labelHidden?: boolean;

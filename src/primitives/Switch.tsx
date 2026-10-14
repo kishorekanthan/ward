@@ -1,5 +1,6 @@
 import { useId } from "react";
-import { describedByScope, useDisabledScope } from "./DisabledScope";
+import { joinIds } from "../a11y/joinIds";
+import { describedByScope, useDisabledScope, type ScopeReason } from "./DisabledScope";
 import s from "./Switch.module.css";
 
 export type SwitchProps = {
@@ -10,6 +11,8 @@ export type SwitchProps = {
   locked?: boolean;
   describedBy?: string;
   labelHidden?: boolean;
+  /** Why a disabled or locked switch cannot change; a scope's reason replaces it. */
+  disabledReason?: string;
 };
 
 // A locked switch shows on; a disabled, locked or scoped one ignores clicks.
@@ -21,11 +24,32 @@ function labelClass(labelHidden?: boolean): string {
   return labelHidden ? `${s.label} ${s.labelHidden}` : s.label;
 }
 
-export function Switch({ label, checked, onChange, disabled, locked, describedBy, labelHidden }: SwitchProps) {
+// A scope says its reason once for the page, so a switch's own reason shows only outside one.
+function ownReason(off: boolean, scoped: boolean, reason?: string): string | undefined {
+  return off && !scoped && reason ? reason : undefined;
+}
+
+function reasonAria(reasonId: string, describedBy: string | undefined, scope: ScopeReason | null, reason?: string) {
+  const own = reason ? reasonId : undefined;
+  return { "aria-describedby": describedByScope(joinIds(describedBy, own), scope), title: scope?.reason ?? reason };
+}
+
+function Reason({ id, reason }: { id: string; reason?: string }) {
+  if (!reason) return null;
+  return (
+    <span id={id} className="ward-visually-hidden">
+      {reason}
+    </span>
+  );
+}
+
+export function Switch({ label, checked, onChange, disabled, locked, describedBy, labelHidden, disabledReason }: SwitchProps) {
   const id = useId();
   const switchId = `${id}switch`;
+  const reasonId = `${id}reason`;
   const scope = useDisabledScope();
   const { on, off } = switchState(checked, disabled, locked, scope !== null);
+  const reason = ownReason(off, scope !== null, disabledReason);
   return (
     <span className={`${s.root} ward-switchrow`}>
       <button
@@ -35,8 +59,7 @@ export function Switch({ label, checked, onChange, disabled, locked, describedBy
         aria-checked={on}
         aria-label={label}
         aria-labelledby={id}
-        aria-describedby={describedByScope(describedBy, scope)}
-        title={scope?.reason}
+        {...reasonAria(reasonId, describedBy, scope, reason)}
         className={`${s.track} ward-switch`}
         data-on={on}
         data-locked={locked ? true : undefined}
@@ -49,6 +72,7 @@ export function Switch({ label, checked, onChange, disabled, locked, describedBy
         {label}
         {locked && <span className={s.lockedNote}>always on</span>}
       </label>
+      <Reason id={reasonId} reason={reason} />
     </span>
   );
 }
