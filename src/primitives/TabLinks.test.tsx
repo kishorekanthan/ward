@@ -91,6 +91,14 @@ describe("TabLinks", () => {
     expect(items).toEqual([2, 3, 4, 5, 6].map((i) => [`Link ${i}`, `#/${i}`]));
   });
 
+  it("keeps a waiting link's count in More", () => {
+    mockFit(300);
+    const counted = seven.map((link, i) => (i === 4 ? { ...link, count: 9 } : link));
+    render(<TabLinks level="page" links={counted} active="l0" label="Sections" />);
+    fireEvent.click(screen.getByRole("button", { name: "More" }));
+    expect(screen.getAllByRole("menuitem").map((item) => item.textContent)).toContain("Link 4 · 9");
+  });
+
   it("keeps the current link in the strip when it sits past the run", () => {
     mockFit(300);
     render(<TabLinks level="page" links={seven} active="l5" label="Sections" />);
