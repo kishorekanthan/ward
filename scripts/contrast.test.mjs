@@ -56,12 +56,13 @@ describe("edge contrast", () => {
       "light edge/laneTint #C9C6C0 on #EEF1EC = 1.50 (needs 3:1)",
       "light edge/gateLaneTint #C9C6C0 on #FBF3DF = 1.54 (needs 3:1)",
       "light edge/hover #C9C6C0 on #F6F6F3 = 1.57 (needs 3:1)",
+      "light edge/tableHead #C9C6C0 on #F1F1EF = 1.51 (needs 3:1)",
     ]);
   });
 
   it("fails dark line2 as the dark edge on every neutral ground", () => {
     const low = belowFloor(edgePairs({ ...tokens, dark: { ...tokens.dark, edge: "#434039" } }));
-    expect(low.map((l) => l.split(" ")[1])).toEqual(["edge/bg", "edge/surface", "edge/surface2", "edge/surface3", "edge/selected", "edge/accentTint", "edge/laneTint", "edge/gateLaneTint", "edge/hover"]);
+    expect(low.map((l) => l.split(" ")[1])).toEqual(["edge/bg", "edge/surface", "edge/surface2", "edge/surface3", "edge/selected", "edge/accentTint", "edge/laneTint", "edge/gateLaneTint", "edge/hover", "edge/tableHead"]);
   });
 
   it("fails a dark surface3 lifted until the edge on it drops below 3:1", () => {
@@ -70,11 +71,11 @@ describe("edge contrast", () => {
   });
 });
 
-const grounds = ["bg", "surface", "surface2", "surface3", "selected", "accentTint", "laneTint", "gateLaneTint", "hover", "sageTint", "peachTint", "runningTint", "waitingTint", "doneTint", "dangerTint"];
+const grounds = ["bg", "surface", "surface2", "surface3", "selected", "accentTint", "laneTint", "gateLaneTint", "hover", "tableHead", "sageTint", "peachTint", "runningTint", "waitingTint", "doneTint", "dangerTint"];
 
 describe("text contrast on every surface (TRELLIS-422)", () => {
-  it("holds text, ink2, muted and faint to 4.5:1 on all fifteen grounds, both themes", () => {
-    expect(textPairs(tokens)).toHaveLength(120);
+  it("holds text, ink2, muted and faint to 4.5:1 on all sixteen grounds, both themes", () => {
+    expect(textPairs(tokens)).toHaveLength(128);
     expect(belowFloor(textPairs(tokens))).toEqual([]);
   });
 
@@ -120,29 +121,29 @@ describe("text contrast on every surface (TRELLIS-422)", () => {
 
 describe("role ink contrast (TRELLIS-422)", () => {
   it("holds every role ink to 4.5:1 on each neutral ground and its own tint, both themes", () => {
-    expect(roleInkPairs(tokens)).toHaveLength(138);
+    expect(roleInkPairs(tokens)).toHaveLength(152);
     expect(belowFloor(roleInkPairs(tokens))).toEqual([]);
   });
 
   // #B5610B is the prototype's peach text, 4.49:1 on white.
   it("fails the prototype peach text on white and every ground under it", () => {
     const low = belowFloor(roleInkPairs({ ...tokens, color: { ...tokens.color, peachInk: "#B5610B" } }));
-    expect(low).toHaveLength(10);
+    expect(low).toHaveLength(11);
     expect(low[1]).toBe("light peachInk/surface #B5610B on #FFFFFF = 4.49 (needs 4.5:1)");
-    expect(low[9]).toBe("light peachInk/peachTint #B5610B on #FBE3D2 = 3.64 (needs 4.5:1)");
+    expect(low[10]).toBe("light peachInk/peachTint #B5610B on #FBE3D2 = 3.64 (needs 4.5:1)");
   });
 });
 
 describe("graphic contrast (TRELLIS-422)", () => {
   it("holds the focus ring, chart marks, sage and peach to 3:1 on every neutral ground, both themes", () => {
-    expect(graphicPairs(tokens)).toHaveLength(108);
+    expect(graphicPairs(tokens)).toHaveLength(120);
     expect(belowFloor(graphicPairs(tokens))).toEqual([]);
   });
 
   // #A7C7EC is the prototype's chart bar and focus outline blue, 1.75:1 on white.
   it("fails the prototype chart bar and focus blue", () => {
     const low = belowFloor(graphicPairs({ ...tokens, color: { ...tokens.color, chartBar: "#A7C7EC", focus: "#A7C7EC" } }));
-    expect(low.map((l) => l.split(" ")[1])).toEqual([...["focus", "chartBar"].flatMap((m) => grounds.slice(0, 9).map((g) => `${m}/${g}`))]);
+    expect(low.map((l) => l.split(" ")[1])).toEqual([...["focus", "chartBar"].flatMap((m) => grounds.slice(0, 10).map((g) => `${m}/${g}`))]);
     expect(low[1]).toBe("light focus/surface #A7C7EC on #FFFFFF = 1.75 (needs 3:1)");
   });
 
@@ -173,18 +174,18 @@ describe("check:contrast exit", () => {
 const withPreset = (name, theme, patch) => ({ ...tokens, accent: { ...tokens.accent, [name]: { ...tokens.accent[name], [theme]: { ...tokens.accent[name][theme], ...patch } } } });
 
 describe("accent presets hold the sage role's pairs (#221)", () => {
-  it("measures all five presets in both themes, 23 pairs each, and every pair passes", () => {
+  it("measures all five presets in both themes, 25 pairs each, and every pair passes", () => {
     const pairs = accentPairs(tokens);
     expect([...new Set(pairs.map(([, , label]) => label.split(" ").slice(0, 2).join(" ")))]).toEqual([
       "light green", "dark green", "light blue", "dark blue", "light violet", "dark violet", "light orange", "dark orange", "light rose", "dark rose",
     ]);
-    expect(pairs).toHaveLength(230);
+    expect(pairs).toHaveLength(250);
     expect(belowFloor(pairs)).toEqual([]);
   });
 
   it("measures green on the base sage role, so the default is the shipped palette", () => {
     const green = accentPairs(tokens).filter(([, , label]) => label.startsWith("light green "));
-    expect(green.slice(9, 11)).toEqual([
+    expect(green.slice(10, 12)).toEqual([
       ["#24553A", "#C9E2D2", "light green sageInk/sageTint", 4.5],
       ["#191918", "#C9E2D2", "light green text/sageTint", 4.5],
     ]);
@@ -193,13 +194,13 @@ describe("accent presets hold the sage role's pairs (#221)", () => {
   // The light blue mark as its ink: fine as a graphic at 3.26:1, too faint for text.
   it("fails a light blue ink on every neutral ground and its own tint", () => {
     const low = belowFloor(accentPairs(withPreset("blue", "color", { sageInk: "#5784B7" })));
-    expect(low.map((l) => l.split(" ")[2])).toEqual(["sageInk/bg", "sageInk/surface", "sageInk/surface2", "sageInk/surface3", "sageInk/selected", "sageInk/accentTint", "sageInk/laneTint", "sageInk/gateLaneTint", "sageInk/hover", "sageInk/sageTint"]);
-    expect(low[9]).toBe("light blue sageInk/sageTint #5784B7 on #D3E1F0 = 2.93 (needs 4.5:1)");
+    expect(low.map((l) => l.split(" ")[2])).toEqual(["sageInk/bg", "sageInk/surface", "sageInk/surface2", "sageInk/surface3", "sageInk/selected", "sageInk/accentTint", "sageInk/laneTint", "sageInk/gateLaneTint", "sageInk/hover", "sageInk/tableHead", "sageInk/sageTint"]);
+    expect(low[10]).toBe("light blue sageInk/sageTint #5784B7 on #D3E1F0 = 2.93 (needs 4.5:1)");
   });
 
   it("fails a dark rose mark set to its light ink, below 3:1 on every dark ground", () => {
     const low = belowFloor(accentPairs(withPreset("rose", "dark", { sage: "#6F2A3A" })));
-    expect(low).toHaveLength(9);
+    expect(low).toHaveLength(10);
     expect(low[5]).toBe("dark rose sage/accentTint #6F2A3A on #303030 = 1.30 (needs 3:1)");
   });
 
@@ -236,5 +237,11 @@ describe("inset card", () => {
   it("fails text too faint to read on the inset ground", () => {
     const dark = { ...tokens.dark, faint: tokens.dark.inset };
     expect(belowFloor(insetPairs({ ...tokens, dark })).some((m) => m.startsWith("dark faint/inset"))).toBe(true);
+  });
+});
+
+describe("table head (#297)", () => {
+  it("keeps the dark table head off the grey a hovered row, a quiet chip and the panel use", () => {
+    expect([tokens.dark.surface, tokens.dark.surface2, tokens.dark.hover, tokens.chipDark.quiet.bg]).not.toContain(tokens.dark.tableHead);
   });
 });

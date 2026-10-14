@@ -74,6 +74,7 @@ export const v = {
     laneTint: 'var(--ward-color-laneTint)',
     gateLaneTint: 'var(--ward-color-gateLaneTint)',
     hover: 'var(--ward-color-hover)',
+    tableHead: 'var(--ward-color-tableHead)',
     blue: 'var(--ward-color-blue)',
     blueSoft: 'var(--ward-color-blueSoft)',
     accentPill: 'var(--ward-color-accentPill)',

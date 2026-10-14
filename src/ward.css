@@ -121,6 +121,7 @@
   --ward-color-laneTint: #EEF1EC;
   --ward-color-gateLaneTint: #FBF3DF;
   --ward-color-hover: #F6F6F3;
+  --ward-color-tableHead: #F1F1EF;
   --ward-color-blue: #2D5A86;
   --ward-color-blueSoft: #F3F3F1;
   --ward-color-accentPill: #C9E2D2;
@@ -626,6 +627,7 @@
   --ward-color-laneTint: #20251F;
   --ward-color-gateLaneTint: #2C271A;
   --ward-color-hover: #191917;
+  --ward-color-tableHead: #242422;
   --ward-color-blue: #9CBDDE;
   --ward-color-blueSoft: #262626;
   --ward-color-accentPill: #213B2B;
@@ -755,6 +757,7 @@
   --ward-color-laneTint: #EEF1EC;
   --ward-color-gateLaneTint: #FBF3DF;
   --ward-color-hover: #F6F6F3;
+  --ward-color-tableHead: #F1F1EF;
   --ward-color-blue: #2D5A86;
   --ward-color-blueSoft: #F3F3F1;
   --ward-color-accentPill: #C9E2D2;

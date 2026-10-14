@@ -51,8 +51,8 @@ export function derivedDarkPairs(dark) {
 }
 
 const THEMES = (tokens) => [["light", tokens.color], ["dark", tokens.dark]];
-// Board lanes and the hover ground carry text, tone pills and marks like any other neutral ground (#217).
-const NEUTRAL = ["bg", "surface", "surface2", "surface3", "selected", "accentTint", "laneTint", "gateLaneTint", "hover"];
+// Board lanes, the hover ground and the table head carry text, tone pills and marks like any other neutral ground (#217).
+const NEUTRAL = ["bg", "surface", "surface2", "surface3", "selected", "accentTint", "laneTint", "gateLaneTint", "hover", "tableHead"];
 const TINTS = ["sageTint", "peachTint", "runningTint", "waitingTint", "doneTint", "dangerTint"];
 const TEXT = ["text", "ink2", "muted", "faint"];
 // A role ink is set on any neutral ground and on its own tint, never on another role's tint.
