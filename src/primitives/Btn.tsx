@@ -1,4 +1,4 @@
-import { Fragment, useId, type ReactNode } from "react";
+import { Fragment, useId, type MouseEvent, type ReactNode } from "react";
 import { useDisabledScope, type ScopeReason } from "./DisabledScope";
 import s from "./Btn.module.css";
 
@@ -7,7 +7,7 @@ export type BtnVariant = "primary" | "destructive" | "secondary" | "ghost" | "ov
 type Base = {
   variant?: BtnVariant;
   size?: "md" | "sm";
-  onClick?: () => void;
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
   type?: "button" | "submit" | "reset";
   children?: ReactNode;
   label?: ReactNode;

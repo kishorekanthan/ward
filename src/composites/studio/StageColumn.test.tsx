@@ -81,8 +81,9 @@ describe("StageColumn", () => {
     );
     expect(screen.getByRole("link", { name: "Mounted agent" }).getAttribute("href")).toBe("#/studio/agents/a%2Fb");
     expect(screen.getByText("6 items")).toBeDefined();
-    fireEvent.click(screen.getByRole("button", { name: "+ Mount agent" }));
-    expect(onMount).toHaveBeenCalledWith(2);
+    const button = screen.getByRole("button", { name: "+ Mount agent" });
+    fireEvent.click(button);
+    expect(onMount).toHaveBeenCalledWith(2, button);
   });
 
   it("counts a single waiting item in the singular", () => {

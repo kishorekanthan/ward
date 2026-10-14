@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { Checkbox } from "./Checkbox";
+import { DisabledScope } from "./DisabledScope";
 
 describe("Checkbox", () => {
   it("renders a locked field as its real value, never off", () => {
@@ -43,5 +44,42 @@ describe("Checkbox", () => {
     expect(screen.getByRole("checkbox", { name: "Approver sees it" })).not.toBeNull();
     expect(label.className).toMatch(/labelHidden/);
     expect(label.className).not.toMatch(/(^|\s)_?label(_|\s|$)/);
+  });
+});
+
+describe("Checkbox disabledReason", () => {
+  const described = (el: HTMLElement) =>
+    (el.getAttribute("aria-describedby") ?? "").split(" ").filter(Boolean).map((id) => document.getElementById(id)?.textContent).join(" | ");
+
+  it("describes a locked or disabled box by its reason, after its consequence", () => {
+    render(
+      <>
+        <Checkbox label="Waits on" checked locked disabledReason="Every card shows its wait." />
+        <Checkbox label="Show cost" checked={false} disabled consequence="Viewers never see cost." disabledReason="Cost is off for this stream." />
+      </>,
+    );
+    const waits = screen.getByRole("checkbox", { name: /^Waits on/ });
+    expect(described(waits)).toBe("Every card shows its wait.");
+    expect(waits.title).toBe("Every card shows its wait.");
+    expect(described(screen.getByRole("checkbox", { name: "Show cost" }))).toBe("Viewers never see cost. | Cost is off for this stream.");
+  });
+
+  it("says nothing of a reason while the box can change", () => {
+    render(<Checkbox label="Show cost" checked={false} disabledReason="Cost is off for this stream." onChange={() => {}} />);
+    const box = screen.getByRole("checkbox", { name: "Show cost" });
+    expect(box.getAttribute("aria-describedby")).toBeNull();
+    expect(box.title).toBe("");
+    expect(screen.queryByText("Cost is off for this stream.")).toBeNull();
+  });
+
+  it("keeps only the scope's reason inside a disabled scope", () => {
+    render(
+      <DisabledScope reason="Read only for viewers.">
+        <Checkbox label="Waits on" checked locked disabledReason="Every card shows its wait." />
+      </DisabledScope>,
+    );
+    const waits = screen.getByRole("checkbox", { name: /^Waits on/ });
+    expect(described(waits)).toBe("Read only for viewers.");
+    expect(waits.title).toBe("Read only for viewers.");
   });
 });

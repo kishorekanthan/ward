@@ -13,6 +13,8 @@ const row = (s: Partial<ConfigStage>, onChange = vi.fn()) => {
 /* The control is a switch, not a checkbox — the comp's Shown cell holds a 26x14
    track — so state is read from aria-checked rather than from input.checked. */
 const shown = () => screen.getByRole("switch") as HTMLButtonElement;
+const described = (el: HTMLElement) =>
+  (el.getAttribute("aria-describedby") ?? "").split(" ").filter(Boolean).map((id) => document.getElementById(id)?.textContent).join(" ");
 
 describe("ConfigRow", () => {
   it("locks a human gate on as a column and says why", () => {
@@ -23,6 +25,8 @@ describe("ConfigRow", () => {
     expect(onChange).not.toHaveBeenCalled();
     expect(screen.getByText("can't be hidden or collapsed")).not.toBeNull();
     expect(screen.getByText("locked")).not.toBeNull();
+    expect(described(shown())).toBe("A human gate is always shown, so people see what waits for them.");
+    expect(shown().title).toBe("A human gate is always shown, so people see what waits for them.");
   });
 
   it("keeps a terminal stage off the board and counted instead", () => {
@@ -30,6 +34,7 @@ describe("ConfigRow", () => {
     expect(shown().getAttribute("aria-checked")).toBe("false");
     expect(shown().disabled).toBe(true);
     expect(screen.getByText("terminal · counted, not a column")).not.toBeNull();
+    expect(described(shown())).toBe("A terminal stage is counted, not shown as a column.");
     expect(screen.queryByLabelText("WIP cap")).toBeNull();
   });
 

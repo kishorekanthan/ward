@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { DisabledScope } from "./DisabledScope";
 import { Switch } from "./Switch";
 
 describe("Switch labelHidden", () => {
@@ -47,5 +48,43 @@ describe("Switch label click", () => {
     fireEvent.click(screen.getByText("Paused lane"));
     fireEvent.click(screen.getByText("Gate lane"));
     expect(seen).toEqual([]);
+  });
+});
+
+const described = (el: HTMLElement) =>
+  (el.getAttribute("aria-describedby") ?? "").split(" ").filter(Boolean).map((id) => document.getElementById(id)?.textContent).join(" | ");
+
+describe("Switch disabledReason", () => {
+  it("describes a disabled or locked switch by its reason", () => {
+    render(
+      <>
+        <p id="note">Paused by the owner.</p>
+        <Switch label="Paused lane" checked={false} disabled disabledReason="Nothing runs here." describedBy="note" />
+        <Switch label="Gate lane" checked locked disabledReason="Gates always show." />
+      </>,
+    );
+    const paused = screen.getByRole("switch", { name: "Paused lane" });
+    expect(described(paused)).toBe("Paused by the owner. | Nothing runs here.");
+    expect(paused.title).toBe("Nothing runs here.");
+    expect(described(screen.getByRole("switch", { name: /^Gate lane/ }))).toBe("Gates always show.");
+  });
+
+  it("says nothing of a reason while the switch can change", () => {
+    render(<Switch label="Intake" checked={false} disabledReason="Nothing runs here." onChange={() => {}} />);
+    const live = screen.getByRole("switch", { name: "Intake" });
+    expect(live.getAttribute("aria-describedby")).toBeNull();
+    expect(live.title).toBe("");
+    expect(screen.queryByText("Nothing runs here.")).toBeNull();
+  });
+
+  it("keeps only the scope's reason inside a disabled scope", () => {
+    render(
+      <DisabledScope reason="Read only for viewers.">
+        <Switch label="Gate lane" checked locked disabledReason="Gates always show." />
+      </DisabledScope>,
+    );
+    const gate = screen.getByRole("switch", { name: /^Gate lane/ });
+    expect(described(gate)).toBe("Read only for viewers.");
+    expect(gate.title).toBe("Read only for viewers.");
   });
 });

@@ -45,7 +45,8 @@ export type StageColumnSummary = {
 export type StageColumnWorkflowProps = {
   stage: StageColumnSummary;
   agentCards?: ReactNode;
-  onMount?: (index: number) => void;
+  /** Gets the button too, so a panel can be anchored to it. */
+  onMount?: (index: number, trigger: HTMLElement) => void;
   presentation: { mode: "workflow" };
 };
 
@@ -212,7 +213,7 @@ function canMount(kind: StageKind): boolean {
 
 function WorkflowMount({ stage, onMount }: Pick<StageColumnWorkflowProps, "stage" | "onMount">) {
   if (onMount === undefined || !canMount(stage.kind)) return null;
-  return <Btn variant="secondary" size="sm" className={s.mount} onClick={() => onMount(stage.index)}>+ Mount agent</Btn>;
+  return <Btn variant="secondary" size="sm" className={s.mount} onClick={(event) => onMount(stage.index, event.currentTarget)}>+ Mount agent</Btn>;
 }
 
 function WorkflowColumn({ stage, agentCards, onMount }: StageColumnWorkflowProps) {

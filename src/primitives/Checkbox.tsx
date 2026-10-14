@@ -11,6 +11,8 @@ export type CheckboxProps = {
   disabled?: boolean;
   locked?: boolean;
   describedBy?: string;
+  /** Why a disabled or locked box cannot change; a scope's reason replaces it. */
+  disabledReason?: string;
   // cell: Studio 4a's bordered card-anatomy cell, with the field's sample value trailing in mono.
   variant?: "cell";
   sample?: string;
@@ -33,6 +35,28 @@ function LockedNote({ locked }: { locked?: boolean }) {
   return <span className={`${s.lockedNote} ward-check-note`}>always shown</span>;
 }
 
+// A scope says its reason once for the page, so a box's own reason shows only outside one.
+function ownReason(props: CheckboxProps, disabled: boolean, scope: ScopeReason | null): string | undefined {
+  return disabled && !scope && props.disabledReason ? props.disabledReason : undefined;
+}
+
+function boxAria(props: CheckboxProps, id: string, disabled: boolean, scope: ScopeReason | null) {
+  const noteId = props.consequence ? `${id}-note` : undefined;
+  const reason = ownReason(props, disabled, scope);
+  const reasonId = reason ? `${id}-reason` : undefined;
+  const describedBy = describedByScope(joinIds(noteId, props.describedBy, reasonId), scope);
+  return { noteId, reason, reasonId: `${id}-reason`, input: { "aria-describedby": describedBy, title: scope?.reason ?? reason } };
+}
+
+function Reason({ id, reason }: { id: string; reason?: string }) {
+  if (!reason) return null;
+  return (
+    <span id={id} className="ward-visually-hidden">
+      {reason}
+    </span>
+  );
+}
+
 function Sample({ text }: { text?: string }) {
   if (!text) return null;
   return <span className={s.sample} aria-hidden="true">{text}</span>;
@@ -40,9 +64,9 @@ function Sample({ text }: { text?: string }) {
 
 export function Checkbox(props: CheckboxProps) {
   const id = useId();
-  const noteId = props.consequence ? `${id}-note` : undefined;
   const scope = useDisabledScope();
   const state = checkboxState(props, scope);
+  const aria = boxAria(props, id, state.disabled, scope);
   return (
     <div className={`${s.root} ward-checkrow`} data-ward-checkbox="" data-locked={props.locked || undefined} data-variant={props.variant}>
       <span className={s.row}>
@@ -53,8 +77,7 @@ export function Checkbox(props: CheckboxProps) {
           checked={state.checked}
           disabled={state.disabled}
           onChange={(event) => !state.disabled && props.onChange?.(event.target.checked)}
-          aria-describedby={describedByScope(joinIds(noteId, props.describedBy), scope)}
-          title={scope?.reason}
+          {...aria.input}
         />
         <label htmlFor={id} className={props.labelHidden ? s.labelHidden : s.label}>
           {props.label}
@@ -62,7 +85,8 @@ export function Checkbox(props: CheckboxProps) {
         </label>
         <Sample text={props.sample} />
       </span>
-      <Consequence id={noteId} text={props.consequence} />
+      <Reason id={aria.reasonId} reason={aria.reason} />
+      <Consequence id={aria.noteId} text={props.consequence} />
     </div>
   );
 }

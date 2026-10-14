@@ -38,7 +38,8 @@ export type StageColumnSummary = {
 export type StageColumnWorkflowProps = {
     stage: StageColumnSummary;
     agentCards?: ReactNode;
-    onMount?: (index: number) => void;
+    /** Gets the button too, so a panel can be anchored to it. */
+    onMount?: (index: number, trigger: HTMLElement) => void;
     presentation: {
         mode: "workflow";
     };

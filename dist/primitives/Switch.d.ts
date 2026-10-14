@@ -6,5 +6,7 @@ export type SwitchProps = {
     locked?: boolean;
     describedBy?: string;
     labelHidden?: boolean;
+    /** Why a disabled or locked switch cannot change; a scope's reason replaces it. */
+    disabledReason?: string;
 };
-export declare function Switch({ label, checked, onChange, disabled, locked, describedBy, labelHidden }: SwitchProps): import("react").JSX.Element;
+export declare function Switch({ label, checked, onChange, disabled, locked, describedBy, labelHidden, disabledReason }: SwitchProps): import("react").JSX.Element;
