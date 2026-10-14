@@ -38,7 +38,7 @@ export type { BtnProps, BtnVariant } from "./primitives/Btn";
 export { Checkbox } from "./primitives/Checkbox";
 export type { CheckboxProps } from "./primitives/Checkbox";
 export { Chip } from "./primitives/Chip";
-export type { ChipProps, ChipSemantic } from "./primitives/Chip";
+export type { ChipProps, ChipSemantic, ChipTone } from "./primitives/Chip";
 export { ClampText } from "./primitives/ClampText";
 export type { ClampTextProps } from "./primitives/ClampText";
 export { streamColour, streamChipProps, validatedStep } from "./primitives/streamColour";

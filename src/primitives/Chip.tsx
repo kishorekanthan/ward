@@ -2,9 +2,12 @@ import type { CSSProperties } from "react";
 import { isValidatedStreamStep, stream, v, type ChipRole, type StreamStep } from "../tokens";
 import s from "./Chip.module.css";
 
-export type ChipSemantic = ChipRole | "stream";
+// The scale a page picks a status tone from; every tone is the same filled shape.
+export type ChipTone = "neutral" | "info" | "success" | "warning" | "danger";
 
-const LOOKUP: Record<ChipRole, { bg: string; fg: string; line: string }> = {
+export type ChipSemantic = ChipRole | ChipTone | "stream";
+
+const LOOKUP: Record<ChipRole | ChipTone, { bg: string; fg: string; line: string }> = {
   gate: v.chip.gate,
   system: v.chip.system,
   write: v.chip.write,
@@ -19,6 +22,11 @@ const LOOKUP: Record<ChipRole, { bg: string; fg: string; line: string }> = {
   soft: v.chip.soft,
   quiet: v.chip.quiet,
   owed: v.chip.owed,
+  neutral: v.chip.quiet,
+  info: v.chip.running,
+  success: v.chip.done,
+  warning: v.chip.attention,
+  danger: v.chip.failed,
 };
 
 export type ChipProps = {

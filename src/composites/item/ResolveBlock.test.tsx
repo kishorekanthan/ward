@@ -24,6 +24,8 @@ describe("ResolveBlock", () => {
     expect(document.getElementById(button.getAttribute("aria-describedby") ?? "")?.textContent).toBe(
       "Ask J. Rao to approve this override.",
     );
+    expect(button.getAttribute("title")).toBe("Ask J. Rao to approve this override.");
+    expect(button.nextElementSibling?.className).toContain("ward-btn-reason");
   });
 
   it("never fires the choice it just refused", () => {

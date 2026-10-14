@@ -1,4 +1,3 @@
-import { useId } from "react";
 import { Btn } from "../../primitives/Btn";
 import { Chip } from "../../primitives/Chip";
 import s from "./ResolveBlock.module.css";
@@ -32,19 +31,13 @@ function variant(primary: boolean): "primary" | "secondary" {
 
 type PathProps = { path: ResolvePath; primary: boolean; onChoose: (kind: ResolveKind) => void };
 
-// A path you cannot take stays visible but disabled, and names who to ask instead.
+// A path you cannot take stays visible but disabled, and names who to ask instead in the Btn reason line.
 function PathAction({ path, primary, onChoose }: PathProps) {
-  const askId = useId();
   if (!path.allowed) {
     return (
-      <>
-        <Btn variant={variant(primary)} size="sm" disabled describedBy={askId}>
-          {LABEL[path.kind]}
-        </Btn>
-        <span className={s.ask} id={askId}>
-          {path.askInstead}
-        </span>
-      </>
+      <Btn variant={variant(primary)} size="sm" disabled disabledReason={path.askInstead ?? ""}>
+        {LABEL[path.kind]}
+      </Btn>
     );
   }
   return (
