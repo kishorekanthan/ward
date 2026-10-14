@@ -55,6 +55,14 @@ describe("Chip", () => {
     }
   });
 
+  it("reads each tone from its own status token", () => {
+    const own = { neutral: "quiet", info: "running", success: "done", warning: "attention", danger: "failed" } as const;
+    for (const tone of TONES) {
+      render(<Chip role={tone} label={tone} />);
+      expect(screen.getByText(tone).style.getPropertyValue("--ward-chip-bg")).toBe(`var(--ward-chip-${own[tone]}-bg)`);
+    }
+  });
+
   it("refuses a wordless chip", () => {
     expect(() => render(<Chip role="meta" label="" />)).toThrow(/label is required/);
   });
