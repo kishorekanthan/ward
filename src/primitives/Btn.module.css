@@ -63,3 +63,16 @@
   box-shadow: none;
   cursor: default;
 }
+
+/* A disabled button's own reason: the button, then one 12px line under it. */
+.withReason {
+  display: inline-grid;
+  justify-items: start;
+  gap: var(--ward-space-1);
+}
+
+.reason {
+  font: var(--ward-type-useText);
+  color: var(--ward-color-muted);
+  white-space: normal;
+}

@@ -1,5 +1,6 @@
 import { bothThemes } from "../../.storybook/bothThemes";
 import { Btn } from "./Btn";
+import { Chip, type ChipTone } from "./Chip";
 
 export default {
   title: "Primitives/Btn",
@@ -49,4 +50,27 @@ export const DisabledWithReason = {
 
 export const Submit = {
   args: { variant: "primary", type: "submit", children: "Save the draft" },
+};
+
+const TONES: ChipTone[] = ["neutral", "info", "success", "warning", "danger"];
+
+// The four button ranks and the five chip tones a page picks from.
+export const Ranks = {
+  render: () => (
+    <div style={{ display: "grid", gap: "var(--ward-space-4)" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "start", gap: "var(--ward-space-3)" }}>
+        <Btn variant="primary">Approve</Btn>
+        <Btn variant="secondary">Nudge D. Kovac</Btn>
+        <Btn variant="ghost">Back to board</Btn>
+        <Btn variant="primary" disabled disabledReason="Ask an Approver on Data Engineering.">
+          Override and advance
+        </Btn>
+      </div>
+      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "start", gap: "var(--ward-space-3)" }}>
+        {TONES.map((tone) => (
+          <Chip key={tone} role={tone} label={tone[0].toUpperCase() + tone.slice(1)} />
+        ))}
+      </div>
+    </div>
+  ),
 };

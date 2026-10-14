@@ -1,4 +1,4 @@
-import { useId, type ReactNode } from "react";
+import { Fragment, useId, type ReactNode } from "react";
 import { useDisabledScope, type ScopeReason } from "./DisabledScope";
 import s from "./Btn.module.css";
 
@@ -58,12 +58,14 @@ function describedBy(props: BtnProps, reason: string | undefined, reasonId: stri
   return joinIds(props.describedBy, reason && reasonId);
 }
 
-function Reason({ id, reason }: { id: string; reason?: string }) {
-  return reason ? (
-    <span id={id} className="ward-visually-hidden">
+// A scope's reason is said once by its page, so only a button's own reason shows as a line under it.
+function Reason({ id, reason, shown }: { id: string; reason?: string; shown: boolean }) {
+  if (!reason) return null;
+  return (
+    <span id={id} className={shown ? `${s.reason} ward-btn-reason` : "ward-visually-hidden"}>
       {reason}
     </span>
-  ) : null;
+  );
 }
 
 function buttonContent(props: BtnProps): ReactNode {
@@ -83,8 +85,9 @@ function ShownBtn(props: BtnProps) {
   const disabled = Boolean(props.disabled || scope);
   const reason = shownReason(props, scope);
   const reasonId = useId();
+  const Wrap = wrapFor(reason, scope);
   return (
-    <>
+    <Wrap>
       <button
         type={props.type ?? "button"}
         className={classNames(variant, size, disabled, props.className)}
@@ -100,7 +103,16 @@ function ShownBtn(props: BtnProps) {
       >
         {buttonContent(props)}
       </button>
-      <Reason id={reasonId} reason={reason} />
-    </>
+      <Reason id={reasonId} reason={reason} shown={Wrap === ReasonWrap} />
+    </Wrap>
   );
+}
+
+// Only a button's own reason earns the wrapper that stacks its line under it.
+function wrapFor(reason: string | undefined, scope: ScopeReason | null): typeof ReasonWrap | typeof Fragment {
+  return reason && !scope ? ReasonWrap : Fragment;
+}
+
+function ReasonWrap({ children }: { children?: ReactNode }) {
+  return <span className={`${s.withReason} ward-btn-withReason`}>{children}</span>;
 }

@@ -3,8 +3,9 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it, vi } from "vitest";
-import { injectModuleCss } from "../test-css";
+import { injectModuleCss, ruleBody } from "../test-css";
 import { Btn } from "./Btn";
+import { DisabledScope } from "./DisabledScope";
 import s from "./Btn.module.css";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -44,9 +45,34 @@ describe("Btn", () => {
     const btn = screen.getByRole("button", { name: "Publish" });
     const reason = document.getElementById(btn.getAttribute("aria-describedby") ?? "");
     expect(reason?.textContent).toBe("A dry run has to pass first");
-    expect(reason?.className).toBe("ward-visually-hidden");
     expect(btn.getAttribute("title")).toBe("A dry run has to pass first");
     expect(btn.textContent).toBe("Publish");
+  });
+
+  it("shows its own disabled reason as a 12px line directly under the button", () => {
+    const removeCss = injectModuleCss(join(here, "Btn.module.css"), s);
+    render(<Btn disabled disabledReason="Ask an Approver on Data Engineering.">Publish</Btn>);
+    const btn = screen.getByRole("button", { name: "Publish" });
+    const reason = btn.nextElementSibling as HTMLElement;
+    expect(reason.id).toBe(btn.getAttribute("aria-describedby"));
+    expect(reason.classList.contains("ward-visually-hidden")).toBe(false);
+    expect(reason.className).toContain("ward-btn-reason");
+    expect(ruleBody(join(here, "Btn.module.css"), ".reason")).toContain("font: var(--ward-type-useText)");
+    expect(themeVar(":root", "--ward-type-useText")).toMatch(/ 12px\//);
+    expect(getComputedStyle(btn.parentElement as HTMLElement).display).toBe("inline-grid");
+    removeCss();
+  });
+
+  it("keeps a scope's reason off screen, since the scope's page says it once", () => {
+    render(
+      <DisabledScope reason="Viewers cannot publish">
+        <Btn variant="primary">Publish</Btn>
+      </DisabledScope>,
+    );
+    const btn = screen.getByRole("button", { name: "Publish" });
+    expect(btn.getAttribute("title")).toBe("Viewers cannot publish");
+    expect(document.querySelector(".ward-btn-reason")).toBeNull();
+    expect(document.querySelector(".ward-btn-withReason")).toBeNull();
   });
 
   it("keeps a page reason alongside its own", () => {

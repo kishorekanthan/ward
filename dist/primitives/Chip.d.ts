@@ -1,5 +1,6 @@
 import { ChipRole, StreamStep } from '../tokens';
-export type ChipSemantic = ChipRole | "stream";
+export type ChipTone = "neutral" | "info" | "success" | "warning" | "danger";
+export type ChipSemantic = ChipRole | ChipTone | "stream";
 export type ChipProps = {
     role: ChipSemantic;
     label: string;
