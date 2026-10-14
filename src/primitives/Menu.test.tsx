@@ -584,6 +584,15 @@ describe("Find row", () => {
     expect(labels()).toEqual(["KPI Config"]);
   });
 
+  it("shows at exactly eight items, ignores spaces around the query and honours a smaller from", () => {
+    render(<Streams entries={many.slice(0, 8)} />);
+    openStreams();
+    fireEvent.change(find(), { target: { value: "  zz " } });
+    expect(screen.queryAllByRole("menuitem")).toHaveLength(0);
+    fireEvent.change(find(), { target: { value: "  fin " } });
+    expect(labels()).toEqual(["Finance"]);
+  });
+
   it("does not show with fewer items than from", () => {
     render(<Streams entries={many.slice(0, 7)} />);
     openStreams();
@@ -635,6 +644,23 @@ describe("Find row keys", () => {
     press("k");
     expect(document.activeElement).toBe(find());
     expect(find().value).toBe("k");
+  });
+
+  it("adds each typed key to the find row and picks the first enabled row on Enter", () => {
+    const onPick = vi.fn();
+    const entries: MenuEntry[] = [{ label: "Archive", disabled: true }, ...many];
+    render(<Streams entries={entries} onPick={onPick} />);
+    screen.getByRole("button", { name: "Switch stream" }).focus();
+    press("Enter");
+    press("d");
+    press("ArrowDown");
+    press("e");
+    expect(find().value).toBe("de");
+    expect(labels()).toEqual(["Demo"]);
+    fireEvent.change(find(), { target: { value: "" } });
+    find().focus();
+    press("Enter");
+    expect(onPick).toHaveBeenCalledWith("Data Engineering");
   });
 
   it("moves to the first row on ArrowDown and the last on ArrowUp, leaving the arrows to the list", () => {
@@ -693,6 +719,7 @@ describe("Edges box and row sizes", () => {
     fireEvent.click(opener);
     const panel = screen.getByRole("menu").parentElement as HTMLElement;
     expect([panel.style.top, panel.style.left, panel.style.getPropertyValue("--ward-anchor-width")]).toEqual(["140px", "20px", "220px"]);
+    expect((panel as HTMLElement).className).toContain("edged");
     expect(declared(".edged", "width")).toBe("var(--ward-anchor-width)");
     expect(declared(".edged", "max-width")).toBe("none");
   });
