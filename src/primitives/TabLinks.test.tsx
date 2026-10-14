@@ -20,20 +20,19 @@ const studio = [
 
 const seven = Array.from({ length: 7 }, (_, i) => ({ id: `l${i}`, label: `Link ${i}`, href: `#/${i}` }));
 
-// A 300px strip holding seven 90px links on a 100px pitch: 700px of content.
-function mockStripLayout(): void {
+// Every link is 90px wide and More is 60px, with no gap; the strip is `room` wide.
+function mockFit(room: number): void {
   vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockImplementation(function (this: HTMLElement) {
-    return this.tagName === "NAV" ? 300 : 0;
-  });
-  vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockImplementation(function (this: HTMLElement) {
-    return this.tagName === "NAV" ? 700 : 0;
+    return this.tagName === "NAV" ? room : 0;
   });
   vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
-    const left = this.tagName === "A" ? Number(this.textContent?.replace("Link ", "")) * 100 - (this.parentElement as HTMLElement).scrollLeft : 0;
-    const width = this.tagName === "A" ? 90 : 300;
-    return { left, right: left + width, width, top: 0, bottom: 40, height: 40, x: left, y: 0, toJSON: () => ({}) } as DOMRect;
+    const width = this.hasAttribute("data-more-probe") ? 60 : 90;
+    return { left: 0, right: width, width, top: 0, bottom: 40, height: 40, x: 0, y: 0, toJSON: () => ({}) } as DOMRect;
   });
 }
+
+// Links waiting in More are aria-hidden, so the role query lists only what the strip shows.
+const shownLabels = () => screen.getAllByRole("link").map((link) => link.textContent);
 
 afterEach(() => vi.restoreAllMocks());
 
@@ -66,7 +65,7 @@ describe("TabLinks", () => {
     expect(screen.getAllByRole("link").map((link) => link.getAttribute("tabindex"))).toEqual([null, null, null]);
   });
 
-  it("is no tab stop itself: its links take focus and scroll into view", () => {
+  it("is no tab stop itself: its links take focus", () => {
     render(<TabLinks level="section" links={studio} active="gates" label="Studio sections" />);
     expect(screen.getByRole("navigation", { name: "Studio sections" }).hasAttribute("tabindex")).toBe(false);
   });
@@ -82,44 +81,44 @@ describe("TabLinks", () => {
     expect(() => render(<TabLinks level="page" links={eight.slice(0, 7)} active="l0" label="Sections" />)).not.toThrow();
   });
 
-  it("scrolls a current link off the right edge into view on mount", () => {
-    mockStripLayout();
-    render(<TabLinks level="page" links={seven} active="l5" label="Sections" />);
-    const nav = screen.getByRole("navigation");
-    expect(nav.scrollLeft).toBe(290);
-    expect(nav.hasAttribute("data-fade-start")).toBe(true);
-  });
-
-  it("brings back a current link that sits left of the scrolled window, and leaves one in view alone", () => {
-    mockStripLayout();
-    const { rerender } = render(<TabLinks level="page" links={seven} active="l6" label="Sections" />);
-    rerender(<TabLinks level="page" links={seven} active="l1" label="Sections" />);
-    expect(screen.getByRole("navigation").scrollLeft).toBe(100);
-    rerender(<TabLinks level="page" links={seven} active="l2" label="Sections" />);
-    expect(screen.getByRole("navigation").scrollLeft).toBe(100);
-  });
-
-  it("fades only the edges that hide links, following the scroll", () => {
-    mockStripLayout();
+  it("moves the links that do not fit into More, in order, as links to their pages", () => {
+    mockFit(300);
     render(<TabLinks level="page" links={seven} active="l0" label="Sections" />);
-    const nav = screen.getByRole("navigation");
-    const fades = () => [nav.hasAttribute("data-fade-start"), nav.hasAttribute("data-fade-end")];
-    expect(fades()).toEqual([false, true]);
-    nav.scrollLeft = 200;
-    fireEvent.scroll(nav);
-    expect(fades()).toEqual([true, true]);
-    nav.scrollLeft = 400;
-    fireEvent.scroll(nav);
-    expect(fades()).toEqual([true, false]);
+    // 90 for Link 0 and 60 for More leave 150: Link 1 fits, Link 2 would need 330.
+    expect(shownLabels()).toEqual(["Link 0", "Link 1"]);
+    fireEvent.click(screen.getByRole("button", { name: "More" }));
+    const items = screen.getAllByRole("menuitem").map((item) => [item.textContent, item.getAttribute("href")]);
+    expect(items).toEqual([2, 3, 4, 5, 6].map((i) => [`Link ${i}`, `#/${i}`]));
   });
 
-  it("stops a revealed link clear of the edge fade, the strip's 24px scroll-padding", () => {
-    mockStripLayout();
-    const computed = window.getComputedStyle;
-    vi.spyOn(window, "getComputedStyle").mockImplementation((el) => (el.tagName === "NAV" ? ({ scrollPaddingInlineStart: "24px" } as CSSStyleDeclaration) : computed(el)));
-    render(<TabLinks level="page" links={seven} active="l2" label="Sections" />);
-    // Link 2 ends at 290, inside the 300px window but under the right fade: 290 - 300 + 24 = 14.
-    expect(screen.getByRole("navigation").scrollLeft).toBe(14);
+  it("keeps a waiting link's count in More", () => {
+    mockFit(300);
+    const counted = seven.map((link, i) => (i === 4 ? { ...link, count: 9 } : link));
+    render(<TabLinks level="page" links={counted} active="l0" label="Sections" />);
+    fireEvent.click(screen.getByRole("button", { name: "More" }));
+    expect(screen.getAllByRole("menuitem").map((item) => item.textContent)).toContain("Link 4 · 9");
+  });
+
+  it("keeps the current link in the strip when it sits past the run", () => {
+    mockFit(300);
+    render(<TabLinks level="page" links={seven} active="l5" label="Sections" />);
+    expect(shownLabels()).toEqual(["Link 0", "Link 5"]);
+    expect(screen.getByRole("link", { current: "page" }).textContent).toBe("Link 5");
+  });
+
+  it("takes a waiting link out of the tab order, and never scrolls the strip", () => {
+    mockFit(300);
+    render(<TabLinks level="page" links={seven} active="l0" label="Sections" />);
+    const waiting = Array.from(document.querySelectorAll("nav > a[data-overflow]"), (link) => link.getAttribute("tabindex"));
+    expect(waiting).toEqual(["-1", "-1", "-1", "-1", "-1"]);
+    expect(screen.getByRole("navigation").className).toMatch(/fits/);
+  });
+
+  it("shows every link and no More when they fit", () => {
+    mockFit(700);
+    render(<TabLinks level="page" links={seven} active="l3" label="Sections" />);
+    expect(shownLabels()).toEqual(seven.map((link) => link.label));
+    expect(screen.queryByRole("button", { name: "More" })).toBeNull();
   });
 
   it("draws the current link like the selected tab, at both levels", () => {

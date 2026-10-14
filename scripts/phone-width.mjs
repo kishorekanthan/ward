@@ -207,6 +207,36 @@ async function probeConsoleFoot() {
   };
 }
 
+// The link strip at 375px: links that do not fit wait in More, so the strip never scrolls and the current link stays in it.
+async function probeTabLinks() {
+  await document.fonts.ready;
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const strip = document.querySelector("#storybook-root nav[data-level]");
+  const shown = Array.from(strip.querySelectorAll(":scope > a")).filter((a) => a.getAttribute("aria-hidden") !== "true");
+  const more = strip.querySelector('button[aria-haspopup="menu"]');
+  const active = shown.find((a) => a.getAttribute("aria-current") === "page");
+  const box = strip.getBoundingClientRect();
+  const inStrip = (el) => {
+    const r = el.getBoundingClientRect();
+    return r.left >= box.left - 0.5 && r.right <= box.right + 0.5 && r.right <= innerWidth;
+  };
+  const waiting = strip.querySelectorAll(":scope > [data-overflow]").length;
+  const pageScrollsSideways = document.documentElement.scrollWidth > innerWidth;
+  more?.click();
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const menu = document.querySelector('[role="menu"]');
+  const m = menu?.getBoundingClientRect();
+  return {
+    stripScrolls: strip.scrollWidth > strip.clientWidth + 0.5,
+    moreShown: Boolean(more) && inStrip(more),
+    activeLinkInView: Boolean(active) && inStrip(active),
+    shownLinksInStrip: shown.every(inStrip),
+    menuHoldsTheRest: waiting > 0 && menu?.querySelectorAll('a[role="menuitem"]').length === waiting,
+    menuInView: Boolean(m) && m.left >= 0 && m.right <= innerWidth && m.bottom <= innerHeight,
+    pageScrollsSideways,
+  };
+}
+
 // Six stage columns at 375px: the grid scrolls, not the page; each lone fade, and both mid-scroll, mask their edges.
 async function probeStageGrid() {
   const grid = document.querySelector("#storybook-root [data-ward-stage-grid]");
@@ -483,7 +513,7 @@ async function probeDescribedMenu() {
 }
 
 // One chip fits beside a short crumb, so only that story shows chips still take their own line.
-const PROBES = { themePresets: probeThemeSamples, themeDensities: probeThemeSamples, tabs: probeTabs, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, drawerActions: probeDrawerActions, consoleFoot: probeConsoleFoot, workCardLongTitle: probeLongText, workCardLongTitleWide: probeLongText, sessionLongTitle: probeLongText, sessionLongTitleWide: probeLongText, sessionTableLongTitle: probeLongText, sessionTableLongTitleWide: probeLongText, caseHeaderLongTitle: probeLongText, caseHeaderLongTitleWide: probeLongText, caseHeaderLongCrumb: probeLongCrumb, caseHeaderLongCrumbWide: probeLongCrumb, streamChain: probeStreamChain, streamChainWide: probeStreamChain, streamChainFour: probeStreamChain, streamSummary: probeStreamChain, roleMatrixRows: probeRoleMatrixRows, roleMatrixRowsWide: probeRoleMatrixRows, gridStacked: probeStackedGrid, gridStackedWide: probeStackedGrid, menuDescribed: probeDescribedMenu, menuDescribedWide: probeDescribedMenu };
+const PROBES = { themePresets: probeThemeSamples, themeDensities: probeThemeSamples, tabs: probeTabs, tabLinks: probeTabLinks, pageHeader: probePageHeader, pageHeaderOneChip: probePageHeader, pageHeaderWideActions: probePageHeaderWideActions, pageHeaderLoneLink: probePageHeaderLinks, pageHeaderLongLoneLink: probePageHeaderLinks, pageHeaderTwoLinks: probePageHeaderLinks, pageHeaderLongTitle: probePageHeaderLongTitle, statStrip: probeStatStrip, stageGrid: probeStageGrid, topBar: probeTopBar, topBarNav: probeTopBarNav, topBarNavWide: probeTopBarNav, kicker: probeKicker, shortKicker: probeKicker, kickerAt320: probeKicker, longKicker: probeLongKicker, longKickerLongNote: probeLongKickerLongNote, console: probeConsole, drawerActions: probeDrawerActions, consoleFoot: probeConsoleFoot, workCardLongTitle: probeLongText, workCardLongTitleWide: probeLongText, sessionLongTitle: probeLongText, sessionLongTitleWide: probeLongText, sessionTableLongTitle: probeLongText, sessionTableLongTitleWide: probeLongText, caseHeaderLongTitle: probeLongText, caseHeaderLongTitleWide: probeLongText, caseHeaderLongCrumb: probeLongCrumb, caseHeaderLongCrumbWide: probeLongCrumb, streamChain: probeStreamChain, streamChainWide: probeStreamChain, streamChainFour: probeStreamChain, streamSummary: probeStreamChain, roleMatrixRows: probeRoleMatrixRows, roleMatrixRowsWide: probeRoleMatrixRows, gridStacked: probeStackedGrid, gridStackedWide: probeStackedGrid, menuDescribed: probeDescribedMenu, menuDescribedWide: probeDescribedMenu };
 
 async function measure(page, base, key) {
   const { story, label, longLabel, width = golden.viewport.width } = golden[key];

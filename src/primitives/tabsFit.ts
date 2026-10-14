@@ -22,12 +22,12 @@ export function shownTabs({ room, widths, more, gap }: Fit, selected: number): n
 const px = (value: string) => Number.parseFloat(value) || 0;
 const width = (el: Element) => el.getBoundingClientRect().width;
 
-function readFit(strip: HTMLElement): Fit {
+function readFit(strip: HTMLElement, item: string): Fit {
   const style = getComputedStyle(strip);
   const probe = strip.querySelector(":scope > [data-more-probe]");
   return {
     room: strip.clientWidth - px(style.paddingInlineStart) - px(style.paddingInlineEnd),
-    widths: Array.from(strip.querySelectorAll(':scope > [role="tab"]'), width),
+    widths: Array.from(strip.querySelectorAll(item), width),
     more: probe ? width(probe) : 0,
     gap: px(style.columnGap),
   };
@@ -43,18 +43,18 @@ function watch(strip: HTMLElement, read: () => void): (() => void) | undefined {
 
 const sameFit = (a: Fit | null, b: Fit) => JSON.stringify(a) === JSON.stringify(b);
 
-/** Measures the strip and its tabs; `labels` changes when a tab or its count does. */
-export function useShownTabs(strip: RefObject<HTMLElement | null>, selected: number, labels: string): number[] | null {
+/** Measures the strip and its tabs; `labels` changes when a tab or its count does; `item` picks the strip's tabs. */
+export function useShownTabs(strip: RefObject<HTMLElement | null>, selected: number, labels: string, item = ':scope > [role="tab"]'): number[] | null {
   const [fit, setFit] = useState<Fit | null>(null);
   useLayoutEffect(() => {
     const el = strip.current;
     if (!el) return undefined;
     const read = () => {
-      const next = readFit(el);
+      const next = readFit(el, item);
       setFit((was) => (sameFit(was, next) ? was : next));
     };
     read();
     return watch(el, read);
-  }, [strip, labels]);
+  }, [strip, labels, item]);
   return fit && shownTabs(fit, selected);
 }

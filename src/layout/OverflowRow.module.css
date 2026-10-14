@@ -15,6 +15,13 @@
   scrollbar-color: var(--ward-color-muted) transparent;
 }
 
+/* A touch screen has no hover, so its scrollbar shows at rest. */
+@media (hover: none) {
+  .row {
+    scrollbar-color: var(--ward-color-muted) transparent;
+  }
+}
+
 .row:focus-visible {
   outline: var(--ward-focus-ring) solid var(--ward-color-focus);
   outline-offset: calc(-1 * var(--ward-focus-ring));
