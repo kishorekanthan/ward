@@ -24,7 +24,7 @@
   letter-spacing: var(--ward-type-micro-tracking);
   text-transform: var(--ward-type-micro-transform);
   color: var(--ward-color-muted);
-  background: var(--ward-color-surface2);
+  background: var(--ward-color-tableHead);
   white-space: nowrap;
 }
 
@@ -37,6 +37,11 @@
   font: var(--ward-type-monoId);
   font-variant-numeric: var(--ward-type-monoId-numeric);
   white-space: nowrap;
+}
+
+/* A cell holds its control, not a row rule: a consumer's checklist rule stops at the grid (#297). */
+.td [data-ward-checkbox] {
+  border-bottom: 0;
 }
 
 .th[data-align="end"],

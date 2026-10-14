@@ -119,8 +119,9 @@ describe("soft surfaces against the chosen look (#217)", () => {
     expect(borders(CARD)).toEqual([]);
     expect(borders(COLUMN)).toEqual([]);
     // A stacked Grid moves its row rule from the cells to the row: still one row rule, never a column rule.
+    // The 0 keeps a consumer's checklist rule off a checkbox in a cell (#297).
     const rowRule = "border-bottom: var(--ward-border) solid var(--ward-color-line)";
-    expect(borders(GRID)).toEqual([rowRule, rowRule, "border-bottom: none"]);
+    expect(borders(GRID)).toEqual([rowRule, "border-bottom: 0", rowRule, "border-bottom: none"]);
     for (const selector of [".scroller", '.frame[data-inset="board"] .scroller', '.frame[data-inset="board"] .scroller > *']) {
       expect(ruleBody(LAYOUT, selector), selector).not.toMatch(/(^|\n)(border(?!-radius)|box-shadow|column-rule)/);
     }

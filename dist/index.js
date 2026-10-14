@@ -234,6 +234,7 @@ const $R = (e, a, n) => {
     laneTint: "var(--ward-color-laneTint)",
     gateLaneTint: "var(--ward-color-gateLaneTint)",
     hover: "var(--ward-color-hover)",
+    tableHead: "var(--ward-color-tableHead)",
     blue: "var(--ward-color-blue)",
     blueSoft: "var(--ward-color-blueSoft)",
     accentPill: "var(--ward-color-accentPill)",
@@ -2746,7 +2747,7 @@ function oh({ spent: e, ceiling: a, breakdown: n }) {
     ] }, l.label)) })
   ] });
 }
-const ih = "_frame_lmfp9_2", sh = "_table_lmfp9_6", ch = "_th_lmfp9_12", dh = "_td_lmfp9_13", uh = "_sort_lmfp9_48", hh = "_row_lmfp9_60", mh = "_empty_lmfp9_68", je = {
+const ih = "_frame_f7bxz_2", sh = "_table_f7bxz_6", ch = "_th_f7bxz_12", dh = "_td_f7bxz_13", uh = "_sort_f7bxz_53", hh = "_row_f7bxz_65", mh = "_empty_f7bxz_73", je = {
   frame: ih,
   table: sh,
   th: ch,

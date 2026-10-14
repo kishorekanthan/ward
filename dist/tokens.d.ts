@@ -92,6 +92,7 @@ export declare const v: {
         readonly laneTint: "var(--ward-color-laneTint)";
         readonly gateLaneTint: "var(--ward-color-gateLaneTint)";
         readonly hover: "var(--ward-color-hover)";
+        readonly tableHead: "var(--ward-color-tableHead)";
         readonly blue: "var(--ward-color-blue)";
         readonly blueSoft: "var(--ward-color-blueSoft)";
         readonly accentPill: "var(--ward-color-accentPill)";

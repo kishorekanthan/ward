@@ -1,8 +1,10 @@
 import { readFileSync } from "node:fs";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { ruleBody } from "../test-css";
+import { injectModuleCss, ruleBody } from "../test-css";
+import { Checkbox } from "./Checkbox";
 import { Grid, type GridColumn } from "./Grid";
+import s from "./Grid.module.css";
 
 const GRID_CSS = "src/primitives/Grid.module.css";
 
@@ -53,5 +55,21 @@ describe("Grid frame", () => {
     expect(cell).toMatch(/grid-template-columns: minmax\(0, 2fr\) minmax\(0, 3fr\)/);
     expect(cell).toMatch(/column-gap: var\(--ward-space-3\)/);
     expect(ruleBody(GRID_CSS, '[data-narrow="stack"] .td::before')).toContain("content: attr(data-label)");
+  });
+
+  it("draws its header on the table head ground, not the surface2 grey a hovered row and a quiet chip share", () => {
+    expect(ruleBody(GRID_CSS, ".th")).toContain("background: var(--ward-color-tableHead)");
+  });
+
+  it("keeps a consumer's checklist rule off a checkbox in a cell", () => {
+    const removeCss = injectModuleCss(GRID_CSS, s);
+    const consumer = document.createElement("style");
+    consumer.textContent = ".ward-checkrow { border-bottom: 1px solid black; }";
+    document.head.append(consumer);
+    render(<Grid<Row> label="Roles" columns={columns} rows={[{ id: "a", name: "Viewer" }]} rowId={(r) => r.id} renderCell={(r) => <Checkbox label={r.name} checked={false} onChange={() => {}} />} empty="None" />);
+    const box = screen.getAllByRole("checkbox")[0].closest("[data-ward-checkbox]") as HTMLElement;
+    expect(getComputedStyle(box).borderBottomWidth).toBe("0px");
+    consumer.remove();
+    removeCss();
   });
 });
