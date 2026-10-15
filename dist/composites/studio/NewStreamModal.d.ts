@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, ReactNode } from 'react';
 import { StreamStep } from '../../tokens';
 import { LadderStep } from './ColourLadder';
 export type StageDraft = {
@@ -58,6 +58,8 @@ export type WebNewStreamModalProps = {
     onDraft?: (draft: WebNewStreamDraft) => void;
     onClose: () => void;
     returnFocusTo?: HTMLElement | null;
+    /** Fields the consumer owns, shown after Identity; their state stays with the consumer. */
+    fields?: ReactNode;
 };
 type NewStreamModalRenderProps = NewStreamModalProps | WebNewStreamModalProps;
 export declare function colourStatus(colourStep: number | null, takenBy: Record<number, string>): string;

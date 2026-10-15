@@ -4849,6 +4849,7 @@ function uy(e) {
     /* @__PURE__ */ n(cy, { titleId: a }),
     /* @__PURE__ */ l("div", { className: b.webBody, children: [
       /* @__PURE__ */ n(dy, { name: o, setName: i, streamKey: s, setKey: c, colour: Ee, owner: Ye }),
+      e.fields && /* @__PURE__ */ n("section", { className: b.webSection, "data-stream-fields": "", children: e.fields }),
       /* @__PURE__ */ l("section", { className: b.webSection, children: [
         /* @__PURE__ */ l("div", { className: b.sectionHead, children: [
           /* @__PURE__ */ n("h3", { className: b.kicker, children: "02 · Workflow stages" }),
