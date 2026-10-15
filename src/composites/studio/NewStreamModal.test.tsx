@@ -87,6 +87,24 @@ describe("NewStreamModal", () => {
     });
   });
 
+  it("renders consumer fields after Identity and before the stages", () => {
+    render(
+      <NewStreamModal presentation="web" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} fields={<label>Jira project<input /></label>} />,
+    );
+    const slot = document.querySelector("[data-stream-fields]") as HTMLElement;
+    const identity = screen.getByRole("heading", { name: "01 · Identity" });
+    const stages = screen.getByRole("heading", { name: "02 · Workflow stages" });
+    expect(slot.contains(screen.getByLabelText("Jira project"))).toBe(true);
+    expect(identity.compareDocumentPosition(slot) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(slot.compareDocumentPosition(stages) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it("adds no section when the consumer passes no fields", () => {
+    render(<NewStreamModal presentation="web" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} />);
+    expect(screen.getByRole("heading", { name: "02 · Workflow stages" })).toBeTruthy();
+    expect(document.querySelector("[data-stream-fields]")).toBeNull();
+  });
+
   it("refuses a taken colour step", () => {
     render(<NewStreamModal presentation="web" owners={["Priya Nayar"]} ladder={ladder} takenBy={{ 1: "Data" }} onCreate={() => undefined} onClose={() => undefined} />);
     const taken = screen.getByRole("radio", { name: "Step 1 · taken by Data" });

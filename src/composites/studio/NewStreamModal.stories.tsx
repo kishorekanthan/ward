@@ -1,4 +1,5 @@
 import { overlayThemes } from "../../../.storybook/overlayThemes";
+import { Field } from "../../primitives/Field";
 import { NewStreamModal } from "./NewStreamModal";
 import type { LadderStep } from "./ColourLadder";
 
@@ -59,5 +60,12 @@ export const Web = {
     onCreate: () => {},
     onDraft: () => {},
     onClose: () => {},
+  },
+};
+
+export const WebWithFields = {
+  args: {
+    ...Web.args,
+    fields: <Field variant="form" label="Jira project" value="DATA" onChange={() => {}} mono />,
   },
 };

@@ -1,4 +1,4 @@
-import { useId, useState, type ReactElement } from "react";
+import { useId, useState, type ReactElement, type ReactNode } from "react";
 import { Btn } from "../../primitives/Btn";
 import { Chip } from "../../primitives/Chip";
 import { Field } from "../../primitives/Field";
@@ -55,6 +55,8 @@ export type WebNewStreamModalProps = {
   onDraft?: (draft: WebNewStreamDraft) => void;
   onClose: () => void;
   returnFocusTo?: HTMLElement | null;
+  /** Fields the consumer owns, shown after Identity; their state stays with the consumer. */
+  fields?: ReactNode;
 };
 
 type NewStreamModalRenderProps = NewStreamModalProps | WebNewStreamModalProps;
@@ -304,6 +306,7 @@ function WebNewStreamModal(props: WebNewStreamModalProps): ReactElement {
       <WebHeader titleId={titleId} />
       <div className={s.webBody}>
         <WebIdentity name={name} setName={setName} streamKey={key} setKey={setKey} colour={colour} owner={ownerField} />
+        {props.fields && <section className={s.webSection} data-stream-fields="">{props.fields}</section>}
         <section className={s.webSection}>
           <div className={s.sectionHead}>
             <h3 className={s.kicker}>02 · Workflow stages</h3>
