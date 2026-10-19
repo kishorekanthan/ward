@@ -8,5 +8,6 @@ export type RecordSectionProps = {
     label?: string;
     empty?: "inline";
     measure?: "prose";
+    surface?: "card";
 };
-export declare function RecordSection({ title, children, note, trailing, pad, label, empty, measure }: RecordSectionProps): import("react").JSX.Element;
+export declare function RecordSection({ title, children, note, trailing, pad, label, empty, measure, surface }: RecordSectionProps): import("react").JSX.Element;

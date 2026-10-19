@@ -67,6 +67,29 @@
   min-width: 0;
 }
 
+/* Provenance of the card surface: not established — the denser record page; existing card and rail tokens. */
+.record[data-surface="card"] {
+  padding: var(--ward-pad-railBlock);
+  border-radius: var(--ward-radius-card);
+  background: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line);
+}
+
+.record[data-surface="card"] > :global(.ward-sh) {
+  padding: 0 0 var(--ward-space-3);
+  border-bottom: 0;
+}
+
+.record[data-surface="card"] > :global(.ward-sh) h2 {
+  font: var(--ward-type-control);
+  color: var(--ward-color-text);
+}
+
+.record[data-surface="card"] > .recordBody {
+  padding: 0;
+  border-bottom: 0;
+}
+
 /* Mirrors Trellis Board Item 8b block padding under each `.sec` band. */
 .recordBody {
   display: flex;

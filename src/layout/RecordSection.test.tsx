@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { render, screen } from "@testing-library/react";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -47,6 +48,29 @@ describe("RecordSection", () => {
     render(<RecordSection title="History"><p>rows</p></RecordSection>);
     expect(getComputedStyle(screen.getByText("prose")).maxWidth).toBe("576px");
     expect(getComputedStyle(screen.getByText("rows")).maxWidth).toBe("none");
+  });
+});
+
+describe("RecordSection card surface", () => {
+  const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "layout.module.css"), "utf8");
+
+  it("marks a card section, keeps its heading and body, and leaves a plain section unmarked", () => {
+    const { container, rerender } = render(<RecordSection title="Acceptance criteria" surface="card"><p>rows</p></RecordSection>);
+    expect(container.querySelector("section")?.getAttribute("data-surface")).toBe("card");
+    expect(screen.getByRole("heading", { level: 2 }).textContent).toBe("Acceptance criteria");
+    expect(screen.getByText("rows")).toBeTruthy();
+    rerender(<RecordSection title="Acceptance criteria"><p>rows</p></RecordSection>);
+    expect(container.querySelector("section")?.hasAttribute("data-surface")).toBe(false);
+  });
+
+  it("marks an inline empty card section too", () => {
+    const { container } = render(<RecordSection title="Cost" empty="inline" surface="card">Nothing spent yet.</RecordSection>);
+    expect(container.querySelector("section")?.getAttribute("data-surface")).toBe("card");
+  });
+
+  it("pads the card 14px 16px, borders it, and sets its heading in the small control type", () => {
+    expect(css).toMatch(/\.record\[data-surface="card"\] \{[^}]*padding: var\(--ward-pad-railBlock\);[^}]*box-shadow: inset 0 0 0 var\(--ward-border\) var\(--ward-color-line\);/);
+    expect(css).toMatch(/\.record\[data-surface="card"\] > :global\(\.ward-sh\) h2 \{\s*font: var\(--ward-type-control\);/);
   });
 });
 

@@ -6,7 +6,7 @@ import { usePageStrip } from "./pageStrip";
 import { useShownTabs } from "./tabsFit";
 import s from "./Tabs.module.css";
 
-export type Tab = { id: string; label: string; count?: number };
+export type Tab = { id: string; label: string; count?: number; badge?: string };
 export type TabDef = Tab;
 // A page strip is pills above the title, one per page; a section strip is text tabs below it.
 export type TabLevel = "page" | "section";
@@ -26,7 +26,8 @@ function selectedIndex(tabs: Tab[], active: string): number {
   return index < 0 ? 0 : index;
 }
 
-const labelOf = (tab: Tab) => (tab.count === undefined ? tab.label : `${tab.label} · ${tab.count}`);
+const counted = (tab: Tab) => (tab.count === undefined ? tab.label : `${tab.label} · ${tab.count}`);
+const labelOf = (tab: Tab) => (tab.badge === undefined ? counted(tab) : `${counted(tab)}, ${tab.badge}`);
 
 export function tabClass(level: TabLevel): string {
   return `${s.strip} ward-tabs ward-tabs--${level}`;
@@ -46,11 +47,13 @@ function TabButton({ tab, active, place, onChange }: { tab: Tab; active: string;
       className={`${s.tab} ward-tab`}
       aria-selected={tab.id === active}
       aria-controls={`panel-${tab.id}`}
+      aria-label={tab.badge === undefined ? undefined : labelOf(tab)}
       onClick={() => onChange(tab.id)}
       {...place}
     >
       {tab.label}
       {tab.count === undefined ? null : <> <span className={s.count}>{`· ${tab.count}`}</span></>}
+      {tab.badge === undefined ? null : <span className={s.badge}>{tab.badge}</span>}
     </button>
   );
 }

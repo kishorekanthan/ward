@@ -93,6 +93,17 @@ a.tab {
   font-variant-numeric: var(--ward-type-monoId-numeric);
 }
 
+/* A badge flags news on a tab the reader is not on, such as new events: neutral, as it is neither owed nor the current page. */
+.badge {
+  margin-inline-start: var(--ward-space-2);
+  padding: 0 var(--ward-space-2);
+  border-radius: var(--ward-radius-chip);
+  font: var(--ward-type-chip);
+  color: var(--ward-color-ink2);
+  background: var(--ward-color-surface2);
+  white-space: nowrap;
+}
+
 /* Intake 12b scope row: 14px above, no rule of its own; the list below draws the line. */
 /* The scrolling strip clips every edge; a ring-sized gutter, cancelled by margin, keeps each tab's ring whole. */
 .strip[data-level="section"] {
