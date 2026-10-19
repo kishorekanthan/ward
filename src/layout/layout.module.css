@@ -53,6 +53,20 @@
   will-change: transform;
 }
 
+/* A rail of cards (ward#305): the cards stand on the page a gutter from the subject, with no rule between. */
+.subjectRail:has(> .rail > .record[data-surface="card"]) {
+  column-gap: var(--ward-space-4);
+}
+
+.rail:has(> .record[data-surface="card"]) {
+  background: none;
+  border-left: 0;
+}
+
+.record[data-surface="card"] + .record[data-surface="card"] {
+  margin-top: var(--ward-space-3);
+}
+
 /* Mirrors Trellis Board Item 8b: the grid carries border-top; the rail's own rule stands in for the record's border-right. */
 .subjectRail[data-ruled="true"] {
   margin-inline: calc(-1 * var(--ward-page-inset));
@@ -65,6 +79,29 @@
 
 .record {
   min-width: 0;
+}
+
+/* Provenance of the card surface: not established — the denser record page; existing card and rail tokens. */
+.record[data-surface="card"] {
+  padding: var(--ward-pad-railBlock);
+  border-radius: var(--ward-radius-card);
+  background: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-insetEdge), var(--ward-shadow-card);
+}
+
+.record[data-surface="card"] > :global(.ward-sh) {
+  padding: 0 0 var(--ward-space-3);
+  border-bottom: 0;
+}
+
+.record[data-surface="card"] > :global(.ward-sh) h2 {
+  font: var(--ward-type-control);
+  color: var(--ward-color-text);
+}
+
+.record[data-surface="card"] > .recordBody {
+  padding: 0;
+  border-bottom: 0;
 }
 
 /* Mirrors Trellis Board Item 8b block padding under each `.sec` band. */

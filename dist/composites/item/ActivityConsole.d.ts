@@ -11,6 +11,7 @@ export type ActivityConsoleProps = {
     connection: LiveConnection;
     idleSince?: string;
     label?: string;
+    fixed?: boolean;
 };
 export type ConsoleAnnounceProviderProps = {
     announce?: boolean;
@@ -18,4 +19,4 @@ export type ConsoleAnnounceProviderProps = {
     children: ReactNode;
 };
 export declare function ConsoleAnnounceProvider({ announce, onAnnounceChange, children }: ConsoleAnnounceProviderProps): import("react").JSX.Element;
-export declare function ActivityConsole({ lines, connection, idleSince, label }: ActivityConsoleProps): import("react").JSX.Element;
+export declare function ActivityConsole({ lines, connection, idleSince, label, fixed }: ActivityConsoleProps): import("react").JSX.Element;

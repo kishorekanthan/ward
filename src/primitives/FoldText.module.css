@@ -1,0 +1,33 @@
+/* Provenance: not established — no comp folds a block; the toggle is the text-button look of Btn's ghost. */
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ward-space-1);
+  min-width: 0;
+}
+
+.body {
+  min-width: 0;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.body[data-lines="2"] { max-height: 2lh; }
+.body[data-lines="3"] { max-height: 3lh; }
+.body[data-lines="4"] { max-height: 4lh; }
+
+.body[data-open] {
+  max-height: none;
+}
+
+.toggle {
+  min-height: var(--ward-height-target);
+  padding: 0 var(--ward-space-1);
+  border: 0;
+  background: none;
+  font: var(--ward-type-control);
+  color: var(--ward-color-link);
+  cursor: pointer;
+}
+

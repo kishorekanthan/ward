@@ -2,6 +2,7 @@ export type Tab = {
     id: string;
     label: string;
     count?: number;
+    badge?: string;
 };
 export type TabDef = Tab;
 export type TabLevel = "page" | "section";

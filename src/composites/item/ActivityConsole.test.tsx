@@ -134,6 +134,23 @@ describe("ActivityConsole", () => {
     expect(list.scrollTop).toBe(0);
   });
 
+  it("keeps a fixed console at one height from no lines to fifty", () => {
+    const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "ActivityConsole.module.css"), "utf8");
+    const many = Array.from({ length: 50 }, (_, i) => ({ at: LINES[0].at, kind: "tool" as const, text: `event ${i}` }));
+    const { rerender } = render(<ActivityConsole lines={[]} connection="live" fixed />);
+    const list = screen.getByRole("list");
+    expect(list.getAttribute("data-fixed")).toBe("true");
+    rerender(<ActivityConsole lines={many} connection="live" fixed />);
+    expect(list.getAttribute("data-fixed")).toBe("true");
+    rerender(<ActivityConsole lines={many} connection="live" />);
+    expect(list.hasAttribute("data-fixed")).toBe(false);
+    const fixed = /\n\.list\[data-fixed\] \{([^}]*)\}/.exec(css)?.[1] ?? "";
+    expect(fixed).toMatch(/\bheight: calc\(14lh \+ 13 \* var\(--ward-gap-console\)\);/);
+    expect(fixed).toContain("min-height: 0;");
+    expect(fixed).toContain("max-height: none;");
+    expect(css.indexOf(".list[data-fixed]")).toBeGreaterThan(css.indexOf(".list[data-empty]"));
+  });
+
   it("inks the idle foot in consoleFaint, the keep-list console ink", () => {
     const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "ActivityConsole.module.css"), "utf8");
     const foot = /\n\.foot \{([^}]*)\}/.exec(css)?.[1] ?? "";

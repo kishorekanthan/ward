@@ -1,0 +1,31 @@
+/* Provenance: not established — the owed chip's peach pair on a card; existing card and rail tokens. */
+.root {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ward-space-3) var(--ward-space-5);
+  padding: var(--ward-pad-railBlock);
+  border-radius: var(--ward-radius-card);
+  color: var(--ward-chip-owed-fg);
+  background: var(--ward-chip-owed-bg);
+  /* A page-head row: a row gap from what follows. */
+  margin-block-end: var(--ward-space-3);
+}
+
+.words {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-space-1);
+  min-width: 0;
+}
+
+.title {
+  font: var(--ward-type-control);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ward-space-2);
+}

@@ -46,3 +46,7 @@ export const Prose = {
     children: <p>Shipments that land after the 01:00 cut are absent from the daily view, so the morning report undercounts by the late batch and the warehouse plans against yesterday's numbers.</p>,
   },
 };
+
+export const Card = {
+  args: { title: "Acceptance criteria", surface: "card", trailing: <span>2 of 4 met</span>, children: <p>Every column has a data dictionary entry.</p> },
+};

@@ -83,3 +83,8 @@ function PageOverSection() {
 
 // One page strip above the title and one section strip below it: only the page strip draws a pill.
 export const PageAndSection = { render: () => <PageOverSection /> };
+
+// A badge flags news on a tab the reader is not on.
+export const Badge = {
+  render: () => <Tabs tabs={[{ id: "overview", label: "Overview" }, { id: "activity", label: "Activity", badge: "3 new" }]} active="overview" level="section" label="Request sections" onChange={() => undefined} />,
+};

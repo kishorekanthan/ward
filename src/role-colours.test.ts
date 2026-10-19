@@ -37,6 +37,9 @@ const ROLE_USES: Record<Reason, string[]> = {
     "primitives/Menu.module.css .item[aria-current=\"true\"]:hover, .item[aria-current=\"true\"]:focus sageTint",
     "primitives/Menu.module.css .item[aria-current=\"true\"]:hover, .item[aria-current=\"true\"]:focus sageInk",
     "primitives/Menu.module.css .item[aria-current=\"true\"] .description sageInk",
+    // ward#305: the current step of a stage stepper.
+    "primitives/StageSteps.module.css .step[data-state=\"now\"] sageTint",
+    "primitives/StageSteps.module.css .step[data-state=\"now\"] sageInk",
   ],
   owed: ["primitives/Marker.tsx owed: \"var(--ward-color-peach)\", peach"],
 };

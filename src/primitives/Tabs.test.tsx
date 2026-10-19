@@ -195,3 +195,19 @@ describe("Tabs", () => {
     expect(ruleBlock(".strip")).toMatch(/flex-wrap:\s*nowrap;/);
   });
 });
+describe("Tabs badge", () => {
+  it("shows a badge pill on its tab and reads it in the tab's name", () => {
+    mockFit(1000);
+    render(<Tabs tabs={[{ id: "overview", label: "Overview" }, { id: "activity", label: "Activity", badge: "3 new" }]} active="overview" level="section" onChange={() => undefined} />);
+    const tab = screen.getByRole("tab", { name: "Activity, 3 new" });
+    expect(tab.lastElementChild?.textContent).toBe("3 new");
+    expect(tab.lastElementChild?.className).toContain("badge");
+    const plain = screen.getByRole("tab", { name: "Overview" });
+    expect(plain.childElementCount).toBe(0);
+    expect(plain.hasAttribute("aria-label")).toBe(false);
+  });
+
+  it("paints the badge neutral, since news is neither owed nor the current page", () => {
+    expect(ruleBlock(".badge")).toMatch(/color: var\(--ward-color-ink2\);[^}]*background: var\(--ward-color-surface2\);/);
+  });
+});

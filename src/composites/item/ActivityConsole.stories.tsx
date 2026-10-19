@@ -34,3 +34,6 @@ export const SharedAnnounce = {
     docs: { description: { story: "To restore a persisted preference, pass `announce` with the stored value and update it from `onAnnounceChange`: `announce` is controlled, so a value you never update stops the toggle, and `onAnnounceChange` alone only reports changes." } },
   },
 };
+
+// A fixed console keeps its height from the first line to the fiftieth.
+export const Fixed = { args: { lines: [], connection: "live", fixed: true } };
