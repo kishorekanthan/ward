@@ -25,4 +25,8 @@ describe("OwedCard", () => {
   it("paints the owed peach pair", () => {
     expect(css).toMatch(/\.root \{[^}]*color: var\(--ward-chip-owed-fg\);[^}]*background: var\(--ward-chip-owed-bg\);/);
   });
+
+  it("keeps a row gap from what follows it on the page head", () => {
+    expect(css).toMatch(/\.root \{[^}]*margin-block-end: var\(--ward-space-3\);/);
+  });
 });

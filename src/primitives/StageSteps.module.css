@@ -3,7 +3,8 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--ward-space-2);
-  margin: 0;
+  /* A page-head row: a row gap from what follows. */
+  margin: 0 0 var(--ward-space-3);
   padding: 0;
   list-style: none;
 }

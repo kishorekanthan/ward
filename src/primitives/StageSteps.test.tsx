@@ -38,4 +38,8 @@ describe("StageSteps", () => {
     expect(css).toMatch(/\.root \{[^}]*flex-wrap: wrap;/);
     expect(css).toMatch(/\.step\[data-state="now"\] \{[^}]*color: var\(--ward-color-sageInk\);[^}]*background: var\(--ward-color-sageTint\);/);
   });
+
+  it("keeps a row gap from what follows it on the page head", () => {
+    expect(css).toMatch(/\.root \{[^}]*margin: 0 0 var\(--ward-space-3\);/);
+  });
 });

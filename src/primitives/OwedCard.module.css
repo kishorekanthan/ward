@@ -9,6 +9,8 @@
   border-radius: var(--ward-radius-card);
   color: var(--ward-chip-owed-fg);
   background: var(--ward-chip-owed-bg);
+  /* A page-head row: a row gap from what follows. */
+  margin-block-end: var(--ward-space-3);
 }
 
 .words {

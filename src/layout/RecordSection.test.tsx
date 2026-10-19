@@ -69,12 +69,17 @@ describe("RecordSection card surface", () => {
   });
 
   it("pads the card 14px 16px, borders it, and sets its heading in the small control type", () => {
-    expect(css).toMatch(/\.record\[data-surface="card"\] \{[^}]*padding: var\(--ward-pad-railBlock\);[^}]*box-shadow: inset 0 0 0 var\(--ward-border\) var\(--ward-color-line\);/);
+    expect(css).toMatch(/\.record\[data-surface="card"\] \{[^}]*padding: var\(--ward-pad-railBlock\);[^}]*box-shadow: inset 0 0 0 var\(--ward-border\) var\(--ward-color-insetEdge\), var\(--ward-shadow-card\);/);
     expect(css).toMatch(/\.record\[data-surface="card"\] > :global\(\.ward-sh\) h2 \{\s*font: var\(--ward-type-control\);/);
   });
 
   it("lets the card's own padding hold the body, with no inner padding or rule", () => {
     expect(css).toMatch(/\.record\[data-surface="card"\] > \.recordBody \{\s*padding: 0;\s*border-bottom: 0;/);
+  });
+  it("sets cards a row gap apart, and a rail of cards a gutter from the subject with no rule or ground", () => {
+    expect(css).toMatch(/\.record\[data-surface="card"\] \+ \.record\[data-surface="card"\] \{\s*margin-top: var\(--ward-space-3\);/);
+    expect(css).toMatch(/\.subjectRail:has\(> \.rail > \.record\[data-surface="card"\]\) \{\s*column-gap: var\(--ward-space-4\);/);
+    expect(css).toMatch(/\.rail:has\(> \.record\[data-surface="card"\]\) \{\s*background: none;\s*border-left: 0;/);
   });
 });
 
