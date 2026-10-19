@@ -17,7 +17,7 @@ const dotOf = (name: string) => screen.getByText(name).closest("li")?.querySelec
 
 describe("StageSteps", () => {
   it("lists the steps in order and marks only the now step as current", () => {
-    render(<StageSteps steps={[...STEPS]} label="Progress" />);
+    render(<StageSteps steps={[...STEPS]} />);
     const items = screen.getAllByRole("listitem");
     expect(screen.getByRole("list", { name: "Progress" })).toBeTruthy();
     expect(items.map((item) => item.getAttribute("data-state"))).toEqual(["done", "done", "now", "next"]);

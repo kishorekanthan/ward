@@ -72,6 +72,10 @@ describe("RecordSection card surface", () => {
     expect(css).toMatch(/\.record\[data-surface="card"\] \{[^}]*padding: var\(--ward-pad-railBlock\);[^}]*box-shadow: inset 0 0 0 var\(--ward-border\) var\(--ward-color-line\);/);
     expect(css).toMatch(/\.record\[data-surface="card"\] > :global\(\.ward-sh\) h2 \{\s*font: var\(--ward-type-control\);/);
   });
+
+  it("lets the card's own padding hold the body, with no inner padding or rule", () => {
+    expect(css).toMatch(/\.record\[data-surface="card"\] > \.recordBody \{\s*padding: 0;\s*border-bottom: 0;/);
+  });
 });
 
 describe("SubjectRail ruled", () => {
