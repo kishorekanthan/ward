@@ -380,6 +380,7 @@ export const v = {
     colourPick: 'var(--ward-width-colourPick)',
     iconRail: 'var(--ward-width-iconRail)',
     menuIcon: 'var(--ward-width-menuIcon)',
+    measure: 'var(--ward-width-measure)',
   },
   height: {
     control: 'var(--ward-height-control)',
@@ -535,6 +536,10 @@ export const v = {
     eyebrowTracking: 'var(--ward-type-eyebrow-tracking)',
     eyebrowTransform: 'var(--ward-type-eyebrow-transform)',
     caption: 'var(--ward-type-caption)',
+    proseH2: 'var(--ward-type-proseH2)',
+    proseH3: 'var(--ward-type-proseH3)',
+    proseH4: 'var(--ward-type-proseH4)',
+    codeText: 'var(--ward-type-codeText)',
   },
   motion: {
     fast: 'var(--ward-motion-fast)',

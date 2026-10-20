@@ -398,6 +398,7 @@ export declare const v: {
         readonly colourPick: "var(--ward-width-colourPick)";
         readonly iconRail: "var(--ward-width-iconRail)";
         readonly menuIcon: "var(--ward-width-menuIcon)";
+        readonly measure: "var(--ward-width-measure)";
     };
     readonly height: {
         readonly control: "var(--ward-height-control)";
@@ -556,6 +557,10 @@ export declare const v: {
         readonly eyebrowTracking: "var(--ward-type-eyebrow-tracking)";
         readonly eyebrowTransform: "var(--ward-type-eyebrow-transform)";
         readonly caption: "var(--ward-type-caption)";
+        readonly proseH2: "var(--ward-type-proseH2)";
+        readonly proseH3: "var(--ward-type-proseH3)";
+        readonly proseH4: "var(--ward-type-proseH4)";
+        readonly codeText: "var(--ward-type-codeText)";
     };
     readonly motion: {
         readonly fast: "var(--ward-motion-fast)";

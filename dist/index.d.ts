@@ -182,3 +182,8 @@ export { Eyebrow } from './site/Eyebrow';
 export type { EyebrowProps } from './site/Eyebrow';
 export { Figure } from './site/Figure';
 export type { FigureProps, FigureRatio } from './site/Figure';
+export { Prose, ProseHeading } from './site/Prose';
+export type { ProseProps, ProseHeadingProps } from './site/Prose';
+export { slug } from './site/slug';
+export { headingTag } from './site/heading';
+export type { HeadingLevel, HeadingTag } from './site/heading';
