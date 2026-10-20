@@ -1,0 +1,50 @@
+/* Provenance: not established — a post in a writing list; a ruled row that opens as a whole, existing tokens (#317). */
+.row {
+  position: relative;
+  display: grid;
+  gap: var(--ward-space-1);
+  padding: var(--ward-space-4) var(--ward-space-3);
+  border-block-end: 1px solid var(--ward-color-line);
+  min-inline-size: 0;
+}
+
+.row:hover {
+  background: var(--ward-color-hover);
+}
+
+.title {
+  margin: 0;
+  font: var(--ward-type-proseH4);
+  color: var(--ward-color-text);
+  overflow-wrap: break-word;
+}
+
+/* The one link: its overlay covers the row so a click anywhere opens it. */
+.link {
+  color: var(--ward-color-text);
+  text-decoration: none;
+  border-radius: var(--ward-radius-chip);
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.link:focus-visible {
+  outline: var(--ward-focus-ring) solid var(--ward-color-focus);
+  outline-offset: var(--ward-focus-offset);
+}
+
+.meta {
+  margin: 0;
+  font: var(--ward-type-caption);
+  color: var(--ward-color-muted);
+}
+
+.summary {
+  margin: 0;
+  font: var(--ward-type-rowText);
+  color: var(--ward-color-ink2);
+}
