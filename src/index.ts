@@ -262,3 +262,5 @@ export { SplitLayout } from "./site/SplitLayout";
 export type { SplitLayoutProps } from "./site/SplitLayout";
 export { Hero } from "./site/Hero";
 export type { HeroAction, HeroProps } from "./site/Hero";
+export { FlowChain } from "./site/FlowChain";
+export type { FlowAnimate, FlowChainProps } from "./site/FlowChain";

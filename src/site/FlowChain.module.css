@@ -1,0 +1,44 @@
+/* Provenance: not established — a one-line pipeline as an ordered list; existing tokens and motion tokens (#315). */
+.chain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ward-space-2);
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.step {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+  min-inline-size: 0;
+}
+
+.arrow {
+  font: var(--ward-type-rowText);
+  color: var(--ward-color-muted);
+}
+
+.box {
+  padding: var(--ward-space-2) var(--ward-space-3);
+  border-radius: var(--ward-radius);
+  background: var(--ward-color-surface);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-line2);
+  font: var(--ward-type-rowTextStrong);
+  color: var(--ward-color-text);
+  overflow-wrap: break-word;
+}
+
+/* The reveal runs only on the hook and only when motion is welcome; otherwise every step stays visible. */
+@media (prefers-reduced-motion: no-preference) {
+  .chain[data-ward-animate="ready"] .step {
+    opacity: 0;
+  }
+
+  .chain[data-ward-animate="run"] .step {
+    opacity: 1;
+    transition: opacity var(--ward-motion-reveal) calc(var(--ward-step) * var(--ward-motion-reveal));
+  }
+}
