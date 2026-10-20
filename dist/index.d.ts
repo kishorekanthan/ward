@@ -222,3 +222,5 @@ export { Article } from './site/Article';
 export type { ArticleProps } from './site/Article';
 export { readTime, wordCount } from './site/readTime';
 export type { TocHeading } from './site/toc';
+export { AnimatedDiagram } from './site/AnimatedDiagram';
+export type { AnimatedDiagramProps, DiagramStep, DiagramNode, DiagramEdge } from './site/AnimatedDiagram';
