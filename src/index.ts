@@ -275,3 +275,5 @@ export { TextList } from "./site/TextList";
 export type { TextListProps } from "./site/TextList";
 export { CaseStudy } from "./site/CaseStudy";
 export type { CaseStudyProps } from "./site/CaseStudy";
+export { ProjectPage } from "./site/ProjectPage";
+export type { ProjectPageProps, Screenshot, SourceLink } from "./site/ProjectPage";
