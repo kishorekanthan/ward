@@ -191,3 +191,7 @@ export { FactList } from './site/FactList';
 export type { Fact, FactListProps } from './site/FactList';
 export { LinkList } from './site/LinkList';
 export type { LinkItem, LinkListProps } from './site/LinkList';
+export { SiteHeader } from './site/SiteHeader';
+export type { SiteHeaderProps, SiteLink } from './site/SiteHeader';
+export { SiteFooter } from './site/SiteFooter';
+export type { SiteFooterProps } from './site/SiteFooter';
