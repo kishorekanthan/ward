@@ -234,3 +234,8 @@ export * from "./composites/intake/TypedInputBlock";
 export * from "./composites/platform/Band";
 
 export * from "./tokens";
+
+export { Tag } from "./site/Tag";
+export type { TagProps } from "./site/Tag";
+export { Eyebrow } from "./site/Eyebrow";
+export type { EyebrowProps } from "./site/Eyebrow";

@@ -530,6 +530,10 @@ export const v = {
     rowText: 'var(--ward-type-rowText)',
     rowTextStrong: 'var(--ward-type-rowTextStrong)',
     streamAvatar: 'var(--ward-type-streamAvatar)',
+    tagText: 'var(--ward-type-tagText)',
+    eyebrow: 'var(--ward-type-eyebrow)',
+    eyebrowTracking: 'var(--ward-type-eyebrow-tracking)',
+    eyebrowTransform: 'var(--ward-type-eyebrow-transform)',
   },
   motion: {
     fast: 'var(--ward-motion-fast)',

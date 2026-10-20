@@ -44,7 +44,7 @@ const preview: Preview = {
     },
     options: {
       storySort: {
-        order: ["Tokens", "Primitives", "Layout", "States", "Live", "Board", "Studio", "Admin", "Item", "Intake", "Platform"],
+        order: ["Tokens", "Primitives", "Layout", "States", "Live", "Board", "Studio", "Admin", "Item", "Intake", "Platform", "Site"],
       },
     },
   },

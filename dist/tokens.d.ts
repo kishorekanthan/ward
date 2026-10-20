@@ -551,6 +551,10 @@ export declare const v: {
         readonly rowText: "var(--ward-type-rowText)";
         readonly rowTextStrong: "var(--ward-type-rowTextStrong)";
         readonly streamAvatar: "var(--ward-type-streamAvatar)";
+        readonly tagText: "var(--ward-type-tagText)";
+        readonly eyebrow: "var(--ward-type-eyebrow)";
+        readonly eyebrowTracking: "var(--ward-type-eyebrow-tracking)";
+        readonly eyebrowTransform: "var(--ward-type-eyebrow-transform)";
     };
     readonly motion: {
         readonly fast: "var(--ward-motion-fast)";
