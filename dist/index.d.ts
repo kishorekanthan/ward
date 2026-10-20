@@ -187,3 +187,7 @@ export type { ProseProps, ProseHeadingProps } from './site/Prose';
 export { slug } from './site/slug';
 export { headingTag } from './site/heading';
 export type { HeadingLevel, HeadingTag } from './site/heading';
+export { FactList } from './site/FactList';
+export type { Fact, FactListProps } from './site/FactList';
+export { LinkList } from './site/LinkList';
+export type { LinkItem, LinkListProps } from './site/LinkList';
