@@ -534,6 +534,7 @@ export const v = {
     eyebrow: 'var(--ward-type-eyebrow)',
     eyebrowTracking: 'var(--ward-type-eyebrow-tracking)',
     eyebrowTransform: 'var(--ward-type-eyebrow-transform)',
+    caption: 'var(--ward-type-caption)',
   },
   motion: {
     fast: 'var(--ward-motion-fast)',

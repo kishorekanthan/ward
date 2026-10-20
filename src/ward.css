@@ -563,6 +563,7 @@
   --ward-type-eyebrow: 600 13px/1.4 Figtree, system-ui, sans-serif;
   --ward-type-eyebrow-tracking: normal;
   --ward-type-eyebrow-transform: none;
+  --ward-type-caption: 400 13px/1.45 Figtree, system-ui, sans-serif;
   --ward-motion-fast: 0.12s;
   --ward-motion-flash: 300ms;
   --ward-motion-reveal: 320ms;

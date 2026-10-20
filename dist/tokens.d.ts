@@ -555,6 +555,7 @@ export declare const v: {
         readonly eyebrow: "var(--ward-type-eyebrow)";
         readonly eyebrowTracking: "var(--ward-type-eyebrow-tracking)";
         readonly eyebrowTransform: "var(--ward-type-eyebrow-transform)";
+        readonly caption: "var(--ward-type-caption)";
     };
     readonly motion: {
         readonly fast: "var(--ward-motion-fast)";

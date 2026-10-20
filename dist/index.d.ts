@@ -180,3 +180,5 @@ export { Tag } from './site/Tag';
 export type { TagProps } from './site/Tag';
 export { Eyebrow } from './site/Eyebrow';
 export type { EyebrowProps } from './site/Eyebrow';
+export { Figure } from './site/Figure';
+export type { FigureProps, FigureRatio } from './site/Figure';
