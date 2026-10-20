@@ -205,3 +205,7 @@ export { Hero } from './site/Hero';
 export type { HeroAction, HeroProps } from './site/Hero';
 export { FlowChain } from './site/FlowChain';
 export type { FlowAnimate, FlowChainProps } from './site/FlowChain';
+export { ProjectCard } from './site/ProjectCard';
+export type { CardProps, ProjectCardProps } from './site/ProjectCard';
+export { FeaturedCard } from './site/FeaturedCard';
+export type { FeaturedCardProps } from './site/FeaturedCard';
