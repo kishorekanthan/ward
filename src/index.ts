@@ -258,3 +258,5 @@ export { PageIntro } from "./site/PageIntro";
 export type { PageIntroProps } from "./site/PageIntro";
 export { Section } from "./site/Section";
 export type { SectionProps, SectionSpace } from "./site/Section";
+export { SplitLayout } from "./site/SplitLayout";
+export type { SplitLayoutProps } from "./site/SplitLayout";

@@ -401,6 +401,7 @@ export declare const v: {
         readonly iconRail: "var(--ward-width-iconRail)";
         readonly menuIcon: "var(--ward-width-menuIcon)";
         readonly measure: "var(--ward-width-measure)";
+        readonly splitMain: "var(--ward-width-splitMain)";
     };
     readonly height: {
         readonly control: "var(--ward-height-control)";

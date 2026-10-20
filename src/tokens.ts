@@ -383,6 +383,7 @@ export const v = {
     iconRail: 'var(--ward-width-iconRail)',
     menuIcon: 'var(--ward-width-menuIcon)',
     measure: 'var(--ward-width-measure)',
+    splitMain: 'var(--ward-width-splitMain)',
   },
   height: {
     control: 'var(--ward-height-control)',

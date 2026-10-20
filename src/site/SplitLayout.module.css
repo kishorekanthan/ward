@@ -1,0 +1,18 @@
+/* Provenance: not established — content-page main and side column; flex wrapping so it follows its container, not the viewport (#313). */
+.split {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--ward-space-7);
+}
+
+/* The main column takes all spare room; once it would drop below its min width, the aside wraps under it. */
+.main {
+  flex: 999 1 0;
+  min-inline-size: min(100%, var(--ward-width-splitMain));
+}
+
+.aside {
+  flex: 1 1 var(--ward-width-rail);
+  min-inline-size: 0;
+}
