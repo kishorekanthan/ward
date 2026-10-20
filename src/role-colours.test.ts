@@ -10,7 +10,13 @@ type Reason = "mainAction" | "currentPage" | "owed";
 
 // TRELLIS-422: sage marks only the main action and the current page, peach only what is owed. Anything added names one reason.
 const ROLE_USES: Record<Reason, string[]> = {
-  mainAction: ["primitives/Btn.module.css .primary sageTint", "primitives/Btn.module.css .primary sageInk"],
+  mainAction: [
+    "primitives/Btn.module.css .primary sageTint",
+    "primitives/Btn.module.css .primary sageInk",
+    // ward#314: a hero's first action is the page's main action.
+    "site/Hero.module.css .primary sageTint",
+    "site/Hero.module.css .primary sageInk",
+  ],
   currentPage: [
     "primitives/Tabs.module.css .tab[aria-selected=\"true\"] sageTint",
     "primitives/Tabs.module.css .tab[aria-selected=\"true\"] sageInk",

@@ -201,3 +201,5 @@ export { Section } from './site/Section';
 export type { SectionProps, SectionSpace } from './site/Section';
 export { SplitLayout } from './site/SplitLayout';
 export type { SplitLayoutProps } from './site/SplitLayout';
+export { Hero } from './site/Hero';
+export type { HeroAction, HeroProps } from './site/Hero';
