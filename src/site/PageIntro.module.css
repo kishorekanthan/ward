@@ -1,0 +1,21 @@
+/* Provenance: not established — content-page opening; the 26px page title and an 18px lead from the scale (#312). */
+.intro {
+  display: grid;
+  gap: var(--ward-space-3);
+  max-inline-size: var(--ward-width-measure);
+  min-inline-size: 0;
+}
+
+.title {
+  margin: 0;
+  font: var(--ward-type-pageTitle);
+  letter-spacing: var(--ward-type-pageTitle-tracking);
+  color: var(--ward-color-text);
+  overflow-wrap: break-word;
+}
+
+.lead {
+  margin: 0;
+  font: var(--ward-type-lead);
+  color: var(--ward-color-ink2);
+}

@@ -189,6 +189,8 @@ export declare const v: {
         readonly s5: "var(--ward-space-5)";
         readonly s6: "var(--ward-space-6)";
         readonly s7: "var(--ward-space-7)";
+        readonly s8: "var(--ward-space-8)";
+        readonly s9: "var(--ward-space-9)";
         readonly page: "var(--ward-space-page)";
     };
     readonly pad: {
@@ -561,6 +563,7 @@ export declare const v: {
         readonly proseH3: "var(--ward-type-proseH3)";
         readonly proseH4: "var(--ward-type-proseH4)";
         readonly codeText: "var(--ward-type-codeText)";
+        readonly lead: "var(--ward-type-lead)";
     };
     readonly motion: {
         readonly fast: "var(--ward-motion-fast)";

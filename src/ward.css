@@ -211,6 +211,10 @@
   --ward-space-s6: var(--ward-space-6);
   --ward-space-7: 32px;
   --ward-space-s7: var(--ward-space-7);
+  --ward-space-8: 48px;
+  --ward-space-s8: var(--ward-space-8);
+  --ward-space-9: 64px;
+  --ward-space-s9: var(--ward-space-9);
   --ward-space-page: 24px;
   --ward-pad-row: 11px 0;
   --ward-pad-sessionCell: 11px 8px 11px 0;
@@ -569,6 +573,7 @@
   --ward-type-proseH3: 600 18px/1.3 Figtree, system-ui, sans-serif;
   --ward-type-proseH4: 600 15px/1.35 Figtree, system-ui, sans-serif;
   --ward-type-codeText: 400 13px/1.55 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --ward-type-lead: 400 18px/1.5 Figtree, system-ui, sans-serif;
   --ward-motion-fast: 0.12s;
   --ward-motion-flash: 300ms;
   --ward-motion-reveal: 320ms;

@@ -195,3 +195,7 @@ export { SiteHeader } from './site/SiteHeader';
 export type { SiteHeaderProps, SiteLink } from './site/SiteHeader';
 export { SiteFooter } from './site/SiteFooter';
 export type { SiteFooterProps } from './site/SiteFooter';
+export { PageIntro } from './site/PageIntro';
+export type { PageIntroProps } from './site/PageIntro';
+export { Section } from './site/Section';
+export type { SectionProps, SectionSpace } from './site/Section';

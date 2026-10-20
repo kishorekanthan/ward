@@ -1,0 +1,48 @@
+/* Provenance: not established — content-page section; padding from the space scale, 48 and 64 added for page sections (#312). */
+.section {
+  display: grid;
+  gap: var(--ward-space-6);
+  min-inline-size: 0;
+}
+
+.section[data-space="6"] { padding-block: var(--ward-space-6); }
+.section[data-space="7"] { padding-block: var(--ward-space-7); }
+.section[data-space="8"] { padding-block: var(--ward-space-8); }
+.section[data-space="9"] { padding-block: var(--ward-space-9); }
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--ward-space-2) var(--ward-space-4);
+}
+
+.titles {
+  display: grid;
+  gap: var(--ward-space-1);
+  min-inline-size: 0;
+}
+
+.title {
+  margin: 0;
+  font: var(--ward-type-proseH2);
+  color: var(--ward-color-text);
+  overflow-wrap: break-word;
+}
+
+.link {
+  font: var(--ward-type-rowTextStrong);
+  color: var(--ward-color-link);
+  text-decoration: none;
+  border-radius: var(--ward-radius-chip);
+}
+
+.link:hover {
+  background: var(--ward-color-accentTint);
+}
+
+.link:focus-visible {
+  outline: var(--ward-focus-ring) solid var(--ward-color-focus);
+  outline-offset: var(--ward-focus-offset);
+}

@@ -171,6 +171,8 @@ export const v = {
     s5: 'var(--ward-space-5)',
     s6: 'var(--ward-space-6)',
     s7: 'var(--ward-space-7)',
+    s8: 'var(--ward-space-8)',
+    s9: 'var(--ward-space-9)',
     page: 'var(--ward-space-page)',
   },
   pad: {
@@ -540,6 +542,7 @@ export const v = {
     proseH3: 'var(--ward-type-proseH3)',
     proseH4: 'var(--ward-type-proseH4)',
     codeText: 'var(--ward-type-codeText)',
+    lead: 'var(--ward-type-lead)',
   },
   motion: {
     fast: 'var(--ward-motion-fast)',
