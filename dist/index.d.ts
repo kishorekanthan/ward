@@ -214,3 +214,5 @@ export type { PostRowProps } from './site/PostRow';
 export { formatDate } from './site/formatDate';
 export { TextList } from './site/TextList';
 export type { TextListProps } from './site/TextList';
+export { CaseStudy } from './site/CaseStudy';
+export type { CaseStudyProps } from './site/CaseStudy';

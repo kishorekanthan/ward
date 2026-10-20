@@ -1,0 +1,17 @@
+/* Provenance: not established — content-page layout for case studies and projects; existing tokens (#318). */
+.page {
+  display: grid;
+  gap: var(--ward-space-7);
+  min-inline-size: 0;
+}
+
+.aside {
+  display: grid;
+  gap: var(--ward-space-6);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ward-space-1);
+}
