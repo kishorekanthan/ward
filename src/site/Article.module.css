@@ -1,0 +1,78 @@
+/* Provenance: not established — a long post with a TL;DR and a section list; existing tokens (#320). */
+.article {
+  display: grid;
+  gap: var(--ward-space-6);
+  min-inline-size: 0;
+}
+
+.meta {
+  margin: 0;
+  font: var(--ward-type-caption);
+  color: var(--ward-color-muted);
+}
+
+.tldr {
+  max-inline-size: var(--ward-width-measure);
+  padding: var(--ward-space-4);
+  background: var(--ward-color-surface2);
+  border-radius: var(--ward-radius-card);
+}
+
+.tldrLabel {
+  margin: 0 0 var(--ward-space-1);
+  font: var(--ward-type-eyebrow);
+  color: var(--ward-color-ink2);
+}
+
+.tldrText {
+  font: var(--ward-type-body);
+  color: var(--ward-color-text);
+}
+
+.tldrText > * {
+  margin: 0;
+}
+
+.tldrText > * + * {
+  margin-block-start: var(--ward-space-2);
+}
+
+.toc {
+  max-inline-size: var(--ward-width-measure);
+}
+
+.tocTitle {
+  margin: 0 0 var(--ward-space-2);
+  font: var(--ward-type-eyebrow);
+  color: var(--ward-color-ink2);
+}
+
+.tocList {
+  display: grid;
+  gap: var(--ward-space-1);
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  font: var(--ward-type-rowText);
+}
+
+.tocList .tocList {
+  margin-block-start: var(--ward-space-1);
+  padding-inline-start: var(--ward-space-4);
+}
+
+/* Links read as links by colour, never an underline; hover tints their ground. */
+.tocLink {
+  color: var(--ward-color-link);
+  text-decoration: none;
+  border-radius: var(--ward-radius-chip);
+}
+
+.tocLink:hover {
+  background: var(--ward-color-accentTint);
+}
+
+.tocLink:focus-visible {
+  outline: var(--ward-focus-ring) solid var(--ward-color-focus);
+  outline-offset: var(--ward-focus-offset);
+}

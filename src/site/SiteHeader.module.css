@@ -1,0 +1,78 @@
+/* Provenance: not established — content-site header for static pages; existing tokens (#311). */
+.header {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ward-space-2) var(--ward-space-6);
+  padding-block: var(--ward-space-4);
+  color: var(--ward-color-muted);
+}
+
+/* Hidden until it has focus, then it shows over the header's top corner. */
+.skip {
+  position: absolute;
+  inset-block-start: var(--ward-space-2);
+  inset-inline-start: 0;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip:focus {
+  inline-size: auto;
+  block-size: auto;
+  overflow: visible;
+  clip-path: none;
+  padding: var(--ward-space-2) var(--ward-space-3);
+  border-radius: var(--ward-radius);
+  background: var(--ward-color-surface);
+  box-shadow: var(--ward-shadow-card);
+  color: var(--ward-color-link);
+  text-decoration: none;
+  font: var(--ward-type-rowTextStrong);
+}
+
+.brand {
+  font: var(--ward-type-drawerTitle);
+  color: var(--ward-color-text);
+  text-decoration: none;
+  border-radius: var(--ward-radius-chip);
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ward-space-1) var(--ward-space-4);
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+/* Nav links take the text colour against the header's muted ink; hover tints their ground. */
+.link {
+  font: var(--ward-type-rowText);
+  color: var(--ward-color-text);
+  text-decoration: none;
+  border-radius: var(--ward-radius-chip);
+}
+
+.brand:hover,
+.link:hover {
+  background: var(--ward-color-accentTint);
+}
+
+.brand:focus-visible,
+.link:focus-visible {
+  outline: var(--ward-focus-ring) solid var(--ward-color-focus);
+  outline-offset: var(--ward-focus-offset);
+}
+
+/* The current page: heavier, with a rule drawn under it, no new colour. */
+.link[aria-current="page"] {
+  font-weight: 600;
+  box-shadow: inset 0 calc(-1 * var(--ward-underline)) 0 var(--ward-color-text);
+}

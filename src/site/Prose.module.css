@@ -1,0 +1,94 @@
+/* Provenance: not established — long-form text for a content site; existing tokens plus a 680px measure (#309). */
+.prose {
+  max-inline-size: var(--ward-width-measure);
+  min-inline-size: 0;
+  font: var(--ward-type-body);
+  color: var(--ward-color-text);
+  overflow-wrap: break-word;
+}
+
+.prose > * {
+  margin-block: 0;
+}
+
+.prose > * + * {
+  margin-block-start: var(--ward-space-4);
+}
+
+.prose > :is(h2, h3, h4) {
+  margin-block-start: var(--ward-space-7);
+}
+
+.prose h2 { font: var(--ward-type-proseH2); }
+.prose h3 { font: var(--ward-type-proseH3); }
+.prose h4 { font: var(--ward-type-proseH4); }
+
+.prose :is(ul, ol) {
+  padding-inline-start: var(--ward-space-6);
+}
+
+.prose li + li {
+  margin-block-start: var(--ward-space-2);
+}
+
+/* Links read as links by colour, never an underline; hover tints their ground. */
+.prose a {
+  color: var(--ward-color-link);
+  text-decoration: none;
+  border-radius: var(--ward-radius-chip);
+}
+
+.prose a:hover {
+  background: var(--ward-color-accentTint);
+}
+
+.prose a:focus-visible {
+  outline: var(--ward-focus-ring) solid var(--ward-color-focus);
+  outline-offset: var(--ward-focus-offset);
+}
+
+.prose blockquote {
+  padding: var(--ward-space-4);
+  border-radius: var(--ward-radius-card);
+  background: var(--ward-color-surface);
+  color: var(--ward-color-ink2);
+}
+
+.prose :not(pre) > code {
+  padding: 0 var(--ward-space-1);
+  border-radius: var(--ward-radius-chip);
+  background: var(--ward-color-surface2);
+  font: var(--ward-type-codeText);
+}
+
+/* A code block scrolls inside its own box, so the page never scrolls sideways. */
+.prose pre {
+  padding: var(--ward-space-4);
+  border-radius: var(--ward-radius-card);
+  background: var(--ward-color-surface2);
+  font: var(--ward-type-codeText);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.prose pre code {
+  font: inherit;
+}
+
+/* The self-link reads as a link outside Prose too. */
+.anchor {
+  font: var(--ward-type-caption);
+  vertical-align: middle;
+  color: var(--ward-color-link);
+  text-decoration: none;
+  border-radius: var(--ward-radius-chip);
+}
+
+.anchor:hover {
+  background: var(--ward-color-accentTint);
+}
+
+.anchor:focus-visible {
+  outline: var(--ward-focus-ring) solid var(--ward-color-focus);
+  outline-offset: var(--ward-focus-offset);
+}

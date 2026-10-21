@@ -1,0 +1,41 @@
+/* Provenance: not established — content-site footer for static pages; existing tokens (#311). */
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--ward-space-2) var(--ward-space-6);
+  padding-block: var(--ward-space-6);
+  border-block-start: 1px solid var(--ward-color-line);
+}
+
+.note {
+  margin: 0;
+  font: var(--ward-type-caption);
+  color: var(--ward-color-muted);
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ward-space-1) var(--ward-space-4);
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.link {
+  font: var(--ward-type-caption);
+  color: var(--ward-color-link);
+  text-decoration: none;
+  border-radius: var(--ward-radius-chip);
+}
+
+.link:hover {
+  background: var(--ward-color-accentTint);
+}
+
+.link:focus-visible {
+  outline: var(--ward-focus-ring) solid var(--ward-color-focus);
+  outline-offset: var(--ward-focus-offset);
+}

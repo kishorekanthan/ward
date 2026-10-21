@@ -1,0 +1,38 @@
+/* Provenance: not established — content-site figure; existing tokens, ratios asked for by the site (#308). */
+.figure {
+  display: grid;
+  gap: var(--ward-space-2);
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.media {
+  border-radius: var(--ward-radius-card);
+  background: var(--ward-color-surface2);
+  overflow: hidden;
+}
+
+/* The ratio reserves the box before the image loads. */
+.media[data-ratio="16/9"] { aspect-ratio: 16 / 9; }
+.media[data-ratio="4/3"] { aspect-ratio: 4 / 3; }
+.media[data-ratio="3/2"] { aspect-ratio: 3 / 2; }
+.media[data-ratio="2/1"] { aspect-ratio: 2 / 1; }
+.media[data-ratio="1/1"] { aspect-ratio: 1 / 1; }
+
+.media > img,
+.media > svg {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.media[data-ratio] > img,
+.media[data-ratio] > svg {
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.caption {
+  font: var(--ward-type-caption);
+  color: var(--ward-color-muted);
+}

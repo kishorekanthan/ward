@@ -1,0 +1,22 @@
+/* Provenance: not established — a short list of text for content pages; existing tokens (#317). */
+.list {
+  display: grid;
+  gap: var(--ward-space-2);
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  font: var(--ward-type-rowText);
+  color: var(--ward-color-text);
+}
+
+.list[data-rules="true"] {
+  gap: 0;
+}
+
+.list[data-rules="true"] .item {
+  padding-block: var(--ward-space-2);
+}
+
+.list[data-rules="true"] .item + .item {
+  border-block-start: 1px solid var(--ward-color-line);
+}

@@ -1,0 +1,26 @@
+/* Provenance: not established — content-site topic label; existing tokens, the 13px floor asked for by the site (#307). */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--ward-space-1) var(--ward-space-2);
+  font: var(--ward-type-tagText);
+  color: var(--ward-color-ink2);
+  background: var(--ward-color-surface2);
+  border-radius: var(--ward-radius-chip);
+  white-space: nowrap;
+}
+
+/* A linked tag reads as a link by colour, never an underline; hover tints its ground. */
+.link {
+  color: var(--ward-color-link);
+  text-decoration: none;
+}
+
+.link:hover {
+  background: var(--ward-color-accentTint);
+}
+
+.link:focus-visible {
+  outline: var(--ward-focus-ring) solid var(--ward-color-focus);
+  outline-offset: var(--ward-focus-offset);
+}

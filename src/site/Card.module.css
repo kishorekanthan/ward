@@ -1,0 +1,93 @@
+/* Provenance: not established — content-site work cards; soft surface as #217: card shadow, no border, hover ring and ground (#316). */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-space-3);
+  padding: var(--ward-space-4);
+  border-radius: var(--ward-radius-card);
+  background: var(--ward-color-surface);
+  box-shadow: var(--ward-shadow-card);
+  min-inline-size: 0;
+}
+
+.card:hover {
+  background: var(--ward-color-hover);
+  box-shadow: 0 0 0 var(--ward-border) var(--ward-color-line2), var(--ward-shadow-card);
+}
+
+/* Featured: media beside the text; it wraps under once the text would drop below its min width. */
+.featured {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ward-space-6);
+  padding: var(--ward-space-6);
+}
+
+.featured .media {
+  flex: 1 1 var(--ward-width-rail);
+}
+
+.featured .body {
+  flex: 999 1 0;
+  min-inline-size: min(100%, var(--ward-width-splitMain));
+}
+
+.media {
+  min-inline-size: 0;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ward-space-2);
+  min-inline-size: 0;
+}
+
+.title {
+  margin: 0;
+  font: var(--ward-type-proseH3);
+  color: var(--ward-color-text);
+  overflow-wrap: break-word;
+}
+
+.featured .title {
+  font: var(--ward-type-proseH2);
+}
+
+/* The one link: text colour, no underline; its overlay covers the card so a click anywhere opens it. */
+.link {
+  color: var(--ward-color-text);
+  text-decoration: none;
+  border-radius: var(--ward-radius-chip);
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--ward-radius-card);
+}
+
+.link:focus-visible {
+  outline: var(--ward-focus-ring) solid var(--ward-color-focus);
+  outline-offset: var(--ward-focus-offset);
+}
+
+.summary {
+  margin: 0;
+  font: var(--ward-type-rowText);
+  color: var(--ward-color-ink2);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ward-space-1);
+}
+
+.cta {
+  font: var(--ward-type-rowTextStrong);
+  color: var(--ward-color-link);
+}

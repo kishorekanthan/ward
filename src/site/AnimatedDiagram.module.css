@@ -1,0 +1,91 @@
+/* Provenance: not established — a stepped architecture diagram; token colours only, static unless motion is welcome (#321). */
+.diagram {
+  display: grid;
+  gap: var(--ward-space-3);
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.label {
+  font: var(--ward-type-rowTextStrong);
+  color: var(--ward-color-text);
+}
+
+.svg {
+  display: block;
+  max-inline-size: 100%;
+  block-size: auto;
+}
+
+.node rect {
+  fill: var(--ward-color-surface);
+  stroke: var(--ward-color-edge);
+  stroke-width: var(--ward-border);
+}
+
+.node text {
+  font: var(--ward-type-rowText);
+  fill: var(--ward-color-text);
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.edge {
+  stroke: var(--ward-color-edge);
+  stroke-width: var(--ward-border);
+}
+
+.arrow {
+  fill: var(--ward-color-edge);
+}
+
+/* The current step: its nodes take the accent tint and its edges the link ink. */
+.node[data-active="true"] rect {
+  fill: var(--ward-color-accentTint);
+  stroke: var(--ward-color-link);
+  stroke-width: var(--ward-underline);
+}
+
+.edge[data-active="true"] {
+  stroke: var(--ward-color-link);
+  stroke-width: var(--ward-underline);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .node rect,
+  .edge {
+    transition:
+      fill var(--ward-motion-reveal),
+      stroke var(--ward-motion-reveal);
+  }
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ward-space-2);
+}
+
+.live {
+  margin: 0;
+  flex: 1 1 var(--ward-width-rail);
+  font: var(--ward-type-rowText);
+  color: var(--ward-color-text);
+}
+
+.steps {
+  margin: 0;
+  padding-inline-start: var(--ward-space-6);
+  font: var(--ward-type-rowText);
+  color: var(--ward-color-ink2);
+}
+
+.steps li + li {
+  margin-block-start: var(--ward-space-1);
+}
+
+.steps [aria-current="step"] {
+  font: var(--ward-type-rowTextStrong);
+  color: var(--ward-color-text);
+}

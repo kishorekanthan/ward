@@ -189,6 +189,8 @@ export declare const v: {
         readonly s5: "var(--ward-space-5)";
         readonly s6: "var(--ward-space-6)";
         readonly s7: "var(--ward-space-7)";
+        readonly s8: "var(--ward-space-8)";
+        readonly s9: "var(--ward-space-9)";
         readonly page: "var(--ward-space-page)";
     };
     readonly pad: {
@@ -398,6 +400,8 @@ export declare const v: {
         readonly colourPick: "var(--ward-width-colourPick)";
         readonly iconRail: "var(--ward-width-iconRail)";
         readonly menuIcon: "var(--ward-width-menuIcon)";
+        readonly measure: "var(--ward-width-measure)";
+        readonly splitMain: "var(--ward-width-splitMain)";
     };
     readonly height: {
         readonly control: "var(--ward-height-control)";
@@ -551,6 +555,16 @@ export declare const v: {
         readonly rowText: "var(--ward-type-rowText)";
         readonly rowTextStrong: "var(--ward-type-rowTextStrong)";
         readonly streamAvatar: "var(--ward-type-streamAvatar)";
+        readonly tagText: "var(--ward-type-tagText)";
+        readonly eyebrow: "var(--ward-type-eyebrow)";
+        readonly eyebrowTracking: "var(--ward-type-eyebrow-tracking)";
+        readonly eyebrowTransform: "var(--ward-type-eyebrow-transform)";
+        readonly caption: "var(--ward-type-caption)";
+        readonly proseH2: "var(--ward-type-proseH2)";
+        readonly proseH3: "var(--ward-type-proseH3)";
+        readonly proseH4: "var(--ward-type-proseH4)";
+        readonly codeText: "var(--ward-type-codeText)";
+        readonly lead: "var(--ward-type-lead)";
     };
     readonly motion: {
         readonly fast: "var(--ward-motion-fast)";

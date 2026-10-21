@@ -1,0 +1,23 @@
+/* Provenance: not established — content-site kicker above a heading; existing tokens, the 13px floor asked for by the site (#307). */
+.eyebrow {
+  margin: 0;
+  font: var(--ward-type-eyebrow);
+  letter-spacing: var(--ward-type-eyebrow-tracking);
+  text-transform: var(--ward-type-eyebrow-transform);
+  color: var(--ward-color-muted);
+}
+
+.link {
+  color: var(--ward-color-link);
+  text-decoration: none;
+  border-radius: var(--ward-radius-chip);
+}
+
+.link:hover {
+  background: var(--ward-color-accentTint);
+}
+
+.link:focus-visible {
+  outline: var(--ward-focus-ring) solid var(--ward-color-focus);
+  outline-offset: var(--ward-focus-offset);
+}

@@ -1,0 +1,79 @@
+/* Provenance: not established — home-page opening; the 26px scale top is the headline, no display size (#314). */
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ward-space-7);
+  padding-block: var(--ward-space-8);
+}
+
+/* With a visual, the text keeps its min width and the visual wraps under it on a narrow screen. */
+.text {
+  display: grid;
+  gap: var(--ward-space-4);
+  flex: 999 1 0;
+  min-inline-size: min(100%, var(--ward-width-splitMain));
+  max-inline-size: var(--ward-width-measure);
+}
+
+.hero[data-visual="none"] .text {
+  max-inline-size: none;
+}
+
+.visual {
+  flex: 1 1 var(--ward-width-rail);
+  min-inline-size: 0;
+}
+
+.title {
+  margin: 0;
+  font: var(--ward-type-pageTitle);
+  letter-spacing: var(--ward-type-pageTitle-tracking);
+  color: var(--ward-color-text);
+  overflow-wrap: break-word;
+}
+
+.lead {
+  margin: 0;
+  font: var(--ward-type-lead);
+  color: var(--ward-color-ink2);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ward-space-3);
+}
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--ward-height-target);
+  padding: var(--ward-space-2) var(--ward-space-4);
+  border-radius: var(--ward-radius);
+  font: var(--ward-type-rowTextStrong);
+  text-decoration: none;
+}
+
+.action:focus-visible {
+  outline: var(--ward-focus-ring) solid var(--ward-color-focus);
+  outline-offset: var(--ward-focus-offset);
+}
+
+.primary {
+  background: var(--ward-color-sageTint);
+  color: var(--ward-color-sageInk);
+}
+
+.primary:hover {
+  opacity: 0.85;
+}
+
+.secondary {
+  color: var(--ward-color-text);
+  box-shadow: inset 0 0 0 var(--ward-border) var(--ward-color-edge);
+}
+
+.secondary:hover {
+  background: var(--ward-color-accentTint);
+}
