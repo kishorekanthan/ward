@@ -55,6 +55,14 @@ describe("AnimatedDiagram (#321)", () => {
     expect(screen.queryAllByRole("button")).toHaveLength(0);
   });
 
+  it("names the figure by its caption once and hides the drawing from screen readers (#323)", () => {
+    stubMatchMedia(false);
+    const { container } = render(diagram());
+    expect(screen.getByRole("figure", { name: "Flow" })).toBeTruthy();
+    expect(screen.queryAllByRole("img")).toHaveLength(0);
+    expect(container.querySelector("svg")?.getAttribute("aria-hidden")).toBe("true");
+  });
+
   it("holds no raw colour in the component or its stylesheet", () => {
     for (const file of ["AnimatedDiagram.tsx", "AnimatedDiagram.module.css", "diagram.ts"]) {
       const text = readFileSync(`src/site/${file}`, "utf8").replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, "");

@@ -13,13 +13,14 @@ const kept = [
   "http://example.com",
   "https://example.com/a?b=1#c",
   "HTTPS://EXAMPLE.COM",
+  "mailto:ops@example.com",
+  "MAILTO:ops@example.com?subject=Hi",
 ];
 
 const replaced = [
   "data:text/html,x",
   "blob:https://example.com/0b1c",
   "javascript:alert(1)",
-  "mailto:ops@example.com",
   "JavaScript:alert(1)",
   " javascript:alert(1)",
   "\u0001data:text/html,x",

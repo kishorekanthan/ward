@@ -1,5 +1,5 @@
 const SCHEME = /^([a-z][a-z0-9+.-]*):/i;
-const ALLOWED_SCHEMES = new Set(["http", "https"]);
+const ALLOWED_SCHEMES = new Set(["http", "https", "mailto"]);
 
 export const UNSAFE_HREF = "#";
 

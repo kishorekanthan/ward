@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { Hero } from "./Hero";
 import { declared, resolve } from "../test-site";
 
@@ -36,6 +36,22 @@ describe("Hero (#314)", () => {
     const [main, quiet] = screen.getAllByRole("link");
     expect([main.textContent, main.getAttribute("href")]).toEqual(["See the work", "/work"]);
     expect(main.className).not.toBe(quiet.className);
+  });
+
+  it("renders two actions that share an href without a duplicate key (#323)", () => {
+    const errors = vi.spyOn(console, "error").mockImplementation(() => {});
+    render(
+      <Hero
+        title="Cheap data platforms"
+        actions={[
+          { href: "mailto:me@example.com", label: "Email me" },
+          { href: "mailto:me@example.com", label: "Ask about work" },
+        ]}
+      />,
+    );
+    expect(screen.getAllByRole("link").map((a) => a.textContent)).toEqual(["Email me", "Ask about work"]);
+    expect(errors.mock.calls.map((call) => String(call[0])).filter((message) => message.includes("same key"))).toEqual([]);
+    errors.mockRestore();
   });
 
   it("sets the headline at the 26px scale top", () => {

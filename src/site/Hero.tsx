@@ -19,7 +19,7 @@ function Actions({ actions }: { actions: HeroAction[] }) {
   return (
     <div className={s.actions}>
       {actions.map((action, i) => (
-        <a key={action.href} className={`${s.action} ${i === 0 ? s.primary : s.secondary}`} href={safeHref(action.href)}>
+        <a key={`${action.href}-${action.label}`} className={`${s.action} ${i === 0 ? s.primary : s.secondary}`} href={safeHref(action.href)}>
           {action.label}
         </a>
       ))}

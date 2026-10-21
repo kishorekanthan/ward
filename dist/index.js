@@ -1151,7 +1151,7 @@ function dt(e) {
     l
   );
 }
-const Ti = /^([a-z][a-z0-9+.-]*):/i, Li = /* @__PURE__ */ new Set(["http", "https"]), Ai = "#";
+const Ti = /^([a-z][a-z0-9+.-]*):/i, Li = /* @__PURE__ */ new Set(["http", "https", "mailto"]), Ai = "#";
 function Ei(e) {
   var r, l;
   const t = e.replace(/[\t\n\r]/g, "");
@@ -7172,7 +7172,7 @@ const Ux = "_hero_ehbct_2", Vx = "_text_ehbct_11", Yx = "_visual_ehbct_23", Jx =
   secondary: tT
 };
 function nT({ actions: e }) {
-  return e.length === 0 ? null : /* @__PURE__ */ n("div", { className: Ee.actions, children: e.map((t, a) => /* @__PURE__ */ n("a", { className: `${Ee.action} ${a === 0 ? Ee.primary : Ee.secondary}`, href: T(t.href), children: t.label }, t.href)) });
+  return e.length === 0 ? null : /* @__PURE__ */ n("div", { className: Ee.actions, children: e.map((t, a) => /* @__PURE__ */ n("a", { className: `${Ee.action} ${a === 0 ? Ee.primary : Ee.secondary}`, href: T(t.href), children: t.label }, `${t.href}-${t.label}`)) });
 }
 function aT({ title: e, eyebrow: t, lead: a, actions: r = [] }) {
   return /* @__PURE__ */ i("div", { className: Ee.text, children: [
@@ -7466,7 +7466,7 @@ function k3({ label: e, nodes: t, edges: a, steps: r }) {
   const l = eL() && r.length > 0, [o, s] = b(0), c = y(), d = (h) => l && r[o].nodes.includes(h), u = QT(t);
   return /* @__PURE__ */ i("figure", { className: Te.diagram, "data-live": l, "aria-labelledby": c, children: [
     /* @__PURE__ */ n("figcaption", { className: Te.label, id: c, children: e }),
-    /* @__PURE__ */ i("svg", { className: Te.svg, viewBox: `0 0 ${u.w} ${u.h}`, width: u.w, height: u.h, role: "img", "aria-label": e, children: [
+    /* @__PURE__ */ i("svg", { className: Te.svg, viewBox: `0 0 ${u.w} ${u.h}`, width: u.w, height: u.h, "aria-hidden": "true", children: [
       /* @__PURE__ */ n("defs", { children: /* @__PURE__ */ n("marker", { id: `${c}-arrow`, viewBox: "0 0 8 8", refX: "7", refY: "4", markerWidth: "8", markerHeight: "8", markerUnits: "userSpaceOnUse", orient: "auto-start-reverse", children: /* @__PURE__ */ n("path", { className: Te.arrow, d: "M0 0 L8 4 L0 8 z" }) }) }),
       /* @__PURE__ */ n(dL, { nodes: t, edges: a, lit: d, marker: `${c}-arrow` }),
       /* @__PURE__ */ n(uL, { nodes: t, lit: d })

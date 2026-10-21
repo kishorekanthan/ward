@@ -84,7 +84,7 @@ export function AnimatedDiagram({ label, nodes, edges, steps }: AnimatedDiagramP
       <figcaption className={s.label} id={titleId}>
         {label}
       </figcaption>
-      <svg className={s.svg} viewBox={`0 0 ${size.w} ${size.h}`} width={size.w} height={size.h} role="img" aria-label={label}>
+      <svg className={s.svg} viewBox={`0 0 ${size.w} ${size.h}`} width={size.w} height={size.h} aria-hidden="true">
         <defs>
           <marker id={`${titleId}-arrow`} viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto-start-reverse">
             <path className={s.arrow} d="M0 0 L8 4 L0 8 z" />
