@@ -85,6 +85,10 @@ describe("public Ward exports", () => {
     expect(exports.every((value) => typeof value === "function")).toBe(true);
   });
 
+  it("publishes the dashboard info tip and period picker from the package root", () => {
+    expect([typeof Ward.InfoTip, typeof Ward.PeriodPicker]).toEqual(["function", "function"]);
+  });
+
   it("publishes every promoted composite from the package root", () => {
     const expected = [
       "AppShell", "PageFrame", "SubjectRail", "RecordSection", "FormStack", "SectionBand", "BoardScroller",

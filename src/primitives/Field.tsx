@@ -11,7 +11,7 @@ export type FieldVariant = "form" | "inline" | "tag" | "tagGate" | "reply" | "to
 export type FieldOption = { value: string; label: string };
 
 export type FieldProps = {
-  kind?: "input" | "select" | "textarea";
+  kind?: "input" | "select" | "textarea" | "date";
   label: string;
   value: string;
   onChange?: (value: string) => void;
@@ -26,6 +26,9 @@ export type FieldProps = {
   placeholder?: string;
   // Masks an input and keeps it out of autofill and spell check, for write-only keys.
   secret?: boolean;
+  /** Earliest and latest day a date field takes, as YYYY-MM-DD. */
+  min?: string;
+  max?: string;
 };
 
 type ControlProps = {
@@ -79,7 +82,11 @@ function TextareaControl({ props, controlProps, cls }: FieldControlProps) {
   return <textarea className={cls} rows={props.rows ?? 3} {...controlProps} />;
 }
 
-const CONTROLS = { input: InputControl, select: SelectControl, textarea: TextareaControl };
+function DateControl({ props, controlProps, cls }: FieldControlProps) {
+  return <input className={cls} type="date" min={props.min} max={props.max} {...controlProps} />;
+}
+
+const CONTROLS = { input: InputControl, select: SelectControl, textarea: TextareaControl, date: DateControl };
 
 function FieldControl(props: FieldProps, controlProps: ControlProps, cls: string) {
   const Control = CONTROLS[props.kind ?? "input"];

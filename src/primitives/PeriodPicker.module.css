@@ -1,0 +1,7 @@
+/* Provenance: Trellis Overview redesign canvas, board "Overview", the Period, From and To fields beside the page title. */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--ward-space-2);
+}
