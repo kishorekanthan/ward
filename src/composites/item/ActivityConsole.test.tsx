@@ -93,7 +93,7 @@ describe("ActivityConsole", () => {
   it("says when the last event landed while idle, and freezes to a stamp when stale", () => {
     const { container, rerender } = render(<ActivityConsole lines={lines} connection="live" idleSince="2026-09-06T02:14:00Z" />);
     const idle = () => Array.from(container.querySelectorAll("p.ward-consline--dim > span:not(.ward-caret)"), (span) => span.textContent);
-    expect(idle()).toEqual(["03:14:00"]);
+    expect(idle()).toEqual(["Last event 03:14:00"]);
     rerender(<ActivityConsole lines={lines} connection="stale" idleSince="2026-09-06T02:14:00Z" />);
     expect(idle()).toEqual(["Quiet since 03:14:00"]);
   });

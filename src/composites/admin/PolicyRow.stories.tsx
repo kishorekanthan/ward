@@ -5,8 +5,8 @@ import { SegmentedControl } from "../../primitives/SegmentedControl";
 import { PolicyRow, type PolicyControl, type PolicySetting } from "./PolicyRow";
 
 const setting: PolicySetting = {
-  name: "Gate notifications",
-  consequence: "Approvers stop hearing about waiting gates when this is off.",
+  name: "Review notifications",
+  consequence: "Approvers stop hearing about items waiting for review when this is off.",
 };
 
 const toggle: PolicyControl = { kind: "switch", checked: true, onChange: () => {} };

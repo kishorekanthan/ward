@@ -18,7 +18,7 @@ const requeue = { kind: "requeue", consequence: "The agent runs the stage again.
 
 const override = {
   kind: "override",
-  consequence: "The item advances without the gate.",
+  consequence: "The item moves on without review.",
   requiredRole: "APPROVER",
   allowed: false,
   askInstead: "Ask J. Rao to approve this override.",

@@ -13,7 +13,9 @@ const INTERNAL_WORD = /\b(gate[sd]?|gating|mount(s|ed|ing)?|chains?|route[sd]?|r
 // A lone lower-case token is a key, a class, a kind or a path in code, not a word the product shows.
 const CODE_TOKEN = /^[a-z0-9_./:-]*$|^var\(|\bward-[\w-]+/;
 // Unless it fills a slot that is always shown, as a select option or a chip label is.
-const SHOWN_SLOT = /^(label|title|legend|sentence|placeholder|aria-label|consequence|note|reason)$/;
+const SHOWN_SLOT = /^(label|title|legend|sentence|placeholder|aria-label|aria-description|alt|consequence|note|reason|hint|text|name|description|helper|error|message|heading|caption|tooltip|summary|kicker|empty)$/;
+// A named constant of copy (const OUTSIDE = "...") is shown wherever it is used.
+const COPY_CONSTANT = /^[A-Z][A-Z0-9_]*$/;
 
 function shippedSources(dir: string): string[] {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -67,10 +69,15 @@ function isCodeOnly(node: ts.Node): boolean {
 
 function slotName(node: ts.Node): string {
   const parent = node.parent;
-  return parent && (ts.isPropertyAssignment(parent) || ts.isJsxAttribute(parent)) ? parent.name.getText() : "";
+  return parent && (ts.isPropertyAssignment(parent) || ts.isJsxAttribute(parent) || ts.isVariableDeclaration(parent)) ? parent.name.getText() : "";
 }
 
-const isCode = (text: string, node: ts.Node) => CODE_TOKEN.test(text) && !SHOWN_SLOT.test(slotName(node));
+// JSX text is always on screen; a string literal is code only when it is a lone token outside a shown slot.
+function isCode(text: string, node: ts.Node): boolean {
+  if (ts.isJsxElement(node) || ts.isJsxFragment(node)) return false;
+  const slot = slotName(node);
+  return CODE_TOKEN.test(text) && !SHOWN_SLOT.test(slot) && !COPY_CONSTANT.test(slot);
+}
 
 function shownStrings(path: string, fails: (text: string, node: ts.Node) => boolean): string[] {
   const source = ts.createSourceFile(path, readFileSync(path, "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);

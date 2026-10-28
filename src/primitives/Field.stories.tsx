@@ -64,7 +64,7 @@ export const TagVariant = {
     labelHidden: true,
     variant: "tagGate",
     value: "gate",
-    options: [{ value: "agent", label: "Agent allowed" }, { value: "gate", label: "Human gate" }],
+    options: [{ value: "agent", label: "Agent allowed" }, { value: "gate", label: "Human review" }],
     onChange: () => {},
   },
 };

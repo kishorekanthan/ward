@@ -117,7 +117,7 @@ describe("NewStreamModal", () => {
     fireEvent.change(screen.getByLabelText("Stage 2 name"), { target: { value: "Map fields" } });
     fireEvent.click(screen.getByRole("radio", { name: "Step 2 · free" }));
     rerender(<NewStreamModal {...props} takenBy={{ 2: "Data" }} />);
-    expect(container.ownerDocument.querySelector("[data-colour-status]")?.textContent).toBe("Colour 2 can't be used.");
+    expect(container.ownerDocument.querySelector("[data-colour-status]")?.textContent).toBe("Colour 2 is taken by Data.");
     expect((screen.getByRole("button", { name: "Create stream" }) as HTMLButtonElement).disabled).toBe(true);
   });
 
@@ -132,7 +132,7 @@ describe("NewStreamModal", () => {
     fireEvent.change(screen.getByLabelText("Stage 1 name"), { target: { value: "Triage" } });
     fireEvent.change(screen.getByLabelText("Stage 2 name"), { target: { value: "Map fields" } });
     const status = () => container.ownerDocument.querySelector("[data-colour-status]")?.textContent;
-    const partial = screen.getByRole("radio", { name: "Step 4 · Not available" });
+    const partial = screen.getByRole("radio", { name: "Step 4 · not available" });
     fireEvent.click(partial);
     expect(partial.getAttribute("aria-checked")).toBe("false");
     expect(status()).toBeUndefined();

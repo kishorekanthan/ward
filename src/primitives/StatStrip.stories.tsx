@@ -11,7 +11,7 @@ export const TwoCells = {
   args: {
     cells: [
       { value: "14", label: "In flight" },
-      { value: "3", label: "At a gate" },
+      { value: "3", label: "Awaiting review" },
     ],
   },
 };
@@ -31,7 +31,7 @@ export const Accented = {
   args: {
     cells: [
       { value: "14", label: "In flight" },
-      { value: "3", label: "At a gate", accent: "amber" },
+      { value: "3", label: "Awaiting review", accent: "amber" },
       { value: "4", label: "Agents working" },
     ],
   },
@@ -85,7 +85,7 @@ export const PhoneWidth = {
   args: {
     cells: [
       { value: "14", label: "In flight" },
-      { value: "3", label: "Items waiting at a review gate" },
+      { value: "3", label: "Items waiting for a named reviewer" },
       { value: "4", label: "Agents working" },
       { value: "2", label: "Failed agent runs across every stream and every stage, in the last 24 hours" },
     ],

@@ -25,7 +25,7 @@ describe("small links take the 24px target", () => {
       ["Board", false],
       ["14In flight", false],
       ["0Failed runs 24h", false],
-      ["2Items waiting at a gate", false],
+      ["2Items waiting for review", false],
       ["5Done", false],
       ["Tool registry", true],
       ["Prompt library", true],

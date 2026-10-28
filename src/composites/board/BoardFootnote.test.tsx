@@ -3,15 +3,16 @@ import { describe, expect, it } from "vitest";
 import { BoardFootnote } from "./BoardFootnote";
 
 describe("BoardFootnote", () => {
-  it("draws nothing when there is no board config to link to", () => {
-    const { container } = render(<BoardFootnote />);
-    expect(container.innerHTML).toBe("");
+  it("says filters are not saved, with no link when there is no board config to open", () => {
+    render(<BoardFootnote />);
+    expect(screen.getByRole("contentinfo").textContent).toBe("Filters you set are not saved.");
+    expect(screen.queryByRole("link")).toBeNull();
   });
 
-  it("carries only the link to the board config, with no note explaining the board", () => {
+  it("follows the note with the link to the board config", () => {
     render(<BoardFootnote configureHref="#/studio/streams/ledger" />);
     const link = screen.getByRole("link", { name: "Configure board" });
     expect(link.getAttribute("href")).toBe("#/studio/streams/ledger");
-    expect(screen.getByRole("contentinfo").textContent).toBe("Configure board");
+    expect(screen.getByRole("contentinfo").textContent).toBe("Filters you set are not saved.Configure board");
   });
 });

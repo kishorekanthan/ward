@@ -28,14 +28,15 @@ export function ConnectionMark({ connection, since, lastEventAt }: ConnectionMar
   }
   if (connection === "reconnecting") {
     return (
-      <span className={`${s.chip} ward-connection`} role="status" title={elapsed(elapsedMs)}>
-        Reconnecting
+      <span className={`${s.chip} ward-connection`} role="status">
+        Reconnecting ·{" "}
+        <span className={s.noCase}>{elapsed(elapsedMs)}</span>
       </span>
     );
   }
   return (
     <span className={`${s.chip} ward-connection`} role="status">
-      As of {stamp(observedAt)}
+      Out of date · as of {stamp(observedAt)}
     </span>
   );
 }

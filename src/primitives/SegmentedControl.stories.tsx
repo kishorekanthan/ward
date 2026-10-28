@@ -9,7 +9,7 @@ const two = [
 const three = [
   { value: "all", label: "All" },
   { value: "mine", label: "Mine" },
-  { value: "gate", label: "At a gate" },
+  { value: "gate", label: "Awaiting review" },
 ];
 
 export default {

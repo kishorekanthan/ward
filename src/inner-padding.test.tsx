@@ -114,6 +114,12 @@ function applyHeight(pad: Pad, decl: string): void {
   if (px(resolve(valueOf(decl))) > 0) [pad.top, pad.bottom] = [Math.max(pad.top, 1), Math.max(pad.bottom, 1)];
 }
 
+// A fixed or minimum width, as on a lettered square, centres its glyph clear of the left and right edges.
+function applyWidth(pad: Pad, decl: string): void {
+  const value = resolve(valueOf(decl));
+  if (!value.includes("%") && px(value) > 0) [pad.left, pad.right] = [Math.max(pad.left, 1), Math.max(pad.right, 1)];
+}
+
 // The rules a state or variant builds on: .tab for .strip .tab[aria-selected], .panel for .panel.drawer.
 function baseSelectors(selector: string): string[] {
   const stateless = selector.replace(/::?[\w-]+(\([^)]*\))?/g, "").trim();
@@ -128,15 +134,18 @@ function paddingOf(file: string, selector: string): Pad {
   const chain = baseSelectors(selector).flatMap((sel) => ALL.filter((r) => r.file === file && r.selector === sel));
   chain.forEach((r) => declarations(r.body, /^padding/).forEach((d) => applyPadding(pad, d)));
   chain.forEach((r) => declarations(r.body, /^(min-)?height\s*:/).forEach((d) => applyHeight(pad, d)));
+  chain.forEach((r) => declarations(r.body, /^(min-)?(width|inline-size)\s*:/).forEach((d) => applyWidth(pad, d)));
   return pad;
 }
 
 const key = (rule: Rule) => `${rule.file} ${rule.selector}`;
-// A focus ring sits outside the box, so it never meets the text inside.
-const isFocusRing = (rule: Rule) => /:focus/.test(rule.selector);
+const printsText = (rule: Rule) => /content:\s*attr\(/.test(rule.body);
+// A focus ring sits outside the box, so it never meets the text inside; a tip shown on focus is not a ring.
+const isFocusRing = (rule: Rule) => /:focus/.test(rule.selector) && !printsText(rule);
 // Marks with no text in them: dots, bars, swatches, tracks, thumbs, scrims, rules, carets and images.
-const NO_TEXT = /\.(\w*[dD]ot|\w*[bB]ar|bar\w*|swatch|mark\w*|\w*Mark|thumb|track|scrim|separator|caret|avatar|media|hollow|skeleton|preview|empty|frame|webFrame|railItem|move|identity|overflow|close)\b[^\s]*$| input$|::?-(webkit|moz)-|\[data-step="\d"\]$|::after$|^\.prose :not\(pre\) > code$/;
-const isNoText = (rule: Rule) => NO_TEXT.test(rule.selector);
+const NO_TEXT = /\.(\w*[dD]ot|bar|swatch|gateMark|marker|thumb|track|scrim|separator|caret|avatar|media|hollow|skeleton|railItem|move|identity|overflow)\b[^\s]*$| input$|::?-(webkit|moz)-|\[data-step="\d"\]$|::after$|^\.prose :not\(pre\) > code$/;
+// A pseudo-element that prints an attribute (a tooltip) holds text, so it is never exempt.
+const isNoText = (rule: Rule) => NO_TEXT.test(rule.selector) && !printsText(rule);
 
 // Padders are " | "-separated; one named with its own file lives in another module, as a StatStrip cell in a rail.
 function paddersOf(rule: Rule): [string, string][] {
@@ -153,10 +162,29 @@ function paddingFor(rule: Rule): Pad {
   return Object.fromEntries(SIDES.map((s) => [s, Math.max(...pads.map((p) => p[s]))])) as Pad;
 }
 
+// A variant that restates padding on a painted base rule (form .control on .control) must keep that base's sides clear.
+function inheritedSides(rule: Rule): Side[] {
+  if (declarations(rule.body, /^padding/).length === 0) return [];
+  const cleared = clearedSides(rule.body);
+  return ownBases(rule).flatMap((r) => [...paintedSides(r.body)]).filter((side) => !cleared.has(side));
+}
+
+// The element's own class with its state and variant stripped: .control for .field[data-variant] .control, never an ancestor.
+function ownBases(rule: Rule): Rule[] {
+  const own = (rule.selector.split(/[\s>+~]+/).pop() ?? "").replace(/\[[^\]]*\]|::?[\w-]+(\([^)]*\))?/g, "");
+  return own === "" || own === rule.selector ? [] : ALL.filter((r) => r.file === rule.file && r.selector === own);
+}
+
+// The sides a rule switches off with background: none, box-shadow: none or a zero border.
+function clearedSides(body: string): Set<Side> {
+  const clears = declarations(body, /^(background|box-shadow|border)/).filter((d) => isClear(valueOf(d)));
+  return new Set(clears.flatMap((d) => (/^box-shadow/.test(d) ? SIDES : (BORDER_SIDES.find(([re]) => re.test(d))?.[1] ?? []))));
+}
+
 function bareSides(rule: Rule): string[] {
   const child = golden.paddedBy[key(rule)];
   const pad = paddingFor(rule);
-  return [...paintedSides(rule.body)].filter((s) => pad[s] <= 0).map((s) => `${key(rule)}${child ? ` (child ${child})` : ""}: ${s}`);
+  return [...new Set([...paintedSides(rule.body), ...inheritedSides(rule)])].filter((s) => pad[s] <= 0).map((s) => `${key(rule)}${child ? ` (child ${child})` : ""}: ${s}`);
 }
 
 describe("inner padding: no text touches a painted edge with no consumer padding (#324)", () => {

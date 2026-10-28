@@ -221,9 +221,10 @@ function hasNamedWebStages(draft: WebNewStreamDraft): boolean {
 }
 
 export function colourStatus(colourStep: number | null, takenBy: Record<number, string>): string {
-  // Only a colour that cannot be used earns a line; the swatch shows every other state.
+  // Only a colour that cannot be used earns a line, with its reason; the swatch shows every other state.
   if (colourStep === null || freeValidatedStep({ step: colourStep }, takenBy)) return "";
-  return `Colour ${colourStep} can't be used.`;
+  const holder = takenBy[colourStep];
+  return holder === undefined ? `Colour ${colourStep} is not available yet.` : `Colour ${colourStep} is taken by ${holder}.`;
 }
 
 function WebFooter({ ready, draft, onCreate, onDraft, reasonId }: {
@@ -292,9 +293,10 @@ function WebNewStreamModal(props: WebNewStreamModalProps): ReactElement {
       <ColourLadder presentation="swatches" label="Colour" steps={props.ladder} value={colourStep} onChange={setColourStep} takenBy={takenBy} />
     </div>
   );
+  const status = colourStatus(colourStep, takenBy);
   const ownerField = (
     <>
-      {colourStatus(colourStep, takenBy) && <p className={s.colourStatus} data-colour-status="">{colourStatus(colourStep, takenBy)}</p>}
+      {status && <p className={s.colourStatus} data-colour-status="">{status}</p>}
       <Field variant="form" kind="select" label="Owner" value={owner} options={props.owners.map((person) => ({ value: person, label: person }))} onChange={setOwner} />
     </>
   );

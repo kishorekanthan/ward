@@ -41,9 +41,9 @@ describe("ColourLadder", () => {
       "Step 1 · free",
       "Step 2 · taken by UI / UX",
       "Step 3 · free",
-      "Step 4 · Not available",
-      "Step 5 · Not available",
-      "Step 6 · Not available",
+      "Step 4 · not available",
+      "Step 5 · not available",
+      "Step 6 · not available",
       "Step 7 · reserved",
     ]);
     expect(radios.map((radio) => radio.getAttribute("aria-disabled"))).toEqual([null, "true", null, "true", "true", "true", "true"]);
@@ -77,7 +77,7 @@ describe("ColourLadder (spec)", () => {
   it("refuses an unvalidated step rather than offering it", () => {
     const onChange = vi.fn();
     render(<ColourLadder label="Stream colour" steps={specSteps} value={1} onChange={onChange} />);
-    const four = screen.getByRole("radio", { name: "Step 4 · Not available" });
+    const four = screen.getByRole("radio", { name: "Step 4 · not available" });
     expect(four.getAttribute("aria-disabled")).toBe("true");
     fireEvent.click(four);
     expect(onChange).not.toHaveBeenCalled();
@@ -127,9 +127,9 @@ describe("ColourLadder tiles (Studio 9a)", () => {
       "Step 01 · yours",
       "Step 02 · UI / UX",
       "Step 03 · Integration",
-      "Step 04 · Not available",
-      "Step 05 · Not available",
-      "Step 06 · Not available",
+      "Step 04 · not available",
+      "Step 05 · not available",
+      "Step 06 · not available",
       "Reserved",
     ]);
   });

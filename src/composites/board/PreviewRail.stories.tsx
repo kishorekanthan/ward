@@ -40,7 +40,7 @@ const draft: BoardConfig = {
 };
 
 const effects: GateItem[] = [
-  { met: true, text: "Review stays a column — a human gate always is." },
+  { met: true, text: "Review stages always show." },
   { met: false, text: "Done drops off the board and is counted instead." },
 ];
 

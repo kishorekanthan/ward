@@ -20,7 +20,7 @@ export const ReadOnlyRegion = {
       <ConfigRow stage={stage} config={{ label: "Implementing", cap: 6, shown: true }} onChange={() => {}} onReorder={() => {}} />
       <Field label="Stream name" value="Regulatory Ops" onChange={() => {}} />
       <Field kind="select" label="Owner" value="priya" options={[{ value: "priya", label: "Priya" }]} onChange={() => {}} />
-      <Switch label="Gate notifications" checked onChange={() => {}} />
+      <Switch label="Review notifications" checked onChange={() => {}} />
       <Btn variant="primary" label="Save changes" onClick={() => {}} />
     </DisabledScope>
   ),
@@ -32,7 +32,7 @@ export const HiddenActions = {
     <DisabledScope reason="You can look but not change anything here. Ask a Stream admin." actions="hide">
       <ConfigRow stage={stage} config={{ label: "Implementing", cap: 6, shown: true }} onChange={() => {}} onReorder={() => {}} />
       <Field label="Stream name" value="Regulatory Ops" onChange={() => {}} />
-      <Switch label="Gate notifications" checked onChange={() => {}} />
+      <Switch label="Review notifications" checked onChange={() => {}} />
       <Btn variant="primary" label="Save changes" onClick={() => {}} />
     </DisabledScope>
   ),

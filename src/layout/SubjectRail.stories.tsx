@@ -8,7 +8,7 @@ export default {
 };
 
 const subject = <p>The record under review sits in the subject column.</p>;
-const rail = <p>Cost, gate state and history sit in the rail.</p>;
+const rail = <p>Cost, review state and history.</p>;
 
 export const Preview = { args: { children: subject, rail } };
 

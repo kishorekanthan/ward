@@ -112,9 +112,9 @@ const studioNav = [
 ];
 
 const studioAgents: SidebarAgent[] = [
-  { label: "Data Engineering", href: "#/streams/data", meta: "18 in flight", streamStep: 1 },
-  { label: "Integration", href: "#/streams/integration", meta: "6 in flight", streamStep: 3 },
-  { label: "UI and UX", href: "#/streams/ui", meta: "4 in flight", streamStep: 2 },
+  { label: "Data Engineering", href: "#/streams/data", meta: "18 open", streamStep: 1 },
+  { label: "Integration", href: "#/streams/integration", meta: "6 open", streamStep: 3 },
+  { label: "UI and UX", href: "#/streams/ui", meta: "4 open", streamStep: 2 },
 ];
 
 const iconRail: AppShellRailItem[] = [

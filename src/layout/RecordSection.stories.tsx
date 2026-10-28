@@ -16,12 +16,12 @@ export const RailList = {
 };
 
 export const Kicker = {
-  args: { title: "Ways out of this hold", note: "pick one to release the item", children: <p>Override and advance, or send it back to intake.</p> },
+  args: { title: "How to free this item", note: "pick one to release the item", children: <p>Override and advance, or send it back to intake.</p> },
 };
 
 export const LongKicker = {
   args: {
-    title: "Ways out of this hold before the nightly cut-off closes",
+    title: "How to free this item before the nightly cut-off closes",
     note: "pick one",
     children: <p>Override and advance, or send it back to intake.</p>,
   },
@@ -29,7 +29,7 @@ export const LongKicker = {
 
 export const LongKickerLongNote = {
   args: {
-    title: "Ways out of this hold before the nightly cut-off closes",
+    title: "How to free this item before the nightly cut-off closes",
     note: "pick one to release the item before the nightly cut-off closes",
     children: <p>Override and advance, or send it back to intake.</p>,
   },

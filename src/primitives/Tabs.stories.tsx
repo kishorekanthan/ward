@@ -10,7 +10,7 @@ const board = [
 
 const counted = [
   { id: "open", label: "Open", count: 14 },
-  { id: "gate", label: "At a gate", count: 3 },
+  { id: "gate", label: "Awaiting review", count: 3 },
   { id: "done", label: "Done", count: 61 },
 ];
 

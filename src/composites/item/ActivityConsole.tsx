@@ -40,7 +40,7 @@ type IdleLineProps = Pick<ActivityConsoleProps, "connection" | "idleSince"> & { 
 // Stale says when it went quiet; otherwise the foot shows the last event's time, if any.
 function IdleTime({ connection, idleSince, last }: Omit<IdleLineProps, "children">) {
   if (connection === "stale") return <span className={s.idle}>{`Quiet since ${time([idleSince, last?.at, ""].find(Boolean) as string)}`}</span>;
-  return last?.at === undefined ? null : <span>{time(last.at)}</span>;
+  return last?.at === undefined ? null : <span>{`Last event ${time(last.at)}`}</span>;
 }
 
 function IdleLine({ connection, idleSince, last, children }: IdleLineProps) {

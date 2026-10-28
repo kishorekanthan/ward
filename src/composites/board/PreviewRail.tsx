@@ -38,9 +38,9 @@ function Warnings({ effects }: { effects: GateItem[] }) {
   const unmet = effects.filter((effect) => !effect.met);
   if (unmet.length === 0) return null;
   return (
-    <section className={s.section} aria-label="Warnings">
+    <Section title="Warnings">
       <GateChecklist items={unmet} density="compact" />
-    </section>
+    </Section>
   );
 }
 

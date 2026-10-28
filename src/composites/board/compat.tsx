@@ -111,7 +111,7 @@ function legacyCardChip(item: LegacyBoardItemView, running: boolean): { role: Ch
 
 function legacyCardMeta(item: LegacyBoardItemView, run: NonNullable<LegacyBoardItemView["run"]> | undefined): string {
   if (run !== undefined) return duration(item.timeInStage) + " · waits on " + run.agent;
-  return item.waitsOn ? duration(item.timeInStage) + " · waits on " + item.waitsOn : duration(item.timeInStage);
+  return item.waitsOn ? duration(item.timeInStage) + " · waits on " + item.waitsOn : duration(item.timeInStage) + " in stage";
 }
 
 function legacyCardStyle(item: LegacyBoardItemView, fields: LegacyCardField[] | undefined): CSSProperties {
@@ -299,7 +299,7 @@ export type LegacyBoardHeaderProps = {
 };
 
 function legacyBoardRollup(rollups: LegacyBoardHeaderProps["rollups"]): string {
-  let result = String(rollups.inFlight) + " open · " + String(rollups.loadedThisWeek) + " done this week · " + String(rollups.agentsWorking) + " agents working";
+  let result = String(rollups.inFlight) + " open · " + String(rollups.loadedThisWeek) + " done this week · " + String(rollups.agentsWorking) + (rollups.agentsWorking === 1 ? " agent working" : " agents working");
   if (rollups.p50 !== undefined) result += " · p50 " + duration(rollups.p50);
   if (rollups.p90 !== undefined) result += " · p90 " + duration(rollups.p90);
   return result;

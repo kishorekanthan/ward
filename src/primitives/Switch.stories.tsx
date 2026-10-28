@@ -8,15 +8,15 @@ export default {
 };
 
 export const Off = {
-  args: { label: "Gate notifications", checked: false, onChange: () => {} },
+  args: { label: "Review notifications", checked: false, onChange: () => {} },
 };
 
 export const On = {
-  args: { label: "Gate notifications", checked: true, onChange: () => {} },
+  args: { label: "Review notifications", checked: true, onChange: () => {} },
 };
 
 export const Disabled = {
-  args: { label: "Gate notifications", checked: false, disabled: true, onChange: () => {} },
+  args: { label: "Review notifications", checked: false, disabled: true, onChange: () => {} },
 };
 
 export const Locked = {

@@ -19,7 +19,7 @@ const complete = [
 
 const incomplete = [complete[0], { met: false, text: "Dry run replayed on a real item." }];
 
-const NOTE = "Publishing mounts the agent on the live stream.";
+const NOTE = "Publishing puts the agent on the live stream.";
 
 export default {
   title: "Studio/DryRunRail",

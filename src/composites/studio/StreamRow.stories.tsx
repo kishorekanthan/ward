@@ -26,7 +26,7 @@ const stream: Stream = {
     { name: "Done", gate: false },
   ],
   agents: { live: 3, draft: 1, paused: 2 },
-  policy: { id: "PLT-118", summary: "Hold every item at the gate." },
+  policy: { id: "PLT-118", summary: "Hold every item for review." },
   inFlight: 14,
   p50: 5_400_000,
 };

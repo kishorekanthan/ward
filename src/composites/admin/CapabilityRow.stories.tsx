@@ -54,7 +54,7 @@ export const Sheet = {
       rows={[
         { capability, cells },
         {
-          capability: { name: "Gate notifications", consequence: "Approvers stop hearing about waiting gates when this is off.", governedBy: "notification policy" },
+          capability: { name: "Review notifications", consequence: "Approvers stop hearing about items waiting for review when this is off.", governedBy: "notification policy" },
           cells: cells.map((c) => ({ ...c, value: "on" as const })),
         },
       ]}

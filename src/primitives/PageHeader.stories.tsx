@@ -46,7 +46,7 @@ export const WithConsequence = {
   args: {
     crumb,
     title: "intake-advisor v3",
-    consequence: "Publishing mounts the agent on the live stream.",
+    consequence: "Publishing puts the agent on the live stream.",
     actions,
   },
 };
@@ -118,7 +118,7 @@ export const PhoneWidth = {
       { role: "stream", label: "data-eng", streamStep: 1 },
       { role: "running", label: "Draft" },
       { role: "gate", label: "Awaiting review" },
-      { role: "attention", label: "2 gates overdue" },
+      { role: "attention", label: "2 reviews overdue" },
       { role: "meta", label: "Owner platform" },
     ],
     actions,
@@ -143,7 +143,7 @@ export const PhoneWidthWideActions = {
     crumb,
     title: "intake-advisor v3",
     actions: [
-      <Btn key="promote" variant="primary" disabled disabledReason="Nothing to promote: this item is not waiting at a gate.">
+      <Btn key="promote" variant="primary" disabled disabledReason="Nothing to promote: this item is not waiting for review.">
         Promote to the next stage
       </Btn>,
       <Btn key="changes" onClick={() => {}}>

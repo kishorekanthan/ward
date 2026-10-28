@@ -52,7 +52,7 @@ describe("PreviewRail", () => {
     expect(cardKey()).toBe("FL-232");
   });
 
-  it("warns only of an unmet effect, with no heading, and drops it once met", () => {
+  it("warns only of an unmet effect, under a visible Warnings heading, and drops it once met", () => {
     const text = "Two items would sit over the new cap.";
     /* GateChecklist folds its marker's own label into the accessible name, so
        match on the effect's sentence rather than on the whole name. */
@@ -60,6 +60,7 @@ describe("PreviewRail", () => {
     const { rerender } = render(<PreviewRail draft={draft} sample={sample} effects={[{ met: false, text }]} />);
     expect(box().getAttribute("aria-checked")).toBe("false");
     expect(screen.queryByText("Effect of this config")).toBeNull();
+    expect(screen.getByRole("heading", { name: "Warnings" })).toBeDefined();
     rerender(<PreviewRail draft={draft} sample={sample} effects={[{ met: true, text }]} />);
     expect(screen.queryByRole("checkbox", { name: new RegExp(text.replace(".", "\\.")) })).toBeNull();
     expect(screen.queryByRole("region", { name: "Warnings" })).toBeNull();

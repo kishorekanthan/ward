@@ -43,7 +43,7 @@ export function ladderValidation(step: CompatibilityLadderStep): Validation {
 function holderOf(validation: Validation, taken: string | undefined): string {
   if (taken !== undefined && validation !== "reserved") return `taken by ${taken}`;
   if (validation === "reserved") return "reserved";
-  if (validation === "partial") return "Not available";
+  if (validation === "partial") return "not available";
   return "free";
 }
 

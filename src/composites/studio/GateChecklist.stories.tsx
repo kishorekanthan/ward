@@ -26,7 +26,7 @@ export const NoneMet = {
 };
 
 export const WithNote = {
-  args: { items: mixed, note: "Publishing mounts the agent on the live stream." },
+  args: { items: mixed, note: "Publishing puts the agent on the live stream." },
 };
 
 export const Empty = { args: { items: [] } };

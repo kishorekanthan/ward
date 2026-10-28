@@ -65,5 +65,5 @@ export const DetailedRail = {
 };
 
 export const DetailedNothingInFlight = {
-  render: () => <AppearanceStrip draft={streams[0]} streams={streams.slice(1)} presentation="detailed" sampleEmpty="Nothing is in flight on this stream." />,
+  render: () => <AppearanceStrip draft={streams[0]} streams={streams.slice(1)} presentation="detailed" sampleEmpty="Nothing is open on this stream." />,
 };

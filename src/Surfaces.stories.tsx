@@ -19,7 +19,7 @@ function ThreeLevelsFrame() {
   return (
     <div data-level="ground" style={ground}>
       <div data-level="panel" style={panel}>
-        <StatTiles cells={[{ value: "14", label: "In flight", href: "#flight" }, { value: "3", label: "At a gate", href: "#gate" }]} />
+        <StatTiles cells={[{ value: "14", label: "In flight", href: "#flight" }, { value: "3", label: "Awaiting review", href: "#gate" }]} />
         <AgentCard
           href="#agent"
           agent={{ id: "intake-advisor", name: "intake-advisor", streamStep: 1, description: "Reads a request and proposes its stream.", versions: [{ v: "v3", status: "live" }] }}
