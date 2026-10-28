@@ -157,7 +157,7 @@ describe("PolicyRow spec", () => {
     const sw = screen.getByRole("switch") as HTMLButtonElement;
     expect(sw.getAttribute("aria-checked")).toBe("true");
     expect(sw.disabled).toBe(true);
-    expect(screen.getByText("always on")).not.toBeNull();
+    expect(screen.queryByText("always on")).toBeNull();
     fireEvent.click(sw);
     expect(onChange).not.toHaveBeenCalled();
   });

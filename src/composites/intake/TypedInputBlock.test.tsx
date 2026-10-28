@@ -41,7 +41,7 @@ describe("TypedInputBlock", () => {
 
   it("names the list, and lets a consumer rename it", () => {
     const { rerender } = render(<TypedInputBlock lines={lines} />);
-    expect(screen.getByRole("list", { name: "Typed input the agent receives" })).not.toBeNull();
+    expect(screen.getByRole("list", { name: "Agent input" })).not.toBeNull();
     rerender(<TypedInputBlock lines={lines} label="Rejection payload" />);
     expect(screen.getByRole("list", { name: "Rejection payload" })).not.toBeNull();
   });

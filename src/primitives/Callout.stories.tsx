@@ -11,7 +11,7 @@ export const Info = {
   args: {
     variant: "info",
     ticket: "FL-118",
-    children: "A terminal stage is counted, not columned.",
+    children: "Done stages are counted, not shown.",
   },
 };
 
@@ -19,7 +19,7 @@ export const Warn = {
   args: {
     variant: "warn",
     ticket: "FL-229",
-    children: "Publishing mounts the agent on the live stream.",
+    children: "Publishing puts the agent on the live stream.",
   },
 };
 

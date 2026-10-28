@@ -30,11 +30,6 @@ function Consequence({ id, text }: { id?: string; text?: string }) {
   return <p id={id} className={`${s.consequence} ward-check-consequence`}>{text}</p>;
 }
 
-function LockedNote({ locked }: { locked?: boolean }) {
-  if (!locked) return null;
-  return <span className={`${s.lockedNote} ward-check-note`}>always shown</span>;
-}
-
 // A scope says its reason once for the page, so a box's own reason shows only outside one.
 function ownReason(props: CheckboxProps, disabled: boolean, scope: ScopeReason | null): string | undefined {
   return disabled && !scope && props.disabledReason ? props.disabledReason : undefined;
@@ -81,7 +76,6 @@ export function Checkbox(props: CheckboxProps) {
         />
         <label htmlFor={id} className={props.labelHidden ? s.labelHidden : s.label}>
           {props.label}
-          <LockedNote locked={props.locked} />
         </label>
         <Sample text={props.sample} />
       </span>

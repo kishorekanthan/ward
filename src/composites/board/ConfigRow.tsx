@@ -2,6 +2,7 @@ import { Chip } from "../../primitives/Chip";
 import { Field } from "../../primitives/Field";
 import { Switch } from "../../primitives/Switch";
 import { useDisabledScope } from "../../primitives/DisabledScope";
+import { repeatsName } from "../../primitives/kindTag";
 import s from "./ConfigRow.module.css";
 
 export type ConfigStage = {
@@ -21,10 +22,8 @@ export type ConfigRowProps = {
   onReorder?: (direction: -1 | 1) => void;
 };
 
-const GATE_NOTE = "can't be hidden or collapsed";
-const TERMINAL_NOTE = "terminal · counted, not a column";
-const GATE_REASON = "A human gate is always shown, so people see what waits for them.";
-const TERMINAL_REASON = "A terminal stage is counted, not shown as a column.";
+const GATE_REASON = "Review stages always show.";
+const TERMINAL_REASON = "Done stages are counted, not shown.";
 
 /* The head carries the visible names for the row's controls, which is why those
    labels are hidden rather than absent. Export the two together; widths agree. */
@@ -46,18 +45,6 @@ function stageView(stage: ConfigStage, configured: boolean) {
   return { shown: configured, state: configured ? "on" : "off" };
 }
 
-function mountedNote(count: number): string | undefined {
-  if (count === 0) return undefined;
-  return count === 1 ? "1 agent mounted" : `${count} agents mounted`;
-}
-
-// Studio 4a: the sub-line under the stage name says why a row is fixed, else what is mounted on it.
-function subLine(stage: ConfigStage): string | undefined {
-  if (stage.gate) return GATE_NOTE;
-  if (stage.terminal) return TERMINAL_NOTE;
-  return mountedNote(stage.agentsMounted);
-}
-
 function reorderKey(event: React.KeyboardEvent, onReorder?: (direction: -1 | 1) => void) {
   if (event.key === "ArrowUp") onReorder?.(-1);
   if (event.key === "ArrowDown") onReorder?.(1);
@@ -68,9 +55,8 @@ function StageIdentity({ stage }: { stage: ConfigStage }) {
     <span className={s.cName}>
       <span className={s.nameLine}>
         <span className={s.name}>{stage.name}</span>
-        {stage.gate && <Chip role="gate" label="Human gate" size="tag" />}
+        {stage.gate && !repeatsName(stage.name, "Review") && <Chip role="gate" label="Review" size="tag" />}
       </span>
-      {subLine(stage) && <span className={s.sub}>{subLine(stage)}</span>}
     </span>
   );
 }

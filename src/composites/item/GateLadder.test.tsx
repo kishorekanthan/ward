@@ -16,8 +16,10 @@ describe("GateLadder", () => {
     expect(screen.getByText("J. Rao")).not.toBeNull();
   });
 
-  it("refuses a wait with nobody at the other end", () => {
-    expect(() => render(<GateLadder rungs={[{ name: "DPM sign-off", state: "waiting" }]} />)).toThrow(/names no actor/);
+  it("shows a wait with no actor as a dash, so the page can name the actor once elsewhere", () => {
+    render(<GateLadder rungs={[{ name: "DPM sign-off", state: "waiting" }]} />);
+    expect(screen.getByText("Waiting").getAttribute("data-ward-chip")).toBe("attention");
+    expect(screen.getByRole("listitem").textContent).toBe("DPM sign-offWaiting—");
   });
 
   it("keeps passed and pending on their own chips", () => {

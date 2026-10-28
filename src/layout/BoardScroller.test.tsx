@@ -37,7 +37,7 @@ function lanes(ids: string[] = ["build", "gate", "other"]): BoardLane[] {
 }
 
 function visibleLanes(): string[] {
-  return Array.from(screen.getByRole("region", { name: "Workflow board" }).querySelectorAll("section"), (node) => node.textContent ?? "");
+  return Array.from(screen.getByRole("region", { name: "Board" }).querySelectorAll("section"), (node) => node.textContent ?? "");
 }
 
 describe("BoardScroller lanes", () => {

@@ -27,7 +27,7 @@ const item: ItemDetail = {
 
 const withRun: ItemDetail = {
   ...item,
-  stateLabel: "Agent working",
+  stateLabel: "Running",
   agentSentence: "triage v2 is drafting a clarification for the carrier reference.",
   run: {
     agent: "triage v2",

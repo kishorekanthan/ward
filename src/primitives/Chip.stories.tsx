@@ -10,12 +10,12 @@ export default {
 export const Gate = { args: { role: "gate", label: "Gate" } };
 export const System = { args: { role: "system", label: "When" } };
 export const Write = { args: { role: "write", label: "Write" } };
-export const Drift = { args: { role: "drift", label: "Drift flag" } };
+export const Drift = { args: { role: "drift", label: "Off plan" } };
 export const Done = { args: { role: "done", label: "v3 live" } };
 export const Attention = { args: { role: "attention", label: "Needs a human" } };
 export const Failed = { args: { role: "failed", label: "Failed" } };
 export const Pending = { args: { role: "pending", label: "Queued" } };
-export const Running = { args: { role: "running", label: "Agent working" } };
+export const Running = { args: { role: "running", label: "Running" } };
 export const Warn = { args: { role: "warn", label: "Over cap" } };
 export const Meta = { args: { role: "meta", label: "Locked" } };
 export const Soft = { args: { role: "soft", label: "Terminal" } };

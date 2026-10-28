@@ -8,7 +8,7 @@ export type BoardFootnoteProps = {
 export function BoardFootnote({ configureHref }: BoardFootnoteProps) {
   return (
     <footer className={s.foot} data-ward-board-footnote="">
-      <p className={s.note}>Columns, labels and caps come from this stream&apos;s board config. Personal filters aren&apos;t saved to it.</p>
+      <p className={s.note}>Filters you set are not saved.</p>
       {configureHref === undefined ? null : (
         <a className={`${s.link} ward-target`} href={safeHref(configureHref)}>
           Configure board

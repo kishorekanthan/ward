@@ -149,7 +149,7 @@ describe("AppearanceStrip detailed rail (comp 9a)", () => {
 
   it("labels its sections in the comp's order", () => {
     const { container } = detailed();
-    expect([...container.querySelectorAll("section h4")].map((h) => h.textContent)).toEqual(["Board card", "Streams index row", "Overview chart segment", "Not themeable"]);
+    expect([...container.querySelectorAll("section h4")].map((h) => h.textContent)).toEqual(["Board card", "Streams index row", "Overview chart segment"]);
   });
 
   it("reads the index row marker, name, key chip, the marker in the draft's colour", () => {
@@ -165,14 +165,12 @@ describe("AppearanceStrip detailed rail (comp 9a)", () => {
     expect((sectionOf("Streams index row").querySelector("p") as HTMLElement).style.getPropertyValue("--stream")).toBe("var(--ward-color-line2)");
   });
 
-  it("puts the chart note after the chart and shows the Not themeable sentence", () => {
-    detailed();
+  it("shows the chart with no note under it and no design essay section", () => {
+    const { container } = detailed();
     const chart = [...sectionOf("Overview chart segment").children].map((c) => c.tagName);
-    expect(chart).toEqual(["H4", "FIGURE", "P"]);
-    expect(sectionOf("Overview chart segment").textContent).toContain("six adjacent segments, direct-labelled, no legend to lean on.");
-    expect(sectionOf("Not themeable").textContent).toBe(
-      "Not themeableThe action blue, the navy gate chip, the state colours and every rule stay fixed. A stream owns a colour and a mark, not a theme. Two teams theming the same product produces two products.",
-    );
+    expect(chart).toEqual(["H4", "FIGURE"]);
+    expect(container.textContent).not.toContain("no legend to lean on");
+    expect(container.textContent).not.toContain("Not themeable");
   });
 
   it("with no sample keeps the index row and chart, and says why Board card is empty", () => {
@@ -185,7 +183,7 @@ describe("AppearanceStrip detailed rail (comp 9a)", () => {
 
   it("falls back to the default Board card sentence", () => {
     detailed({ sample: undefined });
-    expect(sectionOf("Board card").textContent).toBe("Board cardNo item in flight to preview.");
+    expect(sectionOf("Board card").textContent).toBe("Board cardNothing to preview.");
   });
 
   it("draws the sample card inside Board card", () => {

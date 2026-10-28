@@ -59,11 +59,11 @@ export function RequeueSheet({ run, effects, refusals, cost, onRequeue, onClose,
           spent={cost.spent}
           ceiling={cost.ceiling}
           breakdown={[
-            { label: "This requeue adds", amount: cost.more },
-            { label: "Item total so far", amount: cost.itemTotal },
+            { label: "This run adds", amount: cost.more },
+            { label: "Total", amount: cost.itemTotal },
           ]}
         />
-        <Field kind="textarea" label="Note for the agent" value={note} onChange={setNote} />
+        <Field kind="textarea" label="Note" value={note} onChange={setNote} />
         {refused && (
           <div className={s.refusals}>
             <Chip role="meta" label="Refused" />

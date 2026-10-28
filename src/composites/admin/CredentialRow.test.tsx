@@ -42,7 +42,7 @@ describe("CredentialRow", () => {
     const { container } = inTable(
       <CredentialRow cred={{ id: "oidc", purpose: "Client secret", cls: "identity", tier: "Short-lived", next: "with IdP", state: "idpOwned" }} />,
     );
-    expect(chipClass(container, "IdP owned")).toContain("ward-chip--meta");
+    expect(chipClass(container, "Managed by sign-in provider")).toContain("ward-chip--meta");
     expect(chipClass(container, "Identity")).toContain("ward-chip--meta");
     expect(container.querySelector("[data-urgent]")).toBeNull();
   });
@@ -125,7 +125,7 @@ describe("CredentialRow spec", () => {
     renderState("healthy");
     expect(bg("Healthy")).toBe("var(--ward-chip-done-bg)");
     renderState("idpOwned");
-    expect(bg("IdP owned")).toBe("var(--ward-chip-meta-bg)");
+    expect(bg("Managed by sign-in provider")).toBe("var(--ward-chip-meta-bg)");
   });
 
   it("reinforces the date in red only when the rotation is due", () => {

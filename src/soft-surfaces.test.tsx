@@ -173,7 +173,7 @@ describe("soft surfaces against the chosen look (#217)", () => {
         <BoardColumn column={{ id: "review", label: "Review", gate: true }} items={[item("FL-2")]} sort="oldest" onOpen={() => {}} />
       </>,
     );
-    const [lane, gate] = ["Build", "Review"].map((label) => edge(screen.getByText(label).closest(`.${columnClasses.column}`)!));
+    const [lane, gate] = ["Build", "Review"].map((label) => edge(screen.getByRole("heading", { name: label }).closest(`.${columnClasses.column}`)!));
     const card = edge(screen.getByText("Item FL-1").closest(`.${cardClasses.card}`)!);
     removeCard();
     removeColumn();

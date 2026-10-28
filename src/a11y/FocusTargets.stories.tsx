@@ -37,7 +37,7 @@ const ledger: Stream = {
   members: 4,
   stages: [{ name: "Intake", gate: false }],
   agents: { live: 1, draft: 0, paused: 0 },
-  policy: { id: "PLT-201", summary: "Hold every item at the gate." },
+  policy: { id: "PLT-201", summary: "Hold every item for review." },
   inFlight: 2,
   inFlightHint: "Items running, held or blocked in this stream",
 };
@@ -88,7 +88,7 @@ export const Links = {
       <TopBar destinations={destinations} active="board" />
       <StatStrip cells={[{ value: "14", label: "In flight", href: "/board" }, { value: "0", label: "Failed runs 24h", href: "/runs" }]} />
       <div style={{ width: "var(--ward-width-streamKey)" }}>
-        <StatStrip cells={[{ value: "2", label: "Items waiting at a gate", href: "/gates" }, { value: "5", label: "Done", href: "/done" }]} />
+        <StatStrip cells={[{ value: "2", label: "Items waiting for review", href: "/gates" }, { value: "5", label: "Done", href: "/done" }]} />
       </div>
       <Sidebar brand="Studio" nav={[]} agentsHeading="Agents" agents={[]} shared={shared} />
       <TabLinks level="page" links={sections} active="gates" label="Studio sections" />

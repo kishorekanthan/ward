@@ -28,7 +28,7 @@ describe("DryRunRail foundry presentation", () => {
     rerender(<DryRunRail presentation="foundry" run={{ ...RUN, status: "failed" }} checklist={MET} feed={null} onPublish={onPublish} />);
     const button = screen.getByRole("button", { name: "Publish" }) as HTMLButtonElement;
     expect(button.disabled).toBe(true);
-    expect(document.getElementById(button.getAttribute("aria-describedby") ?? "")?.textContent).toBe("dry run failed");
+    expect(document.getElementById(button.getAttribute("aria-describedby") ?? "")?.textContent).toBe("Dry run failed.");
     rerender(<DryRunRail presentation="foundry" run={RUN} checklist={MET} feed={null} onPublish={onPublish} />);
     fireEvent.click(screen.getByRole("button", { name: "Publish" }));
     expect(onPublish).toHaveBeenCalledTimes(1);
@@ -94,7 +94,7 @@ describe("DryRunRail", () => {
     const btn = screen.getByRole("button", { name: "Publish" }) as HTMLButtonElement;
     expect(btn.disabled).toBe(true);
     expect(document.getElementById(btn.getAttribute("aria-describedby") as string)?.textContent).toBe(
-      "Publish is disabled: 1 of 2 gate conditions unmet: Dry run replayed on a real item.",
+      "Not ready: Dry run replayed on a real item.",
     );
     fireEvent.click(btn);
     expect(onPublish).not.toHaveBeenCalled();
@@ -105,7 +105,7 @@ describe("DryRunRail", () => {
     render(<DryRunRail run={running} checklist={complete} publishNote={NOTE} onPublish={() => {}} />);
     const btn = screen.getByRole("button", { name: "Publish" }) as HTMLButtonElement;
     expect(btn.disabled).toBe(true);
-    expect(document.getElementById(btn.getAttribute("aria-describedby") as string)?.textContent).toMatch(/dry run in progress/);
+    expect(document.getElementById(btn.getAttribute("aria-describedby") as string)?.textContent).toBe("Wait for the dry run to finish.");
     expect(screen.getByText("Running").style.getPropertyValue("--ward-chip-bg")).toBe("var(--ward-chip-running-bg)");
     expect(screen.getAllByRole("timer").length).toBeGreaterThan(0);
     expect(screen.getByText("policy.check").closest("li")?.getAttribute("aria-current")).toBe("step");

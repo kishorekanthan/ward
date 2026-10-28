@@ -55,7 +55,7 @@ export const Unresolved = {
 export const Inherited = {
   render: () => (
     <Tree label="Policy">
-      <TreeRow index={0} depth={0} label="Gate notifications" leaf inherited />
+      <TreeRow index={0} depth={0} label="Review notifications" leaf inherited />
       <TreeRow index={1} depth={0} label="Digest window" leaf />
     </Tree>
   ),

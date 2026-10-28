@@ -22,21 +22,21 @@ export function ConnectionMark({ connection, since, lastEventAt }: ConnectionMar
     return (
       <span className={`${s.root} ward-connection`} role="status">
         <Marker size={6} kind="green" />
-        LIVE
+        Live
       </span>
     );
   }
   if (connection === "reconnecting") {
     return (
       <span className={`${s.chip} ward-connection`} role="status">
-        RECONNECTING ·{" "}
+        Reconnecting ·{" "}
         <span className={s.noCase}>{elapsed(elapsedMs)}</span>
       </span>
     );
   }
   return (
     <span className={`${s.chip} ward-connection`} role="status">
-      STALE · as of {stamp(observedAt)}
+      Out of date · as of {stamp(observedAt)}
     </span>
   );
 }

@@ -14,12 +14,12 @@ export type StageListEditorProps = {
 
 const KINDS = [
   { value: "entry", label: "entry" },
-  { value: "agent", label: "agent allowed" },
-  { value: "gate", label: "human gate" },
-  { value: "terminal", label: "terminal" },
+  { value: "agent", label: "agent" },
+  { value: "gate", label: "review" },
+  { value: "terminal", label: "done" },
 ];
 
-const OUTSIDE = "not in catalogue";
+const OUTSIDE = "not a known stage";
 
 function catalogueOptions(catalogue: string[], name: string) {
   const offered = catalogue.map((value) => ({ value, label: value }));
@@ -92,7 +92,6 @@ export function StageListEditor({ stages, onChange, catalogue }: StageListEditor
       <MoveAnnouncer text={focus.announcement} />
       <p className={s.addStage}>
         <button type="button" className={s.addStageButton} onClick={() => onChange([...stages, { name: "", kind: "agent" }])}>+ Add stage</button>
-        <span className={s.addStageNote}>· a human gate can't be removed once items have passed through it</span>
       </p>
     </div>
   );

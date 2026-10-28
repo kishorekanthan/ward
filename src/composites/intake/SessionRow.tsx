@@ -45,7 +45,7 @@ function turnsText(session: Session): string {
 
 function resolvedText(resolved: string[]): string {
   const text = resolved.join(", ");
-  return text === "" ? "nothing resolved" : text;
+  return text === "" ? "—" : text;
 }
 
 // The list names why a duplicate stopped, so the table says it closed rather than only what it matched.

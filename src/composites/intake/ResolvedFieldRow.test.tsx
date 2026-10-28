@@ -7,7 +7,7 @@ const field: ResolvedField = { key: "Stream", value: "Data Engineering", evidenc
 describe("ResolvedFieldRow", () => {
   it("asks for confirmation with a warn chip, not with a tick", () => {
     render(<ResolvedFieldRow field={{ ...field, state: "confirm" }} />);
-    const chip = screen.getByText("Confirm");
+    const chip = screen.getByText("Check");
     expect(chip.getAttribute("data-ward-chip")).toBe("warn");
     expect(screen.queryByLabelText("Resolved")).toBeNull();
   });
@@ -18,18 +18,18 @@ describe("ResolvedFieldRow", () => {
     expect(screen.getByLabelText("Resolved").getAttribute("data-state")).toBe("met");
     rerender(<ResolvedFieldRow field={{ ...field, state: "unresolved" }} />);
     expect(screen.getByLabelText("Unresolved").getAttribute("data-state")).toBe("unmet");
-    expect(screen.queryByText("Confirm")).toBeNull();
+    expect(screen.queryByText("Check")).toBeNull();
   });
 
   it("keeps evidence on one line, readable in full on hover", () => {
     render(<ResolvedFieldRow field={field} />);
-    expect(screen.getByText("sess:8f21c4").getAttribute("title")).toBe("sess:8f21c4");
+    expect(screen.getByText("Source: sess:8f21c4").getAttribute("title")).toBe("sess:8f21c4");
   });
 
   // jsdom computes no layout, so the structural claim is the testable one.
   it("stacks the evidence under its value rather than beside it", () => {
     render(<ResolvedFieldRow field={field} />);
-    expect(screen.getByText("sess:8f21c4").parentElement).toBe(screen.getByText("Data Engineering").parentElement);
+    expect(screen.getByText("Source: sess:8f21c4").parentElement).toBe(screen.getByText("Data Engineering").parentElement);
   });
 
   it("renders no evidence element when there is no evidence", () => {
@@ -51,7 +51,7 @@ describe("ResolvedFieldRow", () => {
     expect(row.getAttribute("data-state")).toBe("resolved");
     expect(row.querySelector(".ward-resfield-key")?.textContent).toBe("Stream");
     expect(row.querySelector(".ward-resfield-value")?.textContent).toBe("Data Engineering");
-    expect(row.querySelector(".ward-resfield-evidence")?.textContent).toBe("sess:8f21c4");
+    expect(row.querySelector(".ward-resfield-evidence")?.textContent).toBe("Source: sess:8f21c4");
     expect(row.querySelector(".ward-resfield-mark")).not.toBeNull();
   });
 });

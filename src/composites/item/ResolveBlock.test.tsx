@@ -45,9 +45,9 @@ describe("ResolveBlock", () => {
     render(<ResolveBlock paths={[...paths, refused]} onChoose={() => {}} />);
     const variants = screen.getAllByRole("button").map((button) => [button.textContent, button.getAttribute("data-ward-btn")]);
     expect(variants).toEqual([
-      ["Ask a clarifying question", "primary"],
+      ["Ask a question", "primary"],
       ["Override and advance", "secondary"],
-      ["Requeue the agent", "secondary"],
+      ["Run again", "secondary"],
     ]);
   });
 
@@ -56,10 +56,20 @@ describe("ResolveBlock", () => {
     expect(screen.getByRole("button", { name: "Override and advance" }).getAttribute("data-ward-btn")).toBe("primary");
   });
 
+  it("names each path once, on its button: no title line and no role chip", () => {
+    render(<ResolveBlock paths={[{ ...paths[0], title: "Post a clarification" }, { ...paths[1], title: "Pass the check anyway" }]} onChoose={() => {}} />);
+    expect(screen.getAllByText("Override and advance")).toHaveLength(1);
+    expect(screen.getAllByText("Ask a question")).toHaveLength(1);
+    expect(screen.queryByText("Pass the check anyway")).toBeNull();
+    expect(screen.queryByText("Post a clarification")).toBeNull();
+    expect(screen.queryByText("APPROVER")).toBeNull();
+    expect(screen.queryByText("MEMBER")).toBeNull();
+  });
+
   it("takes an allowed path", () => {
     const onChoose = vi.fn();
     render(<ResolveBlock paths={paths} onChoose={onChoose} />);
-    fireEvent.click(screen.getByRole("button", { name: "Ask a clarifying question" }));
+    fireEvent.click(screen.getByRole("button", { name: "Ask a question" }));
     expect(onChoose).toHaveBeenCalledWith("clarify");
   });
 });

@@ -9,7 +9,7 @@ const options = [
 const withConsequences = [
   {
     value: "hold",
-    label: "Hold every item at the gate",
+    label: "Hold every item for review",
     consequence: "Every item waits for a named reviewer, whatever the agent found.",
   },
   {

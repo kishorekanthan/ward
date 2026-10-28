@@ -3,6 +3,7 @@ import { Chip } from "../../primitives/Chip";
 import { OverCapNote } from "./OverCapNote";
 import { WorkCard, type WorkCardFeed } from "./WorkCard";
 import type { BoardColumnConfig, BoardField, BoardItem } from "./types";
+import { repeatsName } from "../../primitives/kindTag";
 import s from "./BoardColumn.module.css";
 
 export type BoardColumnProps = {
@@ -25,7 +26,7 @@ function ColumnHead({ column, count, id }: { column: BoardColumnConfig; count: n
   return (
     <div className={s.head}>
       <h2 className={s.label} id={id} title={column.label}>{column.label}</h2>
-      {column.gate && <Chip role="gate" label="Gate" />}
+      {column.gate && !repeatsName(column.label, "Review") && <Chip role="gate" label="Review" />}
       <span className={s.count}>{count}{column.cap === undefined ? null : ` / ${column.cap}`}</span>
     </div>
   );

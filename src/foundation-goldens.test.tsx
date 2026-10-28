@@ -45,7 +45,7 @@ describe("Ward foundation goldens", () => {
     );
 
     expect(screen.getByRole("main").getAttribute("data-inset")).toBe("page");
-    expect(screen.getByRole("region", { name: "Workflow board" }).getAttribute("tabindex")).toBe("0");
+    expect(screen.getByRole("region", { name: "Board" }).getAttribute("tabindex")).toBe("0");
     expect(screen.getByRole("complementary", { name: "Preview" }).parentElement?.dataset.wardSubjectRail).toBe("preview");
     expect(screen.getByRole("complementary", { name: "Dry run" }).parentElement?.dataset.wardSubjectRail).toBe("dryrun");
   });

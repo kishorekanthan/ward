@@ -83,7 +83,7 @@ function PostBox(props: ComposerProps) {
       )}
       {requeueAfter && (
         <Checkbox
-          label={`Requeue ${requeueAfter.agent} after posting`}
+          label={`Run ${requeueAfter.agent} again after you post`}
           consequence={requeueAfter.consequence}
           checked={requeueAfter.checked}
           onChange={requeueAfter.onChange}

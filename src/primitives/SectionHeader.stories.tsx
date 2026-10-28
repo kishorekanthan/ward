@@ -33,7 +33,7 @@ export const NoteAndCounter = {
   args: {
     index: "04",
     title: "Reviewers",
-    note: "A gate needs two named reviewers before it can go live.",
+    note: "A review needs two named reviewers before it can go live.",
     counter: "2 named",
   },
 };

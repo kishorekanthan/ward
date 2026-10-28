@@ -64,10 +64,10 @@ describe("McpServerRow web presentation", () => {
         }}
       />,
     );
-    expect(cellTexts(container)).toEqual(["jirahttp · trellis-relay", "2 discovered", "Write class", "v1.9.0", "Healthy", ""]);
+    expect(cellTexts(container)).toEqual(["jirahttp · trellis-relay", "2 discovered", "Can write", "v1.9.0", "Healthy", ""]);
     expect(container.querySelector(".ward-toolname")?.textContent).toBe("jira");
     expect(container.querySelector(".ward-truncate")?.getAttribute("title")).toBe("comment, label");
-    expect(chipClass(container, "Write class")).toContain("ward-chip--write");
+    expect(chipClass(container, "Can write")).toContain("ward-chip--write");
     expect(chipClass(container, "Healthy")).toContain("ward-chip--done");
     expect(container.querySelector(".ward-warnink")).toBeNull();
   });
@@ -99,7 +99,7 @@ describe("McpServerRow web presentation", () => {
       <McpServerRow presentation="web" server={{ name: "foundry", pinned_version: "v2.4.1", restart: { implemented: false } }} onRestart={vi.fn()} onPin={vi.fn()} />,
     );
     expect(buttonLabels(container)).toEqual([]);
-    expect(cellTexts(container)[5]).toBe("Restart unavailable: no supervisor configured");
+    expect(cellTexts(container)[5]).toBe("Restart not set up");
   });
 
   it("shows no actions at all without handlers", () => {

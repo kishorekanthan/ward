@@ -75,9 +75,9 @@ describe("StageListEditor", () => {
     const rows: StageListRow[] = [{ name: "apply_config", kind: "agent" }];
     render(<StageListEditor stages={rows} onChange={vi.fn()} catalogue={["triage", "implement"]} />);
     const field = screen.getByRole("button", { name: "Stage 1 name" });
-    expect(optionLabels(field)).toEqual(["apply_config · not in catalogue", "triage", "implement"]);
-    expect(field.textContent).toBe("apply_config · not in catalogue");
+    expect(optionLabels(field)).toEqual(["apply_config · not a known stage", "triage", "implement"]);
+    expect(field.textContent).toBe("apply_config · not a known stage");
     expect(field.getAttribute("aria-invalid")).toBe("true");
-    expect(screen.getByText("apply_config is not in catalogue")).toBeTruthy();
+    expect(screen.getByText("apply_config is not a known stage")).toBeTruthy();
   });
 });

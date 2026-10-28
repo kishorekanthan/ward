@@ -56,6 +56,15 @@
   padding-left: var(--ward-gap-row);
 }
 
+/* A locked or overridden row is tinted, so its outer cells keep their text off the tint's edge. */
+.cell:first-child {
+  padding-left: var(--ward-space-2);
+}
+
+.cell:last-child {
+  padding-right: var(--ward-space-2);
+}
+
 /* Loop policy 11d: 13px 15px rows, a 150px value column and a centred 104px chip column. */
 .webRow {
   display: flex;

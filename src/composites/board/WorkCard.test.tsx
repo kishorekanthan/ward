@@ -53,6 +53,12 @@ describe("WorkCard", () => {
     expect(cardIn(container).textContent).toContain("3d 4h in stage");
   });
 
+  it("drops the waits-on clause when nobody owns the item, keeping time in stage", () => {
+    const { container } = render(<WorkCard item={{ ...item, waitsOn: "" }} onOpen={() => {}} />);
+    const meta = cardIn(container).querySelector("[data-ward-card-meta]") as HTMLElement;
+    expect(meta.textContent).toBe("3d 4h in stage");
+  });
+
   it("keeps the whole meta in one line of text that wraps, with the separator tied to the word before it", () => {
     const { container, rerender } = render(<WorkCard item={{ ...item, waitsOn: "no owner", timeInStage: 857_000_000 }} onOpen={() => {}} />);
     const meta = () => cardIn(container).querySelector("[data-ward-card-meta]") as HTMLElement;
@@ -105,16 +111,16 @@ describe("WorkCard", () => {
     expect(screen.getByText("3 late departures")).not.toBeNull();
   });
 
-  it("replaces the state chip with AGENT WORKING while an agent holds the item", () => {
+  it("replaces the state chip with Running while an agent holds the item", () => {
     render(<WorkCard item={{ ...item, run: { agent: "triage v2", startedAt: "2026-09-06T02:14:00Z" } }} onOpen={() => {}} />);
-    expect(screen.getByText("Agent working")).not.toBeNull();
+    expect(screen.getByText("Running")).not.toBeNull();
     expect(screen.queryByText("ON HOLD")).toBeNull();
   });
 
   it("shows drift and hold as two chips, drift first", () => {
     const { container } = render(<WorkCard item={{ ...item, flagged: true }} onOpen={() => {}} />);
     const labels = Array.from(cardIn(container).querySelectorAll("[data-ward-chip]")).map((c) => c.textContent);
-    expect(labels).toEqual(["Drift flag", "ON HOLD"]);
+    expect(labels).toEqual(["Off plan", "ON HOLD"]);
   });
 
   it("flashes once per event for its own item, and never for another", () => {

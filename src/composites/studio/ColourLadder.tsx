@@ -33,7 +33,7 @@ type RenderProps = ColourLadderProps | ColourLadderCompatibilityProps;
 type Validation = "validated" | "partial" | "reserved";
 
 // tokens.json ships steps 4–6 without dark stepping or the CVD matrix, so they show but cannot be picked.
-export const PARTIAL_STEP_REASON = "not validated yet, pending a CVD matrix and dark stepping";
+export const PARTIAL_STEP_REASON = "Not available yet";
 
 export function ladderValidation(step: CompatibilityLadderStep): Validation {
   if (step.reserved) return "reserved";
@@ -43,7 +43,7 @@ export function ladderValidation(step: CompatibilityLadderStep): Validation {
 function holderOf(validation: Validation, taken: string | undefined): string {
   if (taken !== undefined && validation !== "reserved") return `taken by ${taken}`;
   if (validation === "reserved") return "reserved";
-  if (validation === "partial") return "not validated";
+  if (validation === "partial") return "not available";
   return "free";
 }
 
@@ -88,7 +88,7 @@ const twoDigit = (step: number) => String(step).padStart(2, "0");
 
 // The picked step reads as the viewer's own; otherwise the tile names its holder as the list does.
 function tileHolder(validation: Validation, taken: string | undefined, checked: boolean): string {
-  if (validation === "reserved") return "Reserved until revalidated";
+  if (validation === "reserved") return "Reserved";
   if (checked) return "yours";
   return taken ?? holderOf(validation, undefined);
 }
@@ -155,15 +155,6 @@ function assertLadderSteps(steps: CompatibilityLadderStep[]): void {
   }
 }
 
-function RequestCell(): ReactElement {
-  return (
-    <div className={`${s.cell} ward-ladder-cell ${s.request}`} data-validation="request">
-      <span className={`${s.empty} ward-ladder-swatch ward-ladder-swatch--empty`} aria-hidden="true" />
-      <span className={`${s.name} ward-ladder-name`}>request</span>
-      <span className={`${s.holder} ward-ladder-holder`}>Ask design for a new step</span>
-    </div>
-  );
-}
 
 function presentationOf(props: RenderProps): Presentation {
   return ("presentation" in props ? props.presentation : undefined) ?? "list";
@@ -171,17 +162,7 @@ function presentationOf(props: RenderProps): Presentation {
 
 const GROUP_CLASS: Record<Presentation, string> = { list: s.ladder, swatches: s.swatches, tiles: s.tilesFrame };
 
-function RequestTile(): ReactElement {
-  return (
-    <div className={`${s.tile} ward-ladder-cell`} data-validation="request">
-      <span className={`${s.bar} ward-ladder-bar`} aria-hidden="true" />
-      <span className={`${s.hex} ward-ladder-hex`}>request</span>
-      <span className={`${s.note} ward-ladder-note`}>Ask design for a new step</span>
-    </div>
-  );
-}
 
-const REQUEST: Record<Presentation, () => ReactElement | null> = { list: RequestCell, swatches: () => null, tiles: RequestTile };
 
 function disabledGroup(disabled: boolean): Record<string, true | undefined> {
   return disabled ? { "aria-disabled": true, "data-disabled": true } : {};
@@ -196,18 +177,12 @@ export function ColourLadder(props: RenderProps): ReactElement {
   };
   assertLadderSteps(props.steps);
   const presentation = presentationOf(props);
-  const Request = REQUEST[presentation];
-  const cells = (
-    <>
-      {props.steps.map((step) => (
-        <Cell key={step.step} step={step} value={props.value} taken={takenBy[step.step]} onChange={onChange} presentation={presentation} disabled={props.disabled === true} />
-      ))}
-      <Request />
-    </>
-  );
+  const cells = props.steps.map((step) => (
+    <Cell key={step.step} step={step} value={props.value} taken={takenBy[step.step]} onChange={onChange} presentation={presentation} disabled={props.disabled === true} />
+  ));
   // Tiles reflow on their own width, so the grid sits inside the group it queries.
   return (
-    <div role="radiogroup" aria-label={props.label ?? "Stream colour, validated steps only"} {...disabledGroup(props.disabled === true)} className={`${GROUP_CLASS[presentation]} ward-ladder`}>
+    <div role="radiogroup" aria-label={props.label ?? "Stream colour"} {...disabledGroup(props.disabled === true)} className={`${GROUP_CLASS[presentation]} ward-ladder`}>
       {presentation === "tiles" ? <div className={s.tiles}>{cells}</div> : cells}
     </div>
   );

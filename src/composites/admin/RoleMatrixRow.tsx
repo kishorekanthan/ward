@@ -144,7 +144,7 @@ function WebDetail({ row }: { row: WebRoleMatrixRowSpec }): ReactElement {
 function WebHead(): ReactElement {
   return (
     <div className={s.webHead} aria-hidden="true">
-      <span className={s.webHeadLabel}>Scope → role → person</span>
+      <span className={s.webHeadLabel}>Who has which role</span>
       <span className={s.webColumns}>
         <span className={s.webGroup}>AD group</span>
         <span className={s.webPeople}>People</span>
@@ -159,7 +159,7 @@ function WebLabel({ row }: { row: WebRoleMatrixRowSpec }): ReactElement {
     <span className={`${s.webLabel} ward-envrow`}>
       <span>{row.label}</span>
       {row.role !== undefined ? <Chip role={row.role.role} label={row.role.label} /> : null}
-      {row.state === "floor" ? <Chip role="meta" label="implicit floor" /> : null}
+      {row.state === "floor" ? <Chip role="meta" label="default" /> : null}
     </span>
   );
 }

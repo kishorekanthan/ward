@@ -66,7 +66,7 @@
       "hit24": true
     },
     {
-      "name": "+ Mount agent",
+      "name": "+ Add agent",
       "focusVisible": true,
       "wardRing": true,
       "ring": true,
@@ -134,7 +134,7 @@
       "hit24": true
     },
     {
-      "name": "2Items waiting at a gate",
+      "name": "2Items waiting for review",
       "focusVisible": true,
       "wardRing": true,
       "ring": true,
@@ -298,7 +298,7 @@
       "raised": 0
     },
     {
-      "name": "2Items waiting at a gate",
+      "name": "2Items waiting for review",
       "oneAnchor": true,
       "covered": true,
       "wholeHit": true,

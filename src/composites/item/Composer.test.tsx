@@ -29,7 +29,7 @@ describe("Composer", () => {
     );
 
     expect(screen.queryByRole("button", { name: "Save draft" })).toBeNull();
-    fireEvent.click(screen.getByRole("checkbox", { name: "Requeue reviewer v4 after posting" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Run reviewer v4 again after you post" }));
   });
 
   const props = {
@@ -69,7 +69,7 @@ describe("Composer", () => {
     const { rerender } = render(<Composer {...props} />);
     expect(screen.queryByRole("checkbox")).toBeNull();
     rerender(<Composer {...props} requeueAfter={{ checked: false, agent: "triage v2", onChange }} />);
-    fireEvent.click(screen.getByLabelText("Requeue triage v2 after posting"));
+    fireEvent.click(screen.getByLabelText("Run triage v2 again after you post"));
     expect(onChange).toHaveBeenCalledWith(true);
   });
 });

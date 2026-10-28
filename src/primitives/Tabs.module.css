@@ -96,7 +96,7 @@ a.tab {
 /* A badge flags news on a tab the reader is not on, such as new events: neutral, as it is neither owed nor the current page. */
 .badge {
   margin-inline-start: var(--ward-space-2);
-  padding: 0 var(--ward-space-2);
+  padding: var(--ward-pad-chip);
   border-radius: var(--ward-radius-chip);
   font: var(--ward-type-chip);
   color: var(--ward-color-ink2);

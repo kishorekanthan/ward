@@ -78,7 +78,7 @@
   },
   "statStrip": {
     "story": "primitives-statstrip--phone-width",
-    "label": "Items waiting at a review gate",
+    "label": "Items waiting for a named reviewer",
     "labelLines": 2,
     "labelClipped": false,
     "longLabel": "Failed agent runs across every stream and every stage, in the last 24 hours",
@@ -125,7 +125,7 @@
     "story": "layout-recordsection--kicker",
     "headLines": 1,
     "noteLines": 2,
-    "seenText": "Ways out of this hold",
+    "seenText": "How to free this item",
     "fontSize": "15px",
     "family": "Figtree",
     "letterSpacing": "normal",

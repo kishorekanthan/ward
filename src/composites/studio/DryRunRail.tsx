@@ -29,17 +29,17 @@ const STATUS: Record<DryRun["status"], { role: "done" | "failed" | "running" | "
   passed: { role: "done", label: "Passed" }, failed: { role: "failed", label: "Failed" },
   running: { role: "running", label: "Running" }, notRun: { role: "pending", label: "Not run" },
 };
-const FOUNDRY_BLOCKER: Partial<Record<DryRun["status"], string>> = { running: "dry run in progress", notRun: "dry run has not run yet", failed: "dry run failed" };
+const FOUNDRY_BLOCKER: Partial<Record<DryRun["status"], string>> = { running: "Dry run running.", notRun: "Run a dry run first.", failed: "Dry run failed." };
 const STEP_MARKER: Record<"ok" | "finding" | "action", MarkerKind> = { ok: "greenFill", finding: "orangeFill", action: "blue" };
 const HOLLOW_NAME: Partial<Record<DryRunStepKind, string>> = { notSimulated: "not simulated", running: "running" };
 
 function foundryPresentation(props: DryRunRailProps): props is FoundryProps { return props.presentation === "foundry"; }
 
 function wardPublishReason(run: DryRun, checklist: GateItem[]): string | null {
-  if (run.status === "running") return "Publish is disabled: dry run in progress.";
-  const unmet = checklist.filter((item) => !item.met);
-  if (unmet.length > 0) return `Publish is disabled: ${unmet.length} of ${checklist.length} gate conditions unmet: ${unmet[0].text}`;
-  return run.status === "passed" ? null : "Publish is disabled: the dry run has not passed.";
+  if (run.status === "running") return "Wait for the dry run to finish.";
+  const unmet = checklist.find((item) => !item.met);
+  if (unmet) return `Not ready: ${unmet.text}`;
+  return run.status === "passed" ? null : "Pass a dry run first.";
 }
 
 function foundryPublishReason(run: FoundryDryRun, checklist: GateItem[]): string | null {
@@ -107,7 +107,7 @@ function WardSample(props: { sample?: DryRun["sample"] }): ReactElement | null {
 function FoundrySample(props: { sample?: FoundryDryRun["sample"] }): ReactElement | null {
   if (props.sample === undefined) return null;
   const replayed = props.sample.replayedFrom === undefined ? "" : " · replayed from " + stamp(props.sample.replayedFrom);
-  return <p className={`${s.sampleMeta} ${s.section} ward-dryrun-sample`}>{"Sample item: " + props.sample.key + " · " + props.sample.title + replayed + " · no writes committed"}</p>;
+  return <p className={`${s.sampleMeta} ${s.section} ward-dryrun-sample`}>{"Sample: " + props.sample.key + " · " + props.sample.title + replayed + ". Nothing saved."}</p>;
 }
 
 function WardStats(props: { run: DryRun }): ReactElement {

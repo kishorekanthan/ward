@@ -37,23 +37,17 @@ function KindWord({ kind }: { kind: ConsoleKind }) {
 
 type IdleLineProps = Pick<ActivityConsoleProps, "connection" | "idleSince"> & { last?: ConsoleLine; children: ReactNode };
 
-function LastEventTime({ at }: { at?: string }) {
-  if (at === undefined) return null;
-  return <span>{`last event ${time(at)}`}</span>;
+// Stale says when it went quiet; otherwise the foot shows the last event's time, if any.
+function IdleTime({ connection, idleSince, last }: Omit<IdleLineProps, "children">) {
+  if (connection === "stale") return <span className={s.idle}>{`Quiet since ${time([idleSince, last?.at, ""].find(Boolean) as string)}`}</span>;
+  return last?.at === undefined ? null : <span>{`Last event ${time(last.at)}`}</span>;
 }
 
 function IdleLine({ connection, idleSince, last, children }: IdleLineProps) {
-  const idleAt = [idleSince, last?.at, ""].find(Boolean) as string;
-  const copy = {
-    stale: `no new events as of ${time(idleAt)}`,
-    live: "waiting for the next event…",
-    reconnecting: "waiting for the next event…",
-  }[connection];
   return (
     <p className={`${s.foot} ward-consline ward-consline--dim`}>
       <span className={`${s.caret} ward-caret`} aria-hidden="true" />
-      <span className={s.idle}>{copy}</span>
-      <LastEventTime at={last?.at} />
+      <IdleTime connection={connection} idleSince={idleSince} last={last} />
       {children}
     </p>
   );
@@ -102,7 +96,7 @@ function useAnnounce(): [boolean, (announce: boolean) => void] {
 
 const listMarks = (count: number, fixed?: boolean) => ({ "data-empty": count === 0 || undefined, "data-fixed": fixed || undefined });
 
-export function ActivityConsole({ lines, connection, idleSince, label = "Live activity", fixed }: ActivityConsoleProps) {
+export function ActivityConsole({ lines, connection, idleSince, label = "Activity", fixed }: ActivityConsoleProps) {
   const listRef = useRef<HTMLOListElement>(null);
   const [revealed, setRevealed] = useState(0);
   const [announce, setAnnounce] = useAnnounce();

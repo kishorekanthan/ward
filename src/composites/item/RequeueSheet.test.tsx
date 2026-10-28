@@ -16,7 +16,7 @@ describe("RequeueSheet", () => {
     const onRequeue = vi.fn();
     render(<RequeueSheet {...props} onRequeue={onRequeue} />);
 
-    fireEvent.change(screen.getByRole("textbox", { name: "Note for the agent" }), {
+    fireEvent.change(screen.getByRole("textbox", { name: "Note" }), {
       target: { value: "Input changed upstream" },
     });
     fireEvent.click(screen.getByRole("button", { name: "Requeue" }));
@@ -79,7 +79,7 @@ describe("RequeueSheet", () => {
   it("requeues with the note that was typed", () => {
     const onRequeue = vi.fn();
     render(<RequeueSheet {...sourceProps} onRequeue={onRequeue} />);
-    fireEvent.change(screen.getByLabelText("Note for the agent"), { target: { value: "Use the agreed window." } });
+    fireEvent.change(screen.getByLabelText("Note"), { target: { value: "Use the agreed window." } });
     fireEvent.click(screen.getByRole("button", { name: "Requeue" }));
     expect(onRequeue).toHaveBeenCalledWith("Use the agreed window.");
   });
@@ -94,7 +94,7 @@ describe("RequeueSheet", () => {
   it("is a dialog named by its title, and shows what the run will cost", () => {
     render(<RequeueSheet {...sourceProps} />);
     expect(screen.getByRole("dialog", { name: "Requeue triage v2" }).getAttribute("aria-modal")).toBe("true");
-    expect(screen.getByText("This requeue adds").nextElementSibling?.textContent).toBe("$0.12");
+    expect(screen.getByText("This run adds").nextElementSibling?.textContent).toBe("$0.12");
   });
 
   it("closes on Escape", () => {

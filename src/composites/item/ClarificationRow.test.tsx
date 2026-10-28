@@ -38,7 +38,7 @@ describe("ClarificationRow", () => {
     const edit = screen.getByRole("button", { name: "Edit" });
     expect((edit as HTMLButtonElement).disabled).toBe(true);
     expect(document.getElementById(edit.getAttribute("aria-describedby") ?? "")?.textContent).toContain(
-      "Edit is unavailable mid-flight",
+      "Sending. Cancel to edit.",
     );
     fireEvent.click(screen.getByRole("button", { name: "Cancel delivery" }));
     expect(onCancelDelivery).toHaveBeenCalledTimes(1);
@@ -108,7 +108,7 @@ describe("ClarificationRow", () => {
     const edit = screen.getByText("Edit") as HTMLButtonElement;
     expect(edit.disabled).toBe(true);
     expect(document.getElementById(edit.getAttribute("aria-describedby") ?? "")?.textContent).toBe(
-      "Edit is unavailable mid-flight: a delivery may already have reached Jira. Cancel first, then edit.",
+      "Sending. Cancel to edit.",
     );
     fireEvent.click(edit);
     expect(onEdit).not.toHaveBeenCalled();
@@ -130,9 +130,9 @@ describe("ClarificationRow", () => {
 
   // Recorded from v0.2.2, when the notes named Jira unconditionally.
   const V022: Record<"queued" | "delivered" | "failed", string> = {
-    queued: "Still in the outbox. Editing replaces it, so Jira gets one comment, not two.",
-    delivered: "Already in Jira, so an edit is a Jira edit: it will show as edited by you there, and the original stays in the audit row.",
-    failed: "Delivery failed. Edit and resend, or cancel the delivery.",
+    queued: "Not sent yet. Edits replace it.",
+    delivered: "Sent. Edits show in Jira as yours.",
+    failed: "Not sent. Resend or cancel.",
   };
 
   it.each(["queued", "delivered", "failed"] as const)("keeps the v0.2.2 %s note when no tracker is named", (delivery) => {
@@ -141,9 +141,9 @@ describe("ClarificationRow", () => {
   });
 
   it.each([
-    ["queued", "Still in the outbox. Editing replaces it, so Trellis gets one comment, not two."],
-    ["delivered", "Already in Trellis, so an edit is a Trellis edit: it will show as edited by you there, and the original stays in the audit row."],
-    ["retrying", "Edit is unavailable mid-flight: a delivery may already have reached Trellis. Cancel first, then edit."],
+    ["queued", "Not sent yet. Edits replace it."],
+    ["delivered", "Sent. Edits show in Trellis as yours."],
+    ["retrying", "Sending. Cancel to edit."],
   ] as const)("names the tenant's tracker in every delivery note (%s)", (delivery, note) => {
     const { container } = render(<ClarificationRow comment={{ ...comment, delivery }} {...noop} tracker="Trellis" />);
     expect(screen.getByText(note)).not.toBeNull();

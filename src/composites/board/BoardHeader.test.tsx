@@ -28,14 +28,14 @@ describe("BoardHeader", () => {
   it("puts the rollup through the formatters, never raw numbers", () => {
     const { container } = render(<BoardHeader {...full} />);
     const line = container.querySelector("[aria-live='polite']") as HTMLElement;
-    expect(line.textContent).toContain("14 in flight");
-    expect(line.textContent).toContain("1,204 loaded this week");
+    expect(line.textContent).toContain("14 open");
+    expect(line.textContent).toContain("1,204 done this week");
     expect(line.textContent).toContain("P50 3d 4h");
   });
 
   it("shows connection as a state, not a spinner", () => {
     render(<BoardHeader {...full} connection="reconnecting" />);
-    expect(screen.getByRole("status").textContent).toContain("RECONNECTING");
+    expect(screen.getByRole("status").textContent).toContain("Reconnecting");
   });
 
   it("offers the configure action from the header, not from a column", () => {
@@ -84,7 +84,7 @@ describe("BoardHeader rollups and actions", () => {
       <BoardHeader stream={stream} rollups={{ inFlight: 3, loadedThisWeek: 1 }} connection="live" lastEventAt={null} />,
     );
 
-    expect(container.querySelector("[aria-live='polite']")?.textContent).toBe("3 in flight · 1 loaded this week");
+    expect(container.querySelector("[aria-live='polite']")?.textContent).toBe("3 open · 1 done this week");
   });
 
   it("keeps a supplied agents count and places page actions after Configure board", () => {
@@ -99,7 +99,7 @@ describe("BoardHeader rollups and actions", () => {
       />,
     );
 
-    expect(container.querySelector("[aria-live='polite']")?.textContent).toBe("2 in flight · 0 loaded this week · 4 agents working");
+    expect(container.querySelector("[aria-live='polite']")?.textContent).toBe("2 open · 0 done this week · 4 agents working");
     const labels = screen.getAllByRole("button").map((button) => button.textContent);
     expect(labels.filter((label) => label === "Configure board" || label === "Raise request")).toEqual([
       "Configure board",
@@ -107,14 +107,14 @@ describe("BoardHeader rollups and actions", () => {
     ]);
   });
 
-  it("states an unknown loaded count as unavailable and prints known cycle times", () => {
+  it("states an unknown done count as unknown and prints known cycle times", () => {
     const { container, rerender } = render(<BoardHeader stream={stream} rollups={{ inFlight: 3 }} connection="live" lastEventAt={null} />);
     const line = () => container.querySelector("[aria-live='polite']")?.textContent;
-    expect(line()).toBe("3 in flight · loaded this week unavailable");
+    expect(line()).toBe("3 open · done this week unknown");
 
     const cycle = { inFlight: 2, loadedThisWeek: 5, p50: 30 * 3_600_000, p90: 100.5 * 3_600_000 };
     rerender(<BoardHeader stream={stream} rollups={cycle} connection="live" lastEventAt={null} />);
-    expect(line()).toBe("2 in flight · 5 loaded this week · P50 1d 6h · P90 4d 4h");
+    expect(line()).toBe("2 open · 5 done this week · P50 1d 6h · P90 4d 4h");
   });
 
   it("names the board with the stream as its page heading, followed by the key tag", () => {
@@ -180,8 +180,8 @@ describe("BoardHeader in-flight hint", () => {
     const hinted = container.querySelectorAll("[title]");
     expect(hinted).toHaveLength(1);
     expect(hinted[0].getAttribute("title")).toBe("Items running, held or blocked");
-    expect(hinted[0].textContent).toBe("3 in flight");
-    expect(container.querySelector("[aria-live='polite']")?.textContent).toBe("3 in flight · 1 loaded this week");
+    expect(hinted[0].textContent).toBe("3 open");
+    expect(container.querySelector("[aria-live='polite']")?.textContent).toBe("3 open · 1 done this week");
   });
 
   it("adds no title without a hint", () => {

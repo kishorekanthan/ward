@@ -15,8 +15,6 @@ const CHIP: Record<Rung["state"], { role: ChipRole; label: string }> = {
 };
 
 function RungItem({ rung }: { rung: Rung }) {
-  if (rung.state === "waiting" && !rung.actor)
-    throw new Error(`GateLadder: the waiting rung "${rung.name}" names no actor — a wait always names who it waits on`);
   const chip = CHIP[rung.state];
   return (
     <li className={s.rung} data-state={rung.state}>

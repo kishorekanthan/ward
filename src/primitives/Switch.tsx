@@ -70,7 +70,6 @@ export function Switch({ label, checked, onChange, disabled, locked, describedBy
       </button>
       <label id={id} htmlFor={switchId} className={labelClass(labelHidden)}>
         {label}
-        {locked && <span className={s.lockedNote}>always on</span>}
       </label>
       <Reason id={reasonId} reason={reason} />
     </span>

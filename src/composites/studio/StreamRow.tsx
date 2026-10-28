@@ -86,7 +86,7 @@ function StageChip({ name, gate, look, size }: { name: string; gate: boolean; lo
   return <>
     {gate ? <span className={s.gateMark} aria-hidden="true" data-gate-mark>◆</span> : null}
     <Chip {...look} size={size} label={name} />
-    {gate ? <span className="ward-visually-hidden"> (human gate)</span> : null}
+    {gate ? <span className="ward-visually-hidden"> (review)</span> : null}
   </>;
 }
 

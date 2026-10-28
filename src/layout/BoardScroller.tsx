@@ -51,7 +51,7 @@ function WideLanes({ lanes, label }: { lanes: BoardLane[]; label: string }) {
   );
 }
 
-export function BoardScroller({ children, label = "Workflow board", lanes, laneLabel = "Column" }: BoardScrollerProps) {
+export function BoardScroller({ children, label = "Board", lanes, laneLabel = "Column" }: BoardScrollerProps) {
   const phone = useMediaQuery(BOARD_PHONE_QUERY);
   if (lanes === undefined) return <Scroller label={label}>{children}</Scroller>;
   if (phone) return <PhoneLanes lanes={lanes} label={label} laneLabel={laneLabel} />;

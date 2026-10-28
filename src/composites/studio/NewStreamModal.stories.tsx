@@ -47,7 +47,7 @@ export const NoGateStage = {
 export const OnePolicy = {
   args: {
     ...base,
-    policies: [{ value: "review", label: "Hold every item at the gate", consequence: "Every item waits for a named reviewer, whatever the agent found." }],
+    policies: [{ value: "review", label: "Hold every item for review", consequence: "Every item waits for a named reviewer, whatever the agent found." }],
   },
 };
 
