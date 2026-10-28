@@ -52,15 +52,17 @@ describe("PreviewRail", () => {
     expect(cardKey()).toBe("FL-232");
   });
 
-  it("lists the effects of the draft as an unticked-until-met checklist", () => {
+  it("warns only of an unmet effect, with no heading, and drops it once met", () => {
     const text = "Two items would sit over the new cap.";
     /* GateChecklist folds its marker's own label into the accessible name, so
        match on the effect's sentence rather than on the whole name. */
     const box = () => screen.getByRole("checkbox", { name: new RegExp(text.replace(".", "\\.")) });
     const { rerender } = render(<PreviewRail draft={draft} sample={sample} effects={[{ met: false, text }]} />);
     expect(box().getAttribute("aria-checked")).toBe("false");
+    expect(screen.queryByText("Effect of this config")).toBeNull();
     rerender(<PreviewRail draft={draft} sample={sample} effects={[{ met: true, text }]} />);
-    expect(box().getAttribute("aria-checked")).toBe("true");
+    expect(screen.queryByRole("checkbox", { name: new RegExp(text.replace(".", "\\.")) })).toBeNull();
+    expect(screen.queryByRole("region", { name: "Warnings" })).toBeNull();
   });
 
   // .strip is a horizontal scroll container, so a keyboard cannot scroll it without a stop of its own.
@@ -88,8 +90,8 @@ describe("PreviewRail", () => {
     expect(screen.getByText("Done shows as a counter.")).toBeTruthy();
   });
 
-  it("heads each part of the rail the way the comp names them", () => {
+  it("heads the rail and its columns with one plain word each", () => {
     render(<PreviewRail draft={draft} sample={sample} effects={[]} strip="skeleton" />);
-    expect(screen.getAllByRole("heading").map((h) => h.textContent)).toEqual(["Live preview", "Card", "Columns · 1 shown", "Effect of this config"]);
+    expect(screen.getAllByRole("heading").map((h) => h.textContent)).toEqual(["Preview", "Columns"]);
   });
 });

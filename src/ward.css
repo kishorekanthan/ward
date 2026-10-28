@@ -234,8 +234,8 @@
   --ward-pad-control: 9px 12px;
   --ward-pad-bandHead: 16px 16px 18px;
   --ward-pad-bandCell: 14px 14px 16px;
-  --ward-pad-configRow: 10px 0;
-  --ward-pad-configHead: 8px 0;
+  --ward-pad-configRow: 10px 8px;
+  --ward-pad-configHead: 8px 8px;
   --ward-pad-input: 7px 9px;
   --ward-pad-controlPrimary: 9px 14px;
   --ward-pad-ruleRow: 11px 13px;

@@ -129,7 +129,7 @@ type McpClassChip = { role: "write" | "meta"; label: string };
 
 // Write class follows the server's declared write_tools, not per-tool flags.
 function webClassChip(server: WebMcpServer): McpClassChip {
-  return (server.write_tools?.length ?? 0) > 0 ? { role: "write", label: "Write class" } : { role: "meta", label: "Read only" };
+  return (server.write_tools?.length ?? 0) > 0 ? { role: "write", label: "Can write" } : { role: "meta", label: "Read only" };
 }
 
 function WebPinned({ pinned }: { pinned: string | null }): ReactElement {
@@ -140,7 +140,7 @@ function WebPinned({ pinned }: { pinned: string | null }): ReactElement {
 function WebRestart({ server, onRestart }: Pick<WebMcpServerRowProps, "server" | "onRestart">): ReactElement | null {
   if (onRestart === undefined) return null;
   if (server.restart?.implemented !== true) {
-    return <span className={`${s.webMeta} ward-cellmeta`}>Restart unavailable: no supervisor configured</span>;
+    return <span className={`${s.webMeta} ward-cellmeta`}>Restart not set up</span>;
   }
   return (
     <Btn size="sm" onClick={() => onRestart(server.name)}>

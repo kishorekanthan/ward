@@ -23,7 +23,7 @@ describe("ToolRow", () => {
     expect(box.disabled).toBe(true);
     expect(box.closest(".ward-toolrow")?.getAttribute("data-locked")).toBe("true");
     expect((box.closest(".ward-toolrow") as HTMLElement).style.opacity).toBe("");
-    expect(document.getElementById(box.getAttribute("aria-describedby") ?? "")?.textContent).toBe("locked by stream policy");
+    expect(document.getElementById(box.getAttribute("aria-describedby") ?? "")?.textContent).toBe("Locked by stream policy");
     expect(screen.getByText("Write").className).toContain("ward-chip--write");
     expect(screen.getByText("Locked").className).toContain("ward-chip--meta");
   });

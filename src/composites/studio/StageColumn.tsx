@@ -6,6 +6,7 @@ import { count } from "../../fmt/count";
 import { duration } from "../../fmt/duration";
 import type { LiveConnection } from "../../live/types";
 import { AgentCard, type AgentCardProps } from "./AgentCard";
+import { repeatsName } from "../../primitives/kindTag";
 import s from "./StageColumn.module.css";
 
 export type StageKind = "entry" | "agent" | "gate" | "terminal";
@@ -52,7 +53,7 @@ export type StageColumnWorkflowProps = {
 
 type RenderProps = StageColumnProps | StageColumnWorkflowProps;
 
-const KIND_LABEL: Record<StageKind, string> = { entry: "Entry", agent: "Agent", gate: "Gate", terminal: "Terminal" };
+const KIND_LABEL: Record<StageKind, string> = { entry: "Entry", agent: "Agent", gate: "Review", terminal: "Done" };
 
 // An absent week count is unknown, never a quiet week.
 function weekCount(closed: number | undefined, format: (n: number) => string = String): string {
@@ -73,7 +74,7 @@ function GatePanel({ stage }: { stage: Stage }) {
       </ul>
       {stage.gateShare === undefined ? null : (
         <StatStrip cells={[
-          { value: percent(stage.gateShare), label: "Gate share" },
+          { value: percent(stage.gateShare), label: "Held for review" },
           { value: count(stage.count), label: "In stage" },
         ]} />
       )}
@@ -93,7 +94,7 @@ function StageHead({ stage, titleId }: { stage: Stage; titleId: string }) {
     <header className={s.head}>
       <span className={s.index}>{String(stage.index).padStart(2, "0")}</span>
       <h3 className={s.name} id={titleId}>{stage.name}</h3>
-      <Chip role={stage.kind === "gate" ? "gate" : "soft"} label={KIND_LABEL[stage.kind]} />
+      {repeatsName(stage.name, KIND_LABEL[stage.kind]) ? null : <Chip role={stage.kind === "gate" ? "gate" : "soft"} label={KIND_LABEL[stage.kind]} />}
     </header>
   );
 }
@@ -115,7 +116,7 @@ function StagePanel({ stage }: { stage: Stage }) {
 
 function MountAction({ onMount }: { onMount?: () => void }) {
   if (!onMount) return null;
-  return <Btn variant="ghost" size="sm" onClick={() => onMount()}>Mount an agent</Btn>;
+  return <Btn variant="ghost" size="sm" onClick={() => onMount()}>Add an agent</Btn>;
 }
 
 function StandardColumn({ stage, agents = [], onMount, feed }: StageColumnProps) {
@@ -135,8 +136,8 @@ function StandardColumn({ stage, agents = [], onMount, feed }: StageColumnProps)
 }
 
 const WORKFLOW_TAG: Partial<Record<StageKind, ChipProps>> = {
-  gate: { role: "gate", label: "Human gate" },
-  terminal: { role: "quiet", label: "Terminal" },
+  gate: { role: "gate", label: "Review" },
+  terminal: { role: "quiet", label: "Done" },
 };
 
 function ReviewerList({ reviewers }: { reviewers: StageColumnReviewer[] }) {
@@ -157,12 +158,12 @@ function WorkflowGatePanel({ stage }: { stage: StageColumnSummary }) {
   return (
     <div className={s.workflowGate} data-panel="gate">
       <p className={s.gateNote}>
-        No agent can advance an item out of this stage.{reviewers.length === 0 ? null : " Reviewers:"}
+        {reviewers.length === 0 ? "A person moves items on." : "Needs approval from:"}
       </p>
       {reviewers.length === 0 ? null : <ReviewerList reviewers={reviewers} />}
       {stage.gateShare === undefined ? null : (
         <p className={s.cardNote} data-note="gate-share">
-          <span>{percent(stage.gateShare)}</span> of elapsed time is spent here
+          <span>{percent(stage.gateShare)}</span> of time here
         </p>
       )}
     </div>
@@ -170,8 +171,8 @@ function WorkflowGatePanel({ stage }: { stage: StageColumnSummary }) {
 }
 
 function closedNote(rolledBack: number | undefined): string {
-  if (rolledBack === undefined) return "items closed this week";
-  return `items closed · ${rolledBack} ${rolledBack === 1 ? "rollback" : "rollbacks"}`;
+  if (rolledBack === undefined) return "closed this week";
+  return `closed · ${rolledBack} ${rolledBack === 1 ? "rollback" : "rollbacks"}`;
 }
 
 function WorkflowTerminalCounter({ stage }: { stage: StageColumnSummary }) {
@@ -199,7 +200,7 @@ function WorkflowHead({ stage, titleId }: { stage: StageColumnSummary; titleId: 
     <header className={s.workflowHead}>
       <span className={s.stageRow}>
         <span className={s.stageLabel} id={`${titleId}-index`}>Stage {String(stage.index).padStart(2, "0")}</span>
-        {tag === undefined ? null : <Chip {...tag} size="tag" />}
+        {tag === undefined || repeatsName(stage.name, tag.label) ? null : <Chip {...tag} size="tag" />}
       </span>
       <h3 id={titleId} className={s.workflowTitle}>{stage.name}</h3>
       <span className={s.workflowMeta}>{workflowCountLine(stage)}</span>
@@ -213,7 +214,7 @@ function canMount(kind: StageKind): boolean {
 
 function WorkflowMount({ stage, onMount }: Pick<StageColumnWorkflowProps, "stage" | "onMount">) {
   if (onMount === undefined || !canMount(stage.kind)) return null;
-  return <Btn variant="secondary" size="sm" className={s.mount} onClick={(event) => onMount(stage.index, event.currentTarget)}>+ Mount agent</Btn>;
+  return <Btn variant="secondary" size="sm" className={s.mount} onClick={(event) => onMount(stage.index, event.currentTarget)}>+ Add agent</Btn>;
 }
 
 function WorkflowColumn({ stage, agentCards, onMount }: StageColumnWorkflowProps) {

@@ -47,7 +47,7 @@ function CompactEnvCard({ env }: { env: Env }): ReactElement {
 
 // Only an absent promoter is dropped; an absent ticket still joins, keeping the web page's trailing separator.
 function webMeta(env: Env): string {
-  const promoter = env.by !== undefined ? `promoted by ${env.by}` : null;
+  const promoter = env.by !== undefined ? `by ${env.by}` : null;
   return [stamp(env.deployedAt), promoter, env.ticket].filter((part) => part !== null).join(" · ");
 }
 

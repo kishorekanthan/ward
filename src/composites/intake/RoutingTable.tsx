@@ -56,7 +56,7 @@ export function RoutingTable({ rows, empty, requireNoRerunReason = true }: Routi
   const identifiedRows = withIds(rows);
   return (
     <Grid
-      label="Rejection routing"
+      label="Rejection rules"
       columns={COLUMNS}
       rows={identifiedRows}
       rowId={(r) => r.id}
@@ -65,7 +65,7 @@ export function RoutingTable({ rows, empty, requireNoRerunReason = true }: Routi
           {cellText(r, key)}
         </span>
       )}
-      empty={empty ?? <EmptyState sentence="No rejection route is configured for this stream yet." />}
+      empty={empty ?? <EmptyState sentence="No rejection rules yet." />}
     />
   );
 }

@@ -34,16 +34,16 @@ describe("StageColumn", () => {
     expect(screen.getByRole("heading", { name: "Review" })).toBeDefined();
     expect(screen.getByText("1d 2h median wait")).toBeDefined();
     expect(within(screen.getByText("Reviewers").closest('[data-panel="gate"]') as HTMLElement).getByText("J. Rao")).toBeDefined();
-    expect(screen.getByText("68%").nextElementSibling?.textContent).toBe("Gate share");
+    expect(screen.getByText("68%").nextElementSibling?.textContent).toBe("Held for review");
     expect(container.querySelector("[data-accent]")).toBeNull();
   });
 
   it("keeps default visuals and the no-argument mount callback", () => {
     const onMount = vi.fn();
     const { container } = render(<StageColumn stage={terminal} onMount={onMount} />);
-    expect(container.textContent).toContain("04DoneTerminal");
+    expect(container.textContent).toContain("04Done12 in stage");
     expect(screen.getByText("31").nextElementSibling?.textContent).toBe("Closed this week");
-    fireEvent.click(screen.getByRole("button", { name: "Mount an agent" }));
+    fireEvent.click(screen.getByRole("button", { name: "Add an agent" }));
     expect(onMount).toHaveBeenCalledWith();
   });
 
@@ -59,14 +59,14 @@ describe("StageColumn", () => {
     };
     const { container } = render(<StageColumn stage={stage} presentation={{ mode: "workflow" }} />);
     expect(container.querySelector("section")).toBe(screen.getByRole("region", { name: "Stage 03 Review" }));
-    expect(screen.getAllByText("Human gate")).toHaveLength(1);
+    expect(screen.getAllByText("Review")).toHaveLength(1);
     expect(screen.getByText("7 items · median wait 2d 4h")).toBeDefined();
-    expect(screen.getByText(/^No agent can advance an item out of this stage\. Reviewers:$/)).toBeDefined();
+    expect(screen.getByText(/^Needs approval from:$/)).toBeDefined();
     expect(screen.getByText("Priya Nayar").previousElementSibling?.textContent).toBe("PN");
     const note = screen.getByText("68%").parentElement;
-    expect(note?.textContent).toBe("68% of elapsed time is spent here");
+    expect(note?.textContent).toBe("68% of time here");
     expect(note?.getAttribute("data-accent")).toBeNull();
-    expect(screen.queryByRole("button", { name: "+ Mount agent" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "+ Add agent" })).toBeNull();
   });
 
   it("passes the workflow stage index and preserves supplied cards", () => {
@@ -81,7 +81,7 @@ describe("StageColumn", () => {
     );
     expect(screen.getByRole("link", { name: "Mounted agent" }).getAttribute("href")).toBe("#/studio/agents/a%2Fb");
     expect(screen.getByText("6 items")).toBeDefined();
-    const button = screen.getByRole("button", { name: "+ Mount agent" });
+    const button = screen.getByRole("button", { name: "+ Add agent" });
     fireEvent.click(button);
     expect(onMount).toHaveBeenCalledWith(2, button);
   });
@@ -94,19 +94,19 @@ describe("StageColumn", () => {
   it("counts the terminal stage by the week and offers no mount", () => {
     render(<StageColumn stage={{ index: 5, name: "Loaded", kind: "terminal", count: 2, closedThisWeek: 41 }} onMount={vi.fn()} presentation={{ mode: "workflow" }} />);
     expect(screen.getByText("41 this week")).toBeDefined();
-    expect(screen.getByText("41").nextElementSibling?.textContent).toBe("items closed this week");
-    expect(screen.getByText("Terminal")).toBeDefined();
-    expect(screen.queryByRole("button", { name: "+ Mount agent" })).toBeNull();
+    expect(screen.getByText("41").nextElementSibling?.textContent).toBe("closed this week");
+    expect(screen.getByText("Done")).toBeDefined();
+    expect(screen.queryByRole("button", { name: "+ Add agent" })).toBeNull();
   });
 
   it("counts the terminal stage's rollbacks beside its closed items", () => {
     const stage = { index: 5, name: "Loaded", kind: "terminal" as const, closedThisWeek: 41 };
     const { rerender } = render(<StageColumn stage={{ ...stage, rolledBackThisWeek: 0 }} presentation={{ mode: "workflow" }} />);
-    expect(screen.getByText("41").nextElementSibling?.textContent).toBe("items closed · 0 rollbacks");
+    expect(screen.getByText("41").nextElementSibling?.textContent).toBe("closed · 0 rollbacks");
     rerender(<StageColumn stage={{ ...stage, rolledBackThisWeek: 1 }} presentation={{ mode: "workflow" }} />);
-    expect(screen.getByText("41").nextElementSibling?.textContent).toBe("items closed · 1 rollback");
+    expect(screen.getByText("41").nextElementSibling?.textContent).toBe("closed · 1 rollback");
     rerender(<StageColumn stage={{ ...stage, rolledBackThisWeek: 3 }} presentation={{ mode: "workflow" }} />);
-    expect(screen.getByText("41").nextElementSibling?.textContent).toBe("items closed · 3 rollbacks");
+    expect(screen.getByText("41").nextElementSibling?.textContent).toBe("closed · 3 rollbacks");
     expect(screen.getByText("41 this week")).toBeDefined();
   });
 
@@ -142,7 +142,7 @@ describe("StageColumn", () => {
   it("reads an absent terminal week count as unknown, not zero", () => {
     const { container, rerender } = render(<StageColumn stage={{ index: 5, name: "Loaded", kind: "terminal" }} presentation={{ mode: "workflow" }} />);
     expect(screen.getByText("— this week")).toBeDefined();
-    expect(screen.getByText("—").nextElementSibling?.textContent).toBe("items closed this week");
+    expect(screen.getByText("—").nextElementSibling?.textContent).toBe("closed this week");
     rerender(<StageColumn stage={{ index: 5, name: "Loaded", kind: "terminal", closedThisWeek: 0 }} presentation={{ mode: "workflow" }} />);
     expect(screen.getByText("0 this week")).toBeDefined();
     expect(container.textContent).not.toContain("—");
@@ -171,7 +171,7 @@ describe("StageColumn (spec)", () => {
     const note = screen.getByText("68%").parentElement as HTMLElement;
     expect(note.className).toMatch(/^_cardNote_\w+$/);
     // Whole markup, so an inline amber style on the note or its figure fails too.
-    expect(note.outerHTML).toBe(`<p class="${note.className}" data-note="gate-share"><span>68%</span> of elapsed time is spent here</p>`);
+    expect(note.outerHTML).toBe(`<p class="${note.className}" data-note="gate-share"><span>68%</span> of time here</p>`);
     expect(columnCss).not.toMatch(/--ward-color-(amber|warning)/);
   });
 
@@ -180,7 +180,12 @@ describe("StageColumn (spec)", () => {
     const panel = screen.getByText("Reviewers").closest('[data-panel="gate"]');
     expect(panel).not.toBeNull();
     expect(within(panel as HTMLElement).getByText("J. Rao")).not.toBeNull();
-    expect(screen.getByText("Gate")).not.toBeNull();
+    expect(screen.queryByText("Review", { selector: ".ward-chip" })).toBeNull();
+  });
+
+  it("tags a review stage whose name does not already say so", () => {
+    render(<StageColumn stage={{ ...gate, name: "Sign-off" }} />);
+    expect(screen.getByText("Review", { selector: ".ward-chip" })).not.toBeNull();
   });
 
   it("counts a terminal stage instead of drawing a gate panel", () => {
@@ -206,7 +211,7 @@ describe("StageColumn (spec)", () => {
   it("ships a workflow gate story whose panel shows the gate-share note", () => {
     const { container } = render(<StageColumn {...WorkflowGate.args} />);
     const note = container.querySelector('[data-panel="gate"] [data-note="gate-share"]');
-    expect(note?.textContent).toBe("68% of elapsed time is spent here");
+    expect(note?.textContent).toBe("68% of time here");
     expect([...container.querySelectorAll('[data-panel="gate"] li')].map((row) => row.textContent)).toEqual(["JRJ. Rao", "MCM. Chen"]);
     expect(container.querySelector("header")?.textContent).toContain("6 items · median wait 2d 13h");
   });

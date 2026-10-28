@@ -5,7 +5,6 @@ import { LiveIndicator } from "../../live/LiveIndicator";
 import { duration } from "../../fmt/duration";
 import type { BoardItem } from "./types";
 import type { WorkCardFeed } from "./WorkCard";
-import { streamChipProps, validatedStep } from "../../primitives/streamColour";
 import s from "./ItemDrawer.module.css";
 
 export type ItemDetail = BoardItem & {
@@ -45,11 +44,6 @@ function runningRows(item: ItemDetail, feed?: WorkCardFeed | null): [string, Rea
   return [["Running", <LiveIndicator key="l" startedAt={item.run.startedAt} connection={connection} turn={item.run.turn} lastEvent={item.run.lastStep} />]];
 }
 
-function stepLabel(step: number | null): string {
-  const valid = validatedStep(step);
-  return valid === null ? "No colour" : `Step ${valid}`;
-}
-
 // Built-in rows key on their label; an app fact keys on its position, as two facts may share a label.
 type Row = [label: string, value: ReactNode, key?: string];
 
@@ -59,9 +53,6 @@ function factRows(facts?: DrawerFact[]): Row[] {
 
 function detailRows(item: ItemDetail, feed?: WorkCardFeed | null, facts?: DrawerFact[]): Row[] {
   const rows: Row[] = [
-    ["Stream", item.streamName ?? <Chip key="s" {...streamChipProps(stepLabel(item.streamStep), item.streamStep)} />],
-    ["Workflow", item.workflow],
-    ["State", item.stateLabel],
     ["Time in stage", duration(item.timeInStage)],
     ["Waits on", item.run ? item.run.agent : item.waitsOn],
     ...blockedRows(item),
@@ -82,7 +73,7 @@ function ResolveSection({ resolve, label }: { resolve: ReactNode; label: string 
 }
 
 function drawerState(item: ItemDetail) {
-  return item.run ? { role: "running" as const, label: "Agent working" } : item.state;
+  return item.run ? { role: "running" as const, label: "Running" } : item.state;
 }
 
 function DrawerHead({ item, showKey }: { item: ItemDetail; showKey: boolean }) {
@@ -100,7 +91,6 @@ function AgentQuote({ item }: { item: ItemDetail }) {
   if (!item.agentSentence) return null;
   return (
     <div className={s.block}>
-      <p className={s.k}>What the agent says</p>
       <p className={s.quote}>{item.agentSentence}</p>
       {item.agentMeta && <p className={s.note}>{item.agentMeta}</p>}
     </div>
@@ -133,7 +123,7 @@ export function ItemDrawer({ item, actions, onClose, returnFocusTo, feed, resolv
           <div className={s.actions}>{actions}</div>
           {actionsNote && <p className={s.note}>{actionsNote}</p>}
         </div>
-        <ResolveSection resolve={resolve} label={resolveLabel ?? "Ways out of this hold"} />
+        <ResolveSection resolve={resolve} label={resolveLabel ?? "Next steps"} />
       </div>
     </Overlay>
   );

@@ -17,34 +17,32 @@ const described = (el: HTMLElement) =>
   (el.getAttribute("aria-describedby") ?? "").split(" ").filter(Boolean).map((id) => document.getElementById(id)?.textContent).join(" ");
 
 describe("ConfigRow", () => {
-  it("locks a human gate on as a column and says why", () => {
+  it("locks a review stage on as a column, says why once, and adds no sub-line", () => {
     const onChange = row({ gate: true });
     expect(shown().getAttribute("aria-checked")).toBe("true");
     expect(shown().disabled).toBe(true);
     fireEvent.click(shown());
     expect(onChange).not.toHaveBeenCalled();
-    expect(screen.getByText("can't be hidden or collapsed")).not.toBeNull();
+    expect(screen.queryByText("can't be hidden or collapsed")).toBeNull();
+    expect(screen.getByText("Review")).not.toBeNull();
     expect(screen.getByText("locked")).not.toBeNull();
-    expect(described(shown())).toBe("A human gate is always shown, so people see what waits for them.");
-    expect(shown().title).toBe("A human gate is always shown, so people see what waits for them.");
+    expect(described(shown())).toBe("Review stages always show.");
+    expect(shown().title).toBe("Review stages always show.");
   });
 
   it("keeps a terminal stage off the board and counted instead", () => {
     row({ terminal: true });
     expect(shown().getAttribute("aria-checked")).toBe("false");
     expect(shown().disabled).toBe(true);
-    expect(screen.getByText("terminal · counted, not a column")).not.toBeNull();
-    expect(described(shown())).toBe("A terminal stage is counted, not shown as a column.");
+    expect(screen.queryByText(/terminal/)).toBeNull();
+    expect(described(shown())).toBe("Done stages are counted, not shown.");
     expect(screen.queryByLabelText("WIP cap")).toBeNull();
   });
 
-  it("says how many agents are mounted and shows the switch state in words", () => {
+  it("leaves the agent count to the Agents tab and shows the switch state in words", () => {
     row({});
-    expect(screen.getByText("2 agents mounted")).not.toBeNull();
+    expect(screen.queryByText(/agents?/)).toBeNull();
     expect(screen.getByText("on")).not.toBeNull();
-    cleanup();
-    row({ agentsMounted: 0 });
-    expect(screen.queryByText(/mounted/)).toBeNull();
   });
 
   it("leaves an ordinary stage editable", () => {

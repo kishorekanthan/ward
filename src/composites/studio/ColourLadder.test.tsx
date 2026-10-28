@@ -33,7 +33,7 @@ describe("ColourLadder", () => {
     expect(taken.querySelector(".ward-ladder-swatch--empty")).toBeNull();
   });
 
-  it("shows six colour steps with truthful validation, then the reserved and request cells", () => {
+  it("shows six colour steps with truthful validation, then the reserved cell and no request cell", () => {
     const onChange = vi.fn();
     const { container } = render(<ColourLadder steps={SIX_AND_RESERVED} value={null} onChange={onChange} takenBy={{ 2: "UI / UX" }} />);
     const radios = screen.getAllByRole("radio");
@@ -41,16 +41,16 @@ describe("ColourLadder", () => {
       "Step 1 · free",
       "Step 2 · taken by UI / UX",
       "Step 3 · free",
-      "Step 4 · not validated",
-      "Step 5 · not validated",
-      "Step 6 · not validated",
+      "Step 4 · Not available",
+      "Step 5 · Not available",
+      "Step 6 · Not available",
       "Step 7 · reserved",
     ]);
     expect(radios.map((radio) => radio.getAttribute("aria-disabled"))).toEqual([null, "true", null, "true", "true", "true", "true"]);
     expect(radios[4].style.getPropertyValue("--stream")).toBe("var(--ward-stream-5-id)");
     fireEvent.click(radios[3]);
     expect(onChange).not.toHaveBeenCalled();
-    expect(container.querySelector("[data-validation='request']")?.textContent).toBe("requestAsk design for a new step");
+    expect(container.querySelector("[data-validation='request']")).toBeNull();
   });
 
   it("rejects steps that have no stream token and are not reserved", () => {
@@ -77,7 +77,7 @@ describe("ColourLadder (spec)", () => {
   it("refuses an unvalidated step rather than offering it", () => {
     const onChange = vi.fn();
     render(<ColourLadder label="Stream colour" steps={specSteps} value={1} onChange={onChange} />);
-    const four = screen.getByRole("radio", { name: "Step 4 · not validated" });
+    const four = screen.getByRole("radio", { name: "Step 4 · Not available" });
     expect(four.getAttribute("aria-disabled")).toBe("true");
     fireEvent.click(four);
     expect(onChange).not.toHaveBeenCalled();
@@ -120,18 +120,17 @@ describe("ColourLadder tiles (Studio 9a)", () => {
     render(<ColourLadder presentation="tiles" steps={SIX_AND_RESERVED} value={value} onChange={onChange} takenBy={{ 2: "UI / UX", 3: "Integration" }} />);
   const texts = (container: HTMLElement, cls: string) => Array.from(container.querySelectorAll(`.ward-ladder-${cls}`), (node) => node.textContent);
 
-  it("shows each step's hex and holder in order, then the request tile", () => {
+  it("shows each step's hex and holder in order, then the reserved tile and no request tile", () => {
     const { container } = tiles(1);
-    expect(texts(container, "hex")).toEqual(["#00897B", "#7038C8", "#BF5310", "#1C6FB8", "#8A6A00", "#A02C6B", "step 07", "request"]);
+    expect(texts(container, "hex")).toEqual(["#00897B", "#7038C8", "#BF5310", "#1C6FB8", "#8A6A00", "#A02C6B", "step 07"]);
     expect(texts(container, "note")).toEqual([
       "Step 01 · yours",
       "Step 02 · UI / UX",
       "Step 03 · Integration",
-      "Step 04 · not validated",
-      "Step 05 · not validated",
-      "Step 06 · not validated",
-      "Reserved until revalidated",
-      "Ask design for a new step",
+      "Step 04 · Not available",
+      "Step 05 · Not available",
+      "Step 06 · Not available",
+      "Reserved",
     ]);
   });
 
@@ -161,7 +160,7 @@ describe("ColourLadder tiles (Studio 9a)", () => {
   it("gives every tile a colour bar and sets the grid inside the group it reflows against", () => {
     const { container } = tiles(1);
     const group = screen.getByRole("radiogroup");
-    expect(container.querySelectorAll(".ward-ladder-cell > .ward-ladder-bar")).toHaveLength(8);
+    expect(container.querySelectorAll(".ward-ladder-cell > .ward-ladder-bar")).toHaveLength(7);
     expect(group.className).toMatch(/tilesFrame/);
     expect(group.children).toHaveLength(1);
     expect(group.firstElementChild?.className).toMatch(/tiles(?!Frame)/);

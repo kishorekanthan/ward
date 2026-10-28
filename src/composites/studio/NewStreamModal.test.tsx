@@ -68,13 +68,9 @@ describe("NewStreamModal", () => {
     fireEvent.change(screen.getByLabelText("Key"), { target: { value: "KPI" } });
     fireEvent.change(screen.getByLabelText("Stage 1 name"), { target: { value: "Triage" } });
     expect(create().disabled).toBe(true);
-    expect(document.getElementById(create().getAttribute("aria-describedby") as string)?.textContent).toBe(
-      "A stream can't be created without a name, a key, one named owner and at least two named stages.",
-    );
+    expect(document.getElementById(create().getAttribute("aria-describedby") as string)?.textContent).toBe("Add a name, key, owner and two stages.");
     fireEvent.change(screen.getByLabelText("Stage 2 name"), { target: { value: "Map fields" } });
-    expect(container.ownerDocument.querySelector("[data-colour-status]")?.textContent).toBe(
-      "Colour: none picked. You can set one later on the stream's Identity tab.",
-    );
+    expect(container.ownerDocument.querySelector("[data-colour-status]")).toBeNull();
     expect(create().disabled).toBe(false);
     fireEvent.click(create());
     expect(onCreate).toHaveBeenCalledWith({
@@ -92,8 +88,8 @@ describe("NewStreamModal", () => {
       <NewStreamModal presentation="web" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} fields={<label>Jira project<input /></label>} />,
     );
     const slot = document.querySelector("[data-stream-fields]") as HTMLElement;
-    const identity = screen.getByRole("heading", { name: "01 · Identity" });
-    const stages = screen.getByRole("heading", { name: "02 · Workflow stages" });
+    const identity = screen.getByRole("heading", { name: "Identity" });
+    const stages = screen.getByRole("heading", { name: "Stages" });
     expect(slot.contains(screen.getByLabelText("Jira project"))).toBe(true);
     expect(identity.compareDocumentPosition(slot) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(slot.compareDocumentPosition(stages) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
@@ -101,7 +97,7 @@ describe("NewStreamModal", () => {
 
   it("adds no section when the consumer passes no fields", () => {
     render(<NewStreamModal presentation="web" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} />);
-    expect(screen.getByRole("heading", { name: "02 · Workflow stages" })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Stages" })).toBeTruthy();
     expect(document.querySelector("[data-stream-fields]")).toBeNull();
   });
 
@@ -121,7 +117,7 @@ describe("NewStreamModal", () => {
     fireEvent.change(screen.getByLabelText("Stage 2 name"), { target: { value: "Map fields" } });
     fireEvent.click(screen.getByRole("radio", { name: "Step 2 · free" }));
     rerender(<NewStreamModal {...props} takenBy={{ 2: "Data" }} />);
-    expect(container.ownerDocument.querySelector("[data-colour-status]")?.textContent).toBe("Colour: step 2 cannot be used.");
+    expect(container.ownerDocument.querySelector("[data-colour-status]")?.textContent).toBe("Colour 2 can't be used.");
     expect((screen.getByRole("button", { name: "Create stream" }) as HTMLButtonElement).disabled).toBe(true);
   });
 
@@ -136,12 +132,12 @@ describe("NewStreamModal", () => {
     fireEvent.change(screen.getByLabelText("Stage 1 name"), { target: { value: "Triage" } });
     fireEvent.change(screen.getByLabelText("Stage 2 name"), { target: { value: "Map fields" } });
     const status = () => container.ownerDocument.querySelector("[data-colour-status]")?.textContent;
-    const partial = screen.getByRole("radio", { name: "Step 4 · not validated" });
+    const partial = screen.getByRole("radio", { name: "Step 4 · Not available" });
     fireEvent.click(partial);
     expect(partial.getAttribute("aria-checked")).toBe("false");
-    expect(status()).toBe("Colour: none picked. You can set one later on the stream's Identity tab.");
+    expect(status()).toBeUndefined();
     fireEvent.click(screen.getByRole("radio", { name: "Step 2 · free" }));
-    expect(status()).toBe("Colour: step 2 is validated and free.");
+    expect(status()).toBeUndefined();
     fireEvent.click(screen.getByRole("button", { name: "Create stream" }));
     expect(onCreate.mock.calls[0][0].colourStep).toBe(2);
   });
@@ -168,7 +164,8 @@ describe("NewStreamModal", () => {
 
   it("drops drag wording from the web stage section", () => {
     render(<NewStreamModal presentation="web" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} />);
-    expect(document.body.textContent).toContain("reorder with the ↑ ↓ buttons · min 2");
+    expect(document.body.textContent).toContain("At least 2 stages");
+    expect(document.body.textContent).not.toContain("reorder with");
     expect(document.body.textContent).not.toMatch(/drag/i);
   });
 });
@@ -207,7 +204,7 @@ afterEach(() => {
 describe("NewStreamModal (spec)", () => {
   it("offers colour only as ladder cells — no free swatch, and never the action blue", () => {
     const { dialog } = setup();
-    const group = within(dialog).getByRole("radiogroup", { name: "Stream colour" });
+    const group = within(dialog).getByRole("radiogroup", { name: "Colour" });
     expect(within(group).getAllByRole("radio")).toHaveLength(specLadder.length);
     expect(dialog.querySelector('input[type="color"]')).toBeNull();
     expect(dialog.textContent).not.toMatch(/#[0-9a-fA-F]{6}/);
@@ -218,14 +215,14 @@ describe("NewStreamModal (spec)", () => {
     const { dialog } = setup();
     const sets = Array.from(dialog.querySelectorAll("fieldset"));
     expect(sets).toHaveLength(4);
-    expect(sets.map((f) => f.querySelector("legend")?.textContent)).toEqual(["Identity", "Colour", "Stages", "Loop policy"]);
+    expect(sets.map((f) => f.querySelector("legend")?.textContent)).toEqual(["Identity", "Colour", "Stages", "When items move on"]);
   });
 
-  it("marks the gate stage with a word, not a tint alone", () => {
+  it("names the review stage once: its own name is the word, so no tag repeats it", () => {
     setup();
-    const row = screen.getByText("Review").closest("li") as HTMLElement;
+    const row = screen.getAllByRole("listitem").find((li) => li.children[1].textContent === "Review") as HTMLElement;
     expect(row.getAttribute("data-gate")).toBe("true");
-    expect(within(row).getByText("Gate")).not.toBeNull();
+    expect(within(row).queryByText("Review", { selector: ".ward-chip" })).toBeNull();
   });
 
   it("reorders stages and creates the stream in the order shown", () => {
@@ -237,7 +234,7 @@ describe("NewStreamModal (spec)", () => {
       "In progress",
       "Done",
     ]);
-    fill("Stream name", "Data engineering");
+    fill("Name", "Data engineering");
     fill("Key", "DE");
     fireEvent.click(screen.getByRole("button", { name: "Create stream" }));
     expect(onCreate).toHaveBeenCalledTimes(1);
@@ -247,25 +244,23 @@ describe("NewStreamModal (spec)", () => {
 
   it("carries each policy choice's consequence as its own body text", () => {
     setup();
-    const choice = screen.getByLabelText("Block on a finding");
+    const choice = screen.getByLabelText("Stop on any finding");
     const noteId = choice.getAttribute("aria-describedby") as string;
-    expect(document.getElementById(noteId)?.textContent).toBe("One finding holds the item until a person resolves it.");
+    expect(document.getElementById(noteId)?.textContent).toBe("A finding holds the item until a person clears it.");
   });
 
   it("refuses to create an unnamed, unkeyed stream and says what is missing", () => {
     const { onCreate } = setup();
     const btn = screen.getByRole("button", { name: "Create stream" }) as HTMLButtonElement;
     expect(btn.disabled).toBe(true);
-    expect(document.getElementById(btn.getAttribute("aria-describedby") as string)?.textContent).toBe(
-      "Create is disabled: name the stream and give it a key first.",
-    );
+    expect(document.getElementById(btn.getAttribute("aria-describedby") as string)?.textContent).toBe("Add a name and a key.");
     fireEvent.click(btn);
     expect(onCreate).not.toHaveBeenCalled();
   });
 
   it("keeps a taken colour off the initial choice and names its holder", () => {
     const { dialog } = setup({ takenBy: { 1: "front-end" } });
-    const group = within(dialog).getByRole("radiogroup", { name: "Stream colour" });
+    const group = within(dialog).getByRole("radiogroup", { name: "Colour" });
     expect(within(group).getByRole("radio", { name: "Teal · taken by front-end" }).getAttribute("aria-checked")).toBe("false");
     expect(within(group).getByRole("radio", { name: "Violet · free" }).getAttribute("aria-checked")).toBe("true");
   });

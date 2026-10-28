@@ -31,7 +31,7 @@ type ToolState = { locked: boolean; reason?: string };
 
 function toolState(tool: Tool, presentation: ToolRowPresentation | undefined): ToolState {
   if (tool.grant !== "locked") return { locked: false };
-  return { locked: true, reason: tool.reason ?? presentation?.lockedReasonFallback ?? "locked by stream policy" };
+  return { locked: true, reason: tool.reason ?? presentation?.lockedReasonFallback ?? "Locked by stream policy" };
 }
 
 function ToolInput({ id, reasonId, tool, state, onChange }: { id: string; reasonId: string; tool: Tool; state: ToolState; onChange: ToolRowProps["onChange"] }): ReactElement {

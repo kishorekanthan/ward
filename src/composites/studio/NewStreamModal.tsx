@@ -8,6 +8,7 @@ import { isValidatedStreamStep, type StreamStep } from "../../tokens";
 import { ColourLadder, type LadderStep } from "./ColourLadder";
 import { StageListEditor } from "./StageListEditor";
 import { MoveAnnouncer, MoveButton, moveAnnouncement, moveRow, moveTo, useMoveFocus, type Direction } from "./stageMoves";
+import { repeatsName } from "../../primitives/kindTag";
 import s from "./NewStreamModal.module.css";
 
 export type StageDraft = { id: string; name: string; gate?: boolean };
@@ -68,17 +69,21 @@ const DEFAULT_STAGES: StageDraft[] = [
   { id: "done", name: "Done" },
 ];
 
+function ReviewTag({ stage }: { stage: { name: string; gate?: boolean } }) {
+  return stage.gate && !repeatsName(stage.name, "Review") ? <Chip role="gate" label="Review" /> : null;
+}
+
 const DEFAULT_POLICIES: PolicyOption[] = [
-  { value: "advance", label: "Advance on a met contract", consequence: "An item leaves the stage without a person once every criterion is met." },
-  { value: "review", label: "Hold every item at the gate", consequence: "Every item waits for a named reviewer, whatever the agent found." },
-  { value: "block", label: "Block on a finding", consequence: "One finding holds the item until a person resolves it." },
+  { value: "advance", label: "Move on when all checks pass", consequence: "No one needs to approve." },
+  { value: "review", label: "Hold every item for review", consequence: "Every item waits for a reviewer." },
+  { value: "block", label: "Stop on any finding", consequence: "A finding holds the item until a person clears it." },
 ];
 
-const FOOTER_NOTE = "A new stream starts as a draft. Nothing runs on it until you publish it.";
+const FOOTER_NOTE = "Nothing runs until you publish.";
 
-const BLOCKED = "Create is disabled: name the stream and give it a key first.";
+const BLOCKED = "Add a name and a key.";
 
-const REORDER_NOTE = "reorder with the ↑ ↓ buttons · min 2";
+const REORDER_NOTE = "At least 2 stages";
 
 function freeValidatedStep(step: { step: number; reserved?: boolean }, takenBy: Record<number, string>): boolean {
   return !step.reserved && isValidatedStreamStep(step.step) && takenBy[step.step] === undefined;
@@ -103,7 +108,7 @@ function StageRows({ stages, onMove }: { stages: StageDraft[]; onMove: (from: nu
           <li className={s.stage} key={stage.id} data-gate={stage.gate ? true : undefined}>
             <span className={s.stageIndex}>{String(i + 1).padStart(2, "0")}</span>
             <span className={s.stageName}>{stage.name}</span>
-            {stage.gate && <Chip role="gate" label="Gate" />}
+            <ReviewTag stage={stage} />
             {i > 0 && <MoveButton id={stage.id} name={stage.name} direction="up" onMove={() => move(i, "up")} />}
             {i < stages.length - 1 && <MoveButton id={stage.id} name={stage.name} direction="down" onMove={() => move(i, "down")} />}
           </li>
@@ -166,19 +171,19 @@ function CompactNewStreamModal(props: NewStreamModalProps) {
         </h2>
         <fieldset className={s.section}>
           <legend className={s.legend}>Identity</legend>
-          <Field kind="input" label="Stream name" value={name} onChange={setName} />
+          <Field kind="input" label="Name" value={name} onChange={setName} />
           <Field kind="input" label="Key" value={key} onChange={setKey} mono />
           <Field kind="select" label="Owner" value={owner} onChange={setOwner} options={owners} />
         </fieldset>
         <fieldset className={s.section}>
           <legend className={s.legend}>Colour</legend>
-          <ColourLadder label="Stream colour" steps={ladder} value={streamStep} onChange={setStreamStep} takenBy={takenBy} />
+          <ColourLadder label="Colour" steps={ladder} value={streamStep} onChange={setStreamStep} takenBy={takenBy} />
         </fieldset>
         <fieldset className={s.section}>
           <legend className={s.legend}>Stages</legend>
           <StageRows stages={stages} onMove={(from, to) => setStages(moveRow(stages, from, to))} />
         </fieldset>
-        <Radio legend="Loop policy" options={policies} value={policy} onChange={setPolicy} />
+        <Radio legend="When items move on" options={policies} value={policy} onChange={setPolicy} />
         <Footer reason={reason} onCreate={() => onCreate(draft)} onDraft={() => onDraft(draft)} />
       </div>
     </Overlay>
@@ -186,12 +191,12 @@ function CompactNewStreamModal(props: NewStreamModalProps) {
 }
 
 const WEB_POLICIES = [
-  { value: "relay", label: "All writes go through relay", consequence: "At-least-once, deduped on req_hash. Agents never touch Foundry or Jira directly." },
-  { value: "direct", label: "Direct writes, per-agent approval", consequence: "Needs a second admin to co-sign each grant." },
-  { value: "readonly", label: "Read-only stream", consequence: "Agents can observe and report; nothing leaves Trellis." },
+  { value: "relay", label: "Through Trellis (safe default)", consequence: "Agents never write to Foundry or Jira directly." },
+  { value: "direct", label: "Directly, each agent approved", consequence: "A second admin approves each agent." },
+  { value: "readonly", label: "Read only", consequence: "Agents can read and report only." },
 ];
 
-const WEB_REASON = "A stream can't be created without a name, a key, one named owner and at least two named stages.";
+const WEB_REASON = "Add a name, key, owner and two stages.";
 
 function webDraft(name: string, key: string, owner: string, colourStep: number | null, writePolicyMode: string, stages: WebStreamStageDraft[]): WebNewStreamDraft {
   const policy = WEB_POLICIES.find((option) => option.value === writePolicyMode)?.value ?? "relay";
@@ -216,20 +221,14 @@ function hasNamedWebStages(draft: WebNewStreamDraft): boolean {
 }
 
 export function colourStatus(colourStep: number | null, takenBy: Record<number, string>): string {
-  if (colourStep === null) return `Colour: none picked. You can set one later on the stream's Identity tab.`;
-  if (!freeValidatedStep({ step: colourStep }, takenBy)) return `Colour: step ${colourStep} cannot be used.`;
-  return `Colour: step ${colourStep} is validated and free.`;
+  // Only a colour that cannot be used earns a line; the swatch shows every other state.
+  if (colourStep === null || freeValidatedStep({ step: colourStep }, takenBy)) return "";
+  return `Colour ${colourStep} can't be used.`;
 }
 
-function WebAgentNote({ stage }: { stage: WebStreamStageDraft | undefined }): ReactElement {
-  if (!stage) return <p className={s.webNote}>Add a stage an agent can run on.</p>;
-  return <p className={s.webNote}>Next: mount your first agent on <b>{stage.name}</b>. Nothing runs until you publish it.</p>;
-}
-
-function WebFooter({ ready, draft, agentStage, onCreate, onDraft, reasonId }: {
+function WebFooter({ ready, draft, onCreate, onDraft, reasonId }: {
   ready: boolean;
   draft: WebNewStreamDraft;
-  agentStage: WebStreamStageDraft | undefined;
   onCreate: (draft: WebNewStreamDraft) => void;
   onDraft?: (draft: WebNewStreamDraft) => void;
   reasonId: string;
@@ -237,7 +236,7 @@ function WebFooter({ ready, draft, agentStage, onCreate, onDraft, reasonId }: {
   return (
     <div className={s.webFooter}>
       <div className={s.webFooterNotes}>
-        <WebAgentNote stage={agentStage} />
+        <p className={s.webNote}>{FOOTER_NOTE}</p>
         {!ready && <p id={reasonId} className={s.reason}>{WEB_REASON}</p>}
       </div>
       {onDraft && <Btn variant="secondary" onClick={() => onDraft(draft)}>Save draft</Btn>}
@@ -249,7 +248,6 @@ function WebFooter({ ready, draft, agentStage, onCreate, onDraft, reasonId }: {
 function WebHeader({ titleId }: { titleId: string }): ReactElement {
   return (
     <header className={s.webHead}>
-      <span className={s.kicker}>Studio / Streams</span>
       <h2 id={titleId} className={s.webTitle}>New stream</h2>
     </header>
   );
@@ -265,7 +263,7 @@ function WebIdentity({ name, setName, streamKey, setKey, colour, owner }: {
 }): ReactElement {
   return (
     <section className={s.webSection}>
-      <h3 className={s.kicker}>01 · Identity</h3>
+      <h3 className={s.kicker}>Identity</h3>
       <div className={s.identityRow}>
         <div className={s.nameCell}><Field variant="form" label="Name" value={name} onChange={setName} /></div>
         <div className={s.keyCell}><Field variant="form" label="Key" value={streamKey} onChange={setKey} mono /></div>
@@ -288,17 +286,16 @@ function WebNewStreamModal(props: WebNewStreamModalProps): ReactElement {
   const [stages, setStages] = useState<WebStreamStageDraft[]>([{ name: "", kind: "entry" }, { name: "", kind: "agent" }]);
   const draft = webDraft(name, key, owner, colourStep, policy, stages);
   const ready = validWebDraft(draft, takenBy);
-  const agentStage = stages.find((stage) => stage.kind === "agent" && stage.name.trim() !== "");
   const colour = (
     <div className={s.colourCell}>
       <span className={s.formLabel}>Colour</span>
-      <ColourLadder presentation="swatches" label="Stream colour, validated steps only" steps={props.ladder} value={colourStep} onChange={setColourStep} takenBy={takenBy} />
+      <ColourLadder presentation="swatches" label="Colour" steps={props.ladder} value={colourStep} onChange={setColourStep} takenBy={takenBy} />
     </div>
   );
   const ownerField = (
     <>
-      <p className={s.colourStatus} data-colour-status="">{colourStatus(colourStep, takenBy)}</p>
-      <Field variant="form" kind="select" label="Owner, accountable for every agent published here" value={owner} options={props.owners.map((person) => ({ value: person, label: person }))} onChange={setOwner} />
+      {colourStatus(colourStep, takenBy) && <p className={s.colourStatus} data-colour-status="">{colourStatus(colourStep, takenBy)}</p>}
+      <Field variant="form" kind="select" label="Owner" value={owner} options={props.owners.map((person) => ({ value: person, label: person }))} onChange={setOwner} />
     </>
   );
   return (
@@ -309,15 +306,15 @@ function WebNewStreamModal(props: WebNewStreamModalProps): ReactElement {
         {props.fields && <section className={s.webSection} data-stream-fields="">{props.fields}</section>}
         <section className={s.webSection}>
           <div className={s.sectionHead}>
-            <h3 className={s.kicker}>02 · Workflow stages</h3>
+            <h3 className={s.kicker}>Stages</h3>
             <span className={s.sectionNote}>{REORDER_NOTE}</span>
           </div>
           <StageListEditor stages={stages} onChange={setStages} />
         </section>
         <section className={s.webSection}>
-          <Radio variant="cards" legend="03 · Write policy, inherited by every agent on this stream" value={policy} options={WEB_POLICIES} onChange={setPolicy} />
+          <Radio variant="cards" legend="How agents write" value={policy} options={WEB_POLICIES} onChange={setPolicy} />
         </section>
-        <WebFooter ready={ready} draft={draft} agentStage={agentStage} onCreate={props.onCreate} onDraft={props.onDraft} reasonId={reasonId} />
+        <WebFooter ready={ready} draft={draft} onCreate={props.onCreate} onDraft={props.onDraft} reasonId={reasonId} />
       </div>
     </Overlay>
   );

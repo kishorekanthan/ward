@@ -90,6 +90,7 @@
 /* Each matrix row gets air above and below its text, so a list of roles reads as separate rows. */
 .webFrame [role="treeitem"] {
   padding-block: var(--ward-pad-matrixRow);
+  padding-inline: var(--ward-space-2);
 }
 
 .webFrame [role="treeitem"][data-depth="0"] {

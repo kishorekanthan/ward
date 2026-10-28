@@ -14,9 +14,10 @@ describe("Checkbox", () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  it("says why a locked field cannot be unticked", () => {
+  it("lets the locked, ticked box speak for itself, with no note beside its label", () => {
     render(<Checkbox label="Waits on" checked onChange={() => {}} locked />);
-    expect(screen.getByText("always shown")).not.toBeNull();
+    expect(screen.queryByText("always shown")).toBeNull();
+    expect(screen.getByText("Waits on").textContent).toBe("Waits on");
   });
 
   it("ties the consequence to the control for a screen reader", () => {

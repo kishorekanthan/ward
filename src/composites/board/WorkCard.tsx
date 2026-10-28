@@ -78,18 +78,17 @@ function MetaLine({ item, connection }: { item: BoardItem; connection: LiveConne
   }
   return (
     <p className={s.meta} data-ward-card-meta="">
-      waits on {item.waitsOn}
-      {sep}
+      {item.waitsOn && <>waits on {item.waitsOn}{sep}</>}
       <span className={s.since}>{duration(item.timeInStage)} in stage</span>
     </p>
   );
 }
 
 function Head({ item }: { item: BoardItem }) {
-  const state = item.run ? { role: "running" as const, label: "Agent working" } : item.state;
+  const state = item.run ? { role: "running" as const, label: "Running" } : item.state;
   return (
     <div className={s.head}>
-      {item.flagged && <Chip role="drift" label="Drift flag" />}
+      {item.flagged && <Chip role="drift" label="Off plan" />}
       {state && <Chip role={state.role} label={state.label} />}
     </div>
   );

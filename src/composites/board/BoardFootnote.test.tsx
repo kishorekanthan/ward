@@ -3,18 +3,15 @@ import { describe, expect, it } from "vitest";
 import { BoardFootnote } from "./BoardFootnote";
 
 describe("BoardFootnote", () => {
-  it("states where the board's columns come from, as the comp footer does", () => {
-    render(<BoardFootnote />);
-    expect(screen.getByRole("contentinfo").textContent).toBe(
-      "Columns, labels and caps come from this stream's board config. Personal filters aren't saved to it.",
-    );
-    expect(screen.queryByRole("link")).toBeNull();
+  it("draws nothing when there is no board config to link to", () => {
+    const { container } = render(<BoardFootnote />);
+    expect(container.innerHTML).toBe("");
   });
 
-  it("links to the board config after the note when given a target", () => {
+  it("carries only the link to the board config, with no note explaining the board", () => {
     render(<BoardFootnote configureHref="#/studio/streams/ledger" />);
     const link = screen.getByRole("link", { name: "Configure board" });
     expect(link.getAttribute("href")).toBe("#/studio/streams/ledger");
-    expect(link.previousElementSibling?.tagName).toBe("P");
+    expect(screen.getByRole("contentinfo").textContent).toBe("Configure board");
   });
 });

@@ -69,7 +69,7 @@ describe("RoleMatrixRow web presentation", () => {
       />,
     );
     expect(container.querySelector("[role='tree']")?.getAttribute("aria-label")).toBe("Role matrix");
-    expect(container.querySelector("[data-ward-rolematrix] > [aria-hidden='true']")?.textContent).toBe("Scope → role → personAD groupPeopleRequested via");
+    expect(container.querySelector("[data-ward-rolematrix] > [aria-hidden='true']")?.textContent).toBe("Who has which roleAD groupPeopleRequested via");
     expect(attrs(container, "[role='treeitem']", "aria-level")).toEqual(["1", "2", "3"]);
     expect(attrs(container, "[role='treeitem']", "aria-expanded")).toEqual(["true", "false", null]);
     expect(texts(container, ".ward-rolecols > .ward-cellmeta")).toEqual(["—", "", "AD-TRELLIS-PLATFORM-ADMIN", "SNOW-4471", "—", ""]);
@@ -92,7 +92,7 @@ describe("RoleMatrixRow web presentation", () => {
       />,
     );
     expect(container.querySelector("[role='tree']")?.getAttribute("aria-label")).toBe("People");
-    expect(texts(container, ".ward-envrow > .ward-chip")).toEqual(["Viewer", "implicit floor", "Unresolved"]);
+    expect(texts(container, ".ward-envrow > .ward-chip")).toEqual(["Viewer", "default", "Unresolved"]);
     expect(attrs(container, ".ward-envrow > .ward-chip", "data-ward-chip")).toEqual(["meta", "meta", "warn"]);
     expect(attrs(container, "[role='treeitem']", "aria-expanded")).toEqual(["false", null, "false"]);
     expect(texts(container, ".ward-treerow--unresolved .ward-envrow > span:first-child")).toEqual(["Nested"]);

@@ -38,7 +38,7 @@ describe("RoutingTable", () => {
 
   it("says so when nothing is routed", () => {
     render(<RoutingTable rows={[]} />);
-    expect(screen.getByText("No rejection route is configured for this stream yet.")).not.toBeNull();
+    expect(screen.getByText("No rejection rules yet.")).not.toBeNull();
   });
 
   it("lets a consumer replace the empty state and drop the no-rerun reason requirement", () => {

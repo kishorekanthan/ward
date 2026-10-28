@@ -1,5 +1,4 @@
 import { Btn } from "../../primitives/Btn";
-import { Chip } from "../../primitives/Chip";
 import s from "./ResolveBlock.module.css";
 
 export type ResolveKind = "clarify" | "requeue" | "override";
@@ -14,12 +13,12 @@ export type ResolvePath = {
 };
 
 const LABEL: Record<ResolveKind, string> = {
-  clarify: "Ask a clarifying question",
-  requeue: "Requeue the agent",
+  clarify: "Ask a question",
+  requeue: "Run again",
   override: "Override and advance",
 };
 
-// 10a: a Member path carries an outlined tag, an Approver path a filled write tag on a warm card.
+// 10a: an Approver path sits on a warm card; the button alone names the action.
 function roleChip(requiredRole: string): "write" | "meta" {
   return requiredRole === "APPROVER" ? "write" : "meta";
 }
@@ -52,10 +51,6 @@ function Path({ path, primary, onChoose }: PathProps) {
     throw new Error(`ResolveBlock: the ${path.kind} path is not yours to take and names nobody to ask — askInstead is required`);
   return (
     <li className={s.path} data-allowed={path.allowed} data-role={roleChip(path.requiredRole)}>
-      <span className={s.head}>
-        <span className={s.label}>{path.title ?? LABEL[path.kind]}</span>
-        <Chip role={roleChip(path.requiredRole)} label={path.requiredRole} />
-      </span>
       <span className={s.consequence}>{path.consequence}</span>
       <PathAction path={path} primary={primary} onChoose={onChoose} />
     </li>

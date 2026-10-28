@@ -29,13 +29,13 @@ describe("ActivityConsole", () => {
     expect(screen.getByText("foundry.query manifest → 1 row").previousElementSibling?.textContent).toBe("03:06:11");
     expect(screen.getByText("usage 1,412 in · 380 out · $0.13").parentElement?.getAttribute("data-kind")).toBe("ok");
     expect(screen.getByRole("list", { name: "Run activity" }).getAttribute("aria-live")).toBe("off");
-    expect(container.textContent).toContain("waiting for the next event…");
+    expect(container.textContent).not.toContain("waiting for the next event");
   });
 
   it("freezes stale copy and jumps to the newest event text", () => {
     render(<ActivityConsole lines={LINES} connection="stale" idleSince="2026-09-04T02:14:03Z" />);
 
-    expect(screen.getByText(/no new events as of/).textContent).toContain("03:14:03");
+    expect(screen.getByText(/^Quiet since/).textContent).toBe("Quiet since 03:14:03");
     scrollUp(screen.getByRole("list"));
     fireEvent.click(screen.getByRole("button", { name: "Jump to latest" }));
     expect(document.activeElement?.textContent).toBe("usage 1,412 in · 380 out · $0.13");
@@ -91,16 +91,17 @@ describe("ActivityConsole", () => {
   });
 
   it("says when the last event landed while idle, and freezes to a stamp when stale", () => {
-    const { rerender } = render(<ActivityConsole lines={lines} connection="live" idleSince="2026-09-06T02:14:00Z" />);
-    expect(screen.getByText("last event 03:14:00")).not.toBeNull();
+    const { container, rerender } = render(<ActivityConsole lines={lines} connection="live" idleSince="2026-09-06T02:14:00Z" />);
+    const idle = () => Array.from(container.querySelectorAll("p.ward-consline--dim > span:not(.ward-caret)"), (span) => span.textContent);
+    expect(idle()).toEqual(["03:14:00"]);
     rerender(<ActivityConsole lines={lines} connection="stale" idleSince="2026-09-06T02:14:00Z" />);
-    expect(screen.getByText("no new events as of 03:14:00")).not.toBeNull();
+    expect(idle()).toEqual(["Quiet since 03:14:00"]);
   });
 
   it("keeps the idle caret and the jump control on the foot, outside the event list", () => {
     const { container } = render(<ActivityConsole lines={lines} connection="live" idleSince="2026-09-06T02:14:00Z" />);
     scrollUp(screen.getByRole("list"));
-    const foot = screen.getByText("waiting for the next event…").parentElement as HTMLElement;
+    const foot = container.querySelector("p.ward-consline--dim") as HTMLElement;
     expect(foot.tagName).toBe("P");
     expect(foot.querySelector(".ward-caret")?.getAttribute("aria-hidden")).toBe("true");
     expect(foot.querySelector("button.ward-consjump")?.textContent).toBe("Jump to latest");

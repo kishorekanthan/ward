@@ -17,7 +17,7 @@ export type ResolvedFieldRowProps = {
 // Mark mirrors the comp's `.ok`/`.no` glyph pair; Marker paints a solid decorative
 // square, and this mark carries the state.
 function StateMark({ state }: { state: ResolvedField["state"] }) {
-  if (state === "confirm") return <Chip role="warn" label="Confirm" />;
+  if (state === "confirm") return <Chip role="warn" label="Check" />;
   return <Mark state={state === "resolved" ? "met" : "unmet"} label={state === "resolved" ? "Resolved" : "Unresolved"} />;
 }
 
@@ -30,7 +30,7 @@ export function ResolvedFieldRow({ field }: ResolvedFieldRowProps) {
         <span className={`${s.value} ward-resfield-value`}>{field.value}</span>
         {field.evidence && (
           <span className={`${s.evidence} ward-resfield-evidence`} title={field.evidence}>
-            {field.evidence}
+            Source: {field.evidence}
           </span>
         )}
       </span>

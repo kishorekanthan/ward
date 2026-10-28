@@ -106,12 +106,12 @@ function legacyInitialStep(item: LegacyBoardItemView): string | undefined {
 }
 
 function legacyCardChip(item: LegacyBoardItemView, running: boolean): { role: ChipRole; label: string } {
-  return running ? { role: "running", label: "Agent working" } : (item.state ?? { role: "pending", label: item.key });
+  return running ? { role: "running", label: "Running" } : (item.state ?? { role: "pending", label: item.key });
 }
 
 function legacyCardMeta(item: LegacyBoardItemView, run: NonNullable<LegacyBoardItemView["run"]> | undefined): string {
   if (run !== undefined) return duration(item.timeInStage) + " · waits on " + run.agent;
-  return duration(item.timeInStage) + " · waiting on " + item.waitsOn;
+  return item.waitsOn ? duration(item.timeInStage) + " · waits on " + item.waitsOn : duration(item.timeInStage);
 }
 
 function legacyCardStyle(item: LegacyBoardItemView, fields: LegacyCardField[] | undefined): CSSProperties {
@@ -233,7 +233,7 @@ function legacyColumnHeader(column: LegacyBoardColumnDef, itemCount: number, lab
   return (
     <div className="ward-boardcol-head">
       <span id={labelId} className="ward-boardcol-label" title={column.label}>{column.label}</span>
-      <span className="ward-chiprow">{column.gate === true ? <Chip role="gate" label="Gate" /> : null}<Chip role="meta" label={String(itemCount)} /></span>
+      <span className="ward-chiprow">{column.gate === true ? <Chip role="gate" label="Review" /> : null}<Chip role="meta" label={String(itemCount)} /></span>
     </div>
   );
 }
@@ -299,7 +299,7 @@ export type LegacyBoardHeaderProps = {
 };
 
 function legacyBoardRollup(rollups: LegacyBoardHeaderProps["rollups"]): string {
-  let result = "in flight " + String(rollups.inFlight) + " · loaded this week " + String(rollups.loadedThisWeek) + " · agents working " + String(rollups.agentsWorking);
+  let result = String(rollups.inFlight) + " open · " + String(rollups.loadedThisWeek) + " done this week · " + String(rollups.agentsWorking) + " agents working";
   if (rollups.p50 !== undefined) result += " · p50 " + duration(rollups.p50);
   if (rollups.p90 !== undefined) result += " · p90 " + duration(rollups.p90);
   return result;
@@ -336,15 +336,15 @@ function legacyConfigMandatory(stage: LegacyConfigStage): boolean {
 }
 
 function legacyConfigSwitch(props: LegacyConfigRowProps): ReactElement {
-  if (props.stage.gate === true) return <Switch label={props.stage.name + " gate"} checked onChange={undefined} locked />;
-  return <Switch label={props.stage.terminal === true ? "terminal stage" : props.stage.name} checked={props.config.shown} onChange={(next) => props.onChange({ ...props.config, shown: next })} />;
+  if (props.stage.gate === true) return <Switch label={props.stage.name} checked onChange={undefined} locked />;
+  return <Switch label={props.stage.name} checked={props.config.shown} onChange={(next) => props.onChange({ ...props.config, shown: next })} />;
 }
 
 function legacyConfigBadges(stage: LegacyConfigStage): ReactNode {
   const mounted = stage.agentsMounted ?? 0;
   return <>
-    {mounted > 0 ? <Chip role="running" label={String(mounted) + " AGENTS"} /> : null}
-    {stage.terminal === true ? <Chip role="soft" label="Terminal" /> : null}
+    {mounted > 0 ? <Chip role="running" label={String(mounted) + (mounted === 1 ? " agent" : " agents")} /> : null}
+    {stage.terminal === true ? <Chip role="soft" label="Done" /> : null}
   </>;
 }
 

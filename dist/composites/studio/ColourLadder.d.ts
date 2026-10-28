@@ -28,7 +28,7 @@ export type ColourLadderCompatibilityProps = {
     disabled?: boolean;
 };
 type Validation = "validated" | "partial" | "reserved";
-export declare const PARTIAL_STEP_REASON = "not validated yet, pending a CVD matrix and dark stepping";
+export declare const PARTIAL_STEP_REASON = "Not available yet";
 export declare function ladderValidation(step: CompatibilityLadderStep): Validation;
 export declare function ColourLadder(props: ColourLadderProps): ReactElement;
 export declare function ColourLadder(props: ColourLadderCompatibilityProps): ReactElement;

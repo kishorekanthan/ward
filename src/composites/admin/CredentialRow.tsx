@@ -37,7 +37,7 @@ const STATE: Record<CredentialState, { role: ChipRole; label: string }> = {
   healthy: { role: "done", label: "Healthy" },
   rotateSoon: { role: "attention", label: "Rotate soon" },
   rotateNow: { role: "failed", label: "Rotate now" },
-  idpOwned: { role: "meta", label: "IdP owned" },
+  idpOwned: { role: "meta", label: "Managed by sign-in provider" },
 };
 
 const WEB_STATE: Record<WebCredentialState, { role: ChipRole; label: string }> = {

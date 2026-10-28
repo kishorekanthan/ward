@@ -36,7 +36,7 @@ const INITIALS_PREFIX = "initials:";
 
 // A missing loaded count is stated as unavailable because a zero would claim nothing shipped.
 function loadedPart(loaded: number | undefined) {
-  return loaded === undefined ? "loaded this week unavailable" : `${count(loaded)} loaded this week`;
+  return loaded === undefined ? "done this week unknown" : `${count(loaded)} done this week`;
 }
 
 // Unknown optional rollups are omitted so the line gets shorter instead of showing an invented zero.
@@ -48,11 +48,11 @@ function restOfRollup(r: BoardRollups) {
   return parts.join(" · ");
 }
 
-// The in-flight figure is its own span so its hint names only that figure.
+// The open figure is its own span so its hint names only that figure.
 function rollupLine(r: BoardRollups) {
   return (
     <>
-      <span title={r.inFlightHint}>{count(r.inFlight)} in flight</span> · {restOfRollup(r)}
+      <span title={r.inFlightHint}>{count(r.inFlight)} open</span> · {restOfRollup(r)}
     </>
   );
 }

@@ -24,7 +24,7 @@ describe("PageHeader", () => {
 
   it("owns the connection marker the top bar refuses to carry", () => {
     render(<PageHeader crumb={crumb} title="Data engineering" actions={[]} connection={{ connection: "live", since: "2026-09-06T02:14:00Z" }} />);
-    expect(screen.getByRole("status").textContent).toContain("LIVE");
+    expect(screen.getByRole("status").textContent).toContain("Live");
   });
 
   it("leaves the marker out when the page has no feed", () => {

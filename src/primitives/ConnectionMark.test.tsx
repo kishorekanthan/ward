@@ -11,21 +11,22 @@ afterEach(() => {
 });
 
 describe("ConnectionMark", () => {
-  it("live is a green square plus LIVE text under role=status", () => {
+  it("live is a green square plus Live text under role=status", () => {
     render(<ConnectionMark connection="live" since="2026-09-06T09:59:50Z" />);
     const mark = screen.getByRole("status");
-    expect(mark.textContent).toBe("LIVE");
+    expect(mark.textContent).toBe("Live");
   });
 
-  it("reconnecting renders the warn chip with a ticking elapsed", () => {
+  it("reconnecting says so in one word and keeps the ticking elapsed on hover", () => {
     render(<ConnectionMark connection="reconnecting" since="2026-09-06T09:59:46Z" />);
-    expect(screen.getByRole("status").textContent).toBe("RECONNECTING · 14s");
+    expect(screen.getByRole("status").textContent).toBe("Reconnecting");
+    expect(screen.getByRole("status").getAttribute("title")).toBe("14s");
     act(() => vi.advanceTimersByTime(5_000));
-    expect(screen.getByRole("status").textContent).toBe("RECONNECTING · 19s");
+    expect(screen.getByRole("status").getAttribute("title")).toBe("19s");
   });
 
   it("stale freezes with as of the last reachable time", () => {
     render(<ConnectionMark connection="stale" since="2026-09-06T09:14:00Z" />);
-    expect(screen.getByRole("status").textContent).toBe("STALE · as of 06 Sep 10:14");
+    expect(screen.getByRole("status").textContent).toBe("As of 06 Sep 10:14");
   });
 });

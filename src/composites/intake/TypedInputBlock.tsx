@@ -27,7 +27,7 @@ function TypedRow({ line }: { line: TypedLine }) {
   );
 }
 
-export function TypedInputBlock({ lines, label = "Typed input the agent receives" }: TypedInputBlockProps) {
+export function TypedInputBlock({ lines, label = "Agent input" }: TypedInputBlockProps) {
   return (
     <div className={`${s.block} ward-typed`}>
       <ol className={s.list} aria-label={label}>

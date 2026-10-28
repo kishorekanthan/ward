@@ -21,10 +21,7 @@ export type AppearanceStripProps = {
   identities?: AppearanceIdentity[];
 };
 
-const SAMPLE_EMPTY = "No item in flight to preview.";
-const CHART_NOTE = "This is the view the validation exists for: six adjacent segments, direct-labelled, no legend to lean on.";
-const NOT_THEMEABLE =
-  "The action blue, the navy gate chip, the state colours and every rule stay fixed. A stream owns a colour and a mark, not a theme. Two teams theming the same product produces two products.";
+const SAMPLE_EMPTY = "Nothing to preview.";
 
 const SEGMENTS: StreamStep[] = [1, 2, 3, 4, 5, 6];
 const SEGMENT_WIDTH = 100;
@@ -129,10 +126,6 @@ function DetailedAppearance(props: AppearanceStripProps): ReactElement {
       </RailSection>
       <RailSection label="Overview chart segment">
         <DetailedChart identities={identities} />
-        <p className={s.note}>{CHART_NOTE}</p>
-      </RailSection>
-      <RailSection label="Not themeable">
-        <p className={s.note}>{NOT_THEMEABLE}</p>
       </RailSection>
     </div>
   );

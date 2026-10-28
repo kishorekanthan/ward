@@ -67,7 +67,7 @@ describe("StreamRow", () => {
     const summary = { name: "Data Engineering", key: "DE", streamStep: 2 as const, owner: "Priya Nayar", members: 9, stages: [{ name: "Intake" }, { name: "Review", gate: true }, { name: "Loaded" }], agents: { live: 3, draft: 1, paused: 0 }, policy: { id: "DE-04", summary: "no direct writes" }, inFlight: 18, p50: "4.2h" };
     const { container } = render(table(<StreamRow stream={summary} href="#de" presentation={{ columns: 5 }} />));
     const cells = Array.from(container.querySelectorAll("td"), (cell) => cell.textContent);
-    expect(cells).toEqual(["Data EngineeringDEPriya Nayar · 9 members", "Intake→◆Review (human gate)→Loaded", "43 live · 1 draft", "DE-04no direct writes", "18P50 4.2h"]);
+    expect(cells).toEqual(["Data EngineeringDEPriya Nayar · 9 members", "Intake→◆Review (review)→Loaded", "43 live · 1 draft", "DE-04no direct writes", "18P50 4.2h"]);
   });
 });
 
@@ -108,8 +108,8 @@ describe("StreamRow (spec)", () => {
     const triageLink = screen.getByText("Triage").parentElement as HTMLElement;
     expect(gateLink.querySelector("[data-gate-mark]")?.textContent).toBe("◆");
     expect(gateLink.querySelector("[data-gate-mark]")?.getAttribute("aria-hidden")).toBe("true");
-    expect(gateLink.textContent).toBe("◆DPM sign-off (human gate)");
-    expect(triageLink.textContent).not.toMatch(/◆|human gate/);
+    expect(gateLink.textContent).toBe("◆DPM sign-off (review)");
+    expect(triageLink.textContent).not.toMatch(/◆|review/);
   });
 
   it("keeps the rest of the stage chain neutral", () => {
@@ -237,16 +237,16 @@ describe("StreamRow compact chain highlight", () => {
     ]);
   });
 
-  it("highlights only the first of two gates, and both still read as human gates", () => {
+  it("highlights only the first of two gates, and both still read as review stages", () => {
     const { container } = render(table(<StreamRow stream={{ name: "UX", key: "UX", streamStep: 3, owner: "A. Whyte", stages: [{ name: "Design review", gate: true }, { name: "Build" }, { name: "Sign-off", gate: true }] }} href="#ux" presentation={{ columns: 5 }} />));
-    expect(container.querySelectorAll("td")[1].textContent).toBe("◆Design review (human gate)→Build→◆Sign-off (human gate)");
+    expect(container.querySelectorAll("td")[1].textContent).toBe("◆Design review (review)→Build→◆Sign-off (review)");
     expect(chain(3, [{ name: "Design review", gate: true }, { name: "Build" }, { name: "Sign-off", gate: true }]).map((chip) => chip[1])).toEqual(["stream", "soft", "soft"]);
   });
 
   it("wraps the chain in units that each start with a stage and end with the arrow to the next one", () => {
     const { container } = render(table(<StreamRow stream={{ name: "UX", key: "UX", streamStep: 3, owner: "A. Whyte", stages: [{ name: "Design review", gate: true }, { name: "Build" }, { name: "Sign-off", gate: true }] }} href="#ux" presentation={{ columns: 5 }} />));
     const units = Array.from(container.querySelectorAll(".ward-chiprow > *"), (unit) => unit.textContent);
-    expect(units).toEqual(["◆Design review (human gate)→", "Build→", "◆Sign-off (human gate)"]);
+    expect(units).toEqual(["◆Design review (review)→", "Build→", "◆Sign-off (review)"]);
   });
 
   it("keeps the navy gate chip for a stream with no validated step", () => {

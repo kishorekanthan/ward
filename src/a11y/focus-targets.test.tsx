@@ -16,7 +16,7 @@ describe("small links take the 24px target", () => {
       ["Late-arriving shipments view", true],
       ["→ FL-229", true],
       ["intake-advisor", true],
-      ["+ Mount agent", false],
+      ["+ Add agent", false],
       ["···", false],
       ["Configure board", true],
       ["Skip to content", true],

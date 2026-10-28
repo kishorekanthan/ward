@@ -33,6 +33,17 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
+// Only an unmet effect earns a line; met ones repeat what the table and preview show.
+function Warnings({ effects }: { effects: GateItem[] }) {
+  const unmet = effects.filter((effect) => !effect.met);
+  if (unmet.length === 0) return null;
+  return (
+    <section className={s.section} aria-label="Warnings">
+      <GateChecklist items={unmet} density="compact" />
+    </section>
+  );
+}
+
 function SkeletonColumn({ column, count }: { column: BoardColumnConfig; count: number }) {
   return (
     <div className={s.skeleton} data-kind={column.gate ? "gate" : undefined}>
@@ -64,20 +75,18 @@ export function PreviewRail(props: PreviewRailProps) {
   const first = ordered(props.sample, props.draft.sort)[0];
   return (
     <aside className={s.rail} aria-label="Preview">
-      <h2 className={`${s.k} ${s.head}`}>Live preview</h2>
-      <Section title="Card">
+      <h2 className={`${s.k} ${s.head}`}>Preview</h2>
+      <section className={s.section} aria-label="Card">
         <div className={s.card}>{first && <WorkCard item={first} fields={props.draft.fields} onOpen={open} feed={props.feed} />}</div>
-      </Section>
-      <Section title={`Columns · ${props.draft.columns.length} shown`}>
+      </section>
+      <Section title="Columns">
         {/* .strip scrolls on overflow, so it needs a named tab stop. */}
         <div className={s.strip} role="group" aria-label="Column preview" tabIndex={0} data-strip={props.strip ?? "cards"}>
           <Strip {...props} open={open} />
         </div>
         {props.columnsNote === undefined ? null : <p className={s.note}>{props.columnsNote}</p>}
       </Section>
-      <Section title="Effect of this config">
-        <GateChecklist items={props.effects} density="compact" />
-      </Section>
+      <Warnings effects={props.effects} />
     </aside>
   );
 }
