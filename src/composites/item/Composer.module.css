@@ -72,7 +72,3 @@
   stroke-linejoin: round;
 }
 
-.sendsAs {
-  font: var(--ward-type-useText);
-  color: var(--ward-color-muted);
-}

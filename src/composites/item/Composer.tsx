@@ -1,4 +1,4 @@
-import { useId, useState, type KeyboardEvent } from "react";
+import { useState, type KeyboardEvent } from "react";
 import { Btn } from "../../primitives/Btn";
 import { Checkbox } from "../../primitives/Checkbox";
 import { Chip } from "../../primitives/Chip";
@@ -40,7 +40,6 @@ function sendsOnEnter(event: KeyboardEvent<HTMLElement>): boolean {
 function ReplyRow(props: ComposerProps) {
   const { placeholder, asUser, onPost } = props;
   const [body, setBody] = useBody(props);
-  const sendsAs = useId();
   const send = () => {
     if (body.trim() !== "") onPost(asUser, body);
   };
@@ -52,13 +51,12 @@ function ReplyRow(props: ComposerProps) {
   return (
     <div className={s.reply} data-ward-composer="reply">
       <div className={s.replyField} data-ward-composer-field="" data-ward-focus-host="" onKeyDown={onKeyDown}>
-        <Field variant="reply" kind="textarea" rows={1} labelHidden placeholder={placeholder} label={placeholder} value={body} onChange={setBody} describedBy={sendsAs} />
-        <Btn variant="primary" className={s.send} describedBy={sendsAs} onClick={send}>
+        <Field variant="reply" kind="textarea" rows={1} labelHidden placeholder={placeholder} label={placeholder} value={body} onChange={setBody} />
+        <Btn variant="primary" className={s.send} onClick={send}>
           <SendIcon />
           <span className="ward-visually-hidden">Send</span>
         </Btn>
       </div>
-      <p id={sendsAs} className={s.sendsAs}>{`Sends as ${asUser}.`}</p>
     </div>
   );
 }

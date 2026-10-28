@@ -75,14 +75,14 @@ describe("Composer", () => {
 });
 
 describe("Composer reply row", () => {
-  it("sends what was typed as the named actor and says who it sends as", () => {
+  it("sends what was typed as the named actor with no sender line", () => {
     const onPost = vi.fn();
     render(<Composer variant="reply" placeholder="Reply, or go to review…" asUser="M. Chen" onPost={onPost} />);
     const box = screen.getByRole("textbox", { name: "Reply, or go to review…" });
     fireEvent.change(box, { target: { value: "Six hours covers it." } });
     const send = screen.getByRole("button", { name: "Send" });
-    expect(send.getAttribute("aria-describedby")).toBe(box.getAttribute("aria-describedby"));
-    expect(document.getElementById(send.getAttribute("aria-describedby") ?? "")?.textContent).toBe("Sends as M. Chen.");
+    expect([send.getAttribute("aria-describedby"), box.getAttribute("aria-describedby")]).toEqual([null, null]);
+    expect(document.body.textContent).not.toContain("Sends as");
     fireEvent.click(send);
     expect(onPost).toHaveBeenCalledWith("M. Chen", "Six hours covers it.");
   });
