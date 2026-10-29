@@ -55,6 +55,11 @@ afterEach(() => {
 });
 
 describe("Menu button roles and names", () => {
+  it("puts a trigger's tip name on the button itself (#332)", () => {
+    render(<MenuButton label="+" aria-label="New request" trigger={{ "data-ward-tip": "New request" }}><Menu entries={[{ label: "Bug", onSelect: () => undefined }]} /></MenuButton>);
+    expect(screen.getByRole("button", { name: "New request" }).dataset.wardTip).toBe("New request");
+  });
+
   it("marks the button as a closed menu button that controls nothing yet", () => {
     render(<NewRequest />);
     expect(button().getAttribute("aria-haspopup")).toBe("menu");
