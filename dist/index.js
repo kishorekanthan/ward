@@ -2806,7 +2806,7 @@ function HL({ variant: e = "info", ticket: t, children: a }) {
   if (!t) throw new Error("Callout: a callout must cite the ticket that decided it");
   return /* @__PURE__ */ n("aside", { className: `${ma.root} ward-callout${e === "warn" ? " ward-callout--warn" : ""}`, role: "note", "data-variant": e, "data-ticket": t, children: /* @__PURE__ */ n("div", { className: ma.body, children: a }) });
 }
-const fm = "_tip_1mtdy_2", vm = "_bubble_1mtdy_1", _a = {
+const fm = "_tip_1bmx3_2", vm = "_bubble_1bmx3_1", _a = {
   tip: fm,
   bubble: vm
 }, ut = 16;

@@ -55,9 +55,9 @@ describe("InfoTip", () => {
     const tipRule = ruleBody("src/primitives/InfoTip.module.css", ".tip");
     expect(tipRule).toContain("--ward-tip-overhang: calc((var(--ward-height-touch) - var(--ward-space-5)) / 2);");
     expect(tipRule).toContain("width: var(--ward-height-touch);\nheight: var(--ward-height-touch);");
-    expect(tipRule).toContain("margin-block: calc(0px - var(--ward-tip-overhang));");
-    expect(tipRule).toContain("margin-inline: calc(var(--ward-space-1) - var(--ward-tip-overhang)) calc(0px - var(--ward-tip-overhang));");
-    expect(ruleBody("src/primitives/InfoTip.module.css", ".bubble")).toContain("transform: translateX(calc(-50% + var(--ward-tip-shift, 0px)));");
+    expect(tipRule).toContain("margin-block: calc(-1 * var(--ward-tip-overhang));");
+    expect(tipRule).toContain("margin-inline: calc(var(--ward-space-1) - var(--ward-tip-overhang)) calc(-1 * var(--ward-tip-overhang));");
+    expect(ruleBody("src/primitives/InfoTip.module.css", ".bubble")).toContain("transform: translateX(calc(-50% + var(--ward-tip-shift, 0%)));");
   });
 
   it("moves a bubble 16 px inside either edge of a 375 px window, and leaves one inside alone (#332)", () => {

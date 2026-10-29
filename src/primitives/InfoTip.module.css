@@ -9,8 +9,8 @@
 
   width: var(--ward-height-touch);
   height: var(--ward-height-touch);
-  margin-block: calc(0px - var(--ward-tip-overhang));
-  margin-inline: calc(var(--ward-space-1) - var(--ward-tip-overhang)) calc(0px - var(--ward-tip-overhang));
+  margin-block: calc(-1 * var(--ward-tip-overhang));
+  margin-inline: calc(var(--ward-space-1) - var(--ward-tip-overhang)) calc(-1 * var(--ward-tip-overhang));
   padding: 0;
   border: 0;
   border-radius: 50%;
@@ -30,7 +30,7 @@
   position: absolute;
   inset-block-start: calc(100% - var(--ward-tip-overhang) + var(--ward-space-1));
   inset-inline-start: 50%;
-  transform: translateX(calc(-50% + var(--ward-tip-shift, 0px)));
+  transform: translateX(calc(-50% + var(--ward-tip-shift, 0%)));
   z-index: 40;
   inline-size: max-content;
   max-inline-size: min(60ch, 80vw);
@@ -48,7 +48,7 @@
 
 .tip[data-align="end"] .bubble {
   inset-inline: auto var(--ward-tip-overhang);
-  transform: translateX(var(--ward-tip-shift, 0px));
+  transform: translateX(var(--ward-tip-shift, 0%));
 }
 
 .tip[data-open] .bubble {
