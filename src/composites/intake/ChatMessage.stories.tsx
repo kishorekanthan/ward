@@ -1,6 +1,6 @@
 import type { ComponentType } from "react";
 import { bothThemes } from "../../../.storybook/bothThemes";
-import { ChatMessage, Conversation, type Turn } from "./ChatMessage";
+import { ChatMessage, ChatWorking, Conversation, type Turn } from "./ChatMessage";
 
 export default {
   title: "Intake/ChatMessage",
@@ -42,3 +42,19 @@ export const Thread = {
   ),
 };
 export const EmptyThread = { render: () => <Conversation>{null}</Conversation> };
+export const Working = {
+  render: () => (
+    <Conversation>
+      <ChatMessage turn={requester} />
+      <ChatWorking author="Advisor" step="Looking in Palantir Foundry" note="Still working" />
+    </Conversation>
+  ),
+};
+export const WorkingWithText = {
+  render: () => (
+    <Conversation>
+      <ChatMessage turn={requester} />
+      <ChatWorking author="Advisor" step="" body="Which window counts as late" />
+    </Conversation>
+  ),
+};
