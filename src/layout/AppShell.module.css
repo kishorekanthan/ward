@@ -77,9 +77,20 @@
   position: relative;
 }
 
-/* Ward has no tooltip primitive: a folded item names itself beside the strip on hover and on keyboard focus.
+/* Every control in a folded strip is a touch target; rows of a menu or panel opened from it keep their own size. */
+.app[data-collapsed="true"][data-consumer-fold] .side :global(:is(a[href], button):not([role^="menuitem"], :is([role="menu"], [role="dialog"], [popover]) *)) {
+  min-width: var(--ward-height-touch);
+  min-height: var(--ward-height-touch);
+}
+
+.foldSlot {
+  display: inline-flex;
+}
+
+/* Ward has no tooltip primitive: a folded item names itself beside the strip on hover and on keyboard focus,
+   its own or a control's inside it.
    No tip shows while a menu in the strip is open, so it never covers the menu. */
-.app[data-collapsed="true"][data-consumer-fold] .side:not(:has([aria-haspopup][aria-expanded="true"])) :global([data-ward-tip]:is(:hover, :focus-visible))::after {
+.app[data-collapsed="true"][data-consumer-fold] .side:not(:has([aria-haspopup][aria-expanded="true"])) :global([data-ward-tip]:is(:hover, :focus-visible, :has(:focus-visible)))::after {
   content: attr(data-ward-tip);
   position: absolute;
   top: 50%;

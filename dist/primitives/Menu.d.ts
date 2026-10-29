@@ -44,6 +44,8 @@ export type MenuTrigger = {
     onFocus?: () => void;
     ref?: (el: HTMLButtonElement | null) => void;
     className?: string;
+    /** The name a folded side strip shows beside this trigger on hover and focus. */
+    "data-ward-tip"?: string;
 };
 export type MenuButtonProps = {
     label: ReactNode;
