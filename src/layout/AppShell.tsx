@@ -161,12 +161,16 @@ function drawSidebar(sidebar: StudioShellProps["sidebar"], folded: boolean): Rea
   return typeof sidebar === "function" ? sidebar(folded) : sidebar;
 }
 
+// The wrapper carries the name for the folded strip's tip.
 function FoldButton({ fold }: { fold: SidebarFold }) {
+  const name = fold.collapsed ? "Expand sidebar" : "Collapse sidebar";
   return (
-    <Btn variant="ghost" size="sm" onClick={fold.toggle} expanded={!fold.collapsed}>
-      <PanelIcon />
-      <span className="ward-visually-hidden">{fold.collapsed ? "Expand sidebar" : "Collapse sidebar"}</span>
-    </Btn>
+    <span className={s.foldSlot} data-ward-tip={name}>
+      <Btn variant="ghost" size="sm" onClick={fold.toggle} expanded={!fold.collapsed}>
+        <PanelIcon />
+        <span className="ward-visually-hidden">{name}</span>
+      </Btn>
+    </span>
   );
 }
 

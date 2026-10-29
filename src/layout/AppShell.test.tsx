@@ -805,6 +805,16 @@ describe("frame ground and fold button in the sidebar (#285)", () => {
     expect(screen.queryByRole("button", { name: /sidebar/ })).toBeNull();
   });
 
+  it("names the fold button with a tip that follows its state (#332)", () => {
+    stubMatchMedia(false);
+    render(headShell());
+    const tipOf = (name: string) => (screen.getByRole("button", { name }).closest("[data-ward-tip]") as HTMLElement).dataset.wardTip;
+    expect(tipOf("Collapse sidebar")).toBe("Collapse sidebar");
+    fireEvent.click(screen.getByRole("button", { name: "Collapse sidebar" }));
+    expect(tipOf("Expand sidebar")).toBe("Expand sidebar");
+    expect(rule(".foldSlot")).toContain("display: inline-flex;");
+  });
+
   it("draws nothing where the consumer holds the fold state", () => {
     stubMatchMedia(false);
     render(<AppShell collapsed={false} foldButtonInSidebar sidebar={<SidebarFoldButton />}><p>page</p></AppShell>);
@@ -971,11 +981,21 @@ describe("AppShell fold owned by the consumer", () => {
   it("lets a folded strip overflow and names a tipped item on hover and keyboard focus only", () => {
     const folded = '.app[data-collapsed="true"][data-consumer-fold] .side';
     expect(rule(folded)).toContain("overflow: visible;");
-    const tip = folded + ':not(:has([aria-haspopup][aria-expanded="true"])) :global([data-ward-tip]:is(:hover, :focus-visible))::after';
+    const tip = folded + ':not(:has([aria-haspopup][aria-expanded="true"])) :global([data-ward-tip]:is(:hover, :focus-visible, :has(:focus-visible)))::after';
     expect(css).toContain(tip + " {");
     expect(rule(tip)).toContain("content: attr(data-ward-tip);");
     expect(css.match(/data-ward-tip\]:is\(/g)).toHaveLength(1);
     expect(rule(folded + " :global([data-ward-tip])")).toContain("position: relative;");
+  });
+
+  it("makes every strip link and button a 44 px target, but not the rows of a menu or panel it opens (#332)", () => {
+    const target = /\.side :global\((:is\(a\[href\], button\):not\(.+\))\) \{/.exec(css)?.[1] ?? "";
+    expect(rule('.app[data-collapsed="true"][data-consumer-fold] .side :global(' + target + ")")).toContain("{\n  min-width: 44px;\n  min-height: 44px;\n");
+    const strip = document.createElement("div");
+    strip.innerHTML = '<a href="#/q">Queue</a><a>Held</a><button>New</button><div role="menu"><button role="menuitem">Row</button><button>Find</button></div>'
+      + '<div role="dialog"><button>Sign out</button></div><div popover=""><button>Tip</button></div><button role="menuitemradio">Pick</button>';
+    const hits = [...strip.querySelectorAll("a, button")].filter((el) => el.matches(target)).map((el) => el.textContent);
+    expect(hits).toEqual(["Queue", "New"]);
   });
 
   it("shows no folded-strip tip while a menu in the strip is open, and keeps tips beside a plain open toggle", () => {
