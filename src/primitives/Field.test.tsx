@@ -1,8 +1,8 @@
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { cleanup, render, screen } from "@testing-library/react";
-import { afterEach, beforeAll, describe, expect, it } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { Field, type FieldVariant } from "./Field";
 import s from "./Field.module.css";
 
@@ -25,6 +25,24 @@ describe("Field toolbar variant", () => {
   it("leaves a form select unsized", () => {
     render(<Field kind="select" variant="form" label="Stream" value="demo" options={[{ value: "demo", label: "Demo" }]} />);
     expect(screen.getByRole("button", { name: "Stream" }).dataset.wardSize).toBeUndefined();
+  });
+});
+
+describe("Field date kind", () => {
+  afterEach(cleanup);
+
+  it("is a labelled date input bounded by min and max, and sends the day typed", () => {
+    const onChange = vi.fn();
+    render(<Field kind="date" label="From" value="2026-09-01" min="2026-01-01" max="2026-10-28" onChange={onChange} />);
+    const input = screen.getByLabelText("From");
+    expect([input.tagName, input.getAttribute("type"), input.getAttribute("min"), input.getAttribute("max")]).toEqual(["INPUT", "date", "2026-01-01", "2026-10-28"]);
+    fireEvent.change(input, { target: { value: "2026-09-02" } });
+    expect(onChange).toHaveBeenCalledWith("2026-09-02");
+  });
+
+  it("leaves a text input without date bounds", () => {
+    render(<Field label="Name" value="" min="2026-01-01" />);
+    expect(screen.getByLabelText("Name").hasAttribute("min")).toBe(false);
   });
 });
 

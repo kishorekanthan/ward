@@ -4,7 +4,7 @@ export type FieldOption = {
     label: string;
 };
 export type FieldProps = {
-    kind?: "input" | "select" | "textarea";
+    kind?: "input" | "select" | "textarea" | "date";
     label: string;
     value: string;
     onChange?: (value: string) => void;
@@ -18,5 +18,8 @@ export type FieldProps = {
     variant?: FieldVariant;
     placeholder?: string;
     secret?: boolean;
+    /** Earliest and latest day a date field takes, as YYYY-MM-DD. */
+    min?: string;
+    max?: string;
 };
 export declare function Field(props: FieldProps): import("react").JSX.Element;

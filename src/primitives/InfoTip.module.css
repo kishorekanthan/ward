@@ -1,0 +1,52 @@
+/* Provenance: Trellis Overview redesign canvas, board "Overview", the .info button and .bubble on each tile label. */
+.tip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ward-space-5);
+  height: var(--ward-space-5);
+  margin-inline-start: var(--ward-space-1);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ward-color-faint);
+  cursor: help;
+  vertical-align: middle;
+}
+
+.tip:hover,
+.tip[data-open] {
+  color: var(--ward-color-text);
+}
+
+.bubble {
+  display: none;
+  position: absolute;
+  inset-block-start: calc(100% + var(--ward-space-1));
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  inline-size: max-content;
+  max-inline-size: min(60ch, 80vw);
+  padding: var(--ward-space-2) var(--ward-space-3);
+  border-radius: var(--ward-radius);
+  background: var(--ward-color-surface);
+  box-shadow: var(--ward-shadow-overlay);
+  color: var(--ward-color-text);
+  font: var(--ward-type-body);
+  text-align: start;
+  text-transform: none;
+  letter-spacing: normal;
+  white-space: normal;
+}
+
+.tip[data-align="end"] .bubble {
+  inset-inline: auto 0;
+  transform: none;
+}
+
+.tip[data-open] .bubble {
+  display: block;
+}
