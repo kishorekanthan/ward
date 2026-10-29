@@ -1,4 +1,4 @@
-import { useId, useState, type KeyboardEvent } from "react";
+import { useId, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import s from "./InfoTip.module.css";
 
 export type InfoTipProps = {
@@ -9,10 +9,37 @@ export type InfoTipProps = {
   align?: "center" | "end";
 };
 
+// The bubble keeps this far (--ward-space-4) inside the window.
+const GUTTER = 16;
+
+/** How far to move a bubble at these edges so it stays inside a window this wide. */
+export function edgeShift(left: number, right: number, width: number): number {
+  if (left < GUTTER) return GUTTER - left;
+  if (right > width - GUTTER) return Math.max(width - GUTTER - right, GUTTER - left);
+  return 0;
+}
+
+// Measured as it opens, before paint, so the bubble never shows off screen.
+function useOnScreen(open: boolean) {
+  const bubble = useRef<HTMLSpanElement>(null);
+  const [shift, setShift] = useState(0);
+  useLayoutEffect(() => {
+    const el = bubble.current;
+    if (!open || el === null) {
+      setShift(0);
+      return;
+    }
+    const rect = el.getBoundingClientRect();
+    setShift((prev) => prev + edgeShift(rect.left, rect.right, window.innerWidth));
+  }, [open]);
+  return { bubble, style: { "--ward-tip-shift": `${shift}px` } as CSSProperties };
+}
+
 /** A small icon button beside a label; its text shows on hover and on focus, and Escape shuts it. */
 export function InfoTip({ label, text, align = "center" }: InfoTipProps) {
   const id = useId();
   const [open, setOpen] = useState(false);
+  const onScreen = useOnScreen(open);
   const onKeyDown = (event: KeyboardEvent) => {
     if (event.key !== "Escape" || !open) return;
     event.stopPropagation();
@@ -38,7 +65,7 @@ export function InfoTip({ label, text, align = "center" }: InfoTipProps) {
         <circle cx="12" cy="12" r="9" />
         <path d="M12 11v5M12 8h.01" />
       </svg>
-      <span className={s.bubble} role="tooltip" id={id}>
+      <span className={s.bubble} role="tooltip" id={id} ref={onScreen.bubble} style={onScreen.style}>
         {text}
       </span>
     </button>
