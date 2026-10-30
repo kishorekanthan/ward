@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { accentPairs, belowFloor, contrastProblems, derivedDarkPairs, edgePairs, graphicPairs, insetPairs, panelPairs, roleInkPairs, textPairs } from "./contrast.mjs";
+import { accentPairs, belowFloor, contrastMorePairs, contrastProblems, derivedDarkPairs, edgePairs, graphicPairs, insetPairs, panelPairs, roleInkPairs, textPairs } from "./contrast.mjs";
 
 const tokens = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), "..", "tokens.json"), "utf8"));
 
@@ -245,3 +245,48 @@ describe("table head (#297)", () => {
     expect([tokens.dark.surface, tokens.dark.surface2, tokens.dark.hover, tokens.chipDark.quiet.bg]).not.toContain(tokens.dark.tableHead);
   });
 });
+
+// One value in the high-contrast block replaced, the rest as shipped.
+const withMore = (patch) => ({ ...tokens, contrast: { ...tokens.contrast, more: { ...tokens.contrast.more, ...patch(tokens.contrast.more) } } });
+const failedLabels = (t) => belowFloor(contrastMorePairs(t)).map((line) => line.split(" #")[0]);
+
+describe("high contrast (#338)", () => {
+  it("passes every shipped pair at AAA, both themes, every accent", () => {
+    expect(contrastMorePairs(tokens)).toHaveLength(1084);
+    expect(belowFloor(contrastMorePairs(tokens))).toEqual([]);
+  });
+
+  it("restates only colour roles the base palette already has", () => {
+    const { color, dark } = tokens.contrast.more;
+    expect(Object.keys(color).filter((k) => !(k in tokens.color))).toEqual([]);
+    expect(Object.keys(dark).filter((k) => !(k in tokens.dark))).toEqual([]);
+  });
+
+  it("fails light muted text a step below 7:1", () => {
+    expect(failedLabels(withMore((m) => ({ color: { ...m.color, muted: "#5A564E" } })))).toContain("light high muted/surface2");
+  });
+
+  it("fails a dark edge below 3:1", () => {
+    expect(failedLabels(withMore((m) => ({ dark: { ...m.dark, edge: "#4A473F" } })))).toContain("dark high edge/surface");
+  });
+
+  it("fails the dark callout line below 3:1 on the waiting tint", () => {
+    expect(failedLabels(withMore((m) => ({ dark: { ...m.dark, waitingLine: "#4A473F" } })))).toContain("dark high waitingLine/waitingTint");
+  });
+
+  it("fails a blue accent ink a step below 7:1 on its tint", () => {
+    const blue = { ...tokens.contrast.more.accent.blue, color: { ...tokens.contrast.more.accent.blue.color, sageInk: "#2F4F75" } };
+    expect(failedLabels(withMore((m) => ({ accent: { ...m.accent, blue } })))).toContain("light high blue sageInk/sageTint");
+  });
+
+  it("fails the old stream 3 chip under white text", () => {
+    const stream = tokens.contrast.more.stream.map((s) => (s.step === 3 ? { ...s, chip: "#BF5310" } : s));
+    expect(failedLabels(withMore(() => ({ stream })))).toEqual(["light high stream3 chipText/chip"]);
+  });
+
+  it("fails a dark chip whose text drops below 7:1", () => {
+    const chipDark = { ...tokens.contrast.more.chipDark, failed: { bg: "#2A1418", fg: "#C48A95", line: "#C48A95" } };
+    expect(failedLabels(withMore(() => ({ chipDark })))).toEqual(["dark high chip failed"]);
+  });
+});
+

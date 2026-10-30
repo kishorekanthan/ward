@@ -81,6 +81,34 @@ export function accentRules(tokens) {
     });
 }
 
+const MORE = '[data-contrast="more"]';
+
+function moreStreamVars(steps, dark) {
+  return steps.flatMap((s) => [
+    `--ward-stream-${s.step}-id: ${dark ? s.darkId : s.id};`,
+    `--ward-stream-${s.step}-chip: ${dark ? s.darkChip : s.chip};`,
+    `--ward-stream-${s.step}-chipText: ${dark ? s.darkChipText : s.chipText};`,
+  ]);
+}
+
+// High contrast restates colour only, so it stacks with theme, accent and density; each preset restates just its sage role.
+export function contrastRules(tokens) {
+  const more = tokens.contrast.more;
+  const themed = (key, chip, dark) => [...accentVars(tokens, more[key]), ...chipVars(more[chip]), ...moreStreamVars(more.stream, dark)];
+  const accents = Object.entries(more.accent).flatMap(([name, preset]) => {
+    const on = `${MORE}[data-accent="${name}"]`;
+    return [
+      rule(`${on}[data-theme="dark"], ${on} [data-theme="dark"]`, accentVars(tokens, preset.dark)),
+      rule(`${on}, ${on} [data-theme="light"]`, accentVars(tokens, preset.color)),
+    ];
+  });
+  return [
+    rule(`:root${MORE}, ${MORE} [data-theme="light"]`, themed("color", "chip", false)),
+    rule(`:root${MORE}[data-theme="dark"], ${MORE} [data-theme="dark"]`, themed("dark", "chipDark", true)),
+    ...accents,
+  ];
+}
+
 // Comfortable is the :root lengths; a denser setting restates only the pads and gaps it shortens.
 export function densityRules(tokens) {
   return Object.entries(tokens.density)
@@ -200,6 +228,8 @@ export function buildCss(tokens) {
       "",
       ...accentRules(tokens),
       "",
+      ...contrastRules(tokens),
+      "",
       ...densityRules(tokens),
       "",
       rule("*, *::before, *::after", ["box-sizing: border-box;"]),
@@ -316,6 +346,8 @@ export function buildTokens(tokens) {
     "export type AccentPreset = (typeof ACCENT_PRESETS)[number][\"name\"];",
     `export const DENSITIES = ${JSON.stringify(Object.entries(tokens.density).map(([name, d]) => ({ name, label: d.label })))} as const;`,
     "export type Density = (typeof DENSITIES)[number][\"name\"];",
+    `export const CONTRASTS = ${JSON.stringify(Object.entries(tokens.contrast).map(([name, c]) => ({ name, label: c.label })))} as const;`,
+    "export type Contrast = (typeof CONTRASTS)[number][\"name\"];",
     "",
     "export const v = {",
   ];

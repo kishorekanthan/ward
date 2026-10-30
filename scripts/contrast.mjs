@@ -110,6 +110,54 @@ export function accentPairs(tokens) {
   );
 }
 
+// High contrast (#338) is AAA: text, role inks, chips and stream chip text at 7:1; edges, marks, callout lines and series at 3:1.
+const MORE_GROUNDS = [...NEUTRAL, "inset"];
+const MORE_MARKS = ["focus", "edge", "panelEdge", "line2", "sage", "peach", "chartBar", "chartLine", "chartIdeal", "series1", "series2", "series3", "series4", "series5", "series6"];
+const CONSOLE_INKS = ["consoleInk", "consoleWarn", "consoleOk", "consoleFaint", "consoleInfo", "consoleDim"];
+const MORE_THEMES = [["light", "color", "chip", false], ["dark", "dark", "chipDark", true]];
+
+const morePalette = (tokens, key, preset = {}) => ({ ...tokens[key], ...tokens.contrast.more[key], ...preset[key] });
+
+function moreThemePairs(theme, c) {
+  return [
+    ...[...TEXT, "link"].flatMap((ink) => onGrounds(theme, c, ink, [...MORE_GROUNDS, ...TINTS], 7)),
+    ...Object.entries(ROLE_INKS).flatMap(([ink, tint]) => onGrounds(theme, c, ink, [...new Set([...MORE_GROUNDS, tint])], 7)),
+    ...MORE_MARKS.flatMap((mark) => onGrounds(theme, c, mark, MORE_GROUNDS, 3)),
+    ...onGrounds(theme, c, "waitingLine", [...MORE_GROUNDS, "waitingTint"], 3),
+    ...CONSOLE_INKS.map((ink) => [c[ink], c.console, `${theme} ${ink}/console`, 7]),
+  ];
+}
+
+function moreChipPairs(theme, chips) {
+  return Object.entries(chips).filter(([, p]) => p.bg !== "transparent").map(([role, p]) => [p.fg, p.bg, `${theme} chip ${role}`, 7]);
+}
+
+function moreStreamPairs(theme, c, steps, dark) {
+  return steps.flatMap((s) => {
+    const [id, chip, text] = dark ? [s.darkId, s.darkChip, s.darkChipText] : [s.id, s.chip, s.chipText];
+    return [[text, chip, `${theme} stream${s.step} chipText/chip`, 7], ...MORE_GROUNDS.map((g) => [id, c[g], `${theme} stream${s.step} id/${g}`, 3])];
+  });
+}
+
+function moreSagePairs(label, c) {
+  return [
+    ...onGrounds(label, c, "sageInk", [...MORE_GROUNDS, "sageTint"], 7),
+    ...TEXT.flatMap((ink) => onGrounds(label, c, ink, ["sageTint"], 7)),
+    ...onGrounds(label, c, "sage", MORE_GROUNDS, 3),
+  ];
+}
+
+// Green is the theme's own sage; every other preset restates only that role, so it is measured on its pairs.
+export function contrastMorePairs(tokens) {
+  const more = tokens.contrast.more;
+  return MORE_THEMES.flatMap(([theme, key, chip, dark]) => {
+    const label = `${theme} high`;
+    const c = morePalette(tokens, key);
+    const presets = Object.entries(more.accent).flatMap(([name, preset]) => moreSagePairs(`${label} ${name}`, morePalette(tokens, key, preset)));
+    return [...moreThemePairs(label, c), ...moreChipPairs(label, more[chip]), ...moreStreamPairs(label, c, more.stream, dark), ...presets];
+  });
+}
+
 export function belowFloor(pairs) {
   return pairs.filter(([fg, bg, , need]) => contrast(fg, bg) < need).map(([fg, bg, label, need]) => `${label} ${fg} on ${bg} = ${contrast(fg, bg).toFixed(2)} (needs ${need}:1)`);
 }
@@ -342,8 +390,10 @@ export function describeFailures(failures) {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const derived = belowFloor(derivedDarkPairs(JSON.parse(readFileSync(join(root, "tokens.json"), "utf8")).dark));
-  if (derived.length) console.log(`FAIL derived dark tokens: ${derived.join("; ")}`);
+  const tokens = JSON.parse(readFileSync(join(root, "tokens.json"), "utf8"));
+  const derived = [...belowFloor(derivedDarkPairs(tokens.dark)), ...belowFloor(contrastMorePairs(tokens))];
+  if (derived.length) console.log(`FAIL token pairs: ${derived.join("; ")}`);
+  else console.log(`high contrast: ${contrastMorePairs(tokens).length} pairs at AAA, both themes, every accent`);
   const r = await sweepRenderedContrast();
   const exempt = Object.entries(r.exempt).map(([k, n]) => `${k} ${n}`).join(", ") || "none";
   console.log(`${r.build}; swept ${r.stories} stories in ${r.seconds}s`);

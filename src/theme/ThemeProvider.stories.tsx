@@ -53,6 +53,23 @@ function Presets() {
   );
 }
 
+// High contrast pins on a wrapper beside its accent, so every preset shows its AAA sage, chips and current tab in both themes (#338).
+function HighContrast() {
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: v.space.s3 }}>
+      {ACCENT_PRESETS.flatMap(({ name, label }) =>
+        (["light", "dark"] as const).map((theme) => (
+          <div key={`${name}-${theme}`} data-contrast="more" data-accent={name}>
+            <section data-theme={theme} style={panel}>
+              <Sample title={`${label}, ${theme}, high`} />
+            </section>
+          </div>
+        )),
+      )}
+    </div>
+  );
+}
+
 const item: BoardItem = {
   key: "Shipment review",
   title: "Late-arriving shipments view",
@@ -105,11 +122,13 @@ export default {
 
 export const AccentPresets = { render: () => <Presets /> };
 
+export const HighContrastPresets = { render: () => <HighContrast /> };
+
 export const Densities = { render: () => <DensityPair />, decorators: [bothThemes] };
 
 // The provider writes to the page root, so this story sets the theme for the whole canvas.
 export const Provider = {
-  args: { theme: "light", accent: "blue", density: "compact" },
+  args: { theme: "light", accent: "blue", density: "compact", contrast: "standard" },
   render: (args: ThemeProviderProps) => (
     <ThemeProvider {...args}>
       <div style={panel}>

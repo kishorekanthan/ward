@@ -2,7 +2,7 @@ import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
-import { accentPairs, belowFloor, contrast, derivedDarkPairs, edgePairs, graphicPairs, insetPairs, panelPairs, roleInkPairs, textPairs, describeFailures, sweepRenderedContrast } from "./contrast.mjs";
+import { accentPairs, belowFloor, contrast, contrastMorePairs, derivedDarkPairs, edgePairs, graphicPairs, insetPairs, panelPairs, roleInkPairs, textPairs, describeFailures, sweepRenderedContrast } from "./contrast.mjs";
 import { buildFresh, distDrift } from "./dist-fresh.mjs";
 import { sweepConsoleTheme } from "./console-theme.mjs";
 import { sweepThreeLevels } from "./three-levels.mjs";
@@ -132,6 +132,11 @@ else fail("edge contrast", edgeLow.join("; "));
 const panelLow = belowFloor(panelPairs(tokens));
 if (panelLow.length === 0) pass("panel ground", `${panelPairs(tokens).length} pairs: surface on ground at 1.15:1, both themes`);
 else fail("panel ground", panelLow.join("; "));
+
+// 2a-high. the high-contrast theme holds AAA in both themes, every accent (#338)
+const moreLow = belowFloor(contrastMorePairs(tokens));
+if (moreLow.length === 0) pass("high contrast", `${contrastMorePairs(tokens).length} pairs: text 7:1, edges and marks 3:1, both themes, every accent`);
+else fail("high contrast", moreLow.join("; "));
 
 // 2a-inset. a card on a panel is a third surface level
 const insetLow = belowFloor(insetPairs(tokens));

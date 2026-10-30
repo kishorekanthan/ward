@@ -34,6 +34,14 @@ export declare const DENSITIES: readonly [{
     readonly label: "Compact";
 }];
 export type Density = (typeof DENSITIES)[number]["name"];
+export declare const CONTRASTS: readonly [{
+    readonly name: "standard";
+    readonly label: "Standard";
+}, {
+    readonly name: "more";
+    readonly label: "High";
+}];
+export type Contrast = (typeof CONTRASTS)[number]["name"];
 export declare const v: {
     readonly color: {
         readonly bg: "var(--ward-color-bg)";
