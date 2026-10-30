@@ -70,3 +70,50 @@
   background: var(--ward-color-selected);
   box-shadow: none;
 }
+
+/* A reply on its way: three dots that pulse in turn, then the step line. */
+.working {
+  display: flex;
+  align-items: center;
+  gap: var(--ward-space-2);
+  font: var(--ward-type-meta);
+  color: var(--ward-color-muted);
+}
+
+/* With nothing to say the line leaves the layout, but its live region stays mounted. */
+.working:not(:has(.dots, .step > span)) {
+  position: absolute;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.step {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ward-space-2);
+}
+
+.note {
+  color: var(--ward-color-muted);
+}
+
+.dots {
+  display: inline-flex;
+  gap: var(--ward-space-1);
+}
+
+/* The pulse is Ward's one running animation (ward.css), so reduced motion stops it there. */
+.dots > span {
+  width: var(--ward-space-2);
+  height: var(--ward-space-2);
+  border-radius: 50%;
+  background: var(--ward-color-muted);
+}
+
+.dots > span:nth-child(2) {
+  animation-delay: calc(var(--ward-motion-running) / 6);
+}
+
+.dots > span:nth-child(3) {
+  animation-delay: calc(var(--ward-motion-running) / 3);
+}

@@ -94,7 +94,7 @@ describe("public Ward exports", () => {
       "AppShell", "PageFrame", "SubjectRail", "RecordSection", "FormStack", "SectionBand", "BoardScroller",
       "BoardColumn", "BoardHeader", "ConfigRow", "ItemDrawer", "OverCapNote", "PreviewRail", "WorkCard",
       "ActivityConsole", "ConsoleAnnounceProvider", "ClarificationRow", "Composer", "CriteriaList", "GateLadder", "RequeueSheet", "ResolveBlock", "StageHistory",
-      "ChatMessage", "DeliveryHealth", "ReadyChecklist", "ResolvedFieldRow", "RoutingTable", "SessionRow", "TypedInputBlock",
+      "ChatMessage", "ChatWorking", "DeliveryHealth", "ReadyChecklist", "ResolvedFieldRow", "RoutingTable", "SessionRow", "TypedInputBlock",
       "AgentCard", "ColourLadder", "DryRunRail", "GateChecklist", "NewStreamModal", "RuleRow", "StageColumn", "StageListEditor", "StreamRow", "ToolRow",
       "AppearanceStrip", "CapabilityRow", "ComponentRow", "CredentialRow", "EnvCard", "KeyPanel", "MarkUpload", "McpServerRow", "PolicyRow", "RoleMatrixRow", "RunbookSteps", "ValidationList",
     ] as const;

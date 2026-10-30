@@ -14,3 +14,10 @@ export declare function Conversation({ children, density }: {
     density?: "intake";
 }): import("react").JSX.Element;
 export declare function ChatMessage({ turn }: ChatMessageProps): import("react").JSX.Element;
+export interface ChatWorkingProps {
+    author: string;
+    step: string;
+    body?: string;
+    note?: string;
+}
+export declare function ChatWorking({ author, step, body, note }: ChatWorkingProps): import("react").JSX.Element;
