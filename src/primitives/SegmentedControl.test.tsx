@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import { ruleBody } from "../test-css";
 import { SegmentedControl } from "./SegmentedControl";
 
 const sort = [
@@ -32,5 +33,13 @@ describe("SegmentedControl", () => {
     render(<SegmentedControl label="Sort" options={sort} value="oldest" onChange={onChange} />);
     fireEvent.click(screen.getByRole("radio", { name: "Newest first" }));
     expect(onChange).toHaveBeenCalledWith("newest");
+  });
+
+  it("gives each option a 44 px tap, centred, without changing its drawn height (#336)", () => {
+    const css = "src/primitives/SegmentedControl.module.css";
+    expect(ruleBody(css, ".segment")).toContain("position: relative;\nheight: var(--ward-height-controlSm);");
+    expect(ruleBody(css, ".segment::after")).toBe(
+      'content: "";\nposition: absolute;\ninset-inline: 0;\ninset-block-start: 50%;\nblock-size: var(--ward-height-touch);\ntranslate: 0 -50%',
+    );
   });
 });

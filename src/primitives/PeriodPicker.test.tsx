@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import { ruleBody } from "../test-css";
 import { PeriodPicker, type Period } from "./PeriodPicker";
 
 const TODAY = "2026-10-28";
@@ -69,5 +70,15 @@ describe("PeriodPicker", () => {
     choose("Last 7 days");
     expect(screen.queryByLabelText("From")).toBeNull();
     expect(onChange.mock.calls).toEqual([[{ preset: "7d" }]]);
+  });
+
+  it("gives the trigger a 44 px tap, centred, through the listbox trigger the rule names (#336)", () => {
+    const css = "src/primitives/PeriodPicker.module.css";
+    const { container } = render(<PeriodPicker value={{ preset: "4w" }} onChange={() => {}} today={TODAY} />);
+    expect(Array.from(container.querySelectorAll('.ward-period button[aria-haspopup="listbox"]'))).toEqual([trigger()]);
+    expect(ruleBody(css, '.row button[aria-haspopup="listbox"]')).toBe("position: relative");
+    expect(ruleBody(css, '.row button[aria-haspopup="listbox"]::after')).toBe(
+      'content: "";\nposition: absolute;\ninset-inline: 0;\ninset-block-start: 50%;\nblock-size: var(--ward-height-touch);\ntranslate: 0 -50%',
+    );
   });
 });

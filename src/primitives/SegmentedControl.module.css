@@ -7,6 +7,7 @@
 }
 
 .segment {
+  position: relative;
   height: var(--ward-height-controlSm);
   padding: 0 var(--ward-space-3);
   font: var(--ward-type-control);
@@ -17,6 +18,16 @@
     inset 0 calc(-1 * var(--ward-border)) 0 0 var(--ward-color-edge),
     inset calc(-1 * var(--ward-border)) 0 0 0 var(--ward-color-edge);
   transition: border-color var(--ward-motion-fast), opacity var(--ward-motion-fast);
+}
+
+/* A 44px tap around each option; the box it draws stays as it was (#336). */
+.segment::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 50%;
+  block-size: var(--ward-height-touch);
+  translate: 0 -50%;
 }
 
 .segment:first-child {
