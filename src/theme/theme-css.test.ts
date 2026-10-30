@@ -54,9 +54,10 @@ describe("accent presets", () => {
 
   it("gives Trellis green no block, and no other rule names an accent", () => {
     const selectors = [...css.matchAll(/^([^\n{]*data-accent[^\n{]*) \{$/gm)].map((m) => m[1]);
-    expect(selectors).toHaveLength(8);
+    expect(selectors.filter((s) => !s.includes("data-contrast"))).toHaveLength(8);
+    expect(selectors.filter((s) => s.includes("data-contrast"))).toHaveLength(8);
     expect(css).not.toContain('data-accent="green"');
-    expect(css.match(/data-accent/g)).toHaveLength(16);
+    expect(css.match(/data-accent/g)).toHaveLength(32);
   });
 });
 
@@ -89,3 +90,33 @@ describe("scrim", () => {
     expect([scrimOf(":root"), scrimOf('[data-theme="light"]'), scrimOf('[data-theme="dark"]')]).toEqual(["rgba(25,25,24,0.40)", "rgba(25,25,24,0.40)", "rgba(0,0,0,0.55)"]);
   });
 });
+
+describe("high contrast (#338)", () => {
+  const LIGHT = ':root[data-contrast="more"], [data-contrast="more"] [data-theme="light"]';
+  const DARK = ':root[data-contrast="more"][data-theme="dark"], [data-contrast="more"] [data-theme="dark"]';
+  const colourOnly = (selector: string) => Object.keys(declared(selector)).filter((k) => !/^--ward-(color|chip|stream)-/.test(k));
+
+  it("restates colour, chip and stream tokens only, light and dark", () => {
+    expect(colourOnly(LIGHT)).toEqual([]);
+    expect(colourOnly(DARK)).toEqual([]);
+  });
+
+  it("carries the AAA text, focus ring, edge and callout line, with aliases following their role", () => {
+    const light = declared(LIGHT);
+    const dark = declared(DARK);
+    expect([light["--ward-color-text"], light["--ward-color-focus"], light["--ward-color-edge"], light["--ward-color-warnLine"]]).toEqual(["#0D0D0C", "#0A55B8", "#4B4741", "#77683E"]);
+    expect([dark["--ward-color-text"], dark["--ward-color-focus"], dark["--ward-color-edge"], dark["--ward-color-warnLine"]]).toEqual(["#FFFFFF", "#8DBBF2", "#B3AEA2", "#968C70"]);
+    expect(light["--ward-color-accentPill"]).toBe(light["--ward-color-sageTint"]);
+    expect([light["--ward-chip-gate-bg"], light["--ward-stream-3-chip"], dark["--ward-stream-4-chip"]]).toEqual(["#1C1B18", "#8A3C0C", "#15548C"]);
+  });
+
+  it("restates only the sage role and accentPill for each preset, after the theme blocks", () => {
+    const blue = declared('[data-contrast="more"][data-accent="blue"], [data-contrast="more"][data-accent="blue"] [data-theme="light"]');
+    expect(blue).toEqual(sageRole(["#436D9D", "#E1EAF5", "#27486D"]));
+    const darkBlue = declared('[data-contrast="more"][data-accent="blue"][data-theme="dark"], [data-contrast="more"][data-accent="blue"] [data-theme="dark"]');
+    expect(darkBlue).toEqual(sageRole(["#6B91BD", "#151E28", "#98BAE1"]));
+    expect(css.indexOf('[data-contrast="more"][data-accent="blue"]')).toBeGreaterThan(css.indexOf(DARK));
+    expect(css.indexOf(LIGHT)).toBeGreaterThan(css.indexOf('\n[data-accent="rose"], [data-accent="rose"] [data-theme="light"] {'));
+  });
+});
+

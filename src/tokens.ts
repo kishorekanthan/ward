@@ -15,6 +15,8 @@ export const ACCENT_PRESETS = [{"name":"green","label":"Trellis green"},{"name":
 export type AccentPreset = (typeof ACCENT_PRESETS)[number]["name"];
 export const DENSITIES = [{"name":"comfortable","label":"Comfortable"},{"name":"compact","label":"Compact"}] as const;
 export type Density = (typeof DENSITIES)[number]["name"];
+export const CONTRASTS = [{"name":"standard","label":"Standard"},{"name":"more","label":"High"}] as const;
+export type Contrast = (typeof CONTRASTS)[number]["name"];
 
 export const v = {
   color: {
