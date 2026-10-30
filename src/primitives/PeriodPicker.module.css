@@ -5,3 +5,17 @@
   align-items: flex-end;
   gap: var(--ward-space-2);
 }
+
+/* A 44px tap around the trigger; the box it draws stays as it was (#336). */
+.row button[aria-haspopup="listbox"] {
+  position: relative;
+}
+
+.row button[aria-haspopup="listbox"]::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: 50%;
+  block-size: var(--ward-height-touch);
+  translate: 0 -50%;
+}
