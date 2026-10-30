@@ -5,5 +5,7 @@ export type InfoTipProps = {
     /** end keeps the bubble inside a right-hand column, such as a table's last head cell. */
     align?: "center" | "end";
 };
+/** How far to move a bubble at these edges so it stays inside a window this wide. */
+export declare function edgeShift(left: number, right: number, width: number): number;
 /** A small icon button beside a label; its text shows on hover and on focus, and Escape shuts it. */
 export declare function InfoTip({ label, text, align }: InfoTipProps): import("react").JSX.Element;
