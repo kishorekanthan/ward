@@ -15,10 +15,37 @@ export function injectModuleCss(path: string, classes: Record<string, string>): 
 
 // The declarations of the one rule whose selector is exactly `selector`, one per line, for a CSS golden.
 export function ruleBody(path: string, selector: string): string {
-  const blocks = readFileSync(path, "utf8").split("}").map((b) => b.split("{"));
+  return ruleBodyIn(readFileSync(path, "utf8"), selector, path);
+}
+
+// As ruleBody, over CSS text such as one media block.
+export function ruleBodyIn(css: string, selector: string, where = "css"): string {
+  const blocks = css.split("}").map((b) => b.split("{"));
   const match = blocks.filter(([sel]) => sel.replace(/\/\*[\s\S]*?\*\//g, "").trim() === selector);
-  if (match.length !== 1) throw new Error(`ruleBody: ${match.length} rules match ${selector} in ${path}`);
+  if (match.length !== 1) throw new Error(`ruleBody: ${match.length} rules match ${selector} in ${where}`);
   return match[0][1].split(";").map((d) => d.trim()).filter(Boolean).join(";\n");
+}
+
+function blockEnd(css: string, open: number): number {
+  let depth = 0;
+  for (let i = open; i < css.length; i++) {
+    depth += css[i] === "{" ? 1 : css[i] === "}" ? -1 : 0;
+    if (depth === 0) return i;
+  }
+  return css.length;
+}
+
+// The inner CSS of every `@media <query>` block, and the stylesheet with those blocks cut out.
+export function mediaSplit(path: string, query: string): { inside: string; outside: string } {
+  const head = `@media ${query} {`;
+  let outside = readFileSync(path, "utf8");
+  let inside = "";
+  for (let at = outside.indexOf(head); at >= 0; at = outside.indexOf(head)) {
+    const end = blockEnd(outside, at + head.length - 1);
+    inside += outside.slice(at + head.length, end);
+    outside = outside.slice(0, at) + outside.slice(end + 1);
+  }
+  return { inside, outside };
 }
 
 // jsdom drops var() inside border shorthands, so a left border is found in the source instead.

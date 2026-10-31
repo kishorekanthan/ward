@@ -139,6 +139,22 @@
     flex-wrap: wrap;
   }
 
+  /* Each header action, More actions too, takes a 44px tap and keeps its drawn size; it never clips the tap, whatever a consumer sets. */
+  :where(.actions :is(button, a)) {
+    position: relative;
+  }
+
+  .actions :is(button, a) {
+    overflow: visible;
+  }
+
+  .actions :is(button, a)::after {
+    content: "";
+    position: absolute;
+    inset-block: min(0%, calc(50% - var(--ward-height-touch) / 2));
+    inset-inline: min(0%, calc(50% - var(--ward-height-touch) / 2));
+  }
+
   .row {
     flex-direction: column;
     align-items: flex-start;
@@ -150,9 +166,11 @@
     overflow-wrap: anywhere;
   }
 
+  /* Actions that do not fit already wait in More, so the wrap stops clipping and each button's 44px tap stays whole. */
   .actionsWrap {
     margin-inline: calc(-1 * (var(--ward-focus-ring) + var(--ward-focus-offset)));
     width: calc(100% + 2 * (calc(var(--ward-focus-ring) + var(--ward-focus-offset))));
+    overflow: visible;
   }
 
   .actions {
