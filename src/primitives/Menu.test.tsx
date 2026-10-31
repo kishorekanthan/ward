@@ -4,7 +4,6 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { contrast } from "../../scripts/contrast.mjs";
-import { mediaSplit } from "../test-css";
 import { stubLayout, unstubLayout } from "../test-layout";
 import { findEntries, Menu, MenuButton, type MenuEntry, type MenuItem } from "./Menu";
 
@@ -489,10 +488,7 @@ describe("Current item", () => {
     expect(screen.getByRole("menuitem", { name: "Demo" }).lastElementChild?.tagName).toBe("svg");
     const classes = screen.getAllByRole("menuitem").map((item) => item.className);
     expect(classes.every((each) => each === classes[0] && !each.includes(" "))).toBe(true);
-    // The phone block's one absolute box is the trigger's tap area, never a row's check.
-    const { inside, outside } = mediaSplit(join(HERE, "Menu.module.css"), "(max-width: 767.98px)");
-    expect(outside).not.toMatch(/\.marked|position: absolute/);
-    expect(inside.match(/\.[\w:]+(?=\s*\{[^}]*position: absolute)/g)).toEqual([".trigger::after"]);
+    expect(menuCss).not.toMatch(/\.marked|position: absolute/);
   });
 
   it("fills the current row with sageTint, kept under the pointer, while other rows hover in accentTint", () => {

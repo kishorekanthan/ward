@@ -139,12 +139,16 @@
     flex-wrap: wrap;
   }
 
-  /* A header link takes the same 44px tap as a Btn beside it. */
-  :where(.action > a) {
+  /* Each header action, More actions too, takes a 44px tap and keeps its drawn size; it never clips the tap, whatever a consumer sets. */
+  :where(.actions :is(button, a)) {
     position: relative;
   }
 
-  .action > a::after {
+  .actions :is(button, a) {
+    overflow: visible;
+  }
+
+  .actions :is(button, a)::after {
     content: "";
     position: absolute;
     inset-block: min(0%, calc(50% - var(--ward-height-touch) / 2));

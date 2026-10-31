@@ -130,22 +130,19 @@ a.tab {
   background: var(--ward-color-accentTint);
 }
 
-/* On a phone a tab takes a 44px tap centred on it, and keeps its drawn size; zero specificity keeps a consumer's own position. */
+/* On a phone a tab, More too, takes a 44px tap centred on it and keeps its drawn size; zero specificity keeps a consumer's own position. */
 @media (max-width: 767.98px) {
-  :where(.tab) {
+  :where(.tab, .strip .more) {
     position: relative;
   }
 
-  .tab::after {
+  /* The tap sits over the panel just below the strip. */
+  .tab::after,
+  .strip .more::after {
     content: "";
     position: absolute;
     inset-block: min(0%, calc(50% - var(--ward-height-touch) / 2));
     inset-inline: min(0%, calc(50% - var(--ward-height-touch) / 2));
-  }
-
-  /* A tab's tap, More's too, sits over the panel just below the strip. */
-  .tab::after,
-  .strip .more::after {
     z-index: 1;
   }
 }

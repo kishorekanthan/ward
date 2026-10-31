@@ -6,46 +6,38 @@ import { mediaSplit, ruleBodyIn } from "../test-css";
 const here = dirname(fileURLToPath(import.meta.url));
 const PHONE = "(max-width: 767.98px)";
 const HALF_TAP = "min(0%, calc(50% - var(--ward-height-touch) / 2))";
-const CONTROLS = [
-  { file: "Btn.module.css", selector: ".btn" },
-  { file: "Tabs.module.css", selector: ".tab" },
-  { file: "Menu.module.css", selector: ".trigger" },
-  { file: "PageHeader.module.css", selector: ".action > a" },
-];
+const TAP = `content: "";\nposition: absolute;\ninset-block: ${HALF_TAP};\ninset-inline: ${HALF_TAP}`;
+const css = (file: string) => mediaSplit(join(here, file), PHONE);
 
-// A thumb on a phone gets 44px each way around the control's centre; a box taller or wider keeps its own edge.
+// A thumb on a phone gets 44px each way around a tab, a header action or a header button; a bigger box keeps its own edge.
 describe("phone tap area", () => {
-  for (const { file, selector } of CONTROLS) {
-    it(`${selector} in ${file} grows its tap to 44px on a phone, and only there`, () => {
-      const { inside, outside } = mediaSplit(join(here, file), PHONE);
-      expect(ruleBodyIn(inside, `:where(${selector})`)).toBe("position: relative");
-      expect(ruleBodyIn(inside, `${selector}::after`)).toBe(
-        `content: "";\nposition: absolute;\ninset-block: ${HALF_TAP};\ninset-inline: ${HALF_TAP}`,
-      );
-      expect(outside).not.toContain(`${selector}::after`);
-      expect(outside).not.toContain(`:where(${selector})`);
-    });
-  }
-});
+  it("gives a tab and More a tap over the panel below the strip, on a phone only", () => {
+    const { inside, outside } = css("Tabs.module.css");
+    expect(ruleBodyIn(inside, ":where(.tab, .strip .more)")).toBe("position: relative");
+    expect(ruleBodyIn(inside, ".tab::after,\n  .strip .more::after")).toBe(TAP + ";\nz-index: 1");
+    expect(outside).not.toMatch(/::after|z-index/);
+  });
 
-// The panel under a tab strip is often positioned, so a tab's tap, More's too, is lifted over it.
-it("lifts each tab's tap, and More's, over the panel below the strip", () => {
-  const { inside, outside } = mediaSplit(join(here, "Tabs.module.css"), PHONE);
-  expect(ruleBodyIn(inside, ".tab::after,\n  .strip .more::after")).toBe("z-index: 1");
-  expect(outside).not.toContain("z-index");
-});
+  it("gives each header action a whole tap that no consumer clip cuts, on a phone only", () => {
+    const { inside, outside } = css("PageHeader.module.css");
+    expect(ruleBodyIn(inside, ":where(.actions :is(button, a))")).toBe("position: relative");
+    expect(ruleBodyIn(inside, ".actions :is(button, a)")).toBe("overflow: visible");
+    expect(ruleBodyIn(inside, ".actions :is(button, a)::after")).toBe(TAP);
+    expect(ruleBodyIn(inside, ".actionsWrap")).toContain("overflow: visible");
+    expect(outside).toMatch(/\.actionsWrap \{[^}]*overflow: hidden/);
+    expect(outside).not.toContain("::after");
+  });
 
-// Actions that do not fit wait in More, so on a phone the wrap no longer clips the buttons' taps; wider, it still clips.
-it("lets the header actions' taps out of their wrap on a phone only", () => {
-  const { inside, outside } = mediaSplit(join(here, "PageHeader.module.css"), PHONE);
-  expect(ruleBodyIn(inside, ".actionsWrap")).toContain("overflow: visible");
-  expect(outside).toMatch(/\.actionsWrap \{[^}]*overflow: hidden/);
-});
+  it("gives the header's Menu and action buttons a whole tap, on a phone only", () => {
+    const { inside, outside } = css("../layout/AppShell.module.css");
+    expect(ruleBodyIn(inside, ":where(.sidebarToggle, .headerAction) :is(button, a)")).toBe("position: relative");
+    expect(ruleBodyIn(inside, ".sidebarToggle :is(button, a),\n  .headerAction :is(button, a)")).toBe("overflow: visible");
+    expect(ruleBodyIn(inside, ".sidebarToggle :is(button, a)::after,\n  .headerAction :is(button, a)::after")).toBe(TAP);
+    expect(outside).not.toMatch(/(sidebarToggle|headerAction)[^{]*::after/);
+  });
 
-describe("mediaSplit", () => {
-  it("cuts each block for the query whole, nested braces and all, and leaves other queries outside", () => {
-    const { inside, outside } = mediaSplit(join(here, "Btn.module.css"), "(max-width: 1px)");
-    expect(inside).toBe("");
-    expect(outside).toContain(`@media ${PHONE} {`);
+  it("leaves a plain Btn and a menu trigger as drawn: their taps come from the strip or header that holds them", () => {
+    expect(css("Btn.module.css").inside).toBe("");
+    expect(css("Menu.module.css").inside).toBe("");
   });
 });
