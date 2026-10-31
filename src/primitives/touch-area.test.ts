@@ -10,6 +10,7 @@ const CONTROLS = [
   { file: "Btn.module.css", selector: ".btn" },
   { file: "Tabs.module.css", selector: ".tab" },
   { file: "Menu.module.css", selector: ".trigger" },
+  { file: "PageHeader.module.css", selector: ".action > a" },
 ];
 
 // A thumb on a phone gets 44px each way around the control's centre; a box taller or wider keeps its own edge.
@@ -25,6 +26,20 @@ describe("phone tap area", () => {
       expect(outside).not.toContain(`:where(${selector})`);
     });
   }
+});
+
+// The panel under a tab strip is often positioned, so a tab's tap, More's too, is lifted over it.
+it("lifts each tab's tap, and More's, over the panel below the strip", () => {
+  const { inside, outside } = mediaSplit(join(here, "Tabs.module.css"), PHONE);
+  expect(ruleBodyIn(inside, ".tab::after,\n  .strip .more::after")).toBe("z-index: 1");
+  expect(outside).not.toContain("z-index");
+});
+
+// Actions that do not fit wait in More, so on a phone the wrap no longer clips the buttons' taps; wider, it still clips.
+it("lets the header actions' taps out of their wrap on a phone only", () => {
+  const { inside, outside } = mediaSplit(join(here, "PageHeader.module.css"), PHONE);
+  expect(ruleBodyIn(inside, ".actionsWrap")).toContain("overflow: visible");
+  expect(outside).toMatch(/\.actionsWrap \{[^}]*overflow: hidden/);
 });
 
 describe("mediaSplit", () => {

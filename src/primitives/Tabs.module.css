@@ -142,4 +142,10 @@ a.tab {
     inset-block: min(0%, calc(50% - var(--ward-height-touch) / 2));
     inset-inline: min(0%, calc(50% - var(--ward-height-touch) / 2));
   }
+
+  /* A tab's tap, More's too, sits over the panel just below the strip. */
+  .tab::after,
+  .strip .more::after {
+    z-index: 1;
+  }
 }
