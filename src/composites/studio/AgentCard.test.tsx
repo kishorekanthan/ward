@@ -23,6 +23,14 @@ describe("AgentCard", () => {
     expect(screen.getByRole("link", { name: "Extractor" }).getAttribute("aria-current")).toBe("true");
   });
 
+  it("draws the colour mark only for an agent with a stream colour", () => {
+    const { container, rerender } = render(<AgentCard agent={agent} href="#agent" />);
+    expect(container.querySelectorAll("h3 > span[aria-hidden]")).toHaveLength(1);
+    rerender(<AgentCard agent={{ ...agent, streamStep: null }} href="#agent" />);
+    expect(container.querySelectorAll("h3 > span[aria-hidden]")).toHaveLength(0);
+    expect(screen.getByRole("link", { name: "Extractor" })).toBeDefined();
+  });
+
   it("shows the supplied latest step without requiring a connection override", () => {
     render(<AgentCard agent={agent} href="#agent" lastEvent={{ label: "validate rows", at: "2026-09-06T10:01:00Z" }} />);
     expect(screen.getByRole("timer").textContent).toContain("validate rows");
