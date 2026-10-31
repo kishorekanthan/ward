@@ -4337,7 +4337,7 @@ function Rp({ agent: e, href: t, selected: a, connection: r = "live", lastEvent:
       "data-ward-rowlink": !0,
       children: [
         /* @__PURE__ */ i("h3", { className: ie.head, children: [
-          /* @__PURE__ */ n("span", { className: ie.mark, "aria-hidden": "true" }),
+          e.streamStep === null ? null : /* @__PURE__ */ n("span", { className: ie.mark, "aria-hidden": "true" }),
           /* @__PURE__ */ n("a", { className: `${ie.name} ward-rowlink ward-target`, href: T(t), "aria-current": d, children: e.name })
         ] }),
         /* @__PURE__ */ n(kp, { description: e.description }),
