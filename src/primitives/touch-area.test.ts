@@ -36,8 +36,14 @@ describe("phone tap area", () => {
     expect(outside).not.toMatch(/(sidebarToggle|headerAction)[^{]*::after/);
   });
 
-  it("leaves a plain Btn and a menu trigger as drawn: their taps come from the strip or header that holds them", () => {
+  it("leaves a plain Btn as drawn: its tap comes from the strip or header that holds it", () => {
     expect(css("Btn.module.css").inside).toBe("");
-    expect(css("Menu.module.css").inside).toBe("");
+  });
+
+  it("draws every menu row 44px tall on a phone, beating large, and keeps rows flush with no tap of their own", () => {
+    const { inside, outside } = css("Menu.module.css");
+    expect(inside.replace(/\/\*[\s\S]*?\*\//g, "").trim()).toBe(".panel .item {\n    min-height: var(--ward-height-touch);\n  }");
+    expect(ruleBodyIn(outside, ".item")).toContain("min-height: calc(var(--ward-height-target) + var(--ward-space-1))");
+    expect(ruleBodyIn(outside, ".large .item")).toBe("min-height: calc(var(--ward-height-target) + var(--ward-space-3))");
   });
 });

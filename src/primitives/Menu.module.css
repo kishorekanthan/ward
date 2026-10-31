@@ -232,3 +232,10 @@
   padding: var(--ward-space-2);
   font: var(--ward-type-meta);
 }
+
+/* On a phone every row is drawn 44px tall and rows stay flush, so a thumb opens the row it lands on. */
+@media (max-width: 767.98px) {
+  .panel .item {
+    min-height: var(--ward-height-touch);
+  }
+}
