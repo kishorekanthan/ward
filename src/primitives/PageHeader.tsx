@@ -144,15 +144,26 @@ function columnGap(row: HTMLDivElement): number {
 }
 
 // At phone width the row is a column: the actions sit under the heading and get the whole width (#190).
-function headingShare(row: HTMLDivElement, heading: HTMLDivElement): number {
-  return getComputedStyle(row).flexDirection === "column" ? 0 : heading.offsetWidth + columnGap(row);
+function isStacked(row: HTMLDivElement): boolean {
+  return getComputedStyle(row).flexDirection === "column";
 }
 
-function needsCollapse(row: HTMLDivElement, heading: HTMLDivElement | null, box: HTMLDivElement | null, measure: HTMLDivElement | null, actionCount: number): boolean {
+function headingShare(row: HTMLDivElement, heading: HTMLDivElement): number {
+  return isStacked(row) ? 0 : heading.offsetWidth + columnGap(row);
+}
+
+// Stacked, the strip no longer clips, and the ···'s 44 px tap area overflows its box, so the measure alone decides (#345).
+function stripClips(row: HTMLDivElement, box: HTMLDivElement): boolean {
+  return !isStacked(row) && box.scrollWidth > box.clientWidth + 1;
+}
+
+// Null while the row has no layout: a fit then decides nothing (#345).
+function needsCollapse(row: HTMLDivElement, heading: HTMLDivElement | null, box: HTMLDivElement | null, measure: HTMLDivElement | null, actionCount: number): boolean | null {
   if (actionCount === 0 || missingMeasure(heading, box, measure)) return false;
+  if (row.clientWidth === 0) return null;
   const [readyHeading, readyBox, readyMeasure] = [heading, box, measure] as [HTMLDivElement, HTMLDivElement, HTMLDivElement];
   const available = Math.max(0, row.clientWidth - headingShare(row, readyHeading));
-  return readyMeasure.offsetWidth > available || readyBox.scrollWidth > readyBox.clientWidth + 1;
+  return readyMeasure.offsetWidth > available || stripClips(row, readyBox);
 }
 
 function canObserve(row: HTMLDivElement | null): row is HTMLDivElement {
@@ -177,7 +188,10 @@ function useActionOverflow(actions: ReactNode[], keepShown: boolean) {
   useEffect(() => {
     const row = rowRef.current;
     if (!canObserve(row)) return;
-    const fit = () => setCollapsed(needsCollapse(row, headingRef.current, actionsRef.current, measureRef.current, actions.length));
+    const fit = () => {
+      const next = needsCollapse(row, headingRef.current, actionsRef.current, measureRef.current, actions.length);
+      if (next !== null) setCollapsed(next);
+    };
     const ro = new ResizeObserver(fit);
     ro.observe(row);
     // A web font that loads after the first fit changes the strip's width, so that refits too.

@@ -197,7 +197,7 @@ describe("PageHeader deciding to collapse with more items", () => {
 });
 
 // Like a real ResizeObserver, resize() reports only to observers watching that element.
-function watchedLayout(headingWidth = 0): { measureWidth: { value: number }; resize: (target: Element) => void } {
+function watchedLayout(headingWidth = 0): { measureWidth: { value: number }; rowWidth: { value: number }; resize: (target: Element) => void } {
   const observers: Array<{ callback: () => void; targets: Element[] }> = [];
   vi.stubGlobal("ResizeObserver", class {
     targets: Element[] = [];
@@ -207,13 +207,18 @@ function watchedLayout(headingWidth = 0): { measureWidth: { value: number }; res
     unobserve() {}
   });
   const measureWidth = { value: 400 };
-  vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockReturnValue(300);
+  const rowWidth = { value: 300 };
+  vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockImplementation(() => rowWidth.value);
   vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockImplementation(function (this: HTMLElement) {
     if (this.querySelector(":scope > div > h1")) return headingWidth;
     return this.getAttribute("aria-hidden") === "true" ? measureWidth.value : 0;
   });
   const resize = (target: Element) => observers.filter((o) => o.targets.includes(target)).forEach((o) => act(o.callback));
-  return { measureWidth, resize };
+  return { measureWidth, rowWidth, resize };
+}
+
+function headerRow(container: HTMLElement): HTMLElement {
+  return container.querySelector("h1")?.closest("[data-density] > div:nth-child(2)") as HTMLElement;
 }
 
 describe("PageHeader measuring its row", () => {
@@ -238,7 +243,47 @@ describe("PageHeader measuring its row", () => {
     measureWidth.value = 150;
     const { container } = render(<PageHeader crumb={crumb} title="Data engineering" actions={twoActions} />);
     expect(screen.queryByRole("button", { name: "Configure" })).toBeNull();
-    const row = container.querySelector("h1")?.closest("[data-density] > div:nth-child(2)") as HTMLElement;
+    const row = headerRow(container);
+    row.style.flexDirection = "column";
+    resize(row);
+    expect(screen.getByRole("button", { name: "Configure" })).toBeTruthy();
+  });
+
+  // A full-page capture can fit while the row has no layout yet (#345).
+  it("leaves the actions as they were when the row has no width", () => {
+    const { measureWidth, rowWidth, resize } = watchedLayout();
+    measureWidth.value = 150;
+    const { container } = render(<PageHeader crumb={crumb} title="Data engineering" actions={twoActions} />);
+    const row = headerRow(container);
+    rowWidth.value = 0;
+    resize(row);
+    expect(screen.getByRole("button", { name: "Configure" })).toBeTruthy();
+    rowWidth.value = 300;
+    measureWidth.value = 400;
+    resize(row);
+    expect(screen.queryByRole("button", { name: "Configure" })).toBeNull();
+    rowWidth.value = 0;
+    measureWidth.value = 150;
+    resize(row);
+    expect(screen.queryByRole("button", { name: "Configure" })).toBeNull();
+  });
+
+  it("keeps the actions shown when the strip overflows by a rounding pixel", () => {
+    const { measureWidth } = watchedLayout();
+    measureWidth.value = 150;
+    vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockReturnValue(301);
+    render(<PageHeader crumb={crumb} title="Data engineering" actions={twoActions} />);
+    expect(screen.getByRole("button", { name: "Configure" })).toBeTruthy();
+  });
+
+  // Beside the heading the strip clips, so overflow folds; stacked, the ···'s 44 px tap area overflows its box but nothing clips (#345).
+  it("folds a clipped strip beside the heading, but unfolds once stacked actions fit", () => {
+    const { measureWidth, resize } = watchedLayout();
+    measureWidth.value = 150;
+    vi.spyOn(HTMLElement.prototype, "scrollWidth", "get").mockReturnValue(400);
+    const { container } = render(<PageHeader crumb={crumb} title="Data engineering" actions={twoActions} />);
+    expect(screen.queryByRole("button", { name: "Configure" })).toBeNull();
+    const row = headerRow(container);
     row.style.flexDirection = "column";
     resize(row);
     expect(screen.getByRole("button", { name: "Configure" })).toBeTruthy();
