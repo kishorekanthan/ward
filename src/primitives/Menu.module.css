@@ -233,9 +233,13 @@
   font: var(--ward-type-meta);
 }
 
-/* On a phone every row is drawn 44px tall and rows stay flush, so a thumb opens the row it lands on. */
+/* On a phone every row is drawn 44px tall and rows stay flush, so a thumb opens the row it lands on; the trigger is 44px tall too (#350). */
 @media (max-width: 767.98px) {
   .panel .item {
     min-height: var(--ward-height-touch);
+  }
+
+  .trigger {
+    min-height: var(--ward-touch-box, var(--ward-height-touch));
   }
 }

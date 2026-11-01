@@ -136,6 +136,11 @@ a.tab {
     position: relative;
   }
 
+  /* The strip keeps its drawn height; each tab's tap is the one below. */
+  .strip {
+    --ward-touch-box: auto;
+  }
+
   /* The tap sits over the panel just below the strip. */
   .tab::after,
   .strip .more::after {

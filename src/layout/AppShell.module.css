@@ -468,6 +468,11 @@
     overflow: visible;
   }
 
+  .sidebarToggle,
+  .headerAction {
+    --ward-touch-box: auto;
+  }
+
   .sidebarToggle :is(button, a)::after,
   .headerAction :is(button, a)::after {
     content: "";

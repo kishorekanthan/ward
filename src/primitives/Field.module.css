@@ -182,3 +182,10 @@
   border-radius: var(--ward-radius-chip);
   box-shadow: none;
 }
+
+/* On a phone a plain, form or toolbar input is laid out 44px tall; text set in a sentence or a reply box keeps its line (#350). */
+@media (max-width: 767.98px) {
+  .field:where(:not([data-variant]), [data-variant="form"], [data-variant="toolbar"]) .control {
+    min-height: var(--ward-touch-box, var(--ward-height-touch));
+  }
+}

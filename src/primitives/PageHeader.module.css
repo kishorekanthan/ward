@@ -173,7 +173,9 @@
     overflow: visible;
   }
 
+  /* Header actions keep their drawn size and the tap above (#350). */
   .actions {
     justify-content: flex-start;
+    --ward-touch-box: auto;
   }
 }
