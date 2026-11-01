@@ -67,6 +67,7 @@ describe("phone tap area", () => {
     expect(ruleBodyIn(css("PageHeader.module.css").inside, ".actions")).toContain("--ward-touch-box: auto");
     expect(ruleBodyIn(css("../layout/AppShell.module.css").inside, ".sidebarToggle,\n  .headerAction")).toBe("--ward-touch-box: auto");
     expect(ruleBodyIn(css("Tabs.module.css").inside, ".strip")).toBe("--ward-touch-box: auto");
+    expect(ruleBodyIn(css("PeriodPicker.module.css").outside, ".row")).toContain("--ward-touch-box: auto");
     for (const file of ["PageHeader.module.css", "../layout/AppShell.module.css", "Tabs.module.css"]) expect(css(file).inside).not.toMatch(/min-(height|width): auto/);
   });
 
