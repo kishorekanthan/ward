@@ -136,6 +136,16 @@ a.tab {
     position: relative;
   }
 
+  /* A page tab sits half a tap below the strip's top, so its tap never rises into the row above (#350). */
+  .strip[data-level="page"] {
+    padding-block-start: calc((var(--ward-height-touch) - var(--ward-height-control)) / 2);
+  }
+
+  /* The strip keeps its drawn height; each tab's tap is the one below. */
+  .strip {
+    --ward-touch-box: auto;
+  }
+
   /* The tap sits over the panel just below the strip. */
   .tab::after,
   .strip .more::after {

@@ -76,3 +76,15 @@
   color: var(--ward-color-muted);
   white-space: normal;
 }
+
+/* On a phone every button is laid out 44px tall, an icon button 44px wide; the box grows, so no tap reaches a neighbour (#350).
+   A row with no room sets --ward-touch-box: auto and keeps its drawn size. */
+@media (max-width: 767.98px) {
+  .btn {
+    min-height: var(--ward-touch-box, var(--ward-height-touch));
+  }
+
+  .overflow {
+    min-width: var(--ward-touch-box, var(--ward-height-touch));
+  }
+}

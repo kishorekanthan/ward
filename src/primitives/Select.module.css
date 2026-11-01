@@ -146,3 +146,15 @@
   font: var(--ward-type-meta);
   color: var(--ward-color-muted);
 }
+
+/* On a phone the trigger, the find box and each option are laid out 44px tall; options stay flush (#350). */
+@media (max-width: 767.98px) {
+  .trigger {
+    min-height: var(--ward-touch-box, var(--ward-height-touch));
+  }
+
+  .find,
+  .option {
+    min-height: var(--ward-height-touch);
+  }
+}

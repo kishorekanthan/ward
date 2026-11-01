@@ -1,9 +1,11 @@
 /* Provenance: Trellis Overview redesign canvas, board "Overview", the Period, From and To fields beside the page title. */
+/* The trigger keeps its drawn size on a phone beside a segmented switch; its tap is the one below (#350). */
 .row {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
   gap: var(--ward-space-2);
+  --ward-touch-box: auto;
 }
 
 /* A 44px tap around the trigger; the box it draws stays as it was (#336). */
