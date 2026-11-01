@@ -36,6 +36,9 @@ describe("phone tap area", () => {
     expect(ruleBodyIn(inside, ".sidebarToggle :is(button, a),\n  .headerAction :is(button, a)")).toBe("overflow: visible");
     expect(ruleBodyIn(inside, ".sidebarToggle :is(button, a)::after,\n  .headerAction :is(button, a)::after")).toBe(TAP);
     expect(outside).not.toMatch(/(sidebarToggle|headerAction)[^{]*::after/);
+    // Above a tab's z-index 1 tap, below the drawer's overlay at 50.
+    expect(ruleBodyIn(inside, ".headerRow")).toBe("position: relative;\nz-index: 2");
+    expect(outside).not.toMatch(/\.headerRow \{[^}]*z-index/);
   });
 
   // A real 44px box, not an invisible tap: two stacked rows can never take each other's taps (#350).

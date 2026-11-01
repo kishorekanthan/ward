@@ -473,6 +473,12 @@
     --ward-touch-box: auto;
   }
 
+  /* The header row owns its height: a tab's tap from the strip below never rises into it (#350). */
+  .headerRow {
+    position: relative;
+    z-index: 2;
+  }
+
   .sidebarToggle :is(button, a)::after,
   .headerAction :is(button, a)::after {
     content: "";
