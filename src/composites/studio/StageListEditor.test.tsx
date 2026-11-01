@@ -80,4 +80,38 @@ describe("StageListEditor", () => {
     expect(field.getAttribute("aria-invalid")).toBe("true");
     expect(screen.getByText("apply_config is not a known stage")).toBeTruthy();
   });
+
+  it("shows each catalogue name through stageLabel and stores the key", () => {
+    const onChange = vi.fn();
+    const label = (name: string) => ({ "sql-plan": "SQL plan", triage: "Triage" })[name] ?? "?";
+    const rows: StageListRow[] = [{ name: "triage", kind: "entry" }, { name: "sql-plan", kind: "agent" }];
+    render(<StageListEditor stages={rows} onChange={onChange} catalogue={["triage", "sql-plan"]} stageLabel={label} />);
+    const second = screen.getByRole("button", { name: "Stage 2 name" });
+    expect(optionLabels(second)).toEqual(["Triage", "SQL plan"]);
+    expect(second.textContent).toBe("SQL plan");
+    chooseOption(second, "Triage");
+    expect(onChange).toHaveBeenLastCalledWith([{ name: "triage", kind: "entry" }, { name: "triage", kind: "agent" }]);
+    fireEvent.click(screen.getByRole("button", { name: "Move SQL plan up" }));
+    expect(screen.getByRole("status").textContent).toBe("SQL plan moved to position 1 of 2.");
+  });
+
+  it("marks a name outside the catalogue through stageLabel, and an empty one as unnamed", () => {
+    const label = (name: string) => name.replace("_", " ").toUpperCase();
+    const rows: StageListRow[] = [{ name: "apply_config", kind: "agent" }, { name: "", kind: "agent" }];
+    render(<StageListEditor stages={rows} onChange={vi.fn()} catalogue={["triage"]} stageLabel={label} />);
+    expect(optionLabels(screen.getByRole("button", { name: "Stage 1 name" }))).toEqual(["APPLY CONFIG · not a known stage", "TRIAGE"]);
+    expect(screen.getByText("APPLY CONFIG is not a known stage")).toBeTruthy();
+    expect(optionLabels(screen.getByRole("button", { name: "Stage 2 name" }))).toEqual(["(unnamed) · not a known stage", "TRIAGE"]);
+    expect(screen.getByText("This stage is not a known stage")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Move stage 2 up" })).toBeTruthy();
+  });
+
+  it("offers the kinds in sentence case and stores the kind key", () => {
+    const onChange = vi.fn();
+    render(<StageListEditor stages={[{ name: "Review", kind: "agent" }]} onChange={onChange} />);
+    const kind = screen.getByRole("button", { name: "Stage 1 kind" });
+    expect(optionLabels(kind)).toEqual(["Entry", "Agent", "Review", "Done"]);
+    chooseOption(kind, "Review");
+    expect(onChange).toHaveBeenLastCalledWith([{ name: "Review", kind: "gate" }]);
+  });
 });
