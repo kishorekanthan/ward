@@ -15,9 +15,15 @@ const STAGES: StageListRow[] = [
   { name: "Done", kind: "terminal" },
 ];
 
-function Editable({ initial, catalogue }: { initial: StageListRow[]; catalogue?: string[] }) {
+function Editable({ initial, catalogue, stageLabel }: { initial: StageListRow[]; catalogue?: string[]; stageLabel?: (name: string) => string }) {
   const [stages, setStages] = useState(initial);
-  return <StageListEditor stages={stages} onChange={setStages} catalogue={catalogue} />;
+  return <StageListEditor stages={stages} onChange={setStages} catalogue={catalogue} stageLabel={stageLabel} />;
+}
+
+// The consumer's own naming: "pr-gate" reads "PR gate".
+function asWords(name: string): string {
+  const words = name.split("-").map((word) => (word === "qa" || word === "pr" ? word.toUpperCase() : word)).join(" ");
+  return words.charAt(0).toUpperCase() + words.slice(1);
 }
 
 // A code-host target's catalogue: only these names may be picked.
@@ -36,3 +42,5 @@ export const SingleStage = { render: () => <Editable initial={[STAGES[0]]} /> };
 export const FromCatalogue = { render: () => <Editable initial={CODE_LANE} catalogue={CODE_STAGES} /> };
 
 export const OutsideCatalogue = { render: () => <Editable initial={[CODE_LANE[0], { name: "apply_config", kind: "agent" }]} catalogue={CODE_STAGES} /> };
+
+export const NamedCatalogue = { render: () => <Editable initial={CODE_LANE} catalogue={CODE_STAGES} stageLabel={asWords} /> };
