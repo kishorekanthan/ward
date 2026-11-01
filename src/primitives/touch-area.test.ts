@@ -18,6 +18,8 @@ describe("phone tap area", () => {
     expect(ruleBodyIn(inside, ":where(.tab, .strip .more)")).toBe("position: relative");
     expect(ruleBodyIn(inside, ".tab::after,\n  .strip .more::after")).toBe(TAP + ";\nz-index: 1");
     expect(outside).not.toMatch(/::after|z-index/);
+    // A page tab sits half a tap below the strip's top, so its tap meets the header's tap above and never covers it (#350).
+    expect(ruleBodyIn(inside, '.strip[data-level="page"]')).toBe("padding-block-start: calc((var(--ward-height-touch) - var(--ward-height-control)) / 2)");
   });
 
   it("gives each header action a whole tap that no consumer clip cuts, on a phone only", () => {
@@ -36,9 +38,6 @@ describe("phone tap area", () => {
     expect(ruleBodyIn(inside, ".sidebarToggle :is(button, a),\n  .headerAction :is(button, a)")).toBe("overflow: visible");
     expect(ruleBodyIn(inside, ".sidebarToggle :is(button, a)::after,\n  .headerAction :is(button, a)::after")).toBe(TAP);
     expect(outside).not.toMatch(/(sidebarToggle|headerAction)[^{]*::after/);
-    // Above a tab's z-index 1 tap, below the drawer's overlay at 50.
-    expect(ruleBodyIn(inside, ".headerRow")).toBe("position: relative;\nz-index: 2");
-    expect(outside).not.toMatch(/\.headerRow \{[^}]*z-index/);
   });
 
   // A real 44px box, not an invisible tap: two stacked rows can never take each other's taps (#350).
