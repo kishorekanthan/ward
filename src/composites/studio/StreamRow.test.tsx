@@ -54,7 +54,7 @@ describe("StreamRow", () => {
     expect(container.textContent).toContain("not set");
     expect(container.textContent).not.toContain("paused");
     const cells = Array.from(container.querySelectorAll("td"), (cell) => cell.textContent);
-    expect([cells[2], cells[4]]).toEqual(["None", "None"]);
+    expect([cells[2], cells[4]]).toEqual(["Unknown", "Unknown"]);
   });
 
   it("marks a draft stream and says to define its workflow inside the row's one link", () => {

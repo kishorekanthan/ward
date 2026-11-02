@@ -149,9 +149,9 @@ function compactRow({ stream, href, presentation }: CompactStreamRowProps) {
     <tr className={`${rowClass} ward-streamrow`} onClick={forwardRaisedClick} data-ward-rowlink data-draft={stream.draft === true} style={{ "--stream": streamColour(stream.streamStep, "chip") } as CSSProperties}>
       {identityCell(stream, href)}
       {stagesCell(stream)}
-      {statCell(agentsTotal(stream.agents), stream.agents === undefined ? undefined : agentsLine(stream.agents), "None")}
+      {statCell(agentsTotal(stream.agents), stream.agents === undefined ? undefined : agentsLine(stream.agents), "Unknown")}
       {policyCell(stream.policy)}
-      {statCell(stream.inFlight === undefined ? undefined : String(stream.inFlight), stream.p50 === undefined ? undefined : `P50 ${stream.p50}`, "None", stream.inFlightHint)}
+      {statCell(stream.inFlight === undefined ? undefined : String(stream.inFlight), stream.p50 === undefined ? undefined : `P50 ${stream.p50}`, "Unknown", stream.inFlightHint)}
     </tr>
   );
 }

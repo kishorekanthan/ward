@@ -136,9 +136,9 @@ describe("DryRunRail", () => {
     expect(screen.getByText(NOTE)).not.toBeNull();
   });
 
-  it("reads None for a cost and turns the run did not report", () => {
+  it("reads Unknown for a cost and turns the run did not report, never zero", () => {
     render(<DryRunRail run={{ ...run, cost: undefined, turns: undefined }} checklist={complete} publishNote={NOTE} onPublish={() => {}} />);
-    expect(screen.getAllByText("None").map((value) => value.nextElementSibling?.textContent)).toEqual(["Cost", "Turns used"]);
+    expect(screen.getAllByText("Unknown").map((value) => value.nextElementSibling?.textContent)).toEqual(["Cost", "Turns used"]);
   });
 });
 
