@@ -69,6 +69,11 @@ describe("StageColumn", () => {
     expect(screen.queryByRole("button", { name: "+ Add agent" })).toBeNull();
   });
 
+  it("says a review stage with no reviewer moves on by a person, with no full stop", () => {
+    render(<StageColumn stage={{ index: 3, name: "Review", kind: "gate", count: 0, reviewers: [] }} presentation={{ mode: "workflow" }} />);
+    expect(screen.getByText("A person moves items on")).toBeDefined();
+  });
+
   it("passes the workflow stage index and preserves supplied cards", () => {
     const onMount = vi.fn();
     render(
@@ -141,16 +146,16 @@ describe("StageColumn", () => {
 
   it("reads an absent terminal week count as unknown, not zero", () => {
     const { container, rerender } = render(<StageColumn stage={{ index: 5, name: "Loaded", kind: "terminal" }} presentation={{ mode: "workflow" }} />);
-    expect(screen.getByText("— this week")).toBeDefined();
-    expect(screen.getByText("—").nextElementSibling?.textContent).toBe("closed this week");
+    expect(screen.getByText("Unknown this week")).toBeDefined();
+    expect(screen.getByText("Unknown").nextElementSibling?.textContent).toBe("closed this week");
     rerender(<StageColumn stage={{ index: 5, name: "Loaded", kind: "terminal", closedThisWeek: 0 }} presentation={{ mode: "workflow" }} />);
     expect(screen.getByText("0 this week")).toBeDefined();
-    expect(container.textContent).not.toContain("—");
+    expect(container.textContent).not.toContain("Unknown");
   });
 
   it("reads an absent closed-this-week cell as unknown in the standard column", () => {
     render(<StageColumn stage={{ index: 4, name: "Done", kind: "terminal", count: 12 }} />);
-    expect(screen.getByText("—").nextElementSibling?.textContent).toBe("Closed this week");
+    expect(screen.getByText("Unknown").nextElementSibling?.textContent).toBe("Closed this week");
   });
 });
 

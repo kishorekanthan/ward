@@ -74,14 +74,14 @@ function ReviewTag({ stage }: { stage: { name: string; gate?: boolean } }) {
 }
 
 const DEFAULT_POLICIES: PolicyOption[] = [
-  { value: "advance", label: "Move on when all checks pass", consequence: "No one needs to approve." },
-  { value: "review", label: "Hold every item for review", consequence: "Every item waits for a reviewer." },
-  { value: "block", label: "Stop on any finding", consequence: "A finding holds the item until a person clears it." },
+  { value: "advance", label: "Move on when all checks pass", consequence: "No one needs to approve" },
+  { value: "review", label: "Hold every item for review", consequence: "Every item waits for a reviewer" },
+  { value: "block", label: "Stop on any finding", consequence: "A finding holds the item until a person clears it" },
 ];
 
-const FOOTER_NOTE = "Nothing runs until you publish.";
+const FOOTER_NOTE = "Nothing runs until you publish";
 
-const BLOCKED = "Add a name and a key.";
+const BLOCKED = "Add a name and a key";
 
 const REORDER_NOTE = "At least 2 stages";
 
@@ -191,12 +191,12 @@ function CompactNewStreamModal(props: NewStreamModalProps) {
 }
 
 const WEB_POLICIES = [
-  { value: "relay", label: "Through Trellis (safe default)", consequence: "Agents never write to Foundry or Jira directly." },
-  { value: "direct", label: "Directly, each agent approved", consequence: "A second admin approves each agent." },
-  { value: "readonly", label: "Read only", consequence: "Agents can read and report only." },
+  { value: "relay", label: "Through Trellis (safe default)", consequence: "Agents never write to Foundry or Jira directly" },
+  { value: "direct", label: "Directly, each agent approved", consequence: "A second admin approves each agent" },
+  { value: "readonly", label: "Read only", consequence: "Agents can read and report only" },
 ];
 
-const WEB_REASON = "Add a name, key, owner and two stages.";
+const WEB_REASON = "Add a name, key, owner and two stages";
 
 function webDraft(name: string, key: string, owner: string, colourStep: number | null, writePolicyMode: string, stages: WebStreamStageDraft[]): WebNewStreamDraft {
   const policy = WEB_POLICIES.find((option) => option.value === writePolicyMode)?.value ?? "relay";

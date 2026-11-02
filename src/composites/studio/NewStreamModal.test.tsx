@@ -68,7 +68,7 @@ describe("NewStreamModal", () => {
     fireEvent.change(screen.getByLabelText("Key"), { target: { value: "KPI" } });
     fireEvent.change(screen.getByLabelText("Stage 1 name"), { target: { value: "Triage" } });
     expect(create().disabled).toBe(true);
-    expect(document.getElementById(create().getAttribute("aria-describedby") as string)?.textContent).toBe("Add a name, key, owner and two stages.");
+    expect(document.getElementById(create().getAttribute("aria-describedby") as string)?.textContent).toBe("Add a name, key, owner and two stages");
     fireEvent.change(screen.getByLabelText("Stage 2 name"), { target: { value: "Map fields" } });
     expect(container.ownerDocument.querySelector("[data-colour-status]")).toBeNull();
     expect(create().disabled).toBe(false);
@@ -81,6 +81,11 @@ describe("NewStreamModal", () => {
       writePolicyMode: "relay",
       stages: [{ name: "Triage", kind: "entry" }, { name: "Map fields", kind: "agent" }],
     });
+  });
+
+  it("closes each one-line hint with no full stop", () => {
+    render(<NewStreamModal presentation="web" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} />);
+    for (const hint of ["Nothing runs until you publish", "Agents never write to Foundry or Jira directly", "A second admin approves each agent", "Agents can read and report only"]) expect(screen.getByText(hint)).toBeDefined();
   });
 
   it("renders consumer fields after Identity and before the stages", () => {
@@ -246,14 +251,14 @@ describe("NewStreamModal (spec)", () => {
     setup();
     const choice = screen.getByLabelText("Stop on any finding");
     const noteId = choice.getAttribute("aria-describedby") as string;
-    expect(document.getElementById(noteId)?.textContent).toBe("A finding holds the item until a person clears it.");
+    expect(document.getElementById(noteId)?.textContent).toBe("A finding holds the item until a person clears it");
   });
 
   it("refuses to create an unnamed, unkeyed stream and says what is missing", () => {
     const { onCreate } = setup();
     const btn = screen.getByRole("button", { name: "Create stream" }) as HTMLButtonElement;
     expect(btn.disabled).toBe(true);
-    expect(document.getElementById(btn.getAttribute("aria-describedby") as string)?.textContent).toBe("Add a name and a key.");
+    expect(document.getElementById(btn.getAttribute("aria-describedby") as string)?.textContent).toBe("Add a name and a key");
     fireEvent.click(btn);
     expect(onCreate).not.toHaveBeenCalled();
   });

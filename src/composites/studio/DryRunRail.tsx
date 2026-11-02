@@ -111,7 +111,7 @@ function FoundrySample(props: { sample?: FoundryDryRun["sample"] }): ReactElemen
 }
 
 function WardStats(props: { run: DryRun }): ReactElement {
-  const cells = [{ value: props.run.cost === undefined ? "—" : money(props.run.cost), label: "Cost" }, { value: props.run.turns ? ratio(props.run.turns[0], props.run.turns[1]) : "—", label: "Turns used" }];
+  const cells = [{ value: props.run.cost === undefined ? "None" : money(props.run.cost), label: "Cost" }, { value: props.run.turns ? ratio(props.run.turns[0], props.run.turns[1]) : "None", label: "Turns used" }];
   return <div className={s.sectionFlush}><StatStrip divided cells={cells} /></div>;
 }
 

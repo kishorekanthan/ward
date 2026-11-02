@@ -57,7 +57,7 @@ const KIND_LABEL: Record<StageKind, string> = { entry: "Entry", agent: "Agent", 
 
 // An absent week count is unknown, never a quiet week.
 function weekCount(closed: number | undefined, format: (n: number) => string = String): string {
-  return closed === undefined ? "—" : format(closed);
+  return closed === undefined ? "Unknown" : format(closed);
 }
 
 function percent(fraction: number): string {
@@ -158,7 +158,7 @@ function WorkflowGatePanel({ stage }: { stage: StageColumnSummary }) {
   return (
     <div className={s.workflowGate} data-panel="gate">
       <p className={s.gateNote}>
-        {reviewers.length === 0 ? "A person moves items on." : "Needs approval from:"}
+        {reviewers.length === 0 ? "A person moves items on" : "Needs approval from:"}
       </p>
       {reviewers.length === 0 ? null : <ReviewerList reviewers={reviewers} />}
       {stage.gateShare === undefined ? null : (

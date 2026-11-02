@@ -57,7 +57,7 @@ describe("RoleMatrixRow compact", () => {
 });
 
 describe("RoleMatrixRow web presentation", () => {
-  it("renders its own labelled tree with one item per row and dash-filled AD columns in the detail", () => {
+  it("renders its own labelled tree with one item per row and blank AD columns in the detail", () => {
     const { container } = render(
       <RoleMatrixRow
         presentation="web"
@@ -72,9 +72,9 @@ describe("RoleMatrixRow web presentation", () => {
     expect(container.querySelector("[data-ward-rolematrix] > [aria-hidden='true']")?.textContent).toBe("Who has which roleAD groupPeopleRequested via");
     expect(attrs(container, "[role='treeitem']", "aria-level")).toEqual(["1", "2", "3"]);
     expect(attrs(container, "[role='treeitem']", "aria-expanded")).toEqual(["true", "false", null]);
-    expect(texts(container, ".ward-rolecols > .ward-cellmeta")).toEqual(["—", "", "AD-TRELLIS-PLATFORM-ADMIN", "SNOW-4471", "—", ""]);
+    expect(texts(container, ".ward-rolecols > .ward-cellmeta")).toEqual(["", "", "AD-TRELLIS-PLATFORM-ADMIN", "SNOW-4471", "", ""]);
     expect(texts(container, ".ward-rolecols > .ward-rolepeople")).toEqual(["6", "", ""]);
-    expect(attrs(container, ".ward-rolecols > .ward-truncate", "title")).toEqual(["—", "6", "", "AD-TRELLIS-PLATFORM-ADMIN", "", "SNOW-4471", "—", "", ""]);
+    expect(attrs(container, ".ward-rolecols > .ward-truncate", "title")).toEqual(["", "6", "", "AD-TRELLIS-PLATFORM-ADMIN", "", "SNOW-4471", "", "", ""]);
     expect(texts(container, ".ward-envrow > span:first-child")).toEqual(["Global scope", "Platform Admin", "Priya Nayar"]);
     expect(container.querySelector(".ward-treerow--inherited")?.textContent).toContain("Priya Nayar");
   });

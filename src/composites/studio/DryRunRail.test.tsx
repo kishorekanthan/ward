@@ -135,6 +135,11 @@ describe("DryRunRail", () => {
     expect(screen.getByText("3 / 8")).not.toBeNull();
     expect(screen.getByText(NOTE)).not.toBeNull();
   });
+
+  it("reads None for a cost and turns the run did not report", () => {
+    render(<DryRunRail run={{ ...run, cost: undefined, turns: undefined }} checklist={complete} publishNote={NOTE} onPublish={() => {}} />);
+    expect(screen.getAllByText("None").map((value) => value.nextElementSibling?.textContent)).toEqual(["Cost", "Turns used"]);
+  });
 });
 
 describe("DryRunRail trace header", () => {

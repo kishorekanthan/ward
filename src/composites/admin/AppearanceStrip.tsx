@@ -52,7 +52,7 @@ function CompactChart({ draft, streams }: { draft: Identity; streams: Identity[]
 
 function detailedIdentities(identities: AppearanceIdentity[]): AppearanceIdentity[] {
   const segments = identities.slice(0, SEGMENTS.length);
-  while (segments.length < SEGMENTS.length) segments.push({ key: "—", name: "unclaimed", streamStep: null });
+  while (segments.length < SEGMENTS.length) segments.push({ key: "", name: "Unclaimed", streamStep: null });
   return segments;
 }
 
