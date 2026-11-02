@@ -1,0 +1,41 @@
+/* Provenance: not established; no comp block. Spacing and type are Ward tokens (#355). */
+.root {
+  display: grid;
+  grid-template-columns: minmax(0, 12rem) minmax(0, 1fr) auto;
+  gap: var(--ward-space-1) var(--ward-space-2);
+  align-items: center;
+  padding-block: var(--ward-space-1);
+}
+
+.label {
+  font: var(--ward-type-body);
+  color: var(--ward-color-muted);
+}
+
+.value {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font: var(--ward-type-monoId);
+  color: var(--ward-color-text);
+}
+
+.note {
+  grid-column: 2 / -1;
+  font: var(--ward-type-meta);
+  color: var(--ward-color-muted);
+}
+
+.note:empty {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .root {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .label,
+  .note {
+    grid-column: 1 / -1;
+  }
+}

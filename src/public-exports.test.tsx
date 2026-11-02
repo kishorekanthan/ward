@@ -89,6 +89,10 @@ describe("public Ward exports", () => {
     expect([typeof Ward.InfoTip, typeof Ward.PeriodPicker]).toEqual(["function", "function"]);
   });
 
+  it("publishes the copy field from the package root", () => {
+    expect(typeof Ward.CopyValue).toBe("function");
+  });
+
   it("publishes every promoted composite from the package root", () => {
     const expected = [
       "AppShell", "PageFrame", "SubjectRail", "RecordSection", "FormStack", "SectionBand", "BoardScroller",
