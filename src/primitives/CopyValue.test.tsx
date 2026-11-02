@@ -62,6 +62,7 @@ describe("CopyValue layout", () => {
     expect(ruleBody(css, ".value")).toContain("min-width: 0;\noverflow-wrap: anywhere");
     expect(ruleBody(css, ".root")).toContain("grid-template-columns: minmax(0, 12rem) minmax(0, 1fr) auto");
     expect(ruleBody(css, ".note:empty")).toBe("display: none");
+    expect(ruleBody(css, ".root")).toContain("gap: var(--ward-space-2) var(--ward-space-3);\nalign-items: center;\npadding-block: var(--ward-space-2)");
   });
 
   it("puts the label on its own row at phone width", () => {

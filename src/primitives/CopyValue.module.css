@@ -2,9 +2,9 @@
 .root {
   display: grid;
   grid-template-columns: minmax(0, 12rem) minmax(0, 1fr) auto;
-  gap: var(--ward-space-1) var(--ward-space-2);
+  gap: var(--ward-space-2) var(--ward-space-3);
   align-items: center;
-  padding-block: var(--ward-space-1);
+  padding-block: var(--ward-space-2);
 }
 
 .label {
