@@ -2820,7 +2820,7 @@ function r3({ variant: e = "info", ticket: t, children: a }) {
   if (!t) throw new Error("Callout: a callout must cite the ticket that decided it");
   return /* @__PURE__ */ n("aside", { className: `${fa.root} ward-callout${e === "warn" ? " ward-callout--warn" : ""}`, role: "note", "data-variant": e, "data-ticket": t, children: /* @__PURE__ */ n("div", { className: fa.body, children: a }) });
 }
-const ym = "_root_1cdy9_2", Nm = "_label_1cdy9_10", km = "_value_1cdy9_15", $m = "_note_1cdy9_22", Tt = {
+const ym = "_root_13a5b_2", Nm = "_label_13a5b_10", km = "_value_13a5b_14", $m = "_note_13a5b_21", Tt = {
   root: ym,
   label: Nm,
   value: km,

@@ -8,7 +8,6 @@
 }
 
 .label {
-  font: var(--ward-type-body);
   color: var(--ward-color-muted);
 }
 
