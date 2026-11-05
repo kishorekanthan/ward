@@ -1,5 +1,6 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { readFileSync } from "node:fs";
+import { useState } from "react";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -237,6 +238,35 @@ describe("PageHeader measuring its row", () => {
     expect(screen.getByRole("button", { name: "Configure" })).toBeTruthy();
   });
 
+  // The effect keys on the action count (#357); wider labels with the same count refit through the strip's observer.
+  it("folds when the same number of actions gets wider labels", () => {
+    const { measureWidth, resize } = watchedLayout();
+    measureWidth.value = 150;
+    const { container, rerender } = render(<PageHeader crumb={crumb} title="Data engineering" actions={[<Btn key="a">Edit</Btn>, <Btn key="b">Share</Btn>]} />);
+    expect(screen.getByRole("button", { name: "Edit" })).toBeTruthy();
+    measureWidth.value = 400;
+    rerender(<PageHeader crumb={crumb} title="Data engineering" actions={[<Btn key="a">Edit this whole stream</Btn>, <Btn key="b">Share with the team</Btn>]} />);
+    resize(container.querySelector("[data-ward-measure]") as Element);
+    expect(screen.queryByRole("button", { name: "Edit this whole stream" })).toBeNull();
+  });
+
+  it("refits when an action is added, with no resize", () => {
+    const { measureWidth } = watchedLayout();
+    measureWidth.value = 150;
+    const { rerender } = render(<PageHeader crumb={crumb} title="Data engineering" actions={[<Btn key="a">Edit</Btn>]} />);
+    expect(screen.getByRole("button", { name: "Edit" })).toBeTruthy();
+    measureWidth.value = 400;
+    rerender(<PageHeader crumb={crumb} title="Data engineering" actions={[<Btn key="a">Edit</Btn>, <Btn key="b">Share</Btn>]} />);
+    expect(screen.queryByRole("button", { name: "Edit" })).toBeNull();
+  });
+
+  it("never folds a header that has no actions", () => {
+    const { measureWidth } = watchedLayout();
+    measureWidth.value = 400;
+    render(<PageHeader crumb={crumb} title="Data engineering" actions={[]} />);
+    expect(screen.queryByRole("button")).toBeNull();
+  });
+
   // A 200px heading beside 150px of actions overflows a 300px row; stacked at phone width, they fit under it.
   it("counts the heading beside the actions, but not above them", () => {
     const { measureWidth, resize } = watchedLayout(200);
@@ -287,6 +317,51 @@ describe("PageHeader measuring its row", () => {
     row.style.flexDirection = "column";
     resize(row);
     expect(screen.getByRole("button", { name: "Configure" })).toBeTruthy();
+  });
+});
+
+// Like a chat composer: each keystroke re-renders the header with a fresh actions array (#357).
+function Composer() {
+  const [message, setMessage] = useState("");
+  return (
+    <>
+      <PageHeader crumb={crumb} title="New request" actions={[<Btn key="share">Share</Btn>]} />
+      <textarea aria-label="Message" value={message} onChange={(event) => setMessage(event.target.value)} />
+    </>
+  );
+}
+
+// One input event per character in a single task, as a fast typist's keystrokes reach React.
+function typeInOneTask(box: HTMLTextAreaElement, text: string): void {
+  const setValue = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value")?.set;
+  for (const char of text) {
+    setValue?.call(box, box.value + char);
+    box.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+}
+
+describe("PageHeader under a parent that re-renders on each keystroke", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
+  it("takes a long message without an update loop", () => {
+    const { measureWidth } = watchedLayout();
+    measureWidth.value = 150;
+    render(<Composer />);
+    const thrown: string[] = [];
+    const onError = (event: ErrorEvent) => {
+      thrown.push(String(event.error?.message ?? event.message));
+      event.preventDefault();
+    };
+    window.addEventListener("error", onError);
+    vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", false);
+    const message = "Add a quarterly churn summary to the demo review, smoke-run-d1e856eb0995";
+    typeInOneTask(screen.getByRole("textbox", { name: "Message" }) as HTMLTextAreaElement, message);
+    window.removeEventListener("error", onError);
+    expect(thrown).toEqual([]);
+    expect((screen.getByRole("textbox", { name: "Message" }) as HTMLTextAreaElement).value).toBe(message);
   });
 });
 
