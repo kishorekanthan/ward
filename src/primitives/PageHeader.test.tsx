@@ -1,5 +1,6 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { readFileSync } from "node:fs";
+import { useState } from "react";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -287,6 +288,51 @@ describe("PageHeader measuring its row", () => {
     row.style.flexDirection = "column";
     resize(row);
     expect(screen.getByRole("button", { name: "Configure" })).toBeTruthy();
+  });
+});
+
+// Like a chat composer: each keystroke re-renders the header with a fresh actions array (#357).
+function Composer() {
+  const [message, setMessage] = useState("");
+  return (
+    <>
+      <PageHeader crumb={crumb} title="New request" actions={[<Btn key="share">Share</Btn>]} />
+      <textarea aria-label="Message" value={message} onChange={(event) => setMessage(event.target.value)} />
+    </>
+  );
+}
+
+// One input event per character in a single task, as a fast typist's keystrokes reach React.
+function typeInOneTask(box: HTMLTextAreaElement, text: string): void {
+  const setValue = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, "value")?.set;
+  for (const char of text) {
+    setValue?.call(box, box.value + char);
+    box.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+}
+
+describe("PageHeader under a parent that re-renders on each keystroke", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
+  it("takes a long message without an update loop", () => {
+    const { measureWidth } = watchedLayout();
+    measureWidth.value = 150;
+    render(<Composer />);
+    const thrown: string[] = [];
+    const onError = (event: ErrorEvent) => {
+      thrown.push(String(event.error?.message ?? event.message));
+      event.preventDefault();
+    };
+    window.addEventListener("error", onError);
+    vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", false);
+    const message = "Add a quarterly churn summary to the demo review, smoke-run-d1e856eb0995";
+    typeInOneTask(screen.getByRole("textbox", { name: "Message" }) as HTMLTextAreaElement, message);
+    window.removeEventListener("error", onError);
+    expect(thrown).toEqual([]);
+    expect((screen.getByRole("textbox", { name: "Message" }) as HTMLTextAreaElement).value).toBe(message);
   });
 });
 
