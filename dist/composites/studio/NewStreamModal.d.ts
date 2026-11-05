@@ -58,6 +58,8 @@ export type WebNewStreamModalProps = {
     onDraft?: (draft: WebNewStreamDraft) => void;
     onClose: () => void;
     returnFocusTo?: HTMLElement | null;
+    /** The data platform in use, as people know it ("Databricks"); the Through Trellis option names it. */
+    dataPlatform: string;
     /** Fields the consumer owns, shown after Identity; their state stays with the consumer. */
     fields?: ReactNode;
 };
