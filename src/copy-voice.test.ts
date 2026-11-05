@@ -89,8 +89,17 @@ function shownStrings(path: string, fails: (text: string, node: ts.Node) => bool
   return found;
 }
 
+const FALLBACK_OPERATORS = new Set([ts.SyntaxKind.QuestionQuestionToken, ts.SyntaxKind.BarBarToken]);
+
+// A literal after ?? or ||, or a branch of ?:, is what shows when a value is missing, never code.
+function isFallback(node: ts.Node): boolean {
+  const parent = node.parent;
+  if (ts.isConditionalExpression(parent)) return parent.whenTrue === node || parent.whenFalse === node;
+  return ts.isBinaryExpression(parent) && parent.right === node && FALLBACK_OPERATORS.has(parent.operatorToken.kind);
+}
+
 const emDashes = (path: string) => shownStrings(path, (text) => EM_DASH.test(text));
-const loneDashes = (path: string) => shownStrings(path, (text, node) => LONE_DASH.test(text) && !(ts.isStringLiteral(node) && isCode(text, node)));
+const loneDashes = (path: string) => shownStrings(path, (text, node) => LONE_DASH.test(text) && !(ts.isStringLiteral(node) && isCode(text, node) && !isFallback(node)));
 const internalWords = (path: string) => shownStrings(path, (text, node) => !isCode(text, node) && INTERNAL_WORD.test(text));
 
 describe("Ward's own copy", () => {
