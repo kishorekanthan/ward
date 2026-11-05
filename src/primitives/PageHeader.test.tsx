@@ -238,6 +238,35 @@ describe("PageHeader measuring its row", () => {
     expect(screen.getByRole("button", { name: "Configure" })).toBeTruthy();
   });
 
+  // The effect keys on the action count (#357); wider labels with the same count refit through the strip's observer.
+  it("folds when the same number of actions gets wider labels", () => {
+    const { measureWidth, resize } = watchedLayout();
+    measureWidth.value = 150;
+    const { container, rerender } = render(<PageHeader crumb={crumb} title="Data engineering" actions={[<Btn key="a">Edit</Btn>, <Btn key="b">Share</Btn>]} />);
+    expect(screen.getByRole("button", { name: "Edit" })).toBeTruthy();
+    measureWidth.value = 400;
+    rerender(<PageHeader crumb={crumb} title="Data engineering" actions={[<Btn key="a">Edit this whole stream</Btn>, <Btn key="b">Share with the team</Btn>]} />);
+    resize(container.querySelector("[data-ward-measure]") as Element);
+    expect(screen.queryByRole("button", { name: "Edit this whole stream" })).toBeNull();
+  });
+
+  it("refits when an action is added, with no resize", () => {
+    const { measureWidth } = watchedLayout();
+    measureWidth.value = 150;
+    const { rerender } = render(<PageHeader crumb={crumb} title="Data engineering" actions={[<Btn key="a">Edit</Btn>]} />);
+    expect(screen.getByRole("button", { name: "Edit" })).toBeTruthy();
+    measureWidth.value = 400;
+    rerender(<PageHeader crumb={crumb} title="Data engineering" actions={[<Btn key="a">Edit</Btn>, <Btn key="b">Share</Btn>]} />);
+    expect(screen.queryByRole("button", { name: "Edit" })).toBeNull();
+  });
+
+  it("never folds a header that has no actions", () => {
+    const { measureWidth } = watchedLayout();
+    measureWidth.value = 400;
+    render(<PageHeader crumb={crumb} title="Data engineering" actions={[]} />);
+    expect(screen.queryByRole("button")).toBeNull();
+  });
+
   // A 200px heading beside 150px of actions overflows a 300px row; stacked at phone width, they fit under it.
   it("counts the heading beside the actions, but not above them", () => {
     const { measureWidth, resize } = watchedLayout(200);
