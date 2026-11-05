@@ -2782,7 +2782,7 @@ function _m(e, t) {
     const d = a.current;
     if (!hm(d)) return;
     const u = () => {
-      const m = um(d, r.current, o.current, l.current, e.length);
+      const m = um(d, r.current, o.current, l.current, e);
       m !== null && c(m);
     }, h = new ResizeObserver(u);
     return h.observe(d), l.current && h.observe(l.current), u(), () => h.disconnect();
@@ -2798,7 +2798,7 @@ function vm({ connection: e }) {
   return e ? /* @__PURE__ */ n(Dn, { connection: e.connection, since: e.since }) : null;
 }
 function XL({ crumb: e, crumbCurrent: t, chips: a, title: r, consequence: o, consequenceHint: l, actions: s = [], more: c = [], connection: d, onOverflow: u, density: h = "page" }) {
-  const { rowRef: m, headingRef: _, actionsRef: N, measureRef: k, collapsed: M } = _m(s, wm(s, c)), O = c.length > 0, { disclosure: we, close: ae } = am(M || O, N), Ce = tm(c, s, M, u);
+  const { rowRef: m, headingRef: _, actionsRef: N, measureRef: k, collapsed: M } = _m(s.length, wm(s, c)), O = c.length > 0, { disclosure: we, close: ae } = am(M || O, N), Ce = tm(c, s, M, u);
   return /* @__PURE__ */ i("header", { className: U.root, "data-density": h, children: [
     /* @__PURE__ */ n(lm, { crumb: om(e, r, t) }),
     /* @__PURE__ */ i("div", { className: U.row, ref: m, children: [
