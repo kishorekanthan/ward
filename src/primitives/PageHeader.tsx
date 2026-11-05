@@ -179,7 +179,8 @@ function isLoneLink(actions: ReactNode[], more: ReactNode[]): boolean {
   return more.length === 0 && actions.length === 1 && isLink(actions[0]);
 }
 
-function useActionOverflow(actions: ReactNode[], keepShown: boolean) {
+// Keyed on the count, not the array: an inline array is new each render, and a refit per keystroke loops React (#357).
+function useActionOverflow(actionCount: number, keepShown: boolean) {
   const rowRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const actionsRef = useRef<HTMLDivElement>(null);
@@ -189,7 +190,7 @@ function useActionOverflow(actions: ReactNode[], keepShown: boolean) {
     const row = rowRef.current;
     if (!canObserve(row)) return;
     const fit = () => {
-      const next = needsCollapse(row, headingRef.current, actionsRef.current, measureRef.current, actions.length);
+      const next = needsCollapse(row, headingRef.current, actionsRef.current, measureRef.current, actionCount);
       if (next !== null) setCollapsed(next);
     };
     const ro = new ResizeObserver(fit);
@@ -198,7 +199,7 @@ function useActionOverflow(actions: ReactNode[], keepShown: boolean) {
     if (measureRef.current) ro.observe(measureRef.current);
     fit();
     return () => ro.disconnect();
-  }, [actions]);
+  }, [actionCount]);
   return { rowRef, headingRef, actionsRef, measureRef, collapsed: collapsed && !keepShown };
 }
 
@@ -219,7 +220,7 @@ function Connection({ connection }: Pick<PageHeaderProps, "connection">) {
 }
 
 export function PageHeader({ crumb, crumbCurrent, chips, title, consequence, consequenceHint, actions = [], more = [], connection, onOverflow, density = "page" }: PageHeaderProps) {
-  const { rowRef, headingRef, actionsRef, measureRef, collapsed } = useActionOverflow(actions, isLoneLink(actions, more));
+  const { rowRef, headingRef, actionsRef, measureRef, collapsed } = useActionOverflow(actions.length, isLoneLink(actions, more));
   const hasMore = more.length > 0;
   const { disclosure, close } = useDisclosure(collapsed || hasMore, actionsRef);
   const panel = panelItems(more, actions, collapsed, onOverflow);

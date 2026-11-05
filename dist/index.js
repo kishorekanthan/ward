@@ -2782,7 +2782,7 @@ function fm(e, t) {
     const d = a.current;
     if (!mm(d)) return;
     const u = () => {
-      const m = hm(d, r.current, o.current, l.current, e.length);
+      const m = hm(d, r.current, o.current, l.current, e);
       m !== null && c(m);
     }, h = new ResizeObserver(u);
     return h.observe(d), l.current && h.observe(l.current), u(), () => h.disconnect();
@@ -2798,7 +2798,7 @@ function bm({ connection: e }) {
   return e ? /* @__PURE__ */ n(Hn, { connection: e.connection, since: e.since }) : null;
 }
 function a3({ crumb: e, crumbCurrent: t, chips: a, title: r, consequence: o, consequenceHint: l, actions: s = [], more: c = [], connection: d, onOverflow: u, density: h = "page" }) {
-  const { rowRef: m, headingRef: w, actionsRef: N, measureRef: k, collapsed: A } = fm(s, wm(s, c)), O = c.length > 0, { disclosure: _e, close: ae } = rm(A || O, N), Ce = nm(c, s, A, u);
+  const { rowRef: m, headingRef: w, actionsRef: N, measureRef: k, collapsed: A } = fm(s.length, wm(s, c)), O = c.length > 0, { disclosure: _e, close: ae } = rm(A || O, N), Ce = nm(c, s, A, u);
   return /* @__PURE__ */ i("header", { className: G.root, "data-density": h, children: [
     /* @__PURE__ */ n(im, { crumb: lm(e, r, t) }),
     /* @__PURE__ */ i("div", { className: G.row, ref: m, children: [
