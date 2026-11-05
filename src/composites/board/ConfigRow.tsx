@@ -39,10 +39,9 @@ export function ConfigRowHead() {
   );
 }
 
-function stageView(stage: ConfigStage, configured: boolean) {
-  if (stage.gate) return { shown: true, state: "locked" };
-  if (stage.terminal) return { shown: false, state: "off" };
-  return { shown: configured, state: configured ? "on" : "off" };
+function shownView(stage: ConfigStage, configured: boolean): boolean {
+  if (stage.gate) return true;
+  return stage.terminal ? false : configured;
 }
 
 function reorderKey(event: React.KeyboardEvent, onReorder?: (direction: -1 | 1) => void) {
@@ -102,7 +101,7 @@ function CapCell({ stage, config, onChange }: CellProps) {
     );
   return (
     <span className={s.cCap}>
-      <Field kind="input" label="WIP cap" labelHidden placeholder="none" value={capValue(config.cap)} onChange={(cap) => onChange({ ...config, cap: parsedCap(cap) })} />
+      <Field kind="input" label="WIP cap" labelHidden placeholder="No limit" value={capValue(config.cap)} onChange={(cap) => onChange({ ...config, cap: parsedCap(cap) })} />
     </span>
   );
 }
@@ -112,18 +111,17 @@ function fixedReason(stage: ConfigStage): string | undefined {
   return stage.terminal ? TERMINAL_REASON : undefined;
 }
 
-// The state word is the switch's visible label, so it toggles the row; the switch keeps its own name.
+// The switch shows on or off itself; only a review stage's fixed switch earns a word beside it.
 function ShownCell({ stage, config, onChange }: CellProps) {
-  const scoped = useDisabledScope() !== null;
-  const view = stageView(stage, config.shown);
-  const fixed = stage.gate || stage.terminal || scoped;
   const toggle = (next: boolean) => onChange({ ...config, shown: next });
   return (
     <span className={s.cShown}>
-      <Switch label="Shown as a column" labelHidden checked={view.shown} locked={stage.gate} disabled={stage.terminal} disabledReason={fixedReason(stage)} onChange={toggle} />
-      <span className={s.state} data-fixed={fixed || undefined} aria-hidden="true" onClick={() => !fixed && toggle(!view.shown)}>
-        {view.state}
-      </span>
+      <Switch label="Shown as a column" labelHidden checked={shownView(stage, config.shown)} locked={stage.gate} disabled={stage.terminal} disabledReason={fixedReason(stage)} onChange={toggle} />
+      {stage.gate && (
+        <span className={s.state} aria-hidden="true">
+          locked
+        </span>
+      )}
     </span>
   );
 }

@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { PreviewRail } from "./PreviewRail";
@@ -14,6 +17,13 @@ const sample: BoardItem[] = [
     changedAt: "2026-09-06T02:14:00Z",
   },
 ];
+
+const railCss = readFileSync(join(dirname(fileURLToPath(import.meta.url)), "PreviewRail.module.css"), "utf8");
+
+function ruleBlock(selector: string): string {
+  const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return railCss.match(new RegExp(`(?:^|\\n)${escaped}\\s*\\{([^}]*)\\}`))?.[1] ?? "";
+}
 
 const draft: BoardConfig = {
   columns: [{ id: "implement", label: "Implementing", cap: 6, gate: false }],
@@ -89,6 +99,18 @@ describe("PreviewRail", () => {
     expect(strip.querySelectorAll("[aria-hidden='true']")).toHaveLength(2);
     expect(strip.querySelector("[data-kind='gate']")?.textContent).toBe("Waiting on us0 items");
     expect(screen.getByText("Done shows as a counter.")).toBeTruthy();
+  });
+
+  it("cuts a long skeleton column name on one line and keeps the whole name in its title", () => {
+    const long: BoardConfig = { ...draft, columns: [{ id: "implement", label: "Waiting on the data platform team", gate: false }] };
+    render(<PreviewRail draft={long} sample={sample} effects={[]} strip="skeleton" />);
+    expect(screen.getByText("Waiting on the data platform team").getAttribute("title")).toBe("Waiting on the data platform team");
+    const label = ruleBlock(".skeletonLabel");
+    expect(label).toMatch(/white-space:\s*nowrap;/);
+    expect(label).toMatch(/overflow:\s*hidden;/);
+    expect(label).toMatch(/text-overflow:\s*ellipsis;/);
+    expect(label).not.toMatch(/overflow-wrap/);
+    expect(ruleBlock(".skeleton")).toMatch(/min-width:\s*0;/);
   });
 
   it("heads the rail and its columns with one plain word each", () => {

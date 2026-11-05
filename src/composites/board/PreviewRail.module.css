@@ -74,7 +74,9 @@
 .skeletonLabel {
   font: var(--ward-type-skeletonLabel);
   color: var(--ward-color-text);
-  overflow-wrap: anywhere;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .bar {

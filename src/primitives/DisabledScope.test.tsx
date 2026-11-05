@@ -88,7 +88,7 @@ describe("DisabledScope", () => {
     expect(description(handle)).toBe(REASON);
     expect(handle.title).toBe(REASON);
     fireEvent.keyDown(handle, { key: "ArrowUp" });
-    fireEvent.click(screen.getByText("on"));
+    fireEvent.click(screen.getByRole("switch"));
     expect(onReorder).not.toHaveBeenCalled();
     expect(onChange).not.toHaveBeenCalled();
     expect((screen.getByLabelText("Column label") as HTMLInputElement).disabled).toBe(true);
@@ -144,7 +144,7 @@ describe("DisabledScope with hidden actions", () => {
     expect(line.firstElementChild!.childElementCount).toBe(0);
     expect((screen.getByLabelText("Column label") as HTMLInputElement).disabled).toBe(true);
     expect((screen.getByRole("switch") as HTMLButtonElement).disabled).toBe(true);
-    fireEvent.click(screen.getByText("on"));
+    fireEvent.click(screen.getByRole("switch"));
     expect(onChange).not.toHaveBeenCalled();
   });
 

@@ -47,7 +47,9 @@ function Warnings({ effects }: { effects: GateItem[] }) {
 function SkeletonColumn({ column, count }: { column: BoardColumnConfig; count: number }) {
   return (
     <div className={s.skeleton} data-kind={column.gate ? "gate" : undefined}>
-      <span className={s.skeletonLabel}>{column.label}</span>
+      <span className={s.skeletonLabel} title={column.label}>
+        {column.label}
+      </span>
       <span className="ward-visually-hidden">{`${count} ${count === 1 ? "item" : "items"}`}</span>
       {Array.from({ length: count }, (_, index) => (
         <span key={index} className={s.bar} aria-hidden="true" />
