@@ -30,6 +30,14 @@ describe("CopyValue", () => {
     expect(screen.getByRole("status").textContent).toBe("");
   });
 
+  it("shows the value in the mono face and the Copy button as secondary and small", () => {
+    render(<CopyValue label="Token" value={token} />);
+    const button = screen.getByRole("button", { name: "Copy" });
+    expect(button.classList.contains("ward-btn--secondary")).toBe(true);
+    expect(button.classList.contains("ward-btn--sm")).toBe(true);
+    expect(ruleBody(css, ".value")).toContain("font: var(--ward-type-monoId)");
+  });
+
   it("writes exactly the value to the clipboard and says it was copied", async () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
     withClipboard({ writeText });
