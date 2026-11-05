@@ -7,6 +7,8 @@ import { describe, expect, it } from "vitest";
 const SRC = dirname(fileURLToPath(import.meta.url));
 // An em dash is never shown: not to join clauses, and not alone as an empty value.
 const EM_DASH = /—/;
+// Nor does any other dash stand alone in place of an empty value.
+const LONE_DASH = /^\s*[-–‒―−]+\s*$/;
 const SLOT = "X";
 // Words that name Ward's or Trellis's insides; a first-time user reads none of them on screen.
 const INTERNAL_WORD = /\b(gate[sd]?|gating|mount(s|ed|ing)?|chains?|route[sd]?|routing|slice[sd]?|adapters?|evidence|advisors?|terminal|tenants?|req_hash|sdk|k8s)\b/i;
@@ -88,11 +90,16 @@ function shownStrings(path: string, fails: (text: string, node: ts.Node) => bool
 }
 
 const emDashes = (path: string) => shownStrings(path, (text) => EM_DASH.test(text));
+const loneDashes = (path: string) => shownStrings(path, (text, node) => LONE_DASH.test(text) && !(ts.isStringLiteral(node) && isCode(text, node)));
 const internalWords = (path: string) => shownStrings(path, (text, node) => !isCode(text, node) && INTERNAL_WORD.test(text));
 
 describe("Ward's own copy", () => {
   it("shows no em dash, in prose or as an empty value", () => {
     expect(shippedSources(SRC).flatMap(emDashes)).toEqual([]);
+  });
+
+  it("fills no empty value with a dash of any kind", () => {
+    expect(shippedSources(SRC).flatMap(loneDashes)).toEqual([]);
   });
 
   it("names none of the product's insides", () => {
