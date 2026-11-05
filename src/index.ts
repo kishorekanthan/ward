@@ -92,6 +92,8 @@ export type { MarkerProps } from "./primitives/Marker";
 export { ConnectionMark } from "./primitives/ConnectionMark";
 export type { ConnectionMarkProps } from "./primitives/ConnectionMark";
 export { Callout } from "./primitives/Callout";
+export { CopyValue } from "./primitives/CopyValue";
+export type { CopyValueProps } from "./primitives/CopyValue";
 export { InfoTip } from "./primitives/InfoTip";
 export type { InfoTipProps } from "./primitives/InfoTip";
 export { PeriodPicker } from "./primitives/PeriodPicker";
