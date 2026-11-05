@@ -54,6 +54,7 @@ export const OnePolicy = {
 export const Web = {
   args: {
     presentation: "web",
+    dataPlatform: "Databricks",
     owners: ["Priya Nayar", "Dan Kovac"],
     ladder,
     takenBy: { 1: "front-end" },

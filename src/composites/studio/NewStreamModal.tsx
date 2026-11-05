@@ -56,6 +56,8 @@ export type WebNewStreamModalProps = {
   onDraft?: (draft: WebNewStreamDraft) => void;
   onClose: () => void;
   returnFocusTo?: HTMLElement | null;
+  /** The data platform in use, as people know it ("Databricks"); the Through Trellis option names it. */
+  dataPlatform: string;
   /** Fields the consumer owns, shown after Identity; their state stays with the consumer. */
   fields?: ReactNode;
 };
@@ -79,7 +81,7 @@ const DEFAULT_POLICIES: PolicyOption[] = [
   { value: "block", label: "Stop on any finding", consequence: "A finding holds the item until a person clears it." },
 ];
 
-const FOOTER_NOTE = "Nothing runs until you publish.";
+const FOOTER_NOTE = "Nothing runs until you create the stream.";
 
 const BLOCKED = "Add a name and a key.";
 
@@ -190,17 +192,21 @@ function CompactNewStreamModal(props: NewStreamModalProps) {
   );
 }
 
-const WEB_POLICIES = [
-  { value: "relay", label: "Through Trellis (safe default)", consequence: "Agents never write to Foundry or Jira directly." },
-  { value: "direct", label: "Directly, each agent approved", consequence: "A second admin approves each agent." },
-  { value: "readonly", label: "Read only", consequence: "Agents can read and report only." },
-];
+const WEB_POLICY_MODES: WebNewStreamDraft["writePolicyMode"][] = ["relay", "direct", "readonly"];
+
+function webPolicies(dataPlatform: string): PolicyOption[] {
+  return [
+    { value: "relay", label: "Through Trellis (safe default)", consequence: `Agents never write to ${dataPlatform} or Jira directly.` },
+    { value: "direct", label: "Directly, each agent approved", consequence: "A second admin approves each agent." },
+    { value: "readonly", label: "Read only", consequence: "Agents can read and report only." },
+  ];
+}
 
 const WEB_REASON = "Add a name, key, owner and two stages.";
 
 function webDraft(name: string, key: string, owner: string, colourStep: number | null, writePolicyMode: string, stages: WebStreamStageDraft[]): WebNewStreamDraft {
-  const policy = WEB_POLICIES.find((option) => option.value === writePolicyMode)?.value ?? "relay";
-  return { name, key, owner, colourStep, writePolicyMode: policy as WebNewStreamDraft["writePolicyMode"], stages };
+  const policy = WEB_POLICY_MODES.find((mode) => mode === writePolicyMode) ?? "relay";
+  return { name, key, owner, colourStep, writePolicyMode: policy, stages };
 }
 
 function validWebDraft(draft: WebNewStreamDraft, takenBy: Record<number, string>): boolean {
@@ -314,7 +320,7 @@ function WebNewStreamModal(props: WebNewStreamModalProps): ReactElement {
           <StageListEditor stages={stages} onChange={setStages} />
         </section>
         <section className={s.webSection}>
-          <Radio variant="cards" legend="How agents write" value={policy} options={WEB_POLICIES} onChange={setPolicy} />
+          <Radio variant="cards" legend="How agents write" value={policy} options={webPolicies(props.dataPlatform)} onChange={setPolicy} />
         </section>
         <WebFooter ready={ready} draft={draft} onCreate={props.onCreate} onDraft={props.onDraft} reasonId={reasonId} />
       </div>

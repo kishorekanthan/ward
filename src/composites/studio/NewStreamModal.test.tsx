@@ -38,7 +38,7 @@ describe("NewStreamModal", () => {
   it("uses the web presentation's explicit colour gate and exact payload", () => {
     const onCreate = vi.fn();
     render(
-      <NewStreamModal presentation="web" owners={["Priya Nayar"]} ladder={ladder} takenBy={{ 1: "Data", 2: "Design" }} onCreate={onCreate} onClose={() => undefined} />,
+      <NewStreamModal presentation="web" dataPlatform="Databricks" owners={["Priya Nayar"]} ladder={ladder} takenBy={{ 1: "Data", 2: "Design" }} onCreate={onCreate} onClose={() => undefined} />,
     );
     expect((screen.getByRole("button", { name: "Create stream" }) as HTMLButtonElement).disabled).toBe(true);
     fireEvent.change(screen.getByLabelText("Name"), { target: { value: "Integration" } });
@@ -61,7 +61,7 @@ describe("NewStreamModal", () => {
   it("creates a stream with no colour picked once the rest is filled", () => {
     const onCreate = vi.fn();
     const { container } = render(
-      <NewStreamModal presentation="web" owners={["Priya Nayar"]} ladder={ladder} takenBy={{ 1: "Data", 2: "Design", 3: "Ops" }} onCreate={onCreate} onClose={() => undefined} />,
+      <NewStreamModal presentation="web" dataPlatform="Databricks" owners={["Priya Nayar"]} ladder={ladder} takenBy={{ 1: "Data", 2: "Design", 3: "Ops" }} onCreate={onCreate} onClose={() => undefined} />,
     );
     const create = () => screen.getByRole("button", { name: "Create stream" }) as HTMLButtonElement;
     fireEvent.change(screen.getByLabelText("Name"), { target: { value: "KPI Config" } });
@@ -85,7 +85,7 @@ describe("NewStreamModal", () => {
 
   it("renders consumer fields after Identity and before the stages", () => {
     render(
-      <NewStreamModal presentation="web" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} fields={<label>Jira project<input /></label>} />,
+      <NewStreamModal presentation="web" dataPlatform="Databricks" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} fields={<label>Jira project<input /></label>} />,
     );
     const slot = document.querySelector("[data-stream-fields]") as HTMLElement;
     const identity = screen.getByRole("heading", { name: "Identity" });
@@ -96,20 +96,20 @@ describe("NewStreamModal", () => {
   });
 
   it("adds no section when the consumer passes no fields", () => {
-    render(<NewStreamModal presentation="web" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} />);
+    render(<NewStreamModal presentation="web" dataPlatform="Databricks" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} />);
     expect(screen.getByRole("heading", { name: "Stages" })).toBeTruthy();
     expect(document.querySelector("[data-stream-fields]")).toBeNull();
   });
 
   it("refuses a taken colour step", () => {
-    render(<NewStreamModal presentation="web" owners={["Priya Nayar"]} ladder={ladder} takenBy={{ 1: "Data" }} onCreate={() => undefined} onClose={() => undefined} />);
+    render(<NewStreamModal presentation="web" dataPlatform="Databricks" owners={["Priya Nayar"]} ladder={ladder} takenBy={{ 1: "Data" }} onCreate={() => undefined} onClose={() => undefined} />);
     const taken = screen.getByRole("radio", { name: "Step 1 · taken by Data" });
     fireEvent.click(taken);
     expect(taken.getAttribute("aria-checked")).toBe("false");
   });
 
   it("blocks Create when the picked step is taken after it was picked", () => {
-    const props = { presentation: "web" as const, owners: ["Priya Nayar"], ladder, onCreate: vi.fn(), onClose: () => undefined };
+    const props = { presentation: "web" as const, dataPlatform: "Databricks", owners: ["Priya Nayar"], ladder, onCreate: vi.fn(), onClose: () => undefined };
     const { container, rerender } = render(<NewStreamModal {...props} takenBy={{}} />);
     fireEvent.change(screen.getByLabelText("Name"), { target: { value: "Integration" } });
     fireEvent.change(screen.getByLabelText("Key"), { target: { value: "INT" } });
@@ -125,7 +125,7 @@ describe("NewStreamModal", () => {
     const onCreate = vi.fn();
     const six = [{ step: 1 }, { step: 2 }, { step: 3 }, { step: 4 }, { step: 5 }, { step: 6 }, { step: 7, reserved: true }];
     const { container } = render(
-      <NewStreamModal presentation="web" owners={["Priya Nayar"]} ladder={six} takenBy={{ 1: "Data" }} onCreate={onCreate} onClose={() => undefined} />,
+      <NewStreamModal presentation="web" dataPlatform="Databricks" owners={["Priya Nayar"]} ladder={six} takenBy={{ 1: "Data" }} onCreate={onCreate} onClose={() => undefined} />,
     );
     fireEvent.change(screen.getByLabelText("Name"), { target: { value: "Integration" } });
     fireEvent.change(screen.getByLabelText("Key"), { target: { value: "INT" } });
@@ -153,7 +153,7 @@ describe("NewStreamModal", () => {
 
   it("portals the dialog to the body and removes it on unmount", () => {
     const { container, unmount } = render(
-      <NewStreamModal presentation="web" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} />,
+      <NewStreamModal presentation="web" dataPlatform="Databricks" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} />,
     );
     const dialog = screen.getByRole("dialog");
     expect(container.contains(dialog)).toBe(false);
@@ -163,12 +163,47 @@ describe("NewStreamModal", () => {
   });
 
   it("drops drag wording from the web stage section", () => {
-    render(<NewStreamModal presentation="web" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} />);
+    render(<NewStreamModal presentation="web" dataPlatform="Databricks" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} />);
     expect(document.body.textContent).toContain("At least 2 stages");
     expect(document.body.textContent).not.toContain("reorder with");
     expect(document.body.textContent).not.toMatch(/drag/i);
   });
+
+  it("names the data platform in use on the Through Trellis write option, never another", () => {
+    const web = (dataPlatform: string) => render(<NewStreamModal presentation="web" dataPlatform={dataPlatform} owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} />);
+    const { unmount } = web("Databricks");
+    expect(consequenceOf("Through Trellis (safe default)")).toBe("Agents never write to Databricks or Jira directly.");
+    expect(document.body.textContent).not.toMatch(/Foundry/);
+    unmount();
+    web("Snowflake");
+    expect(consequenceOf("Through Trellis (safe default)")).toBe("Agents never write to Snowflake or Jira directly.");
+  });
+
+  it("keeps the other write options' consequences", () => {
+    render(<NewStreamModal presentation="web" dataPlatform="Databricks" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} />);
+    expect(consequenceOf("Directly, each agent approved")).toBe("A second admin approves each agent.");
+    expect(consequenceOf("Read only")).toBe("Agents can read and report only.");
+  });
+
+  it("names the Create stream step in the web footer note, not a publish step", () => {
+    render(<NewStreamModal presentation="web" dataPlatform="Databricks" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} />);
+    const footer = screen.getByText("Nothing runs until you create the stream.").parentElement?.parentElement as HTMLElement;
+    expect(within(footer).getByRole("button", { name: "Create stream" })).toBeTruthy();
+    expect(document.body.textContent).not.toMatch(/publish/i);
+  });
+
+  it("names the Create stream step in the compact footer note too", () => {
+    render(<NewStreamModal owners={[{ value: "priya", label: "Priya" }]} ladder={[{ step: 1, name: "Data" }]} onCreate={() => undefined} onDraft={() => undefined} onClose={() => undefined} />);
+    const footer = screen.getByText("Nothing runs until you create the stream.").parentElement as HTMLElement;
+    expect(within(footer).getByRole("button", { name: "Create stream" })).toBeTruthy();
+    expect(document.body.textContent).not.toMatch(/publish/i);
+  });
 });
+
+function consequenceOf(option: string): string | null | undefined {
+  const noteId = screen.getByLabelText(option).getAttribute("aria-describedby") as string;
+  return document.getElementById(noteId)?.textContent;
+}
 
 const specLadder: LadderStep[] = [
   { step: 1, name: "Teal" },
