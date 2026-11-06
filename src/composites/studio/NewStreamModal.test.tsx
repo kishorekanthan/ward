@@ -2,7 +2,7 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { stubMatchMedia } from "../../test-setup";
 import type { LadderStep } from "./ColourLadder";
-import { NewStreamModal, type NewStreamModalProps } from "./NewStreamModal";
+import { NewStreamModal, type NewStreamModalProps, type WebNewStreamModalProps } from "./NewStreamModal";
 
 const ladder = [{ step: 1 }, { step: 2 }, { step: 3 }];
 
@@ -182,6 +182,12 @@ describe("NewStreamModal", () => {
     unmount();
     web("Snowflake");
     expect(consequenceOf("Through Trellis (safe default)")).toBe("Agents never write to Snowflake or Jira directly");
+  });
+
+  it("requires the data platform on the web presentation", () => {
+    // @ts-expect-error dataPlatform is required: tsc strict in make check fails if it turns optional
+    const props: WebNewStreamModalProps = { presentation: "web", owners: ["Priya Nayar"], ladder, onCreate: () => undefined, onClose: () => undefined };
+    expect("dataPlatform" in props).toBe(false);
   });
 
   it("keeps the other write options' consequences", () => {
