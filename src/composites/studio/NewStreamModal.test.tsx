@@ -196,6 +196,18 @@ describe("NewStreamModal", () => {
     expect(consequenceOf("Read only")).toBe("Agents can read and report only");
   });
 
+  it.each([
+    ["Through Trellis (safe default)", "relay"],
+    ["Directly, each agent approved", "direct"],
+    ["Read only", "readonly"],
+  ])("sends the %s option as writePolicyMode %s", (option, mode) => {
+    const onDraft = vi.fn();
+    render(<NewStreamModal presentation="web" dataPlatform="Databricks" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onDraft={onDraft} onClose={() => undefined} />);
+    fireEvent.click(screen.getByLabelText(option));
+    fireEvent.click(screen.getByRole("button", { name: "Save draft" }));
+    expect(onDraft).toHaveBeenCalledWith(expect.objectContaining({ writePolicyMode: mode }));
+  });
+
   it("names the Create stream step in the web footer note, not a publish step", () => {
     render(<NewStreamModal presentation="web" dataPlatform="Databricks" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} />);
     const footer = screen.getByText("Nothing runs until you create the stream").parentElement?.parentElement as HTMLElement;
