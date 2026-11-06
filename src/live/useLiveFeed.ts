@@ -129,6 +129,7 @@ export function useLiveFeed(url: string, transport: LiveTransport): LiveFeed {
   }, []);
 
   useEffect(() => {
+    touch();
     open();
     monitorRef.current = window.setInterval(() => {
       const silence = Date.now() - seenRef.current;
@@ -144,7 +145,7 @@ export function useLiveFeed(url: string, transport: LiveTransport): LiveFeed {
       connRef.current?.close();
       connRef.current = null;
     };
-  }, [open, resume, setConn]);
+  }, [open, resume, setConn, touch]);
 
   return { connection, lastEventAt, subscribe };
 }

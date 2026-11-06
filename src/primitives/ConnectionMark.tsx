@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { elapsed } from "../fmt/elapsed";
 import { stamp } from "../fmt/stamp";
 import { useTicker } from "../live/useTicker";
@@ -11,12 +12,18 @@ export type ConnectionMarkProps = {
   lastEventAt?: string | null;
 };
 
-function knownTime(since?: string, lastEventAt?: string | null): string {
-  return since ?? lastEventAt ?? new Date().toISOString();
+function readable(time?: string | null): time is string {
+  return !Number.isNaN(Date.parse(time ?? ""));
+}
+
+// A blank or unreadable time is unknown; with none known, the strip dates from its first render.
+function knownTime(firstRender: string, since?: string, lastEventAt?: string | null): string {
+  return [since, lastEventAt].find(readable) ?? firstRender;
 }
 
 export function ConnectionMark({ connection, since, lastEventAt }: ConnectionMarkProps) {
-  const observedAt = knownTime(since, lastEventAt);
+  const [firstRender] = useState(() => new Date().toISOString());
+  const observedAt = knownTime(firstRender, since, lastEventAt);
   const elapsedMs = useTicker(observedAt, connection === "reconnecting");
   if (connection === "live") {
     return (
