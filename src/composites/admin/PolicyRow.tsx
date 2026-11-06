@@ -100,7 +100,7 @@ function webEditableOptions(control: WebPolicyControl, locked: boolean): Segment
 
 function webChosen(control: WebPolicyControl): string {
   const option = control.kind === "segment" ? control.options?.find((o) => o.value === control.value) : undefined;
-  return option?.label ?? webText(control.value, "—");
+  return option?.label ?? webText(control.value, "None");
 }
 
 type WebControlProps = { control: WebPolicyControl; name: string; locked: boolean; describedBy?: string; onChange?: (value: boolean | string) => void };

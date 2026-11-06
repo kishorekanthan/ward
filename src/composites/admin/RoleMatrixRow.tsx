@@ -133,7 +133,7 @@ function WebCell({ className, text }: { className: string; text: string }): Reac
 function WebDetail({ row }: { row: WebRoleMatrixRowSpec }): ReactElement {
   return (
     <span className={`${s.webColumns} ward-rolecols`}>
-      <WebCell className={`${s.webMeta} ${s.webGroup} ward-cellmeta ward-truncate`} text={row.group ?? "—"} />
+      <WebCell className={`${s.webMeta} ${s.webGroup} ward-cellmeta ward-truncate`} text={row.group ?? ""} />
       <WebCell className={`${s.webPeople} ward-rolepeople ward-truncate`} text={row.people ?? ""} />
       <WebCell className={`${s.webMeta} ${s.webVia} ward-cellmeta ward-truncate`} text={row.requestedVia ?? ""} />
     </span>

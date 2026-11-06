@@ -43,6 +43,11 @@ test("table presentation keeps every title link out of the muted cell colour", (
   for (const rule of linkRules) expect(rule).not.toContain("--ward-color-muted");
 });
 
+test("table presentation reads None when no field is resolved yet", () => {
+  const host = render(<SessionRow session={{ ...SESSION, resolved: [] }} presentation="table" href="#/sessions/1" />);
+  expect(host.querySelectorAll("td")[1]?.textContent).toBe("None");
+});
+
 test("table presentation keeps an absent cost cell empty", () => {
   const host = render(<SessionRow session={{ ...SESSION, cost: undefined }} presentation="table" href="#/sessions/1" />);
   expect(host.querySelectorAll("td")[2]?.textContent).toBe("");
@@ -51,7 +56,7 @@ test("table presentation keeps an absent cost cell empty", () => {
 test("relative activity labels preserve the established boundaries", () => {
   vi.useFakeTimers();
   vi.setSystemTime(new Date("2026-09-06T10:04:00Z"));
-  expect(agoSince("")).toBe("—");
+  expect(agoSince("")).toBe("");
   expect(agoSince("2026-09-06T10:03:30Z")).toBe("just now");
   expect(agoSince("2026-09-06T09:04:00Z")).toBe("1h ago");
   expect(agoSince("2026-09-05T10:04:00Z")).toBe("1d ago");

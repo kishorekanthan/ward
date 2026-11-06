@@ -40,7 +40,7 @@ describe("AppearanceStrip", () => {
     expect(rects).toHaveLength(6);
     expect(rects[0].getAttribute("style")).toContain("var(--ward-stream-3-chip)");
     expect(rects[2].getAttribute("style")).toContain("var(--ward-color-line2)");
-    expect(Array.from(container.querySelectorAll(".ward-seglabel")).map((label) => label.textContent)).toEqual(["REG", "DE", "NEW", "—", "—", "—"]);
+    expect(Array.from(container.querySelectorAll(".ward-seglabel")).map((label) => label.textContent)).toEqual(["REG", "DE", "NEW", "", "", ""]);
     expect(screen.getByRole("img", { name: "Overview chart segments" })).toBeDefined();
     fireEvent.click(screen.getByRole("button", { name: "FL-229 Late-arriving shipments view" }));
     expect(onOpen).toHaveBeenCalledWith("FL-229");

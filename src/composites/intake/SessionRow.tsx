@@ -31,7 +31,7 @@ const CHIP: Record<Session["state"], { role: ChipRole; label: string }> = {
 };
 
 export function agoSince(iso: string): string {
-  if (iso === "") return "—";
+  if (iso === "") return "";
   const minutes = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
   if (minutes < 1) return "just now";
   if (minutes < 60) return `${minutes}m ago`;
@@ -45,7 +45,7 @@ function turnsText(session: Session): string {
 
 function resolvedText(resolved: string[]): string {
   const text = resolved.join(", ");
-  return text === "" ? "—" : text;
+  return text === "" ? "None" : text;
 }
 
 // The list names why a duplicate stopped, so the table says it closed rather than only what it matched.

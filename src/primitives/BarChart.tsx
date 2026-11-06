@@ -14,7 +14,7 @@ export type BarChartProps = {
   missing?: string;
 };
 
-const EMPTY_MARK = "—";
+const EMPTY_MARK = "None";
 const MAX_SERIES = 6;
 
 function validate(categories: string[], series: BarSeries[]): void {

@@ -11,7 +11,7 @@ export const Info = {
   args: {
     variant: "info",
     ticket: "FL-118",
-    children: "Done stages are counted, not shown.",
+    children: "Done stages are counted, not shown",
   },
 };
 

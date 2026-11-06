@@ -26,8 +26,8 @@ describe("ConfigRow", () => {
     expect(screen.queryByText("can't be hidden or collapsed")).toBeNull();
     expect(screen.getByText("Review")).not.toBeNull();
     expect(screen.getByText("locked")).not.toBeNull();
-    expect(described(shown())).toBe("Review stages always show.");
-    expect(shown().title).toBe("Review stages always show.");
+    expect(described(shown())).toBe("Review stages always show");
+    expect(shown().title).toBe("Review stages always show");
   });
 
   it("keeps a terminal stage off the board and counted instead", () => {
@@ -35,8 +35,9 @@ describe("ConfigRow", () => {
     expect(shown().getAttribute("aria-checked")).toBe("false");
     expect(shown().disabled).toBe(true);
     expect(screen.queryByText(/terminal/)).toBeNull();
-    expect(described(shown())).toBe("Done stages are counted, not shown.");
+    expect(described(shown())).toBe("Done stages are counted, not shown");
     expect(screen.queryByLabelText("WIP cap")).toBeNull();
+    expect(document.querySelector("[aria-hidden='true']")?.textContent).toBe("");
   });
 
   it("leaves the agent count to the Agents tab and shows the switch state in words", () => {
