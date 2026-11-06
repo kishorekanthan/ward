@@ -26,10 +26,10 @@ describe("BarChart", () => {
     expect(barOf("22 Sep", 1)?.style.getPropertyValue("--share")).toBe("75%");
   });
 
-  it("draws no bar for zero or missing; zero shows its value, missing the empty mark", () => {
+  it("draws no bar for zero or missing; zero shows its value, missing reads None", () => {
     render(<BarChart title="Done per week" categories={weeks} series={two} />);
     const row = within(screen.getByRole("row", { name: /15 Sep/ })).getAllByRole("cell");
-    expect(row.map((cell) => cell.textContent)).toEqual(["0", "—"]);
+    expect(row.map((cell) => cell.textContent)).toEqual(["0", "None"]);
     expect(barOf("15 Sep", 0)).toBeNull();
     expect(barOf("15 Sep", 1)).toBeNull();
   });

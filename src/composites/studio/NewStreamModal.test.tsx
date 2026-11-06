@@ -68,7 +68,7 @@ describe("NewStreamModal", () => {
     fireEvent.change(screen.getByLabelText("Key"), { target: { value: "KPI" } });
     fireEvent.change(screen.getByLabelText("Stage 1 name"), { target: { value: "Triage" } });
     expect(create().disabled).toBe(true);
-    expect(document.getElementById(create().getAttribute("aria-describedby") as string)?.textContent).toBe("Add a name, key, owner and two stages.");
+    expect(document.getElementById(create().getAttribute("aria-describedby") as string)?.textContent).toBe("Add a name, key, owner and two stages");
     fireEvent.change(screen.getByLabelText("Stage 2 name"), { target: { value: "Map fields" } });
     expect(container.ownerDocument.querySelector("[data-colour-status]")).toBeNull();
     expect(create().disabled).toBe(false);
@@ -81,6 +81,11 @@ describe("NewStreamModal", () => {
       writePolicyMode: "relay",
       stages: [{ name: "Triage", kind: "entry" }, { name: "Map fields", kind: "agent" }],
     });
+  });
+
+  it("closes each one-line hint with no full stop", () => {
+    render(<NewStreamModal presentation="web" dataPlatform="Databricks" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} />);
+    for (const hint of ["Nothing runs until you create the stream", "Agents never write to Databricks or Jira directly", "A second admin approves each agent", "Agents can read and report only"]) expect(screen.getByText(hint)).toBeDefined();
   });
 
   it("renders consumer fields after Identity and before the stages", () => {
@@ -172,29 +177,29 @@ describe("NewStreamModal", () => {
   it("names the data platform in use on the Through Trellis write option, never another", () => {
     const web = (dataPlatform: string) => render(<NewStreamModal presentation="web" dataPlatform={dataPlatform} owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} />);
     const { unmount } = web("Databricks");
-    expect(consequenceOf("Through Trellis (safe default)")).toBe("Agents never write to Databricks or Jira directly.");
+    expect(consequenceOf("Through Trellis (safe default)")).toBe("Agents never write to Databricks or Jira directly");
     expect(document.body.textContent).not.toMatch(/Foundry/);
     unmount();
     web("Snowflake");
-    expect(consequenceOf("Through Trellis (safe default)")).toBe("Agents never write to Snowflake or Jira directly.");
+    expect(consequenceOf("Through Trellis (safe default)")).toBe("Agents never write to Snowflake or Jira directly");
   });
 
   it("keeps the other write options' consequences", () => {
     render(<NewStreamModal presentation="web" dataPlatform="Databricks" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} />);
-    expect(consequenceOf("Directly, each agent approved")).toBe("A second admin approves each agent.");
-    expect(consequenceOf("Read only")).toBe("Agents can read and report only.");
+    expect(consequenceOf("Directly, each agent approved")).toBe("A second admin approves each agent");
+    expect(consequenceOf("Read only")).toBe("Agents can read and report only");
   });
 
   it("names the Create stream step in the web footer note, not a publish step", () => {
     render(<NewStreamModal presentation="web" dataPlatform="Databricks" owners={["Priya Nayar"]} ladder={ladder} onCreate={() => undefined} onClose={() => undefined} />);
-    const footer = screen.getByText("Nothing runs until you create the stream.").parentElement?.parentElement as HTMLElement;
+    const footer = screen.getByText("Nothing runs until you create the stream").parentElement?.parentElement as HTMLElement;
     expect(within(footer).getByRole("button", { name: "Create stream" })).toBeTruthy();
     expect(document.body.textContent).not.toMatch(/publish/i);
   });
 
   it("names the Create stream step in the compact footer note too", () => {
     render(<NewStreamModal owners={[{ value: "priya", label: "Priya" }]} ladder={[{ step: 1, name: "Data" }]} onCreate={() => undefined} onDraft={() => undefined} onClose={() => undefined} />);
-    const footer = screen.getByText("Nothing runs until you create the stream.").parentElement as HTMLElement;
+    const footer = screen.getByText("Nothing runs until you create the stream").parentElement as HTMLElement;
     expect(within(footer).getByRole("button", { name: "Create stream" })).toBeTruthy();
     expect(document.body.textContent).not.toMatch(/publish/i);
   });
@@ -281,14 +286,14 @@ describe("NewStreamModal (spec)", () => {
     setup();
     const choice = screen.getByLabelText("Stop on any finding");
     const noteId = choice.getAttribute("aria-describedby") as string;
-    expect(document.getElementById(noteId)?.textContent).toBe("A finding holds the item until a person clears it.");
+    expect(document.getElementById(noteId)?.textContent).toBe("A finding holds the item until a person clears it");
   });
 
   it("refuses to create an unnamed, unkeyed stream and says what is missing", () => {
     const { onCreate } = setup();
     const btn = screen.getByRole("button", { name: "Create stream" }) as HTMLButtonElement;
     expect(btn.disabled).toBe(true);
-    expect(document.getElementById(btn.getAttribute("aria-describedby") as string)?.textContent).toBe("Add a name and a key.");
+    expect(document.getElementById(btn.getAttribute("aria-describedby") as string)?.textContent).toBe("Add a name and a key");
     fireEvent.click(btn);
     expect(onCreate).not.toHaveBeenCalled();
   });

@@ -27,7 +27,7 @@ export const WithConsequence = {
 export const Disabled = {
   args: {
     label: "Shown as a column",
-    consequence: "Done stages are counted, not shown.",
+    consequence: "Done stages are counted, not shown",
     checked: false,
     disabled: true,
     onChange: () => {},
@@ -37,7 +37,7 @@ export const Disabled = {
 export const Locked = {
   args: {
     label: "Shown as a column",
-    consequence: "Review stages always show.",
+    consequence: "Review stages always show",
     checked: false,
     locked: true,
     disabledReason: "People must see what waits for them.",

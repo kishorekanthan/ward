@@ -86,7 +86,7 @@ describe("PolicyRow web presentation", () => {
       </div>,
     );
     expect(texts(container, ".ward-policy-consequence")).toEqual(["Inherited. from platform", "Overridden.", "Derived."]);
-    expect(texts(container, ".ward-envmeta")).toEqual(["—", "—", "—"]);
+    expect(texts(container, ".ward-envmeta")).toEqual(["None", "None", "None"]);
     const chips = Array.from(container.querySelectorAll(".ward-policy-chip > .ward-chip"));
     expect(chips.map((chip) => chip.textContent)).toEqual(["Inherited", "Overridden", "Derived"]);
     expect(chips.map((chip) => chip.getAttribute("data-ward-chip"))).toEqual(["meta", "running", "soft"]);

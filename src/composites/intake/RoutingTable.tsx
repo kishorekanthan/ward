@@ -27,7 +27,7 @@ const COLUMNS: GridColumn[] = [
 ];
 
 function reEntryText(row: RoutingRow): string {
-  if (!row.noRerun) return row.reEntersAt ?? "—";
+  if (!row.noRerun) return row.reEntersAt ?? "None";
   if (!row.why) return "No rerun";
   return `No rerun: ${row.why}`;
 }
@@ -41,10 +41,10 @@ function cellText(row: RoutingRow, key: string): string {
   const values: Record<string, string> = {
     rejectedBy: row.rejectedBy,
     reEntersAt: reEntryText(row),
-    skips: row.skips ?? "—",
+    skips: row.skips ?? "None",
     typedInput: row.typedInput,
   };
-  return values[key] ?? "—";
+  return values[key];
 }
 
 function withIds(rows: RoutingRow[]) {

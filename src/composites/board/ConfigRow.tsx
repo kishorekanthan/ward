@@ -22,8 +22,8 @@ export type ConfigRowProps = {
   onReorder?: (direction: -1 | 1) => void;
 };
 
-const GATE_REASON = "Review stages always show.";
-const TERMINAL_REASON = "Done stages are counted, not shown.";
+const GATE_REASON = "Review stages always show";
+const TERMINAL_REASON = "Done stages are counted, not shown";
 
 /* The head carries the visible names for the row's controls, which is why those
    labels are hidden rather than absent. Export the two together; widths agree. */
@@ -95,11 +95,7 @@ type CellProps = { stage: ConfigStage; config: ColumnDraft; onChange: (next: Col
 // A terminal stage never becomes a column, so it has no cap to set.
 function CapCell({ stage, config, onChange }: CellProps) {
   if (stage.terminal)
-    return (
-      <span className={`${s.cCap} ${s.noCap}`} aria-hidden="true">
-        —
-      </span>
-    );
+    return <span className={`${s.cCap} ${s.noCap}`} aria-hidden="true" />;
   return (
     <span className={s.cCap}>
       <Field kind="input" label="WIP cap" labelHidden placeholder="none" value={capValue(config.cap)} onChange={(cap) => onChange({ ...config, cap: parsedCap(cap) })} />

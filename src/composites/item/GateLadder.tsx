@@ -20,7 +20,7 @@ function RungItem({ rung }: { rung: Rung }) {
     <li className={s.rung} data-state={rung.state}>
       <span className={s.name}>{rung.name}</span>
       <Chip role={chip.role} label={chip.label} />
-      <span className={`${s.actor} ward-cellmeta`}>{rung.actor ?? "—"}</span>
+      <span className={`${s.actor} ward-cellmeta`}>{rung.actor}</span>
     </li>
   );
 }

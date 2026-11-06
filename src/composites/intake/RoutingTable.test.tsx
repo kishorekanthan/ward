@@ -16,10 +16,10 @@ describe("RoutingTable", () => {
     expect(container.textContent).toContain("No rerun: Approval is final");
   });
 
-  it("uses a dash for omitted route stages and a positional key when an id is omitted", () => {
+  it("reads None for omitted route stages and a positional key when an id is omitted", () => {
     const { container } = render(<RoutingTable rows={[{ rejectedBy: "Lint", typedInput: "Exact error" }]} />);
-    expect(container.querySelectorAll("td")[1]?.textContent).toBe("—");
-    expect(container.querySelectorAll("td")[2]?.textContent).toBe("—");
+    expect(container.querySelectorAll("td")[1]?.textContent).toBe("None");
+    expect(container.querySelectorAll("td")[2]?.textContent).toBe("None");
   });
 
   it("requires an explanation for no-rerun records by default", () => {

@@ -5,8 +5,10 @@ import ts from "typescript";
 import { describe, expect, it } from "vitest";
 
 const SRC = dirname(fileURLToPath(import.meta.url));
-// An em dash with a word or value on either side is prose; a lone "—" stands in for an empty value.
-const PROSE_DASH = /[^\s—]\s*—\s*[^\s—]/;
+// An em dash is never shown: not to join clauses, and not alone as an empty value.
+const EM_DASH = /—/;
+// Nor does any other dash stand alone in place of an empty value.
+const LONE_DASH = /^\s*[-–‒―−]+\s*$/;
 const SLOT = "X";
 // Words that name Ward's or Trellis's insides; a first-time user reads none of them on screen.
 const INTERNAL_WORD = /\b(gate[sd]?|gating|mount(s|ed|ing)?|chains?|route[sd]?|routing|slice[sd]?|adapters?|evidence|advisors?|terminal|tenants?|req_hash|sdk|k8s)\b/i;
@@ -38,15 +40,10 @@ function childrenText(node: ts.JsxElement | ts.JsxFragment): string {
   return node.children.map((child) => (ts.isJsxText(child) ? jsxText(child) : SLOT)).join("");
 }
 
-// A string that opens or closes on a spaced dash is concatenated, so the dash joins it to its neighbour.
-function literalText(text: string): string {
-  return /^\s+—|—\s+$/.test(text) ? SLOT + text + SLOT : text;
-}
-
 // Each string, template or run of JSX children as the product shows it, expressions standing in as a slot.
 const SHOWN: [(node: ts.Node) => boolean, (node: never) => string][] = [
-  [ts.isStringLiteral, (node: ts.StringLiteral) => literalText(node.text)],
-  [ts.isNoSubstitutionTemplateLiteral, (node: ts.NoSubstitutionTemplateLiteral) => literalText(node.text)],
+  [ts.isStringLiteral, (node: ts.StringLiteral) => node.text],
+  [ts.isNoSubstitutionTemplateLiteral, (node: ts.NoSubstitutionTemplateLiteral) => node.text],
   [ts.isTemplateExpression, templateText],
   [ts.isJsxElement, childrenText],
   [ts.isJsxFragment, childrenText],
@@ -92,12 +89,25 @@ function shownStrings(path: string, fails: (text: string, node: ts.Node) => bool
   return found;
 }
 
-const proseDashes = (path: string) => shownStrings(path, (text) => PROSE_DASH.test(text));
+const SEPARATOR_METHODS = new Set(["replace", "replaceAll", "join", "split"]);
+
+// A lone dash is a separator only as the argument of replace, join or split; anywhere else it stands for a missing value.
+function isSeparator(node: ts.Node): boolean {
+  const call = node.parent;
+  return ts.isCallExpression(call) && ts.isPropertyAccessExpression(call.expression) && SEPARATOR_METHODS.has(call.expression.name.text);
+}
+
+const emDashes = (path: string) => shownStrings(path, (text) => EM_DASH.test(text));
+const loneDashes = (path: string) => shownStrings(path, (text, node) => LONE_DASH.test(text) && !isSeparator(node));
 const internalWords = (path: string) => shownStrings(path, (text, node) => !isCode(text, node) && INTERNAL_WORD.test(text));
 
 describe("Ward's own copy", () => {
-  it("joins no clauses with an em dash", () => {
-    expect(shippedSources(SRC).flatMap(proseDashes)).toEqual([]);
+  it("shows no em dash, in prose or as an empty value", () => {
+    expect(shippedSources(SRC).flatMap(emDashes)).toEqual([]);
+  });
+
+  it("fills no empty value with a dash of any kind", () => {
+    expect(shippedSources(SRC).flatMap(loneDashes)).toEqual([]);
   });
 
   it("names none of the product's insides", () => {
