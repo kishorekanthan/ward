@@ -1,6 +1,7 @@
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { LiveTransport, LiveTransportHandlers } from "./transport";
+import { ms } from "../tokens";
 import { useLiveFeed } from "./useLiveFeed";
 import type { LiveEvent } from "./types";
 
@@ -55,6 +56,17 @@ describe("useLiveFeed", () => {
     act(() => vi.advanceTimersByTime(15_000));
     expect(result.current.connection).toBe("reconnecting");
     act(() => vi.advanceTimersByTime(30_000));
+    expect(result.current.connection).toBe("stale");
+  });
+
+  it("a feed that has not opened counts its silence from the start, not from 1970", () => {
+    vi.setSystemTime(new Date("2026-09-06T10:00:00Z"));
+    const { result } = started(fakeTransport(opens));
+    act(() => vi.advanceTimersByTime(ms.heartbeat - ms.tick));
+    expect([result.current.connection, opens.length]).toEqual(["reconnecting", 1]);
+    act(() => vi.advanceTimersByTime(ms.staleAfter - ms.heartbeat));
+    expect(result.current.connection).toBe("reconnecting");
+    act(() => vi.advanceTimersByTime(ms.tick));
     expect(result.current.connection).toBe("stale");
   });
 
