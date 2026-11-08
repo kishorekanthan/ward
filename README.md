@@ -1,5 +1,7 @@
 # `@kishorekanthan/ward`
 
+Moved to kishorekanthan/trellis. This repo is read-only.
+
 Ward is Trellis’s standalone React 19 UI package. It owns the tokens, reset, fonts, accessibility helpers, live-view helpers, states, primitives, layout spine, and reusable board, item, intake, studio, and admin composites. It does not import FoundryLoop application code.
 
 ## Install and use
